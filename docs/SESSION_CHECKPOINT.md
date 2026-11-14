@@ -4,43 +4,39 @@ Updated: 2026-11-14 (Europe/Paris).
 
 ## Authorised request and state
 
-Verify the SmartLingo rename and sync to https://github.com/trinamntn08/SmartLingo.git. Rename verification complete; remote sync blocked by network and Git metadata permissions. App implementation remains a separate request.
+Commit the documentation update and push it. Earlier authorisation to sync to https://github.com/trinamntn08/SmartLingo.git persists. App implementation remains separate.
 
-## Verified results
+## Current verified state
 
-- Case-insensitive former-name text scan: zero matches, including installed tooling and generated npm cache records. Filename scan: zero matches. Real environment secrets were excluded.
-- npm.cmd run setup:codex:plan: passed; all nine installed files match prepared copies.
-- npm.cmd run check: passed.
-- npm.cmd test: all 16 tooling tests passed.
-- git diff --check: passed; bootstrap files are untracked, so staged whitespace validation is still needed.
-- No learner app exists. Runtime hook trust/activation remains unverified.
+- main contains `207cbad` (`chore: bootstrap Codex project workflows and Git tooling`). The working tree was clean before this documentation update.
+- Origin uses the owner-selected HTTPS URL for fetch and push.
+- `git update-index --refresh` succeeded. Earlier index permission failures were not reproduced; this does not prove every Git metadata operation is available. No new commit or config write was tested.
+- `git ls-remote --symref origin HEAD` and `git push --dry-run origin main` fail with `getaddrinfo() thread failed to start`; remote history and push authorisation remain unknown.
+- `Resolve-DnsName github.com` returns Access is denied. Windows `curl.exe -I --connect-timeout 10 https://github.com` fails with Could not resolve host. Evidence points to a session/network restriction; the owner confirmed DNS works in normal PowerShell and remote HEAD lookup returned no output or reported error.
+- Active Git executable: C:\Program Files\Git\cmd\git.exe, version 2.54.0.windows.1.
+- No new commit, fetch, merge, or remote change was made in these checks.
+- Only docs/STATUS.md and docs/SESSION_CHECKPOINT.md were edited for this update. `npm.cmd run check` and `git diff --check` passed after this update; the tooling test suite was not rerun for these documentation-only changes.
 
-## Sync attempts
+## Earlier validation
 
-- git ls-remote against the selected GitHub repository: failed with getaddrinfo() thread failed to start. Remote history remains unknown.
-- git remote add origin: failed to lock .git/config, Permission denied.
-- git add with explicit bootstrap paths: failed to create .git/index.lock, Permission denied.
-- Origin is now configured correctly by the owner; no staging, initial commit, fetch, merge, or push succeeded in this session. All existing bootstrap work remains preserved and untracked on unborn main. No permission bypass or force-push was attempted.
+Rename scan: zero former-name text or filename matches. All nine installed/prepared Codex files matched. Installer dry run, repository checks, 16 tooling tests, and whitespace checks previously passed on 2026-11-14. No learner app exists; runtime hook trust remains unverified.
 
 ## Exact next step
 
-Latest status/commit request (2026-11-14): `npm.cmd run check`, `npm.cmd test` (16/16), and `git diff --check` passed. `git ls-remote --symref origin` still fails with `getaddrinfo() thread failed to start`. The session permission profile still explicitly makes `.git` read-only; committing was not attempted through a permission bypass. Usage lookup failed. The owner explicitly authorises committing the existing bootstrap; no commit or push succeeded. Documentation records this validation; staged checks remain pending.
+1. The owner confirmed DNS works outside this session; Git remote HEAD lookup returned no output or reported error. Agent remote lookup still fails with `getaddrinfo() thread failed to start`.
+2. If those work outside this session, the restriction is specific to the agent environment. Continue sync from that terminal or a session configured with network access; do not change DNS settings or Git history based on this error alone.
+3. Once connectivity works, inspect status and remote refs, then fetch and inspect history before integrating. Preserve both histories if needed. Never force-push or create a replacement repository. The initial local commit already exists.
+4. Review and stage deliberate paths for outstanding documentation changes; run `npm.cmd run check`, `npm.cmd run check:staged`, and `git diff --cached --check` before committing under the existing authorisation.
+5. Push with upstream tracking only after history is understood. Verify final local/remote refs and update status.
 
-Resume the authorised sync where Git metadata is writable and GitHub is reachable. Inspect status and remote refs/history first. If the remote is empty, run npm.cmd run setup:finish, configure origin, and push main with upstream tracking. If the remote contains history, fetch and inspect it before integrating; preserve both histories and existing work, and do not force-push or blindly use setup:finish. Stage deliberate paths, run check:staged and git diff --cached --check before committing. Recheck final branch/remote status after push.
+If DNS also fails in the normal terminal, investigate the host network/VPN/DNS configuration before retrying Git. Do not disable certificate verification; this failure happens before TLS or GitHub authentication.
 
 ## Usage and delegation
 
-Latest usage lookup failed; allowance and reset times unavailable. No subagents were needed for this bounded verification/sync retry. Automatic resume is not configured. Owner authorisation to resume this unfinished sync persists.
+Remaining allowance and reset times unavailable; no usage lookup was made for this bounded documentation update. No subagents needed. Automatic resume is not confirmed. Resume the authorised unfinished sync without asking for permission again.
 
-## Latest retry after owner setup
+## Commit and push request
 
-git remote -v confirms origin points to the selected SmartLingo HTTPS URL for fetch and push. main still has no commits; bootstrap files remain untracked. git ls-remote still fails with getaddrinfo() thread failed to start in this session. Remote history is unknown. Existing session permissions still mark Git metadata read-only; no further write retry or bypass was attempted. Continue in a repository-capable local session with network access.
+The owner explicitly requested committing these two documentation files and pushing main. Remote lookup was retried and remains blocked in the agent session. Commit locally after staged checks, then attempt a normal push; if connectivity still fails, use normal PowerShell to run `git push -u origin main`. No force-push is authorised.
 
-## Authorised continuation retry — 2026-11-14
-
-- Re-read the recovery instructions and inspected the working tree and origin. The branch remains unborn main; bootstrap files remain untracked.
-- `git ls-remote --symref origin` failed with `getaddrinfo() thread failed to start`. Remote refs/history could not be inspected, so integration and setup:finish were not attempted.
-- The current session explicitly marks .git read-only. No Git metadata write, commit, fetch, push, force-push, or permission bypass was attempted.
-- Usage lookup failed again in this new session; remaining allowance and reset times remain unavailable. No subagents or automatic resume were configured.
-- After the documentation update, `npm.cmd run check` and `git diff --check` passed. Final status still shows no commits on main and untracked bootstrap files; staged validation remains pending. The tooling test suite was not rerun for this documentation-only retry; its previous 16-test pass is recorded above.
-- Recovery is still the Exact next step above: use a session with writable Git metadata and working GitHub access, inspect remote history, then complete the authorised sync. No renewed owner authorisation is needed.
+Latest attempt: repository checks and `git diff --check` passed, but `git add -- docs/STATUS.md docs/SESSION_CHECKPOINT.md` failed to create .git/index.lock with Permission denied. No staging, commit, or push followed. The earlier successful `git update-index --refresh` did not establish write access. From normal PowerShell, stage these two files, run `npm.cmd run check:staged` and `git diff --cached --check`, commit, then push normally.

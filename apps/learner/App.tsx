@@ -89,7 +89,7 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
     </View>
   </View>
     <View style={[s.notice, { backgroundColor: colors.yellow, padding: 25, flexDirection: 'row', flexWrap: 'wrap', gap: 30 }]}>
-      <View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Look, then try.</Text><Text style={s.body}>Pictures first. Useful words next.</Text></View><View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Help on your terms.</Text><Text style={s.body}>English and grammar, on tap.</Text></View><View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Keep what matters.</Text><Text style={s.body}>A notebook that’s yours to edit.</Text></View>
+      <View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Look, then try.</Text><Text style={s.body}>Pictures first. Useful words next.</Text></View><View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Understand as you go.</Text><Text style={s.body}>Meanings and explanations, together.</Text></View><View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Keep what matters.</Text><Text style={s.body}>A notebook that’s yours to edit.</Text></View>
     </View>
   </View>;
 }

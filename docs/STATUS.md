@@ -6,7 +6,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Implementation branch: `feat/manual-review`, based on validated backup checkpoint `bc1b08f` (editor `7a84e60`, learner foundation `83c5573`).
+- Current branch: `fix/visible-lesson-details`, based on validated manual-review checkpoint `546965d` (backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Inspect live remote history before any future integration. A local checkpoint is not remote backup.
 
@@ -14,7 +14,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 - npm/TypeScript workspaces: Expo learner, Fastify local API, shared domain contracts, validated draft content.
 - Cream/yellow/green responsive navigation and original code-drawn pictures inspired by the supplied references, with English interface text.
-- Restaurant customer and bakery customer draft lessons: six useful items each, optional meanings/translations/grammar, short dialogue, picture matching, sentence building, hints and helpful retry feedback.
+- Restaurant customer and bakery customer draft lessons: six useful items each, directly visible meanings/examples/translations/explanations and dialogue grammar, picture matching, sentence building, hints and helpful retry feedback. Saved notebook meanings are also visible directly. This follows the owner's simplified-view preference in [ADR 0008](decisions/0008-visible-study-details.md).
 - Restaurant completion through persisted progress, with revision-scoped events and supported-attempt history. Completion records practice, not proficiency.
 - Browser IndexedDB version-1 adapter; idempotent attempt retries, conflicting event-ID rejection, notebook save/edit and reload. Atomic lesson capture preserves personal edits across stale tabs.
 - Optional French synthetic device voice with cancellation/error/text fallback. No API key, paid generation, microphone, recording, or external AI service is used.

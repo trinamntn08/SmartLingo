@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import { notebookEntrySchema, type NotebookEntry } from '@smartlingo/domain';
-import { Button, Reveal, Speak } from './controls';
+import { Button, Speak } from './controls';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';
 
 export function Notebook({ model, onExplore }: { model: LearningModel; onExplore: () => void }) {
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Review at your pace</Text><Text accessibilityRole="header" style={s.title}>Your French, kept close.</Text><Text style={s.body}>Save useful words in a lesson, then make the notes your own. Reveal a meaning when you need it.</Text>
+  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Review at your pace</Text><Text accessibilityRole="header" style={s.title}>Your French, kept close.</Text><Text style={s.body}>Practise your recall, then browse your saved words and meanings below. Make the notes your own.</Text>
     <ReviewPanel notebook={model.notebook} />
     {!model.notebook.length ? <View style={s.card}><Text style={s.heading}>A fresh page.</Text><Text style={s.body}>Your saved words will appear here. Start a lesson and tap “Save word” on something you’d like to keep.</Text><Button primary onPress={onExplore}>Find a lesson →</Button></View>
       : model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} />)}
@@ -32,5 +32,5 @@ function NotebookCard({ entry, model }: { entry: NotebookEntry; model: LearningM
     <Text style={s.body}>English meaning</Text><TextInput accessibilityLabel="English meaning" value={meaning} onChangeText={setMeaning} maxLength={500} style={s.input} />
     <Text style={s.body}>Example or personal note</Text><TextInput accessibilityLabel="Example or personal note" value={example} onChangeText={setExample} maxLength={1000} multiline style={[s.input, { minHeight: 90 }]} />
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}<View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save changes</Button><Button disabled={model.busy || !!model.saveError} onPress={() => setEditing(false)}>Cancel</Button></View>
-  </> : <><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text><Speak text={entry.target} /><Reveal label="Meaning"><Text style={s.body}>{entry.meaning}</Text></Reveal>{!!entry.example && <Text style={s.body}>{entry.example}</Text>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
+  </> : <><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text><Text style={s.body}>{entry.meaning}</Text><Speak text={entry.target} />{!!entry.example && <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text></View>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
 }

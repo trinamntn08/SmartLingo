@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
 import { checkAnswer, lessonProgress, type LearningEvent, type Lesson, type Vocabulary } from '@smartlingo/domain';
-import { Badge, Button, Reveal, Speak } from './controls';
+import { Badge, Button, Speak } from './controls';
 import { Illustration } from './Illustration';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
@@ -17,6 +17,8 @@ function resumeStage(lesson: Lesson, model: LearningModel): Stage {
 }
 
 export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model: LearningModel; onExit: () => void }) {
+  const { width } = useWindowDimensions();
+  const compact = width < 760;
   const progress = lessonProgress(lesson, model.events);
   const [stage, setStage] = useState<Stage>(() => resumeStage(lesson, model));
   const [wordIndex, setWordIndex] = useState(() => Math.max(0, lesson.vocabulary.findIndex(entry => !progress.viewedIds.has(entry.id))));
@@ -47,12 +49,16 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
       <View style={s.progressTrack}><View style={[s.progressFill, { width: `${count / (lesson.vocabulary.length + 2) * 100}%` }]} /></View>
     </View>
     {stage === 'vocabulary' && <View style={s.split}>
-      <View style={[s.card, s.column, { backgroundColor: '#E7ECD9', justifyContent: 'center', minHeight: 310 }]}><Illustration picture={entry.picture} alt={entry.pictureAlt} size={320} /><Text style={[s.eyebrow, { textAlign: 'center' }]}>Look · say it · try it</Text></View>
-      <View style={[s.card, s.column]}><Text style={s.eyebrow}>A useful word or phrase</Text><Text accessibilityRole="header" style={s.title}>{entry.target}</Text>
-        <Speak text={entry.target} /><Reveal key={`${entry.id}.meaning`} label="Meaning"><Text style={s.body}>{entry.meaning}</Text></Reveal>
-        <View style={s.divider} /><Text style={s.eyebrow}>In a sentence</Text><Text style={s.heading}>{entry.example}</Text>
-        <Reveal key={`${entry.id}.example`} label="Example translation"><Text style={s.body}>{entry.exampleMeaning}</Text></Reveal>
-        <Reveal key={`${entry.id}.note`} label="Word note"><Text style={s.body}>{entry.note}</Text></Reveal>
+      {!compact && <View style={[s.card, s.column, { backgroundColor: '#E7ECD9', justifyContent: 'center', minHeight: 310 }]}><Illustration picture={entry.picture} alt={entry.pictureAlt} size={320} /><Text style={[s.eyebrow, { textAlign: 'center' }]}>Look · say it · try it</Text></View>}
+      <View style={[s.card, s.column, { gap: 16 }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <View style={{ flex: 1, minWidth: 0, gap: 6 }}><Text style={s.eyebrow}>Word or phrase</Text><Text accessibilityRole="header" style={[s.title, compact && { fontSize: 32, lineHeight: 38 }]}>{entry.target}</Text><Text style={s.body}>{entry.meaning}</Text></View>
+          {compact && <Illustration picture={entry.picture} alt={entry.pictureAlt} size={84} />}
+        </View>
+        <Speak text={entry.target} />
+        <View style={s.divider} />
+        <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example</Text><Text style={s.heading}>{entry.example}</Text><Text style={s.muted}>{entry.exampleMeaning}</Text></View>
+        <View style={[s.notice, { padding: 14, gap: 6 }]}><Text style={s.eyebrow}>Explanation</Text><Text style={s.body}>{entry.note}</Text></View>
         <View style={s.row}><Button disabled={model.blocked || model.notebook.some(saved => saved.sourceEntryId === entry.id)} onPress={() => saveWord(entry)}>{model.notebook.some(saved => saved.sourceEntryId === entry.id) ? '✓ In notebook' : '+ Save word'}</Button>
           <Button primary disabled={model.blocked} onPress={nextWord}>{wordIndex === lesson.vocabulary.length - 1 ? 'Continue to dialogue →' : 'Next word →'}</Button></View>
         {!!savedMessage && <Text accessibilityLiveRegion="polite" style={s.muted}>{savedMessage}</Text>}
@@ -61,9 +67,9 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
     {stage === 'dialogue' && <View style={s.card}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text><Text style={s.muted}>Read both roles. If you like, say the customer’s lines aloud.</Text>
       {lesson.dialogue.map((line, index) => <View key={index} style={[s.notice, line.role === lesson.role && { backgroundColor: '#E5EEDC', marginLeft: 16 }]}>
         <Text style={s.eyebrow}>{line.role}</Text><Text style={s.heading}>{line.target}</Text><Speak text={line.target} />
-        <Reveal label="Translation"><Text style={s.body}>{line.meaning}</Text></Reveal>
+        <Text style={s.body}>{line.meaning}</Text>
       </View>)}
-      <Reveal label="Grammar help"><Text style={s.heading}>{lesson.grammar.title}</Text><Text style={s.body}>{lesson.grammar.explanation}</Text></Reveal>
+      <View style={s.notice}><Text style={s.eyebrow}>Grammar</Text><Text style={s.heading}>{lesson.grammar.title}</Text><Text style={s.body}>{lesson.grammar.explanation}</Text></View>
       <Button primary onPress={() => setStage('picture')}>Try picture practice →</Button>
     </View>}
     {stage === 'picture' && <PictureActivity lesson={lesson} disabled={model.blocked} done={progress.pictureDone} record={record} onNext={() => setStage('sentence')} />}

@@ -77,7 +77,6 @@ test('download and explicit restore recover learning in a fresh browser without 
     await expect(restored.getByText('Notebook entries: 0 added, 1 existing notes kept.', { exact: false })).toBeVisible();
     await restored.getByRole('button', { name: 'Reload learning', exact: true }).click();
     await restored.getByRole('button', { name: 'Review', exact: true }).click();
-    await restored.getByRole('button', { name: 'Show meaning', exact: true }).click();
     await expect(restored.getByText('Keep my newer personal note')).toBeVisible();
     expect(await eventCount(restored)).toBe(1);
   } finally { await fresh.close(); }

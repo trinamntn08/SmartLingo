@@ -13,7 +13,7 @@
 - Web beta first, Android/iOS later. Future target languages: English and Japanese.
 - Follow `references/1.jpg` through `references/7.jpg` closely in visual character. Use English interface text.
 - Prioritise pictures, vocabulary, sentence building, contextual speaking, and calm review.
-- Show translations and grammar on request. Support guided learning and free exploration.
+- Display lesson meanings, examples, translations and explanations directly. Keep recall reveals and hints for practice. Support guided learning and free exploration.
 - Let users save/edit personal vocabulary. Curriculum edits require preview and publication.
 - Keep ordinary downloaded lessons usable without AI. Do not equate lesson completion with proficiency.
 

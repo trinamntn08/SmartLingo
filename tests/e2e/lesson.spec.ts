@@ -27,7 +27,7 @@ async function storedRows(page: Page, store: 'events' | 'notebook') {
   }, store);
 }
 
-test('restaurant practice, help, notebook edits and completion survive reload without API', async ({ page }, info) => {
+test('restaurant details are visible directly and practice/notebook completion survive reload without API', async ({ page }, info) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
@@ -37,9 +37,12 @@ test('restaurant practice, help, notebook edits and completion survive reload wi
   await expectNoHorizontalOverflow(page);
   await page.screenshot({ path: info.outputPath('today.png'), fullPage: true });
   await button(page, /Start restaurant practice/).click();
-  await expect(page.getByText('hello / good morning', { exact: true })).toHaveCount(0);
-  await button(page, 'Show meaning').click();
   await expect(page.getByText('hello / good morning', { exact: true })).toBeVisible();
+  await expect(page.getByText('Bonjour, madame.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Hello, madam.', { exact: true })).toBeVisible();
+  await expect(page.getByText('A polite greeting when you arrive.', { exact: true })).toBeVisible();
+  await expect(button(page, /Show meaning|Show example translation|Show word note/)).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('vocabulary.png'), fullPage: true });
   await button(page, '+ Save word').click();
   await expect(page.getByText('Saved to your notebook.', { exact: false })).toBeVisible();
   await button(page, /Next word/).click();
@@ -49,9 +52,10 @@ test('restaurant practice, help, notebook edits and completion survive reload wi
   for (let index = 0; index < 4; index++) { await expectPictureLoaded(page); await button(page, /Next word/).click(); }
   await expectPictureLoaded(page);
   await button(page, /Continue to dialogue/).click();
-  await expect(page.getByText( 'Je voudrais means', { exact: false })).toHaveCount(0);
-  await button(page, 'Show grammar help').click();
   await expect(page.getByText('Je voudrais means', { exact: false })).toBeVisible();
+  await expect(page.getByText('Hello! What would you like?', { exact: true })).toBeVisible();
+  await expect(button(page, /Show translation|Show grammar help/)).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('dialogue.png'), fullPage: true });
   await button(page, /Try picture practice/).click();
   await button(page, 'l’addition').click();
   await expect(page.getByText('Take another look.', { exact: false })).toBeVisible();
@@ -81,7 +85,6 @@ test('restaurant practice, help, notebook edits and completion survive reload wi
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
   await page.reload();
   await button(page, 'Review').click();
-  await button(page, 'Show meaning').click();
   await expect(page.getByText('My morning greeting')).toBeVisible();
   await button(page, 'Today').click();
   await expect(page.getByText('✓ Session completed and saved', { exact: false })).toBeVisible();
@@ -115,7 +118,6 @@ test('stale tab capture preserves another tab’s notebook edit', async ({ page,
   await button(stale, '+ Save word').click();
   await expect(button(stale, /In notebook/)).toBeDisabled();
   await button(stale, 'Review').click();
-  await button(stale, 'Show meaning').click();
   await expect(stale.getByText('Keep my personal note')).toBeVisible();
   expect((await storedRows(page, 'notebook'))[0].meaning).toBe('Keep my personal note');
 });

@@ -73,7 +73,6 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await expect(page.getByText('Published', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Show meaning', exact: true }).click();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /In notebook/ })).toBeDisabled();
 });

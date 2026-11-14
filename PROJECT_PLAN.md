@@ -50,7 +50,7 @@ The owner answered question 5 with a level rather than topic priorities. Default
 - One complete restaurant lesson, plus a small greetings foundation lesson.
 - Approximately 20–30 reusable vocabulary/phrase entries and one short dialogue.
 - Image-to-word matching, vocabulary reveal/recall, and sentence building.
-- Play word and sentence audio; translation and grammar on tap.
+- Play word and sentence audio; meanings, translations and explanations visible directly in study views.
 - Persist progress and saved vocabulary across browser reloads.
 - One scripted role-play and an API-backed push-to-talk conversation path.
 - A text fallback and understandable API-unavailable state.
@@ -84,7 +84,7 @@ Today: continue a lesson, review due items, or start a suggested short session. 
 Lesson sequence:
 1. State a concrete outcome: e.g. order a drink politely.
 2. Introduce 6–10 useful items with meaning, picture where appropriate, and audio.
-3. Show these in a short sentence/dialogue. Translation and grammar are optional reveals.
+3. Show these in a short sentence/dialogue. Display meanings, translations and grammar explanations directly in study views (owner preference updated 2026-11-14).
 4. Practise matching and sentence building with helpful hints.
 5. Attempt recall with reduced support.
 6. Offer a contextual speaking role-play.
@@ -140,8 +140,8 @@ Learner navigation: Today, Explore, Practice, Review, Profile. Notebook is acces
 - Today: next activity, continue lesson, reviews due, understated progress.
 - Explore: topic cards, level filter, roles, free search.
 - Topic: useful outcomes, lesson list, progress, download status.
-- Lesson: one main activity, progress, audio, hints, optional grammar/translation.
-- Vocabulary: article + word, meaning reveal, examples, image, audio, notebook action.
+- Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
+- Vocabulary: article + word, visible meaning, example/translation, explanation, image, audio, notebook action.
 - Practice: choose a skill or situation without following a course.
 - Speaking: role selection, short brief, microphone, transcript, help, correction summary.
 - Review: due queue, flashcards, mistakes, notebook.
@@ -228,7 +228,7 @@ Capture confirmed preferences, defaults, boundaries, sample lesson, and a priori
 ### M1 — runnable local foundation and first lesson
 Scaffold shared app/API/domain, theme, navigation, storage, content schema, two seed lessons, audio abstraction, and first editor fields. Test the audio/storage approach early in a desktop browser and a representative phone browser. Browser microphone testing over LAN may require a secure origin; plan HTTPS or an appropriate local development route.
 
-Accept when: a learner opens the app, chooses restaurant customer practice, completes a picture/vocabulary/sentence-building lesson, reveals meaning/grammar, saves a word, reloads, and sees preserved state. Core lesson remains usable without an API key.
+Accept when: a learner opens the app, chooses restaurant customer practice, completes a picture/vocabulary/sentence-building lesson with meaning/grammar visible directly, saves a word, reloads, and sees preserved state. Core lesson remains usable without an API key.
 
 ### M2 — speaking and personal vocabulary
 Implement server-only API credentials, cached AI lesson audio, push-to-talk, transcript correction, contextual response, replay, vocabulary suggestions/save, usage limits, and permission/network failure states.

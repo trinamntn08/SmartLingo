@@ -8,7 +8,7 @@ Initial learner: an English-speaking adult newcomer to France, from complete beg
 - Include noun articles/gender, a specific sense, natural French examples, English meaning, and register.
 - Pair concrete vocabulary with unambiguous pictures; use alt text.
 - Include a short dialogue and sentence-building activity with accepted alternatives.
-- Put grammar and translations behind optional reveals.
+- Show meanings, example translations and explanations directly in study material. Keep deliberate recall reveals within review practice.
 - Keep IDs stable and distinguish shared curriculum from learner-edited notebook entries.
 
 ## Review and publication

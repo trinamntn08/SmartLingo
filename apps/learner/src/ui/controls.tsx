@@ -19,12 +19,6 @@ export function Badge({ children }: { children: ReactNode }) {
   return <View style={s.badge}><Text style={s.badgeText}>{children}</Text></View>;
 }
 
-export function Reveal({ label, children }: { label: string; children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  return <View style={{ gap: 12 }}><Button onPress={() => setOpen(!open)} label={`${open ? 'Hide' : 'Show'} ${label.toLowerCase()}`}>
-    {open ? '−' : '+'} {label}</Button>{open && <View style={s.notice}>{children}</View>}</View>;
-}
-
 export function Speak({ text }: { text: string }) {
   const [state, setState] = useState<'idle' | 'playing'>('idle');
   const [error, setError] = useState('');

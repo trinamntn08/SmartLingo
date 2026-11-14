@@ -18,8 +18,8 @@ test('manual review saves once, retries safely, survives reload and follows loca
   });
   await page.goto('/');
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
-  await page.getByRole('button', { name: '+ Save word', exact: true }).click();
-  await expect(page.getByText('Saved to your notebook.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
+  await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Remembered', exact: true })).toHaveCount(0);
@@ -54,8 +54,8 @@ test('returning to a stale review tab refreshes ratings from another tab', async
   await page.clock.install({ time: new Date('2026-11-16T11:00:00Z') });
   await page.goto('/');
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
-  await page.getByRole('button', { name: '+ Save word', exact: true }).click();
-  await expect(page.getByText('Saved to your notebook.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
+  await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
   await page.evaluate(async () => {

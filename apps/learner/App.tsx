@@ -7,6 +7,7 @@ import { Illustration } from './src/ui/Illustration';
 import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
 import { TopicCatalogue } from './src/ui/TopicCatalogue';
+import { TopicSidebar } from './src/ui/TopicSidebar';
 import { colors, styles as s } from './src/ui/theme';
 import { useLearning, type LearningModel } from './src/ui/useLearning';
 import { CurriculumEditor } from './src/editor/CurriculumEditor';
@@ -46,27 +47,35 @@ function LearnerApp({ onOpenEditor }: { onOpenEditor: () => void }) {
   const catalogue = useCatalogue();
   const [tab, setTab] = useState<Tab>('Today');
   const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
-  function navigate(next: Tab) { audio.stop(); setLesson(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
-  function openLesson(next: Lesson) { audio.stop(); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  const wide = width >= 1050;
+  const topics = groupLessonTopics(catalogue.lessons);
+  function navigate(next: Tab) { audio.stop(); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function selectTopic(name: string | null) { audio.stop(); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function openLesson(next: Lesson) { audio.stop(); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   useEffect(() => () => audio.stop(), []);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
     <View style={s.row}><Text style={{ fontSize: 26 }}>✳</Text><Text style={s.brand}>SmartLingo</Text><Badge>LOCAL PREVIEW</Badge></View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
-    <ScrollView ref={scroll} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}><View style={[s.main, width < 600 && { padding: 16, paddingTop: 24 }]}>
+    {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
+    <View style={{ flex: 1, width: '100%', maxWidth: 1440, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
+    <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}><View style={[s.main, width < 600 && { padding: 16, paddingTop: 24 }]}>
       {model.loading || catalogue.loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text></View> : <>
         {!!model.loadError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text><Text style={s.body}>{model.loadError}</Text><Text style={s.body}>You can browse the bundled lessons. Saving and lesson progress need browser storage.</Text><Button onPress={() => void model.load()}>Retry opening storage</Button></View>}
         {!!model.saveError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>This change hasn’t been confirmed as saved.</Text><Text style={s.body}>{model.saveError}</Text><Text style={s.muted}>Retry keeps the same event, so your practice won’t be counted twice.</Text><View style={s.row}><Button primary disabled={model.busy} onPress={model.retry}>Retry save</Button><Button disabled={model.busy} onPress={model.cancelWrite}>Dismiss and continue</Button></View></View>}
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
-        {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => navigate('Explore')} />
+        {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} />
+            : tab === 'Explore' || tab === 'Practice' ? <TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} />
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
+    {wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />}
+    </View>
   </View>;
 }
 

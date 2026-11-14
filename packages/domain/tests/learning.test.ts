@@ -28,3 +28,15 @@ test('progress belongs to a content revision and completion does not imply profi
   assert.equal(progress.pictureDone, false);
   assert.equal(progress.sentenceDone, false);
 });
+
+test('explicit vocabulary overview review covers one revision without implying exercise completion', () => {
+  const overview: LearningEvent = { id: '88888888-8888-4888-8888-888888888888', lessonId: restaurantLesson.id, revision: 1,
+    itemId: restaurantLesson.id, activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T12:00:00Z' };
+  assert.equal(lessonProgress(restaurantLesson, []).viewedIds.size, 0);
+  assert.deepEqual([...lessonProgress(restaurantLesson, [overview]).viewedIds], restaurantLesson.vocabulary.map(entry => entry.id));
+  assert.equal(lessonProgress(restaurantLesson, [overview]).completed, false);
+  assert.equal(lessonProgress(restaurantLesson, [overview]).pictureDone, false);
+  assert.equal(lessonProgress(restaurantLesson, [overview]).sentenceDone, false);
+  assert.equal(lessonProgress({ ...restaurantLesson, revision: 2 }, [overview]).viewedIds.size, 0);
+  assert.equal(lessonProgress({ ...restaurantLesson, id: 'fr.other.lesson' }, [overview]).viewedIds.size, 0);
+});

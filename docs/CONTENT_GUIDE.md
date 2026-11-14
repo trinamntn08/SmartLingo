@@ -9,6 +9,7 @@ Initial learner: an English-speaking adult newcomer to France, from complete beg
 - Include noun articles/gender, a specific sense, natural French examples, English meaning, and register.
 - Pair concrete vocabulary with unambiguous pictures; use alt text.
 - Use explicit meaning matching for abstract/unillustrated entries. A contextual notebook is not a literal depiction; do not test an abstract word against it as a picture.
+- Topic banks and lesson overviews show words together. Original bundled drawings in `packages/content/src/visuals.ts` associate stable IDs with exact targets without rewriting lesson revisions; see [media records](MEDIA_SOURCES.md). An abstraction can stay text-supported.
 - Include a short dialogue and sentence-building activity with accepted alternatives.
 - Show meanings, example translations and explanations directly in study material. Keep deliberate recall reveals within review practice.
 - Keep IDs stable and distinguish shared curriculum from learner-edited notebook entries.

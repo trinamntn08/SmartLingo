@@ -1,0 +1,13 @@
+# Vocabulary illustration sources and rights
+
+Created 2026-11-14 for the visual topic browser.
+
+## Original bundled drawings
+The ten initial illustrations live in apps/learner/src/ui/Illustration.tsx. New reusable vector drawings and word associations live in packages/content/src/visuals.ts and render through WordIllustration.tsx. All new SVG geometry and compositions were written originally for SmartLingo with AI assistance. No stock photo, Facebook image, textbook artwork, emoji font, icon library or third-party image was copied or fetched. No third-party attribution or licence grant is claimed. The owner must still review clarity, sense, accessibility descriptions and suitability before wider publication.
+
+The new visual catalogue is separate from lesson revisions. Associations use stable vocabulary IDs and exact current target text; changed targets do not receive an outdated new illustration. Existing concrete curriculum pictures remain the fallback. SVGs bundle with ordinary web assets, have no scripts or remote image dependencies, and require no AI/API request during use. This is not service-worker/offline-installation support: web assets still need to load.
+
+## Meaning and accessibility
+Draw recognizable concrete objects where possible, with descriptive English alt text. A scene must describe its context honestly; an abstract word does not need a decorative object masquerading as its literal meaning. Word targets, English senses, original examples/translations and explanations remain directly visible with or without an illustration. Picture practice keeps its explicitly authored answer key; new meaning practice continues to use written meanings.
+
+The new catalogue covers 125 stable vocabulary IDs with 122 distinct original drawings: 108 literal and 17 explicitly described context scenes, across all 12 topics. Canonical ID/target and resource-isolation checks pass. All 125 SVG data URIs decoded in Chromium, with no failures; the complete contact sheets and desktop/320px word grids were visually inspected. The independent reviewer checked generated path syntax, word associations and the unknown-ID fallback (including the JavaScript inherited name constructor). No remaining actionable finding. Full results are recorded in docs/SESSION_CHECKPOINT.md. Automated asset identity/render checks do not establish linguistic or visual teaching quality. Phone/Safari/assistive-technology and owner review remain required.

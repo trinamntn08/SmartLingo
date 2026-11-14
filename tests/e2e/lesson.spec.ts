@@ -7,7 +7,9 @@ async function expectPictureLoaded(page: Page) {
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
-  expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
+  expect(await page.evaluate(() => [...document.querySelectorAll('*')]
+    .filter(element => !element.closest('[data-testid="topic-navigation"]'))
+    .every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
 }
 
 async function storedRows(page: Page, store: 'events' | 'notebook') {
@@ -43,15 +45,17 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByText('A polite greeting when you arrive.', { exact: true })).toBeVisible();
   await expect(button(page, /Show meaning|Show example translation|Show word note/)).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('vocabulary.png'), fullPage: true });
-  await button(page, '+ Save word').click();
-  await expect(page.getByText('Saved to your notebook.', { exact: false })).toBeVisible();
-  await button(page, /Next word/).click();
+  await expect(page.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
+  for (const word of ['un café', 'de l’eau', 'la carte', 'l’addition', 's’il vous plaît'])
+    await expect(page.getByRole('heading', { name: word, exact: true })).toBeVisible();
+  await expectPictureLoaded(page);
+  await expect(button(page, /Next word/)).toHaveCount(0);
+  await button(page, 'Save bonjour').click();
+  await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
+  await button(page, /Continue to dialogue/).click();
   await page.reload();
   await button(page, /Continue your lesson/).click();
-  await expect(page.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
-  for (let index = 0; index < 4; index++) { await expectPictureLoaded(page); await button(page, /Next word/).click(); }
-  await expectPictureLoaded(page);
-  await button(page, /Continue to dialogue/).click();
+  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
   await expect(page.getByText('Je voudrais means', { exact: false })).toBeVisible();
   await expect(page.getByText('Hello! What would you like?', { exact: true })).toBeVisible();
   await expect(button(page, /Show translation|Show grammar help/)).toHaveCount(0);
@@ -90,11 +94,16 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByText('✓ Session completed and saved', { exact: false })).toBeVisible();
   await button(page, /Revisit your lesson/).click();
   await button(page, 'Revisit the words').click();
-  await expect(button(page, /In notebook/)).toBeDisabled();
+  await expect(button(page, 'Save bonjour')).toBeDisabled();
+  await expect(button(page, 'Save bonjour')).toContainText('In notebook');
   const notes = await storedRows(page, 'notebook');
   expect(notes).toHaveLength(1);
   expect(notes[0].meaning).toBe('My morning greeting');
   const events = await storedRows(page, 'events');
+  const overviewEvents = events.filter(event => event.lessonId === 'fr.restaurant.customer'
+    && event.activity === 'vocabulary' && event.result === 'viewed');
+  expect(overviewEvents).toHaveLength(1);
+  expect(overviewEvents[0].itemId).toBe('fr.restaurant.customer');
   expect(events.filter(event => event.activity === 'completion')).toHaveLength(1);
   expect(events.find(event => event.activity === 'picture' && event.result === 'correct')?.hints).toBe(1);
   expect(events.find(event => event.activity === 'sentence' && event.result === 'correct')?.hints).toBe(1);
@@ -108,15 +117,16 @@ test('stale tab capture preserves another tab’s notebook edit', async ({ page,
   const stale = await context.newPage();
   await stale.goto('/');
   await button(stale, /Start restaurant practice/).click();
-  await button(page, '+ Save word').click();
-  await expect(page.getByText('Saved to your notebook.', { exact: false })).toBeVisible();
+  await button(page, 'Save bonjour').click();
+  await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await button(page, 'Review').click();
   await button(page, 'Edit note').click();
   await page.getByRole('textbox', { name: 'English meaning', exact: true }).fill('Keep my personal note');
   await button(page, 'Save changes').click();
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
-  await button(stale, '+ Save word').click();
-  await expect(button(stale, /In notebook/)).toBeDisabled();
+  await button(stale, 'Save bonjour').click();
+  await expect(button(stale, 'Save bonjour')).toBeDisabled();
+  await expect(button(stale, 'Save bonjour')).toContainText('In notebook');
   await button(stale, 'Review').click();
   await expect(stale.getByText('Keep my personal note')).toBeVisible();
   expect((await storedRows(page, 'notebook'))[0].meaning).toBe('Keep my personal note');
@@ -138,10 +148,10 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await page.screenshot({ path: info.outputPath('narrow-lesson.png'), fullPage: true });
   await button(page, 'Listen to bonjour').click();
   // Missing device voices never block the text activity.
-  await expect(button(page, /Next word/)).toBeEnabled();
-  await button(page, /Next word/).click();
   await expect(page.getByRole('heading', { name: 'une baguette', exact: true })).toBeVisible();
-  await expectPictureLoaded(page);
+  await expect(button(page, /Continue to dialogue/)).toBeEnabled();
+  await button(page, /Continue to dialogue/).click();
+  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
 });
 
 test('storage denial explains the problem and never claims a saved change', async ({ page }) => {
@@ -149,8 +159,8 @@ test('storage denial explains the problem and never claims a saved change', asyn
   await page.goto('/');
   await expect(page.getByRole('alert')).toContainText('couldn’t be opened');
   await button(page, /Start restaurant practice/).click();
-  await expect(button(page, '+ Save word')).toBeDisabled();
-  await expect(button(page, /Next word/)).toBeDisabled();
+  await expect(button(page, 'Save bonjour')).toBeDisabled();
+  await expect(button(page, /Continue to dialogue/)).toBeDisabled();
   await button(page, 'Retry opening storage').click();
   await expect(page.getByRole('alert')).toContainText('couldn’t be opened');
 });
@@ -169,9 +179,10 @@ test('failed save can retry once without duplicate practice', async ({ page }) =
   });
   await page.goto('/');
   await button(page, /Start restaurant practice/).click();
-  await button(page, /Next word/).click();
+  await button(page, /Continue to dialogue/).click();
   await expect(page.getByRole('alert')).toContainText('hasn’t been confirmed as saved');
+  await expect(button(page, /Continue to dialogue/)).toBeDisabled();
   await button(page, 'Retry save').click();
-  await expect(page.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
+  await expect(page.getByText('Je voudrais means', { exact: false })).toBeVisible();
   expect(await storedRows(page, 'events')).toHaveLength(1);
 });

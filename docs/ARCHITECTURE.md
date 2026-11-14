@@ -22,6 +22,7 @@ Status: local web learning and first editor/publication slice implemented; nativ
 - Manual recognition events -> framework-independent versioned calendar schedule; store assisted ratings separately, never infer proficiency from activity. Backup v2 includes review events and migrates v1 files; IndexedDB v3 preserves prior stores.
 - Draft editing -> validation/preview -> explicit publication -> versioned content.
 - Published API content -> validated IndexedDB cache -> learner catalogue; newer drafts remain editor-only. Preview practice uses an isolated in-memory model.
+- Stable-ID/target-guarded original SVG media -> learner WordIllustration adapter. Visual catalogue data stays separate from immutable lesson revisions; unknown/abstract words remain text-supported. An explicit vocabulary-overview review event uses the existing event contract, scoped to lesson/revision; mere browsing records no review.
 - Separate target language, explanation language, and UI language.
 - Keep provider/model identifiers configurable and media keyed by content/settings hash.
 - Keep tests provider-independent; add opt-in live checks only when requested.

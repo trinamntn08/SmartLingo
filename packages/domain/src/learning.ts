@@ -43,7 +43,11 @@ export function checkAnswer(answer: string, exercise: Lesson['sentenceActivity']
 }
 export function lessonProgress(lesson: Lesson, events: LearningEvent[]) {
   const relevant = events.filter(event => event.lessonId === lesson.id && event.revision === lesson.revision);
-  const viewedIds = new Set(relevant.filter(event => event.activity === 'vocabulary' && event.result === 'viewed').map(event => event.itemId));
+  // A deliberate overview review covers the displayed set; older per-word events
+  // still count. Opening a grid alone never creates either kind of event.
+  const overviewReviewed = relevant.some(event => event.activity === 'vocabulary' && event.result === 'viewed' && event.itemId === lesson.id);
+  const viewedIds = new Set(overviewReviewed ? lesson.vocabulary.map(entry => entry.id)
+    : relevant.filter(event => event.activity === 'vocabulary' && event.result === 'viewed').map(event => event.itemId));
   return {
     viewedIds,
     pictureDone: relevant.some(event => event.activity === 'picture' && event.result === 'correct'),

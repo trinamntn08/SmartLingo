@@ -29,9 +29,9 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await proxyTestContent(page);
   await page.goto('/');
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
-  await page.getByRole('button', { name: '+ Save word', exact: true }).click();
-  await expect(page.getByText('Saved to your notebook.', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: /Next word/ }).click();
+  await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
+  await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   const originalEvents = await learningRows(page, 'events');
   const originalNotebook = await learningRows(page, 'notebook');
@@ -48,8 +48,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: 'Preview saved revision', exact: true }).click();
   await expect(page.getByText('Saved revision 2 · temporary practice', { exact: true })).toBeVisible();
   // Preview practice and word capture never touch the real notebook/history.
-  await page.getByRole('button', { name: '+ Save word', exact: true }).click();
-  await page.getByRole('button', { name: /Next word/ }).click();
+  await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
+  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   expect(await learningRows(page, 'events')).toEqual(originalEvents);
   expect(await learningRows(page, 'notebook')).toEqual(originalNotebook);
   await expect(page.getByText('Accepted sentence answers', { exact: false })).toBeVisible();
@@ -75,7 +75,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await expect(page.getByText('Published', { exact: true })).toBeVisible();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: /In notebook/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toContainText('In notebook');
 });
 
 test('editor unavailable state preserves the independent learner flow', async ({ page }, info) => {

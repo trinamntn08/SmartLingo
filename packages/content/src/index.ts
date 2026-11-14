@@ -4,6 +4,8 @@ import { foodHomeTopics } from './topics/food-home';
 import { dailyLifeTopics } from './topics/daily-life';
 import { reuseSharedVocabulary } from './shared-vocabulary';
 
+export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
+
 // Original preview curriculum. Publication requires owner review.
 const drafts = [
   {

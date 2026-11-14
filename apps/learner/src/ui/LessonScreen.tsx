@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Text, View, useWindowDimensions } from 'react-native';
-import { checkAnswer, lessonProgress, type LearningEvent, type Lesson, type Vocabulary } from '@smartlingo/domain';
+import { Text, View } from 'react-native';
+import { checkAnswer, lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
 import { Badge, Button, Speak } from './controls';
 import { Illustration } from './Illustration';
+import { VocabularyCard } from './VocabularyCard';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 
@@ -17,52 +18,30 @@ function resumeStage(lesson: Lesson, model: LearningModel): Stage {
 }
 
 export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model: LearningModel; onExit: () => void }) {
-  const { width } = useWindowDimensions();
-  const compact = width < 760;
   const progress = lessonProgress(lesson, model.events);
   const [stage, setStage] = useState<Stage>(() => resumeStage(lesson, model));
-  const [wordIndex, setWordIndex] = useState(() => Math.max(0, lesson.vocabulary.findIndex(entry => !progress.viewedIds.has(entry.id))));
-  const [savedMessage, setSavedMessage] = useState('');
   const readyToFinish = lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id)) && progress.pictureDone && progress.sentenceDone;
   const count = lesson.vocabulary.filter(entry => progress.viewedIds.has(entry.id)).length + Number(progress.pictureDone) + Number(progress.sentenceDone);
   function record(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints = 0, after?: () => void) {
     model.record({ id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints, occurredAt: new Date().toISOString() }, after);
   }
-  function nextWord() {
-    const entry = lesson.vocabulary[wordIndex];
-    record('vocabulary', entry.id, 'viewed', 0, () => {
-      setSavedMessage('');
-      if (wordIndex + 1 < lesson.vocabulary.length) setWordIndex(wordIndex + 1);
-      else setStage('dialogue');
-    });
+  function reviewVocabulary() {
+    if (lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id))) setStage('dialogue');
+    else record('vocabulary', lesson.id, 'viewed', 0, () => setStage('dialogue'));
   }
-  function saveWord(entry: Vocabulary) {
-    model.captureEntry({ id: `notebook.${entry.id}`, sourceEntryId: entry.id, target: entry.target, meaning: entry.meaning,
-      example: entry.example, updatedAt: new Date().toISOString() }, () => setSavedMessage('Saved to your notebook. You can edit it in Review.'));
-  }
-  const entry = lesson.vocabulary[wordIndex];
   return <View style={{ gap: 24 }}>
     <View style={s.row}><Button onPress={onExit}>← All lessons</Button><Badge>{lesson.level} · {lesson.topic} · {lesson.role}</Badge><Badge>{lesson.status === 'draft' ? 'Draft' : 'Published'}</Badge></View>
     <View style={{ gap: 10 }}><Text accessibilityRole="header" style={s.title}>{lesson.subtitle}</Text></View>
     <View style={{ gap: 8 }} accessibilityLabel={`${count} of ${lesson.vocabulary.length + 2} activities saved`}>
-      <View style={s.row}><Text style={s.eyebrow}>{stage === 'vocabulary' ? `Words · ${wordIndex + 1} of ${lesson.vocabulary.length}` : stage === 'finish' ? 'Your session' : stage}</Text><Text style={s.muted}>{count}/{lesson.vocabulary.length + 2} activities saved</Text></View>
+      <View style={s.row}><Text style={s.eyebrow}>{stage === 'vocabulary' ? `${lesson.vocabulary.length} words together` : stage === 'finish' ? 'Your session' : stage}</Text><Text style={s.muted}>{count}/{lesson.vocabulary.length + 2} activities saved</Text></View>
       <View style={s.progressTrack}><View style={[s.progressFill, { width: `${count / (lesson.vocabulary.length + 2) * 100}%` }]} /></View>
     </View>
-    {stage === 'vocabulary' && <View style={s.split}>
-      {!compact && entry.picture !== 'context' && <View style={[s.card, s.column, { backgroundColor: '#E7ECD9', justifyContent: 'center', minHeight: 310 }]}><Illustration picture={entry.picture} alt={entry.pictureAlt} size={320} /></View>}
-      <View style={[s.card, s.column, { gap: 16 }]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <View style={{ flex: 1, minWidth: 0, gap: 6 }}><Text accessibilityRole="header" style={[s.title, compact && { fontSize: 32, lineHeight: 38 }]}>{entry.target}</Text><Text style={s.body}>{entry.meaning}</Text></View>
-          {compact && entry.picture !== 'context' && <Illustration picture={entry.picture} alt={entry.pictureAlt} size={84} />}
-        </View>
-        <Speak text={entry.target} />
-        <View style={s.divider} />
-        <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example</Text><Text style={s.heading}>{entry.example}</Text><Text style={s.muted}>{entry.exampleMeaning}</Text></View>
-        <View style={[s.notice, { padding: 14, gap: 6 }]}><Text style={s.eyebrow}>Explanation</Text><Text style={s.body}>{entry.note}</Text></View>
-        <View style={s.row}><Button disabled={model.blocked || model.notebook.some(saved => saved.sourceEntryId === entry.id)} onPress={() => saveWord(entry)}>{model.notebook.some(saved => saved.sourceEntryId === entry.id) ? '✓ In notebook' : '+ Save word'}</Button>
-          <Button primary disabled={model.blocked} onPress={nextWord}>{wordIndex === lesson.vocabulary.length - 1 ? 'Continue to dialogue →' : 'Next word →'}</Button></View>
-        {!!savedMessage && <Text accessibilityLiveRegion="polite" style={s.muted}>{savedMessage}</Text>}
-      </View>
+    {stage === 'vocabulary' && <View style={{ gap: 20 }}>
+      <View style={[s.split, { gap: 18 }]}>{lesson.vocabulary.map(entry => <View key={entry.id} style={{ flexGrow: 1, flexShrink: 1, flexBasis: 300, minWidth: 0 }}>
+        <VocabularyCard entry={entry} model={model} />
+      </View>)}</View>
+      <Text style={s.muted}>Continue when you have reviewed these words.</Text>
+      <View style={s.row}><Button primary disabled={model.blocked} onPress={reviewVocabulary}>Continue to dialogue →</Button></View>
     </View>}
     {stage === 'dialogue' && <View style={s.card}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text><Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
       {lesson.dialogue.map((line, index) => <View key={index} style={[s.notice, line.role === lesson.role && { backgroundColor: '#E5EEDC', marginLeft: 16 }]}>
@@ -79,7 +58,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
       <Text style={s.body}>{lesson.outcome}</Text><Text style={s.muted}>Completing this session records your practice. Confidence grows with revisiting and using French in real life.</Text>
       {!progress.completed && <Button primary disabled={model.blocked || !readyToFinish} onPress={() => record('completion', lesson.id, 'completed')}>Finish and save session</Button>}
       {!readyToFinish && <Text style={s.muted}>Study every word and solve both activities before finishing.</Text>}
-      <View style={s.row}><Button onPress={() => { setWordIndex(0); setStage('vocabulary'); }}>Revisit the words</Button><Button primary={progress.completed} onPress={onExit}>Back to lessons →</Button></View>
+      <View style={s.row}><Button onPress={() => setStage('vocabulary')}>Revisit the words</Button><Button primary={progress.completed} onPress={onExit}>Back to lessons →</Button></View>
     </View>}
   </View>;
 }

@@ -8,12 +8,12 @@ Owner-selected GitHub target: https://github.com/trinamntn08/SmartLingo.
 
 ## Current Git state
 
-- Local main contains commit `207cbad` (`chore: bootstrap Codex project workflows and Git tooling`). The working tree was clean before this documentation update.
-- Origin points to the selected repository for fetch and push.
-- `git update-index --refresh` succeeded during the access check. However, the later commit attempt failed at staging: .git/index.lock returned Permission denied. The refresh command did not establish write access.
-- Remote lookup and push dry run fail with `getaddrinfo() thread failed to start`. Windows DNS lookup also returns Access is denied; Windows curl cannot resolve github.com. Remote history and push permissions remain unverified.
-- No new commit, fetch, merge, or remote change was made during this verification. See [checkpoint](SESSION_CHECKPOINT.md) for recovery steps.
-
+- Local main and cached origin/main point to `1606501` (`update docs`), following bootstrap commit `207cbad`. The previously requested documentation commit exists. Live remote state remains unverified.
+- The working tree was clean at session start; this verification updates only STATUS.md and SESSION_CHECKPOINT.md.
+- Origin uses the owner-selected HTTPS URL for fetch and push.
+- Staging failed creating .git/index.lock with Permission denied. Fetch failed opening .git/FETCH_HEAD with Permission denied.
+- Remote HEAD lookup and push dry run both failed with `getaddrinfo() thread failed to start`. Push permission and live remote history remain unknown.
+- No staging, new commit, fetch, merge, or remote change succeeded in this session. See [checkpoint](SESSION_CHECKPOINT.md) for the exact recovery steps. Never force-push.
 ## Implemented
 
 - Product requirements and visual references.

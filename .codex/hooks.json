@@ -1,0 +1,31 @@
+{
+  "description": "Project context on session start; advisory repository checks on stop. No paid calls or automatic edits.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"require(require('node:child_process').execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim()+'/scripts/codex-hook.cjs')\" session-start",
+            "timeout": 10,
+            "statusMessage": "Loading project context",
+            "additionalContextLimit": 2200
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"require(require('node:child_process').execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim()+'/scripts/codex-hook.cjs')\" stop",
+            "timeout": 15,
+            "statusMessage": "Checking repository setup"
+          }
+        ]
+      }
+    ]
+  }
+}

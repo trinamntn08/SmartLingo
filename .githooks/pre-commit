@@ -1,0 +1,4 @@
+#!/bin/sh
+# Git for Windows supplies sh; all checks run in Node.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+exec node scripts/check-repo.mjs --staged

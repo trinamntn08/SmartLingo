@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.mp3 binary
+*.wav binary
+*.mp4 binary
+*.ps1 text eol=lf
+.githooks/* text eol=lf

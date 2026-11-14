@@ -1,0 +1,47 @@
+# Dependencies and application builds
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.tgz
+.expo/
+dist/
+build/
+web-build/
+coverage/
+*.tsbuildinfo
+# Secrets (keep blank templates)
+.env
+.env.*
+.[eE][nN][vV]
+.[eE][nN][vV].*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+# Local learner/provider data and generated media
+data/
+storage/
+recordings/
+transcripts/
+exports/
+.cache/
+.tmp/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.log
+# Local tools/editor state
+.codex/*.local.toml
+.codex/sessions/
+.codex/log/
+.codex/history.jsonl
+.agents/*.local.*
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

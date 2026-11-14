@@ -1,0 +1,33 @@
+{
+  "name": "smartlingo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Local-first language learning project — development setup",
+  "packageManager": "npm@11.17.0",
+  "engines": {
+    "node": ">=24.19.0 <25",
+    "npm": ">=11 <12"
+  },
+  "files": [
+    "AGENTS.md",
+    "CONTRIBUTING.md",
+    "PROJECT_PLAN.md",
+    "docs/",
+    "scripts/",
+    "tooling/",
+    ".githooks/",
+    ".env.example"
+  ],
+  "scripts": {
+    "setup": "node scripts/setup-git.mjs",
+    "setup:codex": "node scripts/install-codex.mjs --apply",
+    "setup:codex:plan": "node scripts/install-codex.mjs",
+    "setup:finish": "node scripts/finish-setup.mjs --apply",
+    "setup:finish:plan": "node scripts/finish-setup.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "pack:check": "npm pack --dry-run --ignore-scripts",
+    "check": "node scripts/check-repo.mjs",
+    "check:staged": "node scripts/check-repo.mjs --staged",
+    "test": "node --test scripts/tests/*.test.mjs"
+  }
+}

@@ -1,0 +1,4 @@
+# Project configuration. Inherit model, credentials, sandbox and approval policy.
+# Current documented standalone agent format, verified 2026-11-14.
+[agents]
+max_concurrent_threads_per_session = 3

@@ -1,0 +1,45 @@
+import { z } from 'zod';
+import type { Lesson } from './content';
+
+export const learningEventSchema = z.object({
+  id: z.string().uuid(), lessonId: z.string().min(1), revision: z.number().int().positive(),
+  itemId: z.string().min(1), activity: z.enum(['vocabulary', 'picture', 'sentence', 'completion']),
+  result: z.enum(['viewed', 'correct', 'almost', 'incorrect', 'completed']),
+  hints: z.number().int().min(0), occurredAt: z.string().datetime({ offset: true }),
+});
+export type LearningEvent = z.infer<typeof learningEventSchema>;
+export const notebookEntrySchema = z.object({
+  id: z.string().min(1).max(160), sourceEntryId: z.string().min(1),
+  target: z.string().trim().min(1).max(300), meaning: z.string().trim().min(1).max(500),
+  example: z.string().trim().max(1000), updatedAt: z.string().datetime({ offset: true }),
+});
+export type NotebookEntry = z.infer<typeof notebookEntrySchema>;
+export interface LearningRepository {
+  listEvents(): Promise<LearningEvent[]>;
+  recordEvent(event: LearningEvent): Promise<void>;
+  listNotebook(): Promise<NotebookEntry[]>;
+  captureNotebook(entry: NotebookEntry): Promise<NotebookEntry>;
+  saveNotebook(entry: NotebookEntry): Promise<void>;
+  close(): void;
+}
+
+export function normalizeAnswer(answer: string): string {
+  return answer.normalize('NFC').toLocaleLowerCase('fr-FR').replace(/[’‘]/g, "'")
+    .replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '').trim();
+}
+export function checkAnswer(answer: string, exercise: Lesson['sentenceActivity']): 'correct' | 'almost' | 'incorrect' {
+  const normalized = normalizeAnswer(answer);
+  if (exercise.answers.some(valid => normalizeAnswer(valid) === normalized)) return 'correct';
+  if (exercise.almostAnswers.some(valid => normalizeAnswer(valid) === normalized)) return 'almost';
+  return 'incorrect';
+}
+export function lessonProgress(lesson: Lesson, events: LearningEvent[]) {
+  const relevant = events.filter(event => event.lessonId === lesson.id && event.revision === lesson.revision);
+  const viewedIds = new Set(relevant.filter(event => event.activity === 'vocabulary' && event.result === 'viewed').map(event => event.itemId));
+  return {
+    viewedIds,
+    pictureDone: relevant.some(event => event.activity === 'picture' && event.result === 'correct'),
+    sentenceDone: relevant.some(event => event.activity === 'sentence' && event.result === 'correct'),
+    completed: relevant.some(event => event.activity === 'completion' && event.result === 'completed'),
+  };
+}

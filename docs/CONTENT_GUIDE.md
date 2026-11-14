@@ -22,4 +22,4 @@ Use supportive beginner feedback. Normalise harmless presentation differences; s
 Store hints/attempt types so supported completion does not imply independent recall.
 Voice transcripts can be wrong; do not use transcription success as a pronunciation score.
 
-Actual content schema and validator are pending implementation. The current repository check validates development setup, not French linguistic correctness.
+The runtime schema lives in `packages/domain/src/content.ts`; original drafts live in `packages/content/src/index.ts`. Application tests check schema/IDs and exercise references. These checks do not establish French linguistic correctness. The local learner and read-only API expose drafts explicitly for owner preview; no publication workflow exists yet.

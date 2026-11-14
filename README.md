@@ -1,8 +1,29 @@
 # SmartLingo
 
-A planned practical language-learning app for English-speaking newcomers to France. French first, with web, Android, and iOS targets.
+A practical French learning preview for English-speaking newcomers to France. Web first; Android and iOS adapters are planned.
 
-**Current state:** planning and Codex/Git tooling only. The learner app and API have not been scaffolded.
+**Current state:** first local implementation slice. Two unreviewed lesson drafts, picture and sentence practice, and a browser notebook. This is an owner preview, not published curriculum.
+
+## Run the preview
+
+Use Node 24.19.0 and npm 11.x, then run from the repository root:
+
+```sh
+npm ci
+npm run dev
+```
+
+Open the localhost URL printed by Expo. No API key is required. Study Restaurant → Customer, reveal help as needed, save a word, and find/edit it under Review. Attempts and notebook entries are stored in this browser's IndexedDB and survive reload. Use the same hostname/port/browser to return to that storage. Browser data can be cleared or evicted; export/restore is not implemented yet.
+
+Optional, in a second terminal:
+
+```sh
+npm run dev:api
+```
+
+The read-only API listens at `http://127.0.0.1:3001` with `/health`, `/lessons`, and `/lessons/fr.restaurant.customer`. It seeds draft content into ignored `data/smartlingo.sqlite`. Node's built-in SQLite may print an experimental warning. The learner uses bundled lessons and remains usable while this API is stopped. Host overrides are limited to loopback; LAN access/authentication is not implemented.
+
+Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, content editing/publication, spaced review, microphone conversations, and mobile packages remain planned.
 
 ## Start here
 
@@ -16,7 +37,7 @@ A planned practical language-learning app for English-speaking newcomers to Fran
 
 ## Tooling prerequisites
 
-Node.js 24.19.0 (Node 24 supported), npm 11.x, and Git. The bootstrap tooling uses Node built-ins only; no dependency download is required. See [local environments and packaging](docs/ENVIRONMENT.md). Dependencies/cache stay project-local; runtime-manager version files and a lockfile support reproducible installation.
+Node.js 24.19.0 (Node 24 supported), npm 11.x, and Git. See [local environments and packaging](docs/ENVIRONMENT.md). Dependencies/cache stay project-local; runtime-manager version files and a lockfile support reproducible installation.
 
 Run from the repository root:
 
@@ -29,12 +50,15 @@ npm test
 PowerShell: use `npm.cmd` if execution policy blocks `npm.ps1`.
 
 - `setup`: set this repository's Git hooks path; leave global Git settings unchanged.
-- `check`: validate project instructions/configuration/skill structure and Git whitespace.
-- `test`: exercise tooling, staged-secret detection, and hook behaviour without paid API calls.
+- `check`: validate project instructions/configuration/skill structure, Git whitespace, and TypeScript.
+- `test`: run tooling and domain/storage/API tests without paid API calls.
 - `check:staged`: include staged-file secret checks before a commit.
 - `doctor`: show Node/Git availability, hook installation, and Codex CLI availability.
 
-These are tooling checks, not application tests. No `dev`, app `build`, or app test command exists yet.
+- `build:web`: export the Expo web application to ignored `apps/learner/dist`.
+- `test:e2e`: run Chromium desktop and phone-sized browser checks (install once with `npx playwright install chromium`).
+
+See [verification](docs/TESTING.md) for test scope and device limitations.
 
 ## Working with Codex
 

@@ -1,0 +1,114 @@
+import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+import { test } from 'node:test';
+import { lessons, restaurantLesson } from '@smartlingo/content';
+import { migrateContentDatabase } from '../src/migrations';
+import { InvalidStoredLessonError, SqliteLessonRepository } from '../src/repository';
+
+test('migration initializes the schema once and preserves existing rows', () => {
+  const database = new DatabaseSync(':memory:');
+  try {
+    migrateContentDatabase(database);
+    database.prepare('INSERT INTO lesson_revisions VALUES (?, ?, ?)').run('test.lesson', 1, '{}');
+    migrateContentDatabase(database);
+    assert.equal(database.prepare('PRAGMA user_version').get()?.user_version, 1);
+    assert.equal(database.prepare('SELECT COUNT(*) AS count FROM lesson_revisions').get()?.count, 1);
+  } finally { database.close(); }
+});
+
+test('migration refuses a future schema without changing its version', () => {
+  const database = new DatabaseSync(':memory:');
+  try {
+    database.exec('PRAGMA user_version = 2');
+    assert.throws(() => migrateContentDatabase(database), /Unsupported/);
+    assert.equal(database.prepare('PRAGMA user_version').get()?.user_version, 2);
+    assert.equal(database.isTransaction, false);
+  } finally { database.close(); }
+});
+
+test('draft seed is idempotent and preserves local revisions and same-revision edits', () => {
+  const repository = new SqliteLessonRepository(':memory:');
+  try {
+    const edited = { ...restaurantLesson, title: 'My local preview' };
+    repository.saveLesson(edited);
+    repository.seed(lessons);
+    repository.seed(lessons);
+    assert.equal(repository.listLessons().length, lessons.length);
+    assert.equal(repository.getLesson(edited.id)?.title, edited.title);
+    const next = { ...edited, revision: 3, title: 'My third revision' };
+    repository.saveLesson(next);
+    repository.seed([{ ...restaurantLesson, revision: 4 }]);
+    assert.deepEqual(repository.getLesson(edited.id), next);
+  } finally { repository.close(); }
+});
+
+test('invalid writes and revision conflicts leave valid content unchanged', () => {
+  const repository = new SqliteLessonRepository(':memory:');
+  try {
+    repository.seed(lessons);
+    assert.throws(() => repository.saveLesson({ ...restaurantLesson, vocabulary: [] }));
+    assert.throws(() => repository.saveLesson({ ...restaurantLesson, title: 'Overwrite' }), /revision/);
+    repository.saveLesson(restaurantLesson); // An identical retry is harmless.
+    repository.saveLesson({ ...restaurantLesson, revision: 2 });
+    assert.throws(() => repository.saveLesson(restaurantLesson), /revision/);
+    assert.equal(repository.getLesson(restaurantLesson.id)?.revision, 2);
+    assert.throws(() => repository.seed([{ ...restaurantLesson, status: 'published' }]), /drafts/);
+  } finally { repository.close(); }
+});
+
+test('seeding validates the entire batch before writing', () => {
+  const repository = new SqliteLessonRepository(':memory:');
+  try {
+    assert.throws(() => repository.seed([restaurantLesson, { id: 'broken' }]));
+    assert.deepEqual(repository.listLessons(), []);
+  } finally { repository.close(); }
+});
+
+test('reopening SQLite preserves revisions; malformed stored content fails explicitly', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'smartlingo-api-'));
+  const path = join(directory, 'content.sqlite');
+  let repository = new SqliteLessonRepository(path);
+  try {
+    repository.seed(lessons);
+    const revised = { ...restaurantLesson, revision: 2, title: 'Persisted local title' };
+    repository.saveLesson(revised);
+    repository.close();
+    repository = new SqliteLessonRepository(path);
+    assert.deepEqual(repository.getLesson(revised.id), revised);
+    repository.close();
+    const database = new DatabaseSync(path);
+    try {
+      assert.equal(database.prepare('SELECT COUNT(*) AS count FROM lesson_revisions WHERE id = ?')
+        .get(revised.id)?.count, 2);
+      database.prepare('UPDATE lesson_revisions SET payload = ? WHERE id = ? AND revision = 2')
+        .run('{broken JSON', revised.id);
+    } finally { database.close(); }
+    repository = new SqliteLessonRepository(path);
+    assert.throws(() => repository.getLesson(revised.id), InvalidStoredLessonError);
+    assert.throws(() => repository.listLessons(), InvalidStoredLessonError);
+    assert.throws(() => repository.seed(lessons), InvalidStoredLessonError);
+  } finally {
+    repository.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('stored content must match its database ID and revision', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'smartlingo-api-'));
+  const path = join(directory, 'content.sqlite');
+  const repository = new SqliteLessonRepository(path);
+  try {
+    const database = new DatabaseSync(path);
+    try {
+      database.prepare('INSERT INTO lesson_revisions VALUES (?, ?, ?)')
+        .run(restaurantLesson.id, 2, JSON.stringify(restaurantLesson));
+    } finally { database.close(); }
+    assert.throws(() => repository.getLesson(restaurantLesson.id), InvalidStoredLessonError);
+  } finally {
+    repository.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
+});

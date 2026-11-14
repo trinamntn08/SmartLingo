@@ -9,10 +9,12 @@
 | [Codex setup](CODEX_SETUP.md) | Instructions, subagents, hooks, skills, compatibility |
 | [Architecture](ARCHITECTURE.md) | Planned modules, boundaries, implementation standards, and review criteria |
 | [Content guide](CONTENT_GUIDE.md) | French lesson authoring and review |
-| [Testing](TESTING.md) | Existing tooling checks and planned app validation |
+| [Testing](TESTING.md) | Tooling, application and browser checks; device limitations |
 | [Environment](ENVIRONMENT.md) | Local dependencies, runtime versions, and packaging boundaries |
 | [Bootstrap decision](decisions/0001-project-tooling.md) | Why the repository uses this setup |
 | [Implementation standards decision](decisions/0002-implementation-standards.md) | Owner requirement for clean, modular, extensible code |
 | [Checkpoint commits decision](decisions/0003-checkpoint-commits.md) | Standing authorisation to commit each completed, reviewed, validated step locally |
+| [Local preview foundation](decisions/0004-local-preview-foundation.md) | Bundled drafts, persistence adapters, local read-only API |
+| [First implementation plan](plans/0001-local-foundation.md) | Scope, acceptance criteria, ownership and validation |
 | [ADR template](templates/ADR.md) | Record a material technical decision |
 | [Execution-plan template](templates/EXECUTION_PLAN.md) | Plan and track substantial implementation |

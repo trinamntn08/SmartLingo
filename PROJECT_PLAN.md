@@ -1,6 +1,6 @@
 # SmartLingo — implementation plan
 
-Status: planning baseline, ready for an initial implementation slice.
+Status: first local M1 learner slice implemented; see docs/STATUS.md for verified scope and remaining work.
 Updated: 2026-11-14.
 
 ## 1. Product direction

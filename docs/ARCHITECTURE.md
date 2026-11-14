@@ -1,6 +1,6 @@
 # Architecture baseline
 
-Status: planned application architecture; development tooling exists.
+Status: first local web learning slice implemented; native adapters, full editor, and provider services remain planned.
 
 | Location | Responsibility |
 | --- | --- |
@@ -11,7 +11,7 @@ Status: planned application architecture; development tooling exists.
 | packages/ui | Shared theme/components when actual reuse warrants extraction |
 | scripts | Development tooling and hooks |
 
-These application directories will be created during implementation; do not populate them with placeholder applications in a tooling task.
+`packages/ui` is deferred until actual cross-feature reuse warrants a separate package. The learner's theme/components currently live with its UI. See [ADR 0004](decisions/0004-local-preview-foundation.md) for the first storage/content boundaries and limitations.
 
 ## Boundaries
 

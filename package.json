@@ -2,7 +2,7 @@
   "name": "smartlingo",
   "version": "0.0.0",
   "private": true,
-  "description": "Local-first language learning project — development setup",
+  "description": "Local-first French learning preview",
   "packageManager": "npm@11.17.0",
   "engines": {
     "node": ">=24.19.0 <25",
@@ -26,8 +26,27 @@
     "setup:finish:plan": "node scripts/finish-setup.mjs",
     "doctor": "node scripts/doctor.mjs",
     "pack:check": "npm pack --dry-run --ignore-scripts",
-    "check": "node scripts/check-repo.mjs",
+    "check": "node scripts/check-repo.mjs && npm run typecheck",
     "check:staged": "node scripts/check-repo.mjs --staged",
-    "test": "node --test scripts/tests/*.test.mjs"
+    "test": "npm run test:tooling && npm run test:app",
+    "dev": "npm run web --workspace @smartlingo/learner",
+    "dev:api": "npm run dev --workspace @smartlingo/api",
+    "typecheck": "tsc --noEmit",
+    "build:web": "npm run export --workspace @smartlingo/learner",
+    "test:app": "tsx --test packages/domain/tests/*.test.ts apps/learner/tests/*.test.ts apps/api/tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "test:tooling": "node --test scripts/tests/*.test.mjs"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "fake-indexeddb": "6.2.8",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
   }
 }

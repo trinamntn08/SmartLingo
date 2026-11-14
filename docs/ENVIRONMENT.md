@@ -4,7 +4,7 @@
 
 Use Node 24.19.0 and npm 11.x; the development baseline is npm 11.17.0. The .node-version and .nvmrc files let compatible runtime managers select Node. They do not install or virtualise Node by themselves. package.json enforces the supported major versions.
 
-Install JavaScript/TypeScript dependencies locally with npm from the project root. They belong in ignored node_modules, never a global npm prefix. Invoke tools through npm scripts or local package binaries. No global Expo/Fastify installation is required. The current bootstrap has zero third-party dependencies.
+Install JavaScript/TypeScript dependencies locally with npm from the project root. They belong in ignored node_modules, never a global npm prefix. Invoke tools through npm scripts or local package binaries. No global Expo/Fastify installation is required. npm workspaces share the domain/content packages between the Expo learner and Fastify API.
 
 Project .npmrc keeps the cache under ignored .cache/npm, saves exact dependency versions, and maintains package-lock.json. Commit manifests/lockfiles; do not commit installed libraries or caches. Environment variables and application data stay separate from source.
 
@@ -18,7 +18,7 @@ This is dependency separation, not an operating-system sandbox. A container can 
 
 The root package is private to prevent accidental npm publication. Its files allowlist makes the bootstrap tooling package inspectable without bundling learner data, API keys, caches, node_modules, or unverified reference images.
 
-Run npm run pack:check to inspect a dry run. No distributable learner app exists yet. Actual web assets, Android packages, and iOS builds will get separate build commands when their applications are scaffolded.
+Run npm run pack:check to inspect a tooling-package dry run; this root allowlist is not an application deployment artifact. `npm run build:web` exports local web assets under `apps/learner/dist`. Android and iOS builds remain planned. Databases and generated artifacts stay ignored.
 
 For GitHub, version source/configuration and package-lock.json; teammates restore dependencies with npm ci. Origin is configured for the [owner-selected SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Verify live history before integrating; a local checkpoint commit does not itself prove a remote backup.
 

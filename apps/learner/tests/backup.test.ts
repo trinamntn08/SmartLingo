@@ -7,10 +7,11 @@ import { openLearningRepository } from '../src/persistence';
 import { readBackupFile } from '../src/backup/files';
 
 const backup: LearningBackup = {
-  format: 'smartlingo-learning-backup', version: 1, createdAt: '2026-11-14T12:00:00Z',
+  format: 'smartlingo-learning-backup', version: 2, createdAt: '2026-11-14T12:00:00Z',
   events: [{ id: '77777777-7777-4777-8777-777777777777', lessonId: restaurantLesson.id, revision: 1, itemId: 'fr.cafe', activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T12:00:00Z' }],
   notebook: [{ id: 'notebook.fr.cafe', sourceEntryId: 'fr.cafe', target: 'un café', meaning: 'my coffee note', example: '', updatedAt: '2026-11-14T12:00:00Z' }],
   publishedLessons: [{ ...restaurantLesson, revision: 3, status: 'published' }],
+  reviewEvents: [{ id: '99999999-9999-4999-8999-999999999999', notebookId: 'notebook.fr.cafe', entryUpdatedAt: '2026-11-14T12:00:00Z', skill: 'recognition', source: 'manual', algorithmVersion: 1, rating: 'remembered', occurredAt: '2026-11-14T12:00:00Z', studyDate: '2026-11-14', timeZone: 'UTC' }],
 };
 
 test('download-format backup round-trips all learner stores; repeat merge keeps edits and deduplicates', async () => {
@@ -21,13 +22,14 @@ test('download-format backup round-trips all learner stores; repeat merge keeps 
   const text = serializeBackup(exported);
   const restored = await openLearningRepository({ factory, name: 'restored' });
   const report = await restored.restoreBackup(parseBackupText(text));
-  assert.deepEqual(report, { eventsAdded: 1, eventsKept: 0, notesAdded: 1, notesKept: 0, lessonsUpdated: 1, lessonsKept: 0 });
+  assert.deepEqual(report, { eventsAdded: 1, eventsKept: 0, notesAdded: 1, notesKept: 0, lessonsUpdated: 1, lessonsKept: 0, reviewsAdded: 1, reviewsKept: 0 });
   await restored.saveNotebook({ ...backup.notebook[0], meaning: 'Keep my later edit' });
   const repeat = await restored.restoreBackup(parseBackupText(text));
-  assert.deepEqual(repeat, { eventsAdded: 0, eventsKept: 1, notesAdded: 0, notesKept: 1, lessonsUpdated: 0, lessonsKept: 1 });
+  assert.deepEqual(repeat, { eventsAdded: 0, eventsKept: 1, notesAdded: 0, notesKept: 1, lessonsUpdated: 0, lessonsKept: 1, reviewsAdded: 0, reviewsKept: 1 });
   assert.deepEqual(await restored.listEvents(), backup.events);
   assert.equal((await restored.listNotebook())[0].meaning, 'Keep my later edit');
   assert.deepEqual(await restored.listPublishedLessons(), backup.publishedLessons);
+  assert.deepEqual(await restored.listReviewEvents(), backup.reviewEvents);
   source.close(); restored.close();
 });
 
@@ -35,9 +37,11 @@ test('conflicting immutable events or lessons abort every store in a restore', a
   const store = await openLearningRepository({ factory: new IDBFactory() });
   await store.restoreBackup(backup);
   const newNote = { ...backup.notebook[0], id: 'notebook.new', sourceEntryId: 'fr.new' };
+  const newEvent = { ...backup.events[0], id: '88888888-8888-4888-8888-888888888888' };
   await assert.rejects(store.restoreBackup({ ...backup, events: [{ ...backup.events[0], hints: 1 }], notebook: [newNote] }), /conflicts/);
   assert.deepEqual(await store.listNotebook(), backup.notebook);
-  const newEvent = { ...backup.events[0], id: '88888888-8888-4888-8888-888888888888' };
+  await assert.rejects(store.restoreBackup({ ...backup, events: [newEvent], reviewEvents: [{ ...backup.reviewEvents[0], rating: 'again' }] }), /conflicts/);
+  assert.deepEqual(await store.listEvents(), backup.events);
   await assert.rejects(store.restoreBackup({ ...backup, events: [newEvent], publishedLessons: [{ ...backup.publishedLessons[0], title: 'Conflict' }] }), /conflicts/);
   assert.deepEqual(await store.listEvents(), backup.events);
   assert.deepEqual(await store.listPublishedLessons(), backup.publishedLessons);
@@ -49,7 +53,7 @@ test('conflicting immutable events or lessons abort every store in a restore', a
 
 test('backup parsing rejects unknown versions, duplicate IDs, draft caches, corrupt and oversized files', async () => {
   assert.throws(() => parseBackupText('{broken'), /not a supported/);
-  assert.throws(() => parseBackupText(JSON.stringify({ ...backup, version: 2 })), /not a supported/);
+  assert.throws(() => parseBackupText(JSON.stringify({ ...backup, version: 99 })), /not a supported/);
   assert.throws(() => parseBackupText(JSON.stringify({ ...backup, events: [backup.events[0], backup.events[0]] })), /not a supported/);
   assert.throws(() => parseBackupText(JSON.stringify({ ...backup, publishedLessons: [restaurantLesson] })), /not a supported/);
   assert.throws(() => parseBackupText('é'.repeat(maximumBackupBytes / 2 + 1)), /5 MB/);
@@ -61,4 +65,14 @@ test('backup parsing rejects unknown versions, duplicate IDs, draft caches, corr
   assert.ok(accent >= 0);
   bytes[accent] = 0xff;
   await assert.rejects(readBackupFile(new File([bytes], 'corrupt-encoding.json')), /not valid UTF-8/);
+});
+
+test('version1 learning backups migrate to version2 without inventing review history', () => {
+  const { reviewEvents: _ratings, ...legacy } = backup;
+  const migrated = parseBackupText(JSON.stringify({ ...legacy, version: 1 }));
+  assert.equal(migrated.version, 2);
+  assert.deepEqual(migrated.reviewEvents, []);
+  assert.deepEqual(migrated.events, backup.events);
+  assert.deepEqual(migrated.notebook, backup.notebook);
+  assert.throws(() => parseBackupText(JSON.stringify({ ...legacy, version: 1, events: [backup.events[0], backup.events[0]] })), /not a supported/);
 });

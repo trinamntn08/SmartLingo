@@ -1,10 +1,10 @@
 import {
-  learningBackupSchema, learningEventSchema, notebookEntrySchema, lessonSchema,
-  type LearningBackup, type RestoreReport, type LearningEvent, type NotebookEntry, type Lesson,
+  learningBackupSchema, learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema,
+  type LearningBackup, type RestoreReport, type LearningEvent, type NotebookEntry, type Lesson, type ReviewEvent,
 } from '@smartlingo/domain';
 import { requestResult, transactionDone } from './transactions';
 
-const stores = ['events', 'notebook', 'publishedLessons'];
+const stores = ['events', 'notebook', 'publishedLessons', 'reviewEvents'];
 
 export async function exportLearningBackup(database: IDBDatabase): Promise<LearningBackup> {
   const transaction = database.transaction(stores, 'readonly');
@@ -13,8 +13,8 @@ export async function exportLearningBackup(database: IDBDatabase): Promise<Learn
     Promise.all(stores.map(name => requestResult(transaction.objectStore(name).getAll()))), done,
   ]);
   return learningBackupSchema.parse({
-    format: 'smartlingo-learning-backup', version: 1, createdAt: new Date().toISOString(),
-    events: rows[0], notebook: rows[1], publishedLessons: rows[2],
+    format: 'smartlingo-learning-backup', version: 2, createdAt: new Date().toISOString(),
+    events: rows[0], notebook: rows[1], publishedLessons: rows[2], reviewEvents: rows[3],
   });
 }
 
@@ -58,15 +58,24 @@ function mergeLesson(store: IDBObjectStore, lesson: Lesson, report: RestoreRepor
   });
 }
 
+function mergeReview(store: IDBObjectStore, event: ReviewEvent, report: RestoreReport): Promise<void> {
+  return mergeStored(store, event.id, existing => {
+    if (existing === undefined) { store.add(event); report.reviewsAdded++; return; }
+    if (JSON.stringify(reviewEventSchema.parse(existing)) !== JSON.stringify(event)) throw new Error('A backup rating conflicts with an immutable review ID. Nothing was restored.');
+    report.reviewsKept++;
+  });
+}
+
 export async function restoreLearningBackup(database: IDBDatabase, input: LearningBackup): Promise<RestoreReport> {
   const backup = learningBackupSchema.parse(input);
   const transaction = database.transaction(stores, 'readwrite');
   const done = transactionDone(transaction);
-  const report: RestoreReport = { eventsAdded: 0, eventsKept: 0, notesAdded: 0, notesKept: 0, lessonsUpdated: 0, lessonsKept: 0 };
+  const report: RestoreReport = { eventsAdded: 0, eventsKept: 0, notesAdded: 0, notesKept: 0, lessonsUpdated: 0, lessonsKept: 0, reviewsAdded: 0, reviewsKept: 0 };
   const operations = [
     ...backup.events.map(event => mergeEvent(transaction.objectStore('events'), event, report)),
     ...backup.notebook.map(note => mergeNote(transaction.objectStore('notebook'), note, report)),
     ...backup.publishedLessons.map(lesson => mergeLesson(transaction.objectStore('publishedLessons'), lesson, report)),
+    ...backup.reviewEvents.map(event => mergeReview(transaction.objectStore('reviewEvents'), event, report)),
   ];
   await Promise.all([...operations, done]);
   return report;

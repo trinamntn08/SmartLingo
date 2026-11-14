@@ -17,8 +17,10 @@
 | [Local preview foundation](decisions/0004-local-preview-foundation.md) | Bundled drafts, persistence adapters, local read-only API |
 | [Local editor publication](decisions/0005-local-editor-publication.md) | Draft revisions, preview receipts, local request guards, publication cache |
 | [Learner backup](decisions/0006-learner-backup.md) | Versioned private snapshots and atomic merge restore |
+| [Manual recognition review](decisions/0007-manual-recognition-review.md) | Manual ratings, local-day schedule and versioned history |
 | [First implementation plan](plans/0001-local-foundation.md) | Scope, acceptance criteria, ownership and validation |
 | [Editor execution plan](plans/0002-editor.md) | First editor fields and validated publication journey |
 | [Backup execution plan](plans/0003-backup.md) | Learner export, bounded import and merge validation |
+| [Review execution plan](plans/0004-manual-review.md) | Recognition queue, local dates and backup compatibility |
 | [ADR template](templates/ADR.md) | Record a material technical decision |
 | [Execution-plan template](templates/EXECUTION_PLAN.md) | Plan and track substantial implementation |

@@ -1,6 +1,6 @@
 # SmartLingo — implementation plan
 
-Status: first local M1 learner slice implemented; see docs/STATUS.md for verified scope and remaining work.
+Status: local learner, first editor/publication, backup and manual recognition review implemented; see docs/STATUS.md for verified scope and remaining milestone work.
 Updated: 2026-11-14.
 
 ## 1. Product direction

@@ -81,7 +81,7 @@ export function BackupPanel() {
     {selected && <View style={{ gap: 16 }}>
       <View style={s.notice}><Text style={s.eyebrow}>Selected backup · version {selected.backup.version}</Text>
         <Text style={[s.heading, { flexShrink: 1 }]}>{selected.filename}</Text><Text style={s.body}>Created: {new Date(selected.backup.createdAt).toLocaleString()}</Text>
-        <View style={s.row}><Badge>{selected.backup.events.length} practice events</Badge><Badge>{selected.backup.notebook.length} notebook entries</Badge><Badge>{selected.backup.publishedLessons.length} cached lessons</Badge></View>
+        <View style={s.row}><Badge>{selected.backup.events.length} practice events</Badge><Badge>{selected.backup.notebook.length} notebook entries</Badge><Badge>{selected.backup.publishedLessons.length} cached lessons</Badge><Badge>{selected.backup.reviewEvents.length} review ratings</Badge></View>
       </View>
       <View style={{ gap: 10 }}><Text style={s.heading}>How the merge works</Text>
         <Text style={s.body}>Your existing personal notes stay unchanged when a backup contains the same note ID. New notes are added.</Text>
@@ -98,6 +98,7 @@ export function BackupPanel() {
     {report && <View style={[s.notice, { backgroundColor: colors.green }]}>
       <Text accessibilityRole="header" style={s.heading}>Backup merged successfully</Text>
       <Text accessibilityLiveRegion="polite" style={s.body}>Practice events: {report.eventsAdded} added, {report.eventsKept} already kept.{ '\n' }Notebook entries: {report.notesAdded} added, {report.notesKept} existing notes kept.{ '\n' }Cached lessons: {report.lessonsUpdated} added or updated, {report.lessonsKept} kept.</Text>
+      <Text style={s.body}>Review ratings: {report.reviewsAdded} added, {report.reviewsKept} already kept.</Text>
       <Text style={s.body}>Reload learning to display the restored progress, notebook, and cached lessons. Save any unsaved curriculum edits before reloading.</Text>
       <View style={s.row}><Button primary disabled={!!busy} onPress={() => { if (typeof window !== 'undefined') window.location.reload(); }}>Reload learning</Button></View>
     </View>}

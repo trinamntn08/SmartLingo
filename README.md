@@ -15,6 +15,8 @@ npm run dev
 
 Open the localhost URL printed by Expo. No API key is required. Study Restaurant → Customer, reveal help as needed, save a word, and find/edit it under Review. Attempts and notebook entries are stored in this browser's IndexedDB and survive reload. Use the same hostname/port/browser to return to that storage. Browser data can be cleared or evicted; keep a backup using Profile → Download learning backup.
 
+Review offers French→meaning cards for saved vocabulary. Try to recall before revealing, then choose Again, Needed help or Remembered. These are manual recognition ratings, not a proficiency assessment. Independent due-day recall follows a 1/3/7/14/30-day calendar schedule; help returns the item tomorrow. Early or repeated same-day recall does not advance the schedule. Editing a note starts fresh practice for that revision while preserving prior ratings. Ratings survive reload and are included in backups.
+
 Optional, in a second terminal:
 
 ```sh
@@ -27,9 +29,9 @@ For editing, open the learner at `http://localhost:8081`, choose Profile → Ope
 
 Return to Profile → Load published lessons to save published revisions into this browser. Later draft changes stay separate. Previous attempts/notebook entries remain recorded when a new revision arrives. A newer revision starts its own lesson progress. Editor requests require the exact local browser origin and a guarded JSON request; this is local origin protection, not account authentication or public-hosting access control.
 
-Profile also supports learning backup/restore. Download a private, unencrypted file containing attempts, notebook entries and cached published lessons (not server drafts/credentials/recordings). Choose a backup to inspect counts/date, confirm the merge policy, then restore and reload learning. Existing personal notes win; duplicate attempts stay single; immutable conflicts abort the whole restore. Only supported UTF-8 backups up to 5 MB are accepted. This does not back up the server's curriculum database.
+Profile also supports learning backup/restore. Download a private, unencrypted file containing attempts, manual review ratings, notebook entries and cached published lessons (not server drafts/credentials/recordings). Choose a backup to inspect counts/date, confirm the merge policy, then restore and reload learning. Existing personal notes win; duplicate events stay single; immutable conflicts abort the whole restore. Only supported UTF-8 backups up to 5 MB are accepted. Version 2 exports include ratings; version 1 files remain importable with no invented review history. This does not back up the server's curriculum database.
 
-Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, the complete curriculum editor, spaced review, microphone conversations, and mobile packages remain planned.
+Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, the complete curriculum editor, production/listening review, microphone conversations, and mobile packages remain planned.
 
 ## Start here
 

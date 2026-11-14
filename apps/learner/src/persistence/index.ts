@@ -1,12 +1,12 @@
 import {
-  learningEventSchema, notebookEntrySchema, lessonSchema,
-  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson, type LearningBackup, type RestoreReport,
+  learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema,
+  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson, type LearningBackup, type RestoreReport, type ReviewEvent,
 } from '@smartlingo/domain';
-import { requestResult, transactionDone } from './transactions';
+import { requestResult, transactionDone, appendImmutable } from './transactions';
 import { exportLearningBackup, restoreLearningBackup } from './backup-store';
 
 const databaseName = 'smartlingo-learning';
-const schemaVersion = 2;
+const schemaVersion = 3;
 
 export async function openLearningRepository(options: {
   factory?: IDBFactory; name?: string;
@@ -22,6 +22,7 @@ export async function openLearningRepository(options: {
         request.result.createObjectStore('notebook', { keyPath: 'id' });
       }
       if (event.oldVersion < 2) request.result.createObjectStore('publishedLessons', { keyPath: 'id' });
+      if (event.oldVersion < 3) request.result.createObjectStore('reviewEvents', { keyPath: 'id' });
     };
     request.onblocked = () => {
       blocked = true;
@@ -40,7 +41,7 @@ export async function openLearningRepository(options: {
 class IndexedDbLearningRepository implements LearningRepository {
   constructor(private readonly database: IDBDatabase) {}
 
-  private async list(storeName: 'events' | 'notebook'): Promise<unknown[]> {
+  private async list(storeName: 'events' | 'notebook' | 'reviewEvents'): Promise<unknown[]> {
     const transaction = this.database.transaction(storeName, 'readonly');
     const done = transactionDone(transaction);
     const [rows] = await Promise.all([requestResult(transaction.objectStore(storeName).getAll()), done]);
@@ -53,26 +54,13 @@ class IndexedDbLearningRepository implements LearningRepository {
 
   async recordEvent(input: LearningEvent): Promise<void> {
     const event = learningEventSchema.parse(input);
-    const transaction = this.database.transaction('events', 'readwrite');
-    const done = transactionDone(transaction);
-    const store = transaction.objectStore('events');
-    // Enqueue add in the IDB callback so the transaction cannot become inactive.
-    const write = new Promise<void>((resolve, reject) => {
-      const request = store.get(event.id);
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => {
-        if (request.result !== undefined) {
-          const parsed = learningEventSchema.safeParse(request.result);
-          if (!parsed.success || JSON.stringify(parsed.data) !== JSON.stringify(event)) {
-            reject(new Error('This learning event ID already belongs to a different attempt.'));
-            transaction.abort();
-            return;
-          }
-        } else store.add(event);
-        resolve();
-      };
-    });
-    await Promise.all([write, done]);
+    await appendImmutable(this.database, 'events', event, row => learningEventSchema.parse(row));
+  }
+
+  async listReviewEvents(): Promise<ReviewEvent[]> { return (await this.list('reviewEvents')).map(row => reviewEventSchema.parse(row)); }
+  async recordReview(input: ReviewEvent): Promise<void> {
+    const event = reviewEventSchema.parse(input);
+    await appendImmutable(this.database, 'reviewEvents', event, row => reviewEventSchema.parse(row));
   }
 
   async listNotebook(): Promise<NotebookEntry[]> {

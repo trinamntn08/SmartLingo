@@ -99,3 +99,29 @@ test('published cache rejects drafts and conflicting immutable revisions atomica
   assert.deepEqual(await store.cachePublishedLessons([{ ...published, revision: 2 }]), [published]);
   store.close();
 });
+
+test('v2 cached publications survive v3 review-store migration; manual rating retries stay idempotent', async () => {
+  const factory = new IDBFactory();
+  await new Promise<void>((resolve, reject) => {
+    const request = factory.open('smartlingo-learning', 2);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('events', { keyPath: 'id' }).put(attempt);
+      request.result.createObjectStore('notebook', { keyPath: 'id' });
+      request.result.createObjectStore('publishedLessons', { keyPath: 'id' }).put({ ...restaurantLesson, revision: 3, status: 'published' });
+    };
+    request.onsuccess = () => { request.result.close(); resolve(); };
+    request.onerror = () => reject(request.error);
+  });
+  const store = await openLearningRepository({ factory });
+  assert.equal((await store.listPublishedLessons())[0].revision, 3);
+  const rating = { id: '99999999-9999-4999-8999-999999999999', notebookId: 'notebook.fr.cafe', entryUpdatedAt: '2026-11-14T12:00:00Z', skill: 'recognition' as const, source: 'manual' as const, algorithmVersion: 1 as const, rating: 'helped' as const, occurredAt: '2026-11-14T12:00:00Z', studyDate: '2026-11-14', timeZone: 'UTC' };
+  await store.recordReview(rating);
+  await store.recordReview(rating);
+  await assert.rejects(store.recordReview({ ...rating, rating: 'remembered' }), /different attempt/);
+  await assert.rejects(store.recordReview({ ...rating, studyDate: '2026-11-13' }));
+  store.close();
+  const reopened = await openLearningRepository({ factory });
+  assert.deepEqual(await reopened.listReviewEvents(), [rating]);
+  assert.deepEqual(await reopened.listEvents(), [attempt]);
+  reopened.close();
+});

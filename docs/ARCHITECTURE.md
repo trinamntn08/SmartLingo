@@ -19,6 +19,7 @@ Status: local web learning and first editor/publication slice implemented; nativ
 - Local published content/media -> downloaded lessons -> offline activities.
 - Browser IndexedDB/native SQLite adapters -> stable learning events, notebook, and reviews.
 - Learner backup files -> bounded UTF-8/schema validation -> explicit atomic merge of notebook/events/cached publications. Server curriculum database is a separate backup concern.
+- Manual recognition events -> framework-independent versioned calendar schedule; store assisted ratings separately, never infer proficiency from activity. Backup v2 includes review events and migrates v1 files; IndexedDB v3 preserves prior stores.
 - Draft editing -> validation/preview -> explicit publication -> versioned content.
 - Published API content -> validated IndexedDB cache -> learner catalogue; newer drafts remain editor-only. Preview practice uses an isolated in-memory model.
 - Separate target language, explanation language, and UI language.

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { Lesson } from './content';
 import type { LearningBackup, RestoreReport } from './backup';
+import type { ReviewEvent } from './review-schema';
 
 export const learningEventSchema = z.object({
   id: z.string().uuid(), lessonId: z.string().min(1), revision: z.number().int().positive(),
@@ -25,6 +26,8 @@ export interface LearningRepository {
   cachePublishedLessons(lessons: Lesson[]): Promise<Lesson[]>;
   exportBackup(): Promise<LearningBackup>;
   restoreBackup(backup: LearningBackup): Promise<RestoreReport>;
+  listReviewEvents(): Promise<ReviewEvent[]>;
+  recordReview(event: ReviewEvent): Promise<void>;
   close(): void;
 }
 

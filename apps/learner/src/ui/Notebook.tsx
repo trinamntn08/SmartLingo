@@ -4,9 +4,11 @@ import { notebookEntrySchema, type NotebookEntry } from '@smartlingo/domain';
 import { Button, Reveal, Speak } from './controls';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
+import { ReviewPanel } from '../review/ReviewPanel';
 
 export function Notebook({ model, onExplore }: { model: LearningModel; onExplore: () => void }) {
   return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Review at your pace</Text><Text accessibilityRole="header" style={s.title}>Your French, kept close.</Text><Text style={s.body}>Save useful words in a lesson, then make the notes your own. Reveal a meaning when you need it.</Text>
+    <ReviewPanel notebook={model.notebook} />
     {!model.notebook.length ? <View style={s.card}><Text style={s.heading}>A fresh page.</Text><Text style={s.body}>Your saved words will appear here. Start a lesson and tap “Save word” on something you’d like to keep.</Text><Button primary onPress={onExplore}>Find a lesson →</Button></View>
       : model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} />)}
   </View>;

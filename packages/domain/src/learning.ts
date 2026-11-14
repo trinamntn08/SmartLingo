@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { Lesson } from './content';
+import type { LearningBackup, RestoreReport } from './backup';
 
 export const learningEventSchema = z.object({
   id: z.string().uuid(), lessonId: z.string().min(1), revision: z.number().int().positive(),
@@ -22,6 +23,8 @@ export interface LearningRepository {
   saveNotebook(entry: NotebookEntry): Promise<void>;
   listPublishedLessons(): Promise<Lesson[]>;
   cachePublishedLessons(lessons: Lesson[]): Promise<Lesson[]>;
+  exportBackup(): Promise<LearningBackup>;
+  restoreBackup(backup: LearningBackup): Promise<RestoreReport>;
   close(): void;
 }
 

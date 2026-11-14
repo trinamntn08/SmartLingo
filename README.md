@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Open the localhost URL printed by Expo. No API key is required. Study Restaurant → Customer, reveal help as needed, save a word, and find/edit it under Review. Attempts and notebook entries are stored in this browser's IndexedDB and survive reload. Use the same hostname/port/browser to return to that storage. Browser data can be cleared or evicted; export/restore is not implemented yet.
+Open the localhost URL printed by Expo. No API key is required. Study Restaurant → Customer, reveal help as needed, save a word, and find/edit it under Review. Attempts and notebook entries are stored in this browser's IndexedDB and survive reload. Use the same hostname/port/browser to return to that storage. Browser data can be cleared or evicted; keep a backup using Profile → Download learning backup.
 
 Optional, in a second terminal:
 
@@ -26,6 +26,8 @@ The local API listens at `http://127.0.0.1:3001` with `/health`, `/lessons`, `/l
 For editing, open the learner at `http://localhost:8081`, choose Profile → Open curriculum editor (or `/#editor`), select a lesson, edit its heading/support fields, and save a draft revision. Preview the saved revision, inspect the answer keys and provenance, then explicitly confirm your review before publishing. Preview practice is temporary and does not change learner progress. The first fields cover headings/outcome, vocabulary support, and grammar; target words, pictures, dialogue and exercises are not editable in this slice.
 
 Return to Profile → Load published lessons to save published revisions into this browser. Later draft changes stay separate. Previous attempts/notebook entries remain recorded when a new revision arrives. A newer revision starts its own lesson progress. Editor requests require the exact local browser origin and a guarded JSON request; this is local origin protection, not account authentication or public-hosting access control.
+
+Profile also supports learning backup/restore. Download a private, unencrypted file containing attempts, notebook entries and cached published lessons (not server drafts/credentials/recordings). Choose a backup to inspect counts/date, confirm the merge policy, then restore and reload learning. Existing personal notes win; duplicate attempts stay single; immutable conflicts abort the whole restore. Only supported UTF-8 backups up to 5 MB are accepted. This does not back up the server's curriculum database.
 
 Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, the complete curriculum editor, spaced review, microphone conversations, and mobile packages remain planned.
 

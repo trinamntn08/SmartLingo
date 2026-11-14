@@ -2,32 +2,30 @@
 
 Updated: 2026-11-14 (Europe/Paris).
 
-## Authorised work
+## Authorised continuation
 
-Owner requested “continue till out of token”. Continuing local implementation in validated slices. Account allowance/reset tools remain unavailable; no known remaining balance or automatic resume is claimed. No push, public hosting, merge or actual curriculum approval/publication was performed.
+Owner requested “continue till out of token”. Continuing in coherent validated local slices; usage/reset tools unavailable, so no known allowance balance or automatic resume claimed. No push/merge/public hosting, provider calls or actual curriculum approval/publication performed. Preserve local data and unrelated work.
 
-## Completed editor slice
+## Latest completed slice
 
-Branch `feat/local-editor` from clean learner checkpoint `83c5573`. [Plan 0002](plans/0002-editor.md) is complete: first editor fields, immutable draft revisions, temporary saved-revision preview, explicit reviewed local publication, latest-published selection independent of later drafts, and IndexedDB v2 publication caching. Prior attempts/notebook survive migration and loading new revisions. Profile exposes editor and explicit published-content loading. Review/publication tests use an isolated in-memory API on port3002; the owner's database stays unapproved.
+`feat/learner-backup` from clean editor checkpoint `7a84e60` (foundation `83c5573`). [Backup plan](plans/0003-backup.md) completed: Profile download, bounded versioned UTF-8 file preview, explicit trusted-file restore, all-store atomic merge, actual counts and reload. Snapshots contain notebook/events/cached publications only; existing notes win, identical attempts deduplicate, immutable conflicts abort. Server database/drafts, credentials and recordings are excluded. Files are unencrypted and not automatically stored off-device.
 
-Primary owned contracts, catalogue/client/cache, integration, tests/docs and commits. Existing API/UI agents owned exclusive paths; independent reviewer stayed read-only. Actual model routing: `gpt-6.1-sol`, fresh original contexts, API medium/UI high/reviewer high; no fallback or runtime role auto-loading claim. At most three subagents concurrently. All stopped mutations before integration review.
-
-Review found a content/notebook field-limit mismatch; aligned target300/meaning500/example1000 with UI/contract regressions. Browser validation caught missing checkbox ARIA state; corrected. Final independent review found no remaining actionable defects. Original curriculum remains draft; owner language/rights review is still needed.
+Primary owned shared contracts/storage/file adapters, integration/tests/docs/commits; existing UI agent owned only BackupPanel. Existing independent reviewer stayed read-only. Actual model routing unchanged: exposed `gpt-6.1-sol`, UI high/reviewer high; no fallback/autoload claim. API agent was not used for this slice. Review found nonfatal UTF-8 decoding could silently corrupt imported text; fixed with fatal decoding and invalid-byte regression. Final independent review found no remaining actionable findings.
 
 ## Validation
 
-- `npm.cmd run check`: repository and TypeScript passed.
-- `npm.cmd test`: all 16 tooling and 36 application tests passed. Covers preview receipts/expiration, conflicts, immutable revisions, Host/origin/CORS guards, v1→v2 note/event preservation, publication cache, content timeouts and notebook capacity.
-- `npm.cmd run test:e2e`: 15 passed, one deliberately skipped duplicate mobile publication writer. Includes prior learner regressions, editor unavailable state, 320px keyboard fields/unsaved-form preservation, isolated preview→publication→new draft→learner cache→reload/history preservation.
-- `npm.cmd run build:web`: real final Expo web export passed. Desktop and 320px editor screenshots inspected.
-- No dependencies changed; the previously documented three moderate Expo/fingerprint/minimatch audit findings remain. Physical phones, Safari/native/screen readers and audible voice quality remain unverified.
+- `npm.cmd run check`: repository/TypeScript passed.
+- `npm.cmd test`: 16 tooling and 39 application tests passed; all three backup tests rechecked after the final UTF-8 fix. Tests cover consistent round-trip, repeat restore, note preservation, cross-store conflict rollback, invalid versions/IDs/draft caches, file size and invalid UTF-8.
+- `npm.cmd run test:e2e`: 17 passed, one deliberate duplicate mobile publication skip. Includes prior learner/editor checks plus actual download/upload/fresh-context restore, no-write file preview, repeat merge, reload and newer-note preservation. Narrow backup screenshot inspected.
+- Final `npm.cmd run build:web` passed after the decoding fix.
+- No dependency changes; three moderate upstream Expo/fingerprint/minimatch audit findings remain documented. Physical phones, Safari/native/screen readers and audible voice quality unverified. Actual owner curriculum remains draft.
 
-Primary reviewed the deliberate staged paths and source/documentation diff. `npm.cmd run check:staged`, `git diff --cached --check` and `git diff --check` passed; repeat staged checks on this final note before committing. The checkpoint is the commit containing this file, titled `feat: add local draft editor and reviewed publication`; report its actual hash only after Git confirms it. If interrupted before that commit exists, preserve task files, complete staged checks and commit verification before starting another slice. No learner database/cache, exports, recordings, traces or keys are staged.
+Primary reviewed deliberate index paths and source/documentation diff. Staged-secret and whitespace checks passed; repeat on this final note before committing. Checkpoint identity is the commit containing this file, titled `feat: add private learner backup and atomic restore`; report its hash only after Git confirms it. If interrupted before the commit exists, finish review, `npm.cmd run check:staged`, `git diff --cached --check`, commit and verify `git log -1`/`git status --short` before starting another slice. Backups/test downloads/caches/databases are excluded from the index.
 
 ## Next exact step
 
-Implement learner backup/export/import with versioned validated files, preview/counts, explicit restore, atomic transactions and idempotent event merge; preserve local notebook edits through a clear conflict rule. Provide download/upload UI and test round-trip/corrupt-file/error paths without paid calls. Full review scheduling, downloadable offline installation, editor create/restore/unpublish/media/exercise fields and mobile adapters remain later steps. Owner can review the preview independently; no approval is inferred from development tests.
+Implement calm manual notebook review with a transparent versioned schedule and idempotent ratings, preserving the distinction between helped and independent recall and local study dates/timezones. Include review records in versioned backups and avoid changing ordinary lesson completion into proficiency. Keep full offline installation/downloaded packs, complete editor tools, native adapters and AI conversations separate. Owner curriculum/device review remains needed.
 
-## Recovery and remote
+## Run and recovery
 
-Run learner with `npm run dev` (localhost:8081) and local content server with `npm run dev:api` (127.0.0.1:3001); editor origin must be the documented localhost/loopback8081 origin. Processes may stop between sessions; restart as needed. Inspect live remote history before any future integration. Local checkpoints are not remote backups. Previous local learner commit `83c5573` is verified; no remote operation occurred in this continuation.
+Learner: `npm run dev` at localhost:8081. Local editor API: `npm run dev:api` at 127.0.0.1:3001; approved browser origins use port 8081. Processes may stop between sessions; restart as needed. Local snapshots do not back up server curriculum SQLite. Inspect live remote history before future integration; local checkpoints are not remote backups.

@@ -1,25 +1,12 @@
 import {
   learningEventSchema, notebookEntrySchema, lessonSchema,
-  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson,
+  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson, type LearningBackup, type RestoreReport,
 } from '@smartlingo/domain';
+import { requestResult, transactionDone } from './transactions';
+import { exportLearningBackup, restoreLearningBackup } from './backup-store';
 
 const databaseName = 'smartlingo-learning';
 const schemaVersion = 2;
-
-function requestResult<T>(request: IDBRequest<T>): Promise<T> {
-  return new Promise((resolve, reject) => {
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error ?? new Error('Could not access browser storage.'));
-  });
-}
-
-function transactionDone(transaction: IDBTransaction): Promise<void> {
-  return new Promise((resolve, reject) => {
-    transaction.oncomplete = () => resolve();
-    transaction.onabort = () => reject(transaction.error ?? new Error('The browser could not save this change.'));
-    transaction.onerror = () => reject(transaction.error ?? new Error('Browser storage failed.'));
-  });
-}
 
 export async function openLearningRepository(options: {
   factory?: IDBFactory; name?: string;
@@ -150,6 +137,8 @@ class IndexedDbLearningRepository implements LearningRepository {
     return this.listPublishedLessons();
   }
 
+  exportBackup(): Promise<LearningBackup> { return exportLearningBackup(this.database); }
+  restoreBackup(backup: LearningBackup): Promise<RestoreReport> { return restoreLearningBackup(this.database, backup); }
   close(): void { this.database.close(); }
 }
 

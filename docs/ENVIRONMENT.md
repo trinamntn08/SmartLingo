@@ -20,7 +20,7 @@ The root package is private to prevent accidental npm publication. Its files all
 
 Run npm run pack:check to inspect a dry run. No distributable learner app exists yet. Actual web assets, Android packages, and iOS builds will get separate build commands when their applications are scaffolded.
 
-For GitHub, version source/configuration and package-lock.json; teammates restore dependencies with npm ci. No external remote has been configured.
+For GitHub, version source/configuration and package-lock.json; teammates restore dependencies with npm ci. Origin is configured for the [owner-selected SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Verify live history before integrating; a local checkpoint commit does not itself prove a remote backup.
 
 Official reference:
 - [npm local package folders](https://docs.npmjs.com/cli/v11/configuring-npm/folders/)

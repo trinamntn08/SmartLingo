@@ -44,4 +44,6 @@ Run `npm run setup:codex:plan` to check matching installed files. Use manual che
 
 For this initial repository, `npm run setup:finish` performs that installation, checks/tests, and the initial local commit together. Preview with `npm run setup:finish:plan`. It refuses existing history, conflicting config, or pre-staged changes and never pushes.
 
-The owner selected [SmartLingo on GitHub](https://github.com/trinamntn08/SmartLingo); remote configuration and the initial sync remain blocked in this managed session (see [checkpoint](docs/SESSION_CHECKPOINT.md)). No public deployment is configured. Reference image rights are unverified; keep them as local design inputs until resolved.
+The initial setup commit already exists; do not rerun `setup:finish` on this repository. During authorised work, the agent makes a reviewed, validated local commit after each completed step under the [checkpoint policy](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits).
+
+Origin is configured for the owner-selected [SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Consult the [checkpoint](docs/SESSION_CHECKPOINT.md) for the latest live-remote verification; cached refs alone do not prove a successful push. No public deployment is configured. Reference image rights are unverified; keep them as local design inputs until resolved.

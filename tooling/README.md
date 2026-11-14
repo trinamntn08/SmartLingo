@@ -12,4 +12,4 @@ npm run check
 
 The installer refuses to overwrite different existing files and does not change global configuration or hook trust. Keep sources and installed files in sync deliberately; if they differ, review changes manually instead of forcing an overwrite.
 
-After installing, review hooks in Codex. Commit the activated .codex/.agents files when satisfied. Keep these sources while the managed editing restriction remains; the structural check validates both when present.
+After installing on a new clone, review hooks in Codex. The installed .codex/.agents files are already tracked in this repository. Keep these sources for repeatable installation and validation; the structural check validates both source and installed files when present. Follow the [checkpoint policy](../docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits) for subsequent authorised changes.

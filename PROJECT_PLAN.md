@@ -154,6 +154,8 @@ Accessibility: keyboard navigation, visible focus, screen-reader labels, scalabl
 
 ## 9. Technical architecture
 
+Implementation must follow the [architecture standards](docs/ARCHITECTURE.md#implementation-standards): clean, modular, maintainable, extensible code; one coherent responsibility per function; and clear separation between UI, learning rules, storage, and external services. Apply the linked review criteria to every implementation slice.
+
 Recommended baseline: a TypeScript monorepo with an Expo/React Native learner app, a Node.js/Fastify local API, shared schemas/learning logic, and an editor rendered for web. Verify exact package versions and compatibility during scaffolding; do not assume native and web audio implementations are identical.
 
 Why: one main language for UI/server/types, a shared learner codebase for the three requested platforms, and a local server that can protect API credentials and serve editable content. A separate platform adapter handles browser/mobile storage and recording.

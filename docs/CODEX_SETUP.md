@@ -4,7 +4,9 @@ Verified against official documentation on 2026-11-14.
 
 **Installation state:** root AGENTS.md, Git hook configuration, and all nine Codex agent/skill/hook files are installed. Earlier patch attempts were rejected, but the latest explicitly requested setup command copied the files successfully. Matching sources are retained under tooling/codex and tooling/agents. Runtime discovery and hook trust remain unverified.
 
-Git is initialized on main and core.hooksPath is set. The current session also cannot create .git/index.lock, so the initial commit remains pending. For a single local completion command, run `npm run setup:finish` from your own terminal. Preview with `npm run setup:finish:plan`. It checks for conflicts/pre-staged changes/existing history, installs prepared config, verifies the setup, stages explicit bootstrap paths, sets the pre-commit executable index bit for POSIX clones, and commits locally. It never creates a remote, pushes, or sets hook trust. If it stops, inspect git status; it preserves files rather than resetting them.
+Git is initialized, the initial setup commit exists, origin is configured for the owner-selected repository, and core.hooksPath is set. The earlier Git metadata permission failures are historical; use the [current checkpoint](SESSION_CHECKPOINT.md) for actual results rather than assuming they still apply.
+
+`npm run setup:finish` is a one-time bootstrap helper for repositories without history. It checks for conflicts/pre-staged changes/existing history, installs prepared config, verifies the setup, stages explicit bootstrap paths, sets the pre-commit executable index bit for POSIX clones, and commits locally. It never creates a remote, pushes, or sets hook trust. Do not rerun it to continue this already-initialized project. If it stops in a new bootstrap, inspect git status; it preserves files rather than resetting them.
 
 ## Files and responsibilities
 
@@ -30,11 +32,13 @@ Git is initialized on main and core.hooksPath is set. The current session also c
 
 Non-managed hooks require exact-definition trust; changed hooks may need another review. Do not bypass that review. A cloud-orchestrated Work session may not execute repository command hooks. Unsupported clients can still read AGENTS.md and run manual checks. Files being present does not establish that a runtime has loaded them.
 
-The CLI executable is not currently on PATH. This does not prevent the Codex app from working, but we cannot claim a CLI configuration-load test passed.
+The readiness check on 2026-11-14 found `codex-cli 0.167.0-alpha.4.1` on PATH. `npm run doctor` verifies executable availability, not project configuration loading or hook trust; no runtime activation is established by that result.
 
 ## Hooks
 
 Follow [the session workflow](SESSION_WORKFLOW.md) and maintain [the checkpoint](SESSION_CHECKPOINT.md) while working. Check usage when the client exposes it, preserve progress before limits, and resume only already authorised tasks. Hooks do not schedule a future run or replenish allowance. Automatic resuming requires a confirmed scheduler with repository access; it is not configured by this repository.
+
+The primary agent is authorised to create local checkpoint commits after completed, reviewed, validated steps under the [checkpoint policy](SESSION_WORKFLOW.md#automatic-checkpoint-commits). The advisory Stop hook does not create those commits or replace step review and validation.
 
 - SessionStart: return concise context pointing at product plan and current status. Handle startup/resume/clear/compact/fork.
 - Stop: run lightweight repository checks and return an advisory warning on failure. Do not block/continue the conversation, edit files, spend credits, auto-commit, or auto-push.

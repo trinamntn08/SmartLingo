@@ -6,7 +6,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `fix/visible-lesson-details`, based on validated manual-review checkpoint `546965d` (backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
+- Current branch: `feat/expanded-topics`, based on validated visible-study checkpoint `3653a5e` (manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Inspect live remote history before any future integration. A local checkpoint is not remote backup.
 
@@ -14,7 +14,9 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 - npm/TypeScript workspaces: Expo learner, Fastify local API, shared domain contracts, validated draft content.
 - Cream/yellow/green responsive navigation and original code-drawn pictures inspired by the supplied references, with English interface text.
-- Restaurant customer and bakery customer draft lessons: six useful items each, directly visible meanings/examples/translations/explanations and dialogue grammar, picture matching, sentence building, hints and helpful retry feedback. Saved notebook meanings are also visible directly. This follows the owner's simplified-view preference in [ADR 0008](decisions/0008-visible-study-details.md).
+- Twelve practical draft topics with 30 distinct words/phrases each across 60 six-item lessons (36 A1, 24 A2). Covers food, shops, housing, transport, health, work, services, people, routine and leisure/weather. There are 360 topic entries, 353 stable sense IDs and 351 distinct target forms; shared senses reuse IDs. Original two starter lessons remain unchanged. [Research and owner-review limits](CURRICULUM_RESEARCH.md) accompany the expansion; these are estimated levels, not a complete CEFR course.
+- Searchable topic banks show meanings/examples/translations/explanations directly, support A1/A2 filtering and direct notebook capture, and link to short lessons. New unillustrated/abstract vocabulary uses explicit meaning matching; existing picture practice is retained. Dialogue grammar and notebook meanings remain visible directly. [ADR 0009](decisions/0009-topic-banks.md) records the backward-compatible matching mode; [ADR 0008](decisions/0008-visible-study-details.md) records the owner's direct-display preference.
+- Removed repeated synthetic-voice labels, study filler, home feature slogans and the persistent footer. Synthetic speech remains disclosed in Profile; errors, saving feedback and draft/publication status remain visible. Editor selection is searchable with unique lesson labels and a bounded scroll area.
 - Restaurant completion through persisted progress, with revision-scoped events and supported-attempt history. Completion records practice, not proficiency.
 - Browser IndexedDB version-1 adapter; idempotent attempt retries, conflicting event-ID rejection, notebook save/edit and reload. Atomic lesson capture preserves personal edits across stale tabs.
 - Optional French synthetic device voice with cancellation/error/text fallback. No API key, paid generation, microphone, recording, or external AI service is used.
@@ -24,11 +26,11 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 - Versioned IndexedDB migrations retain prior attempts/notebook/cache; v3 adds immutable manual review ratings. Explicit Profile load keeps publications available after API shutdown/reload and preserves earlier learner history.
 - Private learner backup download and explicit merge restore with file preview, version/UTF-8/5 MB validation, consistent snapshots, idempotent events, personal-note preservation and all-store atomic rollback on conflicts. Reload shows restored data. Server drafts/credentials/recordings are excluded; backups are unencrypted and do not back up the server database.
 - Calm manual recognition review for saved notebook revisions, with explicit reveal/rating, 1/3/7/14/30-day heuristic, separate supported days, local calendar/timezone handling and stable retries. No early/same-day schedule boosting; focus/date refresh keeps tabs current. Note edits start fresh practice without deleting historical ratings. Backup format2 includes ratings; version1 imports remain compatible.
-- Development tooling, 16 tooling tests, 54 application tests, browser checks, web export and run instructions. See [verification](TESTING.md) and [review plan](plans/0004-manual-review.md).
+- Development tooling, 16 tooling tests, 57 application tests, browser checks, web export and run instructions. See [verification](TESTING.md) and [expansion plan](plans/0006-topic-expansion.md).
 
 ## Verified in this step
 
-TypeScript, application/tooling tests and final web export pass. Final browser run: 21 passed, one intentionally skipped duplicate publication writer. Coverage includes desktop/390px/320px learning/editor journeys, backup download/restore, manual rating/retry/reload, cross-tab refresh and calendar-day scheduling across Paris DST. Current exact test/review/commit outcomes are in [the checkpoint](SESSION_CHECKPOINT.md). Publication tests use only an in-memory test API; no owner curriculum was approved or published by the agent. Browser data in automated tests is isolated from actual owner storage.
+TypeScript, application/tooling tests and web export pass. Integrated browser run: 25 passed, one intentionally skipped duplicate publication writer. Coverage includes desktop/390px/320px topic search/filter/direct capture, new meaning/sentence practice and reload, original learning/editor journeys, backup download/restore, manual rating/retry/reload, cross-tab refresh and calendar-day scheduling across Paris DST. Independent read-only review checked French, shared identities and all 60 sentence-button permutations; it does not replace owner/native-language review. The running API returns all 60 seeds while retaining existing local revisions. Current final check/review/commit outcomes are in [the checkpoint](SESSION_CHECKPOINT.md). Publication tests use only an in-memory test API; no owner curriculum was approved or published by the agent. Browser data in automated tests is isolated from actual owner storage.
 
 Known dependency issue: three moderate npm audit findings in Expo's fingerprint/minimatch build-tool chain. No forced SDK downgrade or ineffective override retained; see [testing limitations](TESTING.md). This is a local preview, not a distribution-ready release.
 

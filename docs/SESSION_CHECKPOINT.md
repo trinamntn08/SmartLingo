@@ -4,31 +4,36 @@ Updated: 2026-11-14 (Europe/Paris).
 
 ## Current request and outcome
 
-Owner requested meanings, examples and explanations directly visible without dropdowns, using the restaurant vocabulary screenshot. Completed on `fix/visible-lesson-details` from clean manual-review commit `546965d`. [Plan 0005](plans/0005-visible-study-details.md) and [ADR 0008](decisions/0008-visible-study-details.md) record the explicit replacement of the earlier optional-reveal default for study material.
+Owner requested research, many practical A1/A2 topics with 30–50 words each, less unimportant copy, and supplied a Facebook photo-page reference. Completed on feat/expanded-topics from clean checkpoint 3653a5e. See [plan 0006](plans/0006-topic-expansion.md), [research](CURRICULUM_RESEARCH.md) and [ADR 0009](decisions/0009-topic-banks.md).
 
-Vocabulary cards now show meaning, French example, English translation and labelled explanation together. Dialogue translations/grammar and saved notebook meanings are also visible directly. Editor previews share the same lesson component. Narrow screens use a small illustration beside the word. Removed the unused generic study Reveal component and updated product copy/instructions plus existing browser expectations. Aligned the repository UI role and French-authoring workflow with this preference in both prepared sources and installed files; no runtime role auto-loading claim. Recall cards and exercise hints remain practice controls. No content revision, grading, rating rule, persistence or storage schema changed; no owner data was modified by tests.
+Twelve topics now have exactly 30 distinct target forms each, across 60 six-item lessons (36 A1, 24 A2). Total 360 topic entries, 353 stable sense IDs, 351 distinct French target forms; shared same-sense entries reuse explicit canonical IDs. Topics cover restaurant, bakery, groceries, clothes/shopping, housing, transport, health/appointments, work/study, services/paperwork, people, time/routine and leisure/weather. All new material is original draft text with visible meanings, examples, translations and explanations; owner language/activity review remains necessary. Levels are estimates, not complete CEFR coverage.
 
-## Ownership and validation
+Explore/Practice now browse topic cards, search topics or French/English words, filter A1/A2, open short lessons or read/save directly from word banks. New matching exercises explicitly show English meanings rather than testing a generic image; old picture exercises and persisted activity identifiers remain compatible. Existing two starter lessons are deeply unchanged. No storage migration or dependency changes. Personal edits and published replacements remain preserved. The editor has searchable, uniquely labelled lesson selection. Removed repeated voice labels, study filler, home feature slogans and footer; synthetic speech disclosure remains in Profile, with useful error/progress/draft indicators retained.
 
-Primary handled this small sequential UI/documentation change and self-review; no subagents or new dependencies needed. Preserved the initial clean tree and inspected the focused source diff for obsolete controls, reset risks, accessibility and narrow layout. Account usage/reset tools remain unavailable; no remaining allowance or automatic resume claimed.
+Researched official Council of Europe CEFR guidance and FEI A1 scope. The owner-supplied Facebook page was throttled and ID search found no posts; no lists/images were inspected/imported. References and this access limitation are recorded. No paid API calls, account changes, owner curriculum approval/publication, push or merge.
 
-- `npm.cmd run check`: repository and TypeScript passed after final responsive change.
-- `npm.cmd test`: all 16 tooling and 54 application tests passed; no domain/storage code changes.
-- Final `npm.cmd run test:e2e`: 21 passed, one deliberate duplicate mobile publication skip. Existing assertions verify visible vocabulary/translation/explanation and dialogue grammar without expanding controls; notebook, editor, backup, ratings, retry/reload and 320px flows pass.
-- Final `npm.cmd run build:web`: passed after compact mobile layout change.
-- `npm.cmd run setup:codex:plan`: all nine installed/prepared files match after the preference update.
-- Desktop and narrow vocabulary screenshots inspected. No horizontal overflow in the narrow browser flow. Long text can still require scrolling. Physical phone/voice/Safari/screen-reader limitations and three documented moderate upstream build-tool audit findings remain.
+## Ownership and review
 
-Primary inspected and staged only this task's UI/tests/preference/workflow/plan/status/checkpoint files. Staged-secret and whitespace checks passed and are repeated on this final note before committing. Intended checkpoint title: `fix: show study details without dropdowns`; its actual hash is reported only after Git confirms it. If interrupted first, preserve task files and finish staged checks/commit verification. No test artifacts, databases, backups, recordings or keys are staged. No push, merge, public hosting or owner curriculum approval/publication performed.
+Primary owned shared contracts/content builder/index/canonical IDs, topic UI, editor selector, tests, integration and docs. food_home_topics and daily_life_topics: curriculum-author, exposed gpt-6.1-sol, medium, exclusive disjoint content files. simplify_copy: bounded worker, exposed cheaper gpt-6-luna, medium, controls/lesson/illustration cleanup. Independent read-only topic_review: change-reviewer, exposed gpt-6.1-sol, high. At most three helpers ran concurrently; roles read explicitly, no automatic role-loading claim. All preserved others' edits.
 
-## Previous completed checkpoints
+Reviewer checked original starter equality, same-sense IDs and matching references, all 60 actual sentence-button permutations, French examples/notes/grammar, publication labels and role copy. Fixed the carotte spelling note, canonical duplicates, draft-label and dialogue-role issues. Primary inspected focused diffs, new source files and desktop/narrow screenshots. No unresolved actionable finding; review is not native-speaker validation or exhaustive answer-alternative approval.
 
-`83c5573` learner foundation; `7a84e60` editor/preview/publication; `bc1b08f` backup/atomic restore; `546965d` manual notebook review. All are local commits, not remote backups.
+## Validation
 
-## Next implementation step
+- Final npm.cmd run check: repository and TypeScript passed.
+- npm.cmd test: tooling 16 passed; initial app run exposed an old two-lesson assertion plus punctuation in the new solvability test. Corrected expectations/check logic. Final npm.cmd run test:app: all 57 passed, including actual token-button solution search for every lesson, per-topic counts, stable IDs and English/French search.
+- Stable integrated npm.cmd run test:e2e: 25 passed, one deliberate duplicate mobile publication skip. Covers original learning/editor/backup/review flows and new topic search/filter/capture/reload plus A2 meaning/sentence practice at 320px without API. Earlier run had one backup-form assertion interrupted by source hot reload; stable rerun passed unchanged backup logic.
+- Final npm.cmd run build:web: passed after final learner-copy cleanup.
+- Desktop topic catalogue and filtered vocabulary, plus long-topic 320px lesson screenshots inspected. Additional isolated 320px 30-word bank overflow check returned false. Synthetic repeated label absent; text support visible without dropdowns.
+- Actual local API GET /lessons: HTTP 200, 60 lessons. Existing API startup seed policy preserves local revisions. Learner remains served at localhost:8081; API at 127.0.0.1:3001. Check listeners before starting duplicates.
+- git diff --check: passed before final notes. Final deliberate staging, index-secret/whitespace checks and local checkpoint commit follow this note; actual identity is reported only after Git confirms it. If interrupted before commit, preserve all task files, repeat staged checks, commit and verify.
 
-The next broader product slice remains downloaded web assets/offline installation, explicit cache status/size/removal and recovery while preserving notebook/events/ratings. Actual owner curriculum review and physical-phone tests remain separate. Full editor tools, native packages and AI speaking remain planned. Resume the already-authorised broader work from the current status without reverting this direct-display preference.
+Usage/reset tools unavailable; no allowance/reset estimate or automatic resume claimed. No account settings or scheduler changes. Physical-phone/Safari/voice quality/screen-reader checks, complete CEFR coverage, exhaustive sentence variants and owner review remain gaps. Three previously documented moderate upstream Expo build-tool audit findings remain unrelated and unchanged.
 
-## Run and recovery
+## Git and next steps
 
-Learner: `npm run dev` at localhost:8081. Local API: `npm run dev:api` at 127.0.0.1:3001. Existing browser may hot reload; refresh if needed. Check running processes before starting duplicates. Inspect live remote history before future integration; no remote operation occurred in this task.
+This checkpoint commit contains the completed expansion and these notes. Stage only task source/tests/docs; ignore screenshots, export output, test backups, local SQLite data, caches and keys. No unrelated initial changes existed. Expected title: feat: expand beginner topics and vocabulary banks. Verify actual commit hash and clean working tree after checks; never claim a commit before confirmation.
+
+Next owner-facing action: refresh localhost:8081, open Explore and review topic banks/short lessons. Content remains draft until explicit saved preview and owner publication. More topics can be added through the same typed authoring contract. Broader offline installation/downloaded packs, complete editor tools and AI speaking remain planned, outside this request.
+
+Prior local checkpoints: 3653a5e direct study details; 546965d manual recognition review; bc1b08f backup/restore; 7a84e60 editor; 83c5573 learner foundation. Local commits are not remote backups. Inspect remote history before any future integration.

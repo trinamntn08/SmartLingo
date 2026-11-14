@@ -12,9 +12,10 @@ const drawings: Record<Vocabulary['picture'], string> = {
   croissant: '<path d="M54 145q4-84 96-89q92 5 96 89l-38 32l-23-31l-35 11l-35-11l-23 31z" fill="#DEAC55"/><path d="M102 73l13 73m82-73l-12 73m-35-89v99M66 108l29 51m139-51l-28 51" fill="none" stroke="#9C713A"/>',
   bag: '<path d="M91 81h118l15 121H76z" fill="#DDBB7B"/><path d="M120 83V59q0-33 30-33t30 33v24" fill="none"/><circle cx="150" cy="142" r="29" fill="#F9D936"/><path d="M136 140q14-19 28 0q-2 13-14 19q-12-6-14-19" fill="#82B78D"/>',
   thanks: '<rect x="63" y="62" width="174" height="132" rx="9" fill="#FFFDF7"/><path d="M107 112q20-35 43-5q23-30 43 5q3 25-43 50q-46-25-43-50" fill="#D9896F"/><path d="M92 42l-8-14m65 5V16m59 27l10-13" fill="none"/>',
+  context: '<path d="M45 63q53-20 105 8q52-28 105-8v128q-53-20-105 8q-52-28-105-8z" fill="#FFFDF7"/><path d="M150 71v128M68 108h60m-60 21h60m-60 21h45m49-42h60m-60 21h60m-60 21h45" fill="none"/><path d="M45 63q53-20 105 8q52-28 105-8" fill="none"/>',
 };
 
 export function Illustration({ picture, alt, size = 230 }: { picture: Vocabulary['picture']; alt: string; size?: number }) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="240" viewBox="0 0 300 240"><g stroke="#333D31" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${drawings[picture]}</g></svg>`;
-  return <Image accessibilityRole="img" accessibilityLabel={alt} source={{ uri: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` }} style={{ width: size, height: size * 0.8, maxWidth: '100%', alignSelf: 'center' }} resizeMode="contain" />;
+  return <Image accessibilityRole="img" accessibilityLabel={picture === 'context' ? 'Open notebook illustration' : alt} source={{ uri: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` }} style={{ width: size, height: size * 0.8, maxWidth: '100%', alignSelf: 'center' }} resizeMode="contain" />;
 }

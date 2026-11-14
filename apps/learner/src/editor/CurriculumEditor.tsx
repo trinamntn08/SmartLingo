@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { lessonSchema, type Lesson, type LessonPreview } from '@smartlingo/domain';
+import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { lessonSchema, matchesLesson, type Lesson, type LessonPreview } from '@smartlingo/domain';
 import { localContentApi } from '../content/api';
 import { audio } from '../audio';
 import { Badge, Button } from '../ui/controls';
@@ -14,6 +14,7 @@ const editableDraft = (lesson: Lesson): Lesson => ({ ...lesson, status: 'draft' 
 
 export function CurriculumEditor({ onExit }: { onExit: () => void }) {
   const [catalogue, setCatalogue] = useState<Lesson[]>([]);
+  const [search, setSearch] = useState('');
   const [saved, setSaved] = useState<Lesson | null>(null);
   const [draft, setDraft] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
@@ -129,7 +130,15 @@ export function CurriculumEditor({ onExit }: { onExit: () => void }) {
       {!!message && <View style={[s.notice, { backgroundColor: colors.green }]}><Text accessibilityLiveRegion="polite" style={s.body}>{message}</Text></View>}
       {loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Loading local curriculum…</Text></View> : <>
         {!catalogue.length && !error && <View style={s.card}><Text style={s.heading}>No local lessons yet.</Text><Text style={s.body}>The first editor updates existing curriculum. Start the local API with its bundled lesson seeds.</Text><Button onPress={() => void loadLatest()}>Reload catalogue</Button></View>}
-        {!!catalogue.length && <View style={s.row}>{catalogue.map(lesson => <Button key={lesson.id} selected={saved?.id === lesson.id} disabled={busy || saved?.id === lesson.id} onPress={() => requestNavigation({ kind: 'select', lesson })}>{lesson.topic} · {lesson.role}</Button>)}</View>}
+        {!!catalogue.length && <View style={{ gap: 12 }}>
+          <TextInput accessibilityLabel="Search curriculum" placeholder="Find a topic or lesson" value={search} onChangeText={setSearch} style={s.input} />
+          <ScrollView style={{ maxHeight: 240 }} nestedScrollEnabled keyboardShouldPersistTaps="handled">
+            <View style={{ gap: 8 }}>{catalogue.filter(lesson => matchesLesson(lesson, search)).map(lesson =>
+              <Button key={lesson.id} selected={saved?.id === lesson.id} disabled={busy || saved?.id === lesson.id}
+                onPress={() => requestNavigation({ kind: 'select', lesson })}>{lesson.topic} · {lesson.subtitle}</Button>)}</View>
+          </ScrollView>
+          {!catalogue.some(lesson => matchesLesson(lesson, search)) && <Text style={s.muted}>No matching lessons.</Text>}
+        </View>}
         {saved && draft && <>
           <View style={s.card}><View style={s.row}><Badge>{saved.status} · revision {saved.revision}</Badge><Badge>{dirty ? 'Unsaved changes' : 'Form matches saved revision'}</Badge></View><Text style={s.heading}>{saved.title}</Text>
             <View style={s.row}><Button primary disabled={busy || conflict || (!dirty && saved.status === 'draft')} onPress={() => void saveDraft()}>{busy ? 'Working…' : saved.status === 'published' ? 'Save new draft revision' : 'Save draft revision'}</Button>
@@ -159,7 +168,7 @@ function SavedPreview({ preview, onClose }: { preview: LessonPreview; onClose: (
   return <View style={{ gap: 20 }}><View style={[s.notice, { backgroundColor: colors.yellow }]}><Text style={s.heading}>Saved revision {lesson.revision} · temporary practice</Text><Text style={s.body}>This is the real lesson interface. Attempts, word saves, and completion here exist only in this preview and do not touch your learner notebook or progress.</Text></View><LessonScreen lesson={lesson} model={model} onExit={onClose} />
     <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Author review details</Text><Text style={s.muted}>Answer keys are shown here for curriculum review. These details are separate from learner practice.</Text>
       <Text style={s.body}>Level: {lesson.level} · Target language: {lesson.language} · Explanation language: {lesson.explanationLanguage}</Text>
-      <Text style={s.eyebrow}>Picture answer</Text><Text style={s.body}>{pictureAnswer.target} ({pictureAnswer.id})</Text><Text style={s.body}>Picture description: {pictureAnswer.pictureAlt}</Text>
+      <Text style={s.eyebrow}>{lesson.pictureActivity.mode === 'meaning' ? 'Meaning answer' : 'Picture answer'}</Text><Text style={s.body}>{pictureAnswer.target} ({pictureAnswer.id})</Text><Text style={s.body}>{lesson.pictureActivity.mode === 'meaning' ? `Meaning prompt: ${pictureAnswer.meaning}` : `Picture description: ${pictureAnswer.pictureAlt}`}</Text>
       <Text style={s.eyebrow}>Accepted sentence answers</Text>{lesson.sentenceActivity.answers.map((answer, index) => <Text key={index} style={s.body}>{index + 1}. {answer}</Text>)}
       <Text style={s.eyebrow}>Answers marked “almost”</Text>{lesson.sentenceActivity.almostAnswers.length ? lesson.sentenceActivity.almostAnswers.map((answer, index) => <Text key={index} style={s.body}>{index + 1}. {answer}</Text>) : <Text style={s.body}>None defined.</Text>}
       <Text style={s.eyebrow}>Source and rights</Text><Text style={s.body}>{lesson.provenance.author}</Text><Text style={s.body}>{lesson.provenance.rights}</Text><Text style={s.body}>{lesson.provenance.review}</Text>

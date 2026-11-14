@@ -131,8 +131,8 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await expectNoHorizontalOverflow(page);
   await page.getByRole('textbox', { name: 'Search lessons' }).fill('bakery');
   await expect(page.getByText('At the restaurant', { exact: true })).toHaveCount(0);
-  await expectPictureLoaded(page);
-  await button(page, /Choose this lesson/).click();
+  await button(page, 'Explore Bakery →').click();
+  await button(page, 'Open At the bakery').click();
   await expectNoHorizontalOverflow(page);
   await expectPictureLoaded(page);
   await page.screenshot({ path: info.outputPath('narrow-lesson.png'), fullPage: true });

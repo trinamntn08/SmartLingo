@@ -30,6 +30,6 @@ export function Speak({ text }: { text: string }) {
     finally { setState('idle'); }
   }
   return <View style={{ gap: 6 }}><View style={s.row}><Button onPress={() => void play()} label={state === 'playing' ? 'Stop device voice' : `Listen to ${text}`}>
-    {state === 'playing' ? '■ Stop' : '▷ Listen'}</Button><Text style={s.muted}>Synthetic device voice</Text></View>
+    {state === 'playing' ? '■ Stop' : '▷ Listen'}</Button></View>
     {!!error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{error}</Text>}</View>;
 }

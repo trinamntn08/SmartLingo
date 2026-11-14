@@ -127,6 +127,8 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 Create original lessons and examples using reputable public references for research. Record sources, media attribution, and reuse permissions. Personal use is not a reason to copy entire courses or unlicensed image/audio collections; original content also makes later commercialisation easier.
 
+Owner expansion request (2026-11-14): provide 30–50 distinct words/phrases per practical A1–A2 topic, grouped into short 6–10-item lessons. Let learners search French/English vocabulary and read meanings, examples and explanations directly in a topic bank. Keep ordinary study copy concise; disclose synthetic device speech in Profile rather than beside every Listen button. [Research and limits](docs/CURRICULUM_RESEARCH.md) accompany the draft catalogue.
+
 Use simple illustrations for objects/actions when clear. Use realistic photographs selectively for menus, places, and practical contexts when permission allows. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
 
 Generate stable AI audio for approved content and cache it by text + language + voice + generation-settings hash. Reuse it rather than generate on every playback. A text change invalidates related audio until regenerated/reviewed. Clearly identify synthetic speech.

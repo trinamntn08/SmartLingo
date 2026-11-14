@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   body: { fontSize: 17, lineHeight: 26, color: colors.ink },
   muted: { fontSize: 15, lineHeight: 23, color: colors.muted },
   eyebrow: { fontSize: 12, letterSpacing: 1.7, fontWeight: '700', color: colors.muted, textTransform: 'uppercase' },
-  badge: { backgroundColor: colors.sand, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 },
+  badge: { backgroundColor: colors.sand, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6, maxWidth: '100%', flexShrink: 1 },
   badgeText: { fontSize: 12, fontWeight: '700', color: colors.ink },
   button: { minHeight: 46, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, borderBottomWidth: 3, paddingHorizontal: 17, paddingVertical: 12, justifyContent: 'center', alignItems: 'center' },
   buttonPrimary: { backgroundColor: colors.yellow, borderColor: '#D0B527' },

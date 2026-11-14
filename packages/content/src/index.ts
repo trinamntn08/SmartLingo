@@ -1,4 +1,8 @@
 import { lessonSchema, type Lesson } from '@smartlingo/domain';
+import { buildTopic } from './build-topic';
+import { foodHomeTopics } from './topics/food-home';
+import { dailyLifeTopics } from './topics/daily-life';
+import { reuseSharedVocabulary } from './shared-vocabulary';
 
 // Original preview curriculum. Publication requires owner review.
 const drafts = [
@@ -273,5 +277,9 @@ const drafts = [
   }
 ];
 
-export const lessons: Lesson[] = drafts.map(draft => lessonSchema.parse(draft));
+export const lessons: Lesson[] = reuseSharedVocabulary([
+  ...drafts.map(draft => lessonSchema.parse(draft)),
+  ...foodHomeTopics.flatMap(buildTopic),
+  ...dailyLifeTopics.flatMap(buildTopic),
+]);
 export const restaurantLesson = lessons[0];

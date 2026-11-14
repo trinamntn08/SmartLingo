@@ -2,7 +2,7 @@
 
 A practical French learning preview for English-speaking newcomers to France. Web first; Android and iOS adapters are planned.
 
-**Current state:** local learner preview and first curriculum editor. Two bundled unreviewed lesson drafts, picture/sentence practice, a browser notebook, and explicit local preview/publication. Bundled content remains draft until the owner reviews and publishes it.
+**Current state:** local learner preview and first curriculum editor. Twelve A1–A2 draft topics with 30 words/phrases each across 60 short lessons, picture/meaning/sentence practice, a browser notebook, and explicit local preview/publication. Bundled content remains draft until the owner reviews and publishes it; level labels are estimates.
 
 ## Run the preview
 
@@ -14,6 +14,8 @@ npm run dev
 ```
 
 Open the localhost URL printed by Expo. No API key is required. Study Restaurant → Customer with meanings, examples, translations and explanations visible directly, save a word, and find/edit it under Review. Attempts and notebook entries are stored in this browser's IndexedDB and survive reload. Use the same hostname/port/browser to return to that storage. Browser data can be cleared or evicted; keep a backup using Profile → Download learning backup.
+
+Explore groups the curriculum into everyday topics. Search topics or French/English vocabulary, filter A1/A2, open a short lesson or read and save words directly in its topic bank. The 30-word banks retain six-item sessions. Research scope and original-content rights are recorded in [curriculum research](docs/CURRICULUM_RESEARCH.md).
 
 Review offers French→meaning cards for saved vocabulary. Try to recall before revealing, then choose Again, Needed help or Remembered. These are manual recognition ratings, not a proficiency assessment. Independent due-day recall follows a 1/3/7/14/30-day calendar schedule; help returns the item tomorrow. Early or repeated same-day recall does not advance the schedule. Editing a note starts fresh practice for that revision while preserving prior ratings. Ratings survive reload and are included in backups.
 

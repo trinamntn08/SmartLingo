@@ -21,6 +21,6 @@ test('every valid vocabulary entry fits notebook capture limits', () => {
 
 test('published catalogue overrides previews without allowing drafts to replace publications', () => {
   const published = { ...restaurantLesson, status: 'published' as const, revision: 3 };
-  assert.deepEqual(mergeLessonCatalogue(lessons, [published]), [published, lessons[1]]);
+  assert.deepEqual(mergeLessonCatalogue(lessons, [published]), [published, ...lessons.slice(1)]);
   assert.throws(() => mergeLessonCatalogue(lessons, [restaurantLesson]), /Only published/);
 });

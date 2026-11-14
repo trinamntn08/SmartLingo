@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { checkAnswer, lessonProgress, lessonSchema, type LearningEvent } from '../src/index';
 import { lessons, restaurantLesson } from '@smartlingo/content';
 
-test('both draft lessons validate; bad references and duplicate IDs are rejected', () => {
-  assert.equal(lessons.length, 2);
+test('all draft lessons validate; bad references and duplicate IDs are rejected', () => {
+  assert.ok(lessons.length >= 60);
   for (const lesson of lessons) assert.equal(lessonSchema.parse(lesson).status, 'draft');
   assert.equal(lessonSchema.safeParse({ ...restaurantLesson, pictureActivity: { ...restaurantLesson.pictureActivity, entryId: 'missing.id' } }).success, false);
   assert.equal(lessonSchema.safeParse({ ...restaurantLesson, vocabulary: Array(6).fill(restaurantLesson.vocabulary[0]) }).success, false);

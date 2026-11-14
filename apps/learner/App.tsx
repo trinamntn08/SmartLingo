@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
-import { ActivityIndicator, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
-import { lessonProgress, type Lesson } from '@smartlingo/domain';
+import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { groupLessonTopics, lessonProgress, type Lesson } from '@smartlingo/domain';
 import { audio } from './src/audio';
 import { Badge, Button } from './src/ui/controls';
 import { Illustration } from './src/ui/Illustration';
 import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
+import { TopicCatalogue } from './src/ui/TopicCatalogue';
 import { colors, styles as s } from './src/ui/theme';
 import { useLearning, type LearningModel } from './src/ui/useLearning';
 import { CurriculumEditor } from './src/editor/CurriculumEditor';
@@ -60,12 +61,11 @@ function LearnerApp({ onOpenEditor }: { onOpenEditor: () => void }) {
         {!!model.loadError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text><Text style={s.body}>{model.loadError}</Text><Text style={s.body}>You can browse the bundled lessons. Saving and lesson progress need browser storage.</Text><Button onPress={() => void model.load()}>Retry opening storage</Button></View>}
         {!!model.saveError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>This change hasn’t been confirmed as saved.</Text><Text style={s.body}>{model.saveError}</Text><Text style={s.muted}>Retry keeps the same event, so your practice won’t be counted twice.</Text><View style={s.row}><Button primary disabled={model.busy} onPress={model.retry}>Retry save</Button><Button disabled={model.busy} onPress={model.cancelWrite}>Dismiss and continue</Button></View></View>}
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
-        {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => navigate('Today')} />
+        {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => navigate('Explore')} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <Catalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} />
+            : tab === 'Explore' || tab === 'Practice' ? <TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} />
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
-      <View style={s.divider} /><Text style={s.muted}>Made for everyday life in France. Bundled drafts await owner review; published local revisions are labelled separately.</Text>
     </View></ScrollView>
   </View>;
 }
@@ -78,9 +78,8 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
   return <View style={{ gap: 32 }}><View style={s.split}>
     <View style={[s.column, { justifyContent: 'center', paddingVertical: 18 }]}><Text style={s.eyebrow}>Small steps. Real conversations.</Text>
       <Text accessibilityRole="header" style={[s.hero, { fontSize: 52, lineHeight: 57 }]}>A little French.{ '\n' }A little more{ '\n' }at home.</Text>
-      <Text style={[s.body, { maxWidth: 430 }]}>From your first café order to a friendly bonjour. Practise the words you can use today.</Text>
-      <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : 'Start restaurant practice →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
-      <Text style={s.muted}>No streaks. No rush. Pick up where you left off.</Text>
+      <Text style={[s.body, { maxWidth: 430 }]}>Explore {groupLessonTopics(lessons).length} everyday topics, with short A1–A2 lessons and useful vocabulary.</Text>
+      <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
     </View>
     <View style={[s.card, s.column, { backgroundColor: '#E8ECD9', padding: 28 }]}><View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge><Badge>{suggested.level}</Badge></View>
       <Illustration picture={suggested.vocabulary[1].picture} alt={suggested.vocabulary[1].pictureAlt} size={290} />
@@ -88,21 +87,6 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
       <View style={s.divider} /><Text style={s.muted}>{progress.completed ? '✓ Session completed and saved' : `${progress.viewedIds.size} of ${suggested.vocabulary.length} words explored`} · {suggested.status === 'published' ? `Published revision ${suggested.revision}` : 'Draft preview'}</Text>
     </View>
   </View>
-    <View style={[s.notice, { backgroundColor: colors.yellow, padding: 25, flexDirection: 'row', flexWrap: 'wrap', gap: 30 }]}>
-      <View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Look, then try.</Text><Text style={s.body}>Pictures first. Useful words next.</Text></View><View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Understand as you go.</Text><Text style={s.body}>Meanings and explanations, together.</Text></View><View style={{ flex: 1, minWidth: 160 }}><Text style={s.heading}>Keep what matters.</Text><Text style={s.body}>A notebook that’s yours to edit.</Text></View>
-    </View>
-  </View>;
-}
-
-function Catalogue({ lessons, model, onOpen, practice }: { lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; practice: boolean }) {
-  const [search, setSearch] = useState('');
-  const visible = lessons.filter(lesson => `${lesson.title} ${lesson.topic} ${lesson.role}`.toLowerCase().includes(search.toLowerCase().trim()));
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>{practice ? 'A safe place to try' : 'Everyday life in France'}</Text><Text accessibilityRole="header" style={s.title}>{practice ? 'Put your French together.' : 'What would you like to do?'}</Text><Text style={s.body}>{practice ? 'Choose a situation to practise with pictures, a short dialogue, and sentence pieces.' : 'Two small, practical lessons. Choose a situation and learn from the customer’s side.'}</Text>
-    <TextInput accessibilityLabel="Search lessons" placeholder="Find a topic, like restaurant or bakery" value={search} onChangeText={setSearch} style={s.input} clearButtonMode="while-editing" />
-    {!visible.length && <View style={s.card}><Text style={s.heading}>No matching lessons yet.</Text><Text style={s.body}>Try “restaurant” or “bakery”, or clear your search to see both drafts.</Text><Button onPress={() => setSearch('')}>Clear search</Button></View>}
-    <View style={s.split}>{visible.map(lesson => { const progress = lessonProgress(lesson, model.events); return <View key={lesson.id} style={[s.card, s.column]}>
-      <View style={s.row}><Badge>{lesson.level}</Badge><Badge>{lesson.role}</Badge><Badge>{lesson.status === 'published' ? `Published · revision ${lesson.revision}` : 'Draft'}</Badge></View><Illustration picture={lesson.vocabulary[1].picture} alt={lesson.vocabulary[1].pictureAlt} size={200} /><Text style={s.heading}>{lesson.subtitle}</Text><Text style={s.body}>{lesson.outcome}</Text><Text style={s.muted}>{lesson.durationMinutes} min · {lesson.vocabulary.length} words · {progress.completed ? 'Session saved' : `${progress.viewedIds.size} words explored`}</Text><Button primary onPress={() => onOpen(lesson)}>{progress.completed ? 'Revisit lesson →' : progress.viewedIds.size ? 'Continue lesson →' : 'Choose this lesson →'}</Button>
-    </View>; })}</View>
   </View>;
 }
 

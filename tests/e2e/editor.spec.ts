@@ -37,7 +37,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   const originalNotebook = await learningRows(page, 'notebook');
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Lesson subtitle', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Restaurant · Customer', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Search curriculum', exact: true }).fill('restaurant');
+  await page.getByRole('button', { name: 'Restaurant · At the restaurant', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Publish reviewed revision', exact: true })).toBeDisabled();
   await page.getByRole('textbox', { name: 'Lesson subtitle', exact: true }).fill('A coffee with confidence');
   await page.getByRole('textbox', { name: 'bonjour — English meaning', exact: true }).fill('A greeting reviewed in this isolated test');

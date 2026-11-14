@@ -4,7 +4,7 @@ const id = z.string().regex(/^[a-z0-9][a-z0-9.-]+$/).max(120);
 const text = z.string().trim().min(1).max(2000);
 export const vocabularySchema = z.object({
   id, target: text.max(300), meaning: text.max(500), example: text.max(1000), exampleMeaning: text,
-  note: text, picture: z.enum(['cup', 'water', 'menu', 'bill', 'greeting', 'please', 'bread', 'croissant', 'bag', 'thanks']),
+  note: text, picture: z.enum(['cup', 'water', 'menu', 'bill', 'greeting', 'please', 'bread', 'croissant', 'bag', 'thanks', 'context']),
   pictureAlt: text,
 });
 export const lessonSchema = z.object({
@@ -15,7 +15,7 @@ export const lessonSchema = z.object({
   vocabulary: z.array(vocabularySchema).min(6).max(10),
   dialogue: z.array(z.object({ role: text, target: text, meaning: text })).min(2),
   grammar: z.object({ title: text, explanation: text }),
-  pictureActivity: z.object({ prompt: text, entryId: id, choices: z.array(id).min(2) }),
+  pictureActivity: z.object({ mode: z.enum(['picture', 'meaning']).optional(), prompt: text, entryId: id, choices: z.array(id).min(2) }),
   sentenceActivity: z.object({
     id, prompt: text, tokens: z.array(text).min(2), answers: z.array(text).min(1),
     hint: text, explanation: text,

@@ -43,6 +43,8 @@ This uses Chromium viewport/touch emulation, not a physical phone or Safari/nati
 
 `npm audit` reports three moderate findings along Expo → `@expo/fingerprint` → minimatch 10.2.6 ([upstream advisory](https://github.com/advisories/GHSA-g3hv-75wg-m249)). The suggested automated fix downgrades Expo across SDKs. A pin override did not replace the workspace transitive dependency and was removed; no forced dependency change or audit suppression was retained. The vulnerable path is build-time glob processing; local preview validation is not a clean dependency audit. Revisit with an upstream-compatible release before wider distribution.
 
+Navigation correction: TypeScript, web export and full browser suite (29 passed/one deliberate publication skip) pass with left-pane geometry, mouse/keyboard brand-home navigation and editor-home/unsaved-text preservation. Primary self-reviewed this small UI change and inspected the desktop screenshot. No domain, content, storage or dependency change; previous 16 tooling/60 application results remain the baseline.
+
 ## Future validation
 
 Production/listening or adaptive review; full editor tools; downloaded packs and cache invalidation; microphone/permission handling; actual mobile and screen-reader checks. Owner review establishes French/English correctness and media suitability; automated schema checks cannot do that.

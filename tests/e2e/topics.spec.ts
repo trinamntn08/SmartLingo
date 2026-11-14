@@ -83,7 +83,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   expect(errors).toEqual([]);
 });
 
-test('desktop topic pane stays to the right and switches an open lesson directly to its word bank', async ({ page }) => {
+test('desktop topic pane stays to the left and switches an open lesson directly to its word bank', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
@@ -93,7 +93,7 @@ test('desktop topic pane stays to the right and switches an open lesson directly
   const topicsBox = await topics.boundingBox();
   expect(contentBox).not.toBeNull();
   expect(topicsBox).not.toBeNull();
-  expect(topicsBox!.x).toBeGreaterThanOrEqual(contentBox!.x + contentBox!.width - 1);
+  expect(topicsBox!.x + topicsBox!.width).toBeLessThanOrEqual(contentBox!.x + 1);
 
   const groceriesLesson = lessons.find(lesson => lesson.topic === 'Groceries')!;
   await page.getByRole('button', { name: 'Explore', exact: true }).click();
@@ -104,6 +104,13 @@ test('desktop topic pane stays to the right and switches an open lesson directly
   await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);
+  await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
+  await expect(page.getByRole('button', { name: /Start restaurant practice/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await page.getByRole('button', { name: 'SmartLingo home', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: /Start restaurant practice/ })).toBeVisible();
 });
 
 test('320px horizontal topic strip reaches topics and topic changes clear stale search and level filters', async ({ page }) => {

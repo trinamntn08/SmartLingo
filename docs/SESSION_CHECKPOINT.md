@@ -4,34 +4,26 @@ Updated: 2026-11-14 (Europe/Paris).
 
 ## Current request and outcome
 
-Owner requested a topic list on the right of the web view, rapid vocabulary access without stepping through individual words, and photos/drawings to make words easier to understand. Completed on feat/visual-topic-browser from clean checkpoint 042086d. See [plan 0007](plans/0007-visual-topic-browser.md), [ADR 0010](decisions/0010-visual-word-overviews.md) and [media records](MEDIA_SOURCES.md).
+Owner requested that clicking SmartLingo return to the first page and that topics move to the left. Completed on fix/home-link-and-left-topics from clean visual-browser checkpoint 1ffb044. See [plan 0008](plans/0008-home-and-left-topics.md) and the owner correction in [ADR 0010](decisions/0010-visual-word-overviews.md).
 
-Desktop has persistent right-hand topic navigation outside the main scroll area; narrow screens have a horizontally scrollable topic list. A topic click jumps directly into its word bank, including from an open lesson, and clears stale search/level filters. Word grids appear before optional practice. The same compact VocabularyCard shows all six lesson words together: no Next word sequence. Meaning, example/translation and explanation remain visible, with Listen and atomic Save. Continue to dialogue explicitly records review of the displayed set, with one retry-safe vocabulary viewed event itemId=lesson.id. The domain scopes this to the lesson/revision; old per-entry progress remains valid. Merely browsing records no study or proficiency claim. Matching/sentence/completion actions remain deliberate.
+Shared BrandHome control now works by mouse, Enter and Space through the existing native button semantics, with a visible keyboard-focus border. Learner and editor headers call the same root home action: close the editor view and reset the learner to Today, clearing open lesson/topic selection and scrolling to the top. The editor stays mounted, preserving unsaved text. Its Return to learning control remains available. Desktop topic pane renders before the main content, with the divider on its right edge. The horizontal phone list remains.
 
-Added separate original SVG media data for 125 stable vocabulary IDs (122 distinct drawings: 108 literal, 17 explicitly described contexts) across all twelve topics, alongside legacy concrete pictures. Exact target guards prevent stale new images after owner target edits, and unknown IDs fall back safely. Abstract words can stay text-supported. No external photo requests, bitmap generation, paid calls, new dependencies, curriculum revision/payload changes or storage migration. All content/illustrations still require owner review. No owner publication, push, merge or account changes.
-
-## Ownership and review
-
-Primary owned App/sidebar, lesson overview/domain progress, shared exports, integration, media tests and docs. visual_word_grid: ui-builder, exposed gpt-6.1-sol medium, only TopicCatalogue/VocabularyCard. word_drawings: worker, exposed gpt-6.1-sol medium, only visuals.ts/WordIllustration.tsx. overview_browser_tests: bounded worker, cheaper exposed gpt-6-luna medium, five existing browser specs. visual_browser_review: independent read-only change-reviewer, exposed gpt-6.1-sol high. At most three helpers active concurrently; roles/instructions supplied explicitly, no auto-loading claim. Usage/reset tools unavailable; no allowance estimate or automatic resume claimed.
-
-Independent reviewer traced navigation, atomic capture/stale edits, event revision/retry/backup compatibility and media mappings/path syntax. Found an inherited-property crash for valid unknown ID constructor: Object.hasOwn guard plus regression assertion resolves it. Final six focused checks passed; no remaining actionable finding. Primary inspected complete source/test changes, corrected outdated accessible-name assertions, reviewed all four drawing contact sheets and final desktop/320px word layouts. Native/Safari/assistive-technology and exhaustive owner visual/language review remain unverified.
+Primary handled this small sequential change and self-review; no delegation or new dependencies. Inspected callback/effect reset behaviour, editor preservation and focus/geometry. No curriculum, domain, persistence, media or API changes. No owner data edits, publication, paid calls, push or merge.
 
 ## Validation
 
-- npm.cmd run check: repository and TypeScript passed.
-- npm.cmd test: 16 tooling and 60 application tests passed. Re-ran application tests after the inherited-ID guard fix: all 60 passed. New checks cover explicit overview revision scoping and media ID/target coverage, safe unknown IDs and resource isolation.
-- Final npm.cmd run test:e2e: 29 passed, one deliberate duplicate mobile publication skip. Includes direct right-pane geometry/topic jumps, horizontal topic access/filter reset, six-word overview, one reviewed-set event, save/retry/reload, stale personal edits, original picture/meaning/sentence journeys, editor preview/publication isolation, backup restore and manual review.
-- Initial browser run had five obsolete In notebook accessible-name assertions after cards gained stable Save bonjour labels. Updated them to assert that label is disabled and contains the saved text, keeping persistence assertions intact; final full rerun passed.
-- npm.cmd run build:web: passed after final product changes.
-- All 125 SVG data URIs decoded in Chromium: zero failures. Full drawings contact sheets, desktop right-pane/Groceries cards and 320px topic/word layouts inspected. Horizontal strip clipping is intentional; main/document overflow checks pass.
-- git diff --check passed. Final notes, deliberate staging, staged-secret/whitespace checks and local checkpoint commit follow this note. Verify actual commit hash/status; if interrupted before commit, preserve task files and finish those checks and commit.
+- npm.cmd run check: repository/TypeScript passed; repeated on final staged documents before committing.
+- npm.cmd run test:e2e: 29 passed, one existing deliberate duplicate publication skip. Updated geometry verifies left sidebar; brand click returns home from a topic bank, Enter returns home from a lesson, editor brand returns home and reopening the editor keeps unsaved text. Existing 320px navigation, learning/reload/retry, notebook, publication isolation, backup and manual-review journeys pass.
+- npm.cmd run build:web: passed.
+- Additional private-context smoke check returned home from Groceries; desktop left-pane screenshot inspected. No owner browser/storage used.
+- git diff --check passed before final note. Stage only this task's UI/tests/docs, run staged-secret/whitespace checks and commit locally. Actual commit identity is reported only after Git confirms it; if interrupted first, preserve changes and finish those steps.
 
-Learner remains at localhost:8081, API at 127.0.0.1:3001; check listeners before starting duplicates. Tests used private browser contexts and an in-memory editor API, never owner learning data or owner curriculum approval. Artifacts/exports/test backups stay ignored. Three previously documented moderate upstream Expo build-tool audit findings remain unrelated and unchanged.
+Prior visual-browser checkpoint passed 16 tooling/60 application tests and all 125 image decodes. Those modules are unchanged; no unnecessary repeat of the domain/storage/media suite. Physical phone/Safari/screen reader, audible voice quality and owner content/media review remain unverified. Three previously documented moderate upstream Expo build-tool audit findings remain unrelated. Usage/reset tools unavailable; no allowance estimate or automatic resume claimed.
 
-## Git and next steps
+## Git and next action
 
-This local checkpoint contains the completed visual browser and these notes. Expected title: feat: add topic sidebar and visual word overviews. Stage only task source/tests/docs; no initial unrelated changes existed. Report actual identity only after Git confirms it. No remote operation.
+Expected local checkpoint title: fix: return home from brand and move topics left. No unrelated initial edits existed. Exclude screenshots, test results, exports, caches, databases and keys. Verify actual commit hash and clean working tree after checks.
 
-Next owner-facing action: refresh localhost:8081, select a topic on the right and browse illustrated word cards. More concrete illustrations can extend the same guarded catalogue; abstract vocabulary remains supported by visible explanations. Owner content/media review is still separate. Offline installation/downloaded packs, full editor tools and AI speaking remain planned, outside this request.
+Refresh localhost:8081: topics are on the left, and SmartLingo returns to Today. Learner/API remain at localhost:8081 and 127.0.0.1:3001; check listeners before duplicate starts. Broader offline installation, full editor tools and AI speaking remain planned, outside this request.
 
-Prior local checkpoints: 042086d topic expansion; 3653a5e direct study details; 546965d manual review; bc1b08f backup/restore; 7a84e60 editor; 83c5573 foundation. Local commits are not remote backups; inspect remote history before future integration.
+Prior checkpoints: 1ffb044 visual vocabulary; 042086d topic expansion; 3653a5e direct details; 546965d manual review; bc1b08f backup; 7a84e60 editor; 83c5573 foundation. Local commits are not remote backups. Inspect remote history before future integration.

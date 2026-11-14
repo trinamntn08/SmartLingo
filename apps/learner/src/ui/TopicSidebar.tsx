@@ -16,7 +16,7 @@ export function TopicSidebar({ topics, selected, onSelect, compact }: {
       {choices}
     </ScrollView>
   </View>;
-  return <View testID="topic-navigation" accessibilityLabel="Topics" style={{ width: 250, flexShrink: 0, borderLeftWidth: 1, borderColor: colors.line, backgroundColor: colors.card }}>
+  return <View testID="topic-navigation" accessibilityLabel="Topics" style={{ width: 250, flexShrink: 0, borderRightWidth: 1, borderColor: colors.line, backgroundColor: colors.card }}>
     <Text accessibilityRole="header" style={[s.heading, { padding: 20, paddingBottom: 12 }]}>Topics</Text>
     <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingTop: 0, paddingBottom: 32, gap: 8 }}>{choices}</ScrollView>
   </View>;

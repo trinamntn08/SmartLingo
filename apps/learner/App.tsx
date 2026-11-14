@@ -8,6 +8,7 @@ import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
 import { TopicCatalogue } from './src/ui/TopicCatalogue';
 import { TopicSidebar } from './src/ui/TopicSidebar';
+import { BrandHome } from './src/ui/BrandHome';
 import { colors, styles as s } from './src/ui/theme';
 import { useLearning, type LearningModel } from './src/ui/useLearning';
 import { CurriculumEditor } from './src/editor/CurriculumEditor';
@@ -20,6 +21,7 @@ type Tab = typeof tabs[number];
 export default function App() {
   const [editorOpen, setEditorOpen] = useState(() => typeof window !== 'undefined' && window.location.hash === '#editor');
   const [editorVisited, setEditorVisited] = useState(editorOpen);
+  const [homeRequest, setHomeRequest] = useState(0);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const updateRoute = () => {
@@ -36,13 +38,14 @@ export default function App() {
     setEditorOpen(open);
     if (typeof window !== 'undefined') window.location.hash = open ? 'editor' : '';
   }
+  function goHome() { showEditor(false); setHomeRequest(current => current + 1); }
   return <View style={s.app}>
-    <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp onOpenEditor={() => showEditor(true)} /></View>
-    {editorVisited && <View style={{ flex: 1, display: editorOpen ? 'flex' : 'none' }}><CurriculumEditor onExit={() => showEditor(false)} /></View>}
+    <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp onOpenEditor={() => showEditor(true)} homeRequest={homeRequest} onHome={goHome} /></View>
+    {editorVisited && <View style={{ flex: 1, display: editorOpen ? 'flex' : 'none' }}><CurriculumEditor onExit={() => showEditor(false)} onHome={goHome} /></View>}
   </View>;
 }
 
-function LearnerApp({ onOpenEditor }: { onOpenEditor: () => void }) {
+function LearnerApp({ onOpenEditor, homeRequest, onHome }: { onOpenEditor: () => void; homeRequest: number; onHome: () => void }) {
   const model = useLearning();
   const catalogue = useCatalogue();
   const [tab, setTab] = useState<Tab>('Today');
@@ -56,13 +59,15 @@ function LearnerApp({ onOpenEditor }: { onOpenEditor: () => void }) {
   function selectTopic(name: string | null) { audio.stop(); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function openLesson(next: Lesson) { audio.stop(); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   useEffect(() => () => audio.stop(), []);
+  useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><Text style={{ fontSize: 26 }}>✳</Text><Text style={s.brand}>SmartLingo</Text><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={s.row}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
     {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
     <View style={{ flex: 1, width: '100%', maxWidth: 1440, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
+    {wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />}
     <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}><View style={[s.main, width < 600 && { padding: 16, paddingTop: 24 }]}>
       {model.loading || catalogue.loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text></View> : <>
         {!!model.loadError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text><Text style={s.body}>{model.loadError}</Text><Text style={s.body}>You can browse the bundled lessons. Saving and lesson progress need browser storage.</Text><Button onPress={() => void model.load()}>Retry opening storage</Button></View>}
@@ -74,7 +79,6 @@ function LearnerApp({ onOpenEditor }: { onOpenEditor: () => void }) {
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
-    {wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />}
     </View>
   </View>;
 }

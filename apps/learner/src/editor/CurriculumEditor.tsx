@@ -4,6 +4,7 @@ import { lessonSchema, matchesLesson, type Lesson, type LessonPreview } from '@s
 import { localContentApi } from '../content/api';
 import { audio } from '../audio';
 import { Badge, Button } from '../ui/controls';
+import { BrandHome } from '../ui/BrandHome';
 import { LessonScreen } from '../ui/LessonScreen';
 import { colors, styles as s } from '../ui/theme';
 import { DraftFields } from './DraftFields';
@@ -12,7 +13,7 @@ import { usePreviewLearning } from './usePreviewLearning';
 type Navigation = { kind: 'select'; lesson: Lesson } | { kind: 'reload' };
 const editableDraft = (lesson: Lesson): Lesson => ({ ...lesson, status: 'draft' });
 
-export function CurriculumEditor({ onExit }: { onExit: () => void }) {
+export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHome: () => void }) {
   const [catalogue, setCatalogue] = useState<Lesson[]>([]);
   const [search, setSearch] = useState('');
   const [saved, setSaved] = useState<Lesson | null>(null);
@@ -114,7 +115,7 @@ export function CurriculumEditor({ onExit }: { onExit: () => void }) {
     }
   }
   return <View style={s.app}>
-    <View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}><View style={s.row}><Text style={s.brand}>SmartLingo</Text><Badge>LOCAL EDITOR</Badge></View><Button onPress={() => { audio.stop(); resetReview(); onExit(); }}>← Return to learning</Button></View></View>
+    <View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}><View style={s.row}><BrandHome onPress={() => { audio.stop(); resetReview(); onHome(); }} /><Badge>LOCAL EDITOR</Badge></View><Button onPress={() => { audio.stop(); resetReview(); onExit(); }}>← Return to learning</Button></View></View>
     <ScrollView ref={scroll} keyboardShouldPersistTaps="handled"><View style={[s.main, width < 600 && { padding: 16, paddingTop: 24 }]}>
       <Text style={s.eyebrow}>Curriculum workshop</Text><Text accessibilityRole="header" style={s.title}>Draft. Try. Review.</Text>
       <Text style={s.body}>Save an immutable draft revision, try the saved lesson, then publish only after your review. Nothing publishes automatically.</Text>

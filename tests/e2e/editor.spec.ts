@@ -103,7 +103,8 @@ test('narrow editor keeps unsaved text when returning to the learner', async ({ 
   await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('narrow-editor-form.png'), fullPage: true });
-  await page.getByRole('button', { name: /Return to learning/ }).click();
+  await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
+  await expect(page.getByRole('button', { name: /Start restaurant practice/ })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();
   await expect(title).toHaveValue('Unsaved local form');

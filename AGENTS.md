@@ -6,7 +6,7 @@
 - Read `docs/ARCHITECTURE.md` before changing module boundaries or storage.
 - Treat explicit owner instructions as authoritative. Record material decisions in `docs/decisions/`.
 - Inspect the working tree before edits. Preserve unrelated work.
-- This repository contains an initial local learner preview and read-only API. Check `docs/STATUS.md` for verified behaviour and remaining milestone work; do not claim planned functionality exists.
+- This repository contains a local learner preview and curriculum API/editor. Check `docs/STATUS.md` for verified behaviour and remaining milestone work; do not claim planned functionality exists.
 
 ## Product constraints
 - English-speaking adult newcomers to France; practical metropolitan French, A1–A2 and beginner foundations.

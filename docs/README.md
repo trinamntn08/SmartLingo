@@ -15,6 +15,8 @@
 | [Implementation standards decision](decisions/0002-implementation-standards.md) | Owner requirement for clean, modular, extensible code |
 | [Checkpoint commits decision](decisions/0003-checkpoint-commits.md) | Standing authorisation to commit each completed, reviewed, validated step locally |
 | [Local preview foundation](decisions/0004-local-preview-foundation.md) | Bundled drafts, persistence adapters, local read-only API |
+| [Local editor publication](decisions/0005-local-editor-publication.md) | Draft revisions, preview receipts, local request guards, publication cache |
 | [First implementation plan](plans/0001-local-foundation.md) | Scope, acceptance criteria, ownership and validation |
+| [Editor execution plan](plans/0002-editor.md) | First editor fields and validated publication journey |
 | [ADR template](templates/ADR.md) | Record a material technical decision |
 | [Execution-plan template](templates/EXECUTION_PLAN.md) | Plan and track substantial implementation |

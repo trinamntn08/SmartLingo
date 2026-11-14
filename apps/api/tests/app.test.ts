@@ -33,9 +33,12 @@ test('local preview routes serve validated drafts and useful missing/invalid ID 
 test('damaged content returns a controlled error and closes the injected repository', async () => {
   let closed = false;
   const fail = () => { throw new InvalidStoredLessonError(); };
-  const app = createApp({ listLessons: fail, getLesson: fail, close() { closed = true; } });
+  const app = createApp({
+    listLessons: fail, getLesson: fail, listPublishedLessons: fail, saveDraft: fail, publishDraft: fail,
+    close() { closed = true; },
+  });
   try {
-    for (const url of ['/lessons', `/lessons/${restaurantLesson.id}`]) {
+    for (const url of ['/lessons', '/published-lessons', `/lessons/${restaurantLesson.id}`]) {
       const response = await app.inject(url);
       assert.equal(response.statusCode, 500);
       assert.deepEqual(response.json(), { error: 'Content is unavailable. Check the local content database.' });

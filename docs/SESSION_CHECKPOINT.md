@@ -2,43 +2,32 @@
 
 Updated: 2026-11-14 (Europe/Paris).
 
-## Current request and outcome
+## Authorised work
 
-Owner requested “start to implement”, then “continue”. First M1 learner slice is complete on `feat/local-foundation`, based on clean preparation checkpoint `e0639fa`. Full M1 is still in progress. See [status](STATUS.md) and [execution plan](plans/0001-local-foundation.md).
+Owner requested “continue till out of token”. Continuing local implementation in validated slices. Account allowance/reset tools remain unavailable; no known remaining balance or automatic resume is claimed. No push, public hosting, merge or actual curriculum approval/publication was performed.
 
-Learners can open the Expo web preview, choose restaurant customer practice, study six original illustrated draft entries, reveal meanings/grammar, complete picture/sentence practice, save/edit a notebook word, and reload with progress intact. A second bakery draft also runs. Ordinary text/picture learning needs neither an API key nor an API process. Device synthetic speech is optional. The local read-only Fastify/SQLite API serves draft preview content with versioned migrations and non-overwriting seeds.
+## Completed editor slice
 
-## Ownership and review
+Branch `feat/local-editor` from clean learner checkpoint `83c5573`. [Plan 0002](plans/0002-editor.md) is complete: first editor fields, immutable draft revisions, temporary saved-revision preview, explicit reviewed local publication, latest-published selection independent of later drafts, and IndexedDB v2 publication caching. Prior attempts/notebook survive migration and loading new revisions. Profile exposes editor and explicit published-content loading. Review/publication tests use an isolated in-memory API on port3002; the owner's database stays unapproved.
 
-- Primary owned shared schemas/content, workspace manifests/lockfile, persistence/audio adapters, integration, browser tests, documentation and commits.
-- UI builder owned learner UI; API builder owned API source/tests. Both completed and stopped mutations. An independent read-only change-reviewer inspected the combined change and confirmed the stale-tab notebook finding resolved.
-- Actual model routing: exposed `gpt-6.1-sol`, fresh contexts; UI high, API medium, reviewer high. Named roles were explicitly supplied; no runtime auto-loading claim. At most three subagents ran concurrently.
-- Atomic create-if-absent lesson capture preserves existing personal edits across stale tabs. Regression tests cover it. Primary fixed blank SVG illustrations and narrow header overflow found during visual verification. Curriculum remains draft pending owner review.
+Primary owned contracts, catalogue/client/cache, integration, tests/docs and commits. Existing API/UI agents owned exclusive paths; independent reviewer stayed read-only. Actual model routing: `gpt-6.1-sol`, fresh original contexts, API medium/UI high/reviewer high; no fallback or runtime role auto-loading claim. At most three subagents concurrently. All stopped mutations before integration review.
+
+Review found a content/notebook field-limit mismatch; aligned target300/meaning500/example1000 with UI/contract regressions. Browser validation caught missing checkbox ARIA state; corrected. Final independent review found no remaining actionable defects. Original curriculum remains draft; owner language/rights review is still needed.
 
 ## Validation
 
-Completed on 2026-11-14:
+- `npm.cmd run check`: repository and TypeScript passed.
+- `npm.cmd test`: all 16 tooling and 36 application tests passed. Covers preview receipts/expiration, conflicts, immutable revisions, Host/origin/CORS guards, v1→v2 note/event preservation, publication cache, content timeouts and notebook capacity.
+- `npm.cmd run test:e2e`: 15 passed, one deliberately skipped duplicate mobile publication writer. Includes prior learner regressions, editor unavailable state, 320px keyboard fields/unsaved-form preservation, isolated preview→publication→new draft→learner cache→reload/history preservation.
+- `npm.cmd run build:web`: real final Expo web export passed. Desktop and 320px editor screenshots inspected.
+- No dependencies changed; the previously documented three moderate Expo/fingerprint/minimatch audit findings remain. Physical phones, Safari/native/screen readers and audible voice quality remain unverified.
 
-- `npm.cmd run check`: repository checks and TypeScript passed.
-- `npm.cmd test`: 16 tooling tests and 19 domain/storage/audio/API tests passed.
-- `npm.cmd run test:e2e`: all 10 Chromium checks passed, desktop/390px and 320px keyboard layout; reload/resume, hint history, picture loading, completion, notebook edits, stale tabs, storage denial, save retry.
-- Expo `install --check`: dependencies compatible. `npm.cmd run build:web`: final real web export passed.
-- Live API smoke: `/health` returned ok; `/lessons` returned two drafts. The actual server starts on 127.0.0.1:3001. Expo preview started on localhost:8081. Restart using README commands if those processes have stopped.
-- Desktop/phone-sized screenshots inspected. Audible French voice quality, physical phones, Safari/native and screen readers remain unverified.
-- `npm audit`: three moderate upstream findings in Expo/fingerprint/minimatch build-time glob processing. No ineffective override, suppression or forced SDK downgrade retained. See [details](TESTING.md).
+Primary reviewed the deliberate staged paths and source/documentation diff. `npm.cmd run check:staged`, `git diff --cached --check` and `git diff --check` passed; repeat staged checks on this final note before committing. The checkpoint is the commit containing this file, titled `feat: add local draft editor and reviewed publication`; report its actual hash only after Git confirms it. If interrupted before that commit exists, preserve task files, complete staged checks and commit verification before starting another slice. No learner database/cache, exports, recordings, traces or keys are staged.
 
-Final independent review found no actionable findings after fixes. Primary inspected the staged source/documentation and deliberate path list. The first staged whitespace check caught two trailing blank lines in new files; corrected. `npm.cmd run check:staged` and `git diff --cached --check` then passed, including staged-secret checks; repeat on this final checkpoint update before committing. No application data, keys, caches, exports, browser traces or installed packages are staged. Commit verification is the remaining checkpoint operation.
+## Next exact step
 
-## Checkpoint identity and recovery
+Implement learner backup/export/import with versioned validated files, preview/counts, explicit restore, atomic transactions and idempotent event merge; preserve local notebook edits through a clear conflict rule. Provide download/upload UI and test round-trip/corrupt-file/error paths without paid calls. Full review scheduling, downloadable offline installation, editor create/restore/unpublish/media/exercise fields and mobile adapters remain later steps. Owner can review the preview independently; no approval is inferred from development tests.
 
-The intended checkpoint is the commit containing this file, titled `feat: add local learner preview and restaurant practice`; its actual hash is reported after Git confirms it (a commit cannot contain its own hash). No push, merge, publication, or history rewrite is authorised by this local step. If interrupted before that commit exists, preserve the task files, finish review/staged checks, commit, and verify `git log -1` and `git status --short`.
+## Recovery and remote
 
-No unrelated or pre-staged work existed at start. New source paths are `apps/`, `packages/`, `tests/e2e/`, root TypeScript/Playwright config and the new execution-plan/decision documents; the reviewed tooling/product/status/run documentation and manifests are deliberate task changes.
-
-## Exact next implementation step
-
-Review the preview's French and visual character with the owner; keep drafts unapproved. Continue M1 with the first local curriculum editor fields and separate preview/publication, preserving revision/event history. Test storage/audio on a physical phone via an appropriate secure/local route. Resolve build-tool audit findings before wider distribution. Offline packs/service worker, spaced review, backup/export and native adapters are still planned, not implemented. Browser storage can be cleared/evicted; no backup UI exists yet.
-
-## Usage and remote state
-
-Account usage/reset capability unavailable in the exposed tools; no remaining allowance estimate or automatic resume claimed. A new owner message can resume already-authorised unfinished work. Preparation session's live remote check verified main at `1c6e943`; no remote integration occurred in this implementation. Inspect live history before future integration; a local checkpoint is not remote backup.
+Run learner with `npm run dev` (localhost:8081) and local content server with `npm run dev:api` (127.0.0.1:3001); editor origin must be the documented localhost/loopback8081 origin. Processes may stop between sessions; restart as needed. Inspect live remote history before any future integration. Local checkpoints are not remote backups. Previous local learner commit `83c5573` is verified; no remote operation occurred in this continuation.

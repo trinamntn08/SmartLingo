@@ -10,8 +10,11 @@ export default defineConfig({
     { name: 'desktop', use: { browserName: 'chromium', viewport: { width: 1440, height: 1000 } } },
     { name: 'small-screen', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },
   ],
-  webServer: {
+  webServer: [{
     command: 'npm run web --workspace @smartlingo/learner -- --port 8081',
     url: 'http://localhost:8081', reuseExistingServer: !process.env.CI, timeout: 120000,
-  },
+  }, {
+    command: 'npx tsx tests/e2e/content-server.ts',
+    url: 'http://127.0.0.1:3002/health', reuseExistingServer: false, timeout: 30000,
+  }],
 });

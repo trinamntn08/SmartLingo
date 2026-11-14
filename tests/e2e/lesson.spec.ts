@@ -13,7 +13,7 @@ async function expectNoHorizontalOverflow(page: Page) {
 async function storedRows(page: Page, store: 'events' | 'notebook') {
   return page.evaluate(async storeName => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open('smartlingo-learning', 1);
+      const request = indexedDB.open('smartlingo-learning');
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });

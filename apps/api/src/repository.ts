@@ -1,12 +1,16 @@
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import { lessonSchema, type Lesson } from '@smartlingo/domain';
+import { draftSaveSchema, lessonSchema, revisionRequestSchema, type Lesson } from '@smartlingo/domain';
 import { migrateContentDatabase } from './migrations';
+import { EditorError } from './editor-error';
 
 export interface LessonRepository {
   listLessons(): Lesson[];
   getLesson(id: string): Lesson | undefined;
+  listPublishedLessons(): Lesson[];
+  saveDraft(id: string, input: unknown): Lesson;
+  publishDraft(id: string, expectedRevision: number): Lesson;
   close(): void;
 }
 
@@ -59,7 +63,41 @@ export class SqliteLessonRepository implements LessonRepository {
     return row ? readLesson(row) : undefined;
   }
 
-  /** Append an explicit revision. Existing revisions are immutable. No HTTP write route is exposed. */
+  listPublishedLessons(): Lesson[] {
+    // Status is already part of the v1 payload; keep that schema and all revisions intact.
+    // Validate before selecting so corruption cannot silently disappear from the catalogue.
+    const revisions = this.database.prepare('SELECT id, revision, payload FROM lesson_revisions ORDER BY id, revision DESC')
+      .all().map(readLesson);
+    const published = new Map<string, Lesson>();
+    for (const lesson of revisions) {
+      if (lesson.status === 'published' && !published.has(lesson.id)) published.set(lesson.id, lesson);
+    }
+    return [...published.values()];
+  }
+
+  saveDraft(id: string, input: unknown): Lesson {
+    const command = draftSaveSchema.safeParse(input);
+    if (!command.success || command.data.lesson.id !== id) throw new EditorError(400, 'Invalid draft');
+    return this.transaction(() => {
+      this.requireRevision(id, command.data.expectedRevision);
+      const lesson = lessonSchema.parse({ ...command.data.lesson, revision: command.data.expectedRevision + 1 });
+      this.insertLesson(lesson);
+      return lesson;
+    });
+  }
+
+  publishDraft(id: string, expectedRevision: number): Lesson {
+    if (!revisionRequestSchema.safeParse({ expectedRevision }).success) throw new EditorError(400, 'Invalid revision');
+    return this.transaction(() => {
+      const draft = this.requireRevision(id, expectedRevision);
+      if (draft.status !== 'draft') throw new EditorError(409, 'Only the latest saved draft can be published');
+      const published = lessonSchema.parse({ ...draft, revision: expectedRevision + 1, status: 'published' });
+      this.insertLesson(published);
+      return published;
+    });
+  }
+
+  /** Internal explicit revision append. HTTP edits use the guarded draft/publication operations. */
   saveLesson(input: unknown): void {
     const lesson = lessonSchema.parse(input);
     this.transaction(() => {
@@ -94,11 +132,19 @@ export class SqliteLessonRepository implements LessonRepository {
       .run(lesson.id, lesson.revision, JSON.stringify(lesson));
   }
 
-  private transaction(operation: () => void): void {
+  private requireRevision(id: string, expectedRevision: number): Lesson {
+    const lesson = this.getLesson(id);
+    if (!lesson) throw new EditorError(404, 'Lesson not found');
+    if (lesson.revision !== expectedRevision) throw new EditorError(409, 'Lesson changed. Reload before continuing.');
+    return lesson;
+  }
+
+  private transaction<T>(operation: () => T): T {
     this.database.exec('BEGIN IMMEDIATE');
     try {
-      operation();
+      const result = operation();
       this.database.exec('COMMIT');
+      return result;
     } catch (error) {
       this.database.exec('ROLLBACK');
       throw error;

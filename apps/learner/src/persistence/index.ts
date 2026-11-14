@@ -1,10 +1,10 @@
 import {
-  learningEventSchema, notebookEntrySchema,
-  type LearningEvent, type LearningRepository, type NotebookEntry,
+  learningEventSchema, notebookEntrySchema, lessonSchema,
+  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson,
 } from '@smartlingo/domain';
 
 const databaseName = 'smartlingo-learning';
-const schemaVersion = 1;
+const schemaVersion = 2;
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -29,9 +29,12 @@ export async function openLearningRepository(options: {
   const database = await new Promise<IDBDatabase>((resolve, reject) => {
     const request = factory.open(options.name ?? databaseName, schemaVersion);
     let blocked = false;
-    request.onupgradeneeded = () => {
-      request.result.createObjectStore('events', { keyPath: 'id' });
-      request.result.createObjectStore('notebook', { keyPath: 'id' });
+    request.onupgradeneeded = event => {
+      if (event.oldVersion < 1) {
+        request.result.createObjectStore('events', { keyPath: 'id' });
+        request.result.createObjectStore('notebook', { keyPath: 'id' });
+      }
+      if (event.oldVersion < 2) request.result.createObjectStore('publishedLessons', { keyPath: 'id' });
     };
     request.onblocked = () => {
       blocked = true;
@@ -116,5 +119,42 @@ class IndexedDbLearningRepository implements LearningRepository {
     await done;
   }
 
+  async listPublishedLessons(): Promise<Lesson[]> {
+    const transaction = this.database.transaction('publishedLessons', 'readonly');
+    const done = transactionDone(transaction);
+    const [rows] = await Promise.all([requestResult(transaction.objectStore('publishedLessons').getAll()), done]);
+    return rows.map(parsePublishedLesson);
+  }
+
+  async cachePublishedLessons(inputs: Lesson[]): Promise<Lesson[]> {
+    const lessons = inputs.map(parsePublishedLesson);
+    if (new Set(lessons.map(lesson => lesson.id)).size !== lessons.length) throw new Error('Duplicate lesson IDs in published catalogue.');
+    const transaction = this.database.transaction('publishedLessons', 'readwrite');
+    const done = transactionDone(transaction);
+    const store = transaction.objectStore('publishedLessons');
+    const writes = lessons.map(lesson => new Promise<void>((resolve, reject) => {
+      const request = store.get(lesson.id);
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        try {
+          const existing = request.result === undefined ? undefined : parsePublishedLesson(request.result);
+          if (existing?.revision === lesson.revision && JSON.stringify(existing) !== JSON.stringify(lesson)) {
+            throw new Error('The server changed an immutable published revision. Existing local content was kept.');
+          }
+          if (!existing || lesson.revision > existing.revision) store.put(lesson);
+          resolve();
+        } catch (error) { reject(error); transaction.abort(); }
+      };
+    }));
+    await Promise.all([...writes, done]);
+    return this.listPublishedLessons();
+  }
+
   close(): void { this.database.close(); }
+}
+
+function parsePublishedLesson(input: unknown): Lesson {
+  const lesson = lessonSchema.parse(input);
+  if (lesson.status !== 'published') throw new Error('Draft lessons cannot enter the published cache.');
+  return lesson;
 }

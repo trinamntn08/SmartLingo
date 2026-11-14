@@ -1,6 +1,6 @@
 # Architecture baseline
 
-Status: first local web learning slice implemented; native adapters, full editor, and provider services remain planned.
+Status: local web learning and first editor/publication slice implemented; native adapters, full editor, and provider services remain planned.
 
 | Location | Responsibility |
 | --- | --- |
@@ -19,6 +19,7 @@ Status: first local web learning slice implemented; native adapters, full editor
 - Local published content/media -> downloaded lessons -> offline activities.
 - Browser IndexedDB/native SQLite adapters -> stable learning events, notebook, and reviews.
 - Draft editing -> validation/preview -> explicit publication -> versioned content.
+- Published API content -> validated IndexedDB cache -> learner catalogue; newer drafts remain editor-only. Preview practice uses an isolated in-memory model.
 - Separate target language, explanation language, and UI language.
 - Keep provider/model identifiers configurable and media keyed by content/settings hash.
 - Keep tests provider-independent; add opt-in live checks only when requested.

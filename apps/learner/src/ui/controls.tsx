@@ -7,7 +7,7 @@ export function Button({ children, onPress, primary, selected, disabled, label }
   children: ReactNode; onPress: () => void; primary?: boolean; selected?: boolean; disabled?: boolean; label?: string;
 }) {
   const [focused, setFocused] = useState(false);
-  return <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled: !!disabled, selected: !!selected }}
+  return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-selected={!!selected} aria-disabled={!!disabled} accessibilityState={{ disabled: !!disabled, selected: !!selected }}
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, primary && s.buttonPrimary, selected && s.buttonSelected,
       focused && { borderColor: '#246944', borderWidth: 3 }, { opacity: disabled ? 0.5 : pressed ? 0.75 : 1 }]}>

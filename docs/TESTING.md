@@ -11,14 +11,14 @@ npm run check:staged
 git diff --check
 ```
 
-Install dependencies with `npm ci`. Before the first browser run, use `npx playwright install chromium`. PowerShell users can use `npm.cmd` / `npx.cmd`. Browser checks start Expo on localhost:8081 or reuse that server; stop any unrelated server on that port first. They never start the API or call a paid provider.
+Install dependencies with `npm ci`. Before the first browser run, use `npx playwright install chromium`. PowerShell users can use `npm.cmd` / `npx.cmd`. Browser checks start Expo on localhost:8081 or reuse that server, plus an isolated in-memory API at 127.0.0.1:3002. Stop unrelated servers on those ports first. Editor tests proxy only the tested browser to this isolated API and never publish to the owner's on-disk database or call a paid provider.
 
 ## Existing checks
 
 - `check`: repository structure, deliberately small TOML configuration subset, skill frontmatter, hook shape, local Markdown links, script syntax, Git whitespace, and TypeScript for application/shared/test code.
 - `test:tooling`: 16 tests covering staged-secret scanning, ignored data, configuration parsing, installer behaviour, and lifecycle hooks in temporary repositories. These do not prove Codex runtime hook trust or loading.
-- `test:app`: 19 tests covering validated draft content, answer alternatives/accents, revision-scoped progress, IndexedDB persistence/deduplication/conflicting IDs/concurrent appends, atomic word capture, device-speech failure/cancellation, API routes/configuration, SQLite migrations/revisions/seed safety/reopen/corruption.
-- `test:e2e`: 10 Chromium checks across desktop and phone-sized projects. Restaurant journey through hidden help, wrong-answer retry, hint history, reload at each progress boundary, completion, notebook edits, two-tab capture preservation, storage denial, save retry, picture loading, and 320px keyboard navigation. Screenshots/traces stay in ignored `test-results/`.
+- `test:app`: 36 tests covering content/answer checking, revision-scoped progress, IndexedDB persistence/deduplication/concurrent captures/v1→v2 migration/publication caching, speech failure/cancellation, bounded content requests, and SQLite revisions/editor publication/receipts/conflicts/Host/CORS/input failures. Field-boundary checks ensure valid vocabulary always fits notebook capture.
+- `test:e2e`: Chromium desktop/phone-sized learner regressions plus the isolated editor journey through draft save, preview isolation, explicit review/publication, later-draft separation, cache/reload and historical learning preservation. Narrow editor forms support keyboard entry and preserve unsaved text across learner navigation. Publication has one desktop writer; the duplicate mobile publication case is deliberately skipped against shared test content. Screenshots/traces stay in ignored `test-results/`.
 - `build:web`: real Expo/Metro web export under ignored `apps/learner/dist`.
 
 The staged check inspects actual index bytes for protected paths and high-confidence credential patterns without printing values. It cannot detect every secret and does not run the full application suite. This preview has no CI deployment service.
@@ -26,6 +26,8 @@ The staged check inspects actual index bytes for protected paths and high-confid
 ## Latest observation and limits
 
 On 2026-11-14, the commands above passed during the first implementation slice; final staged checks are recorded in the session checkpoint. Expo `install --check` reported compatible dependencies. The actual loopback API returned health `ok` and two draft lessons. Desktop/390px screenshots and the 320px lesson preview were inspected; original SVG drawings render and navigation wraps.
+
+The editor continuation also passed TypeScript, 16 tooling/36 application tests, the web export, and the final browser run (15 passed, one deliberate duplicate mobile publication skip). Desktop publication-review and 320px editor-field screenshots were inspected. Preview attempts/notebook changes remain isolated; published learner content survives API loss/reload while newer drafts stay separate.
 
 This uses Chromium viewport/touch emulation, not a physical phone or Safari/native test. Audio tests use a fake device-speech boundary; audible French quality, browser voice installation, and owner curriculum/illustration review remain necessary. Device speech may depend on the browser's own voice service. The core text/picture lesson is independent of the API; service-worker offline installation and downloaded packs are not implemented.
 

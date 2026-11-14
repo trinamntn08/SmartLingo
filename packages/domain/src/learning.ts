@@ -20,6 +20,8 @@ export interface LearningRepository {
   listNotebook(): Promise<NotebookEntry[]>;
   captureNotebook(entry: NotebookEntry): Promise<NotebookEntry>;
   saveNotebook(entry: NotebookEntry): Promise<void>;
+  listPublishedLessons(): Promise<Lesson[]>;
+  cachePublishedLessons(lessons: Lesson[]): Promise<Lesson[]>;
   close(): void;
 }
 

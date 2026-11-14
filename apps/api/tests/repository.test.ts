@@ -89,6 +89,7 @@ test('reopening SQLite preserves revisions; malformed stored content fails expli
     repository = new SqliteLessonRepository(path);
     assert.throws(() => repository.getLesson(revised.id), InvalidStoredLessonError);
     assert.throws(() => repository.listLessons(), InvalidStoredLessonError);
+    assert.throws(() => repository.listPublishedLessons(), InvalidStoredLessonError);
     assert.throws(() => repository.seed(lessons), InvalidStoredLessonError);
   } finally {
     repository.close();

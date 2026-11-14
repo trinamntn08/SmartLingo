@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { IDBFactory } from 'fake-indexeddb';
 import type { LearningEvent } from '@smartlingo/domain';
 import { openLearningRepository } from '../src/persistence/index';
+import { lessons, restaurantLesson } from '@smartlingo/content';
 
 const attempt: LearningEvent = {
   id: '77777777-7777-4777-8777-777777777777', lessonId: 'fr.restaurant.customer', revision: 1,
@@ -59,4 +60,42 @@ test('unavailable, closed and invalid storage writes fail visibly', async () => 
   await assert.rejects(repository.saveNotebook({ id: 'x', sourceEntryId: 'fr.cafe', target: ' ', meaning: 'x', example: '', updatedAt: attempt.occurredAt }));
   repository.close();
   await assert.rejects(repository.recordEvent(attempt));
+});
+
+test('v1 browser data migrates to v2 without removing attempts or notes', async () => {
+  const factory = new IDBFactory();
+  const note = { id: 'notebook.fr.cafe', sourceEntryId: 'fr.cafe', target: 'un café', meaning: 'My existing note', example: '', updatedAt: attempt.occurredAt };
+  await new Promise<void>((resolve, reject) => {
+    const request = factory.open('smartlingo-learning', 1);
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore('events', { keyPath: 'id' }).put(attempt);
+      request.result.createObjectStore('notebook', { keyPath: 'id' }).put(note);
+    };
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => { request.result.close(); resolve(); };
+  });
+  const store = await openLearningRepository({ factory });
+  assert.deepEqual(await store.listEvents(), [attempt]);
+  assert.deepEqual(await store.listNotebook(), [note]);
+  assert.deepEqual(await store.listPublishedLessons(), []);
+  await store.cachePublishedLessons([{ ...restaurantLesson, revision: 3, status: 'published' }]);
+  store.close();
+  const reopened = await openLearningRepository({ factory });
+  assert.equal((await reopened.listPublishedLessons())[0].revision, 3);
+  assert.deepEqual(await reopened.listEvents(), [attempt]);
+  assert.deepEqual(await reopened.listNotebook(), [note]);
+  reopened.close();
+});
+
+test('published cache rejects drafts and conflicting immutable revisions atomically', async () => {
+  const store = await openLearningRepository({ factory: new IDBFactory() });
+  const published = { ...restaurantLesson, revision: 3, status: 'published' as const };
+  await store.cachePublishedLessons([published]);
+  await assert.rejects(store.cachePublishedLessons([restaurantLesson]), /Draft/);
+  await assert.rejects(store.cachePublishedLessons([
+    { ...lessons[1], revision: 3, status: 'published' }, { ...published, title: 'Conflicting title' },
+  ]), /immutable/);
+  assert.deepEqual(await store.listPublishedLessons(), [published]);
+  assert.deepEqual(await store.cachePublishedLessons([{ ...published, revision: 2 }]), [published]);
+  store.close();
 });

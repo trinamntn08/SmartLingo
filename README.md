@@ -2,7 +2,7 @@
 
 A practical French learning preview for English-speaking newcomers to France. Web first; Android and iOS adapters are planned.
 
-**Current state:** first local implementation slice. Two unreviewed lesson drafts, picture and sentence practice, and a browser notebook. This is an owner preview, not published curriculum.
+**Current state:** local learner preview and first curriculum editor. Two bundled unreviewed lesson drafts, picture/sentence practice, a browser notebook, and explicit local preview/publication. Bundled content remains draft until the owner reviews and publishes it.
 
 ## Run the preview
 
@@ -21,9 +21,13 @@ Optional, in a second terminal:
 npm run dev:api
 ```
 
-The read-only API listens at `http://127.0.0.1:3001` with `/health`, `/lessons`, and `/lessons/fr.restaurant.customer`. It seeds draft content into ignored `data/smartlingo.sqlite`. Node's built-in SQLite may print an experimental warning. The learner uses bundled lessons and remains usable while this API is stopped. Host overrides are limited to loopback; LAN access/authentication is not implemented.
+The local API listens at `http://127.0.0.1:3001` with `/health`, `/lessons`, `/lessons/fr.restaurant.customer`, and `/published-lessons`. It seeds drafts into ignored `data/smartlingo.sqlite`. The learner uses bundled/cached lessons and remains usable while this API is stopped. Host overrides are limited to loopback; LAN access/authentication is not implemented.
 
-Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, content editing/publication, spaced review, microphone conversations, and mobile packages remain planned.
+For editing, open the learner at `http://localhost:8081`, choose Profile → Open curriculum editor (or `/#editor`), select a lesson, edit its heading/support fields, and save a draft revision. Preview the saved revision, inspect the answer keys and provenance, then explicitly confirm your review before publishing. Preview practice is temporary and does not change learner progress. The first fields cover headings/outcome, vocabulary support, and grammar; target words, pictures, dialogue and exercises are not editable in this slice.
+
+Return to Profile → Load published lessons to save published revisions into this browser. Later draft changes stay separate. Previous attempts/notebook entries remain recorded when a new revision arrives. A newer revision starts its own lesson progress. Editor requests require the exact local browser origin and a guarded JSON request; this is local origin protection, not account authentication or public-hosting access control.
+
+Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, the complete curriculum editor, spaced review, microphone conversations, and mobile packages remain planned.
 
 ## Start here
 

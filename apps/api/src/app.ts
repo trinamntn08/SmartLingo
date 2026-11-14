@@ -1,34 +1,44 @@
 import Fastify, { type FastifyError } from 'fastify';
 import type { LessonRepository } from './repository';
+import { EditorError } from './editor-error';
+import { registerEditorRoutes, lessonParams } from './editor-routes';
+import { registerLocalAccess } from './local-access';
+import { PreviewReceipts } from './preview-receipts';
 
 /** The app takes ownership of the repository and closes it with the server. */
-export function createApp(repository: LessonRepository) {
+export function createApp(repository: LessonRepository, options: { now?: () => number } = {}) {
   const app = Fastify({
     logger: false,
-    bodyLimit: 16_384,
+    bodyLimit: 131_072,
+    routerOptions: { maxParamLength: 120 },
     connectionTimeout: 10_000,
     requestTimeout: 10_000,
     keepAliveTimeout: 5_000,
   });
 
-  app.addHook('onClose', async () => { repository.close(); });
+  const receipts = new PreviewReceipts(options.now);
+  registerLocalAccess(app);
+  app.addHook('onClose', async () => { receipts.clear(); repository.close(); });
   app.setErrorHandler<FastifyError>((error, _request, reply) => {
+    if (error instanceof EditorError) return reply.code(error.statusCode).send({ error: error.message });
     if (error.validation) return reply.code(400).send({ error: 'Invalid request' });
+    if (error.statusCode === 400 || error.statusCode === 413 || error.statusCode === 415) {
+      return reply.code(error.statusCode).send({ error: 'Invalid request body' });
+    }
     return reply.code(500).send({ error: 'Content is unavailable. Check the local content database.' });
   });
   app.get('/health', async () => ({ status: 'ok' }));
   app.get('/lessons', async () => ({ lessons: repository.listLessons() }));
+  app.get('/published-lessons', async () => ({ lessons: repository.listPublishedLessons() }));
   app.get<{ Params: { id: string } }>('/lessons/:id', {
     schema: {
-      params: {
-        type: 'object', required: ['id'], additionalProperties: false,
-        properties: { id: { type: 'string', pattern: '^[a-z0-9][a-z0-9.-]+$', maxLength: 120 } },
-      },
+      params: lessonParams,
     },
   }, async (request, reply) => {
     const lesson = repository.getLesson(request.params.id);
     if (!lesson) return reply.code(404).send({ error: 'Lesson not found' });
     return { lesson };
   });
+  registerEditorRoutes(app, repository, receipts);
   return app;
 }

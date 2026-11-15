@@ -2,7 +2,7 @@
 
 A practical French learning preview for English-speaking newcomers to France. Web first; Android and iOS adapters are planned.
 
-**Current state:** local learner preview and first curriculum editor. Twelve A1–A2 draft topics with 30 words/phrases each across 60 short lessons, picture/meaning/sentence practice, a browser notebook, and explicit local preview/publication. Bundled content remains draft until the owner reviews and publishes it; level labels are estimates.
+**Current state:** local learner preview and first curriculum editor. Twenty-four practical draft topic banks across 120 short lessons, picture/meaning/sentence practice, personal vocabulary/review, optional AI text/recorded-input conversation, and explicit local preview/publication. Bundled content remains draft until the owner reviews and publishes it; level labels are estimates.
 
 ## Run the preview
 
@@ -20,6 +20,8 @@ Choose any topic directly from the left-hand sidebar on desktop or the horizonta
 Original bundled drawings illustrate 125 vocabulary items across all twelve topics, alongside the earlier concrete pictures. Abstract words can remain text-supported. No image API, remote photo requests or paid calls are needed. See [media sources and limits](docs/MEDIA_SOURCES.md) and [curriculum research](docs/CURRICULUM_RESEARCH.md).
 
 Review offers French→meaning cards for saved vocabulary. Try to recall before revealing, then choose Again, Needed help or Remembered. These are manual recognition ratings, not a proficiency assessment. Independent due-day recall follows a 1/3/7/14/30-day calendar schedule; help returns the item tomorrow. Early or repeated same-day recall does not advance the schedule. Editing a note starts fresh practice for that revision while preserving prior ratings. Ratings survive reload and are included in backups.
+
+Use Review → Add personal word to save your own French, English meaning and optional example without an API. Search notebook finds French, English and examples without accents or exact capitalisation. Clearing a search restores all saved entries; hiding an entry does not discard an unsaved edit. Personal entries join the existing review and private backup flows.
 
 Optional, in a second terminal:
 

@@ -28,7 +28,7 @@ export function OfflinePanel({ manager = offlineAssets }: { manager?: OfflineAss
 
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>Learn offline</Text>
-    <Text style={s.body}>Save all 60 draft lessons and their pictures so you can open SmartLingo and study without a connection. Published lessons are loaded separately with “Load published lessons” in Profile.</Text>
+    <Text style={s.body}>Save the bundled draft lessons and their pictures so you can open SmartLingo and study without a connection. Published lessons are loaded separately with “Load published lessons” in Profile.</Text>
     <Text style={s.muted}>Speech is not downloaded. The synthetic device voice may need a connection.</Text>
 
     <View style={[s.notice, ready && { backgroundColor: colors.green }]}>

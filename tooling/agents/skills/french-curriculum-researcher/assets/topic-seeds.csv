@@ -1,0 +1,482 @@
+﻿topic_id,level,title_fr,title_en,can_do,vocabulary_fr,status
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,bonjour,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,bonsoir,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,salut,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,au revoir,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,à bientôt,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,à demain,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,merci,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,merci beaucoup,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,de rien,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,s'il vous plaît,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,excusez-moi,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,enchanté(e),seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,comment ça va ?,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,ça va bien,seed_unreviewed
+a1-salutations,A1,Saluer et prendre congé,Greetings and politeness,Greet someone and close a short exchange,bonne journée,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,je m'appelle,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,le prénom,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,le nom de famille,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,avoir ... ans,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,habiter,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,venir de,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,être,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,la nationalité,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,le pays,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,la ville,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,la langue,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,parler,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,épeler,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,le numéro de téléphone,seed_unreviewed
+a1-identity,A1,Se présenter,Personal identity,Introduce yourself and exchange personal details,quelle est votre adresse ?,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",zéro,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",un,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",dix,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",vingt,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",cent,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",le numéro,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",le jour,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",la semaine,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",le mois,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",l'année,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",aujourd'hui,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",demain,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",hier,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",le lundi,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",la date,seed_unreviewed
+a1-numbers-dates,A1,Donner des nombres et des dates,Numbers and dates,"Give your age, phone number and an appointment date",le premier,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,la famille,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,la mère,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,le père,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,les parents,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,le frère,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,la sœur,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,le fils,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,la fille,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,le mari,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,la femme,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,le conjoint,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,les enfants,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,être marié(e),seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,être célibataire,seed_unreviewed
+a1-family,A1,Présenter sa famille,Family and relationships,Identify relatives and briefly describe your household,avoir un enfant,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,se réveiller,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,se lever,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,se doucher,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,prendre le petit déjeuner,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,partir,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,travailler,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,étudier,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,déjeuner,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,rentrer,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,dîner,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,se coucher,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,le matin,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,l'après-midi,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,le soir,seed_unreviewed
+a1-daily-routine,A1,Raconter sa journée,Daily routine,Tell someone your basic daily schedule,d'habitude,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,quelle heure est-il ?,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,il est neuf heures,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,et demie,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,moins le quart,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,à midi,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,à minuit,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,tôt,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,tard,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,commencer,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,finir,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,à quelle heure ?,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,un rendez-vous,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,être disponible,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,aujourd'hui,seed_unreviewed
+a1-time-appointments,A1,Dire l'heure et fixer un rendez-vous,Time and simple appointments,Ask what time something starts and agree on a time,demain,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,un appartement,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une maison,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une chambre,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,un salon,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une cuisine,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une salle de bain,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,les toilettes,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une porte,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une fenêtre,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,un lit,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une table,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,une chaise,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,à gauche,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,à droite,seed_unreviewed
+a1-home-rooms,A1,Décrire son logement,Home and rooms,Name rooms and describe where things are,il y a,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,le quartier,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,la rue,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,la boulangerie,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,la pharmacie,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,le supermarché,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,la poste,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,la mairie,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,la banque,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,le parc,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,l'arrêt de bus,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,près de,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,loin de,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,en face de,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,à côté de,seed_unreviewed
+a1-neighborhood,A1,Se repérer dans son quartier,Neighborhood places,Name nearby amenities and ask where they are,où est ... ?,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",le bus,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",le métro,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",le RER,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",le train,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",la gare,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",la station,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",un billet,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",un ticket,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",un arrêt,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",la ligne,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",la correspondance,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",monter,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",descendre,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",aller à,seed_unreviewed
+a1-transport,A1,Prendre les transports,Public transport,"Ask about a route, ticket and destination",où est le quai ?,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",une baguette,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",du pain,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",un croissant,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",un pain au chocolat,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",une pâtisserie,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",une viennoiserie,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",un morceau,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",je voudrais ...,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",combien ça coûte ?,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",ça fait combien ?,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",payer,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",en espèces,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",par carte,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",s'il vous plaît,seed_unreviewed
+a1-bakery-shopping,A1,Acheter à la boulangerie,At the bakery,"Choose baked goods, ask prices and pay",ce sera tout,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,un fruit,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,une pomme,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,une banane,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,un légume,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,une tomate,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,une carotte,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,du lait,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,du fromage,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,des œufs,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,du riz,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,un kilo,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,un litre,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,une bouteille,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,un paquet,seed_unreviewed
+a1-groceries,A1,Faire des courses alimentaires,Grocery shopping,Buy basic groceries and ask for quantities,il me faut ...,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,une table,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,la carte,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,le menu,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,une entrée,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,un plat,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,un dessert,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,une boisson,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,de l'eau,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,un café,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,commander,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,je prends ...,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,sans ...,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,l'addition,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,s'il vous plaît,seed_unreviewed
+a1-restaurant,A1,Commander au café ou au restaurant,Café and restaurant,Order a simple meal and request the bill,bon appétit,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",un pantalon,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",un jean,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",une chemise,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",un tee-shirt,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",une robe,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",une veste,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",un manteau,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",des chaussures,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",la taille,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",essayer,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",grand,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",petit,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",rouge,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",bleu,seed_unreviewed
+a1-clothing,A1,Choisir des vêtements,Clothes and shopping,"Identify clothes, colors, and ask for a size",vous avez ... ?,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,il fait beau,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,il fait mauvais,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,il fait chaud,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,il fait froid,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,il pleut,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,il neige,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,le soleil,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,la pluie,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,le vent,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,un nuage,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,le printemps,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,l'été,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,l'automne,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,l'hiver,seed_unreviewed
+a1-weather,A1,Parler de la météo,Weather and seasons,Describe today's weather and choose clothing,la météo,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,avoir mal à,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,la tête,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,le ventre,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,la gorge,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,la fièvre,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,être malade,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,être fatigué(e),seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,tousser,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,un rhume,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,la pharmacie,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,le médecin,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,un médicament,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,une ordonnance,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,je ne me sens pas bien,seed_unreviewed
+a1-health-basic,A1,Expliquer un problème de santé simple,Basic health and pharmacy,Tell a pharmacist or doctor about a simple symptom,depuis hier,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,aimer,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,adorer,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,préférer,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,détester,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,faire du sport,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,se promener,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,lire,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,écouter de la musique,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,regarder un film,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,faire du vélo,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,nager,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,jouer au football,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,le week-end,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,avec des amis,seed_unreviewed
+a1-leisure,A1,Parler de ses loisirs,Leisure and hobbies,Say what you enjoy doing in your free time,avoir du temps libre,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",une annonce,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",un loyer,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",les charges,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",une caution,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",un dépôt de garantie,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",un bail,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",un propriétaire,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",un locataire,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",un garant,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",une visite,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",meublé(e),seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",la superficie,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",disponible,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",prendre rendez-vous,seed_unreviewed
+a2-housing-rental,A2,Chercher et louer un logement,Finding a home,"Ask about an apartment, rental conditions and a viewing",signer,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,une panne,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,une fuite,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,le chauffage,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,un radiateur,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,un robinet,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,l'eau chaude,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,en panne,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,ne fonctionne plus,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,réparer,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,une intervention,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,un technicien,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,signaler,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,urgent,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,depuis trois jours,seed_unreviewed
+a2-housing-problems,A2,Signaler un problème dans le logement,Home repairs,Report a fault and ask for intervention,pourriez-vous ... ?,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,une offre d'emploi,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,un poste,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,une candidature,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,un CV,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,une lettre de motivation,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,une expérience,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,une compétence,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,un entretien,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,postuler,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,être recruté(e),seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,à temps plein,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,à temps partiel,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,un contrat,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,un salaire,seed_unreviewed
+a2-work-jobsearch,A2,Chercher un emploi,Jobs and applications,Describe experience and apply for a basic job,être disponible,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",une réunion,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",un collègue,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",une équipe,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",une tâche,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",un délai,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",un planning,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",une pause,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",être en retard,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",prévenir,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",terminer,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",envoyer un message,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",avoir besoin de,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",être absent(e),seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",un responsable,seed_unreviewed
+a2-workplace,A2,Communiquer au travail,Workplace interactions,"Discuss schedules, tasks and small problems with colleagues",une consigne,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",un cabinet médical,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",un généraliste,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",un spécialiste,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",une consultation,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",une carte Vitale,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",une mutuelle,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",une ordonnance,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",un examen,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",prendre rendez-vous,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",reporter,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",annuler,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",un créneau,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",une douleur,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",un symptôme,seed_unreviewed
+a2-medical-appointments,A2,Prendre et gérer un rendez-vous médical,Healthcare appointments,"Book, reschedule and understand basic medical instructions",depuis combien de temps ?,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,la dose,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,un comprimé,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,un sirop,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,une crème,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,une boîte,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,prendre un médicament,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,avant le repas,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,après le repas,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,deux fois par jour,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,un effet secondaire,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,une allergie,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,la notice,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,la durée du traitement,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,demander conseil,seed_unreviewed
+a2-pharmacy-treatment,A2,Comprendre un traitement,Medicine and instructions,Explain symptoms and follow simple dosage instructions,éviter,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un compte bancaire,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,une carte bancaire,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un virement,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un prélèvement,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un retrait,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un distributeur,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un relevé,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un solde,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,les frais,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,une facture,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un remboursement,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,être débité(e),seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,payer en ligne,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,faire opposition,seed_unreviewed
+a2-bank-payments,A2,Gérer un paiement et un compte bancaire,Banking and payments,Handle a routine bank payment issue,un justificatif,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un formulaire,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,remplir,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un dossier,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,une pièce d'identité,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un justificatif de domicile,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un titre de séjour,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,une attestation,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,une demande,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,une démarche,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un rendez-vous,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,déposer,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,joindre un document,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un délai,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,un guichet,seed_unreviewed
+a2-administration,A2,Faire une démarche administrative,Everyday administration,Request information and submit simple documents,il manque ...,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,réserver,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une réservation,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,un trajet,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,un aller simple,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,un aller-retour,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,un départ,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une arrivée,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une correspondance,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une réduction,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une annulation,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,un remboursement,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une chambre double,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,une nuit,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,complet,seed_unreviewed
+a2-travel-booking,A2,Réserver et organiser un voyage,Travel planning,Compare options and book transport or accommodation,modifier,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,un retard,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,une grève,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,un train supprimé,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,un changement de quai,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,une perturbation,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,un itinéraire,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,un détour,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,une correspondance manquée,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,se renseigner,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,prendre un autre train,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,être bloqué(e),seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,une solution,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,à cause de,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,au lieu de,seed_unreviewed
+a2-directions-problems,A2,Se débrouiller pendant un trajet,Transport disruptions,Handle delays and ask for alternatives,combien de temps ... ?,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",une recette,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",un ingrédient,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",une portion,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",une cuillère,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",une casserole,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",une poêle,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",couper,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",éplucher,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",mélanger,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",ajouter,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",faire cuire,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",chauffer,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",bouillir,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",pendant dix minutes,seed_unreviewed
+a2-food-cooking,A2,Suivre une recette simple,Cooking and recipes,"Explain ingredients, quantities, and basic steps in a recipe",préchauffer,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",inviter,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",proposer,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",accepter,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",refuser,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",être libre,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",être occupé(e),seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",ça te dit ... ?,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",on pourrait ...,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",ça me va,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",une sortie,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",un spectacle,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",une séance,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",se retrouver,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",reporter,seed_unreviewed
+a2-social-plans,A2,Inviter et organiser une sortie,Invitations and plans,"Invite someone, suggest alternatives and agree on plans",finalement,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,le week-end dernier,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,la semaine passée,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,d'abord,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,puis,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,ensuite,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,finalement,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,visiter,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,rencontrer,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,découvrir,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,profiter de,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,se passer,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,une expérience,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,un souvenir,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,c'était ...,seed_unreviewed
+a2-past-experiences,A2,Raconter un week-end ou un souvenir,Past experiences,Describe a short past event in sequence,j'ai passé ...,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,à mon avis,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,je pense que,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,je trouve que,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,parce que,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,donc,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,plus ... que,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,moins ... que,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,aussi ... que,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,pratique,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,cher,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,économique,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,confortable,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,choisir,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,hésiter,seed_unreviewed
+a2-opinions-choices,A2,Comparer et donner son avis,Preferences and comparison,Compare two options and justify a simple preference,préférer,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",une commande,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un reçu,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un ticket de caisse,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un article,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un défaut,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",abîmé(e),seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",en retard,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un échange,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un remboursement,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",retourner,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",signaler un problème,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",ne pas correspondre,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",je souhaite ...,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",pourriez-vous m'aider ?,seed_unreviewed
+a2-customer-service,A2,Faire une réclamation simple,Customer service,"Describe an issue, ask for an exchange or refund",un service client,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",une formation,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un cours,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",une inscription,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un niveau,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un diplôme,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un examen,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",une note,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un exercice,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",progresser,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",réviser,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",réussir,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",échouer,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",s'inscrire,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un horaire,seed_unreviewed
+a2-education-learning,A2,Parler de sa formation,Courses and learning,"Describe studies, ask about a course and explain learning goals",un objectif,seed_unreviewed

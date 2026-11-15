@@ -124,6 +124,8 @@ See [verification](docs/TESTING.md) for test scope and device limitations.
 
 Open this folder as the project and read [the setup guide](docs/CODEX_SETUP.md). Root AGENTS.md, roles, skills, and lifecycle hook definitions are now installed. The copies under [tooling](tooling/README.md) are retained as installation/validation sources. Runtime loading and hook trust must be checked in the Codex client.
 
+For curriculum research, use `$french-curriculum-researcher` ([skill](.agents/skills/french-curriculum-researcher/SKILL.md)) to audit topic coherence, research sources or propose A1/A2 coverage gaps. Its seeds are planning drafts requiring conversion and owner review; they are not added to the app automatically.
+
 Run `npm run setup:codex:plan` to check matching installed files. Use manual checks if your client does not load project hooks.
 
 For this initial repository, `npm run setup:finish` performs that installation, checks/tests, and the initial local commit together. Preview with `npm run setup:finish:plan`. It refuses existing history, conflicting config, or pre-staged changes and never pushes.

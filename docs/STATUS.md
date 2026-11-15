@@ -6,12 +6,13 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/edit-lesson-metadata`, based on dialogue checkpoint `785f385`, curriculum snapshot checkpoint `b076f3d`, audit investigation `5aa1bf2` and offline checkpoint `fea47df` (examples `f40ddcf`, navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
+- Current branch: `chore/french-curriculum-researcher`, based on metadata checkpoint `6f6a58f`, dialogue `785f385`, curriculum snapshots `b076f3d`, audit investigation `5aa1bf2` and offline checkpoint `fea47df` (examples `f40ddcf`, navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Inspect live remote history before any future integration. A local checkpoint is not remote backup.
 
 ## Implemented
 
+- Repository [French curriculum research skill](../.agents/skills/french-curriculum-researcher/SKILL.md), integrated from the owner-supplied package with matching installation sources and author-workflow routing. Its 32-topic map/481 seed rows remain unreviewed planning material; the optional research schema is distinct from runtime lessons. Explicit conversion guidance preserves 6–10-item lessons, stable senses and owner preview/publication. No app curriculum was added or approved. See [scope](plans/0015-french-curriculum-researcher.md) and [ADR 0014](decisions/0014-curriculum-research-skill.md).
 - npm/TypeScript workspaces: Expo learner, Fastify local API, shared domain contracts, validated draft content.
 - Cream/yellow/green responsive navigation and original code-drawn pictures inspired by the supplied references, with English interface text.
 - Twelve practical draft topics with 30 distinct words/phrases each across 60 six-item lessons (36 A1, 24 A2). Covers food, shops, housing, transport, health, work, services, people, routine and leisure/weather. There are 360 topic entries, 353 stable sense IDs and 351 distinct target forms; shared senses reuse IDs. All canonical entries now have fuller original everyday examples/translations in draft revision 2, including the two starter lessons; targets, meanings and exercises stay unchanged. Compact m./f./m./f. metadata sits beside words, useful notes remain and empty notes are omitted. [Research and owner-review limits](CURRICULUM_RESEARCH.md) accompany the expansion; these are estimated levels, not a complete CEFR course.
@@ -33,6 +34,10 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 - Development tooling, 18 tooling tests, 94 application tests, browser checks, offline exported-build checks, web export and run instructions. See [verification](TESTING.md) and [metadata editor plan](plans/0014-edit-lesson-metadata.md).
 
 ## Verified in this step
+
+Skill integration passes repository/TypeScript checks, all 18 tooling tests (including full resource installation/idempotence), both installed/prepared skill metadata validators and Draft 2020-12 schema validation with a translated draft accepted and eight invalid/mismatched fixtures rejected. JSON/CSV/framework agree on 32 unique topics/481 rows; seed asset bytes match the supplied originals. Independent read-only review and a bakery coverage forward-test found no actionable defects. External research pages, French accuracy/provenance and automatic client discovery remain unverified. Temporary Python validation dependencies are isolated under ignored `.tmp`; no project dependency changes. Runtime/browser suites were not repeated because application/content/storage code is unchanged. Final staged checks and local commit are recorded in the checkpoint.
+
+## Previous metadata verification
 
 Latest metadata step passes repository/TypeScript, all 94 application tests, production candidate export and all 33 browser regressions (one intentional duplicate publication skip). The isolated editor test changes topic/role/A2, then verifies new cached topic grouping, role display, level filtering and prior dialogue/history preservation after API loss/reload. Domain coverage verifies published foundations grouping/search/filter behavior. Primary self-reviewed this small step; schema/storage/API/curriculum/dependencies are unchanged. Prior 18 tooling/six offline fault-injection cases remain valid for unchanged modules. Tested candidate was copied into the running preview, retaining old hashed scripts; all four served hashes/sizes verify. An isolated fixture-only production browser renders new fields and cold-loads the downloaded current app offline, including Foundations filtering, with no page errors/owner data access. Narrow screenshot inspected. Exact results are in [the checkpoint](SESSION_CHECKPOINT.md).
 

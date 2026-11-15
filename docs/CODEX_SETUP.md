@@ -2,7 +2,7 @@
 
 Verified against official documentation on 2026-11-14.
 
-**Installation state:** root AGENTS.md, Git hook configuration, and all nine Codex agent/skill/hook files are installed. Earlier patch attempts were rejected, but the latest explicitly requested setup command copied the files successfully. Matching sources are retained under tooling/codex and tooling/agents. Runtime discovery and hook trust remain unverified.
+**Installation state:** root AGENTS.md, Git hook configuration, and all fifteen Codex agent/skill/hook/resource files are installed, including the supplied curriculum researcher and its planning assets. Matching sources are retained under tooling/codex and tooling/agents. Runtime discovery and hook trust remain unverified.
 
 Git is initialized, the initial setup commit exists, origin is configured for the owner-selected repository, and core.hooksPath is set. The earlier Git metadata permission failures are historical; use the [current checkpoint](SESSION_CHECKPOINT.md) for actual results rather than assuming they still apply.
 
@@ -66,9 +66,12 @@ If named roles are unavailable, the primary may spawn a built-in agent and suppl
 
 - `Use $sll-deliver-feature to build the first restaurant lesson. Delegate independent UI and API work after agreeing the content contract.`
 - `Use $sll-author-french to draft a beginner café lesson for owner review.`
+- `Use $french-curriculum-researcher to audit topic coherence and propose A1/A2 coverage gaps against existing lessons.`
 - `Use $sll-review-change to review the current diff without editing it.`
 
 Skills are repository-scoped. This setup does not install or alter your global personal skills.
+
+The [curriculum researcher](../.agents/skills/french-curriculum-researcher/SKILL.md) complements the French author workflow with research, a proposed 32-topic map and unreviewed seed catalogs. Its JSON schema describes research briefs, not importable app lessons. Convert proposals into the current runtime contract and keep them draft for owner preview/review. See [integration scope](plans/0015-french-curriculum-researcher.md). Files being present does not establish that this session's skill catalog has refreshed; the skill can also be read directly by path.
 
 ## Official sources
 

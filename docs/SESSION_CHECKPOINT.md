@@ -1,35 +1,32 @@
-﻿# Session checkpoint
+# Session checkpoint
 
 Updated: 2026-11-15 (Europe/Paris).
 
-## Authorised request
+## Authorised request and completed outcome
 
-Owner authorised completing pending work, committing each reviewed/validated step and continuing while allowance permits. Owner also requested a testable preview before allowance ends. No push, merge or public deployment authorised.
+Owner requested review and repository integration of the downloaded `french-curriculum-researcher`. Completed on `chore/french-curriculum-researcher`, based on metadata checkpoint `6f6a58f`. The commit containing this checkpoint captures this step; report its actual hash after Git confirms it. No initial unrelated changes existed.
 
-## Completed checkpoints
+Installed all six skill resources under `.agents/skills/french-curriculum-researcher` and matching `tooling/agents/skills/` sources. Added author-workflow routing, invocation/docs, tooling inventory/resource-copy coverage, plan 0015 and ADR 0014. Kept supplied 32-topic/481-row seed data unchanged and unreviewed; Git normalises CSV line endings to LF while retaining its UTF-8 BOM. Corrected lesson pacing to 6–10 items, research/runtime import confusion, translation/original-example schema gaps, draft/owner publication boundaries and local checkpoint authorisation. Application content, shared runtime contracts, storage, dependencies and running preview were untouched.
 
-785f385 dialogue editing; b076f3d server curriculum snapshot/recovery CLI; 5aa1bf2 unresolved audit investigation; fea47df offline web downloads; f40ddcf examples/gender/speaker controls. Each was verified committed with clean tree. Audit remains at three moderate Expo/fingerprint/minimatch findings; ineffective experiments were removed and original lock restored.
+## Actual validation and review
 
-## Current completed step
+- `npm.cmd run check`: repository structure/metadata/Markdown links/script syntax/whitespace and TypeScript passed, including a final run after documentation/bootstrap-message edits.
+- `npm.cmd run test:tooling`: all 18 passed, including fresh installation of all 15 files/resources, byte comparison, conflict refusal and idempotence.
+- `npm.cmd run setup:codex` installed new resources; `setup:codex:plan` confirms all 15 match.
+- `python -X utf8 .tmp/validate-curriculum-skill.py`: 32 unique topics (16 A1/16 A2), all 481 CSV rows match JSON/framework, source assets unchanged, installed/prepared resources match; Draft 2020-12 schema valid; translated research fixture accepted and eight invalid/mismatched records rejected. Bundled skill-creator `quick_validate.py` passes both skill copies.
+- Validation Python packages are isolated in ignored `.tmp/skill-validation-deps`; no project/global dependency changes. Initial missing PyYAML/jsonschema and optional URI-checker gaps were resolved there. CSV parser uses `utf-8-sig` for the supplied BOM. The one-off harness is session-only; its fixtures are not authored curriculum.
+- Independent instructionally read-only `change-reviewer`, actual `gpt-6.1-sol`/medium per session routing: no actionable findings. Bakery coverage forward-test identifies existing senses and a bounded payment cluster, marks proposals provisional with no browsing/publication. Primary reviewed the full integration and final diffs.
+- Runtime/app/browser/export tests were not repeated: no application/content/storage edits. Prior metadata checkpoint passed 94 app tests and 33 browser regressions (one intentional duplicate publication skip), plus production export/offline fixture verification.
+- Final `npm.cmd run check:staged` and cached/worktree whitespace checks passed; repeat the staged checks after this final note, then create the focused local checkpoint commit. Only deliberate skill/tooling/docs paths are staged; ignored validation packages/scripts, databases, exports and caches are excluded. Verify actual commit/log/clean tree. No push, merge or publication authorised/performed.
 
-Branch feat/edit-lesson-metadata from 785f385. Editor now exposes required topic/learner-role text and estimated Foundations/A1/A2 buttons, with guidance distinguishing content difficulty from proficiency and matching dialogue roles separately. CatalogueLevel derives from existing Lesson levels, and Foundations has a filter. No schema/storage/API/content/dependency changes. Primary handled this small sequential step and self-review; no new delegation. See plan 0014.
+## Preserved owner preview
 
-Actual validation:
-- npm.cmd run check passed; repeat on final docs before commit.
-- npm.cmd run test:app: all 94 passed, including foundation publication grouping/search/filter test and previous snapshot/storage/security/review coverage.
-- npm.cmd run test:e2e -- --output=.tmp/metadata-browser: full 33 passed, one intentional duplicate publication skip. Changed topic/Guest role/A2 survives isolated save/preview/publication/cache reload, correct new six-word topic/filtering and previous dialogue/history checks. No owner API publication.
-- Separate candidate Expo export/prepareOfflineExport passed: four pack files, 1,250,949 bytes, build 6b657e91158267075364018af5ef89e2d782dcae334b3cd3fde0fc71cd120811.
-- Promoted validated candidate into regular 8082 preview, preserving old hashed scripts and replacing index/manifest last. All four served hashes/sizes verify. Fresh fixture-only production browser renders metadata, downloads current assets and cold-loads offline with Foundations filter. No page errors/actual owner data access. Narrow screenshot inspected.
-- Prior 18 tooling/six offline failure-update-removal cases cover unchanged modules and were not repeated. Final staged secret/whitespace checks and focused local commit follow; verify actual hash/log/clean tree. Stage only five source/test paths and related docs. Exclude exports/logs/screenshots/cache/databases. No unrelated initial edits.
+Prior verified preview: `http://localhost:8082` PID 30084; actual curriculum API `http://127.0.0.1:3001` PID 16248. Build `6b657e91158267075364018af5ef89e2d782dcae334b3cd3fde0fc71cd120811`, four files/1,250,949 bytes. This session did not probe/restart these processes or access learner/API data; check current listeners before future changes. Old downloads need explicit Update offline copy. Ports 8081/8082 have separate browser stores.
 
-## Owner preview running
+## Limits and next action
 
-http://localhost:8082 PID 30084 serves the current build above; http://127.0.0.1:3001 PID 16248 is the actual loopback curriculum API, still compatible with unchanged contracts. Owner has the link and can refresh to test examples/gender/speakers, Profile offline download and expanded editor fields. Keep both hidden loopback processes running; inspect listener/process identity before stopping/duplicate starts. No fault-injection test server is running. An old downloaded copy remains until explicit Update offline copy.
+This owner request is complete after final checks/commit. Invoke `$french-curriculum-researcher` for the next requested topic research/audit; read its file directly if client discovery has not refreshed. Seed language/levels/originality, external source claims and automatic discovery are not verified by installation. Owner preview/review/publication is still required for actual curriculum. No new lessons, sources or seed approval were claimed.
 
-8082 and old development 8081 have separate learner stores; private backup/restore transfers deliberately. Agent performed no learner save, actual owner publication, actual curriculum backup/restore or API database switch in this preview. Snapshot CLI is available; selecting a recovery file requires a later explicit API restart. No real .env/key/paid call/provider/audio recording used.
+Earlier product backlog remains: bounded duration/order or target/exercise editor fields, learner reset with cross-tab safety, full editor/media/import, AI speaking, native packages and per-topic packs. Do not start these solely from this integration request. Three moderate Expo/fingerprint/minimatch audit findings remain unresolved. Physical-phone/Safari/install-icon, audible voice, screen-reader, real quota/eviction and durability limits remain.
 
-## Next action and remaining limits
-
-Finish final repository/staged checks and local commit. Next bounded pending work: duration/order or validated target/exercise editor fields; learner reset needs explicit cross-tab/storage design. Incorporate owner preview feedback when supplied. Keep IDs/history and approval boundaries; checkpoint one complete journey at a time. Full editor lifecycle/media/import, AI speaking, native packages and per-topic packs remain pending.
-
-Actual phone/Safari/SVG installation, screen readers, audible/offline voice, real quota/eviction and some filesystem durability scenarios remain unverified. Owner curriculum/media approval required. Usage/reset lookup unavailable; no allowance estimate or automatic resume configured. A new owner message is needed to start another turn after this session stops. Local commits are not off-device backups.
+Usage observation on 2026-11-15 at 10:26 Europe/Paris: no account allowance/reset lookup tool exposed; unavailable, not zero/unlimited. No automatic resume scheduler configured. Local commits are not off-device backups.

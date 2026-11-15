@@ -85,11 +85,11 @@ test('documentation checks exclude ignored Markdown and tracked learner data', t
   git(dir, ['add', '-f', 'exports/private.md']);
   assert.deepEqual(markdownSources(dir), ['README.md']);
 });
-test('installer dry run lists all nine target files without creating them', t => {
+test('installer dry run lists all fifteen target files without creating them', t => {
   const dir = temporaryRepo(t);
   fs.cpSync(path.join(root, 'tooling'), path.join(dir, 'tooling'), { recursive: true });
   const plan = installationPlan(dir);
-  assert.equal(plan.length, 9);
+  assert.equal(plan.length, 15);
   assert.equal(fs.existsSync(path.join(dir, '.codex')), false);
   assert.ok(plan.every(item => item.to.startsWith(dir + path.sep)));
 });
@@ -104,8 +104,13 @@ test('installer refuses differing existing configuration before copying', t => {
 test('installer copies prepared files and is idempotent in an isolated repository', t => {
   const dir = temporaryRepo(t);
   fs.cpSync(path.join(root, 'tooling'), path.join(dir, 'tooling'), { recursive: true });
-  assert.equal(installPrepared(dir).length, 9);
-  assert.ok(installationPlan(dir).every(item => item.exists));
+  assert.equal(installPrepared(dir).length, 15);
+  const plan = installationPlan(dir);
+  assert.ok(plan.every(item => item.exists));
+  for (const item of plan) assert.ok(fs.readFileSync(item.from).equals(fs.readFileSync(item.to)), item.to);
+  const researchRoot = path.join(dir, '.agents/skills/french-curriculum-researcher');
+  assert.equal(JSON.parse(fs.readFileSync(path.join(researchRoot, 'assets/topic-seeds.json'), 'utf8')).length, 32);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(researchRoot, 'references/content-schema.json'), 'utf8')).properties.review_status.const, 'draft');
   assert.equal(installPrepared(dir).filter(item => !item.exists).length, 0);
   assert.equal(fs.readFileSync(path.join(dir, '.codex/config.toml'), 'utf8'), fs.readFileSync(path.join(dir, 'tooling/codex/config.toml'), 'utf8'));
 });

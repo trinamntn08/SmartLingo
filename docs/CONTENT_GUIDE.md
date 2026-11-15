@@ -2,6 +2,8 @@
 
 Initial learner: an English-speaking adult newcomer to France, from complete beginner through A2.
 
+For topic progression, research sources and vocabulary-coherence audits, use the repository [French curriculum researcher](../.agents/skills/french-curriculum-researcher/SKILL.md). Its 32 proposed topics and seeds are unreviewed planning material; the optional research schema is separate from runtime `lessonSchema`. Reconcile existing senses and convert proposals into the lesson structure below before owner preview/review. Installing the skill does not add or approve lessons.
+
 ## Draft a lesson
 - State one useful outcome and approximate level.
 - Teach 6-10 items in a situation rather than an isolated list.

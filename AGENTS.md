@@ -59,6 +59,7 @@
 Repository skills are in `.agents/skills/`:
 - `sll-deliver-feature`: implement a complete product slice.
 - `sll-author-french`: draft/review original French lessons.
+- `french-curriculum-researcher`: research topic progression, vocabulary coherence and coverage gaps; its seeds and schema are planning resources requiring runtime conversion and owner review.
 - `sll-review-change`: check correctness, learning behaviour, privacy, and regression risks.
 Read the selected skill before following it. These are project workflows, not globally installed personal skills.
 

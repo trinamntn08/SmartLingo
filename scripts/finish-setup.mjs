@@ -18,7 +18,7 @@ const paths = [
 try {
   installationPlan(root); // Detect target conflicts without changing files.
   if (!process.argv.includes('--apply')) {
-    console.log('Would install nine prepared Codex files, configure local Git hooks, run checks/tests, stage bootstrap paths, set hook executable mode, and create the initial commit.');
+    console.log('Would install prepared Codex files and resources, configure local Git hooks, run checks/tests, stage bootstrap paths, set hook executable mode, and create the initial commit.');
     console.log('No global config, hook trust, remote, push, or paid API operation is included.');
     process.exit(0);
   }

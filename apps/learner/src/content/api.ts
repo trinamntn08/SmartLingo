@@ -20,7 +20,7 @@ async function request(path: string, body?: unknown): Promise<unknown> {
     });
     if (!response.ok) {
       const message = response.status === 409 ? 'This lesson changed in another editor. Reload the latest revision before saving or publishing.'
-        : response.status === 403 ? 'Local editor access was refused. Open the app at http://localhost:8081 and retry.'
+        : response.status === 403 ? 'Local editor access was refused. Open the app at http://localhost:8081 or http://localhost:8082 and retry.'
           : response.status === 400 ? 'The lesson or preview request was not accepted. Check the fields and preview the saved draft again.'
             : 'The local content server could not complete this request. Your current content was kept.';
       throw new ContentApiError(message, response.status);

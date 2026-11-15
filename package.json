@@ -32,7 +32,9 @@
     "dev": "npm run web --workspace @smartlingo/learner",
     "dev:api": "npm run dev --workspace @smartlingo/api",
     "typecheck": "tsc --noEmit",
-    "build:web": "npm run export --workspace @smartlingo/learner",
+    "build:web": "npm run export --workspace @smartlingo/learner && node scripts/prepare-offline-web.mjs",
+    "preview:web": "node scripts/serve-web.mjs",
+    "test:offline": "npm run build:web && playwright test --config playwright.offline.config.ts",
     "test:app": "tsx --test packages/domain/tests/*.test.ts apps/learner/tests/*.test.ts apps/api/tests/*.test.ts",
     "test:e2e": "playwright test",
     "test:tooling": "node --test scripts/tests/*.test.mjs"

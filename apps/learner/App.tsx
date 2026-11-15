@@ -14,6 +14,7 @@ import { useLearning, type LearningModel } from './src/ui/useLearning';
 import { CurriculumEditor } from './src/editor/CurriculumEditor';
 import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
+import { OfflinePanel } from './src/offline/OfflinePanel';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
@@ -108,7 +109,8 @@ function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; cat
   return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
     <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
+    <OfflinePanel />
     <BackupPanel />
-    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons and original illustrations still need owner review. Offline installation and downloadable lesson packs are planned.</Text></View>
+    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons and original illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text></View>
   </View>;
 }

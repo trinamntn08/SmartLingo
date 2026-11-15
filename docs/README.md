@@ -19,10 +19,14 @@
 | [Learner backup](decisions/0006-learner-backup.md) | Versioned private snapshots and atomic merge restore |
 | [Manual recognition review](decisions/0007-manual-recognition-review.md) | Manual ratings, local-day schedule and versioned history |
 | [Visible study details](decisions/0008-visible-study-details.md) | Owner preference for directly visible meanings/examples/explanations |
+| [Everyday examples and gender](decisions/0011-example-revisions-and-gender.md) | Fuller original examples, optional noun gender and immutable seed refresh |
+| [Offline web assets](decisions/0012-offline-web-assets.md) | Explicit validated app downloads, cache-only removal and loopback preview |
 | [First implementation plan](plans/0001-local-foundation.md) | Scope, acceptance criteria, ownership and validation |
 | [Editor execution plan](plans/0002-editor.md) | First editor fields and validated publication journey |
 | [Backup execution plan](plans/0003-backup.md) | Learner export, bounded import and merge validation |
 | [Review execution plan](plans/0004-manual-review.md) | Recognition queue, local dates and backup compatibility |
 | [Study-detail simplification](plans/0005-visible-study-details.md) | Remove study dropdowns and verify responsive presentation |
+| [Everyday examples plan](plans/0009-everyday-examples.md) | Complete example sentences, compact gender and speaker icons |
+| [Offline web plan](plans/0010-offline-web-downloads.md) | Download/retry/update/removal and cold offline browser verification |
 | [ADR template](templates/ADR.md) | Record a material technical decision |
 | [Execution-plan template](templates/EXECUTION_PLAN.md) | Plan and track substantial implementation |

@@ -29,7 +29,7 @@ npm run dev:api
 
 The local API listens at `http://127.0.0.1:3001` with `/health`, `/lessons`, `/lessons/fr.restaurant.customer`, and `/published-lessons`. It seeds drafts into ignored `data/smartlingo.sqlite`. The learner uses bundled/cached lessons and remains usable while this API is stopped. Host overrides are limited to loopback; LAN access/authentication is not implemented.
 
-For editing, open the learner at `http://localhost:8081`, choose Profile → Open curriculum editor (or `/#editor`), select a lesson, edit its heading/support fields, and save a draft revision. Preview the saved revision, inspect the answer keys and provenance, then explicitly confirm your review before publishing. Preview practice is temporary and does not change learner progress. The first fields cover headings/outcome, vocabulary support, and grammar; target words, pictures, dialogue and exercises are not editable in this slice.
+For editing, open the learner at `http://localhost:8081` (development) or `http://localhost:8082` (exported preview), choose Profile → Open curriculum editor (or `/#editor`), select a lesson, edit its heading/support fields, and save a draft revision. Preview the saved revision, inspect the answer keys and provenance, then explicitly confirm your review before publishing. Preview practice is temporary and does not change learner progress. The first fields cover headings/outcome, vocabulary support, and grammar; target words, pictures, dialogue and exercises are not editable in this slice.
 
 Word notes may be empty, and noun gender can be changed separately. The revised bundled examples are draft revision 2. API startup appends these only above an exact, untouched bundled revision-1 draft; owner edits, publications and newer revisions stay intact. Existing notebook examples and review history are preserved.
 
@@ -37,7 +37,22 @@ Return to Profile → Load published lessons to save published revisions into th
 
 Profile also supports learning backup/restore. Download a private, unencrypted file containing attempts, manual review ratings, notebook entries and cached published lessons (not server drafts/credentials/recordings). Choose a backup to inspect counts/date, confirm the merge policy, then restore and reload learning. Existing personal notes win; duplicate events stay single; immutable conflicts abort the whole restore. Only supported UTF-8 backups up to 5 MB are accepted. Version 2 exports include ratings; version 1 files remain importable with no invented review history. This does not back up the server's curriculum database.
 
-Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Full offline installation/downloads, the complete curriculum editor, production/listening review, microphone conversations, and mobile packages remain planned.
+Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Per-topic downloads, the complete curriculum editor, production/listening review, microphone conversations, and mobile packages remain planned.
+
+## Test the offline-ready preview
+
+```sh
+npm run build:web
+npm run preview:web
+```
+
+Open `http://localhost:8082`. In Profile → Learn offline, choose Download for offline use and wait for Ready for offline use. This saves the app, all 60 bundled draft lessons and their pictures. You can then disconnect or stop both local servers and reload at the same address. Loaded publications, saved vocabulary, progress and manual review use the existing browser storage. Speech is not downloaded and may require a connection. Use the browser menu's Install/Add to Home Screen option if it is available; offline readiness is shown separately.
+
+Port 8082 has separate browser storage from development on 8081. To bring existing learning across, download a private learning backup from the old address, then explicitly restore it in Profile at the new address. Do not clear the old browser data to make that transfer.
+
+Profile shows download size, saved complete-copy size, progress, status and retry/update/removal controls. Updates retain previous complete copies for older tabs; removing downloaded assets clears all those app copies while preserving notebook, practice/review events and loaded publications. Interrupted staging files are cleaned on retry/removal; sizes describe complete-copy files and exclude staging/browser overhead. Keep a separate private learning backup because browser storage may be evicted.
+
+This local route requires a browser with service workers, Web Locks and a secure localhost context. Expo development does not offer offline downloads. Actual phone/Safari installation and offline voice quality are unverified; this is not a public/LAN deployment.
 
 ## Start here
 
@@ -69,8 +84,10 @@ PowerShell: use `npm.cmd` if execution policy blocks `npm.ps1`.
 - `check:staged`: include staged-file secret checks before a commit.
 - `doctor`: show Node/Git availability, hook installation, and Codex CLI availability.
 
-- `build:web`: export the Expo web application to ignored `apps/learner/dist`.
+- `build:web`: export the Expo web application to ignored `apps/learner/dist`, then generate its hashed offline file manifest.
+- `preview:web`: serve that export on loopback at `http://localhost:8082`; build first. Leave the terminal running while opening/downloading it.
 - `test:e2e`: run Chromium desktop and phone-sized browser checks (install once with `npx playwright install chromium`).
+- `test:offline`: build the current export, then run isolated desktop/320px Chromium checks for cold offline launch, failure/retry/update, learner-data-preserving asset removal and stalled-network fallback. Stop the regular port-8082 preview first; tests refuse to reuse it.
 
 See [verification](docs/TESTING.md) for test scope and device limitations.
 

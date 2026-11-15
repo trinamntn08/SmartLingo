@@ -30,7 +30,7 @@ test('loopback Host guard rejects DNS rebinding, malformed hosts and spoofed for
 test('editor POST requires exact allowed Origin, custom header and JSON even for encoded route segments', async () => {
   const { app, repository } = fixture();
   try {
-    for (const origin of [undefined, 'null', 'https://localhost:8081', 'http://localhost:8082', 'http://localhost:8081.attacker.test', 'http://attacker.test']) {
+    for (const origin of [undefined, 'null', 'https://localhost:8081', 'http://localhost:8083', 'http://localhost:8081.attacker.test', 'http://localhost:8082.attacker.test', 'http://attacker.test']) {
       const headers: Record<string, string> = { 'x-smartlingo-editor': '1', 'content-type': 'application/json' };
       if (origin !== undefined) headers.origin = origin;
       const response = await app.inject({ method: 'POST', url: editorUrl, headers, payload: { expectedRevision: restaurantLesson.revision } });
@@ -52,7 +52,7 @@ test('editor POST requires exact allowed Origin, custom header and JSON even for
     assert.equal((await app.inject({
       method: 'POST', url: editorUrl.replace('fr.restaurant', '%66r.restaurant'), payload: { expectedRevision: restaurantLesson.revision },
     })).statusCode, 403);
-    for (const origin of [allowedOrigin, 'http://127.0.0.1:8081']) {
+    for (const origin of [allowedOrigin, 'http://127.0.0.1:8081', 'http://localhost:8082', 'http://127.0.0.1:8082']) {
       const response = await app.inject({
         method: 'POST', url: editorUrl,
         headers: { origin, 'x-smartlingo-editor': '1', 'content-type': 'application/json; charset=utf-8' },

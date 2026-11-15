@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 
-const origins = new Set(['http://localhost:8081', 'http://127.0.0.1:8081']);
+const origins = new Set(['http://localhost:8081', 'http://127.0.0.1:8081', 'http://localhost:8082', 'http://127.0.0.1:8082']);
 const editorPath = /^\/editor\/lessons\/[a-z0-9][a-z0-9.-]{1,119}\/(draft|preview|publish)$/;
 const readPath = /^\/(health|lessons|published-lessons|lessons\/[a-z0-9][a-z0-9.-]{1,119})$/;
 

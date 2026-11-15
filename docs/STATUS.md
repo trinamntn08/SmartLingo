@@ -6,7 +6,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/everyday-examples-and-gender`, based on validated navigation checkpoint `8009796` (visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
+- Current branch: `feat/offline-web-downloads`, based on validated example/control checkpoint `f40ddcf` (navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Inspect live remote history before any future integration. A local checkpoint is not remote backup.
 
@@ -28,25 +28,28 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 - Versioned IndexedDB migrations retain prior attempts/notebook/cache; v3 adds immutable manual review ratings. Explicit Profile load keeps publications available after API shutdown/reload and preserves earlier learner history.
 - Private learner backup download and explicit merge restore with file preview, version/UTF-8/5 MB validation, consistent snapshots, idempotent events, personal-note preservation and all-store atomic rollback on conflicts. Reload shows restored data. Server drafts/credentials/recordings are excluded; backups are unencrypted and do not back up the server database.
 - Calm manual recognition review for saved notebook revisions, with explicit reveal/rating, 1/3/7/14/30-day heuristic, separate supported days, local calendar/timezone handling and stable retries. No early/same-day schedule boosting; focus/date refresh keeps tabs current. Note edits start fresh practice without deleting historical ratings. Backup format2 includes ratings; version1 imports remain compatible.
-- Development tooling, 16 tooling tests, 66 application tests, browser checks, web export and run instructions. See [verification](TESTING.md) and [everyday examples plan](plans/0009-everyday-examples.md).
+- Explicit Profile offline download of the exported app, all 60 bundled draft lessons and pictures (about 1.25 MB). Available/saved complete-copy sizes, progress, ready/incomplete status, failure/retry/update and confirmed asset removal are shown. SHA256/size validation and staged completion records preserve prior copies on failed updates; root navigation falls back after a three-second stalled-network deadline. Removing owned asset caches preserves all learner IndexedDB stores and unrelated caches. Web Locks serialize worker-generation changes; browser management requires their support. Optional installation uses a web manifest/original SVG icon. Loopback export preview runs on 8082 with exact API origin access; development on 8081 remains a separate browser store. See [ADR 0012](decisions/0012-offline-web-assets.md) and [run instructions](../README.md#test-the-offline-ready-preview).
+- Development tooling, 18 tooling tests, 79 application tests, browser checks, offline exported-build checks, web export and run instructions. See [verification](TESTING.md) and [offline plan](plans/0010-offline-web-downloads.md).
 
 ## Verified in this step
 
-Repository/TypeScript, all 16 tooling/66 application tests and web export pass. Browser verification: 29 existing cases passed (one deliberate duplicate publication skip); the two new keyboard play/stop cases passed on focused rerun after correcting their mock utterance constructor. Coverage includes full examples/gender/44px icon visibility, empty notes and clearing gender through saved preview/publication/cache reload, narrow error layout, learning/backup/review and home/navigation regressions. Narrow vocabulary screenshot inspected. Independent code review verified all 60 historical fingerprints and in-memory immutable refresh; separate French review corrected wording across the full draft catalogue. Exact results are in [the checkpoint](SESSION_CHECKPOINT.md). Publication tests use an in-memory API and isolated browser data, never owner approval/publication or actual learner storage.
+Repository/TypeScript, all 18 tooling/79 application tests and the current web export pass. Existing browser regressions: 31 passed/one deliberate duplicate publication skip. Real exported-app checks: all six desktop/320px cases pass for explicit download, cold offline launch, publication/notebook/practice/review persistence, interrupted download/retry, corrupted update retaining the old copy, successful new-copy fallback, removal preserving all four stores/unrelated cache and stalled-navigation/query fallback. Desktop ready and narrow error screenshots inspected. Independent read-only review found and confirmed the fix for the unbounded navigation wait; no remaining actionable finding. Tests use isolated browser state and synthetic/in-memory publications, never actual owner approval/publication. Exact results are in [the checkpoint](SESSION_CHECKPOINT.md).
+
+For owner testing, a stable exported preview was started at `http://localhost:8082`, with the actual local curriculum server at `http://127.0.0.1:3001`; HTTP 200 and health ok were confirmed. API startup applies the reviewed immutable seed policy to the local database. No learner writes or publication were performed by the agent in that preview. Check current listeners before starting duplicates.
 
 Known dependency issue: three moderate npm audit findings in Expo's fingerprint/minimatch build-tool chain. No forced SDK downgrade or ineffective override retained; see [testing limitations](TESTING.md). This is a local preview, not a distribution-ready release.
 
 ## Not implemented
 
 - Full editor (target/exercise/media editing, create/archive/restore/import/export/unpublish) and actual owner content approval.
-- Downloaded offline packs/service worker, production/listening or adaptive review, server curriculum backups and data reset controls.
+- Per-topic offline packs/downloaded speech, production/listening or adaptive review, server curriculum backups and data reset controls.
 - AI audio/cache, vocabulary assistant, push-to-talk/conversations, usage controls, provider adapters.
 - Native storage/audio and Android/iOS packages; onboarding/preferences and cloud accounts/deployment.
 
-Bundled/cached lessons run with the API stopped, but web assets still need to load. Browser storage can be cleared/evicted; keep private backup files separately. Native/device voice quality, Safari, physical-phone behaviour and screen-reader testing are unverified.
+Explicitly downloaded app assets cold-load with network/API unavailable in Chromium. Browser storage can be cleared/evicted; keep private backup files separately. Actual phone/Safari installation, SVG install-icon compatibility, native/device voice quality and screen-reader testing are unverified. Downloads require Web Locks; no public/LAN hosting is supported.
 
 ## Next task
 
-Continue with downloaded web assets/offline installation, explicit cache size/status/removal and recoverable downloads; preserve learner storage when removing cached assets. Owner review and physical-phone storage/audio testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Address the build-tool audit chain before wider distribution. Full editor completion remains later work.
+Recheck the documented Expo build-tool audit chain for an upstream-compatible resolution before wider distribution; preserve the stable owner preview while doing so. Then address server curriculum backup/recovery or the next bounded editor slice. Owner review and physical-phone storage/audio/installation testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Per-topic packs, downloaded speech and full editor completion remain later work.
 
 No public launch date is committed. Hook/role files do not prove runtime loading/trust; no usage-limit lookup or automatic resume capability was available in this session.

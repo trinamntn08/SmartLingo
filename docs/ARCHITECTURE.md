@@ -18,6 +18,7 @@ Status: local web learning and first editor/publication slice implemented; nativ
 - Client -> local API -> provider. Permanent credentials stay on the API.
 - Local published content/media -> downloaded lessons -> offline activities.
 - Browser IndexedDB/native SQLite adapters -> stable learning events, notebook, and reviews.
+- Explicit exported-web download -> size/hash-validated staged CacheStorage -> complete offline app copy. A separate typed browser asset manager/worker never opens learner IndexedDB. Web Locks serialize updates/removal across worker generations; removing owned asset caches preserves learner data and unrelated caches. See [ADR 0012](decisions/0012-offline-web-assets.md).
 - Learner backup files -> bounded UTF-8/schema validation -> explicit atomic merge of notebook/events/cached publications. Server curriculum database is a separate backup concern.
 - Manual recognition events -> framework-independent versioned calendar schedule; store assisted ratings separately, never infer proficiency from activity. Backup v2 includes review events and migrates v1 files; IndexedDB v3 preserves prior stores.
 - Draft editing -> validation/preview -> explicit publication -> versioned content.

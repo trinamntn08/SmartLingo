@@ -1,0 +1,488 @@
+{
+  "reviewStatus": "draft",
+  "baselineCommit": "aac20dc",
+  "date": "2026-11-15",
+  "fingerprintDescription": "SHA256 of JSON.stringify({id,revision,topic,title,level,outcome,vocabulary}); vocabulary includes all runtime support fields",
+  "lessons": [
+    {
+      "id": "fr.restaurant.customer",
+      "sha256": "ec3c95e64665e02cffa5acbca431bba99684823d5b4301da28af482481f756e8"
+    },
+    {
+      "id": "fr.bakery.customer",
+      "sha256": "b33a08576c388ee443441cb6d97ccb0352d8944c44e7808d9caeb0c548ba9947"
+    },
+    {
+      "id": "fr.restaurant.find-a-table",
+      "sha256": "0241898783da24b5a879d32d0e787956bccbd8e453b7199113f1352c64eeab6c"
+    },
+    {
+      "id": "fr.restaurant.choose-a-meal",
+      "sha256": "ffbc465dbc0555d4306d9b7a5cd30bbea16cb6fe4fb995888504f9b8753916df"
+    },
+    {
+      "id": "fr.restaurant.explain-food-needs",
+      "sha256": "8d15b61efc80e7c9d639a78898f4b855ec82cf9bd34a4b3459f722c064d97339"
+    },
+    {
+      "id": "fr.restaurant.finish-the-meal",
+      "sha256": "d3859fe0d0b017e694f60afdcdd7ab2f4892a555879dc0e7f005c8478c2afc4a"
+    },
+    {
+      "id": "fr.bakery.choose-bread",
+      "sha256": "317c105eb444fe8a3f07ac5ba93b997836fdf68a962f92d91534e1359762abfc"
+    },
+    {
+      "id": "fr.bakery.choose-a-treat",
+      "sha256": "67f75b61fcd920749ab98b74db0c7fddf9183641982c368d7a9704e7ee445d75"
+    },
+    {
+      "id": "fr.bakery.buy-lunch",
+      "sha256": "1fb5cd8ec60b8cff3772da4330ee3aa8719b9f43b06766b979def9baea9d2605"
+    },
+    {
+      "id": "fr.bakery.order-for-later",
+      "sha256": "72695e855c9c6509af30b2a0ce331a9d92521214e7f4cbd20ad7cb762cad6da4"
+    },
+    {
+      "id": "fr.groceries.fruit-and-vegetables",
+      "sha256": "e8e32a93fab9e7fa9b5d396e11d8a68138ebc85b40462fdbe8edd4b98ab96f68"
+    },
+    {
+      "id": "fr.groceries.fill-the-cupboard",
+      "sha256": "a4c99f50893e06c5908af28f63ecb9d6c3983879ad58050b804a183233570b2b"
+    },
+    {
+      "id": "fr.groceries.chilled-foods",
+      "sha256": "c75834b13f6364d6511fdfca1b32eeaf47333493b261a6d89cb652ee333c5cbb"
+    },
+    {
+      "id": "fr.groceries.find-products",
+      "sha256": "2586388d3271f014c4dbc786fc86752e692adc978ec6b4c35cc30b1d2017664a"
+    },
+    {
+      "id": "fr.groceries.check-before-paying",
+      "sha256": "59eaa9652a6a751a1b69738cacad4284bb86dea054250a591c237323a157d1ea"
+    },
+    {
+      "id": "fr.shopping.everyday-clothes",
+      "sha256": "10dd9ae5d8e6d1a7a4c67e8474c89cc1f86a607f0f7354e1878e390c3b025a4c"
+    },
+    {
+      "id": "fr.shopping.shoes-and-accessories",
+      "sha256": "baec40ef98bef27e43e128380160cce77b380923fd83f56d1c45eabc98712b73"
+    },
+    {
+      "id": "fr.shopping.sizes-and-colours",
+      "sha256": "66922d860469148d07404ee14f164355b34920e0541c4aea271582a2b924e111"
+    },
+    {
+      "id": "fr.shopping.try-before-buying",
+      "sha256": "cb922d533cc33060edeb7a4e89c3f0d6e524d54e451bc0edb7ca2af3fb6daf5f"
+    },
+    {
+      "id": "fr.shopping.return-an-item",
+      "sha256": "808f724d54a517427087f801687bf9b5506b34743d9180c041143fd1dc7e08b8"
+    },
+    {
+      "id": "fr.housing.rooms-at-home",
+      "sha256": "4b8610e6d0b0f0439dd7604c0dc004996ca7f7b30c2befa2abd166e94a9b0fc1"
+    },
+    {
+      "id": "fr.housing.furniture-and-essentials",
+      "sha256": "38524285af789c32b9f79ec99fe5c886675231f44cc77b23bf4cd75248d3ef4c"
+    },
+    {
+      "id": "fr.housing.arrive-at-a-building",
+      "sha256": "4fd4f6e87cb8709972ac8f2af1a5aac587373a7f33c17866eeba360c1149ffd9"
+    },
+    {
+      "id": "fr.housing.ask-about-a-rental",
+      "sha256": "c4c553f5a8bb2f5e9e2fb78f0a42773034727fb13c9707d8769350f59da8e852"
+    },
+    {
+      "id": "fr.housing.report-a-home-problem",
+      "sha256": "30417e908fad238d836e7ab3a5cd9e0cd40e8fda21b5312e8d763e319f88c053"
+    },
+    {
+      "id": "fr.transport.choose-transport",
+      "sha256": "e4f7862bd981578656ec233ec45f08ed4d3f65588f16d93cf637a9f7647ba6fe"
+    },
+    {
+      "id": "fr.transport.find-your-stop",
+      "sha256": "5ce6cd8b6b26ce722ce173665fbe6522679ae7ba8cf049b6cd2986f8cfc2b9c1"
+    },
+    {
+      "id": "fr.transport.buy-a-ticket",
+      "sha256": "4cbf60c7661782c8d328a87e8d71546f3e23329998eebec71ff7eeb09fb1af96"
+    },
+    {
+      "id": "fr.transport.understand-a-journey",
+      "sha256": "ba6bfe2522ee5c41b651f0f40e851d3e38fff3244db5e1e2464b17519dea14f9"
+    },
+    {
+      "id": "fr.transport.handle-disruption",
+      "sha256": "d1b8110db3b0b3cc27f8d841749231fe819cde067bc93298bbb78189896dd010"
+    },
+    {
+      "id": "fr.health.appointment",
+      "sha256": "22b1b3893e7a1418d6d6d5b9c565340ddd5621cefbb08c9d6d0f687cb316ca70"
+    },
+    {
+      "id": "fr.health.symptoms",
+      "sha256": "e0b3e659c63bfa69ee0205255704a812e6b3529c3b31a42c71a1d482b81f61fb"
+    },
+    {
+      "id": "fr.health.pharmacy",
+      "sha256": "2874a73f7d683c41538a1ace1d2429829c25d3781049c68af16336d8b7ca902d"
+    },
+    {
+      "id": "fr.health.consultation",
+      "sha256": "39ac39863948d75bd463acae50c1cd64534b927dac109c53703f0fcefb736022"
+    },
+    {
+      "id": "fr.health.change-appointment",
+      "sha256": "027122749c186df298c4526f7728163bc7a8a51b50ddc41e23f79dc50e993d50"
+    },
+    {
+      "id": "fr.work.workplace",
+      "sha256": "aa8f545aa2f2fc1d32affc3a891323695785a4dff548979f6b1709e4b147ed44"
+    },
+    {
+      "id": "fr.work.study",
+      "sha256": "7e4bf845edc75a88331d50e568bf4521a4b5129c921278360624eb0a80cc3273"
+    },
+    {
+      "id": "fr.work.simple-tasks",
+      "sha256": "cf2739958fa08c2cc30ac4ead1f16552dada520dd865f975c36995f71b5d57a6"
+    },
+    {
+      "id": "fr.work.organise-work",
+      "sha256": "8be7c1c904885acea5a5ca8d8eb33405dfb63d8d5db77c51690f9787173870f5"
+    },
+    {
+      "id": "fr.work.clarify-request",
+      "sha256": "8eb606ce45c1613da275ad5fbb672317f375643b48998ecc678148893eb1ec71"
+    },
+    {
+      "id": "fr.administration.reception",
+      "sha256": "91be0a537141a4309603aa4856325926e214a45e0cb6053b3c60f301fe8bf059"
+    },
+    {
+      "id": "fr.administration.contact-details",
+      "sha256": "6ad1169a6fd408992411536ecdf4ad429b2fb58d7ae1524ff2f02b599c55c034"
+    },
+    {
+      "id": "fr.administration.post",
+      "sha256": "ac5602d0defd244faadbf861c38bd46b928def1d2806bb66b26d0f6b3b09fef6"
+    },
+    {
+      "id": "fr.administration.internet",
+      "sha256": "fc9ea18bb64ad6b5128d2bada48551256b0729a67e04cf70e64cfc9ebaa32b5e"
+    },
+    {
+      "id": "fr.administration.paperwork",
+      "sha256": "0e5fd107650002e3d126c1f9acefa2f08df1162f79358eeb67c3959889101ebc"
+    },
+    {
+      "id": "fr.people.first-meeting",
+      "sha256": "eebc814289e77775107704775e6162a8e9ac6713b646a88fdbbb82f347f29430"
+    },
+    {
+      "id": "fr.people.where-from",
+      "sha256": "77520b6827a8be900ddbb55a0c85cc0da8441f48ac6ebcca14567e44322ece3e"
+    },
+    {
+      "id": "fr.people.family",
+      "sha256": "2899b7e5353b7064f0a033fa0ed04c175226aeb036abea89f90523ed75addd85"
+    },
+    {
+      "id": "fr.people.conversation",
+      "sha256": "11bd8974b22d2fb553f731f6b46eb9245f25340d241b8e0de6ced952d18c7af2"
+    },
+    {
+      "id": "fr.people.settling-in",
+      "sha256": "702e5361cf2fcc154edfea0e2c2d1c2271b45cc49cc1e79d22c902ef3173e868"
+    },
+    {
+      "id": "fr.routine.small-numbers",
+      "sha256": "65dcfed982d39d3f5572004b8e50efe00297ed6b1a1091d89f9ec6d4ddcbc1bf"
+    },
+    {
+      "id": "fr.routine.clock",
+      "sha256": "78bbd235b7b22f965c69833448476a1ecc73f7cef7ee15940609c5532c8e5a4e"
+    },
+    {
+      "id": "fr.routine.calendar",
+      "sha256": "238b6e2ee91749f5c8be0fdfbef9633985192157818ac27d1158202edf75c2ca"
+    },
+    {
+      "id": "fr.routine.daily-actions",
+      "sha256": "7eb034d49617c0d4ed31b32a024e6ba0b15e7fc1389bfd723ef69f10dc3fdcac"
+    },
+    {
+      "id": "fr.routine.sequence",
+      "sha256": "a5592c223adc1ca071becc2bb4cd198909236d6feaec2b35dfd6df7c4ca3b0f9"
+    },
+    {
+      "id": "fr.leisure.free-time",
+      "sha256": "b7db76b0213bbc3ee3e711291bb78a085517338fbc73cff038141a958be2df89"
+    },
+    {
+      "id": "fr.leisure.weather",
+      "sha256": "d0aff4803cae84ca2dc7057d90e15b6326ef2eb3f3a97e6d7fed746bdbbbf910"
+    },
+    {
+      "id": "fr.leisure.sport",
+      "sha256": "6739822da11982586aa8a0397f0df828d4e2657e153f66e3e5eeb258b685f4c1"
+    },
+    {
+      "id": "fr.leisure.invitations",
+      "sha256": "049e345a40602a20279232e6cb112331d940eca95b493dec5a3dbb42dfea36bc"
+    },
+    {
+      "id": "fr.leisure.change-plans",
+      "sha256": "0231744c665a021219e25280295e3e3dce4839e74b33923d738702e11f736a49"
+    },
+    {
+      "id": "fr.essentials.repair",
+      "sha256": "41c81e2d747ffb9e58b39fcc491f967f7f8d39b9c71bfbb6cd65077fba26c6d4"
+    },
+    {
+      "id": "fr.essentials.polite-help",
+      "sha256": "48fbe4a8ae4723627a5736ca129156f50a98f1937e30848f1fe1db724adef510"
+    },
+    {
+      "id": "fr.essentials.yes-and-no",
+      "sha256": "9a746e4781a9d13d69cb28b3c6d7322a8609d79e08e650d7f16cc1502acb6cba"
+    },
+    {
+      "id": "fr.essentials.simple-questions",
+      "sha256": "3a2ac1e28c0c28a33ea8a373ccf33ba7df32d708e0273c4baaf96ae530992033"
+    },
+    {
+      "id": "fr.essentials.clarify",
+      "sha256": "dc85d7e7b5c41c977b32e8567213255ecc67d32eb0e24661fc2875011c6646ec"
+    },
+    {
+      "id": "fr.numbers.zero-five",
+      "sha256": "d7ded84d25ed126869d983fe0e3cdaed75faa83a181540756fc278a8c79140f6"
+    },
+    {
+      "id": "fr.numbers.six-eleven",
+      "sha256": "25c69c24453ac95337f996fa72309200b23f94123718eef51ca1dfe943e84c38"
+    },
+    {
+      "id": "fr.numbers.twelve-seventeen",
+      "sha256": "910ba29303aab4edae22b621c7be09b9f8376d9d9e7d7ec8a4d7c3d9f0394300"
+    },
+    {
+      "id": "fr.numbers.eighteen-fifty",
+      "sha256": "fe8e37796bf39a0ccb5f1daf0362fad3a31c96dba055ba8c6684b3e9d2403b95"
+    },
+    {
+      "id": "fr.numbers.sixty-hundred",
+      "sha256": "6c39bd8f7557e036c6905f09582145ea49b6e2f503a1f2a154d2199fb55d453d"
+    },
+    {
+      "id": "fr.calendar.working-week",
+      "sha256": "9d1258c58fae11f8adff2f0d53a8dd3adab0e587ca256b3e3205f324549787b4"
+    },
+    {
+      "id": "fr.calendar.nearby-days",
+      "sha256": "22f97198ab5317cdc7e576fe0e3a011c45b34b5d1f71662edc647fbe120fc603"
+    },
+    {
+      "id": "fr.calendar.january-june",
+      "sha256": "2162902599e254d8d060567b6531530eb538a789a170cb1d330f261c9a31850d"
+    },
+    {
+      "id": "fr.calendar.july-december",
+      "sha256": "339d8da25fb45a864ae237e2a7f69681c92c8b20c9e2a2ed3aea603be0f84810"
+    },
+    {
+      "id": "fr.calendar.dates-and-slots",
+      "sha256": "57e9968683279a75f965e5de693e1f606090fa0ff6e4bb507ca5da23ee790d7f"
+    },
+    {
+      "id": "fr.directions.street-landmarks",
+      "sha256": "959f44df0018617ab0a2721e8668888521cabc0b2563695bd5aa837a8d715c47"
+    },
+    {
+      "id": "fr.directions.location",
+      "sha256": "924b58c9fed48c96235f8536338647cd0c349a94250faead20f6e083b99f991d"
+    },
+    {
+      "id": "fr.directions.route",
+      "sha256": "4631511ca80ac0f8d9aa57ff38b333a209370f2a2fa3462dcc2d832fed7e6c28"
+    },
+    {
+      "id": "fr.directions.local-places",
+      "sha256": "a62b3802cd582dbedac2086cf3f816198314dea1b00f4b512aff85b62adf6ad9"
+    },
+    {
+      "id": "fr.directions.check-distance",
+      "sha256": "b3bf3af57e4bff07a9c0f3653c5a937c30ee29538e694777310ffb79082119da"
+    },
+    {
+      "id": "fr.cooking.prepare-workspace",
+      "sha256": "57b1dc7dd00a540b5a637ab8ff53163c550e0966280f8d2fcf1c2f9d37616d70"
+    },
+    {
+      "id": "fr.cooking.prepare-vegetables",
+      "sha256": "362f722c4ebfd94d933882a871b7d5e7588dd1ee05796753c475ddc48b3b480d"
+    },
+    {
+      "id": "fr.cooking.follow-a-recipe",
+      "sha256": "3d6cf7fd1f1bc13397f6e5322af3897291bc06ab26bd66d0613808c9bd67eb79"
+    },
+    {
+      "id": "fr.cooking.control-the-cooking",
+      "sha256": "a6d7d119c58c01e0bb01ba9668b80845771d2c48ae4b9d1e2d672796795522aa"
+    },
+    {
+      "id": "fr.cooking.serve-and-clear-away",
+      "sha256": "c35aff90a68d872b89b8145cc23f274ca639d0a454a9e302868ccdbd70c64df0"
+    },
+    {
+      "id": "fr.accommodation.book-a-room",
+      "sha256": "4f06783c8f0e28186cceade8c413c0e8106777c3af97e345f7db32e84ae23ae2"
+    },
+    {
+      "id": "fr.accommodation.check-in",
+      "sha256": "d24982d39d4f08ec3ba4897642baef6c8b0ea657879e377392c7e57cd72501a2"
+    },
+    {
+      "id": "fr.accommodation.settle-into-your-room",
+      "sha256": "17bfa2cc3a5459686d141a5e5e053b1824f1f1ccbabb1b7ad77c3aa6604cbfd0"
+    },
+    {
+      "id": "fr.accommodation.request-help-during-stay",
+      "sha256": "ef679f0cf9665eda9013dd3582a70f33b7bae825cf9bf2c270159ab3c765ced0"
+    },
+    {
+      "id": "fr.accommodation.check-out",
+      "sha256": "a4ad4a2e710d6126025deb85f08c131558d808006c88af8c01ebe6d746e74e01"
+    },
+    {
+      "id": "fr.education.enrol",
+      "sha256": "d3130dcfa5568a6649a4905806bf4efb9e097e2e1e514ae0cb3c4ec34e519d78"
+    },
+    {
+      "id": "fr.education.class-actions",
+      "sha256": "278d40e2f958d87aa3f51c67e9ac645bca48084f5fa5093f63a849014d0c68c7"
+    },
+    {
+      "id": "fr.education.attendance",
+      "sha256": "030eb262f645c373ebacb2745c555347a40f7fa4e696a3c21505a7ded792a535"
+    },
+    {
+      "id": "fr.education.homework",
+      "sha256": "8a28017bc93d8a37ff203299fe2bc3127a529323d361c4e43371243d2263c23e"
+    },
+    {
+      "id": "fr.education.progress",
+      "sha256": "64f082081d64d0e91a0bb839e6f21aa7f06ae803eb25d8de71a3c4f04e74c16a"
+    },
+    {
+      "id": "fr.jobsearch.job-goal",
+      "sha256": "c076d84343b458fc12ddd6697dc0e1683466c2ca790840bd524a6f331ddc6e6e"
+    },
+    {
+      "id": "fr.jobsearch.application",
+      "sha256": "f4c03c519cee5a9d928faac0493fd19011cb8ef627c64262434025afee3eadfe"
+    },
+    {
+      "id": "fr.jobsearch.skills",
+      "sha256": "3590c1dc85fa56312cf7e6816e7db9dce477969106c999c0f3a38554fe69747c"
+    },
+    {
+      "id": "fr.jobsearch.interview",
+      "sha256": "69698597b9bab6e7c3a03efc0ffbd3bb6f9ac112a11c408ab51e032a341fd649"
+    },
+    {
+      "id": "fr.jobsearch.follow-up",
+      "sha256": "b1915801b2d0c6d502aff086e2b91d4ff1f737b575495cb6a65b871aa5d0540a"
+    },
+    {
+      "id": "fr.digital.phone",
+      "sha256": "84a32ceb7a38310df2ff26377ad6962dfc411a47cab53e51c513c46ceed1ea46"
+    },
+    {
+      "id": "fr.digital.email-address",
+      "sha256": "143d3d17e64c6380bd8c9313bf04387f7027822e83522bddd0bece13f5ad38b6"
+    },
+    {
+      "id": "fr.digital.messages",
+      "sha256": "9145306e534ce5f27c8ab844e06e197de7f1bb94f0d95bb1e12d44745f05ce3a"
+    },
+    {
+      "id": "fr.digital.connection",
+      "sha256": "fd1b779fb75888ebc396ab1ebdc2aac1da18403ad8e865d5261f6afda7c92916"
+    },
+    {
+      "id": "fr.digital.files",
+      "sha256": "84e1495ba0123f93948b6200cd2505545b9c4ea752593eecfe0357f73df92c4e"
+    },
+    {
+      "id": "fr.social.invite",
+      "sha256": "ed22838237a75817cbdc138d6a98c53c5854cc8bc3d87b77674fc8796e3bf3ff"
+    },
+    {
+      "id": "fr.social.join-plan",
+      "sha256": "69807d7530b2e6f4d800acebd0e3774a26392987438413aa5c4af0925d870bf2"
+    },
+    {
+      "id": "fr.social.decline",
+      "sha256": "33951b6a07d92fad464beb170534b1c4c824a8c15e4e44cf8baf1d8681dee039"
+    },
+    {
+      "id": "fr.social.organise",
+      "sha256": "c58c0d70a184bee1d89da01c5445d1633a3359ab9ef6cb44a9b4a798e9092f57"
+    },
+    {
+      "id": "fr.social.change-plan",
+      "sha256": "5b55e81d4de59184165c15e869420776af9ee1af0e632b1bc691e151b48da8d5"
+    },
+    {
+      "id": "fr.past.when",
+      "sha256": "4dff588382a110a1807ba32fb23b43c2b0aa698908b9785c8ea203d3fec26bd1"
+    },
+    {
+      "id": "fr.past.sequence",
+      "sha256": "0dc342a96cf0e04c0c3443813d6359866c64ea519e9b978420bd060f46f3084e"
+    },
+    {
+      "id": "fr.past.activities",
+      "sha256": "fee7c58aea6a2b9a5b92363049f6b6d475ee43e842fcb2b27fc0410009f86739"
+    },
+    {
+      "id": "fr.past.reaction",
+      "sha256": "98a51a174a6a93ccdc3dbee9f5831252debabe187227c0416be5a0cba5416f6c"
+    },
+    {
+      "id": "fr.past.small-incident",
+      "sha256": "d2b5bc4260017c3d2f2151d7b72ad92daecae87b2653551dd8aab6d5cc13389b"
+    },
+    {
+      "id": "fr.opinions.preferences",
+      "sha256": "98108f2802ee256f98a6d9cee66649a70330fa1c432b8ad34034a2a68e5da6c7"
+    },
+    {
+      "id": "fr.opinions.give-view",
+      "sha256": "c303b704d8afd313af35bcad8c9e3631a1b0e0dc52d6cbfc6bd19706261366d2"
+    },
+    {
+      "id": "fr.opinions.compare",
+      "sha256": "b1bb975ae2f66fe73a4200c6c78d555649ec8c12a539921929ca2e9f05ec3119"
+    },
+    {
+      "id": "fr.opinions.qualities",
+      "sha256": "2ae0a5822fadeb5cb71a7fffc387bfa0b727ba5fac24ec0049cc881103bb214a"
+    },
+    {
+      "id": "fr.opinions.reasons",
+      "sha256": "feda5d416bb466ac720db0bbbda2711aeefec22747063c789daf8a6d97de1c45"
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 Snapshot: 2026-11-15. Original editorial material requiring owner review. Suggested order below; free exploration remains available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
 
+The newer [word-by-word topic audit](CURRICULUM_TOPIC_AUDIT.md) identifies missing greeting-first foundations and proposes a revised teaching map. This catalogue still describes the current bundled content and earlier suggested order. The learner currently follows source insertion order (Restaurant first); the suggested order below is not yet applied by the UI.
+
 24 banks · 120 lessons · 741 vocabulary appearances · 705 canonical senses · 696 distinct written forms. Recycled senses are included in bank counts, not counted again as new. Supported practice is not proficiency certification.
 
 ## Essential conversation tools

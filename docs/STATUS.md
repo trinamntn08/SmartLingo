@@ -6,9 +6,17 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/cached-french-speech`, based on `7c87a4d` (vocabulary review, licensed photos and device-voice choices). The checkpoint containing these notes adds explicit cached neural French speech. Earlier checkpoints remain preserved.
+- Current branch: `docs/curriculum-topic-audit`, based on `aac20dc` (completed explicit cached neural French speech). The checkpoint containing these notes adds curriculum research only. Earlier feature branches/checkpoints remain preserved.
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Live `git ls-remote --heads origin` on 2026-11-15 reports only `main` at `1c6e943`. The reviewed source checkpoint `35f8853` is 21 commits beyond that ancestor; the current feature branch is not on origin. Inspect remote history again before integration. A local checkpoint is not remote backup.
+
+## Complete topic-placement research review (2026-11-15)
+
+The owner requested a careful review of every word and a familiar greetings-first beginner progression. Reviewed all 24 banks/120 lessons/741 appearances against their current targets, meanings, examples and support; preserved all 705 canonical IDs and 696 written forms. [Master findings and proposed teaching map](CURRICULUM_TOPIC_AUDIT.md), [readable per-word recommendations](audits/all-topic-words.md) and the two linked JSON inventories distinguish appropriate introductions, contextual recycling, first-home moves and support/level revisions. Final dispositions: 547 keep, 52 recycle, 3 move first introduction, 139 revise; these are editorial recommendations, not 139 confirmed French errors.
+
+Live TV5MONDE and official Hachette Cosmopolite 1 material support early greetings/introductions/spelling/numbers; Council of Europe evidence bounds A1/A2 performance claims. The original draft opening proposes 24 everyday greetings/polite/check-in expressions across three short lessons. Seventeen are new target candidates; seven reuse existing IDs. Full per-bank gap lists and an original 30-area teaching proposal remain research requiring runtime conversion and owner review. No proprietary full course list, runtime curriculum change, owner publication or learner-data migration occurred.
+
+Confirmed source-level presentation gap: suggested `courseSequence` is not consumed by the learner; insertion order and the fresh Today fallback start with Restaurant. Applying actual ordering and greeting-first draft lessons remains implementation work. This review does not claim the learner preview has been updated. Repository/TypeScript checks, the complete audit integrity/encoding validator and eight relevant content/topic tests pass; final independent review and checkpoint details are in [the session checkpoint](SESSION_CHECKPOINT.md). Full browser/offline/provider suites were not rerun for this research-only step. Complete dialogue/exercise linguistic review and native-teacher/owner approval remain open.
 
 ## Saved neural French speech (2026-11-15)
 

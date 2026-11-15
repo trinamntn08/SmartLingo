@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -40,8 +41,8 @@ test('restaurant details are visible directly and practice/notebook completion s
   await page.screenshot({ path: info.outputPath('today.png'), fullPage: true });
   await button(page, /Start restaurant practice/).click();
   await expect(page.getByText('hello / good morning', { exact: true })).toBeVisible();
-  await expect(page.getByText('Bonjour madame, est-ce que je peux vous poser une question ?', { exact: true })).toBeVisible();
-  await expect(page.getByText('Hello, madam, could I ask you a question?', { exact: true })).toBeVisible();
+  await expect(page.getByText(restaurantLesson.vocabulary[0].example, { exact: true })).toBeVisible();
+  await expect(page.getByText(restaurantLesson.vocabulary[0].exampleMeaning, { exact: true })).toBeVisible();
   await expect(page.getByText('A polite greeting when you arrive.', { exact: true })).toBeVisible();
   await expect(button(page, /Show meaning|Show example translation|Show word note/)).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('vocabulary.png'), fullPage: true });

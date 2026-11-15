@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lessons, restaurantLesson } from '@smartlingo/content';
+import { lessons, restaurantLesson, courseSequence, previousSeedFingerprints } from '@smartlingo/content';
 import { checkAnswer, groupLessonTopics, matchesLesson, matchesVocabulary, mergeLessonCatalogue, normalizeAnswer, normalizeSearch, type Lesson, type Vocabulary } from '../src/index';
 
 function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: string[] = [], remaining = exercise.tokens): boolean {
@@ -13,17 +13,15 @@ function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: 
   return remaining.some((token, index) => canBuildAcceptedSentence(exercise, [...chosen, token], remaining.filter((_, at) => at !== index)));
 }
 
-test('each beginner topic has 30–50 distinct entries across short A1 and A2 lessons', () => {
+test('each beginner topic has a distinct 30–50-entry bank and solvable short lessons', () => {
   const topics = groupLessonTopics(lessons);
-  assert.equal(topics.length, 12);
+  assert.equal(topics.length, 24);
   assert.equal(new Set(lessons.map(lesson => lesson.id)).size, lessons.length);
   const sharedEntries = new Map<string, Vocabulary>();
   for (const topic of topics) {
     const targets = new Set(topic.vocabulary.map(entry => normalizeSearch(entry.target)));
     assert.ok(targets.size >= 30 && targets.size <= 50, `${topic.name}: ${targets.size} distinct targets`);
     assert.equal(targets.size, topic.vocabulary.length, `${topic.name}: no repeated target padding`);
-    assert.ok(topic.lessons.some(lesson => lesson.level === 'A1'), `${topic.name}: A1`);
-    assert.ok(topic.lessons.some(lesson => lesson.level === 'A2'), `${topic.name}: A2`);
     for (const lesson of topic.lessons) {
       assert.equal(lesson.status, 'draft');
       assert.ok(lesson.vocabulary.length >= 6 && lesson.vocabulary.length <= 10);
@@ -51,6 +49,33 @@ test('catalogue search matches English/French words, accents, levels and lesson 
   assert.equal(matchesVocabulary(restaurantLesson.vocabulary[4], "l'addition"), true);
   assert.equal(matchesVocabulary(restaurantLesson.vocabulary[0], 'good morning'), true);
   assert.equal(matchesVocabulary(restaurantLesson.vocabulary[0], 'coffee'), false);
+});
+
+test('suggested progression covers every bank once with earlier prerequisites and immutable draft revisions', () => {
+  const slugs = courseSequence.map(topic => topic.slug);
+  assert.equal(new Set(slugs).size, 24);
+  assert.deepEqual(new Set(lessons.map(lesson => lesson.id.split('.')[1])), new Set(slugs));
+  const seen = new Set<string>();
+  for (const topic of courseSequence) {
+    for (const prerequisite of topic.prerequisites) assert.ok(seen.has(prerequisite), `${topic.slug}: prior ${prerequisite}`);
+    seen.add(topic.slug);
+  }
+  assert.equal(lessons.length, 120);
+  for (const lesson of lessons) assert.equal(lesson.revision, Object.hasOwn(previousSeedFingerprints, lesson.id) ? 3 : 1, lesson.id);
+  assert.ok(lessons.some(lesson => lesson.level === 'foundation'));
+  assert.ok(lessons.filter(lesson => lesson.id.startsWith('fr.past.') || lesson.id.startsWith('fr.opinions.'))
+    .every(lesson => lesson.level === 'A2'));
+});
+
+test('identical target forms share a sense ID except explicit contextual senses', () => {
+  const contextualForms = new Set(['ça me va', 'un guichet', 'un horaire', 'manquer', 'après', 'une place', 'jusqu’à', 'une expérience', 'ouvrir'].map(normalizeSearch));
+  const groups = new Map<string, Set<string>>();
+  for (const word of lessons.flatMap(lesson => lesson.vocabulary)) {
+    const form = normalizeSearch(word.target);
+    const ids = groups.get(form) ?? new Set<string>();
+    ids.add(word.id); groups.set(form, ids);
+  }
+  for (const [form, ids] of groups) assert.ok(ids.size === 1 || contextualForms.has(form), `${form}: unmarked duplicate senses ${[...ids].join(', ')}`);
 });
 
 test('topic grouping follows published replacements without duplicating their entries', () => {

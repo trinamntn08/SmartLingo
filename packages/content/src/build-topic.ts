@@ -9,7 +9,7 @@ export type WordDraft = readonly [
 export type ShortLessonDraft = {
   slug: string;
   title: string;
-  level: 'A1' | 'A2';
+  level: Lesson['level'];
   outcome: string;
   words: readonly WordDraft[];
   dialogue: readonly { role: string; target: string; meaning: string }[];
@@ -28,6 +28,7 @@ export type TopicDraft = {
   slug: string;
   title: string;
   role: string;
+  revision?: number;
   lessons: readonly ShortLessonDraft[];
 };
 
@@ -41,7 +42,7 @@ export function buildTopic(topic: TopicDraft): Lesson[] {
       pictureAlt: details?.picture ? `Study illustration for ${meaning}` : 'An open vocabulary notebook',
     }));
     return lessonSchema.parse({
-      id: lessonId, revision: 2, status: 'draft', language: 'fr-FR', explanationLanguage: 'en',
+      id: lessonId, revision: topic.revision ?? 1, status: 'draft', language: 'fr-FR', explanationLanguage: 'en',
       title: part.title, subtitle: part.title, outcome: part.outcome, level: part.level,
       topic: topic.title, role: topic.role, durationMinutes: 7, vocabulary,
       dialogue: part.dialogue, grammar: part.grammar,
@@ -54,7 +55,7 @@ export function buildTopic(topic: TopicDraft): Lesson[] {
         almostAnswers: [], hint: part.sentence.hint, explanation: part.sentence.explanation,
       },
       provenance: {
-        author: 'Original SmartLingo AI-assisted draft, 2026-11-14',
+        author: 'Original SmartLingo AI-assisted curriculum rework, 2026-11-15',
         rights: 'Original examples and code-drawn illustrations; research references in docs/CURRICULUM_RESEARCH.md. No third-party course text or media copied.',
         review: 'Owner review required: French, meanings, estimated A1/A2 levels, activities and media. No audio reviewed.',
       },

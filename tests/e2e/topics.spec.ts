@@ -1,16 +1,39 @@
 import { test, expect } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
+import { groupLessonTopics, matchesVocabulary } from '@smartlingo/domain';
+
+const topics = groupLessonTopics(lessons);
+const groceryCount = topics.find(topic => topic.name === 'Groceries')!.vocabulary.length;
 
 async function expectPicturesLoaded(page: import('@playwright/test').Page) {
   await expect.poll(() => page.locator('img').evaluateAll(images => images.length > 0
     && images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
 }
 
+test('new foundations and A2 experience lessons expose translated study material without API', async ({ page }) => {
+  await page.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/');
+  for (const [slug, level] of [['essentials', 'foundation'], ['past', 'A2']] as const) {
+    const lesson = lessons.find(item => item.id.startsWith(`fr.${slug}.`) && item.level === level)!;
+    const topicButton = page.getByRole('button', { name: `Topic ${lesson.topic}`, exact: true });
+    await topicButton.scrollIntoViewIfNeeded();
+    await topicButton.click();
+    await page.getByRole('button', { name: level === 'foundation' ? 'Foundations level' : 'A2 level', exact: true }).click();
+    await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
+    const entry = lesson.vocabulary[0];
+    await expect(page.getByText(entry.meaning, { exact: true })).toBeVisible();
+    await expect(page.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+    await expect(page.getByText(lesson.dialogue[0].meaning, { exact: true })).toBeVisible();
+    await expect(page.getByText(lesson.grammar.explanation, { exact: true })).toBeVisible();
+  }
+});
+
 test('topic words are directly readable, searchable and save to the notebook without API', async ({ page }, info) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Explore', exact: true }).click();
-  await expect(page.getByText('12 everyday topics · A1–A2', { exact: true })).toBeVisible();
+  await expect(page.getByText('24 everyday topics · Foundations, A1–A2', { exact: true })).toBeVisible();
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
   await page.getByRole('button', { name: 'Explore Health and appointments →', exact: true }).click();
@@ -27,7 +50,8 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await page.getByRole('button', { name: 'Save un rendez-vous', exact: true }).click();
   await expect(page.getByText('Saved un rendez-vous to your notebook.', { exact: true })).toBeVisible();
   await search.fill('rendez');
-  await expect(page.getByRole('heading', { name: 'Vocabulary · 1', exact: true })).toBeVisible();
+  const matches = topics.find(topic => topic.name === 'Health and appointments')!.vocabulary.filter(entry => matchesVocabulary(entry, 'rendez')).length;
+  await expect(page.getByRole('heading', { name: `Vocabulary · ${matches}`, exact: true })).toBeVisible();
   await page.screenshot({ path: info.outputPath('topic-word-search.png'), fullPage: true });
   await search.fill('no-such-word');
   await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
@@ -103,12 +127,12 @@ test('desktop topic pane stays to the left and switches an open lesson directly 
   await page.getByRole('button', { name: `Open ${groceriesLesson.subtitle}`, exact: true }).click();
   await expect(page.getByRole('heading', { name: groceriesLesson.vocabulary[0].target, exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Topic Groceries', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await expect(page.getByRole('button', { name: /Start restaurant practice/ })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).focus();
   await page.keyboard.press('Enter');
@@ -128,7 +152,7 @@ test('320px horizontal topic strip reaches topics and topic changes clear stale 
   await groceries.scrollIntoViewIfNeeded();
   await expect(groceries).toBeInViewport();
   await groceries.click();
-  await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);
   await expect(search).toHaveValue('');

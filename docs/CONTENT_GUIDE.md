@@ -7,8 +7,9 @@ For topic progression, research sources and vocabulary-coherence audits, use the
 ## Draft a lesson
 - State one useful outcome and approximate level.
 - Teach 6-10 items in a situation rather than an isolated list.
-- Group short lessons into topic banks with 30–50 distinct words/phrases per topic. Keep at least one A1 and one A2 lesson; labels are estimates subject to review.
+- Group short lessons into topic banks with 30–50 distinct words/phrases per topic. Use foundations, A1 and A2 where the communicative demands justify them; a foundations bank or an A2-only bank need not force an unsuitable level merely for symmetry. Labels are estimates subject to review.
 - Include noun articles/gender, a specific sense, natural French examples, English meaning, and register.
+- Prefer short, complete examples that actually demonstrate the target sense. Do not impose a minimum word count or add subordinate clauses merely to make an example longer. Teach common formulas before their full grammar when helpful, and explain that choice.
 - Pair concrete vocabulary with unambiguous pictures; use alt text.
 - Use explicit meaning matching for abstract/unillustrated entries. A contextual notebook is not a literal depiction; do not test an abstract word against it as a picture.
 - Topic banks and lesson overviews show words together. Original bundled drawings in `packages/content/src/visuals.ts` associate stable IDs with exact targets without rewriting lesson revisions; see [media records](MEDIA_SOURCES.md). An abstraction can stay text-supported.

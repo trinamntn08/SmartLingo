@@ -3,12 +3,14 @@ import assert from 'node:assert/strict';
 import { lessons } from '@smartlingo/content';
 import { vocabularySchema } from '../src/index';
 
-test('revised drafts have fuller examples and separate noun gender from optional notes', () => {
+test('draft examples are translated and noun gender remains separate from optional notes', () => {
   const entries = new Map(lessons.flatMap(lesson => lesson.vocabulary).map(entry => [entry.id, entry]));
-  for (const lesson of lessons) { assert.equal(lesson.revision, 2); assert.equal(lesson.status, 'draft'); }
+  for (const lesson of lessons) { assert.ok(lesson.revision >= 1); assert.equal(lesson.status, 'draft'); }
   for (const entry of entries.values()) {
-    assert.ok(entry.example.split(/\s+/).length >= 8, `${entry.id}: a full everyday example, not a short fragment`);
+    assert.ok(entry.example.trim().length > 0 && entry.exampleMeaning.trim().length > 0, `${entry.id}: translated example`);
+    assert.doesNotMatch(entry.example, /\b(?:TODO|TBD)\b|\.\.\.|…/, `${entry.id}: complete example rather than an unfinished template`);
     assert.doesNotMatch(entry.note, /^(?:Masculine|Feminine) noun\b/i, entry.id);
+    assert.doesNotMatch(JSON.stringify(entry), /\?(?=\p{L})|\uFFFD|Ã|â€™/u, `${entry.id}: intact UTF-8 accents and apostrophes`);
   }
   assert.equal(entries.get('fr.cafe')?.gender, 'masculine');
   assert.equal(entries.get('fr.eau')?.gender, 'feminine');

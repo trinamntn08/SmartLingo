@@ -6,6 +6,8 @@ import { draftSaveSchema, lessonSchema, revisionRequestSchema, type Lesson } fro
 import { migrateContentDatabase } from './migrations';
 import { EditorError } from './editor-error';
 
+type SeedBaseline = { revision: number; sha256: string; nextRevision?: number };
+
 export interface LessonRepository {
   listLessons(): Lesson[];
   getLesson(id: string): Lesson | undefined;
@@ -112,7 +114,7 @@ export class SqliteLessonRepository implements LessonRepository {
   }
 
   /** Append trusted seed updates only to an exact, untouched prior draft; retain every revision. */
-  seed(inputs: readonly unknown[], baselines?: Readonly<Record<string, { revision: number; sha256: string }>>): void {
+  seed(inputs: readonly unknown[], baselines?: Readonly<Record<string, SeedBaseline | readonly SeedBaseline[]>>): void {
     const lessons = inputs.map(input => lessonSchema.parse(input));
     if (lessons.some(lesson => lesson.status !== 'draft')) throw new Error('Preview seeds must be drafts');
     this.transaction(() => {
@@ -123,9 +125,10 @@ export class SqliteLessonRepository implements LessonRepository {
           continue;
         }
         const baseline = baselines && Object.hasOwn(baselines, lesson.id) ? baselines[lesson.id] : undefined;
-        if (baseline && existing.status === 'draft' && existing.revision === baseline.revision &&
-          lesson.revision === baseline.revision + 1 &&
-          createHash('sha256').update(JSON.stringify(existing)).digest('hex') === baseline.sha256) {
+        const candidates: readonly SeedBaseline[] = !baseline ? [] : Array.isArray(baseline) ? baseline : [baseline as SeedBaseline];
+        if (existing.status === 'draft' && candidates.some(candidate => existing.revision === candidate.revision &&
+          lesson.revision > existing.revision && lesson.revision === (candidate.nextRevision ?? candidate.revision + 1) &&
+          createHash('sha256').update(JSON.stringify(existing)).digest('hex') === candidate.sha256)) {
           this.insertLesson(lesson);
         }
       }

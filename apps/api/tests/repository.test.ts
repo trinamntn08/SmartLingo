@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
-import { lessons, restaurantLesson } from '@smartlingo/content';
+import { lessons, restaurantLesson, previousSeedFingerprints } from '@smartlingo/content';
 import { lessonSchema } from '@smartlingo/domain';
 import { migrateContentDatabase } from '../src/migrations';
 import { InvalidStoredLessonError, SqliteLessonRepository } from '../src/repository';
@@ -193,6 +193,49 @@ test('trusted refresh seeds new databases and validates every incoming draft bef
     assert.deepEqual(existing.getLesson(original.id), original);
     assert.equal(existing.getLesson('fr.published'), undefined);
   } finally { existing.close(); }
+});
+
+test('explicit historical destinations refresh an untouched older draft without publishing or replacing edits', () => {
+  const { original, baselines } = seedRefreshFixture();
+  const revisionTwo = lessonSchema.parse({ ...original, revision: 2, title: 'Second bundled draft' });
+  const updated = lessonSchema.parse({ ...original, revision: 3, title: 'Reviewed rework draft' });
+  const history = { [original.id]: [
+    { ...baselines[original.id], nextRevision: 3 },
+    { revision: 2, sha256: createHash('sha256').update(JSON.stringify(revisionTwo)).digest('hex') },
+  ] };
+  for (const head of [original, revisionTwo, { ...original, title: 'Owner edit' },
+    { ...revisionTwo, title: 'Owner edit' }, { ...original, status: 'published' as const },
+    { ...revisionTwo, revision: 4 }]) {
+    const directory = mkdtempSync(join(tmpdir(), 'smartlingo-rework-'));
+    const path = join(directory, 'content.sqlite');
+    const repository = new SqliteLessonRepository(path);
+    try {
+      repository.saveLesson(head);
+      repository.seed([updated], history);
+      repository.seed([updated], history);
+      const untouched = head === original || head === revisionTwo;
+      assert.deepEqual(repository.getLesson(head.id), untouched ? updated : lessonSchema.parse(head));
+      assert.equal(repository.listPublishedLessons().length, head.status === 'published' ? 1 : 0);
+      // Every recorded historical payload remains readable and unchanged.
+      const database = new DatabaseSync(path);
+      try {
+        const row = database.prepare('SELECT payload FROM lesson_revisions WHERE id = ? AND revision = ?').get(head.id, head.revision)!;
+        assert.deepEqual(JSON.parse(row.payload as string), lessonSchema.parse(head));
+      } finally { database.close(); }
+    } finally {
+      repository.close();
+      rmSync(directory, { recursive: true, force: true });
+    }
+  }
+});
+
+test('bundled refresh destinations have exact revision-1/2 fingerprints and target existing revision-3 drafts', () => {
+  assert.equal(Object.keys(previousSeedFingerprints).length, 60);
+  for (const [id, baselines] of Object.entries(previousSeedFingerprints)) {
+    assert.equal(lessons.find(lesson => lesson.id === id)?.revision, 3, id);
+    assert.deepEqual(baselines.map(baseline => baseline.revision), [1, 2]);
+    for (const baseline of baselines) assert.match(baseline.sha256, /^[a-f0-9]{64}$/);
+  }
 });
 
 test('corrupted stored heads fail safely and roll back earlier seed appends in the batch', () => {

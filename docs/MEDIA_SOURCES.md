@@ -2,6 +2,8 @@
 
 Created 2026-11-14 for the visual topic browser.
 
+Curriculum rework, 2026-11-15: the 125 existing bindings are retained, with 122 used by the current banks. Three bindings (`fr.bakery.chouquette`, `fr.administration.telephone`, `fr.administration.enveloppe`) remain explicitly historical so older notebook captures and lesson revisions keep their original pictures. New topics add no images. Abstract/unillustrated entries use visible meanings and meaning matching; the expanded course does not claim full picture coverage.
+
 ## Original bundled drawings
 The ten initial illustrations live in apps/learner/src/ui/Illustration.tsx. New reusable vector drawings and word associations live in packages/content/src/visuals.ts and render through WordIllustration.tsx. All new SVG geometry and compositions were written originally for SmartLingo with AI assistance. No stock photo, Facebook image, textbook artwork, emoji font, icon library or third-party image was copied or fetched. No third-party attribution or licence grant is claimed. The owner must still review clarity, sense, accessibility descriptions and suitability before wider publication.
 

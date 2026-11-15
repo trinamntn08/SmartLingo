@@ -162,6 +162,12 @@ const drawings = {
 type DrawingKey = keyof typeof drawings;
 type VisualEntry = readonly [id: string, target: string, drawing: DrawingKey, alt: string, kind?: WordVisual['kind']];
 
+// Retained for older lesson revisions and personal notebook captures. These
+// are deliberately absent from the current task-led banks, not unknown IDs.
+export const historicalWordVisualIds: readonly string[] = [
+  'fr.bakery.chouquette', 'fr.administration.telephone', 'fr.administration.enveloppe',
+];
+
 const entries: readonly VisualEntry[] = [
   ['fr.restaurant.table', 'une table', 'table', 'An oval wooden table with four legs'],
   ['fr.restaurant.person', 'une personne', 'person', 'A person standing'],

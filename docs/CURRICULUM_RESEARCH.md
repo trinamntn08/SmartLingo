@@ -1,23 +1,51 @@
-# Practical beginner curriculum research
+# Practical French curriculum research and rework
 
-Researched 2026-11-14. These references inform situation selection and approximate difficulty. They are not vocabulary lists copied into SmartLingo, a syllabus endorsement, or a claim that individual words have official CEFR levels.
+Researched 2026-11-15, Europe/Paris. Owner request: review/rework every current topic and its words, expand useful topics, examples and courses. All runtime material remains an original AI-assisted draft requiring owner review. This is a practical beginner curriculum, not certification or a complete validated CEFR course.
 
-| Primary reference | What informs this draft |
-| --- | --- |
-| [Council of Europe CEFR global scale](https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale/) | A1 concrete everyday needs and introductions; A2 familiar personal, shopping, local-area and employment exchanges. |
-| [Council of Europe CEFR Companion Volume, 2020](https://rm.coe.int/common-european-framework-of-reference-for-languages-learning-teaching/pdf/16809ea0d4) | Routine goods/services, travel, lodging, food, directions, quantities, prices and simple social interaction; no descriptor passages reproduced. |
-| [France Éducation international DELF A1 overview](https://www.france-education-international.fr/diplome/delf-tout-public/niveau-a1?langue=en) | Adult beginner context and simple personal information. Search excerpt available; the A2 page returned access denied, so no A2-specific claims rely on it. |
+## Evidence actually inspected
 
-## Selection and rights
-The owner's [Facebook photo-page reference](https://www.facebook.com/profile.php?id=61583018703953&sk=photos) was attempted on 2026-11-14. Fetching was throttled and an ID search returned no results. Its posts, images and word lists were not inspected or imported; no content or rights claims rely on that page.
+| Reference | Evidence type and supported use | Limits |
+| --- | --- | --- |
+| [Council of Europe global scale](https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale) | Competence frame: A1 concrete everyday needs and personal exchanges; A2 routine information and immediate personal, shopping, local-area and employment needs. | Describes performance, not official word levels. Lesson labels are editorial estimates. |
+| [TV5MONDE vocabulary catalogue](https://apprendre.tv5monde.com/fr/aides/vocabulaire) | Inspiration: everyday pharmacy, meals, kitchen, office, numbers, family and transport language. | Catalogue coverage informs scope; no word list or exercise copied. |
+| [TV5MONDE pharmacy memo](https://apprendre.tv5monde.com/fr/aides/vocabulaire-la-pharmacie-0) | Inspiration: pharmacy language belongs in beginner practical exchanges. | Does not validate treatment advice or each SmartLingo health expression. |
+| [CLE beginner vocabulary resources](https://progressive.cle-international.com/9782090398489) | Inspiration: adult beginners and communicative settings including invitations, directions, holidays, encounters and recipes. | Public resource labels inspected; recordings/exercises not imported. |
+| [CLE complete beginner resources](https://progressive.cle-international.com/9782090382181) | Inspiration: a separate complete-beginner entry point supports scaffolding. | Bibliographic/resource page, not access to the book's contents. |
+| [CLE intermediate resources](https://progressive.cle-international.com/9782090398571) | Inspiration: work and everyday-life situations support revisiting familiar domains. | Spans A2/B1; SmartLingo does not treat the whole resource as A2. |
+| [Hachette Cosmopolite 1 contents](https://hachettefle.pl/wp-content/uploads/2022/07/Cosmopolite_1_spis_tresci.pdf) | Inspiration: broad links among introductions, dates, locations, accommodation, health, daily life, study, invitations, food, purchases and recent events. | Five-page contents used for triangulation only. SmartLingo uses its own order and original text. |
 
-Twelve situations: restaurant, bakery, groceries, clothes/shopping, home/housing, transport, health/appointments, work/study, services/paperwork, people/introductions, time/routine and leisure/weather. Each topic has 30 distinct words or usable phrases across five short lessons. Entries include French articles where appropriate, a specific English sense, original French examples, translations and English notes. A1/A2 labels are author estimates at lesson level, not lexical certification.
+Actual access date: 2026-11-15. TV5MONDE, CLE and Hachette are independent FLE references; the Council of Europe supplies the competence frame. Coverage is compared across the course and audit notes below. Selecting individual words, prerequisites, early formulas and digital/paperwork/job-search tasks are editorial decisions, not source-prescribed inventories. No frequency corpus, exhaustive dictionary verification, native-speaker validation or independent human teaching trial was performed.
 
-All new prose/examples/activities are original AI-assisted drafts. No exam tasks, textbook extracts, dictionary definitions, course lists, third-party pictures or audio were imported. Existing code-drawn concrete illustrations remain; abstract/unillustrated entries use no literal picture. New matching activities show an English meaning and ask for the French. The generic notebook icon is explicitly contextual. Health and administration teach language, not medical or legal advice.
+The CLE commercial product link returned 403; Didier companion A1/A2 pages redirected to inaccessible login; an attempted TV5 Première classe URL was inaccessible. No claims depend on unavailable contents. The earlier Facebook photo reference remains uninspected and unused. No proprietary vocabulary inventory, textbook dialogue, exercise, third-party image or recording was imported.
 
-## Owner review before publication
-Check natural French and English sense, gender, register, estimated difficulty, usefulness, translations, dialogue coherence, all valid sentence alternatives and visual suitability. Automated schema/count/token checks establish structural consistency only. Device speech remains synthetic, disclosed in Profile; no voice quality/native-speaker review is claimed. Review acknowledgement and saved preview remain required for local publication.
+## Findings and changes
 
-## Everyday examples revision, 2026-11-15
+- Broad themes mixed objects, actions and incidental time words without always making the task clear. Keep useful nouns; replace weak/specialist padding with task-essential actions and chunks using new sense IDs.
+- An eight-word example minimum made simple entries unnecessarily long. Use complete, natural examples appropriate to the lesson; a short request can be complete. English senses and translations remain visible.
+- Several dialogues stopped before a practical response. Complete each exchange, clarify speaker roles/register, and bound grammar load.
+- Foundations and connected A2 accounts needed explicit coverage. Add separate banks, allowing level-specific banks instead of forcing unsuitable A1/A2 symmetry.
+- Canonical sense IDs and explicit aliases distinguish repeated practice from new senses. Shared senses have a canonical study card; dialogues provide contextual reuse.
 
-All 353 canonical entries now have fuller original everyday French examples with matching English translations. Gender metadata appears separately from useful usage notes; notes may be empty. Targets, meanings, IDs, exercises, dialogue and original media remain unchanged. Examples use draft revision 2; immutable API history and owner-edited heads/publications are preserved by an exact historical-fingerprint guard. Independent AI-assisted French review corrected several wording details; this is not owner approval or native-speaker validation. No additional external content, images or audio were imported. See [ADR 0011](decisions/0011-example-revisions-and-gender.md).
+Detailed editorial audit records cover [food, shopping, housing and travel](curriculum-food-audit.md), [daily life, health, people, services and work](curriculum-daily-audit.md), and [new foundations, communication and experiences](curriculum-expansion.md). These do not grant owner approval.
+
+## Suggested progression
+
+The [complete review catalogue](COURSE_CATALOGUE.md) lists all 24 banks, 120 lessons and targets: 741 vocabulary appearances, 689 canonical senses and 680 distinct written forms. There are four foundation, 65 A1 and 51 A2 lessons. Bank counts include deliberate recycling; they are not counts of newly learned words.
+
+[course-sequence.ts](../packages/content/src/course-sequence.ts) records suggested prerequisites. Free exploration stays available; prerequisites are guidance, not app locks. Start with foundations and A1 lessons, returning to A2 lessons after relevant basics. Bank placement does not mean every lesson in an early bank precedes every lesson in a later bank.
+
+| Stage | Topics | Purpose |
+| --- | --- | --- |
+| First exchanges | Essentials; Numbers; People and introductions; Calendar; Time and daily routine | Ask for help, repair understanding, exchange details and arrange a time. |
+| Food and purchases | Bakery; Restaurant; Groceries; Cooking; Clothes and shopping | Request items, handle quantities, prepare food and explain a purchase problem. |
+| Town and home | Directions; Transport; Home and housing; Accommodation | Find places, use transport, describe home and manage a stay. |
+| Services, study and work | Health and appointments; Digital life; Services and paperwork; Education; Work and study; Job search | Describe needs, clarify instructions and take part in routine tasks. |
+| Social interaction | Leisure and weather; Social plans; Past experiences; Opinions and choices | Agree on plans, recount an event and compare options. |
+
+The original sixty lessons retain their IDs at revision 3; sixty added lessons start at revision 1. Immutable refresh accepts exact untouched historical seeds, preserving owner-edited heads and publications; [ADR 0015](decisions/0015-curriculum-rework.md) explains compatibility. Personal notebook examples and historical learning events are not rewritten. Repeated bank appearances are practice, not new senses.
+
+## Learning and review limits
+
+Short lessons contain 6–10 useful items, original bilingual examples, a can-do outcome, dialogue, optional grammar support, meaning/picture matching and sentence assembly. They provide supported recognition and guided production, not independent listening assessment, open conversation, native audio or proof of proficiency. Abstract vocabulary stays text-supported; a notebook is not a literal word picture. Existing media are reused only with matching IDs and targets.
+
+Before publication, inspect French accuracy, articles/gender, English meanings, register, prerequisites, difficulty, relevance, dialogue roles, sentence alternatives and media in the saved-revision preview. Useful formulas may precede conjugation mastery with an explanation. Health/administration contexts teach language, without eligibility, legal-procedure or treatment advice. Automated checks establish structure and integrity, not teaching effectiveness or French correctness. Publication remains an explicit owner action.

@@ -6,7 +6,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/offline-web-downloads`, based on validated example/control checkpoint `f40ddcf` (navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
+- Current branch: `chore/expo-build-tool-audit`, based on validated offline checkpoint `fea47df` (examples `f40ddcf`, navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Inspect live remote history before any future integration. A local checkpoint is not remote backup.
 
@@ -39,6 +39,8 @@ For owner testing, a stable exported preview was started at `http://localhost:80
 
 Known dependency issue: three moderate npm audit findings in Expo's fingerprint/minimatch build-tool chain. No forced SDK downgrade or ineffective override retained; see [testing limitations](TESTING.md). This is a local preview, not a distribution-ready release.
 
+Audit recheck on 2026-11-15 confirmed current stable Expo/fingerprint still selects the affected minimatch. A bounded patched-version comparison passed, but the scoped override did not change the actual installed version; it and the incidental lockfile hoist were reverted. This remains unresolved rather than an asserted fix. See [the investigation](plans/0011-build-tool-audit.md).
+
 ## Not implemented
 
 - Full editor (target/exercise/media editing, create/archive/restore/import/export/unpublish) and actual owner content approval.
@@ -50,6 +52,6 @@ Explicitly downloaded app assets cold-load with network/API unavailable in Chrom
 
 ## Next task
 
-Recheck the documented Expo build-tool audit chain for an upstream-compatible resolution before wider distribution; preserve the stable owner preview while doing so. Then address server curriculum backup/recovery or the next bounded editor slice. Owner review and physical-phone storage/audio/installation testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Per-topic packs, downloaded speech and full editor completion remain later work.
+Address server curriculum backup/recovery as the next bounded slice, preserving the stable owner preview. Revisit the unresolved build-tool audit when a compatible upstream release/resolution becomes available; the latest investigation did not fix it. Owner review and physical-phone storage/audio/installation testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Per-topic packs, downloaded speech and full editor completion remain later work.
 
 No public launch date is committed. Hook/role files do not prove runtime loading/trust; no usage-limit lookup or automatic resume capability was available in this session.

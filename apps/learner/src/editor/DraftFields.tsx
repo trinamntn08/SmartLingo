@@ -20,13 +20,16 @@ export function DraftFields({ draft, onChange, disabled }: { draft: Lesson; onCh
   function changeGender(index: number, gender: Vocabulary['gender']) {
     onChange({ ...draft, vocabulary: draft.vocabulary.map((word, at) => at === index ? { ...word, gender, note: vocabularyPresentation(word).note } : word) });
   }
+  function changeDialogue(index: number, field: keyof Lesson['dialogue'][number], value: string) {
+    onChange({ ...draft, dialogue: draft.dialogue.map((line, at) => at === index ? { ...line, [field]: value } : line) });
+  }
   return <View style={{ gap: 24 }}>
     <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Lesson introduction</Text>
       <Field label="Lesson title" value={draft.title} disabled={disabled} multiline={false} onChange={title => onChange({ ...draft, title })} />
       <Field label="Lesson subtitle" value={draft.subtitle} disabled={disabled} multiline={false} onChange={subtitle => onChange({ ...draft, subtitle })} />
       <Field label="Practical outcome" value={draft.outcome} disabled={disabled} onChange={outcome => onChange({ ...draft, outcome })} />
     </View>
-    <View style={s.notice}><Text style={s.body}>This first editor changes headings, explanations, and vocabulary support. French target words, dialogues, pictures, and exercise answers stay fixed in this slice.</Text></View>
+    <View style={s.notice}><Text style={s.body}>Edit headings, vocabulary support, dialogue text and grammar help. Vocabulary target words, pictures, exercise answers and the order of dialogue lines stay fixed in this editor.</Text></View>
     {draft.vocabulary.map((word, index) => <View key={word.id} style={s.card}><Text style={s.eyebrow}>Vocabulary {index + 1} · {word.id}</Text><Text accessibilityRole="header" style={s.heading}>{word.target}</Text>
       <View style={s.row}>{([
         [undefined, 'No gender'], ['masculine', 'm.'], ['feminine', 'f.'], ['both', 'm./f.'],
@@ -37,6 +40,15 @@ export function DraftFields({ draft, onChange, disabled }: { draft: Lesson; onCh
       <Field label={`${word.target} — Example translation`} value={word.exampleMeaning} disabled={disabled} onChange={value => changeWord(index, 'exampleMeaning', value)} />
       <Field label={`${word.target} — Word note`} value={word.note} disabled={disabled} onChange={value => changeWord(index, 'note', value)} />
     </View>)}
+    <View style={{ gap: 16 }}><Text accessibilityRole="header" style={s.heading}>Dialogue</Text>
+      <Text style={s.body}>Edit each speaker role, French line and English translation. Save a draft, then use the lesson preview to review the conversation.</Text>
+      {draft.dialogue.map((line, index) => <View key={index} style={s.card}>
+        <Text style={s.eyebrow}>Dialogue line {index + 1}</Text>
+        <Field label={`Dialogue line ${index + 1} — Speaker role`} value={line.role} disabled={disabled} multiline={false} onChange={value => changeDialogue(index, 'role', value)} />
+        <Field label={`Dialogue line ${index + 1} — French text`} value={line.target} disabled={disabled} onChange={value => changeDialogue(index, 'target', value)} />
+        <Field label={`Dialogue line ${index + 1} — English translation`} value={line.meaning} disabled={disabled} onChange={value => changeDialogue(index, 'meaning', value)} />
+      </View>)}
+    </View>
     <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Optional grammar help</Text>
       <Field label="Grammar title" value={draft.grammar.title} disabled={disabled} multiline={false} onChange={title => onChange({ ...draft, grammar: { ...draft.grammar, title } })} />
       <Field label="Grammar explanation" value={draft.grammar.explanation} disabled={disabled} onChange={explanation => onChange({ ...draft, grammar: { ...draft.grammar, explanation } })} />

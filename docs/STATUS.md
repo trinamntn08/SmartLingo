@@ -6,7 +6,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/curriculum-database-backup`, based on audit investigation `5aa1bf2` and validated offline checkpoint `fea47df` (examples `f40ddcf`, navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
+- Current branch: `feat/edit-dialogue-lines`, based on curriculum snapshot checkpoint `b076f3d`, audit investigation `5aa1bf2` and validated offline checkpoint `fea47df` (examples `f40ddcf`, navigation `8009796`, visual browser `1ffb044`, topic expansion `042086d`, visible study `3653a5e`, manual review `546965d`, backup `bc1b08f`, editor `7a84e60`, foundation `83c5573`).
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Inspect live remote history before any future integration. A local checkpoint is not remote backup.
 
@@ -23,7 +23,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 - Browser IndexedDB version-1 adapter; idempotent attempt retries, conflicting event-ID rejection, notebook save/edit and reload. Atomic lesson capture preserves personal edits across stale tabs.
 - Optional French synthetic device voice through labelled, keyboard-accessible 44px speaker icons beside vocabulary, dialogue and notebook text, with cancellation/error/text fallback. No API key, paid generation, microphone, recording, or external AI service is used.
 - Loopback curriculum API with immutable SQLite revisions. Latest drafts and published catalogue are selected separately; a newer draft cannot replace the current publication. Startup appends updated seed drafts only above exact historical revision-1 fingerprints; owner edits/newer drafts/publications remain untouched, with no automatic approval. See [ADR 0011](decisions/0011-example-revisions-and-gender.md).
-- Separate local editor: lesson headings/outcome, vocabulary meanings/examples/optional notes/gender and grammar fields; saved-revision lesson preview uses memory-only practice. Explicit owner review plus a bounded, expiring saved-preview receipt is required for publication. Conflicting/stale saves cannot overwrite newer revisions.
+- Separate local editor: lesson headings/outcome, vocabulary meanings/examples/optional notes/gender, existing dialogue speaker roles/French text/English translations and grammar fields. Blank required fields fail before a save request; dialogue line count/order stay fixed. Saved-revision lesson preview uses memory-only practice. Explicit owner review plus a bounded, expiring saved-preview receipt is required for publication. Conflicting/stale saves cannot overwrite newer revisions.
 - Exact loopback Host/origin, JSON/custom-header and CORS guards protect local browser editing. These are not account authentication; public/LAN hosting remains unsupported.
 - Versioned IndexedDB migrations retain prior attempts/notebook/cache; v3 adds immutable manual review ratings. Explicit Profile load keeps publications available after API shutdown/reload and preserves earlier learner history.
 - Private learner backup download and explicit merge restore with file preview, version/UTF-8/5 MB validation, consistent snapshots, idempotent events, personal-note preservation and all-store atomic rollback on conflicts. Reload shows restored data. Server drafts/credentials/recordings are excluded; backups are unencrypted and do not back up the server database.
@@ -34,7 +34,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Verified in this step
 
-Repository/TypeScript and all 18 tooling/93 application tests pass. New snapshot tests cover every revision/publication, committed WAL, independent recovery, existing/alias/racing destinations, corrupt history/schema/indexes, staging cleanup and native backup deadline rejection; actual CLI child processes and a recovered-file API on an isolated port pass. Independent review found quick_check missed damaged primary-key indexes; full integrity_check and a concrete regression fix it. No owner data/preview was used for backup tests. Prior unchanged learner/export checks remain: current web export, 31 browser cases/one deliberate publication skip and six desktop/320px offline cases passed, with desktop/narrow screenshots inspected. The served export stays stable. Exact results are in [the checkpoint](SESSION_CHECKPOINT.md).
+Latest small editor step passes repository/TypeScript, a separate production export and seven focused browser editor cases (one deliberate duplicate publication skip). Changed dialogue role/French/English survives draft save, temporary preview, explicit test publication and cached reload with API unavailable; blank French sends no save request, and narrow home navigation preserves unsaved dialogue. 320px screenshot inspected. Primary self-reviewed this small UI-only step. No schema/storage/API/curriculum change; prior 18 tooling/93 application tests, full 31-case browser baseline and six offline cases remain valid for unchanged modules. The tested candidate was then copied into the running preview, retaining old hashed scripts for existing tabs. All four served file hashes/sizes match, and a fixture-only isolated browser renders the production editor with no page errors/edits. Exact results are in [the checkpoint](SESSION_CHECKPOINT.md).
 
 For owner testing, a stable exported preview was started at `http://localhost:8082`, with the actual local curriculum server at `http://127.0.0.1:3001`; HTTP 200 and health ok were confirmed. API startup applies the reviewed immutable seed policy to the local database. No learner writes or publication were performed by the agent in that preview. Check current listeners before starting duplicates.
 
@@ -44,7 +44,7 @@ Audit recheck on 2026-11-15 confirmed current stable Expo/fingerprint still sele
 
 ## Not implemented
 
-- Full editor (target/exercise/media editing, create/archive/restore/import/export/unpublish) and actual owner content approval.
+- Full editor (target/exercise/media editing, dialogue line add/remove/reorder, create/archive/restore/import/export/unpublish) and actual owner content approval.
 - Per-topic offline packs/downloaded speech, production/listening or adaptive review, editor backup controls/automatic or in-place curriculum recovery and learner data reset controls.
 - AI audio/cache, vocabulary assistant, push-to-talk/conversations, usage controls, provider adapters.
 - Native storage/audio and Android/iOS packages; onboarding/preferences and cloud accounts/deployment.
@@ -53,6 +53,6 @@ Explicitly downloaded app assets cold-load with network/API unavailable in Chrom
 
 ## Next task
 
-Continue with a bounded editor capability (such as lesson target/exercise editing with validated preview) or explicit learner data reset controls, while preserving the stable owner preview. Revisit the unresolved build-tool audit when a compatible upstream release/resolution becomes available; the latest investigation did not fix it. Owner review and physical-phone storage/audio/installation testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Per-topic packs, downloaded speech and full editor completion remain later work.
+Continue with another bounded editor capability (such as lesson topic/role/estimated-level fields) or explicit learner data reset controls, while preserving the stable owner preview. Revisit the unresolved build-tool audit when a compatible upstream release/resolution becomes available; the latest investigation did not fix it. Owner review and physical-phone storage/audio/installation testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Per-topic packs, downloaded speech and full editor completion remain later work.
 
 No public launch date is committed. Hook/role files do not prove runtime loading/trust; no usage-limit lookup or automatic resume capability was available in this session.

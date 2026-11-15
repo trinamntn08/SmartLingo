@@ -30,5 +30,6 @@
 | [Everyday examples plan](plans/0009-everyday-examples.md) | Complete example sentences, compact gender and speaker icons |
 | [Offline web plan](plans/0010-offline-web-downloads.md) | Download/retry/update/removal and cold offline browser verification |
 | [Curriculum snapshot plan](plans/0012-curriculum-database-backup.md) | Read-only backups, no-overwrite recovery and configured API startup |
+| [Dialogue editor plan](plans/0013-edit-dialogue-lines.md) | Existing conversation line/role/translation edits through preview/publication |
 | [ADR template](templates/ADR.md) | Record a material technical decision |
 | [Execution-plan template](templates/EXECUTION_PLAN.md) | Plan and track substantial implementation |

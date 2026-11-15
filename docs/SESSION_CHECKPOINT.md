@@ -2,6 +2,14 @@
 
 Updated: 2026-11-15 (Europe/Paris).
 
+## Completed direct personal vocabulary
+
+Continued authorised remaining features after duration checkpoint `90634c2` and AI checkpoint `dece895`. Review now offers Add personal word: validated French/English/optional example, personal UUID IDs, confirmed save feedback, duplicate-click guard and existing stable retry behavior. Saved entries use ordinary edit/review/backup without API or curriculum changes. Invalid/cancelled forms write nothing. Failure retains fields and retries the original entry.
+
+Validation: `npm.cmd run check` passes; all24 focused notebook/AI/review/backup browser cases pass across desktop/narrow viewports, including six personal-entry cases with API blocked. Actual edit/reload/review/backup content and one-ID failed-write retry verified. Production export passes to ignored `.tmp/personal-notebook-export`; narrow screenshot inspected. Primary self-reviewed this small sequential feature. Existing all136 application/full47-browser and duration9-browser results remain the baseline for unchanged code. No paid calls, owner data/API/preview changes or storage/domain/API/content/dependency changes.
+
+The commit containing these notes captures this step; report its actual hash after Git confirms final staged checks/commit. Next bounded work: generated French speech/cache or another editor capability; live provider/hardware testing still needs local server configuration and owner testing. Latest usage observation at11:20 Europe/Paris: account allowance lookup unavailable, not zero/unlimited. Automatic resume not configured. Existing owner8082/API3001 and separate curriculum8083 preview remain preserved.
+
 ## Completed lesson-duration editing
 
 Continued the authorised remaining-feature work after AI checkpoint `dece895`. Added a raw text duration field, strict 1–60 whole-minute validation before save, existing unsaved-navigation/review protection and saved-preview estimate display. Existing domain/API/storage contracts and all curriculum remain unchanged. Validation messages now guide form correction without suggesting an API restart.

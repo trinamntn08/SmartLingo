@@ -6,9 +6,17 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/french-course-rework`, with curriculum checkpoint `baa3679`, AI practice `dece895`, duration editing `90634c2`, personal vocabulary `57a2f25` and the notebook-search checkpoint containing these notes. Each step preserves prior work.
+- Current branch: `feat/french-course-rework`, with curriculum checkpoint `baa3679`, AI practice `dece895`, duration editing `90634c2`, personal vocabulary `57a2f25` and notebook search `35f8853`. The working tree was clean at the start of this status review; these features were already committed.
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
-- Inspect live remote history before any future integration. A local checkpoint is not remote backup.
+- Live `git ls-remote --heads origin` on 2026-11-15 reports only `main` at `1c6e943`. The reviewed source checkpoint `35f8853` is 21 commits beyond that ancestor; the current feature branch is not on origin. Inspect remote history again before integration. A local checkpoint is not remote backup.
+
+## Current status review (2026-11-15)
+
+This review refreshes stale documentation and checkpoint bookkeeping; it adds no product feature. Required repository/TypeScript checks and all 18 tooling/136 application tests pass. The full Chromium browser rerun passes 57 tests with one intentional duplicate-publication skip. A fresh `npm audit --json` still exits 1 with three moderate findings in Expo/fingerprint/minimatch and no high/critical findings; no dependency change or remediation is claimed. Export/offline fault-injection suites were not repeated for these documentation-only changes; their earlier results below remain historical evidence.
+
+The latest notebook-search diff has no confirmed actionable code finding in this bounded primary review. README corrections cover current lesson counts/revisions, Foundations filtering, picture coverage, duration editing and implemented recorded-input AI. This is not a full codebase or human French-quality audit. The existing owner preview on 8082 and API on 3001 remain untouched; running exports/processes may predate current source. No build promotion, owner-data access or paid provider call was performed.
+
+Milestones: M1's local learner journey is implemented, with physical-phone/audio validation still open. M2 is partial (conversation/capture exist; generated cached speech and real-provider/device checks remain). M3 is partial (review/search/whole-app offline/publication/backups exist; owner approval, full editor and per-topic packs remain). M4 learner observation and M5 native preparation remain future work.
 
 ## Implemented
 
@@ -36,7 +44,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 - Calm manual recognition review for saved notebook revisions, with explicit reveal/rating, 1/3/7/14/30-day heuristic, separate supported days, local calendar/timezone handling and stable retries. No early/same-day schedule boosting; focus/date refresh keeps tabs current. Note edits start fresh practice without deleting historical ratings. Backup format2 includes ratings; version1 imports remain compatible.
 - Explicit Profile offline download of the exported app, all bundled draft lessons and pictures in the downloaded build (the earlier stable copy has 60 lessons/about 1.25 MB; the new isolated candidate has 120/about 1.4 MB). Available/saved complete-copy sizes, progress, ready/incomplete status, failure/retry/update and confirmed asset removal are shown. SHA256/size validation and staged completion records preserve prior copies on failed updates; root navigation falls back after a three-second stalled-network deadline. Removing owned asset caches preserves all learner IndexedDB stores and unrelated caches. Web Locks serialize worker-generation changes; browser management requires their support. Optional installation uses a web manifest/original SVG icon. Loopback export preview runs on 8082 with exact API origin access; development on 8081 remains a separate browser store. See [ADR 0012](decisions/0012-offline-web-assets.md) and [run instructions](../README.md#test-the-offline-ready-preview).
 - Separate CLI curriculum backup/recovery: read-only SQLite online snapshots preserve every draft/published revision and committed WAL data. Full integrity/schema/history validation, bounded row parsing and exclusive fresh-file publication refuse corrupt/foreign/future databases and occupied/colliding destinations. Recovery writes a new file; explicit existing-file `SMARTLINGO_DATABASE_PATH` configuration switches later API starts without overwriting the current database. No browser learning/credentials/recordings are included; no owner backup/restore or API switch was performed by the agent. See [ADR 0013](decisions/0013-curriculum-snapshots.md) and [commands](../README.md#back-up-and-recover-server-curriculum).
-- Development tooling, 18 tooling tests, 94 application tests, browser checks, offline exported-build checks, web export and run instructions. See [verification](TESTING.md) and [metadata editor plan](plans/0014-edit-lesson-metadata.md).
+- Development tooling, 18 tooling tests, 136 application tests, browser checks, offline exported-build checks, web export and run instructions. See [verification](TESTING.md) and [metadata editor plan](plans/0014-edit-lesson-metadata.md).
 
 ## AI practice verification
 
@@ -72,6 +80,14 @@ Explicitly downloaded app assets cold-load with network/API unavailable in Chrom
 
 ## Next task
 
-Continue with generated French speech/cache, the next bounded editor capability (order or validated target/exercise editing), or learner data reset with an explicit cross-tab safety design. Preserve the stable owner preview and incorporate owner testing feedback first when supplied. Revisit the unresolved build-tool audit when a compatible upstream release/resolution becomes available; the latest investigation did not fix it. Owner review and physical-phone storage/audio/installation testing remain needed. Keep actual curriculum unapproved until the owner uses the review/publication flow. Per-topic packs, downloaded speech and full editor completion remain later work.
+Recommended order, without starting a new feature under this status-only request:
 
-No public launch date is committed. Hook/role files do not prove runtime loading/trust; no usage-limit lookup or automatic resume capability was available in this session.
+1. Validate one complete owner journey: restaurant lesson → save/edit → review → backup/reload → offline return → optional AI role-play. Review a small initial curriculum set and test actual French audio/microphone plus a physical phone/Safari through a separately designed supported access route; current serving is loopback-only. Use that feedback before expanding further. Preserve the stable owner preview until an explicit rebuild/promotion step.
+2. Next bounded implementation: generated French speech/cache, with server-only credentials, explicit generation, text/language/voice/settings cache identity, revision invalidation, download/replay without repeated paid calls and text fallback. Fake-provider checks first; real generation/quality review is separate.
+3. Extend one editor journey at a time: validated target/exercise editing or lesson order, then dialogue line changes and create/archive/restore/import/export/unpublish. Preserve immutable revisions, progress and owner preview/publication.
+4. Complete learner controls and beta readiness: safe cross-tab data reset, onboarding/preferences, per-topic downloads and production/listening practice. Add useful pictures for concrete uncovered vocabulary after reviewing clarity and rights; more lesson volume is lower priority than approval and usability.
+5. Resolve the three moderate build-tool findings with a compatible verified dependency change before distribution. Native adapters/packages, accounts/sync/public hosting and realtime voice follow the tested web beta.
+
+Keep actual curriculum unapproved until owner review/publication. Remote backup is a separate owner-authorised push task; this review performs local commits only. No public launch date is committed.
+
+Hook/role files do not prove runtime loading/trust; no account-allowance lookup is exposed and no automatic resume is configured.

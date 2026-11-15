@@ -1,7 +1,9 @@
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { lessons, previousSeedFingerprints } from '@smartlingo/content';
 import { createApp } from './app';
 import { SqliteLessonRepository } from './repository';
+import { contentDatabasePath } from './database-path';
+import { inspectCurriculumSnapshot } from './curriculum-backup';
 
 export function readServerConfig(environment: { HOST?: string; PORT?: string }) {
   const host = environment.HOST ?? '127.0.0.1';
@@ -17,11 +19,12 @@ export function readServerConfig(environment: { HOST?: string; PORT?: string }) 
   return { host, port };
 }
 
-export async function startServer(environment: { HOST?: string; PORT?: string } = {
-  HOST: process.env.HOST, PORT: process.env.PORT,
+export async function startServer(environment: { HOST?: string; PORT?: string; SMARTLINGO_DATABASE_PATH?: string } = {
+  HOST: process.env.HOST, PORT: process.env.PORT, SMARTLINGO_DATABASE_PATH: process.env.SMARTLINGO_DATABASE_PATH,
 }) {
   const config = readServerConfig(environment);
-  const path = fileURLToPath(new URL('../../../data/smartlingo.sqlite', import.meta.url));
+  const path = contentDatabasePath(environment.SMARTLINGO_DATABASE_PATH);
+  if (environment.SMARTLINGO_DATABASE_PATH !== undefined) inspectCurriculumSnapshot(path);
   const repository = new SqliteLessonRepository(path);
   try {
     repository.seed(lessons, previousSeedFingerprints);
@@ -51,7 +54,7 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
     process.once('SIGINT', stop);
     process.once('SIGTERM', stop);
   } catch {
-    console.error('Unable to start local API. Check HOST, PORT, and the content database.');
+    console.error('Unable to start local API. Check HOST, PORT, SMARTLINGO_DATABASE_PATH, and the content database.');
     process.exitCode = 1;
   }
 }

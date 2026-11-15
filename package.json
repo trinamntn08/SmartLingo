@@ -31,6 +31,8 @@
     "test": "npm run test:tooling && npm run test:app",
     "dev": "npm run web --workspace @smartlingo/learner",
     "dev:api": "npm run dev --workspace @smartlingo/api",
+    "backup:curriculum": "tsx apps/api/src/curriculum-backup-cli.ts backup",
+    "restore:curriculum": "tsx apps/api/src/curriculum-backup-cli.ts restore",
     "typecheck": "tsc --noEmit",
     "build:web": "npm run export --workspace @smartlingo/learner && node scripts/prepare-offline-web.mjs",
     "preview:web": "node scripts/serve-web.mjs",

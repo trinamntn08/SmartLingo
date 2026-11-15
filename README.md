@@ -35,7 +35,7 @@ Word notes may be empty, and noun gender can be changed separately. The revised 
 
 Return to Profile → Load published lessons to save published revisions into this browser. Later draft changes stay separate. Previous attempts/notebook entries remain recorded when a new revision arrives. A newer revision starts its own lesson progress. Editor requests require the exact local browser origin and a guarded JSON request; this is local origin protection, not account authentication or public-hosting access control.
 
-Profile also supports learning backup/restore. Download a private, unencrypted file containing attempts, manual review ratings, notebook entries and cached published lessons (not server drafts/credentials/recordings). Choose a backup to inspect counts/date, confirm the merge policy, then restore and reload learning. Existing personal notes win; duplicate events stay single; immutable conflicts abort the whole restore. Only supported UTF-8 backups up to 5 MB are accepted. Version 2 exports include ratings; version 1 files remain importable with no invented review history. This does not back up the server's curriculum database.
+Profile also supports learning backup/restore. Download a private, unencrypted file containing attempts, manual review ratings, notebook entries and cached published lessons (not server drafts/credentials/recordings). Choose a backup to inspect counts/date, confirm the merge policy, then restore and reload learning. Existing personal notes win; duplicate events stay single; immutable conflicts abort the whole restore. Only supported UTF-8 backups up to 5 MB are accepted. Version 2 exports include ratings; version 1 files remain importable with no invented review history. Server curriculum has separate local snapshot commands below.
 
 Device speech is optional, synthetic, and depends on an installed French browser/device voice. Text is always available. Per-topic downloads, the complete curriculum editor, production/listening review, microphone conversations, and mobile packages remain planned.
 
@@ -53,6 +53,33 @@ Port 8082 has separate browser storage from development on 8081. To bring existi
 Profile shows download size, saved complete-copy size, progress, status and retry/update/removal controls. Updates retain previous complete copies for older tabs; removing downloaded assets clears all those app copies while preserving notebook, practice/review events and loaded publications. Interrupted staging files are cleaned on retry/removal; sizes describe complete-copy files and exclude staging/browser overhead. Keep a separate private learning backup because browser storage may be evicted.
 
 This local route requires a browser with service workers, Web Locks and a secure localhost context. Expo development does not offer offline downloads. Actual phone/Safari installation and offline voice quality are unverified; this is not a public/LAN deployment.
+
+## Back up and recover server curriculum
+
+From the repository root:
+
+```sh
+npm run backup:curriculum
+```
+
+This prints the path of a new private SQLite snapshot under `data/backups/` and counts of lessons/stored revisions/publications. It includes every server curriculum revision, including unpublished edits, and can run while the API is open. It does not include browser learning data, `.env` files, recordings or credentials. Keep an off-device copy separately; local snapshots are unencrypted and ignored by Git. Use `--source PATH` and/or `--destination NEW.sqlite` to choose files explicitly.
+
+To recover a backup, use its printed filename and choose a new destination:
+
+```sh
+npm run restore:curriculum -- --source "data/backups/YOUR-BACKUP.sqlite" --destination "data/recovered.sqlite"
+```
+
+Recovery validates SQLite integrity, the supported schema and every historical lesson revision, then writes a separate file. It refuses existing destinations and never replaces the running database. Source snapshots remain unchanged. The filesystem must support hard links; unsupported/invalid inputs fail without replacing files.
+
+To use the recovered copy, stop the API instance you intend to switch, then set its database path before starting it. In PowerShell:
+
+```powershell
+$env:SMARTLINGO_DATABASE_PATH = 'data/recovered.sqlite'
+npm run dev:api
+```
+
+The configured file must already exist and pass validation. Relative paths resolve from this repository root even when npm starts the API workspace. Normal startup seed preservation still applies; actual publications and owner edits remain intact. Keep the original database and snapshot separately. After stopping that API, `Remove-Item Env:SMARTLINGO_DATABASE_PATH` returns later starts to the default database. No real `.env` file is loaded automatically. Use `npm run backup:curriculum -- --help` or the restore equivalent for command help.
 
 ## Start here
 

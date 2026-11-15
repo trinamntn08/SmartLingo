@@ -814,7 +814,7 @@ export const foodHomeTopics: TopicDraft[] = [
         }
       },
       {
-        "slug": "understand-a-journey",
+        "slug": "understand-a-journey", revision: 4,
         "title": "Understand a journey",
         "level": "A2",
         "outcome": "Check whether you must change trains and how long you have.",
@@ -825,7 +825,7 @@ export const foodHomeTopics: TopicDraft[] = [
           ["direct", "direct", "direct; without a change", "Ce train est direct pour Lyon ?", "Is this train direct to Lyon?", "Adjective; feminine directe. Direct does not necessarily mean non-stop."],
           ["change-trains", "changer de train", "to change trains", "Je dois changer de train à Tours.", "I need to change trains at Tours.", "No article between changer de and train in this expression."],
           ["get-off", "descendre", "to get off", "Je dois descendre au prochain arrêt.", "I need to get off at the next stop.", "Infinitive verb. Descendre du bus means get off the bus."],
-          ["timetable", "un horaire", "a departure or arrival time", "Je vérifie les horaires des trains.", "I’m checking the train times.", "Les horaires commonly means the service times or timetable.", {"gender": "masculine"}]
+          ["timetable","un horaire","a service time / transport timetable","Je vérifie les horaires des trains.","I am checking the train times.","Here the scheduled departure or arrival times of a transport service. Les horaires des trains means the train timetable.",{"gender":"masculine"}]
         ],
         "dialogue": [
           {"role": "Passenger", "target": "Ce train est direct ?", "meaning": "Is this train direct?"},

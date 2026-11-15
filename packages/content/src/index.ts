@@ -10,6 +10,7 @@ import { studyWorkTopics } from './topics/study-work';
 import { experienceTopics } from './topics/experiences';
 
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
+export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
 export { courseSequence } from './course-sequence';
 

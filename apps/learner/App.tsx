@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
-import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { groupLessonTopics, lessonProgress, type Lesson } from '@smartlingo/domain';
 import { audio } from './src/audio';
+import { AudioPreferencesPanel } from './src/audio/AudioPreferencesPanel';
 import { Badge, Button } from './src/ui/controls';
-import { Illustration } from './src/ui/Illustration';
+import { WordIllustration } from './src/ui/WordIllustration';
 import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
 import { TopicCatalogue } from './src/ui/TopicCatalogue';
@@ -97,7 +98,7 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
       <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
     </View>
     <View style={[s.card, s.column, { backgroundColor: '#E8ECD9', padding: 28 }]}><View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge><Badge>{suggested.level}</Badge></View>
-      <Illustration picture={suggested.vocabulary[1].picture} alt={suggested.vocabulary[1].pictureAlt} size={290} />
+      <WordIllustration entry={suggested.vocabulary[1]} size={290} />
       <Text style={s.heading}>{suggested.subtitle}</Text><Text style={s.body}>{suggested.outcome}</Text><View style={s.row}><Badge>{suggested.role}</Badge><Text style={s.muted}>{suggested.durationMinutes} min · {suggested.vocabulary.length} useful words</Text></View>
       <View style={s.divider} /><Text style={s.muted}>{progress.completed ? '✓ Session completed and saved' : `${progress.viewedIds.size} of ${suggested.vocabulary.length} words explored`} · {suggested.status === 'published' ? `Published revision ${suggested.revision}` : 'Draft preview'}</Text>
     </View>
@@ -111,7 +112,8 @@ function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; cat
     <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
     <OfflinePanel />
+    <AudioPreferencesPanel />
     <BackupPanel />
-    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons and original illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text></View>
+    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
   </View>;
 }

@@ -1,5 +1,7 @@
 # Practical French curriculum research and rework
 
+Latest follow-up, 2026-11-15: the [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated introduction slots and clarifies two horaire senses. Current inventory is 705 canonical senses/696 written forms across the same 120 lessons/741 appearances. Five lessons append revision 4, fifty-five remain revision 3 and sixty remain revision 1. Exact old canonical payloads remain taught elsewhere; owner approval remains outstanding. Earlier rework findings/counts below describe the preceding checkpoint. Photograph coverage and voice choices are recorded separately in [photo coverage](PHOTO_COVERAGE.md) and [voice options](VOICE_OPTIONS.md).
+
 Researched 2026-11-15, Europe/Paris. Owner request: review/rework every current topic and its words, expand useful topics, examples and courses. All runtime material remains an original AI-assisted draft requiring owner review. This is a practical beginner curriculum, not certification or a complete validated CEFR course.
 
 ## Evidence actually inspected

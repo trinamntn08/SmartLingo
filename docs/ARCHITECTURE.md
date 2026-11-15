@@ -26,6 +26,8 @@ Status: local web learning, first editor/publication and optional conversation/t
 - Draft editing -> validation/preview -> explicit publication -> versioned content.
 - Published API content -> validated IndexedDB cache -> learner catalogue; newer drafts remain editor-only. Preview practice uses an isolated in-memory model.
 - Stable-ID/target-guarded original SVG media -> learner WordIllustration adapter. Visual catalogue data stays separate from immutable lesson revisions; unknown/abstract words remain text-supported. An explicit vocabulary-overview review event uses the existing event contract, scoped to lesson/revision; mere browsing records no review.
+- Licensed bundled photographs -> exact sense/target lookup -> photo-first study rendering with illustration/text fallback. Per-file source/licence/hash records and credits travel with exported app assets; contextual photographs are labelled and do not change abstract meaning-matching exercises. Photo coverage is separate from owner curriculum approval.
+- Browser device-voice enumeration -> separate versioned voice/rate preference adapter -> shared speaker controls. Explicit sample playback and local preference writes require no provider request or learner database change. Device availability and audible quality remain external capabilities. See [ADR 0017](decisions/0017-vocabulary-photo-and-voice-preferences.md).
 - Separate target language, explanation language, and UI language.
 - Keep provider/model identifiers configurable and media keyed by content/settings hash.
 - Keep tests provider-independent; add opt-in live checks only when requested.

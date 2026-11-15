@@ -59,7 +59,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await button(cold, /Start restaurant practice/).click();
   await expect(cold.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
   await expect(button(cold, 'Save bonjour')).toBeDisabled();
-  expect(await cold.locator('img').evaluateAll(images => images.length > 0 && images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  await expect.poll(() => cold.locator('img').evaluateAll(images => images.length > 0 && images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
   await button(cold, 'Review').click();
   await expect(cold.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await button(cold, 'Profile').click();

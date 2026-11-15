@@ -1,30 +1,50 @@
+import { audioPreferences, type AudioPreferenceStore } from './preferences';
+import { selectFrenchVoice } from './voices';
+
 export interface AudioPlayer {
   available(): boolean;
   speak(text: string): Promise<void>;
   stop(): void;
 }
 
-function frenchVoice(): SpeechSynthesisVoice | undefined {
-  return globalThis.speechSynthesis?.getVoices().find(voice => voice.lang.toLowerCase().startsWith('fr'));
+export interface SpeechEnvironment {
+  synthesis(): Pick<SpeechSynthesis, 'getVoices' | 'speak' | 'cancel'> | undefined;
+  utterance(text: string): SpeechSynthesisUtterance | undefined;
 }
 
-class DeviceSpeechPlayer implements AudioPlayer {
+const browserSpeech: SpeechEnvironment = {
+  synthesis: () => globalThis.speechSynthesis,
+  utterance: text => typeof globalThis.SpeechSynthesisUtterance === 'undefined' ? undefined : new SpeechSynthesisUtterance(text),
+};
+
+export class DeviceSpeechPlayer implements AudioPlayer {
   private cancelPending?: () => void;
+  constructor(private readonly environment: SpeechEnvironment = browserSpeech, private readonly preferences: AudioPreferenceStore = audioPreferences) {}
   available(): boolean {
-    return typeof globalThis.SpeechSynthesisUtterance !== 'undefined' && !!frenchVoice();
+    try { return !!this.environment.utterance('') && !!selectFrenchVoice(this.environment.synthesis()?.getVoices() ?? [], this.preferences.get().voiceId); }
+    catch { return false; }
   }
   speak(text: string): Promise<void> {
     this.stop();
-    const voice = frenchVoice();
-    if (!voice || typeof globalThis.SpeechSynthesisUtterance === 'undefined') {
+    const synthesis = this.environment.synthesis();
+    let utterance: SpeechSynthesisUtterance | undefined;
+    let voice: SpeechSynthesisVoice | undefined;
+    const preferences = this.preferences.get();
+    try {
+      utterance = this.environment.utterance(text);
+      voice = selectFrenchVoice(synthesis?.getVoices() ?? [], preferences.voiceId);
+    } catch { /* Unsupported speech falls back to visible text. */ }
+    if (!voice || !utterance || !synthesis) {
       return Promise.reject(new Error('No French device voice is available. You can continue using the text.'));
     }
     return new Promise((resolve, reject) => {
-      const utterance = new SpeechSynthesisUtterance(text);
       utterance.voice = voice;
-      utterance.lang = 'fr-FR';
-      utterance.rate = 0.85;
+      utterance.lang = voice.lang;
+      utterance.rate = preferences.rate;
+      let settled = false;
       const finish = (error?: Error) => {
+        if (settled) return;
+        settled = true;
         clearTimeout(timeout);
         if (this.cancelPending === cancel) this.cancelPending = undefined;
         utterance.onend = null;
@@ -33,19 +53,20 @@ class DeviceSpeechPlayer implements AudioPlayer {
       };
       const cancel = () => finish();
       const timeout = setTimeout(() => {
-        globalThis.speechSynthesis.cancel();
         finish(new Error('Device speech did not finish. You can retry or continue with text.'));
+        try { synthesis.cancel(); } catch { /* Playback has already settled. */ }
       }, 20000);
       this.cancelPending = cancel;
       utterance.onend = () => finish();
       utterance.onerror = () => finish(new Error('Device speech could not play. You can continue with text.'));
-      globalThis.speechSynthesis.speak(utterance);
+      try { synthesis.speak(utterance); }
+      catch { finish(new Error('Device speech could not play. You can continue with text.')); }
     });
   }
   stop(): void {
     this.cancelPending?.();
     this.cancelPending = undefined;
-    globalThis.speechSynthesis?.cancel();
+    try { this.environment.synthesis()?.cancel(); } catch { /* Text study remains available. */ }
   }
 }
 

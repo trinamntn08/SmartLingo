@@ -1,0 +1,170 @@
+{
+  "review_status": "draft",
+  "example_origin": "editorial_example",
+  "created": "2026-11-15",
+  "rights": "Original AI-assisted SmartLingo examples, translations, dialogues and explanations; no third-party course text or media copied. Owner review required. Sources and limits: docs/CURRICULUM_REDUNDANCY_AUDIT.md.",
+  "format_note": "Review brief, not an importable runtime lesson. lesson values follow ShortLessonDraft; replacements map old canonical IDs to new sense IDs. Preserve historical lesson IDs and old canonical entries elsewhere. No publication authorised by this file.",
+  "changes": [
+    {
+      "source": "packages/content/src/topics/daily-life.ts",
+      "lessonId": "fr.routine.small-numbers",
+      "replacements": {
+        "fr.routine.zero": "fr.routine.wake-up",
+        "fr.routine.deux": "fr.routine.get-dressed",
+        "fr.routine.trois": "fr.routine.brush-teeth",
+        "fr.routine.quatre": "fr.routine.hurry",
+        "fr.routine.cinq": "fr.routine.ready",
+        "fr.routine.dix": "fr.routine.on-time"
+      },
+      "lesson": {
+        "slug": "small-numbers",
+        "title": "Get ready and leave on time",
+        "level": "A1",
+        "outcome": "Describe getting ready in the morning and say whether you are ready to leave.",
+        "words": [
+          ["wake-up", "se réveiller", "to wake up", "Je me réveille à sept heures.", "I wake up at seven o’clock.", "Se réveiller is waking up; se lever is getting out of bed. With je, use me."],
+          ["get-dressed", "s’habiller", "to get dressed", "Je m’habille avant le petit déjeuner.", "I get dressed before breakfast.", "Se becomes s’ before a vowel sound; with je say je m’habille."],
+          ["brush-teeth", "se brosser les dents", "to brush one’s teeth", "Je me brosse les dents.", "I brush my teeth.", "Use les dents with the reflexive pronoun: je me brosse les dents. Une dent is feminine."],
+          ["hurry", "se dépêcher", "to hurry", "Je dois me dépêcher.", "I have to hurry.", "After dois, keep the verb in its dictionary form but match the pronoun to je: me dépêcher."],
+          ["ready", "être prêt", "to be ready", "Je suis prêt à partir.", "I am ready to leave.", "A feminine speaker writes prête. Être prêt à + a verb means to be ready to do something."],
+          ["on-time", "à l’heure", "on time", "J’arrive à l’heure au travail.", "I arrive at work on time.", "This means at the expected time. En retard means late. Une heure is feminine."]
+        ],
+        "dialogue": [
+          { "role": "Resident", "target": "Je me réveille à sept heures. Et toi ?", "meaning": "I wake up at seven. And you?" },
+          { "role": "Friend", "target": "À sept heures et demie. Je m’habille vite.", "meaning": "At half past seven. I get dressed quickly." },
+          { "role": "Resident", "target": "Je me brosse les dents avant de partir.", "meaning": "I brush my teeth before leaving." },
+          { "role": "Friend", "target": "Je dois me dépêcher. Tu es prêt ?", "meaning": "I have to hurry. Are you ready?" },
+          { "role": "Resident", "target": "Oui, je suis prêt.", "meaning": "Yes, I am ready." },
+          { "role": "Friend", "target": "Alors, on arrive à l’heure !", "meaning": "Then we will arrive on time!" }
+        ],
+        "grammar": {
+          "title": "Actions you do yourself",
+          "explanation": "Se changes with the person: je me réveille, tu te réveilles. Before a vowel sound use m’ or t’: je m’habille. With a body part, the reflexive pronoun usually goes with le, la or les: je me brosse les dents. Prêt becomes prête for a feminine person. Friends use tu in this dialogue."
+        },
+        "sentence": {
+          "tokens": ["me", "Je", "dépêcher", "dois"],
+          "answer": "Je dois me dépêcher.",
+          "meaning": "I have to hurry.",
+          "hint": "Start Je dois, then me dépêcher.",
+          "explanation": "The subject je needs me, even before the dictionary form dépêcher.",
+          "alternatives": []
+        }
+      }
+    },
+    {
+      "source": "packages/content/src/topics/daily-life.ts",
+      "lessonId": "fr.routine.calendar",
+      "replacements": {
+        "fr.routine.aujourdhui": "fr.routine.every-day",
+        "fr.routine.semaine": "fr.routine.weekdays",
+        "fr.routine.lundi": "fr.routine.weekend",
+        "fr.routine.samedi": "fr.routine.early",
+        "fr.routine.date": "fr.routine.late"
+      },
+      "lesson": {
+        "slug": "calendar",
+        "title": "Describe when you usually do things",
+        "level": "A1",
+        "outcome": "Say whether an activity happens every day or on weekdays and describe an early or late routine.",
+        "words": [
+          ["every-day", "tous les jours", "every day", "Je marche tous les jours.", "I walk every day.", "A frequency phrase: tous les jours. Do not add a preposition before it."],
+          ["jour", "un jour", "a day", "Quel jour êtes-vous disponible ?", "Which day are you available?", "Here a day of the week.", { "gender": "masculine" }],
+          ["weekdays", "en semaine", "on weekdays / during the working week", "Je pars tôt en semaine.", "I leave early on weekdays.", "Contrasts with le week-end. This is a time phrase, not a claim that everyone works Monday to Friday."],
+          ["weekend", "le week-end", "at the weekend / on weekends", "Le week-end, je me lève tard.", "At the weekend, I get up late.", "Un week-end is masculine. Here le week-end describes a usual routine.", { "gender": "masculine" }],
+          ["early", "tôt", "early", "Je me couche tôt.", "I go to bed early.", "An adverb with a circumflex; no gender ending. Plus tôt means earlier."],
+          ["late", "tard", "late / late in the day", "Je rentre tard le vendredi.", "I come home late on Fridays.", "Tard describes a late time; en retard means late compared with an expected time."]
+        ],
+        "dialogue": [
+          { "role": "Resident", "target": "Tu travailles tous les jours ?", "meaning": "Do you work every day?" },
+          { "role": "Friend", "target": "Non, je travaille en semaine.", "meaning": "No, I work on weekdays." },
+          { "role": "Resident", "target": "Et le week-end ?", "meaning": "And at the weekend?" },
+          { "role": "Friend", "target": "Je me lève tard. En semaine, je pars tôt.", "meaning": "I get up late. On weekdays, I leave early." },
+          { "role": "Resident", "target": "Tu as un jour de repos ?", "meaning": "Do you have a day off?" },
+          { "role": "Friend", "target": "Oui, le dimanche.", "meaning": "Yes, on Sundays." }
+        ],
+        "grammar": {
+          "title": "Saying when a habit happens",
+          "explanation": "Use tous les jours for every day, en semaine for weekdays and le week-end for a usual weekend routine. Le dimanche means on Sundays. Tôt and tard describe the time of an action. En retard says someone misses an expected time; it does not simply mean late in the evening."
+        },
+        "sentence": {
+          "tokens": ["week-end", "me", "Je", "tard", "le", "lève"],
+          "answer": "Je me lève tard le week-end.",
+          "meaning": "I get up late at the weekend.",
+          "hint": "Keep Je me lève together; the weekend phrase can go at the beginning or end.",
+          "explanation": "Le week-end describes a habit. Both accepted orders use exactly these pieces.",
+          "alternatives": ["Le week-end je me lève tard."]
+        }
+      }
+    },
+    {
+      "source": "packages/content/src/topics/daily-life.ts",
+      "lessonId": "fr.administration.internet",
+      "replacements": {
+        "fr.administration.connexion": "fr.administration.procedure",
+        "fr.administration.mot-de-passe": "fr.administration.attestation",
+        "fr.administration.reseau": "fr.administration.submit-file",
+        "fr.administration.se-connecter": "fr.administration.deadline",
+        "fr.administration.piece-jointe": "fr.administration.acknowledgement"
+      },
+      "lesson": {
+        "slug": "internet",
+        "title": "Ask how to submit an application",
+        "level": "A2",
+        "outcome": "Ask where to submit a routine application, check its deadline and recognise a receipt acknowledgement.",
+        "words": [
+          ["procedure", "une démarche", "an administrative procedure / step", "Je peux faire cette démarche en ligne ?", "Can I complete this procedure online?", "Here a practical administrative step. Faire une démarche is a useful combination.", { "gender": "feminine" }],
+          ["attestation", "une attestation", "a certificate / written confirmation", "Il manque une attestation dans mon dossier.", "A certificate is missing from my application file.", "A document confirming a fact; its purpose depends on the request. This is not the name of one universal form.", { "gender": "feminine" }],
+          ["submit-file", "déposer un dossier", "to submit an application file", "Où puis-je déposer mon dossier ?", "Where can I submit my application file?", "Déposer can mean submit at a desk or through an online service. Un dossier is masculine."],
+          ["fonctionner", "fonctionner", "to work / function", "Le site ne fonctionne pas.", "The website is not working.", "Regular -er verb; use for equipment or services, rather than someone’s job."],
+          ["deadline", "une date limite", "a deadline / final date", "Quelle est la date limite ?", "What is the deadline?", "The last date for an action. Un délai is a period of time allowed, which is a related but different idea.", { "gender": "feminine" }],
+          ["acknowledgement", "un accusé de réception", "an acknowledgement of receipt", "J’ai reçu un accusé de réception.", "I received an acknowledgement of receipt.", "Confirms receipt of a message or application; it does not by itself mean the request was approved. Learn the expression as a whole.", { "gender": "masculine" }]
+        ],
+        "dialogue": [
+          { "role": "Visitor", "target": "Je peux faire cette démarche en ligne ?", "meaning": "Can I complete this procedure online?" },
+          { "role": "Helper", "target": "Oui. Il faut une attestation dans votre dossier.", "meaning": "Yes. You need a certificate in your application file." },
+          { "role": "Visitor", "target": "Le site ne fonctionne pas. Où puis-je déposer mon dossier ?", "meaning": "The website is not working. Where can I submit my application file?" },
+          { "role": "Helper", "target": "Pour cette démarche, vous pouvez le déposer à l’accueil.", "meaning": "For this procedure, you can submit it at reception." },
+          { "role": "Visitor", "target": "Quelle est la date limite ?", "meaning": "What is the deadline?" },
+          { "role": "Helper", "target": "Vendredi. Vous pouvez demander un accusé de réception.", "meaning": "Friday. You can ask for an acknowledgement of receipt." },
+          { "role": "Visitor", "target": "D’accord, merci pour votre aide.", "meaning": "All right, thank you for your help." }
+        ],
+        "grammar": {
+          "title": "Ask how and where to submit something",
+          "explanation": "Vous pouvez + a dictionary-form verb explains an available action: vous pouvez déposer. Où puis-je… ? is a polite form of where can I…? Learn it as a whole question frame. Le replaces the masculine dossier in le déposer. This fictional exchange gives language practice; document requirements, submission routes and dates depend on the actual service."
+        },
+        "sentence": {
+          "tokens": ["dossier", "Je", "mon", "déposer", "peux"],
+          "answer": "Je peux déposer mon dossier.",
+          "meaning": "I can submit my application file.",
+          "hint": "Start Je peux déposer.",
+          "explanation": "After peux, déposer stays in its dictionary form. Mon goes with masculine dossier.",
+          "alternatives": []
+        }
+      }
+    }
+  ],
+  "supportClarifications": [
+    {
+      "source": "packages/content/src/topics/food-home.ts",
+      "lessonId": "fr.transport.understand-a-journey",
+      "entryId": "fr.transport.timetable",
+      "target": "un horaire",
+      "meaning": "a service time / transport timetable",
+      "example": "Je vérifie les horaires des trains.",
+      "exampleMeaning": "I am checking the train times.",
+      "note": "Here the scheduled departure or arrival times of a transport service. Les horaires des trains means the train timetable.",
+      "gender": "masculine"
+    },
+    {
+      "source": "packages/content/src/topics/daily-life.ts",
+      "lessonId": "fr.work.organise-work",
+      "entryId": "fr.work.horaire",
+      "target": "un horaire",
+      "meaning": "working hours / a work schedule",
+      "example": "Mon horaire de travail change lundi.",
+      "exampleMeaning": "My work schedule changes on Monday.",
+      "note": "Here the organisation of working hours. Les horaires de travail is the usual plural phrase for working hours; the noun is masculine.",
+      "gender": "masculine"
+    }
+  ]
+}

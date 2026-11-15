@@ -229,12 +229,16 @@ test('explicit historical destinations refresh an untouched older draft without 
   }
 });
 
-test('bundled refresh destinations have exact revision-1/2 fingerprints and target existing revision-3 drafts', () => {
+test('bundled refresh histories target the current immutable draft revision', () => {
   assert.equal(Object.keys(previousSeedFingerprints).length, 60);
   for (const [id, baselines] of Object.entries(previousSeedFingerprints)) {
-    assert.equal(lessons.find(lesson => lesson.id === id)?.revision, 3, id);
-    assert.deepEqual(baselines.map(baseline => baseline.revision), [1, 2]);
-    for (const baseline of baselines) assert.match(baseline.sha256, /^[a-f0-9]{64}$/);
+    const lesson = lessons.find(lesson => lesson.id === id)!;
+    assert.ok(lesson);
+    assert.deepEqual(baselines.map(baseline => baseline.revision), Array.from({ length: lesson.revision - 1 }, (_, at) => at + 1));
+    for (const baseline of baselines) {
+      assert.match(baseline.sha256, /^[a-f0-9]{64}$/);
+      assert.equal(baseline.nextRevision ?? baseline.revision + 1, lesson.revision);
+    }
   }
 });
 

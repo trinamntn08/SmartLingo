@@ -1,5 +1,5 @@
-// Exact untouched bundled drafts eligible for the reviewed revision-3 rework.
-// Explicit destinations support revision 1 or 2; owner edits/publications never match.
+// Exact untouched bundled drafts eligible for reviewed immutable curriculum updates.
+// Explicit destinations retain historical revisions; owner edits/publications never match.
 export const previousSeedFingerprints = Object.freeze({
   "fr.restaurant.customer": [
     {"revision":1,"sha256":"4394bd14b1da4ab6084a018366bb23bf75c41e64415838da8327e4d87c9e534c","nextRevision":3},
@@ -114,8 +114,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"cf585ec94e9baca755debba5558eff620e28627f6f07ac9cea74b587b05763d9"},
   ],
   "fr.transport.understand-a-journey": [
-    {"revision":1,"sha256":"2f2a4ab00ff554be446681b0bdda760e81181b4abf9589f98856cfc9d11b3c59","nextRevision":3},
-    {"revision":2,"sha256":"1009c7041aa05a3ac11c216db419627d40dc30fdb440dd0ab87654c6de5e23d2"},
+    {"revision":1,"sha256":"2f2a4ab00ff554be446681b0bdda760e81181b4abf9589f98856cfc9d11b3c59","nextRevision":4},
+    {"revision":2,"sha256":"1009c7041aa05a3ac11c216db419627d40dc30fdb440dd0ab87654c6de5e23d2","nextRevision":4},
+    {"revision":3,"sha256":"01b92cbec6755c420a5cf3e4f701acf6a45e57631c5746ee5284b66e8d683375","nextRevision":4},
   ],
   "fr.transport.handle-disruption": [
     {"revision":1,"sha256":"fb7f175502f5bfb5d80926f1fc4f35668f9130a7aad2e6b4d84e25e7a137ac83","nextRevision":3},
@@ -154,8 +155,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"1d46642c9ae01b1f6d28123d1a1ae5f3fa91793aafbe49607915d051f335e2db"},
   ],
   "fr.work.organise-work": [
-    {"revision":1,"sha256":"654fdbe46fea7d2c40cc1326a8049bd4ef493863c2fffaf8f019f507b4e58a4d","nextRevision":3},
-    {"revision":2,"sha256":"2adabf7cec48997b36af663eb2c07db39f1766a46a8b5a64ddf643d08a6a21d0"},
+    {"revision":1,"sha256":"654fdbe46fea7d2c40cc1326a8049bd4ef493863c2fffaf8f019f507b4e58a4d","nextRevision":4},
+    {"revision":2,"sha256":"2adabf7cec48997b36af663eb2c07db39f1766a46a8b5a64ddf643d08a6a21d0","nextRevision":4},
+    {"revision":3,"sha256":"93e6875a97e36b56d171f6717248a93dadb4524e10ebc1f2a9c8309bbe6c9f3e","nextRevision":4},
   ],
   "fr.work.clarify-request": [
     {"revision":1,"sha256":"2dffbe868fa7a3aed27346ee941f0c27aee0e02f620656395a1d766fef5e3292","nextRevision":3},
@@ -174,8 +176,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"d4ce30af43c9d34d08083ce8cc55b693c50949ed771dbf4aaaac6539b5eade26"},
   ],
   "fr.administration.internet": [
-    {"revision":1,"sha256":"3a4aebccb9e1eee7d73dd6e66600317a0d19ab463c3beafadb5f1e5f0884456b","nextRevision":3},
-    {"revision":2,"sha256":"813b55045010a30ada5d15dac490ad3c46e0825f6035fd0a7eed4e7f7f2aed96"},
+    {"revision":1,"sha256":"3a4aebccb9e1eee7d73dd6e66600317a0d19ab463c3beafadb5f1e5f0884456b","nextRevision":4},
+    {"revision":2,"sha256":"813b55045010a30ada5d15dac490ad3c46e0825f6035fd0a7eed4e7f7f2aed96","nextRevision":4},
+    {"revision":3,"sha256":"68e3ba68e95d1ac36d549bff8844a6d6aa885424102f561988a8d74558fb46ee","nextRevision":4},
   ],
   "fr.administration.paperwork": [
     {"revision":1,"sha256":"64dd70e92dd53fcb5c9bc5d1372bb40baea7956cd28a983413719739e99af043","nextRevision":3},
@@ -202,16 +205,18 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"fbcc48543c7d4c2e5682565d010e2f7d687e8a27fc6761d8a32196437a769ab6"},
   ],
   "fr.routine.small-numbers": [
-    {"revision":1,"sha256":"a169dfb8533377d19c30d3ba2fcb2a4c3f9726038713c927eb17396a4badb1f8","nextRevision":3},
-    {"revision":2,"sha256":"85b535789aaf68610e1455b07aed1b8bf0b20c25ee26477fe90657416e8cf673"},
+    {"revision":1,"sha256":"a169dfb8533377d19c30d3ba2fcb2a4c3f9726038713c927eb17396a4badb1f8","nextRevision":4},
+    {"revision":2,"sha256":"85b535789aaf68610e1455b07aed1b8bf0b20c25ee26477fe90657416e8cf673","nextRevision":4},
+    {"revision":3,"sha256":"78d1d303a8126d24711a301ac7a08bf39d7a865d24632d25cb9cb8646a26b6a0","nextRevision":4},
   ],
   "fr.routine.clock": [
     {"revision":1,"sha256":"04ec619465f44a9873933994e1306e36993772c9bdcd49db6f639e0a21c1eced","nextRevision":3},
     {"revision":2,"sha256":"f64ab37b659622192e5aa0122cf4cfbb52179834c9f11432f89015e4ac7d855c"},
   ],
   "fr.routine.calendar": [
-    {"revision":1,"sha256":"32f9c9ede6c39ded77ab655431b80fac9cc0e388a43dc4f5d7106cca230275c9","nextRevision":3},
-    {"revision":2,"sha256":"c56328d530b09683fc4d2dccaacfae47b69f310b1cd9fd53d6dacebc935e5cf0"},
+    {"revision":1,"sha256":"32f9c9ede6c39ded77ab655431b80fac9cc0e388a43dc4f5d7106cca230275c9","nextRevision":4},
+    {"revision":2,"sha256":"c56328d530b09683fc4d2dccaacfae47b69f310b1cd9fd53d6dacebc935e5cf0","nextRevision":4},
+    {"revision":3,"sha256":"b6c1553cdd232b3d812c67f9a8f09d3ff906800522473b42baf289ce8f5c3f44","nextRevision":4},
   ],
   "fr.routine.daily-actions": [
     {"revision":1,"sha256":"41d21fb531bf6e4d95ef507658a181ec7c355d876abd594ba505f2453a791ca7","nextRevision":3},

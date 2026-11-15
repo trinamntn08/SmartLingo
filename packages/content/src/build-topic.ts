@@ -8,6 +8,7 @@ export type WordDraft = readonly [
 
 export type ShortLessonDraft = {
   slug: string;
+  revision?: number;
   title: string;
   level: Lesson['level'];
   outcome: string;
@@ -42,7 +43,7 @@ export function buildTopic(topic: TopicDraft): Lesson[] {
       pictureAlt: details?.picture ? `Study illustration for ${meaning}` : 'An open vocabulary notebook',
     }));
     return lessonSchema.parse({
-      id: lessonId, revision: topic.revision ?? 1, status: 'draft', language: 'fr-FR', explanationLanguage: 'en',
+      id: lessonId, revision: part.revision ?? topic.revision ?? 1, status: 'draft', language: 'fr-FR', explanationLanguage: 'en',
       title: part.title, subtitle: part.title, outcome: part.outcome, level: part.level,
       topic: topic.title, role: topic.role, durationMinutes: 7, vocabulary,
       dialogue: part.dialogue, grammar: part.grammar,

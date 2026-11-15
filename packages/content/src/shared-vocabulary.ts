@@ -1,4 +1,5 @@
 import type { Lesson } from '@smartlingo/domain';
+import { sharedEntries } from './shared-entries';
 
 // Explicit, stable aliases for the same sense. Context-specific senses (guichet,
 // horaire) retain separate IDs. The first starter's existing IDs never change.
@@ -56,7 +57,9 @@ const aliases: Readonly<Record<string, string>> = {
 };
 
 export function reuseSharedVocabulary(lessons: readonly Lesson[]): Lesson[] {
-  const entries = new Map<string, Lesson['vocabulary'][number]>();
+  // Canonical senses outlive the lesson that first introduced them. Keep exact
+  // payloads when redundant introduction slots are replaced in later drafts.
+  const entries = new Map(sharedEntries.map(entry => [entry.id, entry]));
   for (const entry of lessons.flatMap(lesson => lesson.vocabulary)) {
     const previous = entries.get(entry.id);
     if (previous && JSON.stringify(previous) !== JSON.stringify(entry)) throw new Error(`Conflicting vocabulary: ${entry.id}`);

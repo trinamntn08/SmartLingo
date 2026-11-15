@@ -2,7 +2,7 @@
 
 Snapshot: 2026-11-15. Original editorial material requiring owner review. Suggested order below; free exploration remains available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
 
-24 banks · 120 lessons · 741 vocabulary appearances · 689 canonical senses · 680 distinct written forms. Recycled senses are included in bank counts, not counted again as new. Supported practice is not proficiency certification.
+24 banks · 120 lessons · 741 vocabulary appearances · 705 canonical senses · 696 distinct written forms. Recycled senses are included in bank counts, not counted again as new. Supported practice is not proficiency certification.
 
 ## Essential conversation tools
 
@@ -54,13 +54,13 @@ Suggested prior topics: Numbers and quantities. 30 expressions; 0 canonical sens
 
 ## Time and daily routine
 
-Suggested prior topics: Numbers and quantities; Dates and availability. 30 expressions; 11 canonical senses recycled from earlier banks in this suggested order. [Source](../packages/content/src/topics/daily-life.ts).
+Suggested prior topics: Numbers and quantities; Dates and availability. 30 expressions; 0 canonical senses recycled from earlier banks in this suggested order. [Source](../packages/content/src/topics/daily-life.ts).
 
 | Lesson and estimated level | Can-do outcome | Targets |
 | --- | --- | --- |
-| Count people and short waits (A1) | Give a small group size and understand a short waiting time. | zéro · deux · trois · quatre · cinq · dix |
+| Get ready and leave on time (A1) | Describe getting ready in the morning and say whether you are ready to leave. | se réveiller · s’habiller · se brosser les dents · se dépêcher · être prêt · à l’heure |
 | Tell the time (A1) | Ask the time and understand common morning and evening times. | une heure · une minute · midi · minuit · et demie · le soir |
-| Use a simple calendar (A1) | Ask the date and identify a day or a week for a plan. | aujourd’hui · un jour · une semaine · lundi · samedi · une date |
+| Describe when you usually do things (A1) | Say whether an activity happens every day or on weekdays and describe an early or late routine. | tous les jours · un jour · en semaine · le week-end · tôt · tard |
 | Describe an ordinary day (A2) | Describe waking up, meals and leaving home in a short sequence. | se lever · se doucher · le petit déjeuner · partir · rentrer · se coucher |
 | Explain habits and plans (A2) | Put activities in order and distinguish a habit from an occasional change. | d’abord · ensuite · avant · après · d’habitude · parfois |
 
@@ -70,7 +70,7 @@ Suggested prior topics: Essential conversation tools; Numbers and quantities. 30
 
 | Lesson and estimated level | Can-do outcome | Targets |
 | --- | --- | --- |
-| At the bakery (A1) | Ask for a baguette politely and thank the baker. | bonjour · une baguette · un croissant · un sac · s’il vous plaît · merci |
+| Your morning at the bakery (A1) | Ask for a baguette politely and thank the baker. | bonjour · une baguette · un croissant · un sac · s’il vous plaît · merci |
 | Choose your bread (A1) | Choose a loaf, its bake and whether it is sliced. | un pain de campagne · du pain complet · quel pain · une tranche · tranché · bien cuit |
 | Choose a sweet treat (A1) | Choose pastries, give a quantity and finish an order. | un pain au chocolat · une brioche · un chausson aux pommes · une tartelette · et avec ça ? · j’en prends deux |
 | Buy lunch to take away (A2) | Order a slice of quiche to take away and request heating. | un sandwich · une quiche · une part · une formule · à emporter · réchauffer |
@@ -82,7 +82,7 @@ Suggested prior topics: Essential conversation tools; Numbers and quantities. 34
 
 | Lesson and estimated level | Can-do outcome | Targets |
 | --- | --- | --- |
-| At the restaurant (A1) | Order a coffee politely and ask for the bill. | bonjour · un café · de l’eau · la carte · l’addition · s’il vous plaît |
+| Order a coffee and ask for the bill (A1) | Order a coffee politely and ask for the bill. | bonjour · un café · de l’eau · la carte · l’addition · s’il vous plaît |
 | Find a table (A1) | Ask for a table for two and agree where to sit. | une table · réserver une table · une réservation · une terrasse · pour deux · à l’intérieur · une personne |
 | Choose a meal (A1) | Ask about the dish of the day and choose a set meal. | une entrée · un plat · un dessert · un menu · je prends · végétarien · du poulet |
 | Explain food needs (A2) | State an egg allergy and ask staff to check ingredients. | une allergie · un œuf · contenir · une sauce · sans · à part · du lait |
@@ -198,14 +198,14 @@ Suggested prior topics: Essential conversation tools; Numbers and quantities. 30
 
 ## Services and paperwork
 
-Suggested prior topics: People and introductions; Phone and digital communication. 30 expressions; 10 canonical senses recycled from earlier banks in this suggested order. [Source](../packages/content/src/topics/daily-life.ts).
+Suggested prior topics: People and introductions; Phone and digital communication. 30 expressions; 5 canonical senses recycled from earlier banks in this suggested order. [Source](../packages/content/src/topics/daily-life.ts).
 
 | Lesson and estimated level | Can-do outcome | Targets |
 | --- | --- | --- |
 | Ask at a service desk (A1) | Find the right service desk and ask for basic help. | l’accueil · une mairie · un guichet · un formulaire · une aide · attendre |
 | Give contact details (A1) | Give contact details and spell out a name when asked. | une adresse · une rue · un code postal · épeler · un numéro · une adresse mail |
 | Send a letter (A1) | Say where a letter is going and ask staff which stamp it needs. | un bureau de poste · une lettre · un timbre · poster · un colis · le destinataire |
-| Ask about an internet connection (A2) | Describe a connection problem and ask for simple access information. | une connexion · un mot de passe · un réseau · fonctionner · se connecter · une pièce jointe |
+| Ask how to submit an application (A2) | Ask where to submit a routine application, check its deadline and recognise a receipt acknowledgement. | une démarche · une attestation · déposer un dossier · fonctionner · une date limite · un accusé de réception |
 | Check what a form asks for (A2) | Ask which document is requested and clarify an incomplete application. | un dossier · un justificatif · une signature · remplir · manquer · une copie |
 
 ## Education and learning
@@ -296,4 +296,4 @@ Suggested prior topics: Clothes and shopping; Leisure and weather; Talking about
 
 Identical written forms can have different senses: une place (square/available spot), jusqu’à (distance/time), manquer (be missing/miss a service), après (preposition/adverb), une expérience (work experience/an event), ouvrir (physical/digital opening), ça me va (clothing fit/a suitable plan), un guichet (ticket/service counter), un horaire (transport/work schedule). These keep explicit separate IDs. Other same-sense reuse shares a canonical ID.
 
-All sixty existing lesson IDs remain at revision 3; sixty additions start at revision 1. See [research and limits](CURRICULUM_RESEARCH.md) and the three linked audits. Owner review should judge usefulness, naturalness, translations, difficulty, register and answer alternatives before explicit publication. No external word-frequency ranking or human classroom validation is claimed.
+Five reviewed lessons are now revision 4; fifty-five earlier lessons remain revision 3 and sixty additions remain revision 1. The latest [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated slots with new useful senses while preserving the older canonical entries elsewhere. See [research and limits](CURRICULUM_RESEARCH.md) and the three linked audits. Owner review should judge usefulness, naturalness, translations, difficulty, register and answer alternatives before explicit publication. No external word-frequency ranking or human classroom validation is claimed.

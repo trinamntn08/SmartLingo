@@ -43,6 +43,10 @@ test('exported preview serves only known files with correct types and loopback H
     assert.match(page.headers.get('content-type'), /text\/html/);
     assert.equal(page.headers.get('cache-control'), 'no-store');
     assert.match((await fetch(`${url}/smartlingo-sw.js`)).headers.get('content-type'), /javascript/);
+    for (const [name, type] of [['coffee.jpg', 'image/jpeg'], ['street.webp', 'image/webp']]) {
+      await writeFile(path.join(directory, name), 'test image bytes');
+      assert.equal((await fetch(`${url}/${name}`)).headers.get('content-type'), type);
+    }
     for (const name of ['/missing.js', '/.private', '/%2e%2e%5cpackage.json']) assert.equal((await fetch(`${url}${name}`)).status, 404);
     assert.equal((await fetch(url, { method: 'POST' })).status, 405);
     const refused = await new Promise((resolve, reject) => {

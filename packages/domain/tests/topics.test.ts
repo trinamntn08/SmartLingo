@@ -61,10 +61,29 @@ test('suggested progression covers every bank once with earlier prerequisites an
     seen.add(topic.slug);
   }
   assert.equal(lessons.length, 120);
-  for (const lesson of lessons) assert.equal(lesson.revision, Object.hasOwn(previousSeedFingerprints, lesson.id) ? 3 : 1, lesson.id);
+  for (const lesson of lessons) {
+    const history = Object.hasOwn(previousSeedFingerprints, lesson.id)
+      ? previousSeedFingerprints[lesson.id as keyof typeof previousSeedFingerprints] : [];
+    assert.equal(lesson.revision, history.length ? Math.max(...history.map(prior => prior.nextRevision ?? prior.revision + 1)) : 1, lesson.id);
+  }
   assert.ok(lessons.some(lesson => lesson.level === 'foundation'));
   assert.ok(lessons.filter(lesson => lesson.id.startsWith('fr.past.') || lesson.id.startsWith('fr.opinions.'))
     .every(lesson => lesson.level === 'A2'));
+});
+
+test('routine and paperwork replace redundant introductions while prior canonical senses remain taught', () => {
+  const routine = lessons.find(lesson => lesson.id === 'fr.routine.small-numbers')!;
+  assert.ok(routine.vocabulary.some(entry => entry.target === 'se réveiller'));
+  assert.ok(routine.vocabulary.some(entry => entry.target === 'se brosser les dents'));
+  assert.ok(!routine.vocabulary.some(entry => entry.id === 'fr.routine.zero'));
+  const number = lessons.flatMap(lesson => lesson.vocabulary).find(entry => entry.id === 'fr.routine.zero');
+  assert.equal(number?.target, 'zéro');
+  const paperwork = lessons.find(lesson => lesson.id === 'fr.administration.internet')!;
+  assert.ok(paperwork.vocabulary.some(entry => entry.target === 'une date limite'));
+  assert.ok(paperwork.vocabulary.some(entry => entry.target === 'fonctionner'));
+  assert.ok(!paperwork.vocabulary.some(entry => entry.id === 'fr.administration.mot-de-passe'));
+  const password = lessons.flatMap(lesson => lesson.vocabulary).find(entry => entry.id === 'fr.administration.mot-de-passe');
+  assert.equal(password?.target, 'un mot de passe');
 });
 
 test('identical target forms share a sense ID except explicit contextual senses', () => {

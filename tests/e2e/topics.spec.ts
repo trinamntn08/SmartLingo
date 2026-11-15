@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
-import { groupLessonTopics, matchesVocabulary } from '@smartlingo/domain';
+import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
 
 const topics = groupLessonTopics(lessons);
 const groceryCount = topics.find(topic => topic.name === 'Groceries')!.vocabulary.length;
@@ -92,12 +92,12 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await page.getByRole('button', { name: /Build a sentence/ }).click();
   // The first accepted answer is guaranteed buildable by the curriculum integrity check.
   const remaining = lesson.sentenceActivity.tokens.map((token, index) => ({ token, index }));
-  let answer = lesson.sentenceActivity.answers[0];
+  let answer = normalizeAnswer(lesson.sentenceActivity.answers[0]);
   while (remaining.length) {
-    const next = remaining.find(piece => answer === piece.token || answer.startsWith(`${piece.token} `));
+    const next = remaining.find(piece => answer === normalizeAnswer(piece.token) || answer.startsWith(`${normalizeAnswer(piece.token)} `));
     if (!next) throw new Error(`Cannot build ${lesson.id}: ${answer}`);
     await page.getByRole('button', { name: next.token, exact: true }).click();
-    answer = answer.slice(next.token.length).trimStart();
+    answer = answer.slice(normalizeAnswer(next.token).length).trimStart();
     remaining.splice(remaining.indexOf(next), 1);
   }
   await page.getByRole('button', { name: 'Check sentence', exact: true }).click();

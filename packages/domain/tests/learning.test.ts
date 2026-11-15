@@ -21,8 +21,8 @@ test('sentence checking accepts alternatives and apostrophes but keeps meaningfu
 });
 
 test('progress belongs to a content revision and completion does not imply proficiency', () => {
-  const event: LearningEvent = { id: '77777777-7777-4777-8777-777777777777', lessonId: restaurantLesson.id, revision: 1, itemId: 'fr.cafe', activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T12:00:00Z' };
-  const progress = lessonProgress(restaurantLesson, [event, { ...event, revision: 2, activity: 'completion', result: 'completed' }]);
+  const event: LearningEvent = { id: '77777777-7777-4777-8777-777777777777', lessonId: restaurantLesson.id, revision: restaurantLesson.revision, itemId: 'fr.cafe', activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T12:00:00Z' };
+  const progress = lessonProgress(restaurantLesson, [event, { ...event, revision: restaurantLesson.revision + 1, activity: 'completion', result: 'completed' }]);
   assert.ok(progress.viewedIds.has('fr.cafe'));
   assert.equal(progress.completed, false);
   assert.equal(progress.pictureDone, false);
@@ -30,13 +30,13 @@ test('progress belongs to a content revision and completion does not imply profi
 });
 
 test('explicit vocabulary overview review covers one revision without implying exercise completion', () => {
-  const overview: LearningEvent = { id: '88888888-8888-4888-8888-888888888888', lessonId: restaurantLesson.id, revision: 1,
+  const overview: LearningEvent = { id: '88888888-8888-4888-8888-888888888888', lessonId: restaurantLesson.id, revision: restaurantLesson.revision,
     itemId: restaurantLesson.id, activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T12:00:00Z' };
   assert.equal(lessonProgress(restaurantLesson, []).viewedIds.size, 0);
   assert.deepEqual([...lessonProgress(restaurantLesson, [overview]).viewedIds], restaurantLesson.vocabulary.map(entry => entry.id));
   assert.equal(lessonProgress(restaurantLesson, [overview]).completed, false);
   assert.equal(lessonProgress(restaurantLesson, [overview]).pictureDone, false);
   assert.equal(lessonProgress(restaurantLesson, [overview]).sentenceDone, false);
-  assert.equal(lessonProgress({ ...restaurantLesson, revision: 2 }, [overview]).viewedIds.size, 0);
+  assert.equal(lessonProgress({ ...restaurantLesson, revision: restaurantLesson.revision + 1 }, [overview]).viewedIds.size, 0);
   assert.equal(lessonProgress({ ...restaurantLesson, id: 'fr.other.lesson' }, [overview]).viewedIds.size, 0);
 });

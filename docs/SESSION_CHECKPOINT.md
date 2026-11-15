@@ -1,29 +1,27 @@
-# Session checkpoint
+﻿# Session checkpoint
 
-Updated: 2026-11-14 (Europe/Paris).
+Updated: 2026-11-15 (Europe/Paris).
 
 ## Current request and outcome
 
-Owner requested that clicking SmartLingo return to the first page and that topics move to the left. Completed on fix/home-link-and-left-topics from clean visual-browser checkpoint 1ffb044. See [plan 0008](plans/0008-home-and-left-topics.md) and the owner correction in [ADR 0010](decisions/0010-visual-word-overviews.md).
+Owner requested continuing the unfinished everyday examples, compact gender and speaker controls, then committing and proceeding through next pending tasks until allowance ends. The example/control step is completed on feat/everyday-examples-and-gender, based on 8009796. This checkpoint is in its completed-step commit; verify actual resulting hash with Git.
 
-Shared BrandHome control now works by mouse, Enter and Space through the existing native button semantics, with a visible keyboard-focus border. Learner and editor headers call the same root home action: close the editor view and reset the learner to Today, clearing open lesson/topic selection and scrolling to the top. The editor stays mounted, preserving unsaved text. Its Return to learning control remains available. Desktop topic pane renders before the main content, with the divider on its right edge. The horizontal phone list remains.
+All 353 canonical entries have fuller original French examples and matching English. Compact m./f./m./f. labels replace repeated noun-gender prose, useful notes remain and empty notes are allowed. Speaker icons sit beside vocabulary/dialogue/notebook text with accessible labels, 44px targets, focus, Stop and error/text fallback. Editor gender/empty-note changes survive saved preview/publication/cache reload. Draft revision2 updates append only above exact unchanged historical revision1 seeds; edited/newer/published owner content, old immutable rows, notebook and review history remain intact. No curriculum was owner-approved or published outside isolated tests.
 
-Primary handled this small sequential change and self-review; no delegation or new dependencies. Inspected callback/effect reset behaviour, editor preservation and focus/geometry. No curriculum, domain, persistence, media or API changes. No owner data edits, publication, paid calls, push or merge.
+## Review and validation
 
-## Validation
-
-- npm.cmd run check: repository/TypeScript passed; repeated on final staged documents before committing.
-- npm.cmd run test:e2e: 29 passed, one existing deliberate duplicate publication skip. Updated geometry verifies left sidebar; brand click returns home from a topic bank, Enter returns home from a lesson, editor brand returns home and reopening the editor keeps unsaved text. Existing 320px navigation, learning/reload/retry, notebook, publication isolation, backup and manual-review journeys pass.
+- npm.cmd run check: repository/TypeScript passed; final document/staged check follows before commit.
+- npm.cmd test: all 16 tooling and 66 application tests passed. After French refinements, repeated check and all 66 application tests passed.
 - npm.cmd run build:web: passed.
-- Additional private-context smoke check returned home from Groceries; desktop left-pane screenshot inspected. No owner browser/storage used.
-- git diff --check passed before final note. Stage only this task's UI/tests/docs, run staged-secret/whitespace checks and commit locally. Actual commit identity is reported only after Git confirms it; if interrupted first, preserve changes and finish those steps.
+- Browser run: 29 existing cases passed, one intentional duplicate publication skip. Two added icon keyboard playback/Stop cases initially failed because a mock voice was used with the native utterance constructor; correcting the test-only mock made both focused reruns pass. Existing cases also cover 44px icons, examples/gender, empty note/no gender through publication, 320px error layout and learning/backup/review/navigation persistence.
+- Narrow vocabulary screenshot inspected. Actual audible French voice, Safari/physical phone/screen reader and owner content/media review remain unverified.
+- Independent read-only change-reviewer (gpt-6.1-sol high) reconstructed all 60 historical seeds from Git: fingerprints match 60/60, in-memory refresh appends once with zero publications, IDs/targets/meanings/media/exercises preserved; no actionable defect. Separate read-only curriculum-author (gpt-6.1-sol medium) reviewed all canonical entries. Primary fixed socks/weekday/availability wording and refined tartines/attentivement. Primary integrated and reviewed the full diff. No new dependencies or paid calls.
+- git diff --check passed; final staged secret/whitespace checks follow before commit. Check actual commit/log/status before reporting completion.
 
-Prior visual-browser checkpoint passed 16 tooling/60 application tests and all 125 image decodes. Those modules are unchanged; no unnecessary repeat of the domain/storage/media suite. Physical phone/Safari/screen reader, audible voice quality and owner content/media review remain unverified. Three previously documented moderate upstream Expo build-tool audit findings remain unrelated. Usage/reset tools unavailable; no allowance estimate or automatic resume claimed.
+## Next exact action
 
-## Git and next action
+Stage only this step's changed source/tests and related docs, run npm.cmd run check:staged plus git diff --cached --check, then create focused local commit and verify it. Exclude databases, exports, screenshots, caches and keys. Preserve all work if a check or commit fails. No unrelated initial edits identified.
 
-Expected local checkpoint title: fix: return home from brand and move topics left. No unrelated initial edits existed. Exclude screenshots, test results, exports, caches, databases and keys. Verify actual commit hash and clean working tree after checks.
+After committing, create a new topic branch for offline web installation/assets. Smallest next journey: explicit Profile download with size/status, cold reload and ordinary text/picture lessons while network/API are unavailable, recoverable interrupted downloads and explicit asset removal preserving all IndexedDB learner data. Record plan/contracts first, consult official Expo/service-worker docs, delegate disjoint implementation/review, validate a real exported web build in isolated browsers, then checkpoint/commit. Owner review/device checks remain pending; full editor and AI speaking remain later tasks. Three previously documented moderate upstream Expo build-tool findings remain.
 
-Refresh localhost:8081: topics are on the left, and SmartLingo returns to Today. Learner/API remain at localhost:8081 and 127.0.0.1:3001; check listeners before duplicate starts. Broader offline installation, full editor tools and AI speaking remain planned, outside this request.
-
-Prior checkpoints: 1ffb044 visual vocabulary; 042086d topic expansion; 3653a5e direct details; 546965d manual review; bc1b08f backup; 7a84e60 editor; 83c5573 foundation. Local commits are not remote backups. Inspect remote history before future integration.
+Usage/reset tools unavailable; no allowance estimate is claimed. No automatic resume configured. Owner authorised continuing within this active session, with checkpoints before interruptions; local commits are not remote backups. No push, merge, deployment, owner data edits or real publication performed.

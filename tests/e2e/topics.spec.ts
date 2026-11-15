@@ -19,8 +19,10 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'un rendez-vous', exact: true })).toBeVisible();
   await expect(page.getByText('an appointment', { exact: true })).toBeVisible();
-  await expect(page.getByText('I would like an appointment.', { exact: true })).toBeVisible();
-  await expect(page.getByText('Masculine noun; the spelling is unchanged in the plural.', { exact: true })).toBeVisible();
+  const appointment = lessons.flatMap(lesson => lesson.vocabulary).find(entry => entry.id === 'fr.health.rendez-vous')!;
+  await expect(page.getByText(appointment.exampleMeaning, { exact: true })).toBeVisible();
+  await expect(page.getByTestId('vocabulary-fr.health.rendez-vous').getByText('m.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Masculine noun; the spelling is unchanged in the plural.', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Synthetic device voice', { exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Save un rendez-vous', exact: true }).click();
   await expect(page.getByText('Saved un rendez-vous to your notebook.', { exact: true })).toBeVisible();

@@ -44,10 +44,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
       <View style={s.row}><Button primary disabled={model.blocked} onPress={reviewVocabulary}>Continue to dialogue →</Button></View>
     </View>}
     {stage === 'dialogue' && <View style={s.card}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text><Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
-      {lesson.dialogue.map((line, index) => <View key={index} style={[s.notice, line.role === lesson.role && { backgroundColor: '#E5EEDC', marginLeft: 16 }]}>
-        <Text style={s.eyebrow}>{line.role}</Text><Text style={s.heading}>{line.target}</Text><Speak text={line.target} />
-        <Text style={s.body}>{line.meaning}</Text>
-      </View>)}
+      {lesson.dialogue.map((line, index) => <DialogueLine key={index} line={line} highlighted={line.role === lesson.role} />)}
       <View style={s.notice}><Text style={s.eyebrow}>Grammar</Text><Text style={s.heading}>{lesson.grammar.title}</Text><Text style={s.body}>{lesson.grammar.explanation}</Text></View>
       <Button primary onPress={() => setStage('picture')}>{lesson.pictureActivity.mode === 'meaning' ? 'Try meaning practice →' : 'Try picture practice →'}</Button>
     </View>}
@@ -64,6 +61,16 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
 }
 
 type ActivityProps = { lesson: Lesson; disabled: boolean; done: boolean; record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints?: number, after?: () => void) => void; onNext: () => void };
+
+function DialogueLine({ line, highlighted }: { line: Lesson['dialogue'][number]; highlighted: boolean }) {
+  const [voiceError, setVoiceError] = useState('');
+  return <View style={[s.notice, highlighted && { backgroundColor: '#E5EEDC', marginLeft: 16 }]}>
+    <Text style={s.eyebrow}>{line.role}</Text><View style={s.row}>
+      <Text style={[s.heading, { flex: 1, minWidth: 0 }]}>{line.target}</Text><Speak text={line.target} onError={setVoiceError} />
+    </View><Text style={s.body}>{line.meaning}</Text>
+    {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
+  </View>;
+}
 
 function PictureActivity({ lesson, disabled, done, record, onNext }: ActivityProps) {
   const [feedback, setFeedback] = useState('');

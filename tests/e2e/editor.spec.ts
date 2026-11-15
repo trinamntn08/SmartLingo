@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { restaurantLesson } from '@smartlingo/content';
 
 async function proxyTestContent(page: Page) {
   await page.route('**/127.0.0.1:3001/**', async route => {
@@ -42,11 +43,16 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByRole('button', { name: 'Publish reviewed revision', exact: true })).toBeDisabled();
   await page.getByRole('textbox', { name: 'Lesson subtitle', exact: true }).fill('A coffee with confidence');
   await page.getByRole('textbox', { name: 'bonjour — English meaning', exact: true }).fill('A greeting reviewed in this isolated test');
+  await page.getByRole('textbox', { name: 'un café — Word note', exact: true }).fill('');
+  await page.getByRole('button', { name: 'un café — No gender', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'un café — No gender', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByRole('button', { name: 'Preview saved revision', exact: true })).toBeDisabled();
   await page.getByRole('button', { name: 'Save draft revision', exact: true }).click();
-  await expect(page.getByText('Draft revision 2 saved locally.', { exact: false })).toBeVisible();
+  await expect(page.getByText(`Draft revision ${restaurantLesson.revision + 1} saved locally.`, { exact: false })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'un café — Word note', exact: true })).toHaveValue('');
   await page.getByRole('button', { name: 'Preview saved revision', exact: true }).click();
-  await expect(page.getByText('Saved revision 2 · temporary practice', { exact: true })).toBeVisible();
+  await expect(page.getByText(`Saved revision ${restaurantLesson.revision + 1} · temporary practice`, { exact: true })).toBeVisible();
+  await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   // Preview practice and word capture never touch the real notebook/history.
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
@@ -56,11 +62,11 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('checkbox').check();
   await page.screenshot({ path: info.outputPath('publication-review.png'), fullPage: true });
   await page.getByRole('button', { name: 'Publish reviewed revision', exact: true }).click();
-  await expect(page.getByText('Published revision 3 to the local catalogue.', { exact: false })).toBeVisible();
+  await expect(page.getByText(`Published revision ${restaurantLesson.revision + 2} to the local catalogue.`, { exact: false })).toBeVisible();
   // A later draft stays separate from the active publication.
   await page.getByRole('textbox', { name: 'Lesson subtitle', exact: true }).fill('UNPUBLISHED later changes');
   await page.getByRole('button', { name: 'Save new draft revision', exact: true }).click();
-  await expect(page.getByText('Draft revision 4 saved locally.', { exact: false })).toBeVisible();
+  await expect(page.getByText(`Draft revision ${restaurantLesson.revision + 3} saved locally.`, { exact: false })).toBeVisible();
   await page.getByRole('button', { name: /Return to learning/ }).click();
   await page.getByRole('button', { name: 'Load published lessons', exact: true }).click();
   await expect(page.getByText('1 published lesson saved in this browser.')).toBeVisible();
@@ -75,6 +81,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await expect(page.getByText('Published', { exact: true })).toBeVisible();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('In France, un café usually means an espresso.', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toContainText('In notebook');
 });

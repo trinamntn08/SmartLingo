@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -110,13 +111,23 @@ export class SqliteLessonRepository implements LessonRepository {
     });
   }
 
-  /** Seed only absent IDs: startup never replaces local content, even with a newer bundled seed. */
-  seed(inputs: readonly unknown[]): void {
+  /** Append trusted seed updates only to an exact, untouched prior draft; retain every revision. */
+  seed(inputs: readonly unknown[], baselines?: Readonly<Record<string, { revision: number; sha256: string }>>): void {
     const lessons = inputs.map(input => lessonSchema.parse(input));
     if (lessons.some(lesson => lesson.status !== 'draft')) throw new Error('Preview seeds must be drafts');
     this.transaction(() => {
       for (const lesson of lessons) {
-        if (!this.getLesson(lesson.id)) this.insertLesson(lesson);
+        const existing = this.getLesson(lesson.id);
+        if (!existing) {
+          this.insertLesson(lesson);
+          continue;
+        }
+        const baseline = baselines && Object.hasOwn(baselines, lesson.id) ? baselines[lesson.id] : undefined;
+        if (baseline && existing.status === 'draft' && existing.revision === baseline.revision &&
+          lesson.revision === baseline.revision + 1 &&
+          createHash('sha256').update(JSON.stringify(existing)).digest('hex') === baseline.sha256) {
+          this.insertLesson(lesson);
+        }
       }
     });
   }

@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Image, Pressable, Text, View } from 'react-native';
 import { audio } from '../audio';
 import { colors, styles as s } from './theme';
 
@@ -19,17 +19,29 @@ export function Badge({ children }: { children: ReactNode }) {
   return <View style={s.badge}><Text style={s.badgeText}>{children}</Text></View>;
 }
 
-export function Speak({ text }: { text: string }) {
+export function Speak({ text, onError }: { text: string; onError?: (message: string) => void }) {
   const [state, setState] = useState<'idle' | 'playing'>('idle');
   const [error, setError] = useState('');
+  const [focused, setFocused] = useState(false);
   useEffect(() => () => audio.stop(), [text]);
   async function play() {
     if (state === 'playing') { audio.stop(); setState('idle'); return; }
-    setError(''); setState('playing');
-    try { await audio.speak(text); } catch (failure) { setError(failure instanceof Error ? failure.message : 'Voice is unavailable. Read the French text instead.'); }
+    setError(''); onError?.(''); setState('playing');
+    try { await audio.speak(text); } catch (failure) {
+      const message = failure instanceof Error ? failure.message : 'Voice is unavailable. Read the French text instead.';
+      setError(message); onError?.(message);
+    }
     finally { setState('idle'); }
   }
-  return <View style={{ gap: 6 }}><View style={s.row}><Button onPress={() => void play()} label={state === 'playing' ? 'Stop device voice' : `Listen to ${text}`}>
-    {state === 'playing' ? '■ Stop' : '▷ Listen'}</Button></View>
-    {!!error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{error}</Text>}</View>;
+  const drawing = state === 'playing' ? '<rect x="6" y="6" width="12" height="12" rx="1" fill="#19201D"/>'
+    : '<path d="M3 9h4l5-4v14l-5-4H3z" fill="none" stroke="#19201D" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 8q4 4 0 8m3-11q7 7 0 14" fill="none" stroke="#19201D" stroke-width="1.8" stroke-linecap="round"/>';
+  const icon = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">${drawing}</svg>`)}`;
+  return <View style={{ gap: 6, maxWidth: '100%' }}>
+    <Pressable accessibilityRole="button" accessibilityLabel={state === 'playing' ? 'Stop device voice' : `Listen to ${text}`}
+      onPress={() => void play()} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+      style={({ pressed }) => ({ minWidth: 44, minHeight: 44, alignSelf: 'flex-start', alignItems: 'center', justifyContent: 'center',
+        borderRadius: 22, borderWidth: 2, borderColor: focused ? '#246944' : 'transparent', backgroundColor: pressed ? colors.sand : 'transparent' })}>
+      <Image accessible={false} source={{ uri: icon }} style={{ width: 22, height: 22 }} />
+    </Pressable>
+    {!onError && !!error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{error}</Text>}</View>;
 }

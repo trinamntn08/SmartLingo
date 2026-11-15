@@ -1,14 +1,19 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
 import type { Vocabulary } from '@smartlingo/domain';
 import { Button, Speak } from './controls';
-import { styles as s } from './theme';
+import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { WordIllustration } from './WordIllustration';
+import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
 
 export function VocabularyCard({ entry, model }: { entry: Vocabulary; model: LearningModel }) {
   const [message, setMessage] = useState('');
+  const [voiceError, setVoiceError] = useState('');
+  const compact = useWindowDimensions().width < 600;
   const saved = model.notebook.some(note => note.sourceEntryId === entry.id || note.id === `notebook.${entry.id}`);
+  const presentation = vocabularyPresentation(entry);
+  const gender = presentation.gender ? genderLabels[presentation.gender] : undefined;
 
   function saveWord() {
     setMessage('');
@@ -17,21 +22,25 @@ export function VocabularyCard({ entry, model }: { entry: Vocabulary; model: Lea
     () => setMessage(`Saved ${entry.target} to your notebook.`));
   }
 
-  return <View style={[s.card, { width: '100%', minWidth: 0, flexGrow: 1, padding: 18, gap: 12 }]}>
+  return <View testID={`vocabulary-${entry.id}`} style={[s.card, { width: '100%', minWidth: 0, flexGrow: 1, padding: 18, gap: 12 }]}>
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-      <WordIllustration entry={entry} size={100} />
+      <WordIllustration entry={entry} size={compact ? 72 : 100} />
       <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
-        <Text accessibilityRole="header" style={s.heading}>{entry.target}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <Text accessibilityRole="header" style={[s.heading, { flexShrink: 1, minWidth: 0 }]}>{entry.target}</Text>
+          {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
+          <Speak text={entry.target} onError={setVoiceError} />
+        </View>
         <Text style={s.body}>{entry.meaning}</Text>
       </View>
     </View>
+    {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
     <View style={{ gap: 4 }}>
       <Text style={s.body}>{entry.example}</Text>
       <Text style={s.muted}>{entry.exampleMeaning}</Text>
     </View>
-    <Text style={s.muted}>{entry.note}</Text>
+    {!!presentation.note && <Text style={s.muted}>{presentation.note}</Text>}
     <View style={[s.row, { marginTop: 'auto', gap: 8 }]}>
-      <Speak text={entry.target} />
       <Button label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
         {saved ? '✓ In notebook' : '+ Save word'}
       </Button>

@@ -68,7 +68,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
   async function saveDraft(): Promise<boolean> {
     if (!draft || !saved || inFlight.current) return false;
     const parsed = lessonSchema.safeParse(draft);
-    if (!parsed.success) { setError('Every field needs text. Meanings allow up to 500 characters, French examples up to 1,000, and other editable fields up to 2,000. Check the form before saving.'); scroll.current?.scrollTo({ y: 0, animated: false }); return false; }
+    if (!parsed.success) { setError('Required fields need text; word notes may be empty. Meanings allow up to 500 characters, French examples up to 1,000, and other editable fields up to 2,000. Check the form before saving.'); scroll.current?.scrollTo({ y: 0, animated: false }); return false; }
     inFlight.current = true; setBusy(true); setError(''); setMessage(''); resetReview();
     try {
       const lesson = await localContentApi.saveDraft(parsed.data, saved.revision);

@@ -3,7 +3,7 @@ import { lessonSchema, type Lesson, type Vocabulary } from '@smartlingo/domain';
 /** Compact authoring input; runtime lessons still pass the shared public schema. */
 export type WordDraft = readonly [
   slug: string, target: string, meaning: string, example: string,
-  exampleMeaning: string, note: string, picture?: Vocabulary['picture'],
+  exampleMeaning: string, note: string, details?: { picture?: Vocabulary['picture']; gender?: Vocabulary['gender'] },
 ];
 
 export type ShortLessonDraft = {
@@ -34,13 +34,14 @@ export type TopicDraft = {
 export function buildTopic(topic: TopicDraft): Lesson[] {
   return topic.lessons.map(part => {
     const lessonId = `fr.${topic.slug}.${part.slug}`;
-    const vocabulary = part.words.map(([slug, target, meaning, example, exampleMeaning, note, picture]) => ({
+    const vocabulary = part.words.map(([slug, target, meaning, example, exampleMeaning, note, details]) => ({
       id: `fr.${topic.slug}.${slug}`, target, meaning, example, exampleMeaning, note,
-      picture: picture ?? 'context',
-      pictureAlt: picture ? `Study illustration for ${meaning}` : 'An open vocabulary notebook',
+      gender: details?.gender,
+      picture: details?.picture ?? 'context',
+      pictureAlt: details?.picture ? `Study illustration for ${meaning}` : 'An open vocabulary notebook',
     }));
     return lessonSchema.parse({
-      id: lessonId, revision: 1, status: 'draft', language: 'fr-FR', explanationLanguage: 'en',
+      id: lessonId, revision: 2, status: 'draft', language: 'fr-FR', explanationLanguage: 'en',
       title: part.title, subtitle: part.title, outcome: part.outcome, level: part.level,
       topic: topic.title, role: topic.role, durationMinutes: 7, vocabulary,
       dialogue: part.dialogue, grammar: part.grammar,

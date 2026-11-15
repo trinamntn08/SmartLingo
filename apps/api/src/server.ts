@@ -1,5 +1,5 @@
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { lessons } from '@smartlingo/content';
+import { lessons, previousSeedFingerprints } from '@smartlingo/content';
 import { createApp } from './app';
 import { SqliteLessonRepository } from './repository';
 
@@ -24,7 +24,7 @@ export async function startServer(environment: { HOST?: string; PORT?: string } 
   const path = fileURLToPath(new URL('../../../data/smartlingo.sqlite', import.meta.url));
   const repository = new SqliteLessonRepository(path);
   try {
-    repository.seed(lessons);
+    repository.seed(lessons, previousSeedFingerprints);
     const app = createApp(repository);
     try {
       await app.listen(config);

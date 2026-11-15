@@ -4,9 +4,9 @@ import { draftSaveSchema, mergeLessonCatalogue, publishRequestSchema, vocabulary
 import { lessons, restaurantLesson } from '@smartlingo/content';
 
 test('publication is explicit and draft commands refer to their base revision', () => {
-  assert.ok(draftSaveSchema.safeParse({ expectedRevision: 1, lesson: restaurantLesson }).success);
-  assert.equal(draftSaveSchema.safeParse({ expectedRevision: 2, lesson: restaurantLesson }).success, false);
-  assert.equal(draftSaveSchema.safeParse({ expectedRevision: 1, lesson: { ...restaurantLesson, status: 'published' } }).success, false);
+  assert.ok(draftSaveSchema.safeParse({ expectedRevision: restaurantLesson.revision, lesson: restaurantLesson }).success);
+  assert.equal(draftSaveSchema.safeParse({ expectedRevision: restaurantLesson.revision + 1, lesson: restaurantLesson }).success, false);
+  assert.equal(draftSaveSchema.safeParse({ expectedRevision: restaurantLesson.revision, lesson: { ...restaurantLesson, status: 'published' } }).success, false);
   assert.equal(publishRequestSchema.safeParse({ expectedRevision: 1, previewToken: '77777777-7777-4777-8777-777777777777', ownerReviewed: false }).success, false);
 });
 

@@ -17,3 +17,7 @@ All new prose/examples/activities are original AI-assisted drafts. No exam tasks
 
 ## Owner review before publication
 Check natural French and English sense, gender, register, estimated difficulty, usefulness, translations, dialogue coherence, all valid sentence alternatives and visual suitability. Automated schema/count/token checks establish structural consistency only. Device speech remains synthetic, disclosed in Profile; no voice quality/native-speaker review is claimed. Review acknowledgement and saved preview remain required for local publication.
+
+## Everyday examples revision, 2026-11-15
+
+All 353 canonical entries now have fuller original everyday French examples with matching English translations. Gender metadata appears separately from useful usage notes; notes may be empty. Targets, meanings, IDs, exercises, dialogue and original media remain unchanged. Examples use draft revision 2; immutable API history and owner-edited heads/publications are preserved by an exact historical-fingerprint guard. Independent AI-assisted French review corrected several wording details; this is not owner approval or native-speaker validation. No additional external content, images or audio were imported. See [ADR 0011](decisions/0011-example-revisions-and-gender.md).

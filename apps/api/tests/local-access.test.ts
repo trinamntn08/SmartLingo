@@ -33,36 +33,36 @@ test('editor POST requires exact allowed Origin, custom header and JSON even for
     for (const origin of [undefined, 'null', 'https://localhost:8081', 'http://localhost:8082', 'http://localhost:8081.attacker.test', 'http://attacker.test']) {
       const headers: Record<string, string> = { 'x-smartlingo-editor': '1', 'content-type': 'application/json' };
       if (origin !== undefined) headers.origin = origin;
-      const response = await app.inject({ method: 'POST', url: editorUrl, headers, payload: { expectedRevision: 1 } });
+      const response = await app.inject({ method: 'POST', url: editorUrl, headers, payload: { expectedRevision: restaurantLesson.revision } });
       assert.equal(response.statusCode, 403, String(origin));
       assert.equal(response.headers['access-control-allow-origin'], undefined);
     }
     for (const header of [undefined, '0', 'true', '1, 1']) {
       const headers: Record<string, string> = { origin: allowedOrigin, 'content-type': 'application/json' };
       if (header !== undefined) headers['x-smartlingo-editor'] = header;
-      assert.equal((await app.inject({ method: 'POST', url: editorUrl, headers, payload: { expectedRevision: 1 } })).statusCode, 403);
+      assert.equal((await app.inject({ method: 'POST', url: editorUrl, headers, payload: { expectedRevision: restaurantLesson.revision } })).statusCode, 403);
     }
     for (const contentType of ['text/plain', 'application/x-www-form-urlencoded']) {
       assert.equal((await app.inject({
         method: 'POST', url: editorUrl,
         headers: { origin: allowedOrigin, 'x-smartlingo-editor': '1', 'content-type': contentType },
-        payload: '{"expectedRevision":1}',
+        payload: JSON.stringify({ expectedRevision: restaurantLesson.revision }),
       })).statusCode, 415);
     }
     assert.equal((await app.inject({
-      method: 'POST', url: editorUrl.replace('fr.restaurant', '%66r.restaurant'), payload: { expectedRevision: 1 },
+      method: 'POST', url: editorUrl.replace('fr.restaurant', '%66r.restaurant'), payload: { expectedRevision: restaurantLesson.revision },
     })).statusCode, 403);
     for (const origin of [allowedOrigin, 'http://127.0.0.1:8081']) {
       const response = await app.inject({
         method: 'POST', url: editorUrl,
         headers: { origin, 'x-smartlingo-editor': '1', 'content-type': 'application/json; charset=utf-8' },
-        payload: { expectedRevision: 1 },
+        payload: { expectedRevision: restaurantLesson.revision },
       });
       assert.equal(response.statusCode, 200);
       assert.equal(response.headers['access-control-allow-origin'], origin);
       assert.equal(response.headers['access-control-allow-credentials'], undefined);
     }
-    assert.equal(repository.getLesson(restaurantLesson.id)?.revision, 1);
+    assert.equal(repository.getLesson(restaurantLesson.id)?.revision, restaurantLesson.revision);
   } finally { await app.close(); }
 });
 

@@ -21,6 +21,7 @@ function NotebookCard({ entry, model }: { entry: NotebookEntry; model: LearningM
   const [example, setExample] = useState(entry.example);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+  const [voiceError, setVoiceError] = useState('');
   function edit() { setTarget(entry.target); setMeaning(entry.meaning); setExample(entry.example); setEditing(true); setSaved(false); }
   function save() {
     const result = notebookEntrySchema.safeParse({ ...entry, target, meaning, example, updatedAt: new Date().toISOString() });
@@ -32,5 +33,5 @@ function NotebookCard({ entry, model }: { entry: NotebookEntry; model: LearningM
     <Text style={s.body}>English meaning</Text><TextInput accessibilityLabel="English meaning" value={meaning} onChangeText={setMeaning} maxLength={500} style={s.input} />
     <Text style={s.body}>Example or personal note</Text><TextInput accessibilityLabel="Example or personal note" value={example} onChangeText={setExample} maxLength={1000} multiline style={[s.input, { minHeight: 90 }]} />
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}<View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save changes</Button><Button disabled={model.busy || !!model.saveError} onPress={() => setEditing(false)}>Cancel</Button></View>
-  </> : <><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text><Text style={s.body}>{entry.meaning}</Text><Speak text={entry.target} />{!!entry.example && <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text></View>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
+  </> : <><View style={s.row}><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text><Speak text={entry.target} onError={setVoiceError} /></View><Text style={s.body}>{entry.meaning}</Text>{!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}{!!entry.example && <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text></View>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
 }

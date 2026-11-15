@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
+import { lessonSchema } from '@smartlingo/domain';
 import { migrateContentDatabase } from '../src/migrations';
 import { InvalidStoredLessonError, SqliteLessonRepository } from '../src/repository';
 
@@ -38,9 +40,9 @@ test('draft seed is idempotent and preserves local revisions and same-revision e
     repository.seed(lessons);
     assert.equal(repository.listLessons().length, lessons.length);
     assert.equal(repository.getLesson(edited.id)?.title, edited.title);
-    const next = { ...edited, revision: 3, title: 'My third revision' };
+    const next = { ...edited, revision: restaurantLesson.revision + 2, title: 'My later revision' };
     repository.saveLesson(next);
-    repository.seed([{ ...restaurantLesson, revision: 4 }]);
+    repository.seed([{ ...restaurantLesson, revision: restaurantLesson.revision + 3 }]);
     assert.deepEqual(repository.getLesson(edited.id), next);
   } finally { repository.close(); }
 });
@@ -52,9 +54,9 @@ test('invalid writes and revision conflicts leave valid content unchanged', () =
     assert.throws(() => repository.saveLesson({ ...restaurantLesson, vocabulary: [] }));
     assert.throws(() => repository.saveLesson({ ...restaurantLesson, title: 'Overwrite' }), /revision/);
     repository.saveLesson(restaurantLesson); // An identical retry is harmless.
-    repository.saveLesson({ ...restaurantLesson, revision: 2 });
+    repository.saveLesson({ ...restaurantLesson, revision: restaurantLesson.revision + 1 });
     assert.throws(() => repository.saveLesson(restaurantLesson), /revision/);
-    assert.equal(repository.getLesson(restaurantLesson.id)?.revision, 2);
+    assert.equal(repository.getLesson(restaurantLesson.id)?.revision, restaurantLesson.revision + 1);
     assert.throws(() => repository.seed([{ ...restaurantLesson, status: 'published' }]), /drafts/);
   } finally { repository.close(); }
 });
@@ -73,7 +75,7 @@ test('reopening SQLite preserves revisions; malformed stored content fails expli
   let repository = new SqliteLessonRepository(path);
   try {
     repository.seed(lessons);
-    const revised = { ...restaurantLesson, revision: 2, title: 'Persisted local title' };
+    const revised = { ...restaurantLesson, revision: restaurantLesson.revision + 1, title: 'Persisted local title' };
     repository.saveLesson(revised);
     repository.close();
     repository = new SqliteLessonRepository(path);
@@ -83,8 +85,8 @@ test('reopening SQLite preserves revisions; malformed stored content fails expli
     try {
       assert.equal(database.prepare('SELECT COUNT(*) AS count FROM lesson_revisions WHERE id = ?')
         .get(revised.id)?.count, 2);
-      database.prepare('UPDATE lesson_revisions SET payload = ? WHERE id = ? AND revision = 2')
-        .run('{broken JSON', revised.id);
+      database.prepare('UPDATE lesson_revisions SET payload = ? WHERE id = ? AND revision = ?')
+        .run('{broken JSON', revised.id, revised.revision);
     } finally { database.close(); }
     repository = new SqliteLessonRepository(path);
     assert.throws(() => repository.getLesson(revised.id), InvalidStoredLessonError);
@@ -105,9 +107,107 @@ test('stored content must match its database ID and revision', () => {
     const database = new DatabaseSync(path);
     try {
       database.prepare('INSERT INTO lesson_revisions VALUES (?, ?, ?)')
-        .run(restaurantLesson.id, 2, JSON.stringify(restaurantLesson));
+        .run(restaurantLesson.id, restaurantLesson.revision + 1, JSON.stringify(restaurantLesson));
     } finally { database.close(); }
     assert.throws(() => repository.getLesson(restaurantLesson.id), InvalidStoredLessonError);
+  } finally {
+    repository.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+function seedRefreshFixture() {
+  const original = lessonSchema.parse({ ...restaurantLesson, revision: 1, title: 'Original bundled draft' });
+  const updated = lessonSchema.parse({ ...original, revision: 2, title: 'Updated bundled draft' });
+  const baselines = {
+    [original.id]: { revision: 1, sha256: createHash('sha256').update(JSON.stringify(original)).digest('hex') },
+  };
+  return { original, updated, baselines };
+}
+
+test('trusted seed refresh appends once and retains the exact original revision on disk', () => {
+  const { original, updated, baselines } = seedRefreshFixture();
+  const directory = mkdtempSync(join(tmpdir(), 'smartlingo-seed-'));
+  const path = join(directory, 'content.sqlite');
+  const repository = new SqliteLessonRepository(path);
+  try {
+    repository.seed([original]);
+    repository.seed([updated], baselines);
+    repository.seed([updated], baselines);
+    assert.deepEqual(repository.getLesson(original.id), updated);
+    assert.deepEqual(repository.listPublishedLessons(), []);
+    const database = new DatabaseSync(path);
+    try {
+      const rows = database.prepare('SELECT revision, payload FROM lesson_revisions WHERE id = ? ORDER BY revision').all(original.id);
+      assert.deepEqual(rows.map(row => row.revision), [1, 2]);
+      assert.deepEqual(JSON.parse(rows[0].payload as string), original);
+      assert.deepEqual(JSON.parse(rows[1].payload as string), updated);
+    } finally { database.close(); }
+  } finally {
+    repository.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('trusted refresh preserves edited heads, newer drafts, publications and untrusted baselines', () => {
+  const { original, updated, baselines } = seedRefreshFixture();
+  const published = lessonSchema.parse({ ...original, status: 'published' });
+  const cases = [
+    { name: 'same-revision owner edit', head: { ...original, title: 'Owner edit' }, incoming: updated, baselines },
+    { name: 'newer owner draft', head: { ...original, revision: 3 }, incoming: updated, baselines },
+    { name: 'same-revision different draft', head: { ...updated, title: 'Owner revision two' }, incoming: updated, baselines },
+    { name: 'published head even with a matching fingerprint', head: published, incoming: updated, baselines: {
+      [published.id]: { revision: 1, sha256: createHash('sha256').update(JSON.stringify(published)).digest('hex') },
+    } },
+    { name: 'newer publication', head: { ...published, revision: 3 }, incoming: updated, baselines },
+    { name: 'unknown baseline', head: original, incoming: updated, baselines: {} },
+    { name: 'no explicit baseline', head: original, incoming: updated, baselines: undefined },
+    { name: 'inherited baseline', head: original, incoming: updated, baselines: Object.create(baselines) as typeof baselines },
+    { name: 'wrong baseline revision', head: original, incoming: updated, baselines: { [original.id]: { ...baselines[original.id], revision: 2 } } },
+    { name: 'wrong fingerprint', head: original, incoming: updated, baselines: { [original.id]: { revision: 1, sha256: '0'.repeat(64) } } },
+    { name: 'nonconsecutive incoming revision', head: original, incoming: { ...updated, revision: 3 }, baselines },
+  ];
+  for (const scenario of cases) {
+    const repository = new SqliteLessonRepository(':memory:');
+    try {
+      repository.saveLesson(scenario.head);
+      repository.seed([scenario.incoming], scenario.baselines);
+      assert.deepEqual(repository.getLesson(original.id), lessonSchema.parse(scenario.head), scenario.name);
+    } finally { repository.close(); }
+  }
+});
+
+test('trusted refresh seeds new databases and validates every incoming draft before appending', () => {
+  const { original, updated, baselines } = seedRefreshFixture();
+  const repository = new SqliteLessonRepository(':memory:');
+  try {
+    repository.seed([updated], baselines);
+    assert.deepEqual(repository.getLesson(updated.id), updated);
+  } finally { repository.close(); }
+  const existing = new SqliteLessonRepository(':memory:');
+  try {
+    existing.seed([original]);
+    assert.throws(() => existing.seed([updated, { id: 'broken' }], baselines));
+    assert.deepEqual(existing.getLesson(original.id), original);
+    assert.throws(() => existing.seed([updated, { ...updated, id: 'fr.published', status: 'published' }], baselines), /drafts/);
+    assert.deepEqual(existing.getLesson(original.id), original);
+    assert.equal(existing.getLesson('fr.published'), undefined);
+  } finally { existing.close(); }
+});
+
+test('corrupted stored heads fail safely and roll back earlier seed appends in the batch', () => {
+  const { original, updated, baselines } = seedRefreshFixture();
+  const directory = mkdtempSync(join(tmpdir(), 'smartlingo-seed-'));
+  const path = join(directory, 'content.sqlite');
+  const repository = new SqliteLessonRepository(path);
+  try {
+    repository.seed([original]);
+    const database = new DatabaseSync(path);
+    try {
+      database.prepare('INSERT INTO lesson_revisions VALUES (?, ?, ?)').run('fr.corrupt', 1, '{broken');
+    } finally { database.close(); }
+    assert.throws(() => repository.seed([updated, { ...updated, id: 'fr.corrupt' }], baselines), InvalidStoredLessonError);
+    assert.deepEqual(repository.getLesson(original.id), original);
   } finally {
     repository.close();
     rmSync(directory, { recursive: true, force: true });

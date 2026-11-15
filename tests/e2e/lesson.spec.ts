@@ -40,8 +40,8 @@ test('restaurant details are visible directly and practice/notebook completion s
   await page.screenshot({ path: info.outputPath('today.png'), fullPage: true });
   await button(page, /Start restaurant practice/).click();
   await expect(page.getByText('hello / good morning', { exact: true })).toBeVisible();
-  await expect(page.getByText('Bonjour, madame.', { exact: true })).toBeVisible();
-  await expect(page.getByText('Hello, madam.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Bonjour madame, est-ce que je peux vous poser une question ?', { exact: true })).toBeVisible();
+  await expect(page.getByText('Hello, madam, could I ask you a question?', { exact: true })).toBeVisible();
   await expect(page.getByText('A polite greeting when you arrive.', { exact: true })).toBeVisible();
   await expect(button(page, /Show meaning|Show example translation|Show word note/)).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('vocabulary.png'), fullPage: true });
@@ -49,6 +49,12 @@ test('restaurant details are visible directly and practice/notebook completion s
   for (const word of ['un café', 'de l’eau', 'la carte', 'l’addition', 's’il vous plaît'])
     await expect(page.getByRole('heading', { name: word, exact: true })).toBeVisible();
   await expectPictureLoaded(page);
+  await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('vocabulary-fr.eau').getByText('f.', { exact: true })).toBeVisible();
+  await expect(button(page, 'Listen to bonjour')).toHaveText('');
+  const speakerBox = await button(page, 'Listen to bonjour').boundingBox();
+  expect(speakerBox!.width).toBeGreaterThanOrEqual(44);
+  expect(speakerBox!.height).toBeGreaterThanOrEqual(44);
   await expect(button(page, /Next word/)).toHaveCount(0);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
@@ -134,6 +140,7 @@ test('stale tab capture preserves another tab’s notebook edit', async ({ page,
 
 test('320px catalogue navigation works by keyboard and illustrations load', async ({ page }, info) => {
   await page.setViewportSize({ width: 320, height: 740 });
+  await page.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { value: undefined, configurable: true }));
   await page.goto('/');
   await button(page, 'Explore').focus();
   await page.keyboard.press('Enter');
@@ -147,11 +154,46 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await expectPictureLoaded(page);
   await page.screenshot({ path: info.outputPath('narrow-lesson.png'), fullPage: true });
   await button(page, 'Listen to bonjour').click();
+  await expect(page.getByRole('alert')).toContainText('No French device voice');
+  const title = page.getByRole('heading', { name: 'bonjour', exact: true });
+  const titleBox = await title.boundingBox();
+  expect(titleBox!.height).toBeLessThan(100);
+  await expectNoHorizontalOverflow(page);
   // Missing device voices never block the text activity.
+  await page.screenshot({ path: info.outputPath('narrow-voice-error.png'), fullPage: true });
   await expect(page.getByRole('heading', { name: 'une baguette', exact: true })).toBeVisible();
   await expect(button(page, /Continue to dialogue/)).toBeEnabled();
   await button(page, /Continue to dialogue/).click();
   await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+});
+
+test('speaker icon plays and stops through keyboard controls', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      configurable: true,
+      value: class { constructor(public text: string) {} },
+    });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        getVoices: () => [{ lang: 'fr-FR' }],
+        speak: (utterance: SpeechSynthesisUtterance) => { document.documentElement.dataset.spoken = utterance.text; },
+        cancel: () => { document.documentElement.dataset.stopped = 'true'; },
+      },
+    });
+  });
+  await page.goto('/');
+  await button(page, /Start restaurant practice/).click();
+  const speaker = button(page, 'Listen to bonjour');
+  await speaker.focus();
+  await page.keyboard.press('Enter');
+  await expect(button(page, 'Stop device voice')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.dataset.spoken)).toBe('bonjour');
+  await page.evaluate(() => { delete document.documentElement.dataset.stopped; });
+  await page.keyboard.press('Space');
+  await expect(speaker).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.dataset.stopped)).toBe('true');
+  await expect(button(page, /Continue to dialogue/)).toBeEnabled();
 });
 
 test('storage denial explains the problem and never claims a saved change', async ({ page }) => {

@@ -4,9 +4,11 @@ import { EditorError } from './editor-error';
 import { registerEditorRoutes, lessonParams } from './editor-routes';
 import { registerLocalAccess } from './local-access';
 import { PreviewReceipts } from './preview-receipts';
+import { PracticeError, PracticeService, type PracticeOptions } from './practice/service';
+import { registerPracticeRoutes } from './practice/routes';
 
 /** The app takes ownership of the repository and closes it with the server. */
-export function createApp(repository: LessonRepository, options: { now?: () => number } = {}) {
+export function createApp(repository: LessonRepository, options: { now?: () => number; practice?: PracticeOptions } = {}) {
   const app = Fastify({
     logger: false,
     bodyLimit: 131_072,
@@ -17,9 +19,12 @@ export function createApp(repository: LessonRepository, options: { now?: () => n
   });
 
   const receipts = new PreviewReceipts(options.now);
+  const practice = new PracticeService({ now: options.now, ...options.practice });
   registerLocalAccess(app);
+  app.addHook('preClose', async () => { practice.close(); });
   app.addHook('onClose', async () => { receipts.clear(); repository.close(); });
   app.setErrorHandler<FastifyError>((error, _request, reply) => {
+    if (error instanceof PracticeError) return reply.code(error.statusCode).send({ error: error.message, ...(error.terminal ? { code: 'attempt_ended' } : {}) });
     if (error instanceof EditorError) return reply.code(error.statusCode).send({ error: error.message });
     if (error.validation) return reply.code(400).send({ error: 'Invalid request' });
     if (error.statusCode === 400 || error.statusCode === 413 || error.statusCode === 415) {
@@ -40,5 +45,6 @@ export function createApp(repository: LessonRepository, options: { now?: () => n
     return { lesson };
   });
   registerEditorRoutes(app, repository, receipts);
+  registerPracticeRoutes(app, practice);
   return app;
 }

@@ -2,6 +2,20 @@
 
 Updated: 2026-11-15 (Europe/Paris).
 
+## Completed optional AI practice
+
+Owner authorises continued French curriculum/product work while away, prioritising optional API conversation. Completed local text and recorded-input journey on `feat/french-course-rework`, based on curriculum checkpoint `baa3679`. The commit containing these notes captures the separate AI feature; report its actual hash after Git confirms it. The pre-existing curriculum work was preserved and committed independently by its owner. No dependency/lockfile/storage-schema changes.
+
+Practice now offers searchable lesson situations, role/level context, explicit French text exchanges, visible English translations/help/feedback, device replay and explicit editable notebook phrase capture. Optional recording is local until Transcribe recording: thirty seconds/two MiB, editable transcript before separate Send, denied/unsupported fallback, discard/stop/hidden-page/navigation cleanup and late-permission/result guards. Only explicitly saved phrases persist. Server-only configurable OpenAI adapters share bounded temporary sessions, hard idle expiry, daily attempt limits, single flight, stable replay, sanitized terminal failures, timeout and stop/shutdown abort. Counters reset on API restart and exclude transcription tokens; they are not billing totals. See [plan 0017](plans/0017-ai-french-practice.md), [ADR 0016](decisions/0016-optional-ai-practice.md), and [setup](../README.md#optional-ai-french-practice).
+
+Validation: `npm.cmd run check` passes; `npm.cmd run test:app` passes all136 tests. `npx.cmd playwright test --workers=2`:47 passed/one intentional duplicate-publication skip, including twelve practice cases. Independent instructionally read-only reviewer reports no remaining actionable findings after fixes for terminal retry recovery, transcription overwriting edits and wrong transcription failure guidance. API/UI/reviewer actual routing: `gpt-6.1-sol`, medium, exclusive feature ownership. Primary reviewed integration/diffs. Initial in-progress curriculum missing links/fixtures and browser assertion duplication are resolved, without claiming ownership of curriculum fixes.
+
+Production candidate exported with Expo to ignored `.tmp/ai-practice-export`:4 hashed files/1,410,720 bytes, build `ade498ba6d029d4d0cdb57903aa64d360403906d77ac3d77f72922ee8fec7173`. Private ephemeral-port Chromium390px smoke verifies unavailable AI, explicit download and cold offline lesson with no page errors/owner API/data access. Narrow conversation/recorded-input screenshots inspected. Initial smoke port8083 was occupied by the preserved curriculum candidate, so the smoke used an ephemeral port and closed it afterwards.
+
+Existing owner preview8082/API3001 were not replaced/restarted. Curriculum candidate8083 is separately recorded below. No real `.env` reads, paid calls, recordings retained, owner publication, push, merge or deployment. Live provider/model access, French/transcription quality, actual microphone/audio devices, Safari/native and screen-reader checks remain unverified. Configure server environment and deliberately restart API to try real AI; never provide keys through chat/browser. Generated/downloaded AI speech/cache, realtime duplex conversation, full editor, reset controls and per-topic packs remain later slices.
+
+Final action: inspect/stage deliberate feature paths only, run `npm.cmd run check:staged` and cached whitespace checks, create focused local checkpoint commit, verify log/working tree. If those fail, preserve work and record the actual failure; do not claim a commit. Next bounded authorised capability can be lesson-duration editing. Latest usage observation at11:10 Europe/Paris: account allowance lookup unavailable, not zero/unlimited; automatic resume is not configured.
+
 ## Completed curriculum rework — 2026-11-15
 
 Owner request: use the French curriculum researcher to audit/rework all topics, words and examples and expand useful courses. Completed on feat/french-course-rework, based on e737c39. The local commit containing this note captures only curriculum-owned paths. Concurrent optional-AI-practice work remains outside this checkpoint and must be preserved.
@@ -15,32 +29,3 @@ Validation: npm.cmd run check and all 18 tooling tests pass after transient in-p
 Production candidate exported to ignored .tmp/curriculum-export:4 hashed files,1,399,204 bytes, build af0e2f09882907b3bafe5942470975641e3fee881f83530aaa9afa41a09a5892. Separate local candidate at http://127.0.0.1:8083; tool session34317. Isolated Chromium checks confirm24 banks, desktop/320px translated study, explicit download and cold offline A2 browsing, zero page errors; mobile screenshot inspected. This candidate also contains concurrent work present at export time; curriculum checkpoint excludes that feature. Existing8082 preview/API3001 untouched. Port8083 has separate browser storage; its ordinary bundled study works without API, while editor/AI/API access is not configured for this origin. Old downloaded copies require explicit update when a current build replaces their preview.
 
 Remaining: owner/teacher French and teaching review, estimated levels/register, complete listening/picture coverage, audible speech, phone/Safari/screen-reader checks. Suggested sequence is guidance, not an enforced adaptive course or certification. No paid calls, push, merge or publication. Usage lookup unavailable at11:07 Europe/Paris; automatic resume not configured. Next curriculum action is owner review in a saved-revision editor preview after the updated API is deliberately started; do not restart the owner API while concurrent feature work is active.
-
-## Authorised request and completed outcome
-
-Owner requested review and repository integration of the downloaded `french-curriculum-researcher`. Completed on `chore/french-curriculum-researcher`, based on metadata checkpoint `6f6a58f`. The commit containing this checkpoint captures this step; report its actual hash after Git confirms it. No initial unrelated changes existed.
-
-Installed all six skill resources under `.agents/skills/french-curriculum-researcher` and matching `tooling/agents/skills/` sources. Added author-workflow routing, invocation/docs, tooling inventory/resource-copy coverage, plan 0015 and ADR 0014. Kept supplied 32-topic/481-row seed data unchanged and unreviewed; Git normalises CSV line endings to LF while retaining its UTF-8 BOM. Corrected lesson pacing to 6–10 items, research/runtime import confusion, translation/original-example schema gaps, draft/owner publication boundaries and local checkpoint authorisation. Application content, shared runtime contracts, storage, dependencies and running preview were untouched.
-
-## Actual validation and review
-
-- `npm.cmd run check`: repository structure/metadata/Markdown links/script syntax/whitespace and TypeScript passed, including a final run after documentation/bootstrap-message edits.
-- `npm.cmd run test:tooling`: all 18 passed, including fresh installation of all 15 files/resources, byte comparison, conflict refusal and idempotence.
-- `npm.cmd run setup:codex` installed new resources; `setup:codex:plan` confirms all 15 match.
-- `python -X utf8 .tmp/validate-curriculum-skill.py`: 32 unique topics (16 A1/16 A2), all 481 CSV rows match JSON/framework, source assets unchanged, installed/prepared resources match; Draft 2020-12 schema valid; translated research fixture accepted and eight invalid/mismatched records rejected. Bundled skill-creator `quick_validate.py` passes both skill copies.
-- Validation Python packages are isolated in ignored `.tmp/skill-validation-deps`; no project/global dependency changes. Initial missing PyYAML/jsonschema and optional URI-checker gaps were resolved there. CSV parser uses `utf-8-sig` for the supplied BOM. The one-off harness is session-only; its fixtures are not authored curriculum.
-- Independent instructionally read-only `change-reviewer`, actual `gpt-6.1-sol`/medium per session routing: no actionable findings. Bakery coverage forward-test identifies existing senses and a bounded payment cluster, marks proposals provisional with no browsing/publication. Primary reviewed the full integration and final diffs.
-- Runtime/app/browser/export tests were not repeated: no application/content/storage edits. Prior metadata checkpoint passed 94 app tests and 33 browser regressions (one intentional duplicate publication skip), plus production export/offline fixture verification.
-- Final `npm.cmd run check:staged` and cached/worktree whitespace checks passed; repeat the staged checks after this final note, then create the focused local checkpoint commit. Only deliberate skill/tooling/docs paths are staged; ignored validation packages/scripts, databases, exports and caches are excluded. Verify actual commit/log/clean tree. No push, merge or publication authorised/performed.
-
-## Preserved owner preview
-
-Prior verified preview: `http://localhost:8082` PID 30084; actual curriculum API `http://127.0.0.1:3001` PID 16248. Build `6b657e91158267075364018af5ef89e2d782dcae334b3cd3fde0fc71cd120811`, four files/1,250,949 bytes. This session did not probe/restart these processes or access learner/API data; check current listeners before future changes. Old downloads need explicit Update offline copy. Ports 8081/8082 have separate browser stores.
-
-## Limits and next action
-
-This owner request is complete after final checks/commit. Invoke `$french-curriculum-researcher` for the next requested topic research/audit; read its file directly if client discovery has not refreshed. Seed language/levels/originality, external source claims and automatic discovery are not verified by installation. Owner preview/review/publication is still required for actual curriculum. No new lessons, sources or seed approval were claimed.
-
-Earlier product backlog remains: bounded duration/order or target/exercise editor fields, learner reset with cross-tab safety, full editor/media/import, AI speaking, native packages and per-topic packs. Do not start these solely from this integration request. Three moderate Expo/fingerprint/minimatch audit findings remain unresolved. Physical-phone/Safari/install-icon, audible voice, screen-reader, real quota/eviction and durability limits remain.
-
-Usage observation on 2026-11-15 at 10:26 Europe/Paris: no account allowance/reset lookup tool exposed; unavailable, not zero/unlimited. No automatic resume scheduler configured. Local commits are not off-device backups.

@@ -15,6 +15,7 @@ import { CurriculumEditor } from './src/editor/CurriculumEditor';
 import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
+import { FrenchPractice } from './src/practice/FrenchPractice';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
@@ -41,12 +42,12 @@ export default function App() {
   }
   function goHome() { showEditor(false); setHomeRequest(current => current + 1); }
   return <View style={s.app}>
-    <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp onOpenEditor={() => showEditor(true)} homeRequest={homeRequest} onHome={goHome} /></View>
+    <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp active={!editorOpen} onOpenEditor={() => showEditor(true)} homeRequest={homeRequest} onHome={goHome} /></View>
     {editorVisited && <View style={{ flex: 1, display: editorOpen ? 'flex' : 'none' }}><CurriculumEditor onExit={() => showEditor(false)} onHome={goHome} /></View>}
   </View>;
 }
 
-function LearnerApp({ onOpenEditor, homeRequest, onHome }: { onOpenEditor: () => void; homeRequest: number; onHome: () => void }) {
+function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boolean; onOpenEditor: () => void; homeRequest: number; onHome: () => void }) {
   const model = useLearning();
   const catalogue = useCatalogue();
   const [tab, setTab] = useState<Tab>('Today');
@@ -76,7 +77,7 @@ function LearnerApp({ onOpenEditor, homeRequest, onHome }: { onOpenEditor: () =>
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} />
+            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <FrenchPractice lessons={catalogue.lessons} model={model} />}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>

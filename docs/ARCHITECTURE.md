@@ -1,6 +1,6 @@
 # Architecture baseline
 
-Status: local web learning and first editor/publication slice implemented; native adapters, full editor, and provider services remain planned.
+Status: local web learning, first editor/publication and optional conversation/transcription providers implemented; native adapters, full editor and generated speech/cache remain planned.
 
 | Location | Responsibility |
 | --- | --- |
@@ -16,6 +16,7 @@ Status: local web learning and first editor/publication slice implemented; nativ
 ## Boundaries
 
 - Client -> local API -> provider. Permanent credentials stay on the API.
+- Optional practice -> validated shared contracts -> expiring in-memory session service -> injected conversation/transcription providers. Explicit actions share bounded attempts/single flight and idempotent request tombstones; terminal failures permit a new deliberate attempt. Browser recording is temporary and separate from editable message text and notebook persistence. Only explicitly saved phrases reach learner storage. See [ADR 0016](decisions/0016-optional-ai-practice.md).
 - Local published content/media -> downloaded lessons -> offline activities.
 - Browser IndexedDB/native SQLite adapters -> stable learning events, notebook, and reviews.
 - Explicit exported-web download -> size/hash-validated staged CacheStorage -> complete offline app copy. A separate typed browser asset manager/worker never opens learner IndexedDB. Web Locks serialize updates/removal across worker generations; removing owned asset caches preserves learner data and unrelated caches. See [ADR 0012](decisions/0012-offline-web-assets.md).

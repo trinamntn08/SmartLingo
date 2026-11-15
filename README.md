@@ -83,6 +83,18 @@ npm run dev:api
 
 The configured file must already exist and pass validation. Relative paths resolve from this repository root even when npm starts the API workspace. Normal startup seed preservation still applies; actual publications and owner edits remain intact. Keep the original database and snapshot separately. After stopping that API, `Remove-Item Env:SMARTLINGO_DATABASE_PATH` returns later starts to the default database. No real `.env` file is loaded automatically. Use `npm run backup:curriculum -- --help` or the restore equivalent for command help.
 
+## Optional AI French practice
+
+Open **Practice** to choose a lesson context and start a temporary French conversation. Send a message to receive French, its English translation, gentle feedback and an optional phrase to save in your editable notebook. English help is available with a message. Speaker buttons replay through the existing French device voice.
+
+For microphone input, also configure `OPENAI_TRANSCRIPTION_MODEL` on the server. Record French captures up to thirty seconds locally. Stop recording releases the microphone; **Transcribe recording** explicitly sends the clip to OpenAI and may use API credits. Review/edit the resulting text before a separate **Send message** action. Discard, Stop conversation and leaving Practice clear temporary clips. Recording requires a supported browser and microphone permission; typing remains available if permission is denied. Clips are limited to two MiB; SmartLingo does not write them to disk or include them in backups. Provider processing/retention is separate from local temporary storage.
+
+The local API needs `OPENAI_API_KEY` and `OPENAI_TEXT_MODEL` in its process environment. Choose a model your API account supports with the Responses API and Structured Outputs, then start `npm run dev:api`. The app never asks for or stores the key. No real `.env` file is loaded automatically; `.env.example` documents configuration. Restarting an already running API is required to load new environment settings.
+
+Only explicit message sending or recording transcription calls OpenAI. Session creation, availability checks, recording locally, device replay and notebook saving do not. Text, selected context and explicitly submitted clips are processed externally; avoid private details. Conversations are temporary and are discarded when you leave practice, reload or stop. Explicitly saved phrases remain in your browser notebook. Provider retention is governed separately by your API account settings; conversation requests use `store:false`, which is not a zero-retention guarantee.
+
+The API bounds session turns, reserves a daily attempt for each conversation or transcription call, permits one active call, and times out/cancels pending work. A manual retry keeps the request ID to recover an uncertain response. A confirmed failed attempt permits a fresh explicit send, which can use additional credits. Failed calls can consume allowance. Displayed attempts and provider-reported conversation token totals are local operational counters, not billing totals; transcription tokens are not reported here. Counters reset when the API restarts. Ordinary lessons remain available without AI configuration or network access. Real provider/model quality, microphones and audible voice still require owner testing.
+
 ## Start here
 
 - [Product plan](PROJECT_PLAN.md)

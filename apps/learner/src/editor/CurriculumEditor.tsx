@@ -18,9 +18,11 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
   const [search, setSearch] = useState('');
   const [saved, setSaved] = useState<Lesson | null>(null);
   const [draft, setDraft] = useState<Lesson | null>(null);
+  const [durationText, setDurationText] = useState('');
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [validationError, setValidationError] = useState(false);
   const [conflict, setConflict] = useState(false);
   const [message, setMessage] = useState('');
   const [preview, setPreview] = useState<LessonPreview | null>(null);
@@ -31,14 +33,15 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const inFlight = useRef(false);
   const { width } = useWindowDimensions();
-  const dirty = !!draft && !!saved && JSON.stringify(draft) !== JSON.stringify(editableDraft(saved));
+  const dirty = !!draft && !!saved && (JSON.stringify(draft) !== JSON.stringify(editableDraft(saved)) || durationText !== String(saved.durationMinutes));
 
   function resetReview() { setPreview(null); setPreviewOpen(false); setReviewed(false); }
   function select(lesson: Lesson) {
-    setSaved(lesson); setDraft(editableDraft(lesson)); resetReview(); setMessage(''); setError(''); setConflict(false); setNavigation(null);
+    setSaved(lesson); setDraft(editableDraft(lesson)); setDurationText(String(lesson.durationMinutes)); resetReview(); setMessage(''); setError(''); setValidationError(false); setConflict(false); setNavigation(null);
     scroll.current?.scrollTo({ y: 0, animated: false });
   }
   function report(failure: unknown) {
+    setValidationError(false);
     setError(failure instanceof Error ? failure.message : 'The local API request failed. Your form has been kept.');
     setConflict(typeof failure === 'object' && failure !== null && 'status' in failure && failure.status === 409);
     scroll.current?.scrollTo({ y: 0, animated: false });
@@ -64,15 +67,23 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
     return () => window.removeEventListener('hashchange', resetOnLeave);
   }, []);
 
-  function change(next: Lesson) { setDraft(next); resetReview(); setMessage(''); }
+  function clearValidationMessage() { if (validationError) { setValidationError(false); setError(''); } }
+  function change(next: Lesson) { setDraft(next); resetReview(); setMessage(''); clearValidationMessage(); }
+  function changeDuration(value: string) { setDurationText(value); resetReview(); setMessage(''); clearValidationMessage(); }
   async function saveDraft(): Promise<boolean> {
     if (!draft || !saved || inFlight.current) return false;
-    const parsed = lessonSchema.safeParse(draft);
-    if (!parsed.success) { setError('Required fields need text; word notes may be empty. Meanings allow up to 500 characters, French examples up to 1,000, and other editable fields up to 2,000. Check the form before saving.'); scroll.current?.scrollTo({ y: 0, animated: false }); return false; }
+    const durationMinutes = /^[0-9]+$/.test(durationText.trim()) ? Number(durationText.trim()) : Number.NaN;
+    if (!Number.isInteger(durationMinutes) || durationMinutes < 1 || durationMinutes > 60) {
+      setValidationError(true);
+      setError('Estimated duration must be a whole number from 1 to 60 minutes. Correct this field before saving.');
+      scroll.current?.scrollTo({ y: 0, animated: false }); return false;
+    }
+    const parsed = lessonSchema.safeParse({ ...draft, durationMinutes });
+    if (!parsed.success) { setValidationError(true); setError('Required fields need text; word notes may be empty. Meanings allow up to 500 characters, French examples up to 1,000, and other editable fields up to 2,000. Check the form before saving.'); scroll.current?.scrollTo({ y: 0, animated: false }); return false; }
     inFlight.current = true; setBusy(true); setError(''); setMessage(''); resetReview();
     try {
       const lesson = await localContentApi.saveDraft(parsed.data, saved.revision);
-      setSaved(lesson); setDraft(editableDraft(lesson)); setCatalogue(current => current.map(item => item.id === lesson.id ? lesson : item));
+      setSaved(lesson); setDraft(editableDraft(lesson)); setDurationText(String(lesson.durationMinutes)); setCatalogue(current => current.map(item => item.id === lesson.id ? lesson : item));
       setConflict(false); setMessage(`Draft revision ${lesson.revision} saved locally. Preview this revision before publishing.`);
       return true;
     } catch (failure) { report(failure); return false; }
@@ -90,7 +101,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
     inFlight.current = true; setBusy(true); setError(''); setMessage('');
     try {
       const published = await localContentApi.publishDraft(saved.id, saved.revision, preview.previewToken);
-      setSaved(published); setDraft(editableDraft(published)); setCatalogue(current => current.map(item => item.id === published.id ? published : item));
+      setSaved(published); setDraft(editableDraft(published)); setDurationText(String(published.durationMinutes)); setCatalogue(current => current.map(item => item.id === published.id ? published : item));
       resetReview(); setConflict(false); setMessage(`Published revision ${published.revision} to the local catalogue. Return to learning, open Profile, and load published lessons to use it.`);
       scroll.current?.scrollTo({ y: 0, animated: false });
     } catch (failure) { resetReview(); report(failure); }
@@ -126,7 +137,8 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
       </View></View>}
       {!!error && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>The editor request didn’t complete.</Text><Text style={s.body}>{error}</Text>
         {conflict ? <><Text style={s.body}>A newer revision may exist. Your form is still here. Reload latest explicitly before saving again; nothing is merged or retried automatically.</Text><Button disabled={busy || loading} onPress={() => requestNavigation({ kind: 'reload' })}>Reload latest revision</Button></>
-          : <><Text style={s.body}>For local editing, start the API with npm run dev:api, then retry your action. Learner lessons still work without it.</Text>{!saved && <Button disabled={loading} onPress={() => void loadLatest()}>Retry loading lessons</Button>}</>}
+          : validationError ? <Text style={s.body}>Correct the form, then save again. No revision has been sent.</Text>
+            : <><Text style={s.body}>For local editing, start the API with npm run dev:api, then retry your action. Learner lessons still work without it.</Text>{!saved && <Button disabled={loading} onPress={() => void loadLatest()}>Retry loading lessons</Button>}</>}
       </View>}
       {!!message && <View style={[s.notice, { backgroundColor: colors.green }]}><Text accessibilityLiveRegion="polite" style={s.body}>{message}</Text></View>}
       {loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Loading local curriculum…</Text></View> : <>
@@ -148,7 +160,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
               {preview && <Button disabled={busy} onPress={() => { audio.stop(); resetReview(); }}>Back to draft fields</Button>}
             </View>{dirty && <Text style={s.muted}>Save your changes before previewing. Editing clears the previous preview receipt and review approval.</Text>}
           </View>
-          {previewOpen && preview ? <SavedPreview key={`${preview.lesson.id}.${preview.lesson.revision}.${preview.previewToken}`} preview={preview} onClose={() => { audio.stop(); resetReview(); }} /> : <DraftFields draft={draft} onChange={change} disabled={busy} />}
+          {previewOpen && preview ? <SavedPreview key={`${preview.lesson.id}.${preview.lesson.revision}.${preview.previewToken}`} preview={preview} onClose={() => { audio.stop(); resetReview(); }} /> : <DraftFields draft={draft} onChange={change} disabled={busy} durationText={durationText} onDurationChange={changeDuration} />}
           <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Publication review</Text><Text style={s.body}>Check the French and English for naturalness and accuracy, the accepted exercise answers, picture meaning, level, and media rights. Device speech is synthetic and has not been reviewed.</Text>
             <Text style={s.muted}>{saved.provenance.rights}</Text><Text style={s.muted}>{preview && !dirty ? `Preview receipt: revision ${preview.lesson.revision}. Valid for up to 15 minutes.` : 'Save and preview the current draft to enable review and publication.'}</Text>
             <Pressable accessibilityRole="checkbox" aria-checked={reviewed} aria-disabled={busy || !preview || dirty} accessibilityState={{ checked: reviewed, disabled: busy || !preview || dirty }} disabled={busy || !preview || dirty} onFocus={() => setReviewFocused(true)} onBlur={() => setReviewFocused(false)} onPress={() => setReviewed(!reviewed)} style={({ pressed }) => [s.notice, { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: reviewed ? colors.green : colors.sand, borderWidth: 2, borderColor: reviewFocused ? '#246944' : 'transparent', opacity: pressed ? 0.7 : 1 }]}>
@@ -169,6 +181,7 @@ function SavedPreview({ preview, onClose }: { preview: LessonPreview; onClose: (
   return <View style={{ gap: 20 }}><View style={[s.notice, { backgroundColor: colors.yellow }]}><Text style={s.heading}>Saved revision {lesson.revision} · temporary practice</Text><Text style={s.body}>This is the real lesson interface. Attempts, word saves, and completion here exist only in this preview and do not touch your learner notebook or progress.</Text></View><LessonScreen lesson={lesson} model={model} onExit={onClose} />
     <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Author review details</Text><Text style={s.muted}>Answer keys are shown here for curriculum review. These details are separate from learner practice.</Text>
       <Text style={s.body}>Level: {lesson.level} · Target language: {lesson.language} · Explanation language: {lesson.explanationLanguage}</Text>
+      <Text style={s.body}>Estimated duration: {lesson.durationMinutes} minutes</Text>
       <Text style={s.eyebrow}>{lesson.pictureActivity.mode === 'meaning' ? 'Meaning answer' : 'Picture answer'}</Text><Text style={s.body}>{pictureAnswer.target} ({pictureAnswer.id})</Text><Text style={s.body}>{lesson.pictureActivity.mode === 'meaning' ? `Meaning prompt: ${pictureAnswer.meaning}` : `Picture description: ${pictureAnswer.pictureAlt}`}</Text>
       <Text style={s.eyebrow}>Accepted sentence answers</Text>{lesson.sentenceActivity.answers.map((answer, index) => <Text key={index} style={s.body}>{index + 1}. {answer}</Text>)}
       <Text style={s.eyebrow}>Answers marked “almost”</Text>{lesson.sentenceActivity.almostAnswers.length ? lesson.sentenceActivity.almostAnswers.map((answer, index) => <Text key={index} style={s.body}>{index + 1}. {answer}</Text>) : <Text style={s.body}>None defined.</Text>}

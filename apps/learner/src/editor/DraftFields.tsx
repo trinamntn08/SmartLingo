@@ -4,16 +4,18 @@ import { styles as s } from '../ui/theme';
 import { Button } from '../ui/controls';
 import { vocabularyPresentation } from '../content/vocabularyPresentation';
 
-function Field({ label, value, onChange, disabled, multiline = true, maxLength = 2000 }: {
-  label: string; value: string; onChange: (value: string) => void; disabled: boolean; multiline?: boolean; maxLength?: number;
+function Field({ label, value, onChange, disabled, multiline = true, maxLength = 2000, inputMode }: {
+  label: string; value: string; onChange: (value: string) => void; disabled: boolean; multiline?: boolean; maxLength?: number; inputMode?: 'numeric';
 }) {
   return <View style={{ gap: 8 }}><Text style={s.body}>{label}</Text>
     <TextInput accessibilityLabel={label} editable={!disabled} value={value} onChangeText={onChange} maxLength={maxLength}
-      multiline={multiline} style={[s.input, multiline && { minHeight: 84, textAlignVertical: 'top' }]} />
+      multiline={multiline} inputMode={inputMode} style={[s.input, multiline && { minHeight: 84, textAlignVertical: 'top' }]} />
   </View>;
 }
 
-export function DraftFields({ draft, onChange, disabled }: { draft: Lesson; onChange: (draft: Lesson) => void; disabled: boolean }) {
+export function DraftFields({ draft, onChange, disabled, durationText, onDurationChange }: {
+  draft: Lesson; onChange: (draft: Lesson) => void; disabled: boolean; durationText: string; onDurationChange: (value: string) => void;
+}) {
   function changeWord(index: number, field: keyof Vocabulary, value: string) {
     onChange({ ...draft, vocabulary: draft.vocabulary.map((word, at) => at === index ? { ...word, [field]: value } : word) });
   }
@@ -28,6 +30,8 @@ export function DraftFields({ draft, onChange, disabled }: { draft: Lesson; onCh
       <Field label="Lesson title" value={draft.title} disabled={disabled} multiline={false} onChange={title => onChange({ ...draft, title })} />
       <Field label="Lesson subtitle" value={draft.subtitle} disabled={disabled} multiline={false} onChange={subtitle => onChange({ ...draft, subtitle })} />
       <Field label="Practical outcome" value={draft.outcome} disabled={disabled} onChange={outcome => onChange({ ...draft, outcome })} />
+      <Field label="Estimated duration in minutes" value={durationText} disabled={disabled} multiline={false} maxLength={10} inputMode="numeric" onChange={onDurationChange} />
+      <Text style={s.muted}>Choose a whole number from 1 to 60. This is a suggested study time, not a timer or completion requirement.</Text>
       <Field label="Lesson topic" value={draft.topic} disabled={disabled} multiline={false} onChange={topic => onChange({ ...draft, topic })} />
       <Field label="Learner role" value={draft.role} disabled={disabled} multiline={false} onChange={role => onChange({ ...draft, role })} />
       <Text style={s.muted}>Use the same role name in the dialogue for the learner’s lines. Dialogue speaker labels can be edited below.</Text>

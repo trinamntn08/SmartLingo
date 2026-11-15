@@ -2,6 +2,14 @@
 
 Updated: 2026-11-15 (Europe/Paris).
 
+## Completed lesson-duration editing
+
+Continued the authorised remaining-feature work after AI checkpoint `dece895`. Added a raw text duration field, strict 1–60 whole-minute validation before save, existing unsaved-navigation/review protection and saved-preview estimate display. Existing domain/API/storage contracts and all curriculum remain unchanged. Validation messages now guide form correction without suggesting an API restart.
+
+`npm.cmd run check` passes; focused editor browser suite:9 passed/one intentional duplicate-publication skip. Invalid values send zero draft POSTs; unsaved values survive learner navigation, discard restores saved duration, and a published twelve-minute estimate survives cache/reload with a later thirty-minute draft kept private. Production export passes to ignored `.tmp/duration-export`; 320px screenshot inspected. Primary self-reviewed this small sequential change. Previous all136 application/full47-browser/production offline checks remain valid for unchanged modules and AI feature. No paid calls, owner data/API/preview changes or publication outside isolated fixtures.
+
+The commit containing these notes captures this completed step; report its actual hash after Git confirms it. Final staged checks/commit/log verification pending. Next bounded capability: create a personal notebook entry without a lesson/AI capture. Usage lookup remains unavailable; automatic resume is not configured. Preserve checkpoints `baa3679` (curriculum) and `dece895` (AI practice).
+
 ## Completed optional AI practice
 
 Owner authorises continued French curriculum/product work while away, prioritising optional API conversation. Completed local text and recorded-input journey on `feat/french-course-rework`, based on curriculum checkpoint `baa3679`. The commit containing these notes captures the separate AI feature; report its actual hash after Git confirms it. The pre-existing curriculum work was preserved and committed independently by its owner. No dependency/lockfile/storage-schema changes.

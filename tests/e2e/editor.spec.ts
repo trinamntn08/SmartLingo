@@ -42,6 +42,10 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: 'Restaurant · At the restaurant', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Publish reviewed revision', exact: true })).toBeDisabled();
   await page.getByRole('textbox', { name: 'Lesson subtitle', exact: true }).fill('A coffee with confidence');
+  await page.getByRole('textbox', { name: 'Lesson topic', exact: true }).fill('Café visits');
+  await page.getByRole('textbox', { name: 'Learner role', exact: true }).fill('Guest');
+  await page.getByRole('button', { name: 'Lesson level A2', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Lesson level A2', exact: true })).toHaveAttribute('aria-selected', 'true');
   await page.getByRole('textbox', { name: 'bonjour — English meaning', exact: true }).fill('A greeting reviewed in this isolated test');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — Speaker role', exact: true }).fill('Host');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — French text', exact: true }).fill('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?');
@@ -84,6 +88,16 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.reload();
   await expect(page.getByText('A coffee with confidence', { exact: true })).toBeVisible();
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Guest', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Topic Café visits', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Vocabulary · 6', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Foundations level', exact: true }).click();
+  await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'A1 level', exact: true }).click();
+  await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'A2 level', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await expect(page.getByText('Published', { exact: true })).toBeVisible();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();

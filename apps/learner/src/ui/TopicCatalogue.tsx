@@ -27,12 +27,12 @@ export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic
     <View style={{ gap: 6 }}>
       <Text accessibilityRole="header" style={s.title}>{selected?.name ?? (practice ? 'Choose your practice.' : 'Explore topics')}</Text>
       <Text style={s.muted}>{selected ? `${selected.vocabulary.length} words · ${selected.lessons.length} short lessons`
-        : `${topics.length} everyday topics · A1–A2`}</Text>
+        : `${topics.length} everyday topics · ${lessons.some(lesson => lesson.level === 'foundation') ? 'Foundations, A1–A2' : 'A1–A2'}`}</Text>
     </View>
     <TextInput accessibilityLabel="Search lessons" placeholder="Search topics or words in French or English"
       value={query} onChangeText={setQuery} style={s.input} clearButtonMode="while-editing" />
-    <View style={s.row}>{(['All', 'A1', 'A2'] as const).map(value => <Button key={value} selected={level === value}
-      label={value === 'All' ? 'All levels' : `${value} level`} onPress={() => setLevel(value)}>{value === 'All' ? 'All levels' : value}</Button>)}</View>
+    <View style={s.row}>{(['All', 'foundation', 'A1', 'A2'] as const).map(value => <Button key={value} selected={level === value}
+      label={value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations level' : `${value} level`} onPress={() => setLevel(value)}>{value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations' : value}</Button>)}</View>
     {!selected ? <>
       {!topics.length ? <View style={s.card}><Text style={s.heading}>No topics available.</Text>
         <Text style={s.body}>Your lesson catalogue is empty. Try loading the published catalogue from Profile.</Text></View>

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { lessons, restaurantLesson } from '@smartlingo/content';
-import { checkAnswer, groupLessonTopics, matchesLesson, matchesVocabulary, normalizeAnswer, normalizeSearch, type Lesson, type Vocabulary } from '../src/index';
+import { checkAnswer, groupLessonTopics, matchesLesson, matchesVocabulary, mergeLessonCatalogue, normalizeAnswer, normalizeSearch, type Lesson, type Vocabulary } from '../src/index';
 
 function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: string[] = [], remaining = exercise.tokens): boolean {
   const prefix = normalizeAnswer(chosen.join(' '));
@@ -60,4 +60,17 @@ test('topic grouping follows published replacements without duplicating their en
   assert.equal(groups[0].lessons.length, 2);
   assert.equal(groups[0].vocabulary.length, restaurantLesson.vocabulary.length);
   assert.equal(groups[0].lessons[0].status, 'published');
+});
+
+test('published topic and role changes are searchable and foundation content has its own filter', () => {
+  const published: Lesson = { ...restaurantLesson, status: 'published', revision: restaurantLesson.revision + 1,
+    topic: 'First words', role: 'Newcomer', level: 'foundation' };
+  const catalogue = mergeLessonCatalogue(lessons, [published]);
+  const group = groupLessonTopics(catalogue).find(topic => topic.name === 'First words')!;
+  assert.deepEqual(group.lessons, [published]);
+  assert.equal(group.vocabulary.length, restaurantLesson.vocabulary.length);
+  assert.equal(matchesLesson(group.lessons[0], 'first words', 'foundation'), true);
+  assert.equal(matchesLesson(group.lessons[0], 'newcomer', 'foundation'), true);
+  assert.equal(matchesLesson(group.lessons[0], 'coffee', 'A1'), false);
+  assert.equal(matchesLesson(restaurantLesson, 'coffee', 'foundation'), false);
 });

@@ -1,7 +1,7 @@
 import type { Lesson, Vocabulary } from './content';
 
 export type LessonTopic = { name: string; lessons: Lesson[]; vocabulary: Vocabulary[] };
-export type CatalogueLevel = 'All' | 'A1' | 'A2';
+export type CatalogueLevel = 'All' | Lesson['level'];
 
 export function normalizeSearch(value: string): string {
   return value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('fr-FR')

@@ -28,8 +28,15 @@ export function DraftFields({ draft, onChange, disabled }: { draft: Lesson; onCh
       <Field label="Lesson title" value={draft.title} disabled={disabled} multiline={false} onChange={title => onChange({ ...draft, title })} />
       <Field label="Lesson subtitle" value={draft.subtitle} disabled={disabled} multiline={false} onChange={subtitle => onChange({ ...draft, subtitle })} />
       <Field label="Practical outcome" value={draft.outcome} disabled={disabled} onChange={outcome => onChange({ ...draft, outcome })} />
+      <Field label="Lesson topic" value={draft.topic} disabled={disabled} multiline={false} onChange={topic => onChange({ ...draft, topic })} />
+      <Field label="Learner role" value={draft.role} disabled={disabled} multiline={false} onChange={role => onChange({ ...draft, role })} />
+      <Text style={s.muted}>Use the same role name in the dialogue for the learner’s lines. Dialogue speaker labels can be edited below.</Text>
+      <Text style={s.body}>Estimated lesson level</Text>
+      <View style={s.row}>{(['foundation', 'A1', 'A2'] as const).map(level => <Button key={level} selected={draft.level === level} disabled={disabled}
+        label={`Lesson level ${level === 'foundation' ? 'Foundations' : level}`} onPress={() => onChange({ ...draft, level })}>{level === 'foundation' ? 'Foundations' : level}</Button>)}</View>
+      <Text style={s.muted}>Level labels describe lesson content. They do not measure a learner’s proficiency.</Text>
     </View>
-    <View style={s.notice}><Text style={s.body}>Edit headings, vocabulary support, dialogue text and grammar help. Vocabulary target words, pictures, exercise answers and the order of dialogue lines stay fixed in this editor.</Text></View>
+    <View style={s.notice}><Text style={s.body}>Edit lesson details, vocabulary support, dialogue text and grammar help. Vocabulary target words, pictures, exercise answers and the order of dialogue lines stay fixed in this editor.</Text></View>
     {draft.vocabulary.map((word, index) => <View key={word.id} style={s.card}><Text style={s.eyebrow}>Vocabulary {index + 1} · {word.id}</Text><Text accessibilityRole="header" style={s.heading}>{word.target}</Text>
       <View style={s.row}>{([
         [undefined, 'No gender'], ['masculine', 'm.'], ['feminine', 'f.'], ['both', 'm./f.'],

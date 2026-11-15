@@ -19,7 +19,8 @@ async function learningSnapshot(page: Page) {
   });
 }
 
-test.beforeEach(async ({ request }) => {
+test.beforeEach(async ({ request, context }) => {
+  await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await request.post('/__test__/mode');
 });
 

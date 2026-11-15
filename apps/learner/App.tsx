@@ -3,6 +3,7 @@ import { ActivityIndicator, Platform, ScrollView, Text, useWindowDimensions, Vie
 import { groupLessonTopics, lessonProgress, type Lesson } from '@smartlingo/domain';
 import { audio } from './src/audio';
 import { AudioPreferencesPanel } from './src/audio/AudioPreferencesPanel';
+import { GeneratedSpeechPanel } from './src/audio/generated/GeneratedSpeechPanel';
 import { Badge, Button } from './src/ui/controls';
 import { WordIllustration } from './src/ui/WordIllustration';
 import { LessonScreen } from './src/ui/LessonScreen';
@@ -113,6 +114,7 @@ function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; cat
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
     <OfflinePanel />
     <AudioPreferencesPanel />
+    <GeneratedSpeechPanel />
     <BackupPanel />
     <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
   </View>;

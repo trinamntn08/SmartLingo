@@ -1,6 +1,6 @@
 # Architecture baseline
 
-Status: local web learning, first editor/publication and optional conversation/transcription providers implemented; native adapters, full editor and generated speech/cache remain planned.
+Status: local web learning, first editor/publication, optional conversation/transcription and explicit cached neural speech implemented; native adapters and full editor remain planned. Actual provider voice quality still requires audition.
 
 | Location | Responsibility |
 | --- | --- |
@@ -28,6 +28,7 @@ Status: local web learning, first editor/publication and optional conversation/t
 - Stable-ID/target-guarded original SVG media -> learner WordIllustration adapter. Visual catalogue data stays separate from immutable lesson revisions; unknown/abstract words remain text-supported. An explicit vocabulary-overview review event uses the existing event contract, scoped to lesson/revision; mere browsing records no review.
 - Licensed bundled photographs -> exact sense/target lookup -> photo-first study rendering with illustration/text fallback. Per-file source/licence/hash records and credits travel with exported app assets; contextual photographs are labelled and do not change abstract meaning-matching exercises. Photo coverage is separate from owner curriculum approval.
 - Browser device-voice enumeration -> separate versioned voice/rate preference adapter -> shared speaker controls. Explicit sample playback and local preference writes require no provider request or learner database change. Device availability and audible quality remain external capabilities. See [ADR 0017](decisions/0017-vocabulary-photo-and-voice-preferences.md).
+- Explicit neural generation -> validated speech contract -> durable separate SQLite media/attempt ledger -> fixed Azure provider. Verified browser CacheStorage clips feed hybrid saved/device playback; Web Locks/removal epochs isolate audio deletion from learner data and app downloads. Neither normal playback nor content browsing invokes paid generation. See [ADR 0018](decisions/0018-explicit-cached-neural-speech.md).
 - Separate target language, explanation language, and UI language.
 - Keep provider/model identifiers configurable and media keyed by content/settings hash.
 - Keep tests provider-independent; add opt-in live checks only when requested.

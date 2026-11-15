@@ -19,6 +19,7 @@ async function eventCount(page: Page, storeName = 'events'): Promise<number> {
 }
 
 test('download and explicit restore recover learning in a fresh browser without overwriting local edits', async ({ page, browser }, info) => {
+  await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
@@ -43,6 +44,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   expect(backup).not.toHaveProperty('credentials');
 
   const fresh = await browser.newContext({ viewport: { width: 320, height: 740 } });
+  await fresh.route('**/127.0.0.1:3001/**', route => route.abort());
   try {
     const restored = await fresh.newPage();
     await restored.goto('http://localhost:8081');

@@ -83,7 +83,7 @@ test('an explicit recovered database starts the API without changing the backup 
     assert.ok(address && typeof address !== 'string');
     const port = address.port;
     await new Promise<void>((resolve, reject) => reservation.close(error => error ? reject(error) : resolve()));
-    const app = await startServer({ PORT: String(port), SMARTLINGO_DATABASE_PATH: recovered });
+    const app = await startServer({ PORT: String(port), SMARTLINGO_DATABASE_PATH: recovered, SMARTLINGO_SPEECH_DATABASE_PATH: join(directory, 'speech.sqlite') });
     try {
       assert.equal((await app.inject('/health')).statusCode, 200);
       assert.equal((await app.inject(`/lessons/${restaurantLesson.id}`)).json().lesson.title, 'Private saved draft');

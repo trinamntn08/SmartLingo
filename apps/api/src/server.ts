@@ -1,10 +1,19 @@
 import { pathToFileURL } from 'node:url';
+import { extname, resolve } from 'node:path';
 import { lessons, previousSeedFingerprints } from '@smartlingo/content';
 import { createApp } from './app';
 import { SqliteLessonRepository } from './repository';
-import { contentDatabasePath } from './database-path';
+import { contentDatabasePath, projectRoot } from './database-path';
 import { inspectCurriculumSnapshot } from './curriculum-backup';
 import { readPracticeOptions, type PracticeEnvironment } from './practice/provider';
+import { readSpeechOptions, type SpeechEnvironment } from './speech/provider';
+
+function speechDatabasePath(configured?: string): string {
+  if (configured !== undefined && (!configured.trim() || configured.includes('\0') || extname(configured).toLowerCase() !== '.sqlite')) {
+    throw new Error('SMARTLINGO_SPEECH_DATABASE_PATH must name a .sqlite speech cache.');
+  }
+  return resolve(projectRoot, configured ?? 'data/generated-speech.sqlite');
+}
 
 export function readServerConfig(environment: { HOST?: string; PORT?: string }) {
   const host = environment.HOST ?? '127.0.0.1';
@@ -20,20 +29,24 @@ export function readServerConfig(environment: { HOST?: string; PORT?: string }) 
   return { host, port };
 }
 
-export async function startServer(environment: PracticeEnvironment & { HOST?: string; PORT?: string; SMARTLINGO_DATABASE_PATH?: string } = {
+export async function startServer(environment: PracticeEnvironment & SpeechEnvironment & { HOST?: string; PORT?: string; SMARTLINGO_DATABASE_PATH?: string; SMARTLINGO_SPEECH_DATABASE_PATH?: string } = {
   HOST: process.env.HOST, PORT: process.env.PORT, SMARTLINGO_DATABASE_PATH: process.env.SMARTLINGO_DATABASE_PATH,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY, OPENAI_TEXT_MODEL: process.env.OPENAI_TEXT_MODEL, SMARTLINGO_AI_DAILY_LIMIT: process.env.SMARTLINGO_AI_DAILY_LIMIT,
   OPENAI_TRANSCRIPTION_MODEL: process.env.OPENAI_TRANSCRIPTION_MODEL,
+  AZURE_SPEECH_KEY: process.env.AZURE_SPEECH_KEY, AZURE_SPEECH_REGION: process.env.AZURE_SPEECH_REGION,
+  SMARTLINGO_SPEECH_DAILY_LIMIT: process.env.SMARTLINGO_SPEECH_DAILY_LIMIT,
+  SMARTLINGO_SPEECH_DATABASE_PATH: process.env.SMARTLINGO_SPEECH_DATABASE_PATH,
 }) {
   const config = readServerConfig(environment);
   const practice = readPracticeOptions(environment);
+  const speech = { ...readSpeechOptions(environment), databasePath: speechDatabasePath(environment.SMARTLINGO_SPEECH_DATABASE_PATH) };
   const path = contentDatabasePath(environment.SMARTLINGO_DATABASE_PATH);
   if (environment.SMARTLINGO_DATABASE_PATH !== undefined) inspectCurriculumSnapshot(path);
   const repository = new SqliteLessonRepository(path);
   try {
-    repository.seed(lessons, previousSeedFingerprints);
-    const app = createApp(repository, { practice });
+    const app = createApp(repository, { practice, speech });
     try {
+      repository.seed(lessons, previousSeedFingerprints);
       await app.listen(config);
       return app;
     } catch (error) {

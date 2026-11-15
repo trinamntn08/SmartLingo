@@ -1,5 +1,9 @@
 import { audioPreferences, type AudioPreferenceStore } from './preferences';
 import { selectFrenchVoice } from './voices';
+import { HybridSpeechPlayer } from './generated/hybrid';
+import { generatedPreferences } from './generated/preferences';
+import { generatedAudioStore } from './generated/store';
+import { reportAudioNotice, savedClipPlayer } from './generated/runtime';
 
 export interface AudioPlayer {
   available(): boolean;
@@ -70,4 +74,5 @@ export class DeviceSpeechPlayer implements AudioPlayer {
   }
 }
 
-export const audio: AudioPlayer = new DeviceSpeechPlayer();
+export const deviceAudio: AudioPlayer = new DeviceSpeechPlayer();
+export const audio: AudioPlayer = new HybridSpeechPlayer(deviceAudio, generatedAudioStore, savedClipPlayer, generatedPreferences, reportAudioNotice);

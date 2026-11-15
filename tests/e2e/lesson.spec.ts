@@ -188,7 +188,7 @@ test('speaker icon plays and stops through keyboard controls', async ({ page }) 
   const speaker = button(page, 'Listen to bonjour');
   await speaker.focus();
   await page.keyboard.press('Enter');
-  await expect(button(page, 'Stop device voice')).toBeVisible();
+  await expect(button(page, 'Stop audio')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.spoken)).toBe('bonjour');
   await page.evaluate(() => { delete document.documentElement.dataset.stopped; });
   await page.keyboard.press('Space');

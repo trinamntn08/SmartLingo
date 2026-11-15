@@ -6,11 +6,21 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/vocabulary-photos-and-voice`, based on status checkpoint `39c4830`. The checkpoint containing these notes adds vocabulary review, licensed photo coverage and device-voice preferences. Earlier curriculum `baa3679`, AI `dece895`, duration `90634c2`, personal vocabulary `57a2f25` and search `35f8853` remain preserved.
+- Current branch: `feat/cached-french-speech`, based on `7c87a4d` (vocabulary review, licensed photos and device-voice choices). The checkpoint containing these notes adds explicit cached neural French speech. Earlier checkpoints remain preserved.
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Live `git ls-remote --heads origin` on 2026-11-15 reports only `main` at `1c6e943`. The reviewed source checkpoint `35f8853` is 21 commits beyond that ancestor; the current feature branch is not on origin. Inspect remote history again before integration. A local checkpoint is not remote backup.
 
-## Vocabulary, photos and voice verification (2026-11-15)
+## Saved neural French speech (2026-11-15)
+
+Profile offers explicit Azure Denise/Henri generation with gentle/normal pace, verified browser saving, sample playback and opt-in use beside lesson text. Ordinary playback only reads exact saved clips and falls back to device/text; it never generates speech. Saved clips replay after reload/offline. Confirmed browser removal preserves notebook/history, app downloads and unrelated caches; a cross-tab removal marker blocks late requests restoring removed clips. Device-voice auditions remain separate. [Setup](../README.md#optional-saved-neural-french-audio), [plan](plans/0022-cached-french-speech.md), [decision](decisions/0018-explicit-cached-neural-speech.md).
+
+Server-only credentials, bounded escaped SSML/MP3, cancellation and a separate versioned SQLite speech cache provide durable request replay and UTC daily reserved-attempt limits. Cache hits survive restart without spending. Text/voice/pace changes require explicit generation. Server clips/text are retained separately from browser data and excluded from learner/curriculum backups; browser removal does not delete the server cache. These are operational safeguards, not billing totals.
+
+Repository/TypeScript checks and 18 tooling/184 application tests pass. Full Chromium desktop/320px suite: 69 passed, one intentional duplicate-publication skip. Production smoke verifies real test-MP3 cold-offline playback, explicit fake generation, cross-tab removal/late-result isolation, retry without another API request and app-download preservation. No real paid provider calls, credentials or owner data were used. Independent review found no unresolved confirmed defect after fixes, including a real HTTP 11-second fake-provider response/replay check. Actual voice quality still requires owner listening; Denise/Henri are candidates for the requested natural, calm delivery.
+
+All six original offline failure/update/removal/stalled-navigation cases pass against the final export using isolated port8085 fixtures. Current export `.tmp/cached-speech-export`: 126 hashed files/9,685,539 bytes, build `11ea6b312dd8f6203e792ab6ee73bf523b2a8c164e807d270a8e5bdceafa761e`. Review preview runs at `http://127.0.0.1:8084` with separate browser storage; existing8082/API3001 and previous8083 remain preserved. The running owner API predates these routes; a deliberate configured restart is needed for live generation. Physical-phone/Safari/native, screen-reader and real-provider checks remain open.
+
+## Previous vocabulary, photos and voice verification (2026-11-15)
 
 Reviewed all 24 banks/120 lessons/741 appearances for coherence and near-overlap. Sixteen repeated introduction slots across three lessons now teach useful routine/paperwork expressions; two horaire senses have clearer transport/work support. Exactly five lessons append draft revision 4; fifty-five remain revision 3 and sixty remain revision 1. Current inventory: 705 canonical senses/696 written forms. Sixteen displaced canonical payloads remain exact, with their old stable IDs still taught elsewhere. Exact prior SHA refresh guards preserve owner drafts/publications/history. [Complete audit](CURRICULUM_REDUNDANCY_AUDIT.md), [catalogue](COURSE_CATALOGUE.md), [decision](decisions/0017-vocabulary-photo-and-voice-preferences.md).
 
@@ -28,7 +38,7 @@ This review refreshes stale documentation and checkpoint bookkeeping; it adds no
 
 The latest notebook-search diff has no confirmed actionable code finding in this bounded primary review. README corrections cover current lesson counts/revisions, Foundations filtering, picture coverage, duration editing and implemented recorded-input AI. This is not a full codebase or human French-quality audit. The existing owner preview on 8082 and API on 3001 remain untouched; running exports/processes may predate current source. No build promotion, owner-data access or paid provider call was performed.
 
-Milestones: M1's local learner journey is implemented, with physical-phone/audio validation still open. M2 is partial (conversation/capture exist; generated cached speech and real-provider/device checks remain). M3 is partial (review/search/whole-app offline/publication/backups exist; owner approval, full editor and per-topic packs remain). M4 learner observation and M5 native preparation remain future work.
+Milestones: M1's local learner journey is implemented, with physical-phone/audio validation still open. M2 is partial (conversation/capture and explicit saved neural speech exist; real-provider/device checks remain). M3 is partial (review/search/whole-app offline/publication/backups exist; owner approval, full editor and per-topic packs remain). M4 learner observation and M5 native preparation remain future work.
 
 ## Implemented
 
@@ -56,7 +66,7 @@ Milestones: M1's local learner journey is implemented, with physical-phone/audio
 - Calm manual recognition review for saved notebook revisions, with explicit reveal/rating, 1/3/7/14/30-day heuristic, separate supported days, local calendar/timezone handling and stable retries. No early/same-day schedule boosting; focus/date refresh keeps tabs current. Note edits start fresh practice without deleting historical ratings. Backup format2 includes ratings; version1 imports remain compatible.
 - Explicit Profile offline download of the exported app, all bundled draft lessons and pictures in the downloaded build (the earlier stable copy has 60 lessons/about 1.25 MB; the new isolated candidate has 120/about 1.4 MB). Available/saved complete-copy sizes, progress, ready/incomplete status, failure/retry/update and confirmed asset removal are shown. SHA256/size validation and staged completion records preserve prior copies on failed updates; root navigation falls back after a three-second stalled-network deadline. Removing owned asset caches preserves all learner IndexedDB stores and unrelated caches. Web Locks serialize worker-generation changes; browser management requires their support. Optional installation uses a web manifest/original SVG icon. Loopback export preview runs on 8082 with exact API origin access; development on 8081 remains a separate browser store. See [ADR 0012](decisions/0012-offline-web-assets.md) and [run instructions](../README.md#test-the-offline-ready-preview).
 - Separate CLI curriculum backup/recovery: read-only SQLite online snapshots preserve every draft/published revision and committed WAL data. Full integrity/schema/history validation, bounded row parsing and exclusive fresh-file publication refuse corrupt/foreign/future databases and occupied/colliding destinations. Recovery writes a new file; explicit existing-file `SMARTLINGO_DATABASE_PATH` configuration switches later API starts without overwriting the current database. No browser learning/credentials/recordings are included; no owner backup/restore or API switch was performed by the agent. See [ADR 0013](decisions/0013-curriculum-snapshots.md) and [commands](../README.md#back-up-and-recover-server-curriculum).
-- Development tooling, 18 tooling tests, 144 application tests, browser checks, offline exported-build checks, web export and run instructions. See [verification](TESTING.md) and [metadata editor plan](plans/0014-edit-lesson-metadata.md).
+- Development tooling, 18 tooling tests, 184 application tests, browser checks, offline exported-build checks, web export and run instructions. See [verification](TESTING.md) and [metadata editor plan](plans/0014-edit-lesson-metadata.md).
 
 ## AI practice verification
 
@@ -84,18 +94,18 @@ Audit recheck on 2026-11-15 confirmed current stable Expo/fingerprint still sele
 ## Not implemented
 
 - Full editor (target/exercise/media editing, dialogue line add/remove/reorder, create/archive/restore/import/export/unpublish) and actual owner content approval.
-- Per-topic offline packs/downloaded speech, production/listening or adaptive review, editor backup controls/automatic or in-place curriculum recovery and learner data reset controls.
-- Generated/downloaded AI speech and media cache, realtime duplex conversation, durable usage/billing accounting, vocabulary assistant beyond conversation phrase capture and additional provider implementations.
+- Per-topic offline packs/bulk approved-lesson speech, production/listening or adaptive review, editor backup controls/automatic or in-place curriculum recovery and learner data reset controls.
+- Realtime duplex conversation, account/billing accounting, vocabulary assistant beyond conversation phrase capture and additional speech providers. Explicit Azure clip generation/cache and its durable operational attempt ledger are implemented.
 - Native storage/audio and Android/iOS packages; onboarding/preferences and cloud accounts/deployment.
 
 Explicitly downloaded app assets cold-load with network/API unavailable in Chromium. Browser storage can be cleared/evicted; keep private backup files separately. Actual phone/Safari installation, SVG install-icon compatibility, native/device voice quality and screen-reader testing are unverified. Downloads require Web Locks; no public/LAN hosting is supported.
 
 ## Next task
 
-Recommended follow-up after this bounded vocabulary/media/voice step:
+Recommended follow-up after the saved-speech step:
 
 1. Review the new draft vocabulary/photos in the 8083 candidate and audition Profile's actual French voices. Keep the 308 photo gaps visible; prioritize clear photographs for still-uncovered concrete objects over generic filler. Validate one owner journey: restaurant lesson → save/edit → review → backup/reload → offline return → optional AI role-play. Phone/Safari access still requires a separately designed supported route; serving is loopback-only. Preserve owner 8082 until deliberate promotion.
-2. Next bounded implementation: generated French speech/cache, with server-only credentials, explicit generation, text/language/voice/settings cache identity, revision invalidation, download/replay without repeated paid calls and text fallback. Fake-provider checks first; real generation/quality review is separate.
+2. Configure Azure locally using the README, deliberately restart the API, and audition Denise/Henri at gentle/normal pace in the8084 candidate. Compare actual sound before choosing a default or adding another provider. The implementation is verified with fakes; provider compatibility, audible quality and physical devices remain unverified. No paid calls were made by the agent.
 3. Extend one editor journey at a time: validated target/exercise editing or lesson order, then dialogue line changes and create/archive/restore/import/export/unpublish. Preserve immutable revisions, progress and owner preview/publication.
 4. Complete learner controls and beta readiness: safe cross-tab data reset, onboarding/preferences, per-topic downloads and production/listening practice. Add useful pictures for concrete uncovered vocabulary after reviewing clarity and rights; more lesson volume is lower priority than approval and usability.
 5. Resolve the three moderate build-tool findings with a compatible verified dependency change before distribution. Native adapters/packages, accounts/sync/public hosting and realtime voice follow the tested web beta.

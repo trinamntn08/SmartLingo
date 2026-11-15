@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from 'react';
 import { Platform, Text, View } from 'react-native';
 import { Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
-import { audio } from './index';
+import { audio, deviceAudio } from './index';
 import { audioPreferences, audioRates, type AudioPreferences } from './preferences';
 import { getFrenchVoices, selectFrenchVoice, subscribeVoiceChanges, voiceId } from './voices';
 
@@ -38,7 +38,7 @@ export function AudioPreferencesPanel() {
   async function preview() {
     if (playing) { audio.stop(); setPlaying(false); return; }
     setError(''); setPlaying(true);
-    try { await audio.speak(previewText); }
+    try { audio.stop(); await deviceAudio.speak(previewText); }
     catch (failure) { setError(failure instanceof Error ? failure.message : 'Voice is unavailable. You can continue with text.'); }
     finally { setPlaying(false); }
   }

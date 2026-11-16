@@ -6,8 +6,18 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `chore/cloud-workflow`, based on the completed greetings checkpoint `d5a56ed`. Earlier feature branches/checkpoints remain preserved. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
+- Current branch: `chore/a1-a2-curriculum-review`; inherited cloud-preparation checkpoint `1c5b5d4` and greetings checkpoint `d5a56ed` remain preserved. This step prepares a curriculum research/review pack. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
 - Owner authorised the proposed GitHub upload and Codex Cloud setup on 2026-11-16. Live fetch confirms `main` at `1c6e943` is an ancestor of the current source (27 application/tooling commits ahead before cloud preparation). Upload and draft-PR results are tracked in the session checkpoint. No merge, deployment, curriculum publication or history rewrite is authorised by this setup.
+
+## A1–A2 curriculum research and compatible candidates (2026-11-16)
+
+[Research/review pack](curriculum/README.md) refreshes the architecture and CEFR/FLE comparison and maps all 25 current banks/123 lessons into a recommended foundation/A1 pass and A2 revisit. Each topic has lexical subclusters, can-do goals, original bilingual communicative model/task criteria, prerequisites, transfer/revision and B1/B2 extension goals. The route, tasks and extension metadata remain research; the app does not consume them. [Plan 0024](plans/0024-a1-a2-curriculum-review.md).
+
+The deterministic full-payload ledger preserves all 765 appearances/722 canonical IDs/713 written forms and marks existing-ID recycling. One same-sense breakfast link gives 721 provisional teaching concepts/44 recycled appearances without merging IDs or learner data. Nine same-form groups retain explicit contextual/sense distinctions. The 32-area seed map distinguishes present, partial and missing coverage; weekdays/months and basic number sequences are already present.
+
+Six complete runtime-schema bridge drafts (54 appearances: 35 new senses and 19 reused appearances) address family, colours, body locations, compound prices, predictable payment clarification and a short practical message. Five full existing-lesson candidate revisions correct four broken grammar question explanations and one stale pronoun reference. All remain separate review files, unregistered and unpublished. Full shipped lesson payloads/revisions, seed baselines, catalogue order and running preview are unchanged. No research JSON importer, production code/storage change, owner database access, provider call or new media was added.
+
+Live primary references include Council of Europe selected descriptor scales, Eaquals/CIEP summaries, TV5MONDE, publisher-hosted Cosmopolite 1/2 contents and CLE resource labels, with bounded usage checks and explicit inaccessible-source limits. Structure/integrity and relevant domain checks are recorded in the session checkpoint; they do not establish native-teacher validation, complete CEFR alignment, listening competence or owner approval. Candidate integration and saved-revision owner preview/publication remain separate work.
 
 ## GitHub and phone-driven cloud preparation (2026-11-16)
 

@@ -1,36 +1,38 @@
-﻿# Session checkpoint
+# Session checkpoint
 
-Updated: 2026-11-16, Europe/Paris. GitHub/cloud preparation reviewed and locally validated; upload, Linux CI and environment activation follow this checkpoint.
+Updated: 2026-11-16, Europe/Paris. A1–A2 curriculum research/review and compatible draft preparation complete. The commit containing this note is the local checkpoint; report its hash after Git confirms it.
 
-## Authorised request and scope
+## Authorised request and outcome
 
-Owner accepted setting up the proposed remote working route: upload current source to the existing GitHub repository, expose a tested draft PR, prepare a Codex Cloud environment, and verify phone access. Current branch `chore/cloud-workflow`, based on greetings checkpoint `d5a56ed` (previous request complete). Do not merge, deploy the learner, publish curriculum or transfer owner databases as part of setup.
+Owner requested the French curriculum researcher skill: architecture/content review, CEFR/FLE research, coherent A1/A2 topics, deduplication, progressive revision, validated app-compatible content and extensible B1/B2. Branch `chore/a1-a2-curriculum-review`; inherited cloud-preparation commit `1c5b5d4` and curriculum baseline `d5a56ed` are preserved. Started with no task edits. No production module or dependency changed.
 
-## Completed preparation
+[Review pack](curriculum/README.md) contains all 25-bank/123-lesson progression, canonical support/occurrence ledger, per-bank findings, 32-seed-area reconciliation, fourteen successfully inspected primary-source records and explicit inaccessible-source limits. Every topic has selected lexical clusters, a bilingual communicative model/task with success criteria, prerequisites, transfer/revision and topic-linked B1/B2 goals. Runtime ordering and level support remain unchanged; this recommended route is not consumed by the app.
 
-- Live `git fetch origin` and branch listing verify only `main` at `1c6e943a3a2f4d9fdbf6886a71ac31c0d3b235ef`; it is an ancestor of `d5a56ed`, 27 commits behind. Existing owner-selected remote preserved. Working tree started clean.
-- Added `.github/workflows/verify.yml`, `docs/CLOUD_WORKFLOW.md`, ADR 0020, and README/Codex setup links. Workflow runs existing checks and browser/offline journeys on Ubuntu 24.04 without provider secrets. Cloud guide names the current source branch so setup cannot silently use the old scaffold on `main`.
-- Independent read-only change-reviewer (`gpt-6.1-sol`, medium; explicit fresh context) scanned all 1,095 newly reachable historical objects: 702 blobs, 27 commits, 366 trees. No protected paths or supported credential patterns. Bounded scanner cannot identify every key format or private JSON semantically. Review of workflow/docs found no actionable issue. Primary owns all edits and integration.
+Six standalone runtime-schema bridge drafts address family, colours, pain locations, compound prices, predictable payment clarification and a short practical written message: 54 appearances, 35 new senses, 19 exact canonical reused appearances. Five full existing-lesson revision+1 candidates correct four corrupted question explanations and one stale pronoun reference; only grammar explanations change. All eleven candidates are unregistered/unpublished drafts. They are not API-import envelopes; future integration needs actual-head reconciliation, application checks and saved-revision owner preview/publication.
 
-## Actual checks and capabilities
+All 123 shipped full lesson payloads/revisions remain exact, including all 765 appearances/722 canonical IDs/713 written forms. One semantic breakfast teaching link yields 721 provisional teaching concepts/44 recycled appearances while preserving both historical IDs and exact cards; nine same-form groups keep explicit sense/context decisions. This does not claim exhaustive semantic deduplication, native review or complete CEFR coverage. No owner data, seed baseline, media/audio, running preview, API or provider was changed/accessed.
 
-- `npm.cmd run check`: PASS repository checks and TypeScript.
-- `npm.cmd test`: PASS 18 tooling / 190 application tests.
-- Parsed workflow using installed `js-yaml`: PASS. First inline Node invocation failed because Windows argument quoting stripped quotes; corrected here-string/stdin invocation succeeds. No dependency changes.
-- `git diff --check`: PASS before final documentation/staging; final staged checks and commit follow this note.
-- Local browser/offline suites not repeated for tooling/docs changes; new remote Linux workflow must supply that evidence.
-- GitHub connector read/write access verified. No Cloud environment-management tool exposed. Browser access host unavailable; native Chrome new tab opened, navigation blocked twice by concurrent user input. No login, permissions or account settings changed. Async question requests account-specific Cloud/Create environment availability while GitHub preparation continues.
-- Account usage unavailable: no allowance tool exposed (2026-11-16). No automatic resume configured. Skills applied: openai-docs (prior investigation), computer-use; reviewer read the repository review skill.
+## Actual validation and review
 
-## Exact next actions
+- `npm.cmd run check`: PASS repository tooling and TypeScript; final documentation/staged checks follow this note.
+- `node --import tsx scripts/verify-curriculum-review.mjs --self-test`: PASS all 25 topics/all 123 assignments, full-payload fingerprints, canonical support, draft/schema/reference/band/DAG/encoding/notebook constraints, six bridge drafts and five exact correction candidates. All accepted candidate sentence answers build from their pieces. All current lessons have at least one buildable answer. Eight negative fixtures rejected bad prerequisites/references, missing coverage, accidental publication, unsolvable sentences, shared-support drift, unrecorded edits and stale fingerprints.
+- Focused domain/content command in the [pack overview](curriculum/README.md): PASS all 30 tests across topics, examples, greetings, learning and review scheduling. `node --import tsx scripts/verify-curriculum-topic-audit.mjs`: PASS unchanged historical 120-lesson/741-appearance scope, current 123 runtime lessons reported separately.
+- `git diff d5a56ed -- packages/content packages/domain apps/api apps/learner`: empty, confirming runtime/source preservation. `git diff --check`: PASS. Final staged check/commit verification follow.
+- Primary inspected all six new bilingual drafts and integrated artifacts; independent read-only change-reviewer found no unresolved confirmed actionable defect in the bounded pack/validator review. No browser/export/offline/provider suites were rerun: no runtime change or candidate editor registration/preview occurred. Prior application/browser evidence remains in STATUS and earlier checkpoints.
+- During validation, fixed a comparison-key curly/straight-apostrophe mismatch. The initial overstrict all-current-answer check caught the legacy valid typed variant sœur/soeur, which cannot both be built from one fixed spelling; current content retains at least one buildable path, while every accepted candidate answer is required buildable. Initial Windows inline quoting failed before using stdin scripts. A source-status patch used stale text before rereading and preserving the inherited cloud checkpoint. These did not change runtime content or bypass checks.
 
-1. Stage only cloud workflow/docs paths, run `npm.cmd run check:staged` and `git diff --cached --check`, commit and verify. Commit containing this checkpoint records the prepared step; report its actual hash after confirmation.
-2. Push `chore/cloud-workflow` normally (no force) and open a draft PR against `main`. Verify remote SHA and wait for the actual Linux workflow results; fix reproducible failures within setup scope.
-3. Finish account-specific Cloud environment creation using `docs/CLOUD_WORKFLOW.md`. Confirm the prepared source branch, runtime, actual setup tests and publication. User interaction may be required for login or unavailable UI controls. Then run the phone acceptance task.
-4. Update this checkpoint with actual upload/CI/activation results and commit the focused handoff. Never claim an environment is active from a setup guide alone.
+## Review limits and next exact step
 
-## Existing application state to preserve
+Research/draft preparation requested here is complete. Review the pack and candidate French before selecting any integration. Apply the five support fixes through current-head editor saves or deliberate immutable seed revisions; register selected bridges only with the existing content/publication workflow and meaningful application checks. The old 741-appearance recommendations remain proposals, not 139 confirmed errors. Alphabet/phonetic instruction, independent listening/reading/free writing, medicine-label comprehension, broader banking tasks and learner trials remain documented gaps. Native-teacher/owner approval, actual audio, phone/Safari/native and screen-reader review remain open.
 
-Greetings-first implementation is complete at `d5a56ed`: 25 banks, 123 lessons, 765 appearances, 722 canonical senses, 713 forms. New greetings remain draft revision 1; owner content review/publication remains explicit. Prior validation and implementation details are preserved in that commit and STATUS.
+Previously recorded preview: `http://localhost:8082`, API `http://127.0.0.1:3001`; no restart or new live verification in this research step. No publication, paid call, secret read, push, merge or deployment.
 
-Owner preview remains at `http://localhost:8082`, API `http://127.0.0.1:3001`; neither was restarted or changed for cloud preparation. No real `.env` reads, paid calls, new media/audio, curriculum publication or learner-data migration. Physical-phone/Safari/native, audible provider quality and screen-reader checks remain open. A cloud source checkout does not restore the local learner's notebook or editor data.
+## Preserved cloud-setup follow-up
+
+Separate earlier request: `1c5b5d4` locally prepared `.github/workflows/verify.yml`, [cloud/phone guide](CLOUD_WORKFLOW.md) and ADR 0020. Its checkpoint records 18 tooling/190 application tests and bounded independent review. At that preparation, fetched `origin/main` was `1c6e943`; GitHub upload/draft PR, actual Linux CI, account-specific environment activation and phone acceptance remained pending. This research step did not recheck or perform those remote/account actions. Consult `git show 1c5b5d4:docs/SESSION_CHECKPOINT.md` for exact previous actions and re-inspect live remote state before continuing; do not treat this curriculum commit as uploaded or a Cloud environment as active.
+
+## Delegation and usage
+
+Two curriculum-author helpers and one independent read-only change-reviewer used exposed `gpt-6.1-sol` / high via explicit fresh contexts, following session routing. Exclusive files: topic plan/review/refinements; bridge drafts/notes; review read-only. Primary owned architecture/source comparison, ledger/validator, integration, status/checkpoint and commit. Skills applied: french-curriculum-researcher and sll-author-french; reviewer used sll-review-change. Role instructions were read; no claim of separate role sandbox/hook activation.
+
+Usage observation 2026-11-16: no account-allowance tool exposed; unavailable, not zero/unlimited. No automatic resume configured. Required final stage/check/commit remains the active handoff action until Git confirms it; no new implementation scope is implied.

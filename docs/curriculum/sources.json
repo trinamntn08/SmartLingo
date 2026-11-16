@@ -1,0 +1,135 @@
+{
+  "reviewStatus": "draft",
+  "accessedOn": "2026-11-16",
+  "sources": [
+    {
+      "id": "coe-global",
+      "title": "Council of Europe — CEFR global scale",
+      "url": "https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale",
+      "type": "cefr_descriptor",
+      "claim": "A1 focuses on supported basic personal exchanges; A2 on familiar routine exchanges. B1 and B2 increase connectedness, autonomy and argumentation.",
+      "limit": "No prescribed French vocabulary list or certification of these lessons."
+    },
+    {
+      "id": "coe-companion",
+      "title": "Council of Europe — CEFR Companion volume (2020)",
+      "url": "https://rm.coe.int/cefr-companion-volume-with-new-descriptors-2020/16809ea0d4",
+      "type": "cefr_descriptor",
+      "claim": "Goods/services (printed pp. 77–78) separate basic A1 requests, routine A2 transactions and B1 complaints; correspondence/messages (pp. 82–84) support short A2 practical messages.",
+      "limit": "Selected scales inspected, not an exhaustive descriptor alignment. Predictable supported issue reporting must not be equated with negotiating a dispute."
+    },
+    {
+      "id": "coe-rld",
+      "title": "Council of Europe — Reference Level Descriptions",
+      "url": "https://www.coe.int/en/web/common-european-framework-reference-languages/reference-level-descriptions",
+      "type": "cefr_descriptor",
+      "claim": "The framework is language independent; language-specific descriptions are produced by national teams. The page points to the Eaquals/CIEP inventory.",
+      "limit": "Full French reference-level volumes were not inspected."
+    },
+    {
+      "id": "eaquals-inventory",
+      "title": "Eaquals / CIEP / Eurocentres / ACPLS — Inventaire linguistique des contenus clés (2015)",
+      "url": "https://www.eaquals.org/wp-content/uploads/Inventaire_ONLINE_full.pdf",
+      "type": "inspiration",
+      "claim": "Introduction and level summaries inform a language-specific grammar/function cross-check; the selected A2 transaction passage (printed p. 19) explicitly includes a simple bank exchange.",
+      "limit": "Guidance, not a compulsory syllabus or exhaustive word list. Introduction, contents, A1/A2 summaries and selected bank-related passages inspected; no full lexical audit."
+    },
+    {
+      "id": "tv5-premiere",
+      "title": "TV5MONDE — Première classe",
+      "url": "https://apprendre.tv5monde.com/fr/exercices/premiere-classe",
+      "type": "inspiration",
+      "claim": "Beginner pathways group introductions/family/origins, leisure, housing, meals, work, health and travel around everyday actions.",
+      "limit": "Overview inspected; not every exercise or a word-by-word level inventory."
+    },
+    {
+      "id": "tv5-pain",
+      "title": "TV5MONDE — Grammaire / Avoir mal à",
+      "url": "https://apprendre.tv5monde.com/fr/aides/grammaire-avoir-mal",
+      "type": "usage_validation",
+      "claim": "A1 examples use avoir mal à la / au / aux with body locations.",
+      "limit": "Language pattern only; no diagnosis, treatment or complete health-bank validation."
+    },
+    {
+      "id": "tv5-colours",
+      "title": "TV5MONDE — Les meubles et les couleurs",
+      "url": "https://apprendre.tv5monde.com/fr/aides/vocabulaire-les-meubles-et-les-couleurs-0",
+      "type": "usage_validation",
+      "claim": "A1 descriptive vocabulary includes masculine/feminine colour pairs and invariable marron.",
+      "limit": "Specific forms support usage review, not a compulsory colour inventory."
+    },
+    {
+      "id": "hachette-a1",
+      "title": "Hachette FLE — Cosmopolite 1, publisher-hosted contents",
+      "url": "https://hachettefle.pl/wp-content/uploads/2022/07/Cosmopolite_1_spis_tresci.pdf",
+      "type": "inspiration",
+      "claim": "Opening combines introductions, spelling, numbers and classroom language; subsequent tasks integrate place, daily life, meals, purchases and travel.",
+      "limit": "Five-page overview inspected; SmartLingo sequence/examples remain original."
+    },
+    {
+      "id": "hachette-a2",
+      "title": "Hachette FLE — Cosmopolite 2, publisher-hosted contents",
+      "url": "https://hachettefle.pl/wp-content/uploads/2022/07/Cosmopolite_2_spis_tresci.pdf",
+      "type": "inspiration",
+      "claim": "A2 course themes connect travel/accommodation, administration, experience, job seeking and practical instructions with communicative projects.",
+      "limit": "Four-page overview inspected. Its more demanding grammar is not automatically a prerequisite for SmartLingo A2 or a reason to copy its sequence."
+    },
+    {
+      "id": "cle-a1",
+      "title": "CLE International — Vocabulaire progressif, débutant A1",
+      "url": "https://progressive.cle-international.com/9782090398489",
+      "type": "inspiration",
+      "claim": "Publisher labels this adult/adolescent resource A1 and lists communicative activities such as invitations, directions and recipes.",
+      "limit": "Public resource labels only; recordings and proprietary exercises not downloaded or copied."
+    },
+    {
+      "id": "cle-a2b1",
+      "title": "CLE International — Vocabulaire progressif, intermédiaire A2/B1",
+      "url": "https://progressive.cle-international.com/9782090398571",
+      "type": "inspiration",
+      "claim": "Public activity labels revisit daily life, employment and clothing in an explicitly mixed A2/B1 resource.",
+      "limit": "Not evidence that all its vocabulary or tasks belong at A2. No underlying audio/exercises inspected."
+    },
+    {
+      "id": "academie-numbers",
+      "title": "Académie française — Questions de langue, Nombres / Rectifications de l’orthographe",
+      "url": "https://www.academie-francaise.fr/questions-de-langue",
+      "type": "usage_validation",
+      "claim": "Vingt loses plural s before another numeral; traditional and rectified hyphenation are valid. Metropolitan usage includes soixante-dix / quatre-vingts / quatre-vingt-dix.",
+      "limit": "Selected number sections inspected; no pronunciation audio or whole-curriculum dictionary audit."
+    },
+    {
+      "id": "fipf-banking",
+      "title": "FIPF / DramaFLE — Les chèques, A2 teaching activity overview",
+      "url": "https://bop.fipf.org/2015-06-30-14-06-26/",
+      "type": "inspiration",
+      "claim": "A2 banking-context activity combines a bounded practical task, information exchange, questions and banking vocabulary.",
+      "limit": "Overview only; underlying audio, exercises and cheque procedure not reused or validated as current advice. Together with Eaquals, supports bounded banking-task design, not the exact new charge-clarification vocabulary or its level."
+    },
+    {
+      "id": "larousse-debiter",
+      "title": "Larousse — débiter (de débit)",
+      "url": "https://www.larousse.fr/dictionnaires/francais/d%C3%A9biter/21816",
+      "type": "usage_validation",
+      "claim": "Confirms the banking sense of débiter as entering a sum on the debit side of an account.",
+      "limit": "Lexical usage only; no banking procedure, rights, deadline or refund guarantee."
+    }
+  ],
+  "unavailable": [
+    {
+      "title": "France Éducation international — DELF A2 oral exercise advice",
+      "url": "https://www.france-education-international.fr/document/delf-a2-tout-public-poexercice-con",
+      "result": "Direct open returned access denied ERR-BOT-403; search extract excluded from evidence."
+    },
+    {
+      "title": "Didier — Saison A2 companion exercise index",
+      "url": "https://didierfle-saison.com/exercices/a2/",
+      "result": "Direct open redirected to inaccessible login. Banking search-result labels excluded from inspected-course evidence."
+    },
+    {
+      "title": "CLE — Communication progressive des affaires A2/B1 product page",
+      "url": "https://www.cle-international.com/adolescents/communication-progressive-du-francais-des-affaires-niveau-intermediaire-a2b1-livre-audio-en-ligne-9782090363210.html",
+      "result": "Direct open returned 403; matching Progressive companion URL also inaccessible. Banking search extract excluded from inspected-course evidence."
+    }
+  ]
+}

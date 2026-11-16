@@ -141,6 +141,8 @@ Content lifecycle: draft -> owner review -> published -> revised/archived. AI dr
 
 Owner greeting-first implementation request (2026-11-16): add the researched 24-expression opening as three eight-item foundation drafts, before Essentials and transaction topics. Use actual course ordering in Today/Explore/sidebar while preserving existing lesson resume, canonical IDs/history and published overrides. This bounded conversion adds one compact bank (25 banks/123 lessons total); broader audit restructuring remains separate. See [plan 0023](docs/plans/0023-greetings-first.md).
 
+Owner A1–A2 research/refinement request (2026-11-16): the [curriculum review pack](docs/curriculum/README.md) maps all current topics/lessons to a recommended two-pass progression, documents deduplication/recycling and prepares six runtime-schema gap lessons plus five grammar-support correction candidates. These are separate drafts for review, not registered app additions or publications. B1/B2 stay topic-linked extension goals. See [plan 0024](docs/plans/0024-a1-a2-curriculum-review.md).
+
 ## 8. Screens and visual direction
 
 Learner navigation: Today, Explore, Practice, Review, Profile. Notebook is accessible from Review and the global save action. Editor is a separate local route.

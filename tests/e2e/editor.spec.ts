@@ -1,3 +1,4 @@
+import { openRestaurant } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -29,7 +30,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   test.skip(info.project.name !== 'desktop', 'One publication writer against the isolated in-memory test API.');
   await proxyTestContent(page);
   await page.goto('/');
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
@@ -124,7 +125,7 @@ test('editor unavailable state preserves the independent learner flow', async ({
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('editor-unavailable.png'), fullPage: true });
   await page.getByRole('button', { name: /Return to learning/ }).click();
-  await expect(page.getByRole('button', { name: /Start restaurant practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
 });
 
 test('narrow editor keeps unsaved text when returning to the learner', async ({ page }, info) => {
@@ -144,7 +145,7 @@ test('narrow editor keeps unsaved text when returning to the learner', async ({ 
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('narrow-editor-form.png'), fullPage: true });
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
-  await expect(page.getByRole('button', { name: /Start restaurant practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();
   await expect(title).toHaveValue('Unsaved local form');

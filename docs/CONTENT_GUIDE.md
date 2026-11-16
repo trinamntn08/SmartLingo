@@ -18,6 +18,9 @@ For topic progression, research sources and vocabulary-coherence audits, use the
 - Keep IDs stable and distinguish shared curriculum from learner-edited notebook entries.
 
 ## Review and publication
+
+The greeting-first opening is a deliberately compact exception to the larger-bank guideline: 24 expressions across three eight-item foundation lessons. Do not pad it merely to reach 30 words. It reuses exact existing canonical vocabulary support and adds new stable IDs only for new expressions. See [decision 0019](decisions/0019-greetings-first-drafts.md).
+
 Use draft -> owner review -> published -> revised/archived. Never automatically publish generated material.
 Review language, translation, difficulty, answer variants, pictures, audio, and practical usefulness.
 Record sources and media usage rights. Create original examples and avoid copying whole course collections.

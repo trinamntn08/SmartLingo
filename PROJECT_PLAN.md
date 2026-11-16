@@ -139,6 +139,8 @@ Generate stable AI audio for approved content and cache it by text + language + 
 
 Content lifecycle: draft -> owner review -> published -> revised/archived. AI drafts never enter the published curriculum automatically. Review French accuracy, English meaning, naturalness, level, answer alternatives, image suitability, and audio. Keep source/provenance and version history.
 
+Owner greeting-first implementation request (2026-11-16): add the researched 24-expression opening as three eight-item foundation drafts, before Essentials and transaction topics. Use actual course ordering in Today/Explore/sidebar while preserving existing lesson resume, canonical IDs/history and published overrides. This bounded conversion adds one compact bank (25 banks/123 lessons total); broader audit restructuring remains separate. See [plan 0023](docs/plans/0023-greetings-first.md).
+
 ## 8. Screens and visual direction
 
 Learner navigation: Today, Explore, Practice, Review, Profile. Notebook is accessible from Review and the global save action. Editor is a separate local route.

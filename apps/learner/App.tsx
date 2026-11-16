@@ -96,7 +96,7 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
     <View style={[s.column, { justifyContent: 'center', paddingVertical: 18 }]}><Text style={s.eyebrow}>Small steps. Real conversations.</Text>
       <Text accessibilityRole="header" style={[s.hero, { fontSize: 52, lineHeight: 57 }]}>A little French.{ '\n' }A little more{ '\n' }at home.</Text>
       <Text style={[s.body, { maxWidth: 430 }]}>Explore {groupLessonTopics(lessons).length} everyday topics, with short A1–A2 lessons and useful vocabulary.</Text>
-      <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
+      <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested.id.startsWith('fr.greetings.') ? 'Start greetings practice →' : suggested.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
     </View>
     <View style={[s.card, s.column, { backgroundColor: '#E8ECD9', padding: 28 }]}><View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge><Badge>{suggested.level}</Badge></View>
       <WordIllustration entry={suggested.vocabulary[1]} size={290} />

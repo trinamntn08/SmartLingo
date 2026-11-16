@@ -2,6 +2,8 @@
 
 Audit: 2026-11-15, Europe/Paris. Baseline: `aac20dc`. Audience: English-speaking adult newcomers to France. Original AI-assisted editorial research using the French curriculum researcher skill. **Recommendations only; no runtime curriculum, owner publication, learner history or saved vocabulary changed.**
 
+Implementation follow-up, 2026-11-16: the [greeting-first opening](plans/0023-greetings-first.md) is now converted into three draft lessons, and the learner consumes explicit course ordering. The findings below describe the historical 120-lesson inventory; broader recommendations remain proposals. The integrity checker still verifies that historical scope and its unchanged support fingerprints, and reports the current runtime count separately. No owner publication or native-teacher approval is implied.
+
 ## Finding
 
 The owner's example is correct: **everyday greetings and politeness should be the first teaching topic**. `bonjour`, `bonsoir`, `s’il vous plaît`, `merci` and `au revoir` should be taught together before a restaurant transaction. Their later appearances in a bakery or restaurant are useful contextual practice.

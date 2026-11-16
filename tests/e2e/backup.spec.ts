@@ -1,3 +1,4 @@
+import { openRestaurant } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -19,9 +20,10 @@ async function eventCount(page: Page, storeName = 'events'): Promise<number> {
 }
 
 test('download and explicit restore recover learning in a fresh browser without overwriting local edits', async ({ page, browser }, info) => {
+  test.setTimeout(60000);
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();

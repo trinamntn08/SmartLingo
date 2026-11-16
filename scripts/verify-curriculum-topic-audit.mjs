@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { lessons } from '../packages/content/src/index.ts';
+import { lessons as runtimeLessons } from '../packages/content/src/index.ts';
 
 // Research coverage/integrity check, not French linguistic validation.
 // Run from the repository root: node --import tsx scripts/verify-curriculum-topic-audit.mjs
@@ -9,6 +9,17 @@ const read = name => JSON.parse(readFileSync(new URL(`../docs/audits/${name}`, i
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const support = ({ id, revision, topic, title, level, outcome, vocabulary }) => ({ id, revision, topic, title, level, outcome, vocabulary });
 const baseline = read('topic-word-audit-baseline.json');
+// The completed audit describes the original 120 lessons. Later opening drafts
+// are checked separately; do not silently claim the historical review covers them.
+const lessons = baseline.lessons.map(item => {
+  const lesson = runtimeLessons.find(lesson => lesson.id === item.id);
+  assert.ok(lesson, `Missing historically reviewed lesson: ${item.id}`);
+  return lesson;
+});
+const auditedIds = new Set(lessons.map(lesson => lesson.id));
+assert.deepEqual(runtimeLessons.filter(lesson => !auditedIds.has(lesson.id)).map(lesson => lesson.id),
+  ['fr.greetings.hello-goodbye', 'fr.greetings.politeness', 'fr.greetings.check-in'],
+  'Additional runtime lessons need an explicit audit scope decision');
 const audits = ['topic-words-daily.json', 'topic-words-foundations.json'].map(read);
 const expected = new Map(lessons.flatMap(lesson => lesson.vocabulary.map(word => [`${lesson.id}/${word.id}`, { lesson, word }])));
 const seen = new Set();
@@ -87,4 +98,4 @@ for (const lesson of opening.lessons) {
     }
   }
 }
-console.log(JSON.stringify({ lessons: lessons.length, topics: new Set(lessons.map(lesson => lesson.topic)).size, appearancesReviewed: seen.size, canonicalSenses: canonical.size, exactTargets: new Set([...canonical.values()].map(word => word.target)).size, actions, openingExpressions: proposedIds.size, firstTeachingHomes: new Set(homes.values()).size }, null, 2));
+console.log(JSON.stringify({ runtimeLessons: runtimeLessons.length, historicalLessonsReviewed: lessons.length, topics: new Set(lessons.map(lesson => lesson.topic)).size, appearancesReviewed: seen.size, canonicalSenses: canonical.size, exactTargets: new Set([...canonical.values()].map(word => word.target)).size, actions, openingExpressions: proposedIds.size, firstTeachingHomes: new Set(homes.values()).size }, null, 2));

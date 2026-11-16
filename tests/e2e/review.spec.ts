@@ -1,3 +1,4 @@
+import { openRestaurant } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 
 test.use({ timezoneId: 'Europe/Paris' });
@@ -17,7 +18,7 @@ test('manual review saves once, retries safely, survives reload and follows loca
     };
   });
   await page.goto('/');
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
@@ -53,7 +54,7 @@ test('manual review saves once, retries safely, survives reload and follows loca
 test('returning to a stale review tab refreshes ratings from another tab', async ({ page }) => {
   await page.clock.install({ time: new Date('2026-11-16T11:00:00Z') });
   await page.goto('/');
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();

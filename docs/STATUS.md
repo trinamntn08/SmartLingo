@@ -1,14 +1,22 @@
 # Project status
 
-Updated: 2026-11-15 (Europe/Paris).
+Updated: 2026-11-16 (Europe/Paris).
 
 SmartLingo is a runnable local web preview with first editor fields and explicit local draft preview/publication. Physical-phone and voice checks still prevent claiming the full M1 gate complete.
 
 ## Current Git state
 
-- Current branch: `docs/curriculum-topic-audit`, based on `aac20dc` (completed explicit cached neural French speech). The checkpoint containing these notes adds curriculum research only. Earlier feature branches/checkpoints remain preserved.
+- Current branch: `feat/greetings-first`, based on `3bac1c7` (research plus verified local launch). This step applies the opening greetings draft and actual course ordering. Earlier feature branches/checkpoints remain preserved.
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Live `git ls-remote --heads origin` on 2026-11-15 reports only `main` at `1c6e943`. The reviewed source checkpoint `35f8853` is 21 commits beyond that ancestor; the current feature branch is not on origin. Inspect remote history again before integration. A local checkpoint is not remote backup.
+
+## Greetings-first curriculum (2026-11-16)
+
+Fresh Today, Explore and the topic sidebar now start with Everyday greetings and politeness: Say hello and goodbye, Be polite in everyday exchanges, and Ask how someone is. Each foundation lesson teaches eight expressions with directly visible meanings/examples, original bilingual dialogue, register guidance and solvable meaning/sentence practice. The 24-expression opening is a deliberately compact bank. Larger existing banks stay intact; all topics remain freely accessible. [Catalogue](COURSE_CATALOGUE.md), [plan](plans/0023-greetings-first.md), [decision](decisions/0019-greetings-first-drafts.md).
+
+The content package now applies explicit course ordering before published-catalogue merging. Returning learners retain latest-lesson resume; publication replacements keep their content/topic labels. New drafts reuse seven exact canonical entries and add seventeen stable IDs. All 120 earlier full lesson payloads and revisions remain unchanged, with no learner migration or new seed-refresh baseline needed. Temporary-database checks cover insertion/reseed and preservation of owner edits/publications. Current inventory: 25 banks, 123 lessons, 765 appearances, 722 canonical senses, 713 written forms; 7 foundation, 65 A1 and 51 A2 lessons.
+
+New lessons remain draft revision 1 for saved-revision editor preview and explicit owner publication. No owner publication, provider call or new external image/audio was performed. The broader 30-area audit reorganisation remains proposed. The historical 120-lesson audit validator still checks its exact original scope/support fingerprints and reports current runtime counts separately. New greeting conversion and ordering have separate runtime/browser checks; final validation and refreshed-preview details are recorded in the session checkpoint. Native-teacher/owner content review, phone/Safari/native, screen-reader and actual audio-quality checks remain open.
 
 ## Complete topic-placement research review (2026-11-15)
 

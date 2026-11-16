@@ -1,3 +1,4 @@
+import { openRestaurant } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -35,11 +36,10 @@ test('restaurant details are visible directly and practice/notebook completion s
   page.on('pageerror', error => errors.push(error.message));
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await expect(button(page, /Start restaurant practice/)).toBeVisible();
-  await expectPictureLoaded(page);
+  await expect(button(page, /Start greetings practice/)).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await page.screenshot({ path: info.outputPath('today.png'), fullPage: true });
-  await button(page, /Start restaurant practice/).click();
+  await openRestaurant(page);
   await expect(page.getByText('hello / good morning', { exact: true })).toBeVisible();
   await expect(page.getByText(restaurantLesson.vocabulary[0].example, { exact: true })).toBeVisible();
   await expect(page.getByText(restaurantLesson.vocabulary[0].exampleMeaning, { exact: true })).toBeVisible();
@@ -120,10 +120,10 @@ test('restaurant details are visible directly and practice/notebook completion s
 
 test('stale tab capture preserves another tab’s notebook edit', async ({ page, context }) => {
   await page.goto('/');
-  await button(page, /Start restaurant practice/).click();
+  await openRestaurant(page);
   const stale = await context.newPage();
   await stale.goto('/');
-  await button(stale, /Start restaurant practice/).click();
+  await openRestaurant(stale);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await button(page, 'Review').click();
@@ -184,7 +184,7 @@ test('speaker icon plays and stops through keyboard controls', async ({ page }) 
     });
   });
   await page.goto('/');
-  await button(page, /Start restaurant practice/).click();
+  await openRestaurant(page);
   const speaker = button(page, 'Listen to bonjour');
   await speaker.focus();
   await page.keyboard.press('Enter');
@@ -201,7 +201,7 @@ test('storage denial explains the problem and never claims a saved change', asyn
   await page.addInitScript(() => Object.defineProperty(window, 'indexedDB', { value: undefined }));
   await page.goto('/');
   await expect(page.getByRole('alert')).toContainText('couldn’t be opened');
-  await button(page, /Start restaurant practice/).click();
+  await openRestaurant(page);
   await expect(button(page, 'Save bonjour')).toBeDisabled();
   await expect(button(page, /Continue to dialogue/)).toBeDisabled();
   await button(page, 'Retry opening storage').click();
@@ -221,7 +221,7 @@ test('failed save can retry once without duplicate practice', async ({ page }) =
     };
   });
   await page.goto('/');
-  await button(page, /Start restaurant practice/).click();
+  await openRestaurant(page);
   await button(page, /Continue to dialogue/).click();
   await expect(page.getByRole('alert')).toContainText('hasn’t been confirmed as saved');
   await expect(button(page, /Continue to dialogue/)).toBeDisabled();

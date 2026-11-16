@@ -3,6 +3,8 @@ import { buildTopic } from './build-topic';
 import { foodHomeTopics } from './topics/food-home';
 import { dailyLifeTopics } from './topics/daily-life';
 import { reuseSharedVocabulary } from './shared-vocabulary';
+import { orderCourseLessons } from './course-sequence';
+import { buildGreetingsLessons } from './topics/greetings';
 import { foundationTopics } from './topics/foundations';
 import { communicationTopics } from './topics/communication';
 import { foodTravelTopics } from './topics/food-travel';
@@ -12,7 +14,7 @@ import { experienceTopics } from './topics/experiences';
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
 export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
-export { courseSequence } from './course-sequence';
+export { courseSequence, orderCourseLessons } from './course-sequence';
 
 // Original preview curriculum. Publication requires owner review.
 const drafts = [
@@ -299,7 +301,7 @@ const drafts = [
   }
 ];
 
-export const lessons: Lesson[] = reuseSharedVocabulary([
+const existingLessons: Lesson[] = reuseSharedVocabulary([
   ...drafts.map(draft => lessonSchema.parse(draft)),
   ...foodHomeTopics.flatMap(topic => buildTopic({ ...topic, revision: 3 })),
   ...dailyLifeTopics.flatMap(topic => buildTopic({ ...topic, revision: 3 })),
@@ -308,5 +310,9 @@ export const lessons: Lesson[] = reuseSharedVocabulary([
   ...studyWorkTopics.flatMap(buildTopic),
   ...communicationTopics.flatMap(buildTopic),
   ...experienceTopics.flatMap(buildTopic),
+]);
+export const lessons: Lesson[] = orderCourseLessons([
+  ...buildGreetingsLessons(existingLessons.flatMap(lesson => lesson.vocabulary)),
+  ...existingLessons,
 ]);
 export const restaurantLesson = lessons.find(lesson => lesson.id === 'fr.restaurant.customer')!;

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lessons, restaurantLesson, courseSequence, previousSeedFingerprints } from '@smartlingo/content';
+import { lessons, restaurantLesson, courseSequence, orderCourseLessons, previousSeedFingerprints } from '@smartlingo/content';
 import { checkAnswer, groupLessonTopics, matchesLesson, matchesVocabulary, mergeLessonCatalogue, normalizeAnswer, normalizeSearch, type Lesson, type Vocabulary } from '../src/index';
 
 function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: string[] = [], remaining = exercise.tokens): boolean {
@@ -13,14 +13,17 @@ function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: 
   return remaining.some((token, index) => canBuildAcceptedSentence(exercise, [...chosen, token], remaining.filter((_, at) => at !== index)));
 }
 
-test('each beginner topic has a distinct 30–50-entry bank and solvable short lessons', () => {
+test('beginner banks and the compact greeting opening have distinct targets and solvable short lessons', () => {
   const topics = groupLessonTopics(lessons);
-  assert.equal(topics.length, 24);
+  assert.equal(topics.length, 25);
   assert.equal(new Set(lessons.map(lesson => lesson.id)).size, lessons.length);
   const sharedEntries = new Map<string, Vocabulary>();
   for (const topic of topics) {
     const targets = new Set(topic.vocabulary.map(entry => normalizeSearch(entry.target)));
-    assert.ok(targets.size >= 30 && targets.size <= 50, `${topic.name}: ${targets.size} distinct targets`);
+    if (topic.name === 'Everyday greetings and politeness') {
+      assert.equal(targets.size, 24, 'The opening bank is deliberately compact, without vocabulary padding.');
+      assert.equal(topic.lessons.length, 3);
+    } else assert.ok(targets.size >= 30 && targets.size <= 50, `${topic.name}: ${targets.size} distinct targets`);
     assert.equal(targets.size, topic.vocabulary.length, `${topic.name}: no repeated target padding`);
     for (const lesson of topic.lessons) {
       assert.equal(lesson.status, 'draft');
@@ -53,14 +56,16 @@ test('catalogue search matches English/French words, accents, levels and lesson 
 
 test('suggested progression covers every bank once with earlier prerequisites and immutable draft revisions', () => {
   const slugs = courseSequence.map(topic => topic.slug);
-  assert.equal(new Set(slugs).size, 24);
+  assert.equal(new Set(slugs).size, 25);
   assert.deepEqual(new Set(lessons.map(lesson => lesson.id.split('.')[1])), new Set(slugs));
   const seen = new Set<string>();
   for (const topic of courseSequence) {
     for (const prerequisite of topic.prerequisites) assert.ok(seen.has(prerequisite), `${topic.slug}: prior ${prerequisite}`);
     seen.add(topic.slug);
   }
-  assert.equal(lessons.length, 120);
+  assert.equal(lessons.length, 123);
+  assert.equal(lessons[0].id, 'fr.greetings.hello-goodbye');
+  assert.deepEqual([...new Set(lessons.map(lesson => lesson.id.split('.')[1]))], slugs);
   for (const lesson of lessons) {
     const history = Object.hasOwn(previousSeedFingerprints, lesson.id)
       ? previousSeedFingerprints[lesson.id as keyof typeof previousSeedFingerprints] : [];
@@ -69,6 +74,22 @@ test('suggested progression covers every bank once with earlier prerequisites an
   assert.ok(lessons.some(lesson => lesson.level === 'foundation'));
   assert.ok(lessons.filter(lesson => lesson.id.startsWith('fr.past.') || lesson.id.startsWith('fr.opinions.'))
     .every(lesson => lesson.level === 'A2'));
+});
+
+test('course ordering keeps authored order, publications and custom banks without mutating input', () => {
+  const hello = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
+  const checkIn = lessons.find(lesson => lesson.id === 'fr.greetings.check-in')!;
+  const custom = { ...restaurantLesson, id: 'fr.owner.custom', topic: 'Owner bank' };
+  const input = [custom, restaurantLesson, hello, checkIn];
+  const ordered = orderCourseLessons(input);
+  assert.deepEqual(input.map(lesson => lesson.id), [custom.id, restaurantLesson.id, hello.id, checkIn.id]);
+  assert.deepEqual(ordered.map(lesson => lesson.id), [hello.id, checkIn.id, restaurantLesson.id, custom.id]);
+  const published = { ...hello, revision: 2, status: 'published' as const, topic: 'Owner greetings', title: 'Owner title' };
+  const merged = mergeLessonCatalogue(ordered, [published]);
+  assert.deepEqual(merged[0], published);
+  assert.equal(groupLessonTopics(merged)[0].name, 'Owner greetings');
+  assert.deepEqual(merged[1], checkIn);
+  assert.deepEqual(merged.at(-1), custom);
 });
 
 test('routine and paperwork replace redundant introductions while prior canonical senses remain taught', () => {

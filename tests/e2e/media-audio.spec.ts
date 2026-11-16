@@ -1,3 +1,4 @@
+import { openRestaurant } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 
 test('French voice and speed choices survive reload and apply to lesson playback without AI', async ({ page }, info) => {
@@ -33,7 +34,7 @@ test('French voice and speed choices survive reload and apply to lesson playback
   await expect(voice).toHaveValue(JSON.stringify(['test.fr.alternative', 'French alternative sample', 'fr-FR']));
   await expect(page.getByRole('button', { name: 'Speaking speed: Slow', exact: true })).toHaveAttribute('aria-selected', 'true');
   await page.getByRole('button', { name: 'Today', exact: true }).click();
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Listen to un café', exact: true }).click();
   await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('speech-check') ?? '{}'))).toEqual({
     text: 'un café', voice: 'French alternative sample', rate: 0.7,

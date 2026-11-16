@@ -1,5 +1,6 @@
+import { buildAcceptedSentence, openRestaurant } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
-import { restaurantLesson } from '@smartlingo/content';
+import { lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -24,9 +25,57 @@ test.beforeEach(async ({ request, context }) => {
   await request.post('/__test__/mode');
 });
 
+test('a fresh offline download starts greetings and saves study, practice and notebook changes across cold reloads', async ({ page, context }, info) => {
+  const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
+  await page.goto('/');
+  await button(page, 'Profile').click();
+  await expect(button(page, 'Download for offline use')).toBeEnabled();
+  await button(page, 'Download for offline use').click();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await expect(button(page, 'Refresh offline status')).toBeEnabled();
+  await context.setOffline(true);
+  await page.close();
+  const cold = await context.newPage();
+  await cold.goto('http://localhost:8082/');
+  await expect(cold.getByText(opening.subtitle, { exact: true })).toBeVisible();
+  await button(cold, /Start greetings practice/).click();
+  for (const target of ['bonsoir', 'bonne soirée']) {
+    const entry = opening.vocabulary.find(word => word.target === target)!;
+    const card = cold.getByTestId(`vocabulary-${entry.id}`);
+    await expect(card.getByText(entry.meaning, { exact: true })).toBeVisible();
+    await expect(card.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
+  }
+  await cold.getByTestId('vocabulary-fr.greetings.bonsoir').scrollIntoViewIfNeeded();
+  await cold.screenshot({ path: info.outputPath('greetings-offline-study.png'), fullPage: true });
+  await button(cold, 'Save bonsoir').click();
+  await expect(cold.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
+  await button(cold, /Continue to dialogue/).click();
+  await expect(cold.getByText(opening.grammar.explanation, { exact: true })).toBeVisible();
+  await cold.reload();
+  await button(cold, /Continue your lesson/).click();
+  await expect(cold.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
+  await button(cold, /Try meaning practice/).click();
+  const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
+  await button(cold, target.target).click();
+  await expect(cold.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
+  await button(cold, /Build a sentence/).click();
+  await buildAcceptedSentence(cold, opening);
+  await expect(cold.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
+  await cold.reload();
+  await button(cold, /Continue your lesson/).click();
+  await button(cold, 'Finish and save session').click();
+  await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
+  await cold.reload();
+  await button(cold, 'Review').click();
+  await expect(cold.getByText('bonsoir', { exact: true }).first()).toBeVisible();
+  const [events, notebook] = await learningSnapshot(cold);
+  expect(events).toHaveLength(4);
+  expect(notebook).toEqual([expect.objectContaining({ sourceEntryId: 'fr.greetings.bonsoir', target: 'bonsoir', meaning: 'good evening' })]);
+});
+
 test('explicit download cold-loads offline and asset removal preserves every learner store', async ({ page, context }, info) => {
   await page.goto('/');
-  await button(page, /Start restaurant practice/).click();
+  await openRestaurant(page);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await button(page, /Continue to dialogue/).click();
@@ -134,7 +183,7 @@ test('interrupted download and corrupted update can retry while preserving the l
   const updated = await context.newPage();
   await updated.goto('http://localhost:8082/');
   await expect(updated.locator('meta[name="smartlingo-test-build"]')).toHaveAttribute('content', 'updated');
-  await expect(button(updated, /Start restaurant practice/)).toBeVisible();
+  await expect(button(updated, /Start greetings practice/)).toBeVisible();
 });
 
 test('a stalled connection falls back to the saved document within a few seconds', async ({ page, context, request }) => {
@@ -149,6 +198,6 @@ test('a stalled connection falls back to the saved document within a few seconds
   const stalled = await context.newPage();
   const start = Date.now();
   await stalled.goto('http://localhost:8082/?from=saved');
-  await expect(button(stalled, /Start restaurant practice/)).toBeVisible();
+  await expect(button(stalled, /Start greetings practice/)).toBeVisible();
   expect(Date.now() - start).toBeLessThan(10000);
 });

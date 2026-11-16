@@ -10,6 +10,28 @@ import { lessonSchema } from '@smartlingo/domain';
 import { migrateContentDatabase } from '../src/migrations';
 import { InvalidStoredLessonError, SqliteLessonRepository } from '../src/repository';
 
+test('adding greeting drafts preserves existing publications and owner greeting edits on reseed', () => {
+  const repository = new SqliteLessonRepository(':memory:');
+  try {
+    const oldLessons = lessons.filter(lesson => !lesson.id.startsWith('fr.greetings.'));
+    repository.seed(oldLessons, previousSeedFingerprints);
+    const published = lessonSchema.parse({ ...restaurantLesson, revision: restaurantLesson.revision + 1,
+      status: 'published', title: 'Owner restaurant publication' });
+    repository.saveLesson(published);
+    repository.seed(lessons, previousSeedFingerprints);
+    const greeting = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
+    assert.deepEqual(repository.getLesson(greeting.id), JSON.parse(JSON.stringify(greeting)));
+    assert.equal(repository.listLessons().length, lessons.length);
+    assert.deepEqual(repository.listPublishedLessons(), [published]);
+    const edited = lessonSchema.parse({ ...greeting, revision: 2, title: 'Owner greeting draft' });
+    repository.saveLesson(edited);
+    repository.seed(lessons, previousSeedFingerprints);
+    assert.deepEqual(repository.getLesson(greeting.id), JSON.parse(JSON.stringify(edited)));
+    assert.deepEqual(repository.getLesson(restaurantLesson.id), published);
+    assert.deepEqual(repository.listPublishedLessons(), [published]);
+  } finally { repository.close(); }
+});
+
 test('migration initializes the schema once and preserves existing rows', () => {
   const database = new DatabaseSync(':memory:');
   try {

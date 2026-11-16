@@ -1,3 +1,4 @@
+import { openRestaurant } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -67,7 +68,7 @@ test('explicit neural save, actual MP3 playback, reload and browser-only removal
   const fake = await fakeSpeech(page);
   await instrumentAudio(page);
   await page.goto('/');
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
@@ -85,7 +86,7 @@ test('explicit neural save, actual MP3 playback, reload and browser-only removal
   await panel.screenshot({ path: info.outputPath('neural-audio-panel.png') });
   expect(fake.requests).toHaveLength(1);
   await page.reload();
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Listen to un café', exact: true }).click();
   await expect.poll(async () => (await audioState(page)).ended).toBe(1);
   expect((await audioState(page)).device).toBe(0);
@@ -151,7 +152,7 @@ test('unconfigured neural audio leaves device study available without generation
   await expect(panel.getByText('Neural generation is not configured', { exact: false })).toBeVisible();
   expect(fake.requests).toHaveLength(0);
   await page.getByRole('button', { name: 'Today', exact: true }).click();
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openRestaurant(page);
   await page.getByRole('button', { name: 'Listen to un café', exact: true }).click();
   await expect.poll(async () => (await audioState(page)).device).toBe(1);
   expect(fake.requests).toHaveLength(0);

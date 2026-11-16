@@ -1,5 +1,7 @@
 # Vocabulary overlap and useful-gap audit — draft
 
+**Historical audit (2026-11-15).** Its baseline is 24 banks / 120 lessons / 741 appearances / 689 IDs / 680 written forms. The 16 replacements and two horaire clarifications were subsequently integrated as five revision-4 drafts, producing 705 IDs / 696 forms before greetings were added. Instructions and projected counts below record that original review, not pending integration or current totals. For the current bundled inventory and lesson order, see the [course catalogue](COURSE_CATALOGUE.md); for the latest full-payload review and separate unregistered/unpublished candidates, see the [curriculum review pack](curriculum/README.md).
+
 Audit date: 2026-11-15 (Europe/Paris). Original AI-assisted editorial review for English-speaking adult newcomers to France. All recommendations and replacement text are **drafts for owner review**. No publication, native-speaker review, certified CEFR coverage, exhaustive frequency study or learner trial is claimed.
 
 ## Scope and result

@@ -1,14 +1,16 @@
 # Plan: free website deployment for learner testing
 
-Prepared: 2026-11-16 (Europe/Paris). Status: researched proposal; implementation and deployment have not started. Source baseline: `8ba59ae`. Owner request: a detailed way to test SmartLingo on a website for free now.
+Prepared: 2026-11-16 (Europe/Paris). Original researched design, source baseline `8ba59ae`; the proposal below is retained as acceptance/design evidence. Owner request: a detailed way to test SmartLingo on a website for free now.
 
-For remote execution, copy the [Codex Cloud deployment prompt](../CLOUD_DEPLOY_PROMPT.md). Its source branch includes this plan and the current learner. The prompt authorises the scoped implementation/push/free test deployment when submitted by the owner; this documentation task itself does not deploy anything.
+Follow-up inspected 2026-11-16: remote branch `codex/free-learner-cloud-deploy` now contains a hosted-mode implementation (`68b8d0f`, with follow-up head `c88bc41` at inspection). Its checkpoint reports local hosted/browser/offline validation complete, with actual Cloudflare publication blocked by secure account/network access and no live URL. That code is **not integrated into this documentation checkout**. Resume/inspect that branch before new implementation; remote results are reported evidence, not tests rerun by this documentation audit.
+
+For remote execution, copy the [Codex Cloud deployment prompt](../CLOUD_DEPLOY_PROMPT.md), which now starts from the existing hosted branch and verifies remaining work. The prompt authorises the scoped implementation/push/free test deployment when submitted by the owner; this documentation task itself does not deploy anything.
 
 ## Recommendation and cost
 
 Use **Cloudflare Pages Free**, initially uploading a locally built learner export. Keep one stable `https://<chosen-name>.pages.dev` address. The name is illustrative and availability is unverified. After deployment, the computer can be switched off and testers can open the website from phones and computers.
 
-Cloudflare advertises free Pages hosting without a credit card and unlimited static requests/bandwidth. Its documented Free limits include 500 hosted builds/month, one simultaneous build, 20,000 files/site and 25 MiB/asset. Dashboard drag-and-drop has a separate 1,000-file limit. These limits were checked today; account eligibility and future terms must be checked at setup. See [Pages offering](https://www.cloudflare.com/products/pages/), [platform limits](https://developers.cloudflare.com/pages/platform/limits/) and [upload limits](https://developers.cloudflare.com/pages/get-started/direct-upload/).
+Cloudflare advertised free Pages hosting without a credit card and unlimited static requests/bandwidth when checked on 2026-11-16. Its documented Free limits then included 500 hosted builds/month, one simultaneous build, 20,000 files/site and 25 MiB/asset. Dashboard drag-and-drop had a separate 1,000-file limit. Account eligibility and current terms must be checked at deployment; this cleanup did not revalidate provider limits. See [Pages offering](https://www.cloudflare.com/products/pages/), [platform limits](https://developers.cloudflare.com/pages/platform/limits/) and [upload limits](https://developers.cloudflare.com/pages/get-started/direct-upload/).
 
 | Item | First test release |
 | --- | --- |
@@ -137,4 +139,4 @@ Choose either a durable Node host supporting the current SQLite design or a deli
 
 Planning is complete when the current runtime fit, checked free offer, exact packaging/upload steps, hosting compatibility work, test checklist, data limits and upgrade/rollback path are documented. This file satisfies that planning scope; no hosted capability exists because of this document.
 
-Next implementation request can be: **Prepare the Cloudflare Pages learner-only test release using plan 0025, fix offline hosting compatibility, validate it, and then deploy to my free Cloudflare account.** Complete the local reviewable release before any account-dependent publication step. Keep the initial backend/AI scope excluded unless separately requested.
+Next continuation: inspect/fetch `origin/codex/free-learner-cloud-deploy`, verify its current clean implementation/artifact and reported checks, resolve only remaining release defects, then complete secure account/network setup and actual deployment/hosted acceptance. Use the updated Cloud prompt. Keep the backend/AI scope excluded unless separately requested; no site is live merely because the implementation is committed.

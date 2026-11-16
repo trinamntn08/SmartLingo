@@ -1,13 +1,12 @@
 # SmartLingo — implementation plan
 
-Status: local learner, first editor/publication, backup and manual recognition review implemented; see docs/STATUS.md for verified scope and remaining milestone work.
-Updated: 2026-11-14.
+Target product requirements, reviewed 2026-11-16. This plan describes intended behaviour; [STATUS](docs/STATUS.md) is authoritative for what this checkout implements and which milestone gates remain open. Commands belong in [README](README.md) and [local operations](docs/LOCAL_OPERATIONS.md).
 
 ## 1. Product direction
 
 Build an approachable language-learning app for adults who want to function confidently in a new country and eventually master its language. Launch French first, with English explanations. The initial learner is an English-speaking newcomer to France, including complete beginners. English and Japanese are future target languages.
 
-Initially this is a personal app running locally. Preserve a path to a commercial product without implementing subscriptions, public hosting, or a full account system now. The developer implements; the owner tests and reviews the curriculum.
+The personal app runs locally. A learner-only free website is designed in [plan 0025](docs/plans/0025-free-web-testing.md), with implementation on a separate task branch; no live service or hosted API is established here. Preserve a path to a commercial product while deferring subscriptions and a full account system. The developer implements; the owner tests and reviews the curriculum.
 
 The first content is practical A1–A2 material, not a claim of a complete CEFR course or certification. Long-term mastery requires a much larger curriculum and assessment work.
 
@@ -18,7 +17,7 @@ The first content is practical A1–A2 material, not a claim of a complete CEFR 
 | Delivery | Web beta, then Android and iOS | Owner choice |
 | Audience | English-speaking adults, especially newcomers to France | Owner choice |
 | Teaching language | French; English explanations | Owner choice |
-| French variety | Metropolitan French initially | Recommended default; owner did not explicitly answer this part |
+| French variety | Practical metropolitan French | Current owner project constraints |
 | Future languages | English and Japanese | Owner choice |
 | Learning paths | Guided course plus free topic exploration | Owner choice |
 | Starting level | Include absolute beginners and foundational sounds | Owner choice |
@@ -28,7 +27,7 @@ The first content is practical A1–A2 material, not a claim of a complete CEFR 
 | Dialogues | Scripted, branching, and AI-assisted | Owner choice |
 | Feedback | Supportive A1–A2 tolerance | Owner choice |
 | Motivation | Calm progress; games later | Owner choice |
-| Translation | Hidden until tapped | Owner choice |
+| Translation | Directly visible in study; deliberate recall reveal in practice | Owner correction, 2026-11-14; ADR 0008 |
 | Audio | AI voice acceptable; reusable human audio optional | Owner choice |
 | Content | Original material informed by public resources; owner reviews | Recommended implementation of owner's request |
 | Admin | Edit all learning content and relevant presentation settings | Owner choice; scope defined below |
@@ -40,11 +39,13 @@ The first content is practical A1–A2 material, not a claim of a complete CEFR 
 | Dark mode | Later release; theme tokens now | Owner choice |
 | Working name | SmartLingo | Owner choice |
 
-The owner answered question 5 with a level rather than topic priorities. Default first topics: greetings and essentials, restaurants/cafés, shopping and daily errands. School/university, transport, and workplace communication follow. Restaurants and workplace scenarios cover both customer/visitor and employee roles.
+Begin with greetings and essentials, then practical daily situations including restaurants/cafés, shopping, transport, education and work. Support both customer/visitor and employee roles where useful. The current ordering is in the [course catalogue](docs/COURSE_CATALOGUE.md); the [curriculum review pack](docs/curriculum/README.md) proposes a separate A1/A2 revisit route.
 
 ## 3. Scope boundaries
 
-### First testable slice
+### Original first testable slice
+
+Historical starting scope, retained to explain the milestone design. The current catalogue is larger; this is not the present feature inventory or pending backlog.
 
 - Responsive home, topic list, lesson screen, vocabulary detail, review screen, notebook, speaking screen, and basic editor.
 - One complete restaurant lesson, plus a small greetings foundation lesson.
@@ -58,9 +59,9 @@ The owner answered question 5 with a level rather than topic priorities. Default
 
 ### Personal web beta
 
-- Six topic collections, roughly 18 lessons, and 150–250 unique words/expressions. These are planning targets, subject to review after the first lessons.
+- A reviewed practical curriculum in short lessons. The early six-collection/18-lesson sizing estimate has been superseded; use the current catalogue and prioritise approval/usability over volume.
 - Beginner foundations: greetings, alphabet/sound awareness, articles, numbers, basic polite requests.
-- The six collections: essentials, restaurants, shopping/errands, transport, school/university, workplace.
+- Core situations include essentials, restaurants, shopping/errands, transport, school/university and workplace, with linked daily-life topics.
 - Listening support in each lesson; pictures, vocabulary, and sentence building are the primary exercise modes.
 - Scripted dialogues, a few branching scenarios, and contextual AI conversation.
 - Scheduled reviews, manual flashcard mode, saved mistakes, custom vocabulary.
@@ -107,7 +108,7 @@ Do not force speaking to finish every lesson. A learner must be able to study wi
 
 ## 6. AI speaking and vocabulary assistant
 
-First implement push-to-talk: record a short turn, transcribe, generate a contextual French response, and synthesise audio. This makes transcripts, corrections, failures, and cost easier to inspect. Keep the provider behind an adapter. Smooth real-time conversation is the next speaking milestone, after the basic learning loop works.
+The target speaking journey combines a short recording, editable transcription, contextual response and replay behind provider adapters. The implemented recorded-input/text flow and explicit saved neural speech are separate features; [local operations](docs/LOCAL_OPERATIONS.md) describes their controls and privacy boundaries. Smooth real-time conversation and automatic response-audio generation remain future work.
 
 The assistant uses selected topic, role, level, current target phrases, and recent conversation. Use short sentences, patient pacing, and limited new vocabulary. Give at most one or two useful corrections per turn or a summary at the end, depending on settings. Accept a request for English help.
 
@@ -127,21 +128,15 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 Create original lessons and examples using reputable public references for research. Record sources, media attribution, and reuse permissions. Personal use is not a reason to copy entire courses or unlicensed image/audio collections; original content also makes later commercialisation easier.
 
-Owner expansion request (2026-11-14): provide 30–50 distinct words/phrases per practical A1–A2 topic, grouped into short 6–10-item lessons. Let learners search French/English vocabulary and read meanings, examples and explanations directly in a topic bank. Keep ordinary study copy concise; disclose synthetic device speech in Profile rather than beside every Listen button. [Research and limits](docs/CURRICULUM_RESEARCH.md) accompany the draft catalogue.
+Use coherent topic banks, normally 30–50 distinct words/phrases across short 6–10-item lessons. The 24-expression greetings opening is an intentional compact exception. Foundation and A2-only banks are valid when the task demands justify them. The [content guide](docs/CONTENT_GUIDE.md) owns authoring rules; the [catalogue](docs/COURSE_CATALOGUE.md) lists bundled content and the [review pack](docs/curriculum/README.md) holds unpublished refinements, recycling and B1/B2 extension goals. Word counts and lesson completion do not establish complete CEFR coverage.
 
-Owner curriculum rework request (2026-11-15): audit every topic and word, strengthen task coherence and beginner examples, and expand useful coverage. The draft now contains 24 banks and 120 short lessons; [review catalogue](docs/COURSE_CATALOGUE.md) and [research](docs/CURRICULUM_RESEARCH.md) distinguish unique senses, recycling and owner-review limits. Foundation and A2-only banks are allowed where their communicative demands justify them. This does not establish complete CEFR coverage.
-
-Owner browsing request and correction (2026-11-14): show topics in a persistent left-hand desktop list, with direct switching and a horizontal list on phones. Clicking SmartLingo returns to the home page. Put word grids before optional lessons, and show the whole lesson vocabulary together rather than a serial Next word flow. Include clear drawings/photos for concrete vocabulary with honest alt text; retain directly visible text support. [ADR 0010](docs/decisions/0010-visual-word-overviews.md) records vocabulary overview progress and the separate bundled media catalogue.
+Provide direct topic switching from the desktop sidebar or narrow-screen topic list. Clicking SmartLingo returns home. Show searchable word grids before optional practice, with the full lesson vocabulary together and visible English support. Disclose synthetic speech in Profile rather than repeating labels beside every speaker. [ADR 0010](docs/decisions/0010-visual-word-overviews.md) records this design.
 
 Use simple illustrations for objects/actions when clear. Use realistic photographs selectively for menus, places, and practical contexts when permission allows. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
 
 Generate stable AI audio for approved content and cache it by text + language + voice + generation-settings hash. Reuse it rather than generate on every playback. A text change invalidates related audio until regenerated/reviewed. Clearly identify synthetic speech.
 
 Content lifecycle: draft -> owner review -> published -> revised/archived. AI drafts never enter the published curriculum automatically. Review French accuracy, English meaning, naturalness, level, answer alternatives, image suitability, and audio. Keep source/provenance and version history.
-
-Owner greeting-first implementation request (2026-11-16): add the researched 24-expression opening as three eight-item foundation drafts, before Essentials and transaction topics. Use actual course ordering in Today/Explore/sidebar while preserving existing lesson resume, canonical IDs/history and published overrides. This bounded conversion adds one compact bank (25 banks/123 lessons total); broader audit restructuring remains separate. See [plan 0023](docs/plans/0023-greetings-first.md).
-
-Owner A1–A2 research/refinement request (2026-11-16): the [curriculum review pack](docs/curriculum/README.md) maps all current topics/lessons to a recommended two-pass progression, documents deduplication/recycling and prepares six runtime-schema gap lessons plus five grammar-support correction candidates. These are separate drafts for review, not registered app additions or publications. B1/B2 stay topic-linked extension goals. See [plan 0024](docs/plans/0024-a1-a2-curriculum-review.md).
 
 ## 8. Screens and visual direction
 
@@ -166,20 +161,19 @@ Accessibility: keyboard navigation, visible focus, screen-reader labels, scalabl
 
 Implementation must follow the [architecture standards](docs/ARCHITECTURE.md#implementation-standards): clean, modular, maintainable, extensible code; one coherent responsibility per function; and clear separation between UI, learning rules, storage, and external services. Apply the linked review criteria to every implementation slice.
 
-Recommended baseline: a TypeScript monorepo with an Expo/React Native learner app, a Node.js/Fastify local API, shared schemas/learning logic, and an editor rendered for web. Verify exact package versions and compatibility during scaffolding; do not assume native and web audio implementations are identical.
+Implemented baseline: a TypeScript monorepo with an Expo/React Native web learner, a Node.js/Fastify local API, shared schemas/learning logic, and a web editor. Native storage/audio adapters remain planned. Exact package versions are pinned in the manifests/lockfile; do not assume web and native APIs are interchangeable.
 
 Why: one main language for UI/server/types, a shared learner codebase for the three requested platforms, and a local server that can protect API credentials and serve editable content. A separate platform adapter handles browser/mobile storage and recording.
 
-Suggested structure:
+Repository structure (see [architecture](docs/ARCHITECTURE.md) for current responsibilities):
 
     apps/learner/          Expo app, web and future native targets
     apps/api/              local API, content database, AI adapters
     packages/domain/       schemas, answer checking, review scheduling
-    packages/content/      validated seed content and import/export schema
-    packages/ui/           theme and shared components as useful
+    packages/content/      validated draft content and bundled media metadata
     docs/                  implementation decisions and authoring guidance
 
-Local API: SQLite for content, revisions, and optional local backup data; filesystem media store; schema migrations. Browser learning state/notebook: IndexedDB with an explicit schema version and export. Native learning state later: SQLite through the same storage interface. Design idempotent learning events and stable IDs now, but defer a complex synchronisation engine.
+The API uses SQLite for immutable curriculum revisions and a separate generated-speech cache/attempt ledger. Browser learning state/notebook uses versioned IndexedDB with backup/restore. Native SQLite is planned behind the same storage contracts; a shared UI package is deferred until concrete reuse warrants it. Keep idempotent learning events and stable IDs; defer a complex synchronisation engine.
 
 The API may be needed to load uncached content; after a pack is downloaded, ordinary lessons/reviews must work without it. API speaking always needs network access and the local API process. Browser offline persistence is subject to device storage and eviction; export is the durable beta backup option.
 
@@ -188,6 +182,8 @@ Future hosting: move the API to a hosted service and consider managed PostgreSQL
 Use runtime schema validation at content/API boundaries. Keep AI model identifiers configurable and select available models after testing French quality, latency, and account pricing. Do not hardcode pricing or make provider-specific objects the core data model.
 
 ## 10. Core data model
+
+Conceptual target model, not a claim that each row is a separate implemented table or feature. Current contracts live in `packages/domain/src/`; current migrations belong to the API/persistence adapters.
 
 | Entity | Key fields/relationships |
 | --- | --- |
@@ -211,6 +207,8 @@ Use runtime schema validation at content/API boundaries. Keep AI model identifie
 Store French morphology as extensible language-specific data, not mandatory columns for every language. Japanese scripts/readings and English-specific details will require their own content work later.
 
 ## 11. Editor scope
+
+Target scope below. The current editor is a validated subset; [local operations](docs/LOCAL_OPERATIONS.md#run-the-preview) lists its implemented fields and publication flow.
 
 'Edit everything' means edit topics, lesson order, outcomes, vocabulary, translations, example sentences, grammar notes, dialogue roles/lines, exercise variants/answers/feedback, pictures, audio choices, level tags, sources, labels, and theme settings. It does not mean an arbitrary application-code editor.
 
@@ -266,25 +264,16 @@ Delivery recommendation: use milestone gates instead of a calendar promise. Star
 - Manual device checks: small screen layout, keyboard, audio, denied microphone, offline transitions, reduced motion.
 - Validate sample French, translations, audio, and accepted answers with owner review. No certification claims based on app scores.
 
-## 15. First implementation backlog (priority order)
+## 15. Remaining work (planning only)
 
-1. Initialise project tooling, ignored secrets, local run instructions, and validated configuration.
-2. Implement domain/content schemas and stable seed IDs.
-3. Build reference-inspired theme and responsive navigation.
-4. Build the restaurant lesson end to end with original sample content.
-5. Add persisted progress, notebook, and basic review.
-6. Add editable content and preview/publish workflow.
-7. Implement speech generation/cache and API-backed push-to-talk.
-8. Add vocabulary capture from text/voice and supportive corrections.
-9. Expand approved topics and offline packs.
-10. Validate beta acceptance criteria and prepare mobile adapters.
+The original scaffolding/first-lesson backlog has been completed. Choose the next bounded task from [current status](docs/STATUS.md#remaining-work), rather than replaying those steps. Current priorities are owner/device acceptance and content review, optional learner-only hosting, focused editor/learner controls and unresolved build-tool audit work. A listed opportunity does not authorise implementation or publication.
 
 ## 16. Remaining dependencies and non-blocking decisions
 
 - Owner supplies an API key through local environment configuration when API testing begins; never through a committed file or a public chat artifact. Ordinary lesson implementation does not depend on the key.
 - Owner reviews draft French/English content and early UX previews.
-- Proposed defaults for French variety, first topics, 10-minute goal, voice retention, and offline scope can be changed without restarting planning.
-- Public branding, billing, future account restrictions, hosting, store accounts, and launch date remain intentionally undecided.
+- The optional 10-minute goal and future onboarding/preferences need product review; metropolitan French, greetings-first entry and directly visible study support are current constraints.
+- Public branding, billing, future account restrictions, hosted API/accounts, store release and launch date remain open. A free learner-only hosting proposal is separate from those larger decisions.
 
 ## 17. Reference notes and current technical sources
 

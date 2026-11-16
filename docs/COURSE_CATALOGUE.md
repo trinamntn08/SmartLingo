@@ -2,6 +2,8 @@
 
 Snapshot: 2026-11-16. Original editorial material requiring owner review. The app now uses this explicit topic order for fresh starts, Explore and the topic sidebar. Returning learners resume their previously studied lesson; free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
 
+The [latest curriculum review pack](curriculum/README.md) owns the full-payload ledger, proposed two-pass progression, six bridge drafts and five support-correction candidates. Those candidates are unregistered and unpublished; they are not included in the inventory below.
+
 The [word-by-word topic audit](CURRICULUM_TOPIC_AUDIT.md) describes the historical 120-lesson inventory. Its greeting-first opening has now been converted into three runtime drafts. Broader gap lists and the 30-area teaching map remain proposals. [Implementation decision](decisions/0019-greetings-first-drafts.md).
 
 25 banks · 123 lessons · 765 vocabulary appearances · 722 canonical senses · 713 distinct written forms. Recycled senses are included in bank counts, not counted again as new. The compact opening bank has 24 expressions across three lessons; the other banks retain 30–35 expressions across five lessons. Supported practice is not proficiency certification.
@@ -106,7 +108,7 @@ Suggested prior topics: Essential conversation tools, Numbers and quantities. 30
 
 | Lesson and estimated level | Can-do outcome | Targets |
 | --- | --- | --- |
-| At the bakery (A1) | Ask for a baguette politely and thank the baker. | bonjour · une baguette · un croissant · un sac · s’il vous plaît · merci |
+| Your morning at the bakery (A1) | Ask for a baguette politely and thank the baker. | bonjour · une baguette · un croissant · un sac · s’il vous plaît · merci |
 | Choose your bread (A1) | Choose a loaf, its bake and whether it is sliced. | un pain de campagne · du pain complet · quel pain · une tranche · tranché · bien cuit |
 | Choose a sweet treat (A1) | Choose pastries, give a quantity and finish an order. | un pain au chocolat · une brioche · un chausson aux pommes · une tartelette · et avec ça ? · j’en prends deux |
 | Buy lunch to take away (A2) | Order a slice of quiche to take away and request heating. | un sandwich · une quiche · une part · une formule · à emporter · réchauffer |
@@ -130,7 +132,7 @@ Suggested prior topics: Essential conversation tools, Numbers and quantities. 34
 
 | Lesson and estimated level | Can-do outcome | Targets |
 | --- | --- | --- |
-| At the restaurant (A1) | Order a coffee politely and ask for the bill. | bonjour · un café · de l’eau · la carte · l’addition · s’il vous plaît |
+| Order a coffee and ask for the bill (A1) | Order a coffee politely and ask for the bill. | bonjour · un café · de l’eau · la carte · l’addition · s’il vous plaît |
 | Find a table (A1) | Ask for a table for two and agree where to sit. | une table · réserver une table · une réservation · une terrasse · pour deux · à l’intérieur · une personne |
 | Choose a meal (A1) | Ask about the dish of the day and choose a set meal. | une entrée · un plat · un dessert · un menu · je prends · végétarien · du poulet |
 | Explain food needs (A2) | State an egg allergy and ask staff to check ingredients. | une allergie · un œuf · contenir · une sauce · sans · à part · du lait |
@@ -308,4 +310,4 @@ Suggested prior topics: Clothes and shopping, Leisure and weather, Talking about
 
 Identical written forms can have different senses: une place (square/available spot), jusqu’à (distance/time), manquer (be missing/miss a service), après (preposition/adverb), une expérience (work experience/an event), ouvrir (physical/digital opening), ça me va (clothing fit/a suitable plan), un guichet (ticket/service counter), un horaire (transport/work schedule). These keep explicit separate IDs. Other same-sense reuse shares a canonical ID.
 
-Five reviewed lessons are now revision 4; fifty-five earlier lessons remain revision 3 and sixty earlier additions and three new greeting lessons remain revision 1. The latest [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated slots with new useful senses while preserving the older canonical entries elsewhere. See [research and limits](CURRICULUM_RESEARCH.md) and the three linked audits. Owner review should judge usefulness, naturalness, translations, difficulty, register and answer alternatives before explicit publication. No external word-frequency ranking or human classroom validation is claimed.
+Five reviewed lessons are now revision 4; fifty-five earlier lessons remain revision 3 and sixty earlier additions and three new greeting lessons remain revision 1. The historical [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated slots with new useful senses while preserving the older canonical entries elsewhere. See [research and limits](CURRICULUM_RESEARCH.md) and the three linked audits. Owner review should judge usefulness, naturalness, translations, difficulty, register and answer alternatives before explicit publication. No external word-frequency ranking or human classroom validation is claimed.

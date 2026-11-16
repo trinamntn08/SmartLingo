@@ -7,7 +7,7 @@ Status: local web learning, first editor/publication, optional conversation/tran
 | apps/learner | Expo/React Native learner app; web first, native later |
 | apps/api | Local Node/Fastify API, private credentials, media generation/cache, SQLite content |
 | packages/domain | Language-independent types, answer checking, review scheduling |
-| packages/content | Reproducible draft/reviewed curriculum and schema |
+| packages/content | Schema-validated draft curriculum and bundled media metadata |
 | packages/ui | Shared theme/components when actual reuse warrants extraction |
 | scripts | Development tooling and hooks |
 
@@ -18,7 +18,7 @@ Status: local web learning, first editor/publication, optional conversation/tran
 - Client -> local API -> provider. Permanent credentials stay on the API.
 - Optional practice -> validated shared contracts -> expiring in-memory session service -> injected conversation/transcription providers. Explicit actions share bounded attempts/single flight and idempotent request tombstones; terminal failures permit a new deliberate attempt. Browser recording is temporary and separate from editable message text and notebook persistence. Only explicitly saved phrases reach learner storage. See [ADR 0016](decisions/0016-optional-ai-practice.md).
 - Local published content/media -> downloaded lessons -> offline activities.
-- Browser IndexedDB/native SQLite adapters -> stable learning events, notebook, and reviews.
+- Implemented browser IndexedDB adapter -> stable learning events, notebook and reviews. A native SQLite adapter remains planned behind the shared contracts.
 - Explicit exported-web download -> size/hash-validated staged CacheStorage -> complete offline app copy. A separate typed browser asset manager/worker never opens learner IndexedDB. Web Locks serialize updates/removal across worker generations; removing owned asset caches preserves learner data and unrelated caches. See [ADR 0012](decisions/0012-offline-web-assets.md).
 - Learner backup files -> bounded UTF-8/schema validation -> explicit atomic merge of notebook/events/cached publications. Server curriculum database is a separate backup concern.
 - Server curriculum snapshots -> read-only SQLite online backup -> full integrity/schema/history validation -> exclusive fresh-file publication. CLI recovery never replaces the active database; explicit existing-file configuration controls later API startup. Snapshot adapter remains separate from repository migrations/seeding and browser backup. See [ADR 0013](decisions/0013-curriculum-snapshots.md).

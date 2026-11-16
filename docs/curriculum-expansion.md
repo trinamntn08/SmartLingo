@@ -1,5 +1,7 @@
 # Additional practical French banks — editorial draft
 
+**Historical authoring audit (2026-11-15).** Eight-bank expansion rationale; pre-rework alias candidates and temporary snapshot paths below are historical evidence, not current integration instructions. For the current bundled inventory and lesson order, see the [course catalogue](COURSE_CATALOGUE.md); for the latest full-payload review and separate unregistered/unpublished candidates, see the [curriculum review pack](curriculum/README.md).
+
 Authored and sources inspected 2026-11-15. These eight banks are original AI-assisted drafts for an English-speaking adult newcomer to France. They add 40 short lessons and 240 target slots, each bank containing five lessons of six distinct targets. This is a count of taught targets within banks, **not 240 previously untaught senses**. Recycled senses below must reuse canonical IDs during integration. Owner review and explicit publication remain separate. No certified CEFR coverage, native-speaker review or audio review is claimed.
 
 ## Outcomes and progression

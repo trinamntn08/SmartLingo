@@ -1,5 +1,7 @@
 # Food, home and travel curriculum audit — draft
 
+**Historical authoring audit (2026-11-15).** Food/home/travel authoring and integration rationale; later overlap and greetings changes are not retroactively included. For the current bundled inventory and lesson order, see the [course catalogue](COURSE_CATALOGUE.md); for the latest full-payload review and separate unregistered/unpublished candidates, see the [curriculum review pack](curriculum/README.md).
+
 Updated: 2026-11-15. All text is an original AI-assisted editorial draft requiring owner review. The level labels estimate the demands of the task; they do not certify CEFR coverage. No native-speaker, classroom, audible speech or owner publication review has taken place.
 
 ## Scope and practical design

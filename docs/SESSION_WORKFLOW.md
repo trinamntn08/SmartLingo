@@ -1,6 +1,6 @@
 # Efficient sessions and interruption recovery
 
-Owner preference recorded: 2026-11-14. Use the included Plus allowance efficiently and preserve progress so authorised work can continue without re-explanation.
+Owner preference recorded: 2026-11-14. Use the available plan allowance efficiently and preserve progress so authorised work can continue without re-explanation. Current tool/usage availability belongs in the session checkpoint; do not assume a subscription or a previous session's capabilities.
 
 ## Start and work
 
@@ -9,11 +9,13 @@ Owner preference recorded: 2026-11-14. Use the included Plus allowance efficient
 3. If the client exposes usage limits, check at session start, before substantial work/delegation, and before handoff. Record the observation time, remaining allowance for each available window, and reset times with timezone. Missing data means unavailable, not zero or unlimited. Do not repeatedly retry a failed usage tool in the same session.
 4. Use targeted searches, bounded output, batched independent reads, and concise updates. Reuse verified findings. Delegate only substantial independent tasks with exclusive ownership; extra agents also consume allowance. Run appropriate checks once after a coherent change, repeating only for new changes or unresolved failures.
 5. Update SESSION_CHECKPOINT.md after each meaningful completed step, before risky or long work, before compaction when signalled, and before stopping. Keep it short and replace stale details. Update STATUS.md for milestones and meaningful blockers; record material decisions in decisions/.
-6. After reviewing and validating a completed step, create its local checkpoint commit under the standing owner authorisation below. Verify the commit and report its hash; do not leave completed validated work uncommitted by default.
+6. After reviewing and validating a completed step, create its checkpoint commit and push the assigned task branch to origin under the standing owner authorisation below. Verify the local commit and remote head; report the hash and upload result. Do not leave completed validated work uncommitted or unpushed by default.
 
 ## Automatic checkpoint commits
 
 Owner instruction, recorded 2026-11-14: automatically commit after each completed step so there is a recoverable Git checkpoint. This is standing authorisation for the primary agent to make local commits during authorised work without repeated confirmation. A step is a small, coherent, reviewable outcome with acceptance criteria; it is not each individual edit, command, or subagent response.
+
+Owner extension, recorded 2026-11-16: once work is finished, commit and push to remote automatically. This is standing authorisation to push completed, reviewed, validated checkpoints to the owner-selected origin on the assigned task branch without asking again. It supplies the separate push authorisation mentioned in older skill text; do not treat that wording as a new per-push confirmation requirement. It applies to local and Cloud work; it does not authorise new feature scope, blanket staging, changes to unrelated branches, direct updates to main, merging, deployment or curriculum publication. See [ADR 0021](decisions/0021-automatic-task-branch-pushes.md).
 
 For each completed step:
 
@@ -22,10 +24,12 @@ For each completed step:
 3. Update SESSION_CHECKPOINT.md with the completed outcome, actual validation, remaining limitations, and exact next step. Update STATUS.md and decision records when warranted. Include these task-related notes in the same checkpoint commit.
 4. Inspect the index, stage only deliberate task paths, then inspect the complete staged diff. Preserve unrelated or pre-staged owner work; exclude it from the checkpoint commit. Never use blanket staging when unrelated changes may exist.
 5. Run `npm.cmd run check:staged` and `git diff --cached --check` on the final staged content. Create a focused commit with a descriptive subject, then verify `git log -1` and `git status --short`. Report the actual hash and any remaining uncommitted work. Do not create an empty commit when the step changes nothing.
+6. Inspect the live origin head for the assigned task branch, then push that branch normally. Create/use a named topic branch if the checkout is detached or on main. Preserve unrelated remote commits; reconcile changes safely within the task or report the blocker. Never force-push, push all branches by default, or infer permission to merge from permission to push.
+7. Read back the live remote ref and verify its SHA matches the committed task head. Report success only after this comparison. Include any remaining local/remote mismatch in the handoff.
 
-If a step is interrupted, validation fails, or Git cannot commit, preserve the work and record the blocker, actual command result, and exact recovery action in the checkpoint. Fix failures within scope where possible. Do not claim a successful commit until Git confirms it.
+If a step is interrupted, validation fails, or Git cannot commit/push, preserve the work and record the blocker, actual command result, and exact recovery action in the checkpoint. Fix failures within scope where possible. Do not claim a successful commit until Git confirms it, or a remote backup until its ref is verified. A failed push can leave a valid local checkpoint that still needs uploading.
 
-The agent performs these commits while actively working. No background auto-commit service, file watcher, or Stop-hook commit is configured or required. Hook checks still run normally. Local checkpoint authorisation does not itself authorise pushing, merging, publishing, changing Git identity, or rewriting existing commits; separately authorised actions retain their scope. Never force-push.
+The agent performs these commits and pushes while actively working. No background auto-commit/push service, file watcher, or Stop-hook commit is configured or required. Hook checks still run normally. The 2026-11-16 extension supplies standing task-branch push authorisation; merging, deployment, curriculum publication, Git identity changes and rewriting existing commits remain separately scoped. Never force-push.
 
 See [ADR 0003](decisions/0003-checkpoint-commits.md) for the decision and tradeoffs.
 
@@ -43,11 +47,11 @@ Choose by task complexity rather than assigning an expensive model permanently t
 
 Before spawning, check exposed capabilities and usage once if available. Record role, model, effort, scope, and fallback in the checkpoint. When model overrides require a fresh context, use `fork_turns: "none"` and supply the necessary instructions explicitly. Otherwise inherit the parent model and avoid claiming an override occurred. Never invent a model identifier, silently use a paid API, or edit global settings to obtain a model. If a preferred model is unavailable, use an exposed suitable model or the primary agent; report the fallback. Do not repeatedly spawn replacements for the same task.
 
-At 20% or less remaining allowance, avoid new delegation unless needed to finish a tiny active step; at 10% or less, checkpoint without new delegation. If usage is unavailable, keep scope conservative and delegation bounded; do not treat unknown allowance as exhausted or unlimited. Validate returned work before integration and do not repeat checks without a reason.
-
 ## Budget and stopping policy
 
 These thresholds are project heuristics, not platform guarantees. If any relevant reported allowance is 20% or less, finish only a small already-started step and prioritise a checkpoint. At 10% or less, avoid new implementation/delegation and save a recoverable handoff. If a limit is exhausted, stop work and record the reported reset. Checkpoint regularly even above these thresholds: a hard cutoff may arrive without warning.
+
+If usage is unavailable, keep scope conservative and delegation bounded; do not treat unknown allowance as exhausted or unlimited. Validate returned work before integration and repeat checks only for a change, failure or unresolved concern.
 
 Context capacity and account usage limits are different. Compaction does not restore account allowance. A five-hour window resetting does not necessarily clear a weekly limit. Use actual client-reported reset times rather than adding five hours to the current time. Do not estimate a token balance from message count, purchase resets/credits, or switch to paid API usage automatically.
 
@@ -69,11 +73,11 @@ The owner authorises resuming an unfinished, already authorised task after allow
 
 Documentation and lifecycle hooks cannot wake an idle agent or detect a reset by themselves. Use a supported project/thread scheduler only when available, and claim automatic resuming only after it confirms creation. A scheduled retry must check actual allowance before starting one bounded step and save a checkpoint afterwards. A timer is not a reset event; do not assume the quota has recovered. Respect the scheduler's local access and runtime requirements. A notification-only task cannot substitute for an agent with repository access.
 
-Earlier session observation on 2026-11-14: usage lookup and a local thread scheduling request failed. Consult the current checkpoint for the latest capability observation; no automatic resume is confirmed. Until scheduling succeeds, a new owner message such as `Continue from docs/SESSION_CHECKPOINT.md` is needed to start another turn. Do not run background shell retry loops as a substitute.
+Consult the current checkpoint for actual usage/scheduler observations. Until a supported scheduler confirms automatic resuming, a new owner message such as `Continue from docs/SESSION_CHECKPOINT.md` is needed to start another turn. Do not run background shell retry loops as a substitute.
 
 ## Platform references
 
-Checked 2026-11-14; recheck when platform behaviour matters:
+Dated references inspected 2026-11-14, not revalidated by a documentation-only cleanup. Recheck official documentation when platform behaviour matters:
 
 - [Using Codex with your ChatGPT plan](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan)
 - [Managing usage in Work and Codex](https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex)

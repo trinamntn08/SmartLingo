@@ -1,5 +1,7 @@
 # Foundation and practical-life vocabulary audit
 
+**Historical snapshot (2026-11-15).** Rows and recommendations refer to the pre-greetings 120-lesson audit. “Current”, “missing” and proposed moves below are relative to that snapshot; greetings and course ordering are now implemented. Use the [current catalogue](../COURSE_CATALOGUE.md) and [latest curriculum review pack](../curriculum/README.md) for present coverage. Preserve this report with its linked JSON and support fingerprints; it is evidence, not an import or a publication record.
+
 **Draft for owner review — 2026-11-15.** Research only. No runtime lesson, stable ID, exercise answer, accepted alternative, media, publication state or learner data was changed. Levels are editorial estimates, not certified CEFR coverage or native-speaker review.
 
 Scope: 12 banks, 60 lessons and 360 vocabulary occurrences. The [JSON](topic-words-foundations.json) gives one disposition for every scoped `(lessonId, vocabularyId)` pair while retaining the current French target and English meaning as the baseline. Each assessment considered target, meaning, French example, English translation, article/gender, note/register, level and lesson outcome. Cross-topic decisions use the complete 120-lesson inventory, not ID prefixes.

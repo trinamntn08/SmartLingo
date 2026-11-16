@@ -10,23 +10,24 @@ Accept this setup when the current source is on GitHub without rewriting history
 
 ## Source baseline
 
-For the newer free learner website task, start from `docs/free-testing-deployment` and use the [copyable deployment prompt](CLOUD_DEPLOY_PROMPT.md). The `chore/cloud-workflow` instructions below describe the earlier reusable-environment setup, not the latest deployment-task source. Live fetch on 2026-11-16 also confirmed `origin/chore/a1-a2-curriculum-review` is available; `main` remains at `1c6e943`. Select the task's named source branch rather than assuming `main` contains the current learner.
+For the free learner website continuation, inspect `codex/free-learner-cloud-deploy` and use the [copyable deployment prompt](CLOUD_DEPLOY_PROMPT.md). The branch now contains the hosted implementation and reports account/network-blocked publication; no live URL is recorded. Documentation review baseline `cf4fedb` is its ancestor; `main` was verified at `1c6e943` on 2026-11-16 and does not contain this learner. These are dated Git observations, not permanent remote-head or CI-success claims.
 
-GitHub `main` was verified at `1c6e943a3a2f4d9fdbf6886a71ac31c0d3b235ef` on 2026-11-16. The complete local learner checkpoint `d5a56eda48751fc8889d2c38b2b4828f52ee31fc` is its descendant, 27 commits ahead. Branch `chore/cloud-workflow` includes that history and the remote workflow preparation. Use that branch until its pull request is explicitly approved and merged; an environment that checks out old `main` will contain only the old tooling scaffold.
+The earlier `chore/cloud-workflow` preparation is preserved in Git. Account-specific work and `chore/concurrent-sessions` tooling remain separate branch work, not capabilities established by this checkout. The owner's later automatic task-branch commit/push instruction is reconciled here through [ADR 0021](decisions/0021-automatic-task-branch-pushes.md); it is policy, not installed automation. Do not select a branch simply because its name sounds relevant.
 
-Before any later handoff, inspect the live branches and pull requests again. Saved environment files are not a substitute for a pushed commit. Never force-push, replace this repository, or overwrite another task's branch. Keep separate tasks on separate branches and inspect their current remote heads before updating them.
+Before a handoff, fetch and inspect live branches and pull requests. Use the source named by the task and verify its ancestry before making a new task branch. Saved environment files do not prove a pushed commit, environment activation or account access. Never force-push, replace this repository or overwrite another task's branch.
 
 ## Create the reusable environment
 
-Use the same ChatGPT account on web/desktop and phone. In a new task, choose **Work in > Cloud > Select environment > Create environment**, or **Settings > Codex Cloud > Environments > Create environment**. Select `trinamntn08/SmartLingo`; connect GitHub if required. Existing connector access does not prove that Codex Cloud is enabled for the account.
+The following client navigation was checked on 2026-11-16; labels may change. Use the same ChatGPT account on web/desktop and phone. In a new task, choose **Work in > Cloud > Select environment > Create environment**, or **Settings > Codex Cloud > Environments > Create environment**. Select `trinamntn08/SmartLingo`; connect GitHub if required. Existing connector access does not prove that Codex Cloud is enabled for the account.
 
 Give the setup conversation this brief:
 
 ```text
 Prepare a reusable Codex Cloud environment named SmartLingo for
 https://github.com/trinamntn08/SmartLingo.git.
-Fetch origin and use chore/cloud-workflow, not the older main branch.
-Confirm that d5a56eda48751fc8889d2c38b2b4828f52ee31fc is an ancestor of HEAD.
+Fetch origin and inspect codex/free-learner-cloud-deploy, not older main.
+Confirm that cf4fedb is an ancestor of the selected remote source.
+Inspect live history before creating a separate setup task branch.
 Read AGENTS.md, docs/STATUS.md, docs/SESSION_CHECKPOINT.md and
 docs/SESSION_WORKFLOW.md. Inspect the working tree before changing anything.
 Use Node 24.19.0 and npm 11.17.0 as required by the repository.
@@ -55,14 +56,15 @@ On the phone open **Codex**, select the published SmartLingo environment, and se
 
 ```text
 Verify this SmartLingo cloud setup without changing source files.
-Fetch origin, inspect the working tree and check out chore/cloud-workflow
-only if doing so preserves existing work. Report git branch --show-current,
-git log -1 --oneline, and whether d5a56eda48751fc8889d2c38b2b4828f52ee31fc
+Fetch origin and inspect the working tree and selected source branch.
+Use codex/free-learner-cloud-deploy only if switching preserves existing work;
+report a blocker rather than overwriting another task. Report
+git branch --show-current, git log -1 --oneline, and whether cf4fedb
 is an ancestor of HEAD. Read AGENTS.md and docs/SESSION_CHECKPOINT.md.
 Run npm run check and npm test. Report the results and any blockers.
 ```
 
-Reopen the same task to continue its existing work across devices. Start a new task for independent work, using its own branch. For an implementation task, include the requested outcome and ask it to push the tested task branch and open or update a draft pull request. Keep merging and deployment explicit owner decisions. Task history and local learner browser storage are separate; source checkout does not restore notebook entries or local editor publications.
+Reopen the same task to continue its existing work across devices. Start a new task for independent work, using its own branch. Include the requested outcome; the standing checkpoint policy covers committing/pushing validated work, while creating a draft pull request follows the task's scope. Keep merging and deployment explicit owner decisions. Task history and local learner browser storage are separate; source checkout does not restore notebook entries or local editor publications.
 
 ## GitHub verification
 

@@ -1,13 +1,13 @@
 # Offline web download and installation
 
-Status: completed
+Status: completed; historical first-export record. Current usage is in [local operations](../LOCAL_OPERATIONS.md#test-the-offline-ready-preview), and later saved neural speech is recorded in [plan 0022](0022-cached-french-speech.md).
 Owner: primary agent
 
 ## Outcome and acceptance
 
 After an explicit Profile download, the exported web preview cold-loads with all network/API access unavailable. Ordinary bundled picture/text lessons, personal vocabulary and manual review work. Profile shows download size, progress/status, failure/retry, refresh/update and explicit removal. Asset removal preserves every IndexedDB learner store, including cached publications. Download failures never replace a working copy or report a partial copy as ready. No automatic downloads, approval, AI calls or public hosting.
 
-The first pack is the complete small web preview: 60 draft lessons and bundled pictures, plus the app assets needed to open them. Owner publications remain in the separate existing IndexedDB cache. Per-topic packs and recorded/generated audio are later work. The web manifest supports browser installation where available; actual phone installation/voice quality remain unverified. Root-path static hosting on localhost is the supported local route, distinct from Expo development on 8081.
+The initial pack at this step contained 60 draft lessons and bundled pictures, plus app assets. Later exports include the expanded catalogue; use the current source rather than this historical size/count. Owner publications remain in separate IndexedDB storage. Per-topic packs remain future work; explicit saved generated audio was added later in its own cache. The manifest supports browser installation where available; physical-phone acceptance remains open. Root-path localhost serving is distinct from Expo development on 8081.
 
 ## Contracts and ownership
 
@@ -35,4 +35,4 @@ Previous completed checkpoint: `f40ddcf`. Owner authorised continuing through pe
 
 All planned code is integrated. Exported current pack is four files/about 1.25 MB. `npm.cmd run check`, 18 tooling/79 application tests, web export, 31 development browser regressions/one deliberate publication skip, and six exported-browser cases pass. Independent review found a stalled-navigation bug; the three-second race/abort fix passes VM and real-browser regressions. Desktop ready and 320px error screenshots inspected. The SVG install icon is valid, but actual phone/Safari installation and voice remain unverified. All current source/tests/docs belong to this focused step; no new dependencies or paid calls.
 
-Owner asked for a preview before allowance runs out. Started the regular exported preview on localhost:8082 and actual local API on 127.0.0.1:3001 only after the isolated tests completed. Verified HTTP200 and health ok and shared the link. Preview stays running for testing; do not replace it with the fault-injection test server. Agent did not save learner events or publish curriculum in that preview. API startup uses the reviewed immutable seed policy. Next: final docs/staged checks and focused local commit, then bounded build-tool audit investigation while keeping this export stable.
+Owner asked for a preview before allowance runs out. Started the regular exported preview on localhost:8082 and actual local API on 127.0.0.1:3001 only after the isolated tests completed. Verified HTTP200 and health ok and shared the link. Preview stays running for testing; do not replace it with the fault-injection test server. Agent did not save learner events or publish curriculum in that preview. API startup uses the reviewed immutable seed policy. Those final checks/commit and the subsequent build-tool investigation are historical follow-ups, not the current task; see STATUS for remaining work.

@@ -1,6 +1,8 @@
 # Every vocabulary occurrence — topic placement review
 
-Draft editorial audit, 2026-11-15. Baseline `aac20dc`: 24 current banks, 120 lessons, 741 appearances. No runtime changes or owner publication. Each row preserves current French/English and identifies its stable ID. **Keep/recycle/move/revise are recommendations**, not applied changes. Read the [master review](../CURRICULUM_TOPIC_AUDIT.md) for sources, the new greetings-first proposal, action definitions, proposed progression and limits. JSON records and support fingerprints are the machine-readable source of this table.
+**Historical snapshot (2026-11-15).** Rows and recommendations refer to the pre-greetings 120-lesson audit. “Current”, “missing” and proposed moves below are relative to that snapshot; greetings and course ordering are now implemented. Use the [current catalogue](../COURSE_CATALOGUE.md) and [latest curriculum review pack](../curriculum/README.md) for present coverage. Preserve this report with its linked JSON and support fingerprints; it is evidence, not an import or a publication record.
+
+Draft editorial audit, 2026-11-15. Baseline `aac20dc`: 24 audited banks, 120 lessons, 741 appearances. No runtime changes or owner publication. Each row preserves current French/English and identifies its stable ID. **Keep/recycle/move/revise are recommendations**, not applied changes. Read the [master review](../CURRICULUM_TOPIC_AUDIT.md) for sources, the new greetings-first proposal, action definitions, proposed progression and limits. JSON records and support fingerprints are the machine-readable source of this table.
 
 ## Essential conversation tools
 

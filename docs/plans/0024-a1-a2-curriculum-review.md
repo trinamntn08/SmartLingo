@@ -2,6 +2,8 @@
 
 Authorised 2026-11-16. Research and draft preparation; no publication or learner-data changes.
 
+Status: completed at `8ba59ae`. The [review pack](../curriculum/README.md) contains the all-topic plan/ledger, six runtime-schema bridge drafts and five grammar-only correction candidates. Structure/integrity, 30 relevant tests and independent review passed as recorded in that commit's checkpoint. Candidates remain unregistered/unpublished; content approval and deliberate integration are separate work.
+
 Acceptance criteria:
 
 1. Review architecture and all 25 current banks/123 lessons against current CEFR and at least two independently produced FLE references; distinguish competence evidence from editorial word/level choices.

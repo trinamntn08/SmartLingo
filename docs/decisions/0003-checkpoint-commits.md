@@ -1,7 +1,7 @@
 # ADR 0003: Automatic local checkpoint commits
 
 Date: 2026-11-14
-Status: accepted (explicit owner instruction)
+Status: accepted (explicit owner instruction); extended by [ADR 0021](0021-automatic-task-branch-pushes.md) on 2026-11-16 to include automatic verified task-branch pushes.
 
 ## Context
 
@@ -13,7 +13,7 @@ The primary agent creates a focused local commit after each small, coherent step
 
 Follow the [session workflow](../SESSION_WORKFLOW.md#automatic-checkpoint-commits). Keep unrelated work out of the commit. On interruption or failed checks/commit, preserve changes and record recovery instructions rather than claiming a successful checkpoint.
 
-This is an active-agent workflow, not a background service or a change to the advisory Stop hook. A local checkpoint does not by itself authorise pushing, merging, publishing, Git identity changes, or rewriting history. Earlier explicitly authorised remote work remains separately scoped.
+This is an active-agent workflow, not a background service or a change to the advisory Stop hook. The original local-commit authorisation did not cover pushing; ADR 0021 now supplies that separate standing authorisation for completed task branches. Merging, deployment, curriculum publication, Git identity changes and rewriting history remain separately scoped.
 
 ## Alternatives
 
@@ -23,4 +23,4 @@ This is an active-agent workflow, not a background service or a change to the ad
 
 ## Consequences
 
-Break authorised implementation into reviewable steps with acceptance criteria and one checkpoint commit per completed step. Validation failures prevent a step from being recorded as complete. Local commits support recovery; off-device backup still requires a separately authorised push.
+Break authorised implementation into reviewable steps with acceptance criteria and one checkpoint commit per completed step. Validation failures prevent a step from being recorded as complete. Local commits support recovery; off-device backup requires a verified push under ADR 0021 rather than merely a successful local commit.

@@ -1,15 +1,17 @@
 # Copyable Codex Cloud task: free learner website
 
-Prepared: 2026-11-16 (Europe/Paris). This is an execution brief for a future Cloud task, not evidence of a deployment. The detailed research, hosting constraints and acceptance checklist are in [plan 0025](plans/0025-free-web-testing.md).
+Prepared and reviewed: 2026-11-16 (Europe/Paris). This is a continuation brief, not evidence of a deployment. Remote inspection found the hosted implementation on `codex/free-learner-cloud-deploy` (head `c88bc41` at inspection); its checkpoint reports publication blocked and no live URL. The detailed research, hosting constraints and acceptance checklist are in [plan 0025](plans/0025-free-web-testing.md).
 
-Select the SmartLingo repository/environment in Codex Cloud. Select `docs/free-testing-deployment` as the starting branch where the client allows it. Paste the following prompt. It also directs the agent to fetch the correct source if the environment initially checks out the older `main` branch.
+Select the SmartLingo repository/environment in Codex Cloud. Select `codex/free-learner-cloud-deploy` as the starting branch where the client allows it. Paste the following prompt. It directs the agent to inspect completed work and fetch the correct source if the environment initially checks out older code.
 
 ```text
-Implement and deploy SmartLingo's free learner test website remotely.
+Continue and deploy SmartLingo's free learner test website remotely.
 
 Repository: https://github.com/trinamntn08/SmartLingo.git
-Starting source: origin/docs/free-testing-deployment.
+Starting source: origin/codex/free-learner-cloud-deploy.
 Read docs/plans/0025-free-web-testing.md and this execution brief.
+The hosted implementation already exists there. This pasted continuation
+updates older handoff wording that may remain on the source branch.
 
 Authorisation and goal
 - Prepare, validate, commit and push a focused implementation branch, and
@@ -29,10 +31,11 @@ Authorisation and goal
 Start from the actual current application
 1. Inspect git status and preserve existing work. Fetch origin and inspect
    remote branches/history. The old main may contain only tooling.
-2. Start a task branch such as feat/free-web-testing from
-   origin/docs/free-testing-deployment. If a related task branch exists,
-   inspect it before resuming; do not overwrite another task. Verify that
-   042e7ca is an ancestor and docs/CLOUD_DEPLOY_PROMPT.md is present. Use the
+2. Inspect origin/codex/free-learner-cloud-deploy and its checkpoint first.
+   Continue the existing task when appropriate, or start a separate
+   follow-up branch from its current remote head. Do not overwrite another
+   task. Verify that
+   cf4fedb is an ancestor and docs/CLOUD_DEPLOY_PROMPT.md is present. Use the
    newer remote documentation head, not that older commit as a checkout.
 3. Read AGENTS.md, docs/STATUS.md, docs/SESSION_CHECKPOINT.md,
    docs/SESSION_WORKFLOW.md, relevant PROJECT_PLAN.md sections and
@@ -41,7 +44,7 @@ Start from the actual current application
    repository's bounded delegation and independent review workflow if
    supported; keep shared contracts/manifests under one owner.
 
-Implement the smallest complete hosted learner journey
+Verify the existing hosted learner journey; fix remaining gaps only
 - Keep the normal local editor/API workflow working. Add an explicit,
   documented static-hosted learner configuration. In that mode, ordinary
   lessons, pictures, dialogues, practice, personal words, search, review,
@@ -69,7 +72,8 @@ Validate and package
 - Install dependencies with npm ci and hooks with npm run setup. Install
   Chromium with npx playwright install --with-deps chromium.
 - Run npm run check, npm test, npm run test:e2e -- --workers=2 and
-  npm run test:offline. Use isolated disposable fixtures and fake providers.
+  npm run test:offline, plus npm run test:hosted on the hosted source branch.
+  Use isolated disposable fixtures and fake providers.
   Add meaningful checks for hosted capability gating, URL/redirect/error
   behaviour and unchanged offline integrity. Fix failures rather than
   disabling checks or weakening protections.

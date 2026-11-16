@@ -1,5 +1,7 @@
 # Topic placement and beginner progression — review draft
 
+**Historical placement audit (2026-11-15, baseline `aac20dc`).** Scope: 24 banks / 120 lessons / 741 appearances / 705 IDs / 696 written forms. Statements below about missing greetings and unused ordering describe that snapshot; greetings and actual course ordering were implemented on 2026-11-16. Broader teaching-home recommendations remain proposals. For the current bundled inventory and lesson order, see the [course catalogue](COURSE_CATALOGUE.md); for the latest full-payload review and separate unregistered/unpublished candidates, see the [curriculum review pack](curriculum/README.md).
+
 Audit: 2026-11-15, Europe/Paris. Baseline: `aac20dc`. Audience: English-speaking adult newcomers to France. Original AI-assisted editorial research using the French curriculum researcher skill. **Recommendations only; no runtime curriculum, owner publication, learner history or saved vocabulary changed.**
 
 Implementation follow-up, 2026-11-16: the [greeting-first opening](plans/0023-greetings-first.md) is now converted into three draft lessons, and the learner consumes explicit course ordering. The findings below describe the historical 120-lesson inventory; broader recommendations remain proposals. The integrity checker still verifies that historical scope and its unchanged support fingerprints, and reports the current runtime count separately. No owner publication or native-teacher approval is implied.
@@ -8,7 +10,7 @@ Implementation follow-up, 2026-11-16: the [greeting-first opening](plans/0023-gr
 
 The owner's example is correct: **everyday greetings and politeness should be the first teaching topic**. `bonjour`, `bonsoir`, `s’il vous plaît`, `merci` and `au revoir` should be taught together before a restaurant transaction. Their later appearances in a bakery or restaurant are useful contextual practice.
 
-The existing inventory has 24 banks, 120 lessons, 741 appearances, 705 canonical sense IDs and 696 exact written targets. These counts measure content, not course completeness. The previous overlap review addressed redundant slots; it did not establish a coherent beginner entrance to the course.
+The audited inventory had 24 banks, 120 lessons, 741 appearances, 705 canonical sense IDs and 696 exact written targets. These counts measure content, not course completeness. The previous overlap review addressed redundant slots; it did not establish a coherent beginner entrance to the course.
 
 There are two separate problems:
 
@@ -144,7 +146,7 @@ A2 revisit route: social arrangements → shopping/meal problems → travel/acco
 
 The review covers every bundled vocabulary appearance and its local support fields. Topic recommendations and source comparisons are editorial; automated coverage checks cannot certify French quality. The complete dialogues, exercises and grammar of all 120 lessons were not independently re-authored or exhaustively linguistically reviewed. No dictionary-by-dictionary verification of all 705 senses, native teacher approval, learner study, paid API, owner database access, runtime migration or publication is claimed.
 
-Run `node --import tsx scripts/verify-curriculum-topic-audit.mjs` to compare the review with current bundled lessons and report coverage/action totals. This verifies exact row coverage, preserved snapshot targets/meanings, support fingerprints and structural consistency; it is not a language-quality test. See [session checkpoint](SESSION_CHECKPOINT.md) for actual check results and local checkpoint status.
+Run `node --import tsx scripts/verify-curriculum-topic-audit.mjs` to verify the historical 120-lesson scope against its preserved runtime support and report current runtime totals separately. This verifies exact row coverage, preserved snapshot targets/meanings, support fingerprints and structural consistency; it is not a language-quality test. See [session checkpoint](SESSION_CHECKPOINT.md) for actual check results and local checkpoint status.
 
 Final integrated dispositions: **547 keep, 52 recycle, 3 move first introduction, 139 revise**. Revisions include earlier supported introduction, metadata and example/gloss improvements; this is not a count of 139 French mistakes. The opening proposal reuses seven existing IDs and marks seventeen expressions as new target candidates. The readable report and JSON rows cover exactly the same 741 occurrences.
 

@@ -1,5 +1,7 @@
 # Daily-life, education and job-search curriculum audit
 
+**Historical authoring audit (2026-11-15).** Daily-life/education/job-search authoring rationale; the routine and paperwork replacements described in the later redundancy audit supersede the original number/calendar/internet task descriptions below. For the current bundled inventory and lesson order, see the [course catalogue](COURSE_CATALOGUE.md); for the latest full-payload review and separate unregistered/unpublished candidates, see the [curriculum review pack](curriculum/README.md).
+
 Draft for owner review, 2026-11-15. Scope: the six banks in `daily-life.ts` and the two new banks in `study-work.ts`. All examples, dialogue and explanations are original editorial AI-assisted text. No lesson is approved or published by this audit; levels are estimates, not certified CEFR coverage or native-speaker review.
 
 The reviewed learner journey is to find a relevant bank, read a short usable example with its English meaning, then practise a complete exchange. Each bank has five six-item lessons, exactly 30 distinct target forms and both A1 and A2 content. The existing 30 lesson IDs remain stable. A changed lexical sense gets a new ID; no old ID is reassigned to a different word.

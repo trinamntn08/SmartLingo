@@ -1,6 +1,6 @@
 # Learner backup and merge restore
 
-Status: completed; local checkpoint pending
+Status: completed; historical implementation record. The committed outcome is recorded below; current recovery instructions are in [local operations](../LOCAL_OPERATIONS.md).
 Owner: primary agent
 
 ## Outcome

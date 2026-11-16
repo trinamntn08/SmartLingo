@@ -1,5 +1,7 @@
 # A1–A2 curriculum research and review pack
 
+Navigation: [current course catalogue](../COURSE_CATALOGUE.md) · [authoring and publication guide](../CONTENT_GUIDE.md) · [review-pack overview](README.md).
+
 Prepared 2026-11-16 for English-speaking adult newcomers to France. Original AI-assisted editorial work using the repository French curriculum researcher and French authoring skills. **All proposals remain drafts.** The app still ships 25 banks / 123 lessons; this pack does not publish or register candidates.
 
 Start with [the per-topic review](topic-review.md), then [the structured progression](topic-progression.json). The latter covers every current lesson, two or more coherent lexical subclusters per bank, A1/A2 outcomes, a communicative task with French/English model and success criteria, planned transfer/revision, gaps and B1/B2 extensions. Every vocabulary reference resolves to the [canonical ledger](vocabulary-ledger.json), which contains its full current French, English meaning, example/translation, gender where supplied, notes and all lesson occurrences. This avoids maintaining another divergent copy of each study card.

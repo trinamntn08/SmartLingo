@@ -1,36 +1,40 @@
 # Documentation index
 
-| Document | Purpose |
+Use the current guides below. Dated plans, audits and decisions explain earlier work; their counts, ports, test results and next-step suggestions apply to their recorded snapshot. They do not override current owner instructions, source contracts or this checkout's implemented scope.
+
+## Current guides
+
+| Start with | Purpose |
 | --- | --- |
-| [Product plan](../PROJECT_PLAN.md) | Requirements, decisions, assumptions, milestones |
-| [Status](STATUS.md) | What exists and the next implementation task |
-| [Session workflow](SESSION_WORKFLOW.md) | Efficient usage, automatic checkpoint commits, and resume limits |
-| [Session checkpoint](SESSION_CHECKPOINT.md) | Current request, validation, and exact recovery step |
-| [Codex setup](CODEX_SETUP.md) | Instructions, subagents, hooks, skills, compatibility |
-| [Architecture](ARCHITECTURE.md) | Planned modules, boundaries, implementation standards, and review criteria |
-| [Content guide](CONTENT_GUIDE.md) | French lesson authoring and review |
-| [Testing](TESTING.md) | Tooling, application and browser checks; device limitations |
-| [Environment](ENVIRONMENT.md) | Local dependencies, runtime versions, and packaging boundaries |
-| [Bootstrap decision](decisions/0001-project-tooling.md) | Why the repository uses this setup |
-| [Implementation standards decision](decisions/0002-implementation-standards.md) | Owner requirement for clean, modular, extensible code |
-| [Checkpoint commits decision](decisions/0003-checkpoint-commits.md) | Standing authorisation to commit each completed, reviewed, validated step locally |
-| [Local preview foundation](decisions/0004-local-preview-foundation.md) | Bundled drafts, persistence adapters, local read-only API |
-| [Local editor publication](decisions/0005-local-editor-publication.md) | Draft revisions, preview receipts, local request guards, publication cache |
-| [Learner backup](decisions/0006-learner-backup.md) | Versioned private snapshots and atomic merge restore |
-| [Manual recognition review](decisions/0007-manual-recognition-review.md) | Manual ratings, local-day schedule and versioned history |
-| [Visible study details](decisions/0008-visible-study-details.md) | Owner preference for directly visible meanings/examples/explanations |
-| [Everyday examples and gender](decisions/0011-example-revisions-and-gender.md) | Fuller original examples, optional noun gender and immutable seed refresh |
-| [Offline web assets](decisions/0012-offline-web-assets.md) | Explicit validated app downloads, cache-only removal and loopback preview |
-| [Curriculum snapshots](decisions/0013-curriculum-snapshots.md) | Consistent server backups and explicit recovery to a new file |
-| [First implementation plan](plans/0001-local-foundation.md) | Scope, acceptance criteria, ownership and validation |
-| [Editor execution plan](plans/0002-editor.md) | First editor fields and validated publication journey |
-| [Backup execution plan](plans/0003-backup.md) | Learner export, bounded import and merge validation |
-| [Review execution plan](plans/0004-manual-review.md) | Recognition queue, local dates and backup compatibility |
-| [Study-detail simplification](plans/0005-visible-study-details.md) | Remove study dropdowns and verify responsive presentation |
-| [Everyday examples plan](plans/0009-everyday-examples.md) | Complete example sentences, compact gender and speaker icons |
-| [Offline web plan](plans/0010-offline-web-downloads.md) | Download/retry/update/removal and cold offline browser verification |
-| [Curriculum snapshot plan](plans/0012-curriculum-database-backup.md) | Read-only backups, no-overwrite recovery and configured API startup |
-| [Dialogue editor plan](plans/0013-edit-dialogue-lines.md) | Existing conversation line/role/translation edits through preview/publication |
-| [Lesson metadata editor plan](plans/0014-edit-lesson-metadata.md) | Topic/role/estimated-level revisions and foundations filtering |
-| [ADR template](templates/ADR.md) | Record a material technical decision |
-| [Execution-plan template](templates/EXECUTION_PLAN.md) | Plan and track substantial implementation |
+| [README](../README.md) | Install/run overview and short command list. |
+| [STATUS](STATUS.md) | Implemented capabilities, milestone gates and remaining work. |
+| [Session checkpoint](SESSION_CHECKPOINT.md) | Latest task, actual validation, commit/upload state and recovery action. |
+| [Product plan](../PROJECT_PLAN.md) | Target requirements and product constraints, including future scope. |
+| [Local operations](LOCAL_OPERATIONS.md) | Learner/editor use, backups, offline study and optional speech/AI setup. |
+| [Architecture](ARCHITECTURE.md) | Module responsibilities, boundaries and implementation/review standards. |
+| [Testing](TESTING.md) | Commands, test isolation, coverage and unverified areas. |
+| [Environment](ENVIRONMENT.md) | Pinned runtime, dependency installation and packaging boundaries. |
+| [Contributing](../CONTRIBUTING.md) | Development entry point; [session workflow](SESSION_WORKFLOW.md) owns checkpoint/usage/recovery policy. |
+| [Codex setup](CODEX_SETUP.md) | Prepared/installed instructions, roles, skills, hooks and activation limits. |
+| [Cloud workflow](CLOUD_WORKFLOW.md) | Repository-backed Cloud setup and acceptance; no assumed active environment. |
+
+## Curriculum and media
+
+- [Content guide](CONTENT_GUIDE.md): authoring/publication rules; [course catalogue](COURSE_CATALOGUE.md): bundled lesson order/outcomes/targets.
+- [Current curriculum review pack](curriculum/README.md): all-topic A1/A2 plan, deduplicated teaching ledger, communicative/revision tasks and unregistered candidate lessons.
+- [Curriculum research](CURRICULUM_RESEARCH.md): current versus historical research scope and sources. Earlier [topic-placement audit](CURRICULUM_TOPIC_AUDIT.md) and [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) retain their dated evidence.
+- [Photo coverage](PHOTO_COVERAGE.md), [photo rights](PHOTO_SOURCES.md) and [original illustration sources](MEDIA_SOURCES.md): exact media support and gaps. [Voice options](VOICE_OPTIONS.md) records dated investigation and audition criteria.
+
+## Separate review and deployment work
+
+[Free website plan 0025](plans/0025-free-web-testing.md) and the [Cloud continuation prompt](CLOUD_DEPLOY_PROMPT.md) track hosted implementation on a separate branch and its blocked secure deployment. A written prompt or uploaded branch is not a live website. The curriculum pack's eleven candidates likewise remain separate from the bundled catalogue.
+
+## Historical records and templates
+
+- [Execution plans](plans/) preserve scope, acceptance and checks for individual steps. Completed records are history; current priorities belong in STATUS. Plan 0011 records unresolved build-tool audit work; plan 0025 tracks the separate hosting release and blocked deployment; [plan 0026](plans/0026-documentation-cleanup.md) records this documentation audit.
+- [Architecture decisions](decisions/) preserve the reasoning and consequences of accepted choices. Later decisions may refine earlier ones; do not delete historical evidence as duplicate instructions.
+- [Local preview history](history/local-preview-2026-11.md) retains dated milestone and verification detail removed from STATUS. Full earlier file versions are also recoverable from Git.
+- [ADR template](templates/ADR.md) and [execution-plan template](templates/EXECUTION_PLAN.md) are reusable formats, not pending tasks.
+- [Visual-reference instructions](../references/AGENTS.md), [fixture boundaries](../tests/fixtures/README.md) and [prepared tooling](../tooling/README.md) explain their specific directories. Installed `.agents/` and prepared `tooling/agents/` skill copies intentionally coexist for repeatable installation.
+
+Keep one authoritative home for each current fact or procedure. Link to it from entry points; put new per-step evidence in its plan/checkpoint rather than appending another competing current-status narrative.

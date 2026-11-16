@@ -1,5 +1,7 @@
 # French course coherence and expansion
 
+Status: completed historical 24-bank/120-lesson rework. The [greetings step](0023-greetings-first.md) subsequently expanded the catalogue, and [plan 0024](0024-a1-a2-curriculum-review.md) prepared further unregistered review candidates. Counts and acceptance below describe this original step; use the [current catalogue](../COURSE_CATALOGUE.md).
+
 Authorised 2026-11-15: use the French curriculum researcher to review and rework all topics, words and examples and expand a useful course.
 
 ## Acceptance criteria

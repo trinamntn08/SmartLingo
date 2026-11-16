@@ -1,5 +1,7 @@
 # Six bridge lesson candidates — draft for owner review
 
+Navigation: [current course catalogue](../COURSE_CATALOGUE.md) · [authoring and publication guide](../CONTENT_GUIDE.md) · [review-pack overview](README.md).
+
 Prepared 2026-11-16. `reviewStatus: draft`; `exampleOrigin: editorial_example`.
 
 These six original candidates address bounded practical gaps identified against the current 25-bank catalogue. A1/A2 assignments are editorial estimates, not certified coverage or proof of proficiency. B1/B2 are future planning, with no lessons added here. Family examples are fictional and optional: learners can describe people who matter to them without disclosing real personal details.

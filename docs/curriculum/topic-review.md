@@ -1,5 +1,7 @@
 # Per-bank curriculum review — draft for owner review
 
+Navigation: [current course catalogue](../COURSE_CATALOGUE.md) · [authoring and publication guide](../CONTENT_GUIDE.md) · [review-pack overview](README.md).
+
 Reviewed 2026-11-16. English-speaking adult newcomers to France; practical metropolitan French. This is original AI-assisted editorial work, **not owner approval, native-speaker review, certified CEFR coverage or an implemented learning path**. The app retains its current bundled lessons and ordering. All proposals and five correction candidates remain drafts.
 
 The [progression manifest](topic-progression.json) assigns every existing lesson ID exactly once: **25 banks, 123 lessons, 7 foundation / 65 A1 / 51 A2**. It preserves current levels rather than silently reclassifying lessons. `foundationA1` combines the first two runtime labels for planning only. Empty routes explicitly describe a proposed bridge or revisit; they do not imply that lessons exist. First take the foundation/A1 pass in bank order, then revisit the A2 pass with the earlier support available. Recommended prerequisites and recycling edges only point to earlier banks; they are guidance, not access locks.
@@ -24,7 +26,7 @@ The current source still contains these defects. [refined-lessons.json](refined-
 | `fr.housing.ask-about-a-rental` | `Les charges sont comprises à` has a corrupted question mark. | Quelles agrees with feminine plural charges. Comprises also agrees with charges. Learn Les charges sont comprises ? as a practical question, then ask what those charges cover. |
 | `fr.work.organise-work` | The explanation says `la` replaces `tâche` in the dialogue, but no such pronoun occurs there. | Aller in the present + an infinitive describes a plan: je vais terminer. After tu peux, keep terminer in its dictionary form: tu peux terminer cette tâche. Tu is used between colleagues who already use familiar forms. |
 
-One inspection predicate initially failed to match accented text passed through the Windows pipeline. Direct ID queries and UTF-8 source reads reconfirmed all five defects; none was treated as a runtime fix. Authored files were written as UTF-8 and checked against exact Unicode strings.
+The five defects were reconfirmed by exact lesson-ID queries and UTF-8 source reads; none has been applied to runtime content.
 
 ## Bank-by-bank teaching decisions
 

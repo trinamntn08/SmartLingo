@@ -1,5 +1,7 @@
 # Browser adapter contracts
 
+Historical first-slice contract. Later editor/publication, vocabulary-overview, backup/review and speech work supersedes the limited read-only/API and Next-word details below. Use [architecture](../ARCHITECTURE.md) and the current domain/adapter source for implemented contracts; retain this record as implementation history.
+
 Primary owns `apps/learner/src/persistence/` and `apps/learner/src/audio/`. UI may import:
 
 - `openLearningRepository(): Promise<LearningRepository>` from `./src/persistence/index` (adjust relative path). Rejects clearly if storage is unavailable; no silent volatile success. Repository methods in `@smartlingo/domain`.

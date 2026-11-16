@@ -1,6 +1,8 @@
 # Practical French curriculum research and rework
 
-Latest follow-up, 2026-11-15: the [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated introduction slots and clarifies two horaire senses. Current inventory is 705 canonical senses/696 written forms across the same 120 lessons/741 appearances. Five lessons append revision 4, fifty-five remain revision 3 and sixty remain revision 1. Exact old canonical payloads remain taught elsewhere; owner approval remains outstanding. Earlier rework findings/counts below describe the preceding checkpoint. Photograph coverage and voice choices are recorded separately in [photo coverage](PHOTO_COVERAGE.md) and [voice options](VOICE_OPTIONS.md).
+Current documentation overview, 2026-11-16. The [course catalogue](COURSE_CATALOGUE.md) lists the 25 bundled banks / 123 lessons / 765 appearances / 722 canonical IDs / 713 written forms, starting with greetings. The [latest curriculum review pack](curriculum/README.md) owns the full-payload ledger, proposed foundation/A1 pass and A2 revisit, source comparisons and separate candidates. Six bridge drafts and five correction candidates remain unregistered and unpublished; the app does not consume the proposed route or B1/B2 extensions.
+
+This page preserves the original 2026-11-15 rework rationale and source-access limits. The [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) subsequently replaced 16 repeated slots and clarified two horaire senses: 705 IDs / 696 forms across 120 lessons / 741 appearances, with five revision-4 drafts. Greetings then added three revision-1 lessons and 17 new IDs. Earlier rework counts below are historical, not current coverage. [Photo coverage](PHOTO_COVERAGE.md) and [voice options](VOICE_OPTIONS.md) track those separate concerns.
 
 Researched 2026-11-15, Europe/Paris. Owner request: review/rework every current topic and its words, expand useful topics, examples and courses. All runtime material remains an original AI-assisted draft requiring owner review. This is a practical beginner curriculum, not certification or a complete validated CEFR course.
 
@@ -30,21 +32,13 @@ The CLE commercial product link returned 403; Didier companion A1/A2 pages redir
 
 Detailed editorial audit records cover [food, shopping, housing and travel](curriculum-food-audit.md), [daily life, health, people, services and work](curriculum-daily-audit.md), and [new foundations, communication and experiences](curriculum-expansion.md). These do not grant owner approval.
 
-## Suggested progression
+## Rework snapshot and current progression
 
-The [complete review catalogue](COURSE_CATALOGUE.md) lists all 24 banks, 120 lessons and targets: 741 vocabulary appearances, 689 canonical senses and 680 distinct written forms. There are four foundation, 65 A1 and 51 A2 lessons. Bank counts include deliberate recycling; they are not counts of newly learned words.
+The initial rework produced 24 banks / 120 lessons / 741 appearances / 689 canonical senses / 680 written forms, with four foundation, 65 A1 and 51 A2 lessons. Those are the pre-redundancy counts. The original sixty lessons advanced to revision 3 and sixty additions began at revision 1; the later five revision-4 lessons and greetings are accounted for above.
 
-[course-sequence.ts](../packages/content/src/course-sequence.ts) records suggested prerequisites. Free exploration stays available; prerequisites are guidance, not app locks. Start with foundations and A1 lessons, returning to A2 lessons after relevant basics. Bank placement does not mean every lesson in an early bank precedes every lesson in a later bank.
+Use the [course catalogue](COURSE_CATALOGUE.md) for shipped bank order and targets, and the [review pack](curriculum/README.md#progressive-revision-and-communicative-practice) for the proposed two-pass route. [course-sequence.ts](../packages/content/src/course-sequence.ts) now supplies ordering consumed by the learner. Prerequisites remain guidance, not app locks; returning learners retain resume and free exploration.
 
-| Stage | Topics | Purpose |
-| --- | --- | --- |
-| First exchanges | Essentials; Numbers; People and introductions; Calendar; Time and daily routine | Ask for help, repair understanding, exchange details and arrange a time. |
-| Food and purchases | Bakery; Restaurant; Groceries; Cooking; Clothes and shopping | Request items, handle quantities, prepare food and explain a purchase problem. |
-| Town and home | Directions; Transport; Home and housing; Accommodation | Find places, use transport, describe home and manage a stay. |
-| Services, study and work | Health and appointments; Digital life; Services and paperwork; Education; Work and study; Job search | Describe needs, clarify instructions and take part in routine tasks. |
-| Social interaction | Leisure and weather; Social plans; Past experiences; Opinions and choices | Agree on plans, recount an event and compare options. |
-
-The original sixty lessons retain their IDs at revision 3; sixty added lessons start at revision 1. Immutable refresh accepts exact untouched historical seeds, preserving owner-edited heads and publications; [ADR 0015](decisions/0015-curriculum-rework.md) explains compatibility. Personal notebook examples and historical learning events are not rewritten. Repeated bank appearances are practice, not new senses.
+Immutable refresh accepts exact untouched historical seeds, preserving owner-edited heads and publications; [ADR 0015](decisions/0015-curriculum-rework.md) explains compatibility. Personal notebook examples and historical learning events are not rewritten. Repeated bank appearances are practice, not new senses.
 
 ## Learning and review limits
 

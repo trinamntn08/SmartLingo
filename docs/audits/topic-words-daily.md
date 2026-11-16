@@ -1,5 +1,7 @@
 # Daily-life vocabulary placement audit — draft
 
+**Historical snapshot (2026-11-15).** Rows and recommendations refer to the pre-greetings 120-lesson audit. “Current”, “missing” and proposed moves below are relative to that snapshot; greetings and course ordering are now implemented. Use the [current catalogue](../COURSE_CATALOGUE.md) and [latest curriculum review pack](../curriculum/README.md) for present coverage. Preserve this report with its linked JSON and support fingerprints; it is evidence, not an import or a publication record.
+
 Editorial review dated 2026-11-15. **Draft for owner review; research recommendations only.** No runtime lessons, accepted answers, canonical IDs, media, owner publications or learner data were changed. This is not native-speaker validation or certified CEFR coverage.
 
 The complete occurrence list is [topic-words-daily.json](topic-words-daily.json): 381 rows, covering all vocabulary in the 60 lessons of the 12 topics below. Each row preserves the exact current target and meaning; its rationale assesses the actual example, English translation, available gender/note support and lesson role. The JSON is the complete word list and individual verdict record; the sections below add scenario-level gaps and concrete editorial proposals.

@@ -1,5 +1,18 @@
 # Session checkpoint
 
+Updated: 2026-11-16, 20:08 Europe/Paris. Status and local launch request completed; this note's commit is the local checkpoint.
+
+## Current launch for owner testing
+
+- Starting tree clean on `docs/curriculum-topic-audit`, source checkpoint `8407f30`. Owner requested current status and launch only; no product/curriculum changes were made.
+- Rebuilt current source with `npm.cmd run build:web`: PASS, 126 offline files / 9,685,539 bytes, build `11ea6b312dd8`. Preview serves `apps/learner/dist` at `http://localhost:8082`; API started from current source at `http://127.0.0.1:3001` using the normal local database path. Both were stopped before this launch. Servers remain running for owner testing.
+- Live HTTP checks: preview and offline manifest both 200; API `/health` returns `{"status":"ok"}`. Browser control host was unavailable, and native Chrome input recovery could not target geometry; no successful browser-page verification is claimed. Owner can open the preview link directly.
+- No real `.env` reads, paid calls, publication, push or merge. Optional AI/neural provider configuration and audible quality were not tested. Greetings-first research remains unapplied; existing 24 banks / 120 lessons still use Restaurant-first ordering. Phone/Safari/native and owner curriculum review remain open.
+- Validation: build and live HTTP checks pass; final repository/TypeScript and staged checks run before committing this note. Full application/browser/offline suites were not rerun for this launch-only step. One hidden background preview launch command was blocked by execution policy; the ordinary persistent `node scripts/serve-web.mjs` session succeeded instead.
+- Usage observed at 20:08 Europe/Paris: account allowance unavailable in exposed tools; no delegation or automatic resume configured. Next step: owner tests the running preview; implementation of research recommendations requires its own authorised task. Previous research checkpoint details follow.
+
+## Previous curriculum research checkpoint (2026-11-15)
+
 Updated: 2026-11-15, Europe/Paris. Completed curriculum research; the commit containing this note is the local checkpoint. Report its hash after Git confirms it.
 
 ## Authorised request and outcome

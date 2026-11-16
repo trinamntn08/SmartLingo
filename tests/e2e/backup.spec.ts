@@ -49,7 +49,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   await fresh.route('**/127.0.0.1:3001/**', route => route.abort());
   try {
     const restored = await fresh.newPage();
-    await restored.goto('http://localhost:8081');
+    await restored.goto(page.url());
     await restored.getByRole('button', { name: 'Profile', exact: true }).click();
     const input = restored.getByLabel('Choose a learning backup', { exact: true });
     await input.setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{broken') });

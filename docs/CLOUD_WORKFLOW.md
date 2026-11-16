@@ -12,6 +12,8 @@ Accept this setup when the current source is on GitHub without rewriting history
 
 GitHub `main` was verified at `1c6e943a3a2f4d9fdbf6886a71ac31c0d3b235ef` on 2026-11-16. The complete local learner checkpoint `d5a56eda48751fc8889d2c38b2b4828f52ee31fc` is its descendant, 27 commits ahead. Branch `chore/cloud-workflow` includes that history and the remote workflow preparation. Use that branch until its pull request is explicitly approved and merged; an environment that checks out old `main` will contain only the old tooling scaffold.
 
+The branch is uploaded and [draft PR #1](https://github.com/trinamntn08/SmartLingo/pull/1) is open. Preparation checkpoint `1c5b5d4` is verified on GitHub. The setup report supplied by the owner initially showed only 16 tooling tests and no application: that is the old baseline. If an environment has already been published from that baseline, choose **Edit**, prepare the current branch using the brief below, verify the actual app checks, then **Republish** before starting a new task.
+
 Before any later handoff, inspect the live branches and pull requests again. Saved environment files are not a substitute for a pushed commit. Never force-push, replace this repository, or overwrite another task's branch. Keep separate tasks on separate branches and inspect their current remote heads before updating them.
 
 ## Create the reusable environment

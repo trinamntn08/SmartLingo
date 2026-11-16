@@ -1,5 +1,31 @@
 # Session checkpoint
 
+Updated: 2026-11-16, Europe/Paris. Free learner website implementation, review and local validation are complete on `codex/free-learner-cloud-deploy`, created in a separate worktree from `origin/docs/free-testing-deployment` at `cf4fedb`; the original `chore/cloud-workflow` checkout remains untouched. Implementation checkpoint: `68b8d0f`.
+
+## Current authorised scope and progress
+
+Implement, validate, package, review, commit and push the explicit hosted learner configuration described in plan 0025, then deploy the reviewed artifact to a new Cloudflare Pages Free project when secure account access permits. No merge, force-push, existing-site replacement, paid service/call, owner-data upload or credential sharing is authorised.
+
+Hosted mode is explicit and local remains the default. The hosted UI never mounts editor/publication, AI conversation/transcription or neural-generation controls; ordinary bundled study, pictures, dialogues, lesson practice, notebook/search/review/progress, backup/restore, offline download and device speech remain. The worker maps only the manifest `/index.html` network fetch to `/`, preserving its cache identity, exact decoded size/hash checks and every other redirect rejection. Pages headers, 404 and clean-source/build metadata are generated after the manifest; the inspector rejects dirty provenance, private/debug files, common credential patterns, limits or any manifest mismatch. Narrow focus/layout fixes preserve phone interaction and were traced to upstream focused fix `5d80acb` without merging the other branch.
+
+## Actual validation and review
+
+- Pinned Node 24.19.0/npm 11.17.0: `npm ci` and `npm run setup` pass. `npx playwright install --with-deps chromium` could not elevate to root on this managed runner; plain install obtained the pinned browser, but its missing system integration reproduced the environment's known touch failures. The supported preinstalled `/usr/bin/chromium` was used for the complete matrix.
+- `npm run check`: PASS. `npm test`: PASS, 19 tooling and 194 application tests. Host-shaped worker tests include root mapping plus strict redirect/hash/error cases.
+- Complete two-worker system-Chromium E2E: PASS, 81 passed and three intentional skips across desktop and narrow/touch projects, including the added focus-stability regression.
+- `npm run test:hosted`: PASS, two exported-build capability checks. Both block/count loopback traffic and observe zero requests through `/#editor`, Practice and Profile.
+- `npm run test:offline`: PASS, eight desktop/narrow explicit-download, cold launch, interrupted/corrupt update, learner-data-preserving removal and stalled-network fallback cases.
+- Independent read-only reviewer found two medium provenance/stale-artifact defects. `test:hosted` now rebuilds hosted mode; metadata records worktree state and the inspector rejects dirty artifacts. No remaining confirmed correctness/privacy/offline finding. Actual Pages headers, 404s, hosted byte verification and hosted offline journey remain publication-time evidence.
+- No real `.env`, owner database/profile, credential, recording, provider request or paid call was accessed. Usage allowance remains unavailable, not zero/unlimited. Delegation used inherited model for exclusive UI and worker scopes plus read-only review; no model override or paid API was used. No automatic resume is configured.
+
+## Publication blocker and next exact action
+
+Commit these deployment/status/checkpoint documents, then rebuild and inspect the exact clean committed hosted artifact. Push this task branch without force and open a draft PR if supported. Current environment status exposes no Cloudflare outbound identity, runtime variable or secret, and restricted network policy does not include Cloudflare hosts. Secure setup must provide a Cloudflare account connection/secret binding outside chat with permission limited to creating/deploying a new Pages project, plus network access to Cloudflare's API. Then verify the current Free plan, create a new `smartlingo-test` or unused variant, deploy only `apps/learner/dist`, and run the hosted HTTP/browser/offline checklist. No live URL or deployment ID exists yet.
+
+---
+
+## Previous documentation handoff (historical)
+
 Updated: 2026-11-16, Europe/Paris. Cloud deployment handoff documentation complete. The commit containing this note is the local checkpoint; report its hash and verified remote result at handoff.
 
 ## Authorised request and outcome

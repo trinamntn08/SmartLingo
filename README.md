@@ -74,6 +74,22 @@ Profile shows download size, saved complete-copy size, progress, status and retr
 
 This local route requires a browser with service workers, Web Locks and a secure localhost context. Expo development does not offer offline downloads. Actual phone/Safari installation and offline voice quality are unverified; this is not a public/LAN deployment.
 
+## Build the hosted learner-only test release
+
+Use the explicit hosted configuration for a static test website:
+
+```sh
+npm run build:web:hosted
+npm run inspect:web:hosted
+npm run test:hosted
+```
+
+The deployable directory is `apps/learner/dist`. Upload only its contents, with `index.html` at the hosting root. `build:web:hosted` exports with `EXPO_PUBLIC_SMARTLINGO_DEPLOYMENT_MODE=hosted`, prepares the integrity-checked offline manifest, then writes Cloudflare Pages `_headers`, a genuine `404.html`, and `metadata.json` containing the source commit, worktree state and offline build ID. The control/error/metadata files are deliberately outside the downloadable asset manifest. `inspect:web:hosted` rejects a dirty-source artifact and checks file/asset limits, every manifest size and SHA-256, required files, source metadata, debug/private filenames and common credential patterns. Build the deployable release only after committing the reviewed source.
+
+Hosted mode is learner-only. Bundled lessons, pictures, dialogues, ordinary practice, notebook search/edit/review, progress, learning backup/restore, offline download and browser/device French speech remain available. Curriculum editing/publication, AI conversation/transcription and neural generation are removed from the hosted UI before any local-server request can occur. The local `npm run dev` and `npm run build:web` workflows retain those explicitly local features.
+
+The free test website has no login, account or automatic cross-device sync. Progress is browser-local at each exact origin. To move existing localhost learning, download a private backup from the old browser, transfer it privately, and explicitly restore it at the hosted URL. Backups are unencrypted; never upload one with the site. Bundled curriculum and media remain test/draft material requiring owner review. See [the deployment and phone checklist](docs/plans/0025-free-web-testing.md).
+
 ## Back up and recover server curriculum
 
 From the repository root:
@@ -145,8 +161,11 @@ PowerShell: use `npm.cmd` if execution policy blocks `npm.ps1`.
 - `doctor`: show Node/Git availability, hook installation, and Codex CLI availability.
 
 - `build:web`: export the Expo web application to ignored `apps/learner/dist`, then generate its hashed offline file manifest.
+- `build:web:hosted`: create the learner-only static-hosting export, offline manifest, Pages headers, 404 document and source/build metadata.
+- `inspect:web:hosted`: verify the hosted upload inventory, limits, private/debug exclusions and every offline size/hash.
 - `preview:web`: serve that export on loopback at `http://localhost:8082`; build first. Leave the terminal running while opening/downloading it.
 - `test:e2e`: run Chromium desktop and phone-sized browser checks (install once with `npx playwright install chromium`).
+- `test:hosted`: run desktop and narrow Chromium capability-gating checks against the already-built hosted export.
 - `test:offline`: build the current export, then run isolated desktop/320px Chromium checks for cold offline launch, failure/retry/update, learner-data-preserving asset removal and stalled-network fallback. Stop the regular port-8082 preview first; tests refuse to reuse it.
 
 See [verification](docs/TESTING.md) for test scope and device limitations.

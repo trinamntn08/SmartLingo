@@ -8,6 +8,9 @@ npm test
 npm run test:e2e
 npm run test:offline
 npm run build:web
+npm run build:web:hosted
+npm run inspect:web:hosted
+npm run test:hosted
 npm run check:staged
 git diff --check
 ```
@@ -17,10 +20,12 @@ Install dependencies with `npm ci`. Before the first browser run, use `npx playw
 ## Existing checks
 
 - `check`: repository structure, deliberately small TOML configuration subset, skill frontmatter, hook shape, local Markdown links, script syntax, Git whitespace, and TypeScript for application/shared/test code.
-- `test:tooling`: 18 tests covering staged-secret scanning, ignored data, configuration parsing, installer behaviour, lifecycle hooks in temporary repositories, reproducible offline manifests and the guarded static preview server. These do not prove Codex runtime hook trust or loading.
+- `test:tooling`: tests covering staged-secret scanning, ignored data, configuration parsing, installer behaviour, lifecycle hooks in temporary repositories, reproducible offline/hosted manifests, Pages control-file exclusion and the guarded static preview server. These do not prove Codex runtime hook trust or loading.
 - `test:app`: 184 tests covering content/answers, topic counts/search/IDs/actual sentence-button solvability, revision-scoped progress, media coverage/target guards, IndexedDB migration/idempotency/cache, backup merges, speech fallback, content requests, SQLite editor/security and manual review. Generated speech adds identity/hash/base64 validation, escaped SSML and bounded provider responses, persistent SQLite reservations/cache/replay, daily/storage limits, cancellation, foreign-database rejection, exact HTTP access guards, browser removal epochs, verified-response save retries, offline replay and long-text fallback. All provider boundaries use fakes. Existing coverage includes immutable seed refresh, owner-edit preservation, curriculum snapshot/CLI integrity/recovery, temporary conversation/transcription, recorder cleanup, app-download failure/update/removal and supported-day scheduling. Fakes do not establish real browser quota/eviction or provider quality.
 - `test:e2e`: Chromium desktop/phone-sized learner regressions plus the isolated editor journey through draft save, preview isolation, explicit review/publication, later-draft separation, cache/reload and historical learning preservation. Narrow editor forms support keyboard entry and preserve unsaved text across learner navigation. Publication has one desktop writer; the duplicate mobile publication case is deliberately skipped against shared test content. Screenshots/traces stay in ignored `test-results/`.
 - `build:web`: real Expo/Metro web export under ignored `apps/learner/dist`.
+- `build:web:hosted` and `inspect:web:hosted`: explicit learner-only export plus Pages controls/release metadata, followed by file-limit, private/debug-file, credential-pattern and complete manifest hash/size verification.
+- `test:hosted`: exported-build desktop/narrow checks that block and count loopback API requests while visiting `/#editor`, Practice and Profile. They verify ordinary lesson practice, backup and device-speech alternatives remain while editor/publication, AI/transcription and neural generation controls are absent.
 - `test:offline`: builds the current export first, then runs six Chromium desktop/320px journeys on an isolated port-8082 test server. Do not reuse the regular owner preview; stop it before this suite. Test-only in-memory response modes simulate interrupted/corrupt downloads, updated documents and stalled connections. Cold pages reload with browser networking disabled; removal checks all four learner stores and an unrelated cache. Test fixtures never open owner SQLite or browser profiles. The production static server has no test control endpoints.
 
 The staged check inspects actual index bytes for protected paths and high-confidence credential patterns without printing values. It cannot detect every secret and does not run the full application suite. This preview has no CI deployment service.

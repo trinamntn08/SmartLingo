@@ -1,12 +1,12 @@
 # Codex project setup
 
-For GitHub-backed work that can continue from a phone while the PC is off, follow [the cloud workflow](CLOUD_WORKFLOW.md). Check the session checkpoint for actual environment activation and remote verification results.
+For GitHub-backed work that can continue from a phone while the PC is off, follow [the cloud workflow](CLOUD_WORKFLOW.md). On 2026-11-16 the owner confirms republishing and phone access; GitHub CI and branch synchronisation are verified directly. A fresh Cloud task's source/runtime acceptance report remains to record. Use `origin/chore/cloud-workflow` while default `main` is old.
 
 Verified against official documentation on 2026-11-14.
 
-**Installation state:** root AGENTS.md, Git hook configuration, and all fifteen Codex agent/skill/hook/resource files are installed, including the supplied curriculum researcher and its planning assets. Matching sources are retained under tooling/codex and tooling/agents. Runtime discovery and hook trust remain unverified.
+**Local installation observation:** root AGENTS.md, Git hook configuration, and all fifteen Codex agent/skill/hook/resource files are installed in the reviewed local checkout, including the supplied curriculum researcher and its planning assets. Matching sources are retained under tooling/codex and tooling/agents. This does not prove a new Cloud task has loaded the roles or trusted hooks. Runtime discovery and hook trust remain client-specific and unverified.
 
-Git is initialized, the initial setup commit exists, origin is configured for the owner-selected repository, and core.hooksPath is set. The earlier Git metadata permission failures are historical; use the [current checkpoint](SESSION_CHECKPOINT.md) for actual results rather than assuming they still apply.
+In that local checkout Git is initialized, the initial setup commit exists, origin is configured for the owner-selected repository, and core.hooksPath is set. Fresh clones still need `npm run setup`; local Git configuration is not transported by a push. The earlier Git metadata permission failures are historical; use the [current checkpoint](SESSION_CHECKPOINT.md) for actual results rather than assuming they still apply.
 
 `npm run setup:finish` is a one-time bootstrap helper for repositories without history. It checks for conflicts/pre-staged changes/existing history, installs prepared config, verifies the setup, stages explicit bootstrap paths, sets the pre-commit executable index bit for POSIX clones, and commits locally. It never creates a remote, pushes, or sets hook trust. Do not rerun it to continue this already-initialized project. If it stops in a new bootstrap, inspect git status; it preserves files rather than resetting them.
 

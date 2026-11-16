@@ -1,6 +1,6 @@
 # GitHub and phone-driven Codex Cloud work
 
-Prepared: 2026-11-16 (Europe/Paris). Environment activation and remote check results are recorded in [the session checkpoint](SESSION_CHECKPOINT.md); this guide alone does not establish that an environment is published.
+Reviewed: 2026-11-16 (Europe/Paris). GitHub state and CI below were checked directly. The owner confirms republishing the environment and opening it on the phone; a command-level Cloud acceptance report has not yet been supplied. See [the session checkpoint](SESSION_CHECKPOINT.md) for the current handoff.
 
 ## Scope and acceptance
 
@@ -8,13 +8,34 @@ The owner requested a second working route that can be driven from a phone witho
 
 Accept this setup when the current source is on GitHub without rewriting history, a setup pull request exposes its checks, a published SmartLingo cloud environment passes its baseline checks, and a phone-started task can verify the expected checkout. Repository preparation can finish before account-specific environment activation.
 
+## Current readiness
+
+| Area | Verified state on 2026-11-16 |
+| --- | --- |
+| GitHub backup | All 25 local branch heads match GitHub; upload checkpoint `4d6a4a1` |
+| Current app CI | [Run 43951957211](https://github.com/trinamntn08/SmartLingo/actions/runs/43951957211) on `4d6a4a1` succeeds: repository/TypeScript, 18 tooling, 190 application, 81 browser and 8 offline cases; one intentional browser skip |
+| Cloud environment | Owner confirms it was updated and republished |
+| Phone access | Owner confirms opening the republished environment under Codex on the phone |
+| Command-level acceptance | Still to record: correct fetched source, runtime versions and successful checks from a new phone-started Cloud task |
+| Default branch | `main` remains the old scaffold; [PR #1](https://github.com/trinamntn08/SmartLingo/pull/1) is open, draft and mergeable, not merged |
+
+No additional hosting, permanent provider key or local-PC connection is needed for ordinary source work. A successful Cloud task that verifies the checkout and runs checks is the final setup confirmation. The first real remote implementation should also deliver a pushed task branch and PR; cloud-side write delivery has not been exercised in this chat. Merging PR #1 is optional for this setup while tasks explicitly use the app branch; later integration would make the default branch current.
+
 ## Source baseline
 
 GitHub `main` was verified at `1c6e943a3a2f4d9fdbf6886a71ac31c0d3b235ef` on 2026-11-16. The complete local learner checkpoint `d5a56eda48751fc8889d2c38b2b4828f52ee31fc` is its descendant, 27 commits ahead. Branch `chore/cloud-workflow` includes that history and the remote workflow preparation. Use that branch until its pull request is explicitly approved and merged; an environment that checks out old `main` will contain only the old tooling scaffold.
 
 The branch is uploaded and [draft PR #1](https://github.com/trinamntn08/SmartLingo/pull/1) is open. Preparation checkpoint `1c5b5d4` is verified on GitHub. The setup report supplied by the owner initially showed only 16 tooling tests and no application: that is the old baseline. If an environment has already been published from that baseline, choose **Edit**, prepare the current branch using the brief below, verify the actual app checks, then **Republish** before starting a new task.
 
-Current application fix checkpoint `5d80acb` passes [Linux verification](https://github.com/trinamntn08/SmartLingo/actions/runs/43945569030): repository/TypeScript checks, 18 tooling and 190 application tests, 81 browser cases with one intentional skip, and all 8 offline cases. Use the latest remote branch, including this fix, when updating the environment. Cloud setup and phone acceptance are separate from the GitHub Actions result and remain unverified until observed.
+Application fix checkpoint `5d80acb` passes [Linux verification](https://github.com/trinamntn08/SmartLingo/actions/runs/43945569030), and the latest reviewed upload `4d6a4a1` passes the full run linked above. Use the latest fetched remote branch including this fix. A greetings-only ancestor check is insufficient: old preparation `1c5b5d4` includes greetings but lacks the focus fix.
+
+| Branch | Purpose and integration state |
+| --- | --- |
+| `main` at `1c6e943` | Default branch, old tooling scaffold; do not use as the app baseline yet |
+| `chore/cloud-workflow` | Current tested learner, focus fix and Cloud documentation; use latest `origin/chore/cloud-workflow` for ordinary app work |
+| `chore/a1-a2-curriculum-review` at `8ba59ae` | Uploaded research/candidate drafts and validator, not integrated into the app branch or published curriculum |
+| `chore/concurrent-sessions` at `8e36885` | Uploaded local worktree tooling, not integrated into the app branch; its commands are not available here yet |
+| Other uploaded branches | Preserved feature/history checkpoints; uploading them does not combine their changes |
 
 Before any later handoff, inspect the live branches and pull requests again. Saved environment files are not a substitute for a pushed commit. Never force-push, replace this repository, or overwrite another task's branch. Keep separate tasks on separate branches and inspect their current remote heads before updating them.
 
@@ -27,8 +48,10 @@ Give the setup conversation this brief:
 ```text
 Prepare a reusable Codex Cloud environment named SmartLingo for
 https://github.com/trinamntn08/SmartLingo.git.
-Fetch origin and use chore/cloud-workflow, not the older main branch.
-Confirm that d5a56eda48751fc8889d2c38b2b4828f52ee31fc is an ancestor of HEAD.
+Fetch origin and use the latest origin/chore/cloud-workflow, not older main
+or a stale local branch. Inspect and preserve existing work before updating.
+Report HEAD and the fetched remote tip. Require them to match for this setup,
+and confirm 5d80acbf7e921c860b4ce7ea256f84093611dfb7 is an ancestor of HEAD.
 Read AGENTS.md, docs/STATUS.md, docs/SESSION_CHECKPOINT.md and
 docs/SESSION_WORKFLOW.md. Inspect the working tree before changing anything.
 Use Node 24.19.0 and npm 11.17.0 as required by the repository.
@@ -51,20 +74,41 @@ Keep provider secrets unset for normal development. The tests use fake providers
 
 Review the setup report and configuration, then save and select **Publish**. Environment publication saves the development setup; it is separate from GitHub merging, app deployment, and curriculum publication. Repository skills travel with source. Personal skills on the Windows computer do not automatically sync, and repository hook/role files do not prove runtime activation.
 
+To update an existing setup: **Settings / Paramètres > Codex Cloud > Environments / Environnements > SmartLingo > … > Edit / Modifier**. Describe the change in the setup conversation, let it prepare/test the environment, save, then select **Republish / Republier**. An unpublished environment uses **Publish / Publier**. Start a new task after republishing; existing tasks keep their own saved files and tools. The owner has already confirmed this publication step, so repeat it only if setup configuration needs another change.
+
 ## Phone acceptance task
 
 On the phone open **Codex**, select the published SmartLingo environment, and send:
 
 ```text
-Verify this SmartLingo cloud setup without changing source files.
-Fetch origin, inspect the working tree and check out chore/cloud-workflow
-only if doing so preserves existing work. Report git branch --show-current,
-git log -1 --oneline, and whether d5a56eda48751fc8889d2c38b2b4828f52ee31fc
-is an ancestor of HEAD. Read AGENTS.md and docs/SESSION_CHECKPOINT.md.
-Run npm run check and npm test. Report the results and any blockers.
+Verify SmartLingo in this new Cloud task without editing source files.
+Fetch origin and inspect the working tree. Use the latest fetched
+origin/chore/cloud-workflow as the baseline only if existing work is preserved.
+If this task has existing edits or commits, preserve them and report the
+blocker rather than resetting, overwriting or claiming a fresh acceptance run.
+Report branch, HEAD, origin/chore/cloud-workflow SHA and git status.
+Require HEAD to match that fetched remote tip, and confirm
+5d80acbf7e921c860b4ce7ea256f84093611dfb7 is an ancestor of HEAD.
+Read AGENTS.md and docs/SESSION_CHECKPOINT.md. Report node --version
+and npm --version. Verify dependencies are installed from package-lock.json,
+run npm run setup if needed, then npm run check and npm test.
+Report actual results. Do not call paid providers, edit/publish curriculum,
+push changes, merge branches or deploy anything for this read-only check.
 ```
 
 Reopen the same task to continue its existing work across devices. Start a new task for independent work, using its own branch. For an implementation task, include the requested outcome and ask it to push the tested task branch and open or update a draft pull request. Keep merging and deployment explicit owner decisions. Task history and local learner browser storage are separate; source checkout does not restore notebook entries or local editor publications.
+
+After the acceptance report passes, no further repository setup is required for ordinary Cloud work. Use this task brief for a real change:
+
+```text
+Work in the SmartLingo Cloud environment using the latest
+origin/chore/cloud-workflow as the base. Read AGENTS.md and the checkpoint.
+Create a separate task branch, implement [requested outcome], run relevant
+checks, update the handoff, commit and push that branch, and open a draft PR
+against chore/cloud-workflow. Do not merge, deploy or publish curriculum.
+```
+
+Targeting the app branch keeps a new PR limited to its task while `main` is old. After PR #1 is deliberately merged, refresh this guide and use updated `main` for later task branches. Do not merge the research or local-session tooling branches just to make Cloud work possible.
 
 ## GitHub verification
 

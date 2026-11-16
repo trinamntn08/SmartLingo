@@ -1,4 +1,4 @@
-# Local dependencies and packaging
+# Dependencies, Cloud workspaces and packaging
 
 ## Runtime and dependency isolation
 
@@ -13,6 +13,12 @@ Use npm ci for reproducible installation from the lockfile. Use npm install only
 There is no Python component now. If one is introduced, create a local ignored .venv and a separate pinned Python dependency manifest. Do not mix Python environment management into the Node application.
 
 This is dependency separation, not an operating-system sandbox. A container can be added if native/server tooling later needs stronger runtime reproducibility.
+
+## Managed Cloud workspaces
+
+Codex Cloud uses a separate managed computer and a workspace for each task. It uses the same committed runtime versions, lockfile and test commands; no copy of the owner's Windows environment, browser learning data or local database is required. Ordinary lessons and fake-provider tests need no permanent AI credential. Install dependencies in the Cloud checkout with `npm ci`, Git hooks with `npm run setup`, and Chromium/OS dependencies with `npx playwright install --with-deps chromium`.
+
+The owner confirms republishing the SmartLingo environment and opening it on the phone. Follow [the Cloud guide](CLOUD_WORKFLOW.md) to verify a fresh task uses the current remote app branch. Default `main` is still the old scaffold; uploaded curriculum-review and concurrent-session branches are not automatically combined with the app. Republish when changing the reusable setup, and use a new task to test it; preserve existing task edits.
 
 ## Packaging
 

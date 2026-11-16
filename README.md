@@ -153,6 +153,8 @@ See [verification](docs/TESTING.md) for test scope and device limitations.
 
 ## Working with Codex
 
+For remote work from a phone, use the published SmartLingo Cloud environment and the latest `origin/chore/cloud-workflow` baseline. As reviewed on 2026-11-16, all 25 local branches are on GitHub, current app CI passes, and the owner confirms republishing and phone access. A fresh Cloud task still needs the [source/runtime acceptance check](docs/CLOUD_WORKFLOW.md#phone-acceptance-task). Default `main` remains the old scaffold until PR #1 is deliberately merged; uploaded research and local-session tooling branches are separate work.
+
 Open this folder as the project and read [the setup guide](docs/CODEX_SETUP.md). Root AGENTS.md, roles, skills, and lifecycle hook definitions are now installed. The copies under [tooling](tooling/README.md) are retained as installation/validation sources. Runtime loading and hook trust must be checked in the Codex client.
 
 For curriculum research, use `$french-curriculum-researcher` ([skill](.agents/skills/french-curriculum-researcher/SKILL.md)) to audit topic coherence, research sources or propose A1/A2 coverage gaps. Its seeds are planning drafts requiring conversion and owner review; they are not added to the app automatically.

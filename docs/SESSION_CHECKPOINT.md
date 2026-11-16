@@ -2,6 +2,14 @@
 
 Updated: 2026-11-16, Europe/Paris. GitHub source/workflow is uploaded and verified on Linux. Account-side Cloud environment update and phone acceptance still require user interaction; do not claim the full phone route active yet.
 
+## Latest follow-up: push every local branch
+
+Owner explicitly requested pushing all local branches to GitHub. Fetched origin and compared live refs: 25 local branches, two already present on GitHub and 23 new remote branches. Scanned all 41 newly outgoing Git objects (two commits, eleven trees, twenty-eight blobs), including protected-path checks across the new historical trees: zero supported credential patterns or protected paths. No conflicting branch history found. This is bounded scanning, not an exhaustive secret guarantee.
+
+`git push --dry-run --all origin` and `git push --all origin`: PASS. Independent live `git ls-remote --heads origin` comparison confirms all 25 local branch heads match their GitHub counterparts. This includes the separate curriculum-review and concurrent-session branches; it does not merge their work. Main remains at `1c6e943`. No checkout change, force push, tag push, deployment or owner-data access. Existing uncommitted/ignored files and other worktrees were not staged or changed.
+
+This documentation-only checkpoint records the completed upload. Final repository/staged checks and commit follow this note; push the checkpoint on `chore/cloud-workflow`, then repeat the all-head SHA comparison. No application code changed, so application/browser suites are not rerun for this branch-upload request. The earlier Cloud environment activation work remains pending below. Usage remains unavailable (no allowance tool exposed); no delegation was needed for this small sequential operation.
+
 ## Authorised scope and current source
 
 Owner authorised the proposed GitHub upload, draft PR, Codex Cloud environment and phone working route. [Draft PR #1](https://github.com/trinamntn08/SmartLingo/pull/1) is open from `chore/cloud-workflow` into `main`. Preparation `1c5b5d4` preserves the 27 earlier development commits through greetings checkpoint `d5a56ed`; focused browser fix `5d80acbf7e921c860b4ce7ea256f84093611dfb7` is uploaded and its remote SHA verified. Main stays at `1c6e943`; no merge, force push, deployment or curriculum publication.

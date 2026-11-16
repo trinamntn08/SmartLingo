@@ -7,6 +7,7 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 ## Current Git state
 
 - Current branch: `chore/cloud-workflow`, based on the completed greetings checkpoint `d5a56ed`. Earlier feature branches/checkpoints remain preserved. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
+- Owner-requested all-branch upload on 2026-11-16: all 25 local branch heads verified on GitHub after pushing 23 previously missing branches. Separate curriculum-review and concurrent-session branches remain separate; no merge, force push or deployment. See the session checkpoint for bounded outgoing-history checks and verification.
 - Owner authorised the proposed GitHub upload and Codex Cloud setup on 2026-11-16. Live fetch confirms `main` at `1c6e943` is an ancestor of the current source (27 application/tooling commits ahead before cloud preparation). Upload and draft-PR results are tracked in the session checkpoint. No merge, deployment, curriculum publication or history rewrite is authorised by this setup.
 
 ## GitHub and phone-driven cloud preparation (2026-11-16)

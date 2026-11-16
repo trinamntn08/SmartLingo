@@ -6,8 +6,12 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `chore/a1-a2-curriculum-review`; inherited cloud-preparation checkpoint `1c5b5d4` and greetings checkpoint `d5a56ed` remain preserved. This step prepares a curriculum research/review pack. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
+- Current branch: `docs/free-testing-deployment`; curriculum research checkpoint `8ba59ae`, cloud-preparation checkpoint `1c5b5d4` and greetings checkpoint `d5a56ed` remain preserved. This step documents a free website-testing proposal. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
 - Owner authorised the proposed GitHub upload and Codex Cloud setup on 2026-11-16. Live fetch confirms `main` at `1c6e943` is an ancestor of the current source (27 application/tooling commits ahead before cloud preparation). Upload and draft-PR results are tracked in the session checkpoint. No merge, deployment, curriculum publication or history rewrite is authorised by this setup.
+
+## Free website testing plan (2026-11-16)
+
+[Plan 0025](plans/0025-free-web-testing.md) recommends Cloudflare Pages Free for a learner-only website, with checked provider limits, explicit upload/update/rollback steps, phone/offline acceptance and private learning-backup transfer. Identified preparation includes hosted capability gating, the offline worker's HTML canonicalisation mismatch, deployment-control file exclusions and response policies. These are proposed changes, not implemented fixes. Static hosting does not provide the local editor/API, AI, accounts or cross-device sync. No build promotion, account setup, push, deployment, owner-data access or paid call occurred. Repository/TypeScript and final staged checks are recorded in the checkpoint.
 
 ## A1–A2 curriculum research and compatible candidates (2026-11-16)
 

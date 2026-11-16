@@ -1,6 +1,6 @@
 # Task: Verify cloud browser interactions
 
-Status: in progress
+Status: completed (browser verification); account-side Cloud activation remains separate
 Owner: primary agent
 
 ## Outcome
@@ -26,10 +26,10 @@ Run repository/TypeScript and application checks; reproduce affected narrow less
 
 Initial trace artifacts downloaded to ignored `.tmp/cloud-ci-failures` in the isolated worktree. Primary and independent review confirm that `Button` focus changed the border from 1px to 3px, adding four pixels of width. Traces show Open lesson, Send message and the sentence token mon moving to another row between pointer-down and pointer-up. Replaced that changing border width with a visible geometry-neutral outline; no selectors/assertions/timeouts were weakened.
 
-Added a narrow focus/navigation regression. It fails on old source with width 143.59 -> 147.59 and height 48 -> 50, then passes after the fix. All 22 selected desktop/narrow lesson, conversation, recording, storage-failure, sentence and focus cases pass on isolated port8091. Both desktop/narrow backup journeys also pass. Their first isolated run hit a hardcoded8081 URL in the second context; changed that test to use the actual page URL, preserving isolation and all restore assertions. Repository/TypeScript checks pass; staged checks and the full remote rerun follow.
+Added a narrow focus/navigation regression. It fails on old source with width 143.59 -> 147.59 and height 48 -> 50, then passes after the fix. All 22 selected desktop/narrow lesson, conversation, recording, storage-failure, sentence and focus cases pass on isolated port8091. Both desktop/narrow backup journeys also pass. Their first isolated run hit a hardcoded8081 URL in the second context; changed that test to use the actual page URL, preserving isolation and all restore assertions. Repository/TypeScript checks pass; the complete remote result is recorded below.
 
 Official style references checked: [React Native ViewStyle](https://reactnative.dev/docs/view-style-props) and [React Native Web styling](https://necolas.github.io/react-native-web/docs/styling/); installed React Native 0.88.1 declares the outline fields. Native focus rendering is not verified.
 
 ## Handoff
 
-All 24 selected local browser cases pass. Pending full remote rerun. Account-side environment initially prepared old main; it separately needs the current app branch and republishing.
+All 24 selected local browser cases pass. Fix checkpoint `5d80acb` is uploaded. [Full Linux run 43945569030](https://github.com/trinamntn08/SmartLingo/actions/runs/43945569030) passes repository/TypeScript checks, 18 tooling/190 application tests, 81 desktop/narrow browser cases with one intentional skip and all 8 offline cases. Its export contains 126 files / 9,692,048 bytes, build prefix `b1c6af23a4f4`. The initial 67-pass/12-failure run remains diagnostic history; no selector, assertion or timeout was weakened. Independent review found no unresolved actionable issue. Native focus rendering, owner physical-phone/audio and screen-reader checks are not claimed. Account-side environment initially prepared old main; it separately needs the current app branch, republishing and phone acceptance.

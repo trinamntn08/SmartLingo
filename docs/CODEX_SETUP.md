@@ -1,10 +1,14 @@
 # Codex project setup
 
+For GitHub-backed work that can continue from a phone while the PC is off, follow [the cloud workflow](CLOUD_WORKFLOW.md). On 2026-11-16 the owner confirms republishing and phone access; GitHub CI and branch synchronisation are verified directly. A fresh Cloud task's source/runtime acceptance report remains to record. Use `origin/chore/cloud-workflow` while default `main` is old.
+
 Verified against official documentation on 2026-11-14.
 
-**Installation state:** root AGENTS.md, Git hook configuration, and all nine Codex agent/skill/hook files are installed. Earlier patch attempts were rejected, but the latest explicitly requested setup command copied the files successfully. Matching sources are retained under tooling/codex and tooling/agents. Runtime discovery and hook trust remain unverified.
+**Local installation observation:** root AGENTS.md, Git hook configuration, and all fifteen Codex agent/skill/hook/resource files are installed in the reviewed local checkout, including the supplied curriculum researcher and its planning assets. Matching sources are retained under tooling/codex and tooling/agents. This does not prove a new Cloud task has loaded the roles or trusted hooks. Runtime discovery and hook trust remain client-specific and unverified.
 
-Git is initialized on main and core.hooksPath is set. The current session also cannot create .git/index.lock, so the initial commit remains pending. For a single local completion command, run `npm run setup:finish` from your own terminal. Preview with `npm run setup:finish:plan`. It checks for conflicts/pre-staged changes/existing history, installs prepared config, verifies the setup, stages explicit bootstrap paths, sets the pre-commit executable index bit for POSIX clones, and commits locally. It never creates a remote, pushes, or sets hook trust. If it stops, inspect git status; it preserves files rather than resetting them.
+In that local checkout Git is initialized, the initial setup commit exists, origin is configured for the owner-selected repository, and core.hooksPath is set. Fresh clones still need `npm run setup`; local Git configuration is not transported by a push. The earlier Git metadata permission failures are historical; use the [current checkpoint](SESSION_CHECKPOINT.md) for actual results rather than assuming they still apply.
+
+`npm run setup:finish` is a one-time bootstrap helper for repositories without history. It checks for conflicts/pre-staged changes/existing history, installs prepared config, verifies the setup, stages explicit bootstrap paths, sets the pre-commit executable index bit for POSIX clones, and commits locally. It never creates a remote, pushes, or sets hook trust. Do not rerun it to continue this already-initialized project. If it stops in a new bootstrap, inspect git status; it preserves files rather than resetting them.
 
 ## Files and responsibilities
 
@@ -30,11 +34,13 @@ Git is initialized on main and core.hooksPath is set. The current session also c
 
 Non-managed hooks require exact-definition trust; changed hooks may need another review. Do not bypass that review. A cloud-orchestrated Work session may not execute repository command hooks. Unsupported clients can still read AGENTS.md and run manual checks. Files being present does not establish that a runtime has loaded them.
 
-The CLI executable is not currently on PATH. This does not prevent the Codex app from working, but we cannot claim a CLI configuration-load test passed.
+The readiness check on 2026-11-14 found `codex-cli 0.167.0-alpha.4.1` on PATH. `npm run doctor` verifies executable availability, not project configuration loading or hook trust; no runtime activation is established by that result.
 
 ## Hooks
 
 Follow [the session workflow](SESSION_WORKFLOW.md) and maintain [the checkpoint](SESSION_CHECKPOINT.md) while working. Check usage when the client exposes it, preserve progress before limits, and resume only already authorised tasks. Hooks do not schedule a future run or replenish allowance. Automatic resuming requires a confirmed scheduler with repository access; it is not configured by this repository.
+
+The primary agent is authorised to create checkpoint commits and automatically push the assigned task branch after completed, reviewed, validated steps under the [checkpoint policy](SESSION_WORKFLOW.md#automatic-checkpoint-commits). Verify the remote SHA after each push; merging/deployment/publication remain separate. The advisory Stop hook does not create commits, push changes or replace step review and validation.
 
 - SessionStart: return concise context pointing at product plan and current status. Handle startup/resume/clear/compact/fork.
 - Stop: run lightweight repository checks and return an advisory warning on failure. Do not block/continue the conversation, edit files, spend credits, auto-commit, or auto-push.
@@ -62,9 +68,12 @@ If named roles are unavailable, the primary may spawn a built-in agent and suppl
 
 - `Use $sll-deliver-feature to build the first restaurant lesson. Delegate independent UI and API work after agreeing the content contract.`
 - `Use $sll-author-french to draft a beginner café lesson for owner review.`
+- `Use $french-curriculum-researcher to audit topic coherence and propose A1/A2 coverage gaps against existing lessons.`
 - `Use $sll-review-change to review the current diff without editing it.`
 
 Skills are repository-scoped. This setup does not install or alter your global personal skills.
+
+The [curriculum researcher](../.agents/skills/french-curriculum-researcher/SKILL.md) complements the French author workflow with research, a proposed 32-topic map and unreviewed seed catalogs. Its JSON schema describes research briefs, not importable app lessons. Convert proposals into the current runtime contract and keep them draft for owner preview/review. See [integration scope](plans/0015-french-curriculum-researcher.md). Files being present does not establish that this session's skill catalog has refreshed; the skill can also be read directly by path.
 
 ## Official sources
 

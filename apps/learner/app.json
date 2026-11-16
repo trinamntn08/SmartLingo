@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "SmartLingo",
+    "slug": "smartlingo",
+    "version": "0.1.0",
+    "platforms": ["web"],
+    "web": { "bundler": "metro", "name": "SmartLingo · French for everyday life" }
+  }
+}

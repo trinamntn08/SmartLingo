@@ -1,6 +1,6 @@
 # SmartLingo — implementation plan
 
-Status: planning baseline, ready for an initial implementation slice.
+Status: local learner, first editor/publication, backup and manual recognition review implemented; see docs/STATUS.md for verified scope and remaining milestone work.
 Updated: 2026-11-14.
 
 ## 1. Product direction
@@ -50,7 +50,7 @@ The owner answered question 5 with a level rather than topic priorities. Default
 - One complete restaurant lesson, plus a small greetings foundation lesson.
 - Approximately 20–30 reusable vocabulary/phrase entries and one short dialogue.
 - Image-to-word matching, vocabulary reveal/recall, and sentence building.
-- Play word and sentence audio; translation and grammar on tap.
+- Play word and sentence audio; meanings, translations and explanations visible directly in study views.
 - Persist progress and saved vocabulary across browser reloads.
 - One scripted role-play and an API-backed push-to-talk conversation path.
 - A text fallback and understandable API-unavailable state.
@@ -84,7 +84,7 @@ Today: continue a lesson, review due items, or start a suggested short session. 
 Lesson sequence:
 1. State a concrete outcome: e.g. order a drink politely.
 2. Introduce 6–10 useful items with meaning, picture where appropriate, and audio.
-3. Show these in a short sentence/dialogue. Translation and grammar are optional reveals.
+3. Show these in a short sentence/dialogue. Display meanings, translations and grammar explanations directly in study views (owner preference updated 2026-11-14).
 4. Practise matching and sentence building with helpful hints.
 5. Attempt recall with reduced support.
 6. Offer a contextual speaking role-play.
@@ -127,11 +127,19 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 Create original lessons and examples using reputable public references for research. Record sources, media attribution, and reuse permissions. Personal use is not a reason to copy entire courses or unlicensed image/audio collections; original content also makes later commercialisation easier.
 
+Owner expansion request (2026-11-14): provide 30–50 distinct words/phrases per practical A1–A2 topic, grouped into short 6–10-item lessons. Let learners search French/English vocabulary and read meanings, examples and explanations directly in a topic bank. Keep ordinary study copy concise; disclose synthetic device speech in Profile rather than beside every Listen button. [Research and limits](docs/CURRICULUM_RESEARCH.md) accompany the draft catalogue.
+
+Owner curriculum rework request (2026-11-15): audit every topic and word, strengthen task coherence and beginner examples, and expand useful coverage. The draft now contains 24 banks and 120 short lessons; [review catalogue](docs/COURSE_CATALOGUE.md) and [research](docs/CURRICULUM_RESEARCH.md) distinguish unique senses, recycling and owner-review limits. Foundation and A2-only banks are allowed where their communicative demands justify them. This does not establish complete CEFR coverage.
+
+Owner browsing request and correction (2026-11-14): show topics in a persistent left-hand desktop list, with direct switching and a horizontal list on phones. Clicking SmartLingo returns to the home page. Put word grids before optional lessons, and show the whole lesson vocabulary together rather than a serial Next word flow. Include clear drawings/photos for concrete vocabulary with honest alt text; retain directly visible text support. [ADR 0010](docs/decisions/0010-visual-word-overviews.md) records vocabulary overview progress and the separate bundled media catalogue.
+
 Use simple illustrations for objects/actions when clear. Use realistic photographs selectively for menus, places, and practical contexts when permission allows. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
 
 Generate stable AI audio for approved content and cache it by text + language + voice + generation-settings hash. Reuse it rather than generate on every playback. A text change invalidates related audio until regenerated/reviewed. Clearly identify synthetic speech.
 
 Content lifecycle: draft -> owner review -> published -> revised/archived. AI drafts never enter the published curriculum automatically. Review French accuracy, English meaning, naturalness, level, answer alternatives, image suitability, and audio. Keep source/provenance and version history.
+
+Owner greeting-first implementation request (2026-11-16): add the researched 24-expression opening as three eight-item foundation drafts, before Essentials and transaction topics. Use actual course ordering in Today/Explore/sidebar while preserving existing lesson resume, canonical IDs/history and published overrides. This bounded conversion adds one compact bank (25 banks/123 lessons total); broader audit restructuring remains separate. See [plan 0023](docs/plans/0023-greetings-first.md).
 
 ## 8. Screens and visual direction
 
@@ -140,8 +148,8 @@ Learner navigation: Today, Explore, Practice, Review, Profile. Notebook is acces
 - Today: next activity, continue lesson, reviews due, understated progress.
 - Explore: topic cards, level filter, roles, free search.
 - Topic: useful outcomes, lesson list, progress, download status.
-- Lesson: one main activity, progress, audio, hints, optional grammar/translation.
-- Vocabulary: article + word, meaning reveal, examples, image, audio, notebook action.
+- Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
+- Vocabulary: article + word, visible meaning, example/translation, explanation, image, audio, notebook action.
 - Practice: choose a skill or situation without following a course.
 - Speaking: role selection, short brief, microphone, transcript, help, correction summary.
 - Review: due queue, flashcards, mistakes, notebook.
@@ -153,6 +161,8 @@ Match references closely: warm cream base, white rounded cards, dark text, yello
 Accessibility: keyboard navigation, visible focus, screen-reader labels, scalable type, touch targets, reduced motion, transcripts, and feedback that does not rely on colour alone.
 
 ## 9. Technical architecture
+
+Implementation must follow the [architecture standards](docs/ARCHITECTURE.md#implementation-standards): clean, modular, maintainable, extensible code; one coherent responsibility per function; and clear separation between UI, learning rules, storage, and external services. Apply the linked review criteria to every implementation slice.
 
 Recommended baseline: a TypeScript monorepo with an Expo/React Native learner app, a Node.js/Fastify local API, shared schemas/learning logic, and an editor rendered for web. Verify exact package versions and compatibility during scaffolding; do not assume native and web audio implementations are identical.
 
@@ -226,7 +236,7 @@ Capture confirmed preferences, defaults, boundaries, sample lesson, and a priori
 ### M1 — runnable local foundation and first lesson
 Scaffold shared app/API/domain, theme, navigation, storage, content schema, two seed lessons, audio abstraction, and first editor fields. Test the audio/storage approach early in a desktop browser and a representative phone browser. Browser microphone testing over LAN may require a secure origin; plan HTTPS or an appropriate local development route.
 
-Accept when: a learner opens the app, chooses restaurant customer practice, completes a picture/vocabulary/sentence-building lesson, reveals meaning/grammar, saves a word, reloads, and sees preserved state. Core lesson remains usable without an API key.
+Accept when: a learner opens the app, chooses restaurant customer practice, completes a picture/vocabulary/sentence-building lesson with meaning/grammar visible directly, saves a word, reloads, and sees preserved state. Core lesson remains usable without an API key.
 
 ### M2 — speaking and personal vocabulary
 Implement server-only API credentials, cached AI lesson audio, push-to-talk, transcript correction, contextual response, replay, vocabulary suggestions/save, usage limits, and permission/network failure states.

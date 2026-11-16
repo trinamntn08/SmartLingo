@@ -1,0 +1,15 @@
+# 0013 — Read-only curriculum snapshots and explicit recovery files
+
+Date: 2026-11-15. Status: accepted.
+
+Browser learning backups exclude the curriculum server's immutable SQLite revisions. Add separate local commands to back up that database and recover it to a new file. The source opens read-only with extensions disabled; no migration, seeding or learning-data operation runs during a snapshot. Node24's SQLite online backup includes committed transaction/WAL state. A backup contains all historical draft/published rows, not just the current catalogue; copying it does not approve content.
+
+Validate schema version1, full `integrity_check(1)`, exact expected table/primary-key schema and every immutable lesson's stored ID/revision/content. Stream rows with an 8 MiB per-row bound and return counts/path only. Reject unknown objects/columns and future/foreign databases, including invalid older revisions below a valid current head. A quick check is insufficient: independent review reproduced a damaged primary-key index that quick_check and an ordered row scan accepted. Full integrity validation rejects that fixture.
+
+Write to a private sibling staging directory, validate the completed copy, close source handles and flush only staging bytes. Publish by an exclusive hard link to a fresh `.sqlite` destination. Existing/colliding/case-alias/hard-link targets are never overwritten. Recovery uses the same validated snapshot operation and always requires explicit source/new destination; there is no force, merge or in-place replacement mode. Cleanup touches only the owned staging directory. If OS cleanup fails after successful publication, retain the valid final file and success; an extra private stage may remain. Filesystems must support hard links; power-loss directory durability is not claimed.
+
+To use a recovered file, the owner explicitly stops the intended API and sets `SMARTLINGO_DATABASE_PATH` before restarting. Relative paths resolve from repository root, independent of workspace cwd. An explicit missing/foreign/corrupt file fails before repository migration/seeding; a typo cannot silently create a new seeded replacement. Default startup still uses `data/smartlingo.sqlite`. Normal seed preservation/publication rules remain in effect on an explicitly selected recovery file.
+
+The first slice is CLI-only; no public HTTP route, automatic server restart, real owner restore, off-device upload or editor backup button is introduced. Default snapshots live in ignored `data/backups/`; they are private, unencrypted local files and should be copied separately for off-device protection. They include curriculum only, not `.env` files, browser notebook/progress, recordings or provider credentials. Tests use temporary databases and isolated ports exclusively.
+
+References: [Node24.19 SQLite documentation](https://github.com/nodejs/node/blob/v24.19.0/doc/api/sqlite.md), [SQLite online backup API](https://www.sqlite.org/backup.html). Checked 2026-11-15. No new dependency or paid call.

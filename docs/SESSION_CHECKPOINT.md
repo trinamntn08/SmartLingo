@@ -1,32 +1,34 @@
-# Session checkpoint
+﻿# Session checkpoint
 
-Updated: 2026-11-14 (Europe/Paris).
+Updated: 2026-11-16, Europe/Paris. Beginner architecture/remote/deployment guide and standing automatic commit/push policy completed, independently reviewed and locally validated. Final staged checks and remote delivery follow this note.
 
-## Authorised request and state
+## Current authorised request and scope
 
-Continue the authorised documentation commit and sync to https://github.com/trinamntn08/SmartLingo.git. Never force-push or create a replacement repository. App implementation remains separate.
+Owner requested an easy-to-understand architecture/system/remote/deployment document, with diagrams, then explicitly instructed automatic commits and remote pushes once work finishes. Started clean at `2249086` in isolated worktree `D:/dev/projects/SmartLingo-sessions/cloud-workflow`, branch `chore/cloud-workflow`. Primary owns all edits and integration. No application code, dependency manifests, curriculum, storage boundaries or actual hosting configuration changed. No deployment is requested by writing the deployment guide.
 
-## Current verified state
+## Completed documentation
 
-- Local main and cached origin/main both point to `1606501` (`update docs`), following `207cbad`. The requested documentation commit already exists. Cached origin/main does not establish the current GitHub state.
-- The working tree was clean at session start. This verification updates only docs/STATUS.md and docs/SESSION_CHECKPOINT.md.
-- Origin has the owner-selected HTTPS URL for fetch and push.
-- Actual staging verification: `git add -- docs/STATUS.md docs/SESSION_CHECKPOINT.md` failed creating .git/index.lock with Permission denied.
-- Actual fetch verification: `git fetch origin` failed opening .git/FETCH_HEAD with Permission denied.
-- `git ls-remote --symref origin HEAD` and `git push --dry-run origin main` both failed with `getaddrinfo() thread failed to start`. Live remote history and push permission remain unverified. No real push was attempted because remote history could not be inspected.
-- No staging, new commit, fetch, merge, or remote change succeeded in this session.
+- New `docs/ARCHITECTURE_EXPLAINED.md`: plain-language frontend/API/shared-package explanation, source tree, data/backup/origin map, ordinary study/editor/AI flows, phone/Cloud/GitHub/CI workflow, local run commands, static-owner-preview steps and the separate future hosted-API work. Three native Mermaid diagrams cover current system, remote development and proposed hosting. Root-only offline URLs, hardcoded loopback clients, loopback/Origin server guards, lack of public auth/account sync and durable-storage requirements are explicit; no promise that uploading dist deploys editor/AI.
+- README, documentation index, technical architecture, Cloud workflow and environment guide link the beginner guide. CONTRIBUTING now also accurately states process-environment configuration instead of implying the API auto-loads .env.
+- New ADR0021 records the owner's standing instruction: after a completed, reviewed, validated step, deliberately stage task paths, commit, inspect the live remote task head, push normally and verify its SHA. Updated root AGENTS.md, session workflow, CONTRIBUTING, README, Codex/Cloud docs and ADR0003 to remove stale local-only scope. Applies to local/Cloud tasks; no repeated push confirmation, no blanket staging/all-branch pushes, direct main updates, force pushes, merges, deployment or curriculum publication. Failures preserve accurate local/remote status and next action. No watcher/hook automation added.
 
-## Exact next step
+## Validation and review
 
-1. Continue in a session or normal terminal with Git metadata write access and GitHub connectivity. These checks failed in this session; do not infer host-wide DNS failure or change Git history from them.
-2. Inspect status, run `git fetch origin`, then inspect `git log --oneline --graph --decorate --all -20` and compare main with origin/main before integrating. Preserve existing remote work; never force-push.
-3. Review these two documentation updates, run `npm.cmd run check`, stage deliberate paths, then run `npm.cmd run check:staged` and `git diff --cached --check` before committing under the existing authorisation.
-4. Push normally only after history is understood. Verify live remote refs against local HEAD and record the result. Do not repeat bootstrap setup.
+- Source-based read-only technical review confirms browser IndexedDB/CacheStorage vs API curriculum/speech SQLite separation, temporary conversation/recording flows, fixed127.0.0.1 clients, local Host/Origin/listen restrictions, preview-server restrictions and root worker/asset paths. Primary authored the guide; independent reviewer (`gpt-6.1-sol`, medium, reused) owns no files.
+- Three diagrams rendered successfully with zero page errors using Mermaid12.3.0 and isolated headless Playwright; all PNGs visually inspected. Improved remote-flow layout to a compact sequence diagram and rerendered it successfully. Rendering packages/scripts/PNG/SVG outputs remain ignored under `.tmp/architecture-render`; app manifests/lockfile unchanged. No paid image/provider call.
+- Official sources checked: Expo website export/hosting, Fastify deployment recommendations, OpenAI Cloud environments and GitHub Mermaid support. Repository Markdown links are checked with the normal check command; README recovery heading/anchor was checked directly.
+- Independent final guide/policy review: no unresolved actionable finding. `npm.cmd run check`: PASS repository links/configuration/TypeScript. `npm.cmd test`: PASS 18 tooling/190 application tests. `git diff --check`: PASS. Final staged checks follow before commit. No product UI or provider behaviour changed, so browser/offline suites were not manually repeated for this documentation/policy step. The standing policy explicitly supplies the separate push authorisation mentioned in older skill text; no skill-file rewrite is needed.
 
-## Validation and usage
+## Remote delivery and remaining Cloud acceptance
 
-`npm.cmd run check` and `git diff --check` passed after these documentation updates. Earlier rename/configuration checks and all 16 tooling tests passed on 2026-11-14; those are historical results, not rerun claims. No learner app exists and runtime hook trust remains unverified.
+Owner explicitly authorises committing and pushing this work and future completed task checkpoints. Stage only these guide/policy/link/handoff paths, inspect staged content, run required checks, commit and push `chore/cloud-workflow` normally. Verify remote commit SHA and all local/remote branch heads, then report the actual checkpoint hash and guide link. Do not merge PR #1 or publish an app/lesson.
 
-Usage-limit lookup failed this session; remaining allowance and reset times are unavailable. No subagents were needed for this bounded verification. Automatic resume is not configured or confirmed. Existing authorisation to resume this sync persists.
+All25 local branches were previously uploaded and matched GitHub at `4d6a4a1`; current app base is this Cloud branch, not default main (`1c6e943`, old scaffold). Uploaded curriculum-review `8ba59ae` and concurrent-session tooling `8e36885` remain separate/unmerged. PR #1 is the existing draft handoff. The guide records design/deployment work; it does not integrate those branches.
 
-Repository diagnosis: Windows ACLs grant Authenticated Users Modify access; project configuration inherits sandbox/network policy. No exposed client tool can change that policy. The active session separately protects .git as read-only. No ACL or DNS settings were changed.
+Owner confirms republishing the SmartLingo Cloud environment and opening it on the phone. Still record a fresh Cloud task's command-level acceptance using `docs/CLOUD_WORKFLOW.md#phone-acceptance-task`: fetch current app tip, preserve existing work, verify HEAD equality and fix5d80acb ancestry, report runtime/dependencies and actual check/test results. Last directly inspected full Linux run43951957211 on4d6a4a1 passes18tooling/190application/81browser+1intentionalskip/8offline. Source code is unchanged by this documentation task; a new automatic docs CI run may follow the push.
+
+## Preservation and capabilities
+
+Other worktrees/branches and owner preview8082/API3001 are untouched. No real .env reads, owner database access, paid provider calls, learner migration, deployment, merge or curriculum publication. Cloud management tools are not exposed in this local session; account publication/phone access is owner-reported. Physical-phone learner/audio, Safari/native, screen-reader and provider quality remain product checks separate from Cloud coding access.
+
+Account allowance unavailable (no exposed usage tool,2026-11-16); no automatic resume configured. Skills: repository documentation routing/editorial guidance from pages:write-page (no external Page created; established repo destination), source-based review, and independent sll-review-change review. Current owner instruction authorises primary documentation edits and automatic remote delivery.

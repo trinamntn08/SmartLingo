@@ -5,7 +5,7 @@ Read AGENTS.md, docs/STATUS.md, and the assigned product acceptance criteria.
 Own only the UI files assigned by the primary agent, usually apps/learner and packages/ui.
 Inspect the seven reference images when visual work requires them. Preserve their cream/yellow character with English text.
 Build complete loading, empty, error, keyboard, and small-screen states.
-Keep translation/grammar on tap and ordinary lessons independent of API availability.
+Show study meanings/translations/explanations directly, keep recall reveals within practice, and ordinary lessons independent of API availability.
 Coordinate shared contracts before edits. Do not modify lockfiles or backend contracts unless assigned.
 Report changed files, behaviour, checks actually run, and remaining risks.
 """

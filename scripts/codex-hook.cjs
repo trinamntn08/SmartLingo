@@ -15,9 +15,14 @@ process.stdin.on('end', () => {
   try { event = input.trim() ? JSON.parse(input) : {}; }
   catch { process.stdout.write(JSON.stringify({ systemMessage: 'Project hook received invalid event JSON; run npm run check manually.' })); return; }
   if (mode === 'session-start') {
+    let checkpoint = 'docs/SESSION_CHECKPOINT.md';
+    try {
+      const session = JSON.parse(fs.readFileSync(path.join(root, '.codex/sessions/session.json'), 'utf8'));
+      if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(session.name) && session.name.length <= 60 && session.checkpoint === `docs/sessions/${session.name}.md`) checkpoint = session.checkpoint;
+    } catch { /* Unregistered checkouts use the legacy checkpoint. */ }
     process.stdout.write(JSON.stringify({ hookSpecificOutput: {
       hookEventName: 'SessionStart',
-      additionalContext: 'SmartLingo: read AGENTS.md, docs/STATUS.md, docs/SESSION_CHECKPOINT.md, and docs/SESSION_WORKFLOW.md; consult PROJECT_PLAN.md for requirements. Check usage if available; checkpoint progress and apply task-based model routing. French A1-A2, English explanations, web first. Run npm run check and relevant real checks. Keep API keys server-side. Delegate only independent tasks with exclusive file ownership. Tooling exists; verify app implementation status before making claims.'
+      additionalContext: `SmartLingo checkout: ${root}. Read AGENTS.md, docs/STATUS.md, ${checkpoint}, and docs/SESSION_WORKFLOW.md; consult PROJECT_PLAN.md for requirements. Independent sessions need separate worktrees and branches: follow docs/PARALLEL_SESSIONS.md. Update this session's checkpoint; preserve other sessions and servers. Check usage if available; apply task-based model routing. French A1-A2, English explanations, web first. Run npm run check and relevant real checks. Keep API keys server-side. Delegate only independent tasks with exclusive file ownership. Tooling exists; verify app implementation status before making claims.`
     }}));
     return;
   }

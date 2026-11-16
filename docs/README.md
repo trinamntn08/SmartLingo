@@ -6,6 +6,7 @@
 | [Status](STATUS.md) | What exists and the next implementation task |
 | [Session workflow](SESSION_WORKFLOW.md) | Efficient usage, automatic checkpoint commits, and resume limits |
 | [Session checkpoint](SESSION_CHECKPOINT.md) | Current request, validation, and exact recovery step |
+| [Concurrent task sessions](PARALLEL_SESSIONS.md) | Worktree creation, per-task checkpoints, runtime isolation, integration and cleanup |
 | [Codex setup](CODEX_SETUP.md) | Instructions, subagents, hooks, skills, compatibility |
 | [Architecture](ARCHITECTURE.md) | Planned modules, boundaries, implementation standards, and review criteria |
 | [Content guide](CONTENT_GUIDE.md) | French lesson authoring and review |

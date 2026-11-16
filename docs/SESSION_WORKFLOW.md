@@ -2,6 +2,12 @@
 
 Owner preference recorded: 2026-11-14. Use the included Plus allowance efficiently and preserve progress so authorised work can continue without re-explanation.
 
+## Concurrent independent sessions
+
+Owner request, 2026-11-16: support different tasks running at the same time. Follow [concurrent task sessions](PARALLEL_SESSIONS.md): one worktree, branch and task checkpoint per independent session. `npm run session -- create <name>` creates an isolated checkout without moving or copying the active session's unfinished work; `npm run session -- list` shows Git's inventory. Open the returned folder as the new chat's project.
+
+In registered checkouts, references to SESSION_CHECKPOINT.md below mean the task note in `.codex/sessions/session.json` (`docs/sessions/<name>.md`). Read the root note for context, but update the task note during work, failures and handoff. The designated integrator updates shared STATUS/root summaries when integration is authorised. Task notes travel with their commits; local metadata is ignored. This is separate from subagent delegation within one session. Port/API/browser-test limits and cleanup are documented in the linked guide.
+
 ## Start and work
 
 1. Read STATUS.md and SESSION_CHECKPOINT.md, inspect Git status, then read only the relevant plan sections and source files. Preserve unrelated and uncommitted work.

@@ -3,6 +3,7 @@
 ## Start here
 - Read `docs/STATUS.md`, then the relevant part of `PROJECT_PLAN.md`.
 - Read `docs/SESSION_CHECKPOINT.md` and follow `docs/SESSION_WORKFLOW.md` for usage checks, efficient work, and interruption recovery.
+- For concurrent independent tasks, follow `docs/PARALLEL_SESSIONS.md`: use a separate worktree and branch per session. In registered checkouts, read/update the task checkpoint named in `.codex/sessions/session.json` instead of rewriting the root checkpoint. Preserve active sessions and servers.
 - Read `docs/ARCHITECTURE.md` before changing module boundaries or storage.
 - Treat explicit owner instructions as authoritative. Record material decisions in `docs/decisions/`.
 - Inspect the working tree before edits. Preserve unrelated work.
@@ -23,7 +24,7 @@
 3. Implement within the assigned ownership boundaries. Avoid unrelated refactors.
 4. Run `npm run check`, plus meaningful application checks once those exist.
 5. Update `docs/STATUS.md` for milestone changes and record decisions when needed.
-6. Review the completed step, update `docs/SESSION_CHECKPOINT.md`, and create a focused local checkpoint commit after checks pass. Follow `docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits`; no repeated confirmation is needed.
+6. Review the completed step, update the active session checkpoint (registered task note, otherwise `docs/SESSION_CHECKPOINT.md`), and create a focused local checkpoint commit after checks pass. Follow `docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits`; no repeated confirmation is needed.
 7. Report behaviour, validation, remaining limitations, and the checkpoint commit accurately.
 - Implement authorised work without repeated confirmation. Ask only about genuinely blocking choices.
 - Do not invent successful checks or use placeholder test scripts that always succeed.
@@ -65,9 +66,10 @@ Read the selected skill before following it. These are project workflows, not gl
 
 ## Git and completion
 - Use topic branches such as `feat/restaurant-lesson`, `fix/audio-replay`, or `chore/tooling`.
+- Separate user sessions must not share a writable checkout. Use `npm run session -- create <name>` or a client-managed worktree; open that directory as the new session's project. Coordinate shared files and serialize fixed-port browser suites. Do not integrate into an occupied checkout or change another session's branch/index.
 - Stage deliberate paths. Do not stage secrets, learner databases, recordings, or generated caches.
 - The owner authorises automatic local commits after each completed, reviewed, validated step. Keep commits focused and stage only deliberate task paths. This standing authorisation does not automatically authorise pushing, publishing, or merging.
-- If checks or committing fail, preserve the work, record the failure and next action in `docs/SESSION_CHECKPOINT.md`, and report the blocker. Never bypass checks or create an empty commit to claim a checkpoint. Never force-push.
+- If checks or committing fail, preserve the work, record the failure and next action in the active session checkpoint, and report the blocker. Never bypass checks or create an empty commit to claim a checkpoint. Never force-push.
 - Owner-selected remote: `https://github.com/trinamntn08/SmartLingo.git`. Inspect remote history before integrating; never force-push or create a replacement repository.
 - Run `git diff --check` and the documented checks before handing off.
 - Current tooling commands are in `README.md`; planned commands must be labelled as planned.

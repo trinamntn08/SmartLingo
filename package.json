@@ -25,6 +25,7 @@
     "setup:finish": "node scripts/finish-setup.mjs --apply",
     "setup:finish:plan": "node scripts/finish-setup.mjs",
     "doctor": "node scripts/doctor.mjs",
+    "session": "node scripts/session.mjs",
     "pack:check": "npm pack --dry-run --ignore-scripts",
     "check": "node scripts/check-repo.mjs && npm run typecheck",
     "check:staged": "node scripts/check-repo.mjs --staged",

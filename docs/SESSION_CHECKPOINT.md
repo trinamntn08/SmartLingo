@@ -1,5 +1,7 @@
 # Session checkpoint
 
+Concurrent-session entry point (2026-11-16): follow [the worktree guide](PARALLEL_SESSIONS.md). Registered tasks maintain `docs/sessions/<name>.md`; this root note retains legacy history. The concurrent-session setup checkpoint is [concurrent-sessions](sessions/concurrent-sessions.md). Run `npm run session -- list` for actual worktrees; this file does not identify which other chats are live.
+
 Updated: 2026-11-16, 20:08 Europe/Paris. Status and local launch request completed; this note's commit is the local checkpoint.
 
 ## Current launch for owner testing

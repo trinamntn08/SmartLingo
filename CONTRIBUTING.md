@@ -8,6 +8,8 @@ Use `feat/<topic>`, `fix/<topic>`, `docs/<topic>`, or `chore/<topic>`. Keep a co
 
 For independent parallel tasks, assign exclusive files and agree shared schemas first. One agent owns dependency manifests and lockfiles. The primary agent integrates and verifies the combined result.
 
+Separate user sessions also require [separate Git worktrees and branches](docs/PARALLEL_SESSIONS.md). Run `npm run session -- create <name>`, then open the returned directory as the new project. Registered sessions update their own task checkpoint instead of competing for the root note. Keep fixed-port browser suites/connected API checks coordinated; local commits do not authorise integration into another session's active checkout.
+
 ## Checks and commits
 
 Follow the [implementation standards and review criteria](docs/ARCHITECTURE.md#implementation-standards): focused functions, cohesive modules, explicit typed boundaries, and practical extensibility. Review these alongside behaviour and failure handling before handing off a feature or fix.

@@ -1,14 +1,20 @@
 # Project status
 
-Updated: 2026-11-15 (Europe/Paris).
+Updated: 2026-11-16 (Europe/Paris).
 
 SmartLingo is a runnable local web preview with first editor fields and explicit local draft preview/publication. Physical-phone and voice checks still prevent claiming the full M1 gate complete.
 
 ## Current Git state
 
-- Current branch: `docs/curriculum-topic-audit`, based on `aac20dc` (completed explicit cached neural French speech). The checkpoint containing these notes adds curriculum research only. Earlier feature branches/checkpoints remain preserved.
+- Branch/worktree state is session-specific. Use `git status --short`, `git branch --show-current` and `npm run session -- list` in the actual task checkout. The curriculum branch details below are historical; another task may be active in the main checkout.
+
+- Previous curriculum research branch: `docs/curriculum-topic-audit`, based on `aac20dc` (completed explicit cached neural French speech). That checkpoint adds curriculum research only. Earlier feature branches/checkpoints remain preserved.
 - This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
 - Live `git ls-remote --heads origin` on 2026-11-15 reports only `main` at `1c6e943`. The reviewed source checkpoint `35f8853` is 21 commits beyond that ancestor; the current feature branch is not on origin. Inspect remote history again before integration. A local checkpoint is not remote backup.
+
+## Concurrent task setup (2026-11-16)
+
+Independent sessions can use separate Git worktrees/topic branches with local dependencies and task checkpoints. The new `npm run session -- create <name>`, `init <name>` and `list` helper preserves the caller's files/branch/index, copies committed source only, refuses collisions and points startup context at the registered task note. [Setup, server/test constraints and cleanup](PARALLEL_SESSIONS.md), [decision](decisions/0020-concurrent-task-worktrees.md), [validation checkpoint](sessions/concurrent-sessions.md). This setup was implemented in a sibling worktree while greetings-first work continued in the main checkout. No integration into that active branch, server restart, owner-data access, push or publication occurred. Fixed-port browser suites/connected API journeys still require a coordinated window; no extra account allowance or automatic scheduler is configured.
 
 ## Complete topic-placement research review (2026-11-15)
 

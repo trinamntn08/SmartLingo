@@ -49,6 +49,8 @@ Install Git hooks with `npm run setup` in every fresh clone; Git does not copy l
 
 ## Agent roles and delegation
 
+Separate user chats are independent sessions, distinct from these subagents. Use [the concurrent-session workflow](PARALLEL_SESSIONS.md) and a worktree per task. Changing `max_concurrent_threads_per_session` does not isolate chats sharing one checkout. Registered checkouts have their own task checkpoint, selected by the existing startup hook implementation when hooks execute; no hook-definition/trust change is required by this setup.
+
 | Name | Use | Typical ownership |
 | --- | --- | --- |
 | ui-builder | Responsive learner UI and visual/accessibility work | apps/learner, packages/ui |

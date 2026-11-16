@@ -118,6 +118,7 @@ The API bounds session turns, reserves a daily attempt for each conversation or 
 - [Product plan](PROJECT_PLAN.md)
 - [Current status and next task](docs/STATUS.md)
 - [Codex setup and usage](docs/CODEX_SETUP.md)
+- [GitHub and phone-driven cloud work](docs/CLOUD_WORKFLOW.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Development workflow](CONTRIBUTING.md)
 - [Content authoring](docs/CONTENT_GUIDE.md)

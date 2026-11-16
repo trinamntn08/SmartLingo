@@ -1,5 +1,7 @@
 # Codex project setup
 
+For GitHub-backed work that can continue from a phone while the PC is off, follow [the cloud workflow](CLOUD_WORKFLOW.md). Check the session checkpoint for actual environment activation and remote verification results.
+
 Verified against official documentation on 2026-11-14.
 
 **Installation state:** root AGENTS.md, Git hook configuration, and all fifteen Codex agent/skill/hook/resource files are installed, including the supplied curriculum researcher and its planning assets. Matching sources are retained under tooling/codex and tooling/agents. Runtime discovery and hook trust remain unverified.

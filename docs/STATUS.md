@@ -6,9 +6,14 @@ SmartLingo is a runnable local web preview with first editor fields and explicit
 
 ## Current Git state
 
-- Current branch: `feat/greetings-first`, based on `3bac1c7` (research plus verified local launch). This step applies the opening greetings draft and actual course ordering. Earlier feature branches/checkpoints remain preserved.
-- This step is a local checkpoint only. No push, publication, merge, or history rewrite was performed. Origin remains the owner-selected `https://github.com/trinamntn08/SmartLingo.git`.
-- Live `git ls-remote --heads origin` on 2026-11-15 reports only `main` at `1c6e943`. The reviewed source checkpoint `35f8853` is 21 commits beyond that ancestor; the current feature branch is not on origin. Inspect remote history again before integration. A local checkpoint is not remote backup.
+- Current branch: `chore/cloud-workflow`, based on the completed greetings checkpoint `d5a56ed`. Earlier feature branches/checkpoints remain preserved. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
+- Owner authorised the proposed GitHub upload and Codex Cloud setup on 2026-11-16. Live fetch confirms `main` at `1c6e943` is an ancestor of the current source (27 application/tooling commits ahead before cloud preparation). Upload and draft-PR results are tracked in the session checkpoint. No merge, deployment, curriculum publication or history rewrite is authorised by this setup.
+
+## GitHub and phone-driven cloud preparation (2026-11-16)
+
+Added a [cloud setup and phone acceptance guide](CLOUD_WORKFLOW.md) and GitHub Actions for repository/TypeScript, tooling/application, desktop/narrow Chromium and offline journeys. CI uses the pinned runtime, isolated fixtures and fake providers, read-only repository access, SHA-pinned actions and bounded browser workers. It does not deploy the app or expose a public learner preview. [Decision](decisions/0020-github-cloud-workflow.md).
+
+Local repository/TypeScript checks and 18 tooling/190 application tests pass. Independent review found no actionable workflow/documentation finding or supported-pattern credential/protected-data match in the 1,095 newly reachable historical objects. This is bounded scanning, not proof against every secret format. Actual Linux CI, account-specific environment publication and phone acceptance remain pending at preparation; consult the checkpoint and live PR checks for subsequent results. Browser-control host is unavailable; native Chrome navigation was blocked by concurrent user input. No credentials, local learner databases or paid providers were accessed.
 
 ## Greetings-first curriculum (2026-11-16)
 

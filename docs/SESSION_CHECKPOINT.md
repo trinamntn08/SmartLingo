@@ -1,30 +1,27 @@
 # Session checkpoint
 
-Updated: 2026-11-16, Europe/Paris. Free website deployment planning complete. The commit containing this note is the local checkpoint; report its hash after Git confirms it.
+Updated: 2026-11-16, Europe/Paris. Cloud deployment handoff documentation complete. The commit containing this note is the local checkpoint; report its hash and verified remote result at handoff.
 
 ## Authorised request and outcome
 
-Owner requested a detailed plan to deploy SmartLingo to a website for testing now, preferably free. [Plan 0025](plans/0025-free-web-testing.md) recommends a Cloudflare Pages Free learner-only export: no domain purchase, backend or paid provider needed. It includes runtime-specific preparation, release commands, dashboard upload, data transfer, phone/offline acceptance, CI upgrade, recovery and separate backend requirements. Pricing/limits and provider behaviour were checked against linked official documentation today; no account or hosted deployment was tested.
+Owner requested: write the deployment instructions in docs, push to remote, and provide a copyable prompt for Codex Cloud to implement/deploy remotely. Branch docs/free-testing-deployment started this step clean at 042e7ca. The preceding free-hosting plan is preserved in [plan 0025](plans/0025-free-web-testing.md).
 
-Branch docs/free-testing-deployment started from clean 8ba59ae; all curriculum research and inherited checkpoints are preserved. Scope is documentation only: plan, STATUS and this checkpoint. No application/configuration/dependency changes, build/export, owner database/real .env access, provider calls, publication, push, merge, account setup or deployment. Original previews/API remain untouched. No skill or subagent was needed for this bounded sequential planning task.
+Added [the complete Cloud execution prompt](CLOUD_DEPLOY_PROMPT.md), linked from the plan and [cloud workflow](CLOUD_WORKFLOW.md). It names the correct source branch, requires actual app/offline hosting preparation, local and hosted checks, focused commits/push/draft PR, and a new free Cloudflare test deployment when secure account access exists. It forbids paid calls/upgrades, merging, history rewriting, owner-data upload and unauthenticated local API exposure. Missing account access must not prevent finishing the reviewable release; the prompt requests only the remaining secure setup after that work.
 
-## Findings and actual verification
+This step is documentation and authorised branch upload only. No production code/configuration/dependency changes, app build, real .env or owner database access, provider call, account setup or deployment. Original local API/previews remain untouched. Physical phones, Safari/audio and Cloudflare account access are not verified. No website URL is claimed live.
 
-- Static bundled learning can be hosted independently of Fastify. Current source has 25 banks/123 lessons; research candidates remain unregistered.
-- Local content/practice/speech clients hard-code loopback. Public release needs explicit hosted capability gating; a hosting env var alone is insufficient. Authenticated editor hosting is not implemented.
-- Cloudflare documents HTML canonical redirects; the manifest/validators require /index.html and the worker rejects redirects. Plan proposes a narrow root-fetch/cache-key adaptation retaining integrity checks, plus host-shaped and live verification. No fix is claimed.
-- Host control-file exclusions, genuine missing-file responses and revalidation/unchanged served bytes need release validation. No blanket SPA rewrite or public API/tunnel is proposed.
-- npm.cmd run check: PASS repository tooling/documentation and TypeScript before final bookkeeping. Final check/staged whitespace and commit verification follow this note.
-- Primary reviewed the proposal against architecture, current scripts/adapters/worker and official sources. Application/browser/offline suites are future release gates, not rerun for documentation-only changes.
+## Remote inspection and actual validation
 
-## Next exact step and limits
+- git fetch origin: PASS. Origin remains https://github.com/trinamntn08/SmartLingo.git. origin/main is 1c6e943; origin/chore/a1-a2-curriculum-review is available. Before this new checkpoint, only 042e7ca was not already reachable from fetched origin refs. Target docs/free-testing-deployment had no remote head at inspection. No remote integration or rewrite is needed.
+- npm.cmd run check: PASS repository/documentation and TypeScript checks for the new prompt/links/status. git diff --check: PASS. Final checkpoint/staged checks and commit follow this note.
+- Primary reviewed prompt against plan 0025, current branch ancestry and Cloud workflow. No application/browser/offline suites rerun: no runtime change. Prompt lists those as future execution requirements, not completed checks.
 
-Planning request is complete. Next, on an implementation/deployment request, prepare the hosted learner-only capability and offline/packaging adaptations, run application and isolated browser/offline checks, review the concrete artifact, then publish through the owner's free account and verify the actual HTTPS URL on phones. Account login may require owner interaction. No website is live from this work and no deployment permission is requested by this planning handoff.
+## Final upload and next exact action
 
-Use one stable origin; browser learning stays separate on each device and only explicit backups transfer it. Editor/publication, AI/transcription/neural generation, login/sync and a durable cloud database remain outside the first free static release. Physical-phone/Safari/audio/accessibility and real hosting behaviour remain unverified.
+Stage only docs/CLOUD_DEPLOY_PROMPT.md, docs/CLOUD_WORKFLOW.md, docs/plans/0025-free-web-testing.md, docs/STATUS.md and this checkpoint. Run npm.cmd run check:staged and git diff --cached --check, commit, then push docs/free-testing-deployment to origin without force. Verify the remote branch hash equals local HEAD and report the result. If push fails, preserve this checkpoint, record the actual blocker and do not claim the source is accessible in Cloud.
 
-Prior curriculum pack/draft outcome and cloud-setup follow-up are preserved in git show 8ba59ae:docs/SESSION_CHECKPOINT.md; cloud preparation detail is in git show 1c5b5d4:docs/SESSION_CHECKPOINT.md. Inspect live remote history before resuming remote actions; this task did not recheck uploads, PR/CI or Cloud account state. Historical localhost8082/API3001 addresses are not newly verified here.
+After verified upload, owner can select the SmartLingo repository/environment and docs/free-testing-deployment branch in Codex Cloud, then paste the execution prompt. Cloud must fetch and branch from the actual current remote source rather than old main. It may need secure Cloudflare account access to publish; no access is established by this document. This local task does not itself implement or deploy the website.
 
-## Usage and recovery
+## Usage and preserved context
 
-Usage observation 2026-11-16: no account-allowance tool exposed; unavailable, not zero/unlimited. No automatic resume configured. No delegation/model overrides. Final deliberately staged paths: docs/plans/0025-free-web-testing.md, docs/STATUS.md, docs/SESSION_CHECKPOINT.md. Do not include generated output or private data. Required final stage/check/commit remains pending until Git confirms success; record any failure here without bypassing checks.
+Usage observation 2026-11-16: account allowance tool unavailable, not zero/unlimited. No automatic resume configured. No delegation or model override; bounded sequential documentation handled by primary. Previous planning checkpoint: git show 042e7ca:docs/SESSION_CHECKPOINT.md. Curriculum research/checkpoint: git show 8ba59ae:docs/SESSION_CHECKPOINT.md. Cloud setup history: git show 1c5b5d4:docs/SESSION_CHECKPOINT.md. Existing learner data remains browser-local; backup/restore is the transfer route, not account sync.

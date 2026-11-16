@@ -2,6 +2,8 @@
 
 Prepared: 2026-11-16 (Europe/Paris). Status: researched proposal; implementation and deployment have not started. Source baseline: `8ba59ae`. Owner request: a detailed way to test SmartLingo on a website for free now.
 
+For remote execution, copy the [Codex Cloud deployment prompt](../CLOUD_DEPLOY_PROMPT.md). Its source branch includes this plan and the current learner. The prompt authorises the scoped implementation/push/free test deployment when submitted by the owner; this documentation task itself does not deploy anything.
+
 ## Recommendation and cost
 
 Use **Cloudflare Pages Free**, initially uploading a locally built learner export. Keep one stable `https://<chosen-name>.pages.dev` address. The name is illustrative and availability is unverified. After deployment, the computer can be switched off and testers can open the website from phones and computers.

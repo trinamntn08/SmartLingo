@@ -10,6 +10,8 @@ Accept this setup when the current source is on GitHub without rewriting history
 
 ## Source baseline
 
+For the newer free learner website task, start from `docs/free-testing-deployment` and use the [copyable deployment prompt](CLOUD_DEPLOY_PROMPT.md). The `chore/cloud-workflow` instructions below describe the earlier reusable-environment setup, not the latest deployment-task source. Live fetch on 2026-11-16 also confirmed `origin/chore/a1-a2-curriculum-review` is available; `main` remains at `1c6e943`. Select the task's named source branch rather than assuming `main` contains the current learner.
+
 GitHub `main` was verified at `1c6e943a3a2f4d9fdbf6886a71ac31c0d3b235ef` on 2026-11-16. The complete local learner checkpoint `d5a56eda48751fc8889d2c38b2b4828f52ee31fc` is its descendant, 27 commits ahead. Branch `chore/cloud-workflow` includes that history and the remote workflow preparation. Use that branch until its pull request is explicitly approved and merged; an environment that checks out old `main` will contain only the old tooling scaffold.
 
 Before any later handoff, inspect the live branches and pull requests again. Saved environment files are not a substitute for a pushed commit. Never force-push, replace this repository, or overwrite another task's branch. Keep separate tasks on separate branches and inspect their current remote heads before updating them.

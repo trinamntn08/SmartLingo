@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const defaultDirectory = fileURLToPath(new URL('../apps/learner/dist/', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const excludedFiles = new Set(['404.html', '_headers', '_redirects', 'smartlingo-sw.js', 'offline-manifest.json', 'metadata.json']);
 
 async function exportFiles(directory, relative = '') {
   const files = [];
@@ -12,7 +13,7 @@ async function exportFiles(directory, relative = '') {
     const name = path.posix.join(relative, entry.name);
     if (entry.isSymbolicLink()) throw new Error('Offline exports cannot include symbolic links');
     if (entry.isDirectory()) files.push(...await exportFiles(directory, name));
-    else if (entry.isFile() && !['smartlingo-sw.js', 'offline-manifest.json', 'metadata.json'].includes(name) && !name.endsWith('.map')) files.push(name);
+    else if (entry.isFile() && !excludedFiles.has(name) && !name.endsWith('.map')) files.push(name);
   }
   return files.sort();
 }

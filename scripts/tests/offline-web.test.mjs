@@ -6,6 +6,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { request } from 'node:http';
 import { prepareOfflineExport } from '../prepare-offline-web.mjs';
+import { prepareHostedExport } from '../prepare-hosted-web.mjs';
 import { createWebPreview } from '../serve-web.mjs';
 
 test('offline manifest fingerprints export bytes reproducibly and excludes worker metadata/maps', async () => {
@@ -26,6 +27,26 @@ test('offline manifest fingerprints export bytes reproducibly and excludes worke
     assert.equal(html.match(/rel="manifest"/g).length, 1);
     await writeFile(path.join(directory, '_expo/app.js'), 'changed app bytes');
     assert.notEqual((await prepareOfflineExport(directory)).buildId, first.buildId);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('hosted controls are generated after fingerprinting and never enter the offline manifest', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'smartlingo-hosted-'));
+  try {
+    await mkdir(path.join(directory, '_expo'));
+    for (const [name, content] of Object.entries({ 'index.html': '<html><head></head><body>hosted</body></html>', 'smartlingo-sw.js': '// worker', 'manifest.webmanifest': '{}', 'icon.svg': '<svg/>', '_expo/app.js': 'hosted bytes', '_headers': 'stale', '404.html': 'stale', 'metadata.json': '{}' })) await writeFile(path.join(directory, name), content);
+    const manifest = await prepareOfflineExport(directory);
+    const sourceCommit = 'a'.repeat(40);
+    const metadata = await prepareHostedExport(directory, sourceCommit, false);
+    assert.equal(metadata.sourceCommit, sourceCommit);
+    assert.equal(metadata.offlineBuildId, manifest.buildId);
+    assert.equal(manifest.files.some(file => ['/404.html', '/_headers', '/_redirects', '/metadata.json'].includes(file.url)), false);
+    assert.match(await readFile(path.join(directory, '_headers'), 'utf8'), /X-Robots-Tag: noindex, nofollow/);
+    assert.match(await readFile(path.join(directory, '_headers'), 'utf8'), /X-Content-Type-Options: nosniff/);
+    assert.match(await readFile(path.join(directory, '404.html'), 'utf8'), /Page not found/);
+    assert.deepEqual(JSON.parse(await readFile(path.join(directory, 'metadata.json'), 'utf8')), {
+      formatVersion: 1, deploymentMode: 'hosted', sourceCommit, sourceDirty: false, offlineBuildId: manifest.buildId,
+    });
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 

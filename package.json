@@ -35,10 +35,13 @@
     "restore:curriculum": "tsx apps/api/src/curriculum-backup-cli.ts restore",
     "typecheck": "tsc --noEmit",
     "build:web": "npm run export --workspace @smartlingo/learner && node scripts/prepare-offline-web.mjs",
+    "build:web:hosted": "node scripts/build-hosted-web.mjs",
+    "inspect:web:hosted": "node scripts/inspect-hosted-web.mjs",
     "preview:web": "node scripts/serve-web.mjs",
     "test:offline": "npm run build:web && playwright test --config playwright.offline.config.ts",
     "test:app": "tsx --test packages/domain/tests/*.test.ts apps/learner/tests/*.test.ts apps/api/tests/*.test.ts",
     "test:e2e": "playwright test",
+    "test:hosted": "npm run build:web:hosted && playwright test --config playwright.hosted.config.ts",
     "test:tooling": "node --test scripts/tests/*.test.mjs"
   },
   "workspaces": [

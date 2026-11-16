@@ -18,18 +18,19 @@ import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
+import { learnerCapabilities } from './src/config/deployment';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
 
 export default function App() {
-  const [editorOpen, setEditorOpen] = useState(() => typeof window !== 'undefined' && window.location.hash === '#editor');
+  const [editorOpen, setEditorOpen] = useState(() => learnerCapabilities.localContentApi && typeof window !== 'undefined' && window.location.hash === '#editor');
   const [editorVisited, setEditorVisited] = useState(editorOpen);
   const [homeRequest, setHomeRequest] = useState(0);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const updateRoute = () => {
-      const open = window.location.hash === '#editor';
+      const open = learnerCapabilities.localContentApi && window.location.hash === '#editor';
       setEditorOpen(open);
       if (open) setEditorVisited(true);
     };
@@ -37,6 +38,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', updateRoute);
   }, []);
   function showEditor(open: boolean) {
+    if (open && !learnerCapabilities.localContentApi) return;
     audio.stop();
     if (open) setEditorVisited(true);
     setEditorOpen(open);
@@ -45,7 +47,7 @@ export default function App() {
   function goHome() { showEditor(false); setHomeRequest(current => current + 1); }
   return <View style={s.app}>
     <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp active={!editorOpen} onOpenEditor={() => showEditor(true)} homeRequest={homeRequest} onHome={goHome} /></View>
-    {editorVisited && <View style={{ flex: 1, display: editorOpen ? 'flex' : 'none' }}><CurriculumEditor onExit={() => showEditor(false)} onHome={goHome} /></View>}
+    {learnerCapabilities.localContentApi && editorVisited && <View style={{ flex: 1, display: editorOpen ? 'flex' : 'none' }}><CurriculumEditor onExit={() => showEditor(false)} onHome={goHome} /></View>}
   </View>;
 }
 
@@ -66,7 +68,7 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={s.row}><BrandHome onPress={onHome} /><Badge>{learnerCapabilities.label}</Badge></View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
     {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
@@ -79,11 +81,22 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <FrenchPractice lessons={catalogue.lessons} model={model} />}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
+            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && (learnerCapabilities.aiPractice
+              ? <FrenchPractice lessons={catalogue.lessons} model={model} />
+              : <HostedPracticeNotice />)}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
     </View>
+  </View>;
+}
+
+function HostedPracticeNotice() {
+  return <View style={s.card}>
+    <View style={s.row}><Badge>Hosted learner test</Badge><Badge>No AI or microphone upload</Badge></View>
+    <Text accessibilityRole="header" style={s.heading}>Practise with the lessons on this device.</Text>
+    <Text style={s.body}>The free hosted preview does not connect to SmartLingo’s local server, so AI conversation and transcription are unavailable here. It never sends a recording or message to a paid AI provider.</Text>
+    <Text style={s.muted}>Choose a lesson below for picture, meaning, dialogue and sentence practice. Speaker buttons continue to use a French voice supplied by your browser or device when one is available.</Text>
   </View>;
 }
 
@@ -109,13 +122,15 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
 
 function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; catalogue: ReturnType<typeof useCatalogue>; onOpenEditor: () => void }) {
   const completed = model.events.filter(event => event.activity === 'completion' && event.result === 'completed').length;
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
-    <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
-    <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
+  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A browser-local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
+    {learnerCapabilities.localContentApi ? <>
+      <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
+      <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
+    </> : <View style={s.card}><Text style={s.heading}>Learner-only test website</Text><Text style={s.body}>This website includes the bundled test lessons but no curriculum editor or publication connection. Owner editing and publication remain available only in the separate local preview.</Text><Text style={s.muted}>The bundled curriculum, photographs and illustrations are draft test material and still need owner review.</Text></View>}
     <OfflinePanel />
     <AudioPreferencesPanel />
-    <GeneratedSpeechPanel />
+    {learnerCapabilities.neuralSpeechGeneration ? <GeneratedSpeechPanel /> : <View style={s.card}><Text style={s.heading}>Device speech only</Text><Text style={s.body}>Saved neural-audio generation is unavailable on this learner-only website, so it makes no speech-provider request. Listen buttons use a French voice supplied by your browser or device when available.</Text><Text style={s.muted}>You can always read and practise from the visible text when no suitable voice is installed.</Text></View>}
     <BackupPanel />
-    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
+    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or automatic phone/computer sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted. Use an explicit private backup and restore to move learning between browser profiles or devices.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
   </View>;
 }

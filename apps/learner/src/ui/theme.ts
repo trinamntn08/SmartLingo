@@ -7,13 +7,13 @@ export const colors = {
 };
 
 export const styles = StyleSheet.create({
-  app: { flex: 1, backgroundColor: colors.paper },
+  app: { flex: 1, overflow: 'hidden', backgroundColor: colors.paper },
   header: { backgroundColor: colors.card, borderBottomWidth: 1, borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 18 },
   headerInner: { width: '100%', maxWidth: 1160, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' },
   brand: { fontSize: 25, fontWeight: '800', letterSpacing: -1, color: colors.ink },
   nav: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, maxWidth: '100%', flexShrink: 1 },
   main: { width: '100%', maxWidth: 1160, alignSelf: 'center', padding: 24, paddingTop: 36, paddingBottom: 64, gap: 24 },
-  row: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12 },
+  row: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12, maxWidth: '100%', minWidth: 0 },
   split: { flexDirection: 'row', flexWrap: 'wrap', gap: 28, alignItems: 'stretch' },
   column: { flexGrow: 1, flexShrink: 1, flexBasis: 330, minWidth: 0, gap: 20 },
   card: { backgroundColor: colors.card, borderRadius: 24, padding: 24, borderWidth: 1, borderColor: colors.line, borderBottomWidth: 5, gap: 16 },

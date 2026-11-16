@@ -156,7 +156,10 @@ async function download(expectedBuildId, progress) {
   let completed = 0;
   progress({ completed, total: manifest.files.length, bytes });
   for (const file of manifest.files) {
-    const downloaded = await fetchBytes(file.url, file.size);
+    // Static hosts can canonicalise /index.html to /. Keep the manifest and
+    // cache identity stable while fetching only that exact document at root.
+    const downloadPath = file.url === '/index.html' ? '/' : file.url;
+    const downloaded = await fetchBytes(downloadPath, file.size);
     if (downloaded.bytes.byteLength !== file.size || await sha256(downloaded.bytes) !== file.sha256) {
       throw new Error('An offline file failed its integrity check. Retry the download.');
     }

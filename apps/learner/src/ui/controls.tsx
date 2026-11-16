@@ -13,7 +13,8 @@ export function Button({ children, onPress, primary, selected, disabled, label }
   return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-selected={!!selected} aria-disabled={!!disabled} accessibilityState={{ disabled: !!disabled, selected: !!selected }}
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }, primary && s.buttonPrimary, selected && s.buttonSelected,
-      focused && { borderColor: '#246944', borderWidth: 3 }, { opacity: disabled ? 0.5 : pressed ? 0.75 : 1 }]}>
+      // A wider focus border can wrap the button between pointer-down and pointer-up.
+      focused && { borderColor: '#246944', outlineColor: '#246944', outlineWidth: 2, outlineOffset: 2, outlineStyle: 'solid' }, { opacity: disabled ? 0.5 : pressed ? 0.75 : 1 }]}>
     <Text style={[s.buttonText, { maxWidth: '100%', flexShrink: 1 }, selected && { color: colors.card }]}>{children}</Text>
   </Pressable>;
 }

@@ -40,7 +40,7 @@ The readiness check on 2026-11-14 found `codex-cli 0.167.0-alpha.4.1` on PATH. `
 
 Follow [the session workflow](SESSION_WORKFLOW.md) and maintain [the checkpoint](SESSION_CHECKPOINT.md) while working. Check usage when the client exposes it, preserve progress before limits, and resume only already authorised tasks. Hooks do not schedule a future run or replenish allowance. Automatic resuming requires a confirmed scheduler with repository access; it is not configured by this repository.
 
-The primary agent is authorised to create local checkpoint commits after completed, reviewed, validated steps under the [checkpoint policy](SESSION_WORKFLOW.md#automatic-checkpoint-commits). The advisory Stop hook does not create those commits or replace step review and validation.
+The primary agent is authorised to create checkpoint commits and automatically push the assigned task branch after completed, reviewed, validated steps under the [checkpoint policy](SESSION_WORKFLOW.md#automatic-checkpoint-commits). Verify the remote SHA after each push; merging/deployment/publication remain separate. The advisory Stop hook does not create commits, push changes or replace step review and validation.
 
 - SessionStart: return concise context pointing at product plan and current status. Handle startup/resume/clear/compact/fork.
 - Stop: run lightweight repository checks and return an advisory warning on failure. Do not block/continue the conversation, edit files, spend credits, auto-commit, or auto-push.

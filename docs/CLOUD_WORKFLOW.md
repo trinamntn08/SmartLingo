@@ -2,6 +2,8 @@
 
 Reviewed: 2026-11-16 (Europe/Paris). GitHub state and CI below were checked directly. The owner confirms republishing the environment and opening it on the phone; a command-level Cloud acceptance report has not yet been supplied. See [the session checkpoint](SESSION_CHECKPOINT.md) for the current handoff.
 
+For a beginner diagram-led explanation of the app, data storage, remote work and deployment stages, read [Architecture and deployment explained](ARCHITECTURE_EXPLAINED.md).
+
 ## Scope and acceptance
 
 The owner requested a second working route that can be driven from a phone without keeping the Windows computer running. GitHub stores the source and pull requests; Codex Cloud supplies the computer that edits and tests it. This does not deploy the learner app, transfer personal study data, publish curriculum, or configure automatic task resumption.
@@ -96,7 +98,9 @@ Report actual results. Do not call paid providers, edit/publish curriculum,
 push changes, merge branches or deploy anything for this read-only check.
 ```
 
-Reopen the same task to continue its existing work across devices. Start a new task for independent work, using its own branch. For an implementation task, include the requested outcome and ask it to push the tested task branch and open or update a draft pull request. Keep merging and deployment explicit owner decisions. Task history and local learner browser storage are separate; source checkout does not restore notebook entries or local editor publications.
+Reopen the same task to continue its existing work across devices. Start a new task for independent work, using its own branch. For an implementation task, state the requested outcome and task-branch/PR target; reviewed commits and pushes follow the standing policy below. Request a draft PR when a review handoff is wanted. Keep merging and deployment explicit owner decisions. Task history and local learner browser storage are separate; source checkout does not restore notebook entries or local editor publications.
+
+The owner's 2026-11-16 standing instruction makes committing and pushing the assigned task branch automatic after completed, reviewed, validated steps. No repeat push confirmation is needed. Follow [the checkpoint workflow](SESSION_WORKFLOW.md#automatic-checkpoint-commits), inspect live remote history and verify the pushed SHA. This does not merge, deploy, publish curriculum or push unrelated branches.
 
 After the acceptance report passes, no further repository setup is required for ordinary Cloud work. Use this task brief for a real change:
 

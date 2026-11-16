@@ -12,21 +12,22 @@ For independent parallel tasks, assign exclusive files and agree shared schemas 
 
 Follow the [implementation standards and review criteria](docs/ARCHITECTURE.md#implementation-standards): focused functions, cohesive modules, explicit typed boundaries, and practical extensibility. Review these alongside behaviour and failure handling before handing off a feature or fix.
 
-The owner authorises a focused local checkpoint commit after every completed step, without asking again. A step is a small, coherent, reviewable outcome with acceptance criteria, rather than every file edit or tool call. Follow the [checkpoint policy](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits).
+The owner authorises a focused checkpoint commit and automatic push of the assigned task branch to origin after every completed, reviewed, validated step, without asking again. A step is a small, coherent, reviewable outcome with acceptance criteria, rather than every file edit or tool call. Follow the [checkpoint policy](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits).
 
 1. Review the complete diff for correctness, scope, architecture, and sensitive data; address findings relevant to the step.
 2. Run `npm run check` and `npm test`, plus relevant application checks once implementation introduces them.
 3. Update the session checkpoint with the outcome, actual validation, limitations, and exact next action; update status/decisions when needed.
 4. Stage deliberate task paths, inspect `git diff --cached`, and run `npm run check:staged` and `git diff --cached --check` on the final staged content.
 5. Commit with a clear subject such as `feat: add restaurant sentence practice`, then verify the new commit and remaining working tree. Report the hash and any work left uncommitted.
+6. Inspect the live remote task-branch head, push normally and verify that the remote SHA matches the local commit. Report the upload result; do not update main or unrelated branches by default.
 
-Do not create empty commits or bypass failed checks. If a step is interrupted or a check/commit fails, preserve the work and record the exact next action without claiming a successful checkpoint commit. Local checkpoint commits do not automatically authorise a push, merge, or publication; separately authorised remote work retains its scope.
+Do not create empty commits or bypass failed checks. If a step is interrupted or a check/commit/push fails, preserve the work and record the exact next action. Distinguish a local checkpoint from a verified remote upload. Standing automatic task-branch push authorisation was added on 2026-11-16; merges, deployment and curriculum publication remain separate actions. Never force-push.
 
 Git pre-commit runs the structural/whitespace and staged-secret checks. It does not run the whole application suite, call APIs, or replace a review. Hooks can be bypassed or unavailable; checks are also explicit commands.
 
 ## Local data
 
-Copy [the environment example](.env.example) to a local ignored environment file only when the API is implemented. Keep keys, databases, recordings, transcripts, generated audio, and exported learner data out of Git. Keep reproducible seed content separately under packages/content.
+Use [the environment example](.env.example) as configuration reference. The API reads its process environment; it does not automatically load a real `.env` file. Keep keys, databases, recordings, transcripts, generated audio, and exported learner data out of Git. Keep reproducible seed content separately under packages/content.
 
 The paid provider path should have deterministic mocked checks and an explicitly requested manual live check. Do not claim voice evaluation is tested from a text-only mock.
 

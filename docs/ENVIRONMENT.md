@@ -26,6 +26,8 @@ The root package is private to prevent accidental npm publication. Its files all
 
 Run npm run pack:check to inspect a tooling-package dry run; this root allowlist is not an application deployment artifact. `npm run build:web` exports local web assets under `apps/learner/dist`. Android and iOS builds remain planned. Databases and generated artifacts stay ignored.
 
+For the static-preview deployment steps and the separate work required for a hosted API, see [Architecture and deployment explained](ARCHITECTURE_EXPLAINED.md#7-deploying-in-stages). The local preview server and loopback API are not a public hosting configuration.
+
 For GitHub, version source/configuration and package-lock.json; teammates restore dependencies with npm ci. Origin is configured for the [owner-selected SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Verify live history before integrating; a local checkpoint commit does not itself prove a remote backup.
 
 Official reference:

@@ -1,5 +1,7 @@
 # Architecture baseline
 
+For the beginner explanation, data map and deployment stages, start with [Architecture and deployment explained](ARCHITECTURE_EXPLAINED.md). This document retains the technical boundaries and implementation standards.
+
 Status: local web learning, first editor/publication, optional conversation/transcription and explicit cached neural speech implemented; native adapters and full editor remain planned. Actual provider voice quality still requires audition.
 
 | Location | Responsibility |

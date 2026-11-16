@@ -119,6 +119,7 @@ The API bounds session turns, reserves a daily attempt for each conversation or 
 - [Current status and next task](docs/STATUS.md)
 - [Codex setup and usage](docs/CODEX_SETUP.md)
 - [GitHub and phone-driven cloud work](docs/CLOUD_WORKFLOW.md)
+- [Architecture and deployment explained with diagrams](docs/ARCHITECTURE_EXPLAINED.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Development workflow](CONTRIBUTING.md)
 - [Content authoring](docs/CONTENT_GUIDE.md)
@@ -163,6 +164,6 @@ Run `npm run setup:codex:plan` to check matching installed files. Use manual che
 
 For this initial repository, `npm run setup:finish` performs that installation, checks/tests, and the initial local commit together. Preview with `npm run setup:finish:plan`. It refuses existing history, conflicting config, or pre-staged changes and never pushes.
 
-The initial setup commit already exists; do not rerun `setup:finish` on this repository. During authorised work, the agent makes a reviewed, validated local commit after each completed step under the [checkpoint policy](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits).
+The initial setup commit already exists; do not rerun `setup:finish` on this repository. During authorised work, the agent commits and pushes the assigned task branch automatically after each completed, reviewed, validated step under the [checkpoint policy](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits), then verifies the remote head. Merging, deployment and curriculum publication remain separate actions.
 
 Origin is configured for the owner-selected [SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Consult the [checkpoint](docs/SESSION_CHECKPOINT.md) for the latest live-remote verification; cached refs alone do not prove a successful push. No public deployment is configured. Reference image rights are unverified; keep them as local design inputs until resolved.

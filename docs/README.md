@@ -9,6 +9,7 @@
 | [Codex setup](CODEX_SETUP.md) | Instructions, subagents, hooks, skills, compatibility |
 | [Cloud and phone workflow](CLOUD_WORKFLOW.md) | Live readiness evidence, branch map, environment updates and fresh phone-task acceptance |
 | [Architecture](ARCHITECTURE.md) | Planned modules, boundaries, implementation standards, and review criteria |
+| [Architecture explained](ARCHITECTURE_EXPLAINED.md) | Beginner diagrams, data locations, remote work and deployment stages |
 | [Content guide](CONTENT_GUIDE.md) | French lesson authoring and review |
 | [Testing](TESTING.md) | Tooling, application and browser checks; device limitations |
 | [Environment](ENVIRONMENT.md) | Local/Cloud dependencies, runtime versions, and packaging boundaries |
@@ -16,6 +17,7 @@
 | [Implementation standards decision](decisions/0002-implementation-standards.md) | Owner requirement for clean, modular, extensible code |
 | [Checkpoint commits decision](decisions/0003-checkpoint-commits.md) | Standing authorisation to commit each completed, reviewed, validated step locally |
 | [GitHub and Cloud decision](decisions/0020-github-cloud-workflow.md) | Remote branch/PR work, separate publication and owner-confirmed phone access |
+| [Automatic task branch pushes](decisions/0021-automatic-task-branch-pushes.md) | Owner authorisation to commit/push completed verified work and read back the remote head |
 | [Local preview foundation](decisions/0004-local-preview-foundation.md) | Bundled drafts, persistence adapters, local read-only API |
 | [Local editor publication](decisions/0005-local-editor-publication.md) | Draft revisions, preview receipts, local request guards, publication cache |
 | [Learner backup](decisions/0006-learner-backup.md) | Versioned private snapshots and atomic merge restore |

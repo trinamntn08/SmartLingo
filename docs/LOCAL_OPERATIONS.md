@@ -2,6 +2,14 @@
 
 Current operational instructions for this source checkout. For installation and the short command list, start with [README](../README.md). For verified scope and remaining work, use [STATUS](STATUS.md). Ports below are configured defaults, not a claim that a process is currently running. Keys are optional server-process settings; no real `.env` is loaded automatically.
 
+## Try the daily-course pilot
+
+In the current learner build, open **Today → Open daily course**. One draft day is available: study its bilingual sections, save useful words, answer three choices and explicitly save a manual self-review. Save each study section before using Next section; you may browse any section directly. Complete study day becomes available after every section is saved. Reopen the course after reload to resume the saved section. Missed calendar dates do not skip content.
+
+**Source credits and licence** shows the exact BCcampus text source, author, copyright, CC BY 4.0 link, changes and exclusions. Study does not fetch that website or require imported media/AI. Optional device speech is separate. Optional written self-review remains only on the current screen; course events, completion and notebook saves persist. Learning backup v3 includes course events and accepts earlier v1/v2 files; the normal explicit restore/reload flow applies.
+
+This is one bundled owner-review draft, not an imported book, published curriculum or complete A1–B1 course. [Pilot acceptance](plans/0028-open-course-pilot.md) and [source/rights record](curriculum/open-course-pilot-sources.md) describe the bounded release.
+
 ## Run the preview
 
 Use Node 24.19.0 and npm 11.x, then run from the repository root:

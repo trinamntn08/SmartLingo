@@ -1,10 +1,10 @@
 import {
-  learningBackupSchema, learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema,
-  type LearningBackup, type RestoreReport, type LearningEvent, type NotebookEntry, type Lesson, type ReviewEvent,
+  learningBackupSchema, learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema, courseEventSchema,
+  type LearningBackup, type RestoreReport, type LearningEvent, type NotebookEntry, type Lesson, type ReviewEvent, type CourseEvent,
 } from '@smartlingo/domain';
 import { requestResult, transactionDone } from './transactions';
 
-const stores = ['events', 'notebook', 'publishedLessons', 'reviewEvents'];
+const stores = ['events', 'notebook', 'publishedLessons', 'reviewEvents', 'courseEvents'];
 
 export async function exportLearningBackup(database: IDBDatabase): Promise<LearningBackup> {
   const transaction = database.transaction(stores, 'readonly');
@@ -13,8 +13,8 @@ export async function exportLearningBackup(database: IDBDatabase): Promise<Learn
     Promise.all(stores.map(name => requestResult(transaction.objectStore(name).getAll()))), done,
   ]);
   return learningBackupSchema.parse({
-    format: 'smartlingo-learning-backup', version: 2, createdAt: new Date().toISOString(),
-    events: rows[0], notebook: rows[1], publishedLessons: rows[2], reviewEvents: rows[3],
+    format: 'smartlingo-learning-backup', version: 3, createdAt: new Date().toISOString(),
+    events: rows[0], notebook: rows[1], publishedLessons: rows[2], reviewEvents: rows[3], courseEvents: rows[4],
   });
 }
 
@@ -70,13 +70,24 @@ export async function restoreLearningBackup(database: IDBDatabase, input: Learni
   const backup = learningBackupSchema.parse(input);
   const transaction = database.transaction(stores, 'readwrite');
   const done = transactionDone(transaction);
-  const report: RestoreReport = { eventsAdded: 0, eventsKept: 0, notesAdded: 0, notesKept: 0, lessonsUpdated: 0, lessonsKept: 0, reviewsAdded: 0, reviewsKept: 0 };
+  const report: RestoreReport = { eventsAdded: 0, eventsKept: 0, notesAdded: 0, notesKept: 0, lessonsUpdated: 0, lessonsKept: 0, reviewsAdded: 0, reviewsKept: 0, courseEventsAdded: 0, courseEventsKept: 0 };
   const operations = [
     ...backup.events.map(event => mergeEvent(transaction.objectStore('events'), event, report)),
     ...backup.notebook.map(note => mergeNote(transaction.objectStore('notebook'), note, report)),
     ...backup.publishedLessons.map(lesson => mergeLesson(transaction.objectStore('publishedLessons'), lesson, report)),
     ...backup.reviewEvents.map(event => mergeReview(transaction.objectStore('reviewEvents'), event, report)),
+    ...backup.courseEvents.map(event => mergeCourseEvent(transaction.objectStore('courseEvents'), event, report)),
   ];
   await Promise.all([...operations, done]);
   return report;
+}
+
+function mergeCourseEvent(store: IDBObjectStore, event: CourseEvent, report: RestoreReport): Promise<void> {
+  return mergeStored(store, event.id, existing => {
+    if (existing === undefined) { store.add(event); report.courseEventsAdded++; return; }
+    if (JSON.stringify(courseEventSchema.parse(existing)) !== JSON.stringify(event)) {
+      throw new Error('A backup course event conflicts with an immutable event ID. Nothing was restored.');
+    }
+    report.courseEventsKept++;
+  });
 }

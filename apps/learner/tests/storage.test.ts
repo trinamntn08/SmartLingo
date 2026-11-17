@@ -62,7 +62,7 @@ test('unavailable, closed and invalid storage writes fail visibly', async () => 
   await assert.rejects(repository.recordEvent(attempt));
 });
 
-test('v1 browser data migrates to v2 without removing attempts or notes', async () => {
+test('v1 browser data migrates to v4 without removing attempts or notes', async () => {
   const factory = new IDBFactory();
   const note = { id: 'notebook.fr.cafe', sourceEntryId: 'fr.cafe', target: 'un café', meaning: 'My existing note', example: '', updatedAt: attempt.occurredAt };
   await new Promise<void>((resolve, reject) => {
@@ -78,6 +78,8 @@ test('v1 browser data migrates to v2 without removing attempts or notes', async 
   assert.deepEqual(await store.listEvents(), [attempt]);
   assert.deepEqual(await store.listNotebook(), [note]);
   assert.deepEqual(await store.listPublishedLessons(), []);
+  assert.deepEqual(await store.listReviewEvents(), []);
+  assert.deepEqual(await store.listCourseEvents(), []);
   await store.cachePublishedLessons([{ ...restaurantLesson, revision: 3, status: 'published' }]);
   store.close();
   const reopened = await openLearningRepository({ factory });
@@ -100,7 +102,7 @@ test('published cache rejects drafts and conflicting immutable revisions atomica
   store.close();
 });
 
-test('v2 cached publications survive v3 review-store migration; manual rating retries stay idempotent', async () => {
+test('v2 cached publications survive v4 migration; manual rating retries stay idempotent', async () => {
   const factory = new IDBFactory();
   await new Promise<void>((resolve, reject) => {
     const request = factory.open('smartlingo-learning', 2);
@@ -114,6 +116,7 @@ test('v2 cached publications survive v3 review-store migration; manual rating re
   });
   const store = await openLearningRepository({ factory });
   assert.equal((await store.listPublishedLessons())[0].revision, 3);
+  assert.deepEqual(await store.listCourseEvents(), []);
   const rating = { id: '99999999-9999-4999-8999-999999999999', notebookId: 'notebook.fr.cafe', entryUpdatedAt: '2026-11-14T12:00:00Z', skill: 'recognition' as const, source: 'manual' as const, algorithmVersion: 1 as const, rating: 'helped' as const, occurredAt: '2026-11-14T12:00:00Z', studyDate: '2026-11-14', timeZone: 'UTC' };
   await store.recordReview(rating);
   await store.recordReview(rating);

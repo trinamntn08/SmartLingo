@@ -59,7 +59,7 @@ export function BackupPanel() {
   }
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>Keep a copy of your learning</Text>
-    <Text style={s.body}>Download your notebook, practice history, and cached published lessons as a JSON file. A backup lets you bring them back to this browser or another device.</Text>
+    <Text style={s.body}>Download your notebook, practice and course history, and cached published lessons as a JSON file. A backup lets you bring them back to this browser or another device.</Text>
     <View style={s.notice}><Text style={s.body}>Backup files are private and unencrypted. They contain your personal notes and learning history. Server curriculum drafts, recordings, and credentials are excluded.</Text></View>
     <View style={s.row}><Button primary disabled={!!busy} onPress={() => void download()}>Download learning backup</Button></View>
     <View style={s.divider} />
@@ -81,11 +81,12 @@ export function BackupPanel() {
     {selected && <View style={{ gap: 16 }}>
       <View style={s.notice}><Text style={s.eyebrow}>Selected backup · version {selected.backup.version}</Text>
         <Text style={[s.heading, { flexShrink: 1 }]}>{selected.filename}</Text><Text style={s.body}>Created: {new Date(selected.backup.createdAt).toLocaleString()}</Text>
-        <View style={s.row}><Badge>{selected.backup.events.length} practice events</Badge><Badge>{selected.backup.notebook.length} notebook entries</Badge><Badge>{selected.backup.publishedLessons.length} cached lessons</Badge><Badge>{selected.backup.reviewEvents.length} review ratings</Badge></View>
+        <View style={s.row}><Badge>{selected.backup.events.length} practice events</Badge><Badge>{selected.backup.notebook.length} notebook entries</Badge><Badge>{selected.backup.publishedLessons.length} cached lessons</Badge><Badge>{selected.backup.reviewEvents.length} review ratings</Badge><Badge>{selected.backup.courseEvents.length} course events</Badge></View>
       </View>
       <View style={{ gap: 10 }}><Text style={s.heading}>How the merge works</Text>
         <Text style={s.body}>Your existing personal notes stay unchanged when a backup contains the same note ID. New notes are added.</Text>
-        <Text style={s.body}>Identical practice events are kept once. Cached published lessons keep the newer revision. Your other local entries and cached lessons are preserved.</Text>
+        <Text style={s.body}>Identical practice, review, and course events are kept once. Cached published lessons keep the newer revision. Your other local entries and cached lessons are preserved.</Text>
+        <Text style={s.muted}>Course history includes study, support, choices, and your place in the day. Completion records activity; it does not establish proficiency.</Text>
         <Text style={s.muted}>Conflicting data for an immutable event or the same lesson revision stops the entire restore. There is no overwrite or reset option.</Text>
       </View>
       <label style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: 16, background: colors.sand, borderRadius: 12, color: colors.ink, fontSize: 17, lineHeight: '26px' }}>
@@ -99,6 +100,7 @@ export function BackupPanel() {
       <Text accessibilityRole="header" style={s.heading}>Backup merged successfully</Text>
       <Text accessibilityLiveRegion="polite" style={s.body}>Practice events: {report.eventsAdded} added, {report.eventsKept} already kept.{ '\n' }Notebook entries: {report.notesAdded} added, {report.notesKept} existing notes kept.{ '\n' }Cached lessons: {report.lessonsUpdated} added or updated, {report.lessonsKept} kept.</Text>
       <Text style={s.body}>Review ratings: {report.reviewsAdded} added, {report.reviewsKept} already kept.</Text>
+      <Text style={s.body}>Course events: {report.courseEventsAdded} added, {report.courseEventsKept} already kept.</Text>
       <Text style={s.body}>Reload learning to display the restored progress, notebook, and cached lessons. Save any unsaved curriculum edits before reloading.</Text>
       <View style={s.row}><Button primary disabled={!!busy} onPress={() => { if (typeof window !== 'undefined') window.location.reload(); }}>Reload learning</Button></View>
     </View>}

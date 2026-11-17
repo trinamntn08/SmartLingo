@@ -8,3 +8,4 @@ export * from './review-schema';
 export * from './review';
 export * from './practice';
 export * from './speech';
+export * from './course';

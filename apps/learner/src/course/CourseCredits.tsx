@@ -1,0 +1,34 @@
+import { useState } from 'react';
+import { Linking, Text, View } from 'react-native';
+import type { OpenCourse } from '@smartlingo/domain';
+import { Button } from '../ui/controls';
+import { styles as s } from '../ui/theme';
+
+export function CourseCredits({ course }: { course: OpenCourse }) {
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
+  async function follow(url: string) {
+    setError('');
+    try { await Linking.openURL(url); } catch { setError('The external link could not be opened. All course study material is available here.'); }
+  }
+  return <View style={{ gap: 12, minWidth: 0 }}>
+    <Button onPress={() => setOpen(value => !value)}>{open ? 'Hide source credits' : 'Source credits and licence'}</Button>
+    {open && <View testID="course-source-credits" style={s.notice}>
+      <Text accessibilityRole="header" style={s.heading}>Source credits</Text>
+      <Text style={s.muted}>All study material is included here. These optional links open the original source and licence.</Text>
+      {course.sources.map(source => <View key={source.id} style={{ gap: 8 }}>
+        <Text style={s.body}>{source.title}</Text>
+        <Text style={s.body}>Creator: {source.creator}</Text>
+        <Text style={s.muted}>{source.copyrightNotice}</Text>
+        <Button onPress={() => void follow(source.sourceUrl)}>Open original source</Button>
+        <Button onPress={() => void follow(source.licenseUrl)}>Creative Commons Attribution 4.0 (CC BY 4.0)</Button>
+        <Text style={s.muted}>Retrieved: {source.retrievedOn}</Text>
+        <Text style={s.body}>Adaptation scope: {source.scope}</Text>
+        <Text style={s.body}>Changes: {source.changes}</Text>
+        <Text style={s.body}>Excluded from this adaptation:</Text>
+        {source.excludedAssets.map(asset => <Text key={asset} style={s.muted}>• {asset}</Text>)}
+      </View>)}
+      {!!error && <Text accessibilityRole="alert" style={s.muted}>{error}</Text>}
+    </View>}
+  </View>;
+}

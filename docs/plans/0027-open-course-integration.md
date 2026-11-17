@@ -1,6 +1,6 @@
 # Plan: a freely reusable A1–B1 course inside SmartLingo
 
-Prepared: 2026-11-17 (Europe/Paris). **Planning complete; implementation proposed.** Source baseline: `0ab3feb`, branch `docs/taxi-daily-course`. No book content has been imported, licensed, published or deployed by this task.
+Prepared: 2026-11-17 (Europe/Paris). **Planning complete; broader implementation remains proposed.** Source baseline: `0ab3feb`, branch `docs/taxi-daily-course`. This planning task imported/published/deployed no book content. Subsequent owner authorisation started [pilot 0028](0028-open-course-pilot.md): one bundled draft day with a bounded CC BY text adaptation, not the full roadmap.
 
 ## Owner outcome and recommendation
 

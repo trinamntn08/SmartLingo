@@ -18,6 +18,8 @@ import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
+import { openCoursePilot } from '@smartlingo/content';
+import { OpenCoursePanel } from './src/course/OpenCoursePanel';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
@@ -104,6 +106,7 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
       <View style={s.divider} /><Text style={s.muted}>{progress.completed ? '✓ Session completed and saved' : `${progress.viewedIds.size} of ${suggested.vocabulary.length} words explored`} · {suggested.status === 'published' ? `Published revision ${suggested.revision}` : 'Draft preview'}</Text>
     </View>
   </View>
+  <OpenCoursePanel course={openCoursePilot} model={model} />
   </View>;
 }
 

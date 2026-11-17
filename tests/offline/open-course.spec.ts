@@ -1,0 +1,34 @@
+import { expect, test } from '@playwright/test';
+import { openCoursePilot } from '@smartlingo/content';
+
+test('the daily-course pilot, credits and saved cursor cold-start offline without source requests', async ({ page, context, baseURL }, info) => {
+  const sourceRequests: string[] = [];
+  context.on('request', request => { if (/opentextbc|utexas|creativecommons/.test(request.url())) sourceRequests.push(request.url()); });
+  await context.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await context.setOffline(true);
+  await page.close();
+  const cold = await context.newPage();
+  await cold.goto(baseURL!);
+  await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
+  const panel = cold.getByTestId('open-course-panel');
+  await panel.getByRole('button', { name: 'Source credits and licence', exact: true }).click();
+  await expect(panel.getByText(openCoursePilot.sources[0].copyrightNotice, { exact: true })).toBeVisible();
+  await expect(panel.getByRole('button', { name: 'Creative Commons Attribution 4.0 (CC BY 4.0)', exact: true })).toBeVisible();
+  await panel.getByRole('button', { name: 'Hide source credits', exact: true }).click();
+  await panel.getByRole('button', { name: 'Save study section', exact: true }).click();
+  await panel.getByRole('button', { name: 'Next section', exact: true }).click();
+  await panel.getByRole('button', { name: 'Save bonsoir', exact: true }).click();
+  await expect(panel.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
+  await cold.reload();
+  await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
+  await expect(cold.getByTestId(`course-block-${openCoursePilot.days[0].blocks[1].id}`)).toBeVisible();
+  await expect(cold.getByText('1 of 7 sections saved', { exact: true })).toBeVisible();
+  await expect(cold.getByTestId('vocabulary-fr.greetings.bonsoir').getByRole('button', { name: 'Save bonsoir', exact: true })).toBeDisabled();
+  expect(sourceRequests).toEqual([]);
+  expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await cold.screenshot({ path: info.outputPath('open-course-cold-offline.png'), fullPage: true });
+});

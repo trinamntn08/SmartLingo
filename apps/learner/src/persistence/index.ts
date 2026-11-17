@@ -1,12 +1,12 @@
 import {
-  learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema,
-  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson, type LearningBackup, type RestoreReport, type ReviewEvent,
+  learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema, courseEventSchema,
+  type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson, type LearningBackup, type RestoreReport, type ReviewEvent, type CourseEvent,
 } from '@smartlingo/domain';
 import { requestResult, transactionDone, appendImmutable } from './transactions';
 import { exportLearningBackup, restoreLearningBackup } from './backup-store';
 
 const databaseName = 'smartlingo-learning';
-const schemaVersion = 3;
+const schemaVersion = 4;
 
 export async function openLearningRepository(options: {
   factory?: IDBFactory; name?: string;
@@ -23,6 +23,7 @@ export async function openLearningRepository(options: {
       }
       if (event.oldVersion < 2) request.result.createObjectStore('publishedLessons', { keyPath: 'id' });
       if (event.oldVersion < 3) request.result.createObjectStore('reviewEvents', { keyPath: 'id' });
+      if (event.oldVersion < 4) request.result.createObjectStore('courseEvents', { keyPath: 'id' });
     };
     request.onblocked = () => {
       blocked = true;
@@ -41,7 +42,7 @@ export async function openLearningRepository(options: {
 class IndexedDbLearningRepository implements LearningRepository {
   constructor(private readonly database: IDBDatabase) {}
 
-  private async list(storeName: 'events' | 'notebook' | 'reviewEvents'): Promise<unknown[]> {
+  private async list(storeName: 'events' | 'notebook' | 'reviewEvents' | 'courseEvents'): Promise<unknown[]> {
     const transaction = this.database.transaction(storeName, 'readonly');
     const done = transactionDone(transaction);
     const [rows] = await Promise.all([requestResult(transaction.objectStore(storeName).getAll()), done]);
@@ -65,6 +66,15 @@ class IndexedDbLearningRepository implements LearningRepository {
 
   async listNotebook(): Promise<NotebookEntry[]> {
     return (await this.list('notebook')).map(row => notebookEntrySchema.parse(row));
+  }
+
+  async listCourseEvents(): Promise<CourseEvent[]> {
+    return (await this.list('courseEvents')).map(row => courseEventSchema.parse(row));
+  }
+
+  async recordCourseEvent(input: CourseEvent): Promise<void> {
+    const event = courseEventSchema.parse(input);
+    await appendImmutable(this.database, 'courseEvents', event, row => courseEventSchema.parse(row));
   }
 
   async captureNotebook(input: NotebookEntry): Promise<NotebookEntry> {

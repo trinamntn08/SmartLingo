@@ -41,7 +41,8 @@ test('download and explicit restore recover learning in a fresh browser without 
   expect(backup.format).toBe('smartlingo-learning-backup');
   expect(backup.events).toHaveLength(1);
   expect(backup.notebook).toHaveLength(1);
-  expect(backup.version).toBe(2);
+  expect(backup.version).toBe(3);
+  expect(backup.courseEvents).toEqual([]);
   expect(backup.reviewEvents).toHaveLength(1);
   expect(backup).not.toHaveProperty('credentials');
 

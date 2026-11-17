@@ -10,6 +10,7 @@ import { communicationTopics } from './topics/communication';
 import { foodTravelTopics } from './topics/food-travel';
 import { studyWorkTopics } from './topics/study-work';
 import { experienceTopics } from './topics/experiences';
+import { buildOpenCoursePilot } from './open-course-pilot';
 
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
 export { getVocabularyPhoto } from './photos';
@@ -316,3 +317,4 @@ export const lessons: Lesson[] = orderCourseLessons([
   ...existingLessons,
 ]);
 export const restaurantLesson = lessons.find(lesson => lesson.id === 'fr.restaurant.customer')!;
+export const openCoursePilot = buildOpenCoursePilot(lessons.flatMap(lesson => lesson.vocabulary));

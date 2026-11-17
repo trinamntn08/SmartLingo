@@ -1,3 +1,4 @@
+import { deployment } from '../deployment/config';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
 import { checkAnswer, lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
@@ -30,7 +31,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
     else record('vocabulary', lesson.id, 'viewed', 0, () => setStage('dialogue'));
   }
   return <View style={{ gap: 24 }}>
-    <View style={s.row}><Button onPress={onExit}>← All lessons</Button><Badge>{lesson.level} · {lesson.topic} · {lesson.role}</Badge><Badge>{lesson.status === 'draft' ? 'Draft' : 'Published'}</Badge></View>
+    <View style={s.row}><Button onPress={onExit}>← All lessons</Button><Badge>{lesson.level} · {lesson.topic} · {lesson.role}</Badge><Badge>{lesson.status === 'draft' ? deployment().beta ? 'Beta material' : 'Draft' : 'Published'}</Badge></View>
     <View style={{ gap: 10 }}><Text accessibilityRole="header" style={s.title}>{lesson.subtitle}</Text></View>
     <View style={{ gap: 8 }} accessibilityLabel={`${count} of ${lesson.vocabulary.length + 2} activities saved`}>
       <View style={s.row}><Text style={s.eyebrow}>{stage === 'vocabulary' ? `${lesson.vocabulary.length} words together` : stage === 'finish' ? 'Your session' : stage}</Text><Text style={s.muted}>{count}/{lesson.vocabulary.length + 2} activities saved</Text></View>

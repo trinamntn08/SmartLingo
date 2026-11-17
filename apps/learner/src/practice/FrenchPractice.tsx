@@ -44,8 +44,8 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
     <Text accessibilityRole="header" style={s.heading}>French conversation</Text>
     <Text style={s.body}>Try a short everyday conversation. French replies, English meanings and helpful feedback stay visible.</Text>
     <View style={s.notice}>
-      <Text style={s.body}>Send message or Retry message sends your text, selected context and conversation to OpenAI through the local server. Transcribe recording or Retry transcription separately sends your local microphone clip to OpenAI. These explicit actions may use paid API credits.</Text>
-      <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Practice or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under your API account settings. Avoid private information.</Text>
+      <Text style={s.body}>Send message or Retry message sends your text, selected context and conversation to OpenAI through the SmartLingo server. Transcribe recording or Retry transcription separately sends your local microphone clip to OpenAI. These explicit actions may use paid API credits.</Text>
+      <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Practice or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under the server owner’s API account settings. Avoid private information.</Text>
       <Text style={s.muted}>Starting, checking availability and recording locally use no AI credits. Local clips are cleared after successful transcription or when you discard, stop, leave or reload. A failed transcription keeps the clip temporarily for an explicit retry. Replay uses your device voice.</Text>
     </View>
     {!state.session && <>
@@ -64,7 +64,7 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
       <Text style={s.eyebrow}>Conversation level</Text>
       <View style={s.row}>{(['foundation', 'A1', 'A2'] as const).map(choice => <Button key={choice} selected={(level ?? selected?.level) === choice} disabled={state.busy} onPress={() => setLevel(choice)}>{choice === 'foundation' ? 'Foundations' : choice}</Button>)}</View>
       {!lessons.length && <Text style={s.body}>Choose a conversation after lessons finish loading. Ordinary downloaded lessons remain available.</Text>}
-      {state.status?.available === false && <View style={s.notice}><Text style={s.body}>AI practice is not configured. Configure the OpenAI API key and practice model on the local API server, restart it, then check again. Keep credentials out of the browser.</Text></View>}
+      {state.status?.available === false && <View style={s.notice}><Text style={s.body}>AI practice is not configured. The site owner can configure the OpenAI API key and practice model on the server, restart it, then check again. Keep provider credentials out of the browser.</Text></View>}
       <View style={s.row}><Button primary disabled={!active || state.busy || !selected || state.status?.available !== true || atLimit}
         onPress={() => { if (selected) void practice.start({ topic: selected.topic, role: selected.role, level: level ?? selected.level }); }}>Start AI conversation</Button>
         <Button disabled={!active || state.busy} onPress={() => void practice.check()}>Check AI availability</Button></View>
@@ -95,10 +95,10 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
       </View>
       {!!state.failed && <Text style={s.muted}>Retry keeps the same request ID to avoid duplicate processing. Editing the text or help setting creates a new request only when you press Send message.</Text>}
     </>}
-    {state.busy && <View style={s.row}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>{state.session ? 'Waiting for the AI reply…' : 'Connecting to local practice…'}</Text>{!state.session && <Button onPress={stop}>Cancel connection</Button>}</View>}
+    {state.busy && <View style={s.row}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>{state.session ? 'Waiting for the AI reply…' : 'Connecting to practice…'}</Text>{!state.session && <Button onPress={stop}>Cancel connection</Button>}</View>}
     {!!state.error && <View style={s.error}><Text accessibilityRole="alert" style={s.body}>{state.error}</Text></View>}
     {!!state.notice && <Text accessibilityLiveRegion="polite" style={s.muted}>{state.notice}</Text>}
-    {state.usage && <Text style={s.muted}>Local daily attempts: {state.usage.usedToday} / {state.usage.dailyLimit}. Reported conversation tokens: {state.usage.inputTokens} input, {state.usage.outputTokens} output. Transcription tokens are not included. Failed attempts can count; this is not a billing total. The local daily allowance resets when the server restarts.</Text>}
+    {state.usage && <Text style={s.muted}>Server daily attempts: {state.usage.usedToday} / {state.usage.dailyLimit}. Reported conversation tokens: {state.usage.inputTokens} input, {state.usage.outputTokens} output. Transcription tokens are not included. Failed attempts can count; this is not a billing total. The conversation allowance resets when the server restarts.</Text>}
     <Text style={s.muted}>AI suggestions can be mistaken. This is supported practice, not a proficiency assessment.</Text>
   </View>;
 }

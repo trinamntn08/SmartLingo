@@ -1,3 +1,5 @@
+import { apiUrl, BackendUnavailableError } from '../deployment/config';
+import { accessHeaders } from '../deployment/access';
 import {
   practiceContextSchema, practiceSessionSchema, practiceStatusSchema,
   practiceTurnRequestSchema, practiceTurnResponseSchema, practiceSessionIdSchema,
@@ -21,11 +23,11 @@ export interface PracticeApi {
 
 function failureMessage(status: number): string {
   if (status === 502 || status === 504) return 'The previous AI attempt ended without a usable reply. Press Send message to make a new attempt; it may use additional API credits.';
-  if (status === 503) return 'AI practice is unavailable. Configure OpenAI on the local API server, then check again. Ordinary lessons remain available.';
+  if (status === 503) return 'AI practice is unavailable. The site owner can configure OpenAI on the server, then check again. Ordinary lessons remain available.';
   if (status === 429) return 'The practice limit has been reached. Stop this conversation or try again later. Failed attempts can count toward the daily limit.';
   if (status === 404 || status === 410) return 'This conversation has expired. Stop and start a new conversation.';
   if (status === 409) return 'Another turn is still processing or this request changed. Wait, then retry the unchanged message, or stop and start again.';
-  if (status === 403) return 'Local practice access was refused. Open SmartLingo at localhost:8081 or localhost:8082.';
+  if (status === 401 || status === 403) return 'Practice access was refused. Apply your beta access token in Profile, then check availability again. Local preview requires its configured localhost address.';
   return 'The AI reply could not be completed. Retry the same message explicitly, or stop. Nothing is sent automatically.';
 }
 
@@ -37,9 +39,9 @@ async function request(path: string, body?: unknown, signal?: AbortSignal): Prom
   const timer = setTimeout(cancel, 35000);
   try {
     if (controller.signal.aborted) throw new Error('Cancelled');
-    const response = await fetch(`http://127.0.0.1:3001/ai/practice/${path}`, {
+    const response = await fetch(apiUrl(`/ai/practice/${path}`), {
       method: body === undefined ? 'GET' : 'POST',
-      headers: body === undefined ? {} : { 'Content-Type': 'application/json', 'X-SmartLingo-Practice': '1' },
+      headers: { ...accessHeaders('beta'), ...(body === undefined ? {} : { 'Content-Type': 'application/json', 'X-SmartLingo-Practice': '1' }) },
       body: body === undefined ? undefined : JSON.stringify(body),
       credentials: 'omit', redirect: 'error', cache: 'no-store', signal: controller.signal,
     });
@@ -49,7 +51,7 @@ async function request(path: string, body?: unknown, signal?: AbortSignal): Prom
       const terminal = typeof failure === 'object' && failure !== null && 'code' in failure && failure.code === 'attempt_ended';
       const message = terminal || response.status === 502 || response.status === 504
         ? `The previous AI attempt ended without a usable reply. Press ${path === 'transcribe' ? 'Transcribe recording' : 'Send message'} to make a new attempt; it may use additional API credits.`
-        : path === 'transcribe' && response.status === 503 ? 'Transcription is not configured on the local API server. Configure its OpenAI transcription model, restart, and check availability. You can keep typing instead.'
+        : path === 'transcribe' && response.status === 503 ? 'Transcription is not configured on the server. The site owner can configure its transcription model and restart. You can keep typing instead.'
           : failureMessage(response.status);
       throw new PracticeApiError(message, response.status, terminal);
     }
@@ -58,7 +60,8 @@ async function request(path: string, body?: unknown, signal?: AbortSignal): Prom
     return result;
   } catch (error) {
     if (error instanceof PracticeApiError) throw error;
-    throw new PracticeApiError(signal?.aborted ? 'Practice request cancelled.' : 'The local practice server is offline or timed out. Run npm run dev:api, then retry explicitly. Ordinary lessons remain available.');
+    if (error instanceof BackendUnavailableError) throw new PracticeApiError(error.message);
+    throw new PracticeApiError(signal?.aborted ? 'Practice request cancelled.' : 'The practice server is offline or timed out. Retry explicitly when connected. Ordinary lessons remain available.');
   } finally {
     clearTimeout(timer); signal?.removeEventListener('abort', cancel);
   }

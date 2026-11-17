@@ -12,7 +12,7 @@ const DOCUMENT_TIMEOUT_MS = 3000;
 let mutations = Promise.resolve();
 
 function reservedPath(path) {
-  return /^\/(?:api|editor|health|lessons|published-lessons)(?:\/|$)/i.test(path)
+  return /^\/(?:api|editor|health|lessons|published-lessons|ai|speech)(?:\/|$)/i.test(path)
     || path === '/smartlingo-sw.js' || path === '/offline-manifest.json'
     || path.startsWith('/__smartlingo_offline_');
 }
@@ -156,7 +156,8 @@ async function download(expectedBuildId, progress) {
   let completed = 0;
   progress({ completed, total: manifest.files.length, bytes });
   for (const file of manifest.files) {
-    const downloaded = await fetchBytes(file.url, file.size);
+    // Static hosts may redirect /index.html to /. Cache under the manifest ID.
+    const downloaded = await fetchBytes(file.url === '/index.html' ? '/' : file.url, file.size);
     if (downloaded.bytes.byteLength !== file.size || await sha256(downloaded.bytes) !== file.sha256) {
       throw new Error('An offline file failed its integrity check. Retry the download.');
     }

@@ -5,6 +5,7 @@ import { dailyLifeTopics } from './topics/daily-life';
 import { reuseSharedVocabulary } from './shared-vocabulary';
 import { orderCourseLessons } from './course-sequence';
 import { buildGreetingsLessons } from './topics/greetings';
+import { integrateBetaCurriculum } from './beta-curriculum';
 import { foundationTopics } from './topics/foundations';
 import { communicationTopics } from './topics/communication';
 import { foodTravelTopics } from './topics/food-travel';
@@ -311,8 +312,10 @@ const existingLessons: Lesson[] = reuseSharedVocabulary([
   ...communicationTopics.flatMap(buildTopic),
   ...experienceTopics.flatMap(buildTopic),
 ]);
-export const lessons: Lesson[] = orderCourseLessons([
+/** Immutable 123-lesson research baseline; used to verify historical source fingerprints. */
+export const historicalResearchLessons: Lesson[] = orderCourseLessons([
   ...buildGreetingsLessons(existingLessons.flatMap(lesson => lesson.vocabulary)),
   ...existingLessons,
 ]);
+export const lessons: Lesson[] = orderCourseLessons(integrateBetaCurriculum(historicalResearchLessons));
 export const restaurantLesson = lessons.find(lesson => lesson.id === 'fr.restaurant.customer')!;

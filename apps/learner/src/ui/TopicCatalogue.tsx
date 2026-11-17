@@ -1,3 +1,4 @@
+import { deployment } from '../deployment/config';
 import { useEffect, useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import { groupLessonTopics, lessonProgress, matchesLesson, matchesVocabulary, normalizeSearch,
@@ -44,7 +45,7 @@ export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic
           <Text style={s.body}>{topic.vocabulary.length} words · {topic.lessons.length} lessons</Text>
           <Text style={s.muted}>{topic.vocabulary.slice(0, 3).map(entry => entry.target).join(' · ')}</Text>
           <View style={s.row}><Badge>{[...new Set(topic.lessons.map(lesson => lesson.level))].join(' · ')}</Badge>
-            <Text style={s.muted}>{completed ? `${completed} sessions saved · ` : ''}{topic.lessons.every(lesson => lesson.status === 'published') ? 'Published' : topic.lessons.some(lesson => lesson.status === 'published') ? 'Includes drafts' : 'Draft'}</Text></View>
+            <Text style={s.muted}>{completed ? `${completed} sessions saved · ` : ''}{topic.lessons.every(lesson => lesson.status === 'published') ? 'Published' : topic.lessons.some(lesson => lesson.status === 'published') ? deployment().beta ? 'Includes beta material' : 'Includes drafts' : deployment().beta ? 'Beta material' : 'Draft'}</Text></View>
           <Button primary onPress={() => onSelectTopic(topic.name)}>Explore {topic.name} →</Button>
         </View>;
       })}</View>
@@ -65,7 +66,7 @@ export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic
               <View style={[s.row, { justifyContent: 'space-between' }]}>
                 <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 200, minWidth: 0, gap: 4 }}>
                   <Text style={[s.body, { fontWeight: '700' }]}>{lesson.subtitle}</Text>
-                  <Text style={s.muted}>{lesson.level} · {lesson.vocabulary.length} words · {lesson.durationMinutes} min · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
+                  <Text style={s.muted}>{lesson.level} · {lesson.vocabulary.length} words · {lesson.durationMinutes} min · {lesson.status === 'published' ? 'Published' : deployment().beta ? 'Beta material' : 'Draft'}</Text>
                 </View>
                 <Button label={`Open ${lesson.subtitle}`} onPress={() => onOpen(lesson)}>
                   {progress.completed ? 'Revisit →' : progress.viewedIds.size ? 'Continue →' : 'Practise →'}

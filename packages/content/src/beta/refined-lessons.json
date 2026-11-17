@@ -1,0 +1,747 @@
+[
+  {
+    "id": "fr.bakery.buy-lunch",
+    "revision": 4,
+    "status": "draft",
+    "language": "fr-FR",
+    "explanationLanguage": "en",
+    "title": "Buy lunch to take away",
+    "subtitle": "Buy lunch to take away",
+    "outcome": "Order a slice of quiche to take away and request heating.",
+    "level": "A2",
+    "topic": "Bakery",
+    "role": "Customer",
+    "durationMinutes": 7,
+    "vocabulary": [
+      {
+        "id": "fr.bakery.sandwich",
+        "target": "un sandwich",
+        "meaning": "a sandwich",
+        "example": "Je voudrais un sandwich au fromage.",
+        "exampleMeaning": "I would like a cheese sandwich.",
+        "gender": "masculine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.bakery.quiche",
+        "target": "une quiche",
+        "meaning": "a savoury egg tart",
+        "example": "Cette quiche est aux légumes ?",
+        "exampleMeaning": "Is this a vegetable quiche?",
+        "gender": "feminine",
+        "note": "Fillings vary; ask if ingredients matter.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.bakery.portion",
+        "target": "une part",
+        "meaning": "a portion; a slice",
+        "example": "Une part de quiche, s’il vous plaît.",
+        "exampleMeaning": "A slice of quiche, please.",
+        "gender": "feminine",
+        "note": "Used for a portion cut from a larger food.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.bakery.lunch-deal",
+        "target": "une formule",
+        "meaning": "a set lunch deal",
+        "example": "La formule comprend une boisson ?",
+        "exampleMeaning": "Does the set lunch deal include a drink?",
+        "gender": "feminine",
+        "note": "Contents depend on the bakery.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.bakery.take-away",
+        "target": "à emporter",
+        "meaning": "to take away",
+        "example": "C’est à emporter, s’il vous plaît.",
+        "exampleMeaning": "It’s to take away, please.",
+        "note": "Service phrase. Sur place means to eat on the premises.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.bakery.heat-up",
+        "target": "réchauffer",
+        "meaning": "to heat up",
+        "example": "Vous pouvez réchauffer ma quiche ?",
+        "exampleMeaning": "Can you heat up my quiche?",
+        "note": "Infinitive verb. Use after pouvez in a request.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      }
+    ],
+    "dialogue": [
+      {
+        "role": "Customer",
+        "target": "Une part de quiche, à emporter, s’il vous plaît.",
+        "meaning": "A slice of quiche to take away, please."
+      },
+      {
+        "role": "Baker",
+        "target": "Vous voulez une formule avec une boisson ?",
+        "meaning": "Would you like a set deal with a drink?"
+      },
+      {
+        "role": "Customer",
+        "target": "Non, merci. Vous pouvez réchauffer la quiche ?",
+        "meaning": "No, thank you. Can you heat up the quiche?"
+      },
+      {
+        "role": "Baker",
+        "target": "Oui, je la réchauffe.",
+        "meaning": "Yes, I’ll heat it up."
+      }
+    ],
+    "grammar": {
+      "title": "Ask someone to do something",
+      "explanation": "Vous pouvez + infinitive is an ordinary polite request: Vous pouvez réchauffer… ? Keep the action verb in its infinitive form."
+    },
+    "pictureActivity": {
+      "mode": "meaning",
+      "prompt": "Choose the French for this meaning.",
+      "entryId": "fr.bakery.sandwich",
+      "choices": [
+        "fr.bakery.portion",
+        "fr.bakery.sandwich",
+        "fr.bakery.quiche"
+      ]
+    },
+    "sentenceActivity": {
+      "id": "fr.bakery.buy-lunch.sentence",
+      "prompt": "Build: “Can you heat up the quiche?”",
+      "tokens": [
+        "quiche",
+        "pouvez",
+        "la",
+        "Vous",
+        "réchauffer"
+      ],
+      "answers": [
+        "Vous pouvez réchauffer la quiche ?"
+      ],
+      "hint": "Put réchauffer after Vous pouvez.",
+      "explanation": "Pouvez is conjugated for vous; réchauffer stays in the infinitive.",
+      "almostAnswers": []
+    },
+    "provenance": {
+      "author": "Original SmartLingo AI-assisted curriculum rework, 2026-11-15",
+      "rights": "Original examples and code-drawn illustrations; research references in docs/CURRICULUM_RESEARCH.md. No third-party course text or media copied.",
+      "review": "Owner review required: French, meanings, estimated A1/A2 levels, activities and media. No audio reviewed."
+    }
+  },
+  {
+    "id": "fr.groceries.find-products",
+    "revision": 4,
+    "status": "draft",
+    "language": "fr-FR",
+    "explanationLanguage": "en",
+    "title": "Find products in a shop",
+    "subtitle": "Find products in a shop",
+    "outcome": "Locate a shop section and find a basket and checkout.",
+    "level": "A2",
+    "topic": "Groceries",
+    "role": "Shopper",
+    "durationMinutes": 7,
+    "vocabulary": [
+      {
+        "id": "fr.groceries.aisle-section",
+        "target": "un rayon",
+        "meaning": "a shop section",
+        "example": "Le rayon des surgelés est au fond.",
+        "exampleMeaning": "The frozen-food section is at the back.",
+        "gender": "masculine",
+        "note": "Rayon means a department or product section here.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.groceries.checkout",
+        "target": "une caisse",
+        "meaning": "a checkout",
+        "example": "Cette caisse est ouverte ?",
+        "exampleMeaning": "Is this checkout open?",
+        "gender": "feminine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.groceries.basket",
+        "target": "un panier",
+        "meaning": "a shopping basket",
+        "example": "Je prends un panier pour mes courses.",
+        "exampleMeaning": "I’m taking a basket for my shopping.",
+        "gender": "masculine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.groceries.look-for",
+        "target": "chercher",
+        "meaning": "to look for",
+        "example": "Je cherche le rayon des surgelés.",
+        "exampleMeaning": "I’m looking for the frozen-food section.",
+        "note": "Use chercher + the thing sought; no pour.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.groceries.frozen-foods",
+        "target": "les surgelés",
+        "meaning": "frozen foods",
+        "example": "Où sont les surgelés ?",
+        "exampleMeaning": "Where are the frozen foods?",
+        "gender": "masculine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.groceries.at-the-back",
+        "target": "au fond",
+        "meaning": "at the back",
+        "example": "Les pâtes sont au fond du magasin.",
+        "exampleMeaning": "The pasta is at the back of the shop.",
+        "note": "Location phrase; au combines à and le.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.groceries.trolley",
+        "target": "un chariot",
+        "meaning": "a shopping trolley",
+        "example": "Où sont les chariots ?",
+        "exampleMeaning": "Where are the shopping trolleys?",
+        "gender": "masculine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      }
+    ],
+    "dialogue": [
+      {
+        "role": "Shopper",
+        "target": "Je cherche le rayon des surgelés.",
+        "meaning": "I’m looking for the frozen-food section."
+      },
+      {
+        "role": "Staff",
+        "target": "Il est au fond, près des caisses.",
+        "meaning": "It’s at the back, near the checkouts."
+      },
+      {
+        "role": "Shopper",
+        "target": "Et où sont les paniers ?",
+        "meaning": "And where are the baskets?"
+      },
+      {
+        "role": "Staff",
+        "target": "À l’entrée, à droite.",
+        "meaning": "At the entrance, on the right."
+      }
+    ],
+    "grammar": {
+      "title": "Where is and where are",
+      "explanation": "Où est… ? asks for one place or item. Où sont… ? asks for a plural: Où sont les surgelés ? The accent distinguishes où (where) from ou (or)."
+    },
+    "pictureActivity": {
+      "mode": "meaning",
+      "prompt": "Choose the French for this meaning.",
+      "entryId": "fr.groceries.aisle-section",
+      "choices": [
+        "fr.groceries.basket",
+        "fr.groceries.aisle-section",
+        "fr.groceries.checkout"
+      ]
+    },
+    "sentenceActivity": {
+      "id": "fr.groceries.find-products.sentence",
+      "prompt": "Build: “Where are the frozen foods?”",
+      "tokens": [
+        "les",
+        "Où",
+        "surgelés",
+        "sont"
+      ],
+      "answers": [
+        "Où sont les surgelés ?"
+      ],
+      "hint": "Use sont with the plural les surgelés.",
+      "explanation": "Où asks where. Les surgelés is plural, so use sont rather than est.",
+      "almostAnswers": []
+    },
+    "provenance": {
+      "author": "Original SmartLingo AI-assisted curriculum rework, 2026-11-15",
+      "rights": "Original examples and code-drawn illustrations; research references in docs/CURRICULUM_RESEARCH.md. No third-party course text or media copied.",
+      "review": "Owner review required: French, meanings, estimated A1/A2 levels, activities and media. No audio reviewed."
+    }
+  },
+  {
+    "id": "fr.restaurant.finish-the-meal",
+    "revision": 4,
+    "status": "draft",
+    "language": "fr-FR",
+    "explanationLanguage": "en",
+    "title": "Finish the meal",
+    "subtitle": "Finish the meal",
+    "outcome": "Request missing tableware, split payment and ask for a receipt.",
+    "level": "A2",
+    "topic": "Restaurant",
+    "role": "Customer",
+    "durationMinutes": 7,
+    "vocabulary": [
+      {
+        "id": "fr.restaurant.fork",
+        "target": "une fourchette",
+        "meaning": "a fork",
+        "example": "Il me manque une fourchette.",
+        "exampleMeaning": "I’m missing a fork.",
+        "gender": "feminine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.restaurant.bring",
+        "target": "apporter",
+        "meaning": "to bring",
+        "example": "Vous pouvez apporter une fourchette ?",
+        "exampleMeaning": "Can you bring a fork?",
+        "note": "Use after pouvez in a request.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.restaurant.napkin",
+        "target": "une serviette",
+        "meaning": "a napkin",
+        "example": "Je peux avoir une autre serviette ?",
+        "exampleMeaning": "Can I have another napkin?",
+        "gender": "feminine",
+        "note": "At a table this is a napkin; elsewhere it can mean a towel.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.restaurant.bank-card",
+        "target": "une carte bancaire",
+        "meaning": "a bank card",
+        "example": "Je paie par carte bancaire.",
+        "exampleMeaning": "I’m paying by bank card.",
+        "gender": "feminine",
+        "note": "Not the restaurant menu.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.restaurant.separately",
+        "target": "séparément",
+        "meaning": "separately",
+        "example": "Nous pouvons payer séparément ?",
+        "exampleMeaning": "Can we pay separately?",
+        "note": "Adverb. Ask whether the restaurant can split payment.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.restaurant.receipt",
+        "target": "un ticket",
+        "meaning": "a receipt",
+        "example": "Je peux avoir un ticket ?",
+        "exampleMeaning": "Can I have a receipt?",
+        "gender": "masculine",
+        "note": "Here a payment receipt, not a transport ticket.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.restaurant.knife",
+        "target": "un couteau",
+        "meaning": "a knife",
+        "example": "Je peux avoir un autre couteau ?",
+        "exampleMeaning": "Can I have another knife?",
+        "gender": "masculine",
+        "note": "Plural: des couteaux.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      }
+    ],
+    "dialogue": [
+      {
+        "role": "Customer",
+        "target": "Il me manque une fourchette.",
+        "meaning": "I’m missing a fork."
+      },
+      {
+        "role": "Server",
+        "target": "Je vous en apporte une.",
+        "meaning": "I’ll bring you one."
+      },
+      {
+        "role": "Customer",
+        "target": "Merci. Et nous pouvons payer séparément ?",
+        "meaning": "Thank you. And can we pay separately?"
+      },
+      {
+        "role": "Server",
+        "target": "Oui, bien sûr.",
+        "meaning": "Yes, of course."
+      },
+      {
+        "role": "Customer",
+        "target": "Je paie par carte. Je peux avoir un ticket ?",
+        "meaning": "I’m paying by card. Can I have a receipt?"
+      },
+      {
+        "role": "Server",
+        "target": "Oui, voici votre ticket.",
+        "meaning": "Yes, here is your receipt."
+      }
+    ],
+    "grammar": {
+      "title": "Pouvoir for practical requests",
+      "explanation": "Je peux… ? means Can I…? Nous pouvons… ? means Can we…? Follow pouvoir with an infinitive such as payer or avoir."
+    },
+    "pictureActivity": {
+      "mode": "meaning",
+      "prompt": "Choose the French for this meaning.",
+      "entryId": "fr.restaurant.fork",
+      "choices": [
+        "fr.restaurant.napkin",
+        "fr.restaurant.fork",
+        "fr.restaurant.bring"
+      ]
+    },
+    "sentenceActivity": {
+      "id": "fr.restaurant.finish-the-meal.sentence",
+      "prompt": "Build: “Can we pay separately?”",
+      "tokens": [
+        "payer",
+        "pouvons",
+        "séparément",
+        "Nous"
+      ],
+      "answers": [
+        "Nous pouvons payer séparément ?"
+      ],
+      "hint": "Begin with Nous pouvons.",
+      "explanation": "Rising intonation turns this word order into an ordinary spoken question. Payer stays in the infinitive.",
+      "almostAnswers": []
+    },
+    "provenance": {
+      "author": "Original SmartLingo AI-assisted curriculum rework, 2026-11-15",
+      "rights": "Original examples and code-drawn illustrations; research references in docs/CURRICULUM_RESEARCH.md. No third-party course text or media copied.",
+      "review": "Owner review required: French, meanings, estimated A1/A2 levels, activities and media. No audio reviewed."
+    }
+  },
+  {
+    "id": "fr.housing.ask-about-a-rental",
+    "revision": 4,
+    "status": "draft",
+    "language": "fr-FR",
+    "explanationLanguage": "en",
+    "title": "Ask about a rental",
+    "subtitle": "Ask about a rental",
+    "outcome": "Check rent and included charges before reading a tenancy agreement.",
+    "level": "A2",
+    "topic": "Home and housing",
+    "role": "Resident",
+    "durationMinutes": 7,
+    "vocabulary": [
+      {
+        "id": "fr.housing.rent",
+        "target": "un loyer",
+        "meaning": "rent; a rent payment",
+        "example": "Le loyer est de huit cents euros.",
+        "exampleMeaning": "The rent is eight hundred euros.",
+        "gender": "masculine",
+        "note": "",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.housing.service-charges",
+        "target": "les charges",
+        "meaning": "service charges",
+        "example": "Les charges sont comprises ?",
+        "exampleMeaning": "Are service charges included?",
+        "gender": "feminine",
+        "note": "Ask what is included; arrangements vary.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.housing.tenancy-agreement",
+        "target": "un bail",
+        "meaning": "a tenancy agreement",
+        "example": "Je voudrais lire le bail.",
+        "exampleMeaning": "I would like to read the tenancy agreement.",
+        "gender": "masculine",
+        "note": "Plural: des baux.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.housing.landlord",
+        "target": "le propriétaire",
+        "meaning": "the landlord; the owner",
+        "example": "Je vais appeler le propriétaire.",
+        "exampleMeaning": "I’m going to call the landlord.",
+        "gender": "masculine",
+        "note": "Feminine: la propriétaire. Here the owner who rents out the home; not a statement about legal responsibilities.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.housing.move-in",
+        "target": "emménager",
+        "meaning": "to move in",
+        "example": "Je vais emménager samedi.",
+        "exampleMeaning": "I’m going to move in on Saturday.",
+        "note": "One move into a new home; déménager means move home.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.housing.furnished",
+        "target": "meublé",
+        "meaning": "furnished",
+        "example": "L’appartement est meublé.",
+        "exampleMeaning": "The flat is furnished.",
+        "note": "Adjective: meublé for appartement; meublée with a feminine noun.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.housing.tenant",
+        "target": "un locataire",
+        "meaning": "a tenant",
+        "example": "Je suis le nouveau locataire.",
+        "exampleMeaning": "I’m the new tenant.",
+        "gender": "masculine",
+        "note": "Feminine: une locataire.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      }
+    ],
+    "dialogue": [
+      {
+        "role": "Resident",
+        "target": "Quel est le loyer mensuel ?",
+        "meaning": "What is the monthly rent?"
+      },
+      {
+        "role": "Agent",
+        "target": "Huit cents euros, charges comprises.",
+        "meaning": "Eight hundred euros, including service charges."
+      },
+      {
+        "role": "Resident",
+        "target": "Quelles charges sont comprises ?",
+        "meaning": "Which service charges are included?"
+      },
+      {
+        "role": "Agent",
+        "target": "L’eau et l’entretien de l’immeuble.",
+        "meaning": "Water and building maintenance."
+      },
+      {
+        "role": "Resident",
+        "target": "Je voudrais lire le bail avant d’emménager.",
+        "meaning": "I would like to read the tenancy agreement before moving in."
+      },
+      {
+        "role": "Agent",
+        "target": "Bien sûr, je vous l’envoie.",
+        "meaning": "Of course, I’ll send it to you."
+      }
+    ],
+    "grammar": {
+      "title": "Ask which costs are included",
+      "explanation": "Quelles agrees with feminine plural charges. Comprises also agrees with charges. Learn Les charges sont comprises ? as a practical question, then ask what those charges cover."
+    },
+    "pictureActivity": {
+      "mode": "meaning",
+      "prompt": "Choose the French for this meaning.",
+      "entryId": "fr.housing.rent",
+      "choices": [
+        "fr.housing.tenancy-agreement",
+        "fr.housing.rent",
+        "fr.housing.service-charges"
+      ]
+    },
+    "sentenceActivity": {
+      "id": "fr.housing.ask-about-a-rental.sentence",
+      "prompt": "Build: “Are service charges included?”",
+      "tokens": [
+        "comprises",
+        "sont",
+        "charges",
+        "Les"
+      ],
+      "answers": [
+        "Les charges sont comprises ?"
+      ],
+      "hint": "Use sont after the plural charges.",
+      "explanation": "Comprises takes feminine plural agreement with charges.",
+      "almostAnswers": []
+    },
+    "provenance": {
+      "author": "Original SmartLingo AI-assisted curriculum rework, 2026-11-15",
+      "rights": "Original examples and code-drawn illustrations; research references in docs/CURRICULUM_RESEARCH.md. No third-party course text or media copied.",
+      "review": "Owner review required: French, meanings, estimated A1/A2 levels, activities and media. No audio reviewed."
+    }
+  },
+  {
+    "id": "fr.work.organise-work",
+    "revision": 5,
+    "status": "draft",
+    "language": "fr-FR",
+    "explanationLanguage": "en",
+    "title": "Organise a working day",
+    "subtitle": "Organise a working day",
+    "outcome": "Discuss a meeting, a deadline and a task that matters first.",
+    "level": "A2",
+    "topic": "Work and study",
+    "role": "Colleague",
+    "durationMinutes": 7,
+    "vocabulary": [
+      {
+        "id": "fr.work.reunion",
+        "target": "une réunion",
+        "meaning": "a meeting",
+        "example": "La réunion commence à quatorze heures.",
+        "exampleMeaning": "The meeting starts at two p.m.",
+        "gender": "feminine",
+        "note": "Workplace sense.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.work.horaire",
+        "target": "un horaire",
+        "meaning": "working hours / a work schedule",
+        "example": "Mon horaire de travail change lundi.",
+        "exampleMeaning": "My work schedule changes on Monday.",
+        "gender": "masculine",
+        "note": "Here the organisation of working hours. Les horaires de travail is the usual plural phrase for working hours; the noun is masculine.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.work.delai",
+        "target": "un délai",
+        "meaning": "a time allowed / deadline period",
+        "example": "Quel est le délai pour répondre ?",
+        "exampleMeaning": "How long do we have to reply?",
+        "gender": "masculine",
+        "note": "A period of time, not always a specific due date.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.work.tache",
+        "target": "une tâche",
+        "meaning": "a task",
+        "example": "Je commence cette tâche ce matin.",
+        "exampleMeaning": "I am starting this task this morning.",
+        "gender": "feminine",
+        "note": "Keep the circumflex: tache without it means a stain.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.work.terminer",
+        "target": "terminer",
+        "meaning": "to finish",
+        "example": "Je vais terminer avant midi.",
+        "exampleMeaning": "I am going to finish before noon.",
+        "note": "Regular -er verb; can take an object directly.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      },
+      {
+        "id": "fr.work.urgent",
+        "target": "urgent",
+        "meaning": "urgent",
+        "example": "Ce message est urgent.",
+        "exampleMeaning": "This message is urgent.",
+        "note": "Adjective: urgente with a feminine noun.",
+        "picture": "context",
+        "pictureAlt": "An open vocabulary notebook"
+      }
+    ],
+    "dialogue": [
+      {
+        "role": "Colleague",
+        "target": "La réunion est à quelle heure ?",
+        "meaning": "What time is the meeting?"
+      },
+      {
+        "role": "Coworker",
+        "target": "À quatorze heures. Tu peux terminer cette tâche avant ?",
+        "meaning": "At two p.m. Can you finish this task before then?"
+      },
+      {
+        "role": "Colleague",
+        "target": "Oui. C’est urgent ?",
+        "meaning": "Yes. Is it urgent?"
+      },
+      {
+        "role": "Coworker",
+        "target": "Oui, le client attend une réponse avant midi.",
+        "meaning": "Yes, the customer is waiting for a reply before noon."
+      },
+      {
+        "role": "Colleague",
+        "target": "D’accord, je vais terminer ce matin.",
+        "meaning": "All right, I am going to finish this morning."
+      }
+    ],
+    "grammar": {
+      "title": "Near future",
+      "explanation": "Aller in the present + an infinitive describes a plan: je vais terminer. After tu peux, keep terminer in its dictionary form: tu peux terminer cette tâche. Tu is used between colleagues who already use familiar forms."
+    },
+    "pictureActivity": {
+      "mode": "meaning",
+      "prompt": "Choose the French for this meaning.",
+      "entryId": "fr.work.reunion",
+      "choices": [
+        "fr.work.delai",
+        "fr.work.reunion",
+        "fr.work.horaire"
+      ]
+    },
+    "sentenceActivity": {
+      "id": "fr.work.organise-work.sentence",
+      "prompt": "Build: “I am going to finish this task.”",
+      "tokens": [
+        "cette",
+        "vais",
+        "tâche.",
+        "Je",
+        "terminer"
+      ],
+      "answers": [
+        "Je vais terminer cette tâche."
+      ],
+      "hint": "Use Je vais, then the action.",
+      "explanation": "Terminer stays in the infinitive. Cette agrees with feminine tâche.",
+      "almostAnswers": []
+    },
+    "provenance": {
+      "author": "Original SmartLingo AI-assisted curriculum rework, 2026-11-15",
+      "rights": "Original examples and code-drawn illustrations; research references in docs/CURRICULUM_RESEARCH.md. No third-party course text or media copied.",
+      "review": "Owner review required: French, meanings, estimated A1/A2 levels, activities and media. No audio reviewed."
+    }
+  }
+]

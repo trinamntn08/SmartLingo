@@ -1,3 +1,4 @@
+import { deployment } from '../../deployment/config';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import { speechVoices, type SpeechInput, type SpeechStatus } from '@smartlingo/domain';
@@ -33,7 +34,7 @@ export function GeneratedSpeechPanel() {
     const controller = new AbortController();
     setChecking(true); setAvailabilityError('');
     void speechClient.status(controller.signal).then(value => { if (!controller.signal.aborted) setStatus(value); })
-      .catch(() => { if (!controller.signal.aborted) { setStatus(undefined); setAvailabilityError('The local audio server is unavailable. Saved browser audio still plays offline.'); } })
+      .catch(() => { if (!controller.signal.aborted) { setStatus(undefined); setAvailabilityError('The audio server is unavailable. Check online access in Profile if this is a hosted beta. Saved browser audio still plays offline.'); } })
       .finally(() => { if (!controller.signal.aborted) setChecking(false); });
     return () => controller.abort();
   }, [removalVersion]);
@@ -77,11 +78,11 @@ export function GeneratedSpeechPanel() {
     <View style={s.notice}><Text style={s.body}>{sample}</Text><Text style={s.muted}>Hello! I would like a coffee, please.</Text></View>
     <Text style={s.body}>French phrase for neural audio (up to 500 characters)</Text>
     <TextInput accessibilityLabel="French phrase for neural audio" multiline value={text} maxLength={500} editable={!phrase.busy} onChangeText={value => { savedClipPlayer.stop(); setPlaying(false); setText(value); }} style={s.input} />
-    <Text style={s.muted}>Generate sends this text to Azure through your local server and may use API credits. Avoid private details. Your local server keeps generated clips and their French text in a separate cache. Removing browser audio does not clear that server cache. Browser clips are separate from learner backups; Azure processing is separate from local storage.</Text>
+    <Text style={s.muted}>Generate sends this text to Azure through the SmartLingo server and may use API credits. Avoid private details. The server keeps generated clips and their French text in a separate cache. Removing browser audio does not clear that server cache. Browser clips are separate from learner backups; Azure processing is separate from local storage.</Text>
     {supported && <Text accessibilityLiveRegion="polite" style={s.muted}>{phrase.saved ? 'Saved audio is available for this text, voice and pace.' : 'No saved audio found for this text, voice and pace. Generate explicitly to save a clip.'}</Text>}
     {!supported && <Text style={s.body}>Saving audio needs CacheStorage, Web Crypto and Web Locks in this browser. Device speech and lesson text remain available.</Text>}
     {checking && <Text accessibilityLiveRegion="polite" style={s.muted}>Checking neural audio availability…</Text>}
-    {!!status && <Text accessibilityLiveRegion="polite" style={s.muted}>{status.available ? 'Local generation is configured.' : 'Neural generation is not configured on the local API server.'} At last availability check, attempts reserved today: {status.usage.usedToday}/{status.usage.dailyLimit}. Refresh to update; this counter is not a billing total.</Text>}
+    {!!status && <Text accessibilityLiveRegion="polite" style={s.muted}>{status.available ? deployment().hosted ? 'Generation is configured.' : 'Local generation is configured.' : 'Neural generation is not configured on the server.'} At last availability check, attempts reserved today: {status.usage.usedToday}/{status.usage.dailyLimit}. Refresh to update; this counter is not a billing total.</Text>}
     {!!availabilityError && <Text style={s.muted}>{availabilityError}</Text>}
     <View style={s.row}>
       <Button primary disabled={!supported || phrase.busy || removing || !text.trim()} onPress={() => void phrase.save()}>{phrase.busy ? 'Generating…' : 'Generate and save (may use credits)'}</Button>

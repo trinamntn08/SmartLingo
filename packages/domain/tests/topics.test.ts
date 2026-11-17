@@ -63,7 +63,7 @@ test('suggested progression covers every bank once with earlier prerequisites an
     for (const prerequisite of topic.prerequisites) assert.ok(seen.has(prerequisite), `${topic.slug}: prior ${prerequisite}`);
     seen.add(topic.slug);
   }
-  assert.equal(lessons.length, 123);
+  assert.equal(lessons.length, 129);
   assert.equal(lessons[0].id, 'fr.greetings.hello-goodbye');
   assert.deepEqual([...new Set(lessons.map(lesson => lesson.id.split('.')[1]))], slugs);
   for (const lesson of lessons) {

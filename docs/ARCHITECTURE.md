@@ -17,6 +17,8 @@ Status: local web learning, first editor/publication, optional conversation/tran
 
 ## Boundaries
 
+- Hosted beta: public URL-only runtime configuration selects an optional API; blank settings keep bundled learning available and never probe visitor localhost. Memory-only owner/beta Bearer access protects the separate single-instance Node API; exact HTTPS origins and Host validation supplement authentication. SQLite persists on a server volume. Cloudflare Pages serves the static learner; it does not run the Node/SQLite backend. See [deployment](DEPLOYMENT.md).
+
 - Client -> local API -> provider. Permanent credentials stay on the API.
 - Optional practice -> validated shared contracts -> expiring in-memory session service -> injected conversation/transcription providers. Explicit actions share bounded attempts/single flight and idempotent request tombstones; terminal failures permit a new deliberate attempt. Browser recording is temporary and separate from editable message text and notebook persistence. Only explicitly saved phrases reach learner storage. See [ADR 0016](decisions/0016-optional-ai-practice.md).
 - Local published content/media -> downloaded lessons -> offline activities.

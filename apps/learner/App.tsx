@@ -18,18 +18,20 @@ import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
+import { deployment } from './src/deployment/config';
+import { OnlineAccessPanel } from './src/deployment/OnlineAccessPanel';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
 
 export default function App() {
-  const [editorOpen, setEditorOpen] = useState(() => typeof window !== 'undefined' && window.location.hash === '#editor');
+  const [editorOpen, setEditorOpen] = useState(() => !!deployment().apiUrl && typeof window !== 'undefined' && window.location.hash === '#editor');
   const [editorVisited, setEditorVisited] = useState(editorOpen);
   const [homeRequest, setHomeRequest] = useState(0);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const updateRoute = () => {
-      const open = window.location.hash === '#editor';
+      const open = !!deployment().apiUrl && window.location.hash === '#editor';
       setEditorOpen(open);
       if (open) setEditorVisited(true);
     };
@@ -66,7 +68,7 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={[s.row, { maxWidth: '100%', flexShrink: 1 }]}><BrandHome onPress={onHome} /><Badge>{deployment().beta ? 'BETA' : 'LOCAL PREVIEW'}</Badge></View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
     {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
@@ -79,12 +81,16 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <FrenchPractice lessons={catalogue.lessons} model={model} />}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
+            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && (deployment().apiUrl ? <FrenchPractice lessons={catalogue.lessons} model={model} /> : <HostedPracticeNotice />)}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
     </View>
   </View>;
+}
+
+function HostedPracticeNotice() {
+  return <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Practise with the lessons on this device.</Text><Text style={s.body}>Online conversation and transcription are not connected yet. Explore the lessons below for vocabulary, dialogue and sentence practice.</Text><Text style={s.muted}>Lessons and device speech work without an AI account. No messages or recordings are sent to an AI provider from this beta until online services are connected and you deliberately use them.</Text></View>;
 }
 
 function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; onExplore: () => void }) {
@@ -101,7 +107,7 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
     <View style={[s.card, s.column, { backgroundColor: '#E8ECD9', padding: 28 }]}><View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge><Badge>{suggested.level}</Badge></View>
       <WordIllustration entry={suggested.vocabulary[1]} size={290} />
       <Text style={s.heading}>{suggested.subtitle}</Text><Text style={s.body}>{suggested.outcome}</Text><View style={s.row}><Badge>{suggested.role}</Badge><Text style={s.muted}>{suggested.durationMinutes} min · {suggested.vocabulary.length} useful words</Text></View>
-      <View style={s.divider} /><Text style={s.muted}>{progress.completed ? '✓ Session completed and saved' : `${progress.viewedIds.size} of ${suggested.vocabulary.length} words explored`} · {suggested.status === 'published' ? `Published revision ${suggested.revision}` : 'Draft preview'}</Text>
+      <View style={s.divider} /><Text style={s.muted}>{progress.completed ? '✓ Session completed and saved' : `${progress.viewedIds.size} of ${suggested.vocabulary.length} words explored`} · {suggested.status === 'published' ? `Published revision ${suggested.revision}` : deployment().beta ? 'Beta material' : 'Draft preview'}</Text>
     </View>
   </View>
   </View>;
@@ -109,13 +115,16 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
 
 function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; catalogue: ReturnType<typeof useCatalogue>; onOpenEditor: () => void }) {
   const completed = model.events.filter(event => event.activity === 'completion' && event.result === 'completed').length;
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
-    <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
-    <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
+  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A browser-local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
+    {deployment().hosted && <OnlineAccessPanel />}
+    {deployment().apiUrl ? <>
+    <View style={s.card}><Text style={s.heading}>{deployment().hosted ? 'Owner curriculum workshop' : 'Local curriculum workshop'}</Text><Text style={s.body}>Edit a draft, preview its saved revision, and explicitly publish updates to the catalogue. Owner access is required on the hosted beta.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
+    <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
+    </> : <View style={s.card}><Text style={s.heading}>Learner-only beta website</Text><Text style={s.body}>All bundled topics, lessons and materials are available here. Online services and the owner workshop can be connected later.</Text></View>}
     <OfflinePanel />
     <AudioPreferencesPanel />
-    <GeneratedSpeechPanel />
+    {deployment().apiUrl ? <GeneratedSpeechPanel /> : <View style={s.card}><Text style={s.heading}>Device speech only</Text><Text style={s.body}>Listen buttons use a French voice supplied by your browser or device when available. Neural audio generation is not connected yet. Visible text is always available.</Text></View>}
     <BackupPanel />
-    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
+    <View style={s.card}><Text style={s.heading}>About this beta</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no learner account or automatic phone/computer sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need an API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Beta learning material may contain errors and will be reviewed during testing. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
   </View>;
 }

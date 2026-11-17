@@ -2,6 +2,8 @@
 
 ## Commands
 
+Beta release checks: `npm run test:hosted` builds and exercises the static beta on desktop/phone-sized Chromium, then `npm run verify:beta` verifies a clean committed release's file hashes, metadata, credential patterns and host limits. The main browser, offline and hosted suites have separate output directories; run export-producing suites sequentially. CI uploads the verified `apps/learner/dist` as `smartlingo-beta`. New API hosted access tests cover missing/invalid configuration, role separation, exact Host/origin, CORS and unauthenticated paid-route rejection. These tests use fakes, not provider credits. See [deployment](DEPLOYMENT.md).
+
 ```sh
 npm run check
 npm test

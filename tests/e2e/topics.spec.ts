@@ -4,6 +4,7 @@ import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlin
 
 const topics = groupLessonTopics(lessons);
 const groceryCount = topics.find(topic => topic.name === 'Groceries')!.vocabulary.length;
+const healthTopic = topics.find(topic => topic.name === 'Health and appointments')!;
 
 async function expectPicturesLoaded(page: import('@playwright/test').Page) {
   await expect.poll(() => page.locator('img').evaluateAll(images => images.length > 0
@@ -37,9 +38,9 @@ test('topic words are directly readable, searchable and save to the notebook wit
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
   await page.getByRole('button', { name: 'Explore Health and appointments →', exact: true }).click();
-  await expect(page.getByText('30 words · 5 short lessons', { exact: true })).toBeVisible();
+  await expect(page.getByText(`${healthTopic.vocabulary.length} words · ${healthTopic.lessons.length} short lessons`, { exact: true })).toBeVisible();
   await search.fill('');
-  await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `Vocabulary · ${healthTopic.vocabulary.length}`, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'un rendez-vous', exact: true })).toBeVisible();
   await expect(page.getByText('an appointment', { exact: true })).toBeVisible();
   const appointment = lessons.flatMap(lesson => lesson.vocabulary).find(entry => entry.id === 'fr.health.rendez-vous')!;

@@ -3,7 +3,8 @@ import {
   publishRequestSchema, revisionRequestSchema, type Lesson,
 } from '@smartlingo/domain';
 
-const apiOrigin = 'http://127.0.0.1:3001';
+import { apiUrl, BackendUnavailableError } from '../deployment/config';
+import { accessHeaders } from '../deployment/access';
 export class ContentApiError extends Error {
   constructor(message: string, public readonly status?: number) { super(message); this.name = 'ContentApiError'; }
 }
@@ -12,15 +13,15 @@ async function request(path: string, body?: unknown): Promise<unknown> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
-    const response = await fetch(`${apiOrigin}${path}`, {
+    const response = await fetch(apiUrl(path), {
       method: body === undefined ? 'GET' : 'POST',
-      headers: body === undefined ? {} : { 'Content-Type': 'application/json', 'X-SmartLingo-Editor': '1' },
+      headers: { ...(path === '/published-lessons' ? {} : accessHeaders('owner')), ...(body === undefined ? {} : { 'Content-Type': 'application/json', 'X-SmartLingo-Editor': '1' }) },
       body: body === undefined ? undefined : JSON.stringify(body),
       credentials: 'omit', redirect: 'error', signal: controller.signal,
     });
     if (!response.ok) {
       const message = response.status === 409 ? 'This lesson changed in another editor. Reload the latest revision before saving or publishing.'
-        : response.status === 403 ? 'Local editor access was refused. Open the app at http://localhost:8081 or http://localhost:8082 and retry.'
+        : response.status === 401 || response.status === 403 ? 'Editor access was refused. For hosted beta, apply the owner access token in Profile. For local preview, use the configured localhost address.'
           : response.status === 400 ? 'The lesson or preview request was not accepted. Check the fields and preview the saved draft again.'
             : 'The local content server could not complete this request. Your current content was kept.';
       throw new ContentApiError(message, response.status);
@@ -28,7 +29,8 @@ async function request(path: string, body?: unknown): Promise<unknown> {
     return await response.json();
   } catch (error) {
     if (error instanceof ContentApiError) throw error;
-    throw new ContentApiError('The local content server is unavailable or timed out. Run npm run dev:api, then retry. Your current content was kept.');
+    if (error instanceof BackendUnavailableError) throw new ContentApiError(error.message);
+    throw new ContentApiError('The content server is unavailable or timed out. Retry when connected. Your current content was kept.');
   } finally { clearTimeout(timer); }
 }
 

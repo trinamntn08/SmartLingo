@@ -1,0 +1,1065 @@
+{
+  "reviewStatus": "draft",
+  "exampleOrigin": "editorial_example",
+  "lessons": [
+    {
+      "id": "fr.people.immediate-family",
+      "revision": 1,
+      "status": "draft",
+      "language": "fr-FR",
+      "explanationLanguage": "en",
+      "title": "Introduce close family members",
+      "subtitle": "Introduce close family members",
+      "outcome": "Introduce close family members or a partner and say how they are related to you.",
+      "level": "A1",
+      "topic": "People and introductions",
+      "role": "Neighbour",
+      "durationMinutes": 8,
+      "vocabulary": [
+        {
+          "id": "fr.people.famille",
+          "target": "une famille",
+          "meaning": "a family",
+          "example": "Ma famille habite à Londres.",
+          "exampleMeaning": "My family lives in London.",
+          "gender": "feminine",
+          "note": "Singular family takes a singular verb.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.mother",
+          "target": "la mère",
+          "meaning": "the mother",
+          "example": "Voici ma mère, Anne.",
+          "exampleMeaning": "This is my mother, Anne.",
+          "gender": "feminine",
+          "note": "Feminine. Say ma mère for my mother; mère is neutral, while maman is familiar.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.father",
+          "target": "le père",
+          "meaning": "the father",
+          "example": "Mon père habite à Lyon.",
+          "exampleMeaning": "My father lives in Lyon.",
+          "gender": "masculine",
+          "note": "Masculine. Say mon père for my father; papa is familiar.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.parents-family",
+          "target": "les parents",
+          "meaning": "the parents",
+          "example": "Mes parents habitent à Lille.",
+          "exampleMeaning": "My parents live in Lille.",
+          "gender": "masculine",
+          "note": "Plural of un parent in the mother/father sense; a mixed group uses masculine plural. Not the general English word relatives.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.son-family",
+          "target": "le fils",
+          "meaning": "the son",
+          "example": "Mon fils s’appelle Hugo.",
+          "exampleMeaning": "My son is called Hugo.",
+          "gender": "masculine",
+          "note": "Masculine. In fils meaning son, pronounce the final s; the l is silent. Plural les fils has the same spelling.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.daughter-family",
+          "target": "la fille",
+          "meaning": "the daughter",
+          "example": "Ma fille s’appelle Zoé.",
+          "exampleMeaning": "My daughter is called Zoé.",
+          "gender": "feminine",
+          "note": "Feminine. Fille also means girl; ma fille here identifies a family relationship.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.male-partner",
+          "target": "un compagnon",
+          "meaning": "a partner (man, romantic relationship)",
+          "example": "Voici mon compagnon, Karim.",
+          "exampleMeaning": "This is my partner, Karim.",
+          "gender": "masculine",
+          "note": "Masculine. Here a romantic partner, not a travelling companion. This everyday introduction does not specify legal marital status.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.female-partner",
+          "target": "une compagne",
+          "meaning": "a partner (woman, romantic relationship)",
+          "example": "Ma compagne s’appelle Alice.",
+          "exampleMeaning": "My partner is called Alice.",
+          "gender": "feminine",
+          "note": "Feminine counterpart of compagnon in a romantic relationship. This everyday introduction does not specify legal marital status.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.people.here-is-person",
+          "target": "voici",
+          "meaning": "here is / here are; this is (introducing someone)",
+          "example": "Voici ma famille.",
+          "exampleMeaning": "This is my family.",
+          "note": "Use voici directly before the person or people you are introducing. It does not change for plural people.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        }
+      ],
+      "dialogue": [
+        {
+          "role": "Neighbour",
+          "target": "Bonjour, voici ma famille. Voici ma mère, Anne, et mon père, Paul.",
+          "meaning": "Hello, this is my family. This is my mother, Anne, and my father, Paul."
+        },
+        {
+          "role": "Other neighbour",
+          "target": "Vos parents habitent ici ?",
+          "meaning": "Do your parents live here?"
+        },
+        {
+          "role": "Neighbour",
+          "target": "Non, mes parents habitent à Lille. Voici mon compagnon, Karim, mon fils, Hugo, et ma fille, Zoé.",
+          "meaning": "No, my parents live in Lille. This is my partner, Karim, my son, Hugo, and my daughter, Zoé."
+        },
+        {
+          "role": "Other neighbour",
+          "target": "Enchantée. Ma compagne, Alice, arrive demain.",
+          "meaning": "Pleased to meet you. My partner, Alice, arrives tomorrow."
+        }
+      ],
+      "grammar": {
+        "title": "Optional: my family, your family",
+        "explanation": "Mon goes with a masculine singular noun (mon père, mon fils, mon compagnon); ma with a feminine singular noun (ma mère, ma fille, ma compagne); mes with a plural noun (mes parents). The possessive agrees with the family noun, not the person speaking. Use votre/vos when addressing an adult neighbour with vous. Voici ma fille introduces a daughter; une fille can also mean a girl. Choose the family members that fit your situation; the example is one fictional family."
+      },
+      "pictureActivity": {
+        "mode": "meaning",
+        "prompt": "Choose the French for “the daughter”.",
+        "entryId": "fr.people.daughter-family",
+        "choices": [
+          "fr.people.famille",
+          "fr.people.daughter-family",
+          "fr.people.mother"
+        ]
+      },
+      "sentenceActivity": {
+        "id": "fr.people.immediate-family.sentence",
+        "prompt": "Build: “This is my mother and my father.”",
+        "tokens": [
+          "mon père",
+          "Voici",
+          "et",
+          "ma mère"
+        ],
+        "answers": [
+          "Voici ma mère et mon père.",
+          "Voici mon père et ma mère."
+        ],
+        "hint": "Start Voici; link the two people with et.",
+        "explanation": "Keep ma with mère and mon with père. Either order introduces both people. Do not use mon mère or ma père.",
+        "almostAnswers": []
+      },
+      "provenance": {
+        "author": "Original SmartLingo AI-assisted editorial draft, 2026-11-16",
+        "rights": "editorial_example: newly composed examples and dialogue; exact existing SmartLingo canonical entries reused unchanged. No external text, image or audio copied. Context is a text-support placeholder, not a new media asset. See docs/curriculum/bridge-notes.md.",
+        "review": "Draft for owner review: French, gender and senses, English, estimated level, register, answer alternatives and task coherence. No native-speaker review, certified CEFR coverage, audio review or publication claimed."
+      }
+    },
+    {
+      "id": "fr.shopping.basic-colour-choices",
+      "revision": 1,
+      "status": "draft",
+      "language": "fr-FR",
+      "explanationLanguage": "en",
+      "title": "Choose an item by colour",
+      "subtitle": "Choose an item by colour",
+      "outcome": "Name common colours and ask for a different colour while choosing clothes.",
+      "level": "A1",
+      "topic": "Clothes and shopping",
+      "role": "Customer",
+      "durationMinutes": 8,
+      "vocabulary": [
+        {
+          "id": "fr.shopping.black",
+          "target": "noir",
+          "meaning": "black",
+          "example": "Je voudrais ce pantalon en noir.",
+          "exampleMeaning": "I would like these trousers in black.",
+          "note": "Adjective: noir, noire, noirs, noires.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.blue",
+          "target": "bleu",
+          "meaning": "blue",
+          "example": "Vous avez ce pull en bleu ?",
+          "exampleMeaning": "Do you have this jumper in blue?",
+          "note": "Adjective: bleu, bleue, bleus, bleues.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.red",
+          "target": "rouge",
+          "meaning": "red",
+          "example": "Je cherche une veste rouge.",
+          "exampleMeaning": "I am looking for a red jacket.",
+          "note": "Adjective: rouge for masculine or feminine singular; rouges in the plural.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.green",
+          "target": "vert",
+          "meaning": "green",
+          "example": "Vous avez ce pull en vert ?",
+          "exampleMeaning": "Do you have this jumper in green?",
+          "note": "Adjective: vert, verte, verts, vertes. In en vert, keep the base colour form.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.yellow",
+          "target": "jaune",
+          "meaning": "yellow",
+          "example": "Je préfère le tee-shirt jaune.",
+          "exampleMeaning": "I prefer the yellow T-shirt.",
+          "note": "Adjective: jaune for masculine or feminine singular; jaunes in the plural.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.white",
+          "target": "blanc",
+          "meaning": "white",
+          "example": "Cette chemise est blanche.",
+          "exampleMeaning": "This shirt is white.",
+          "note": "Adjective: blanc, blanche, blancs, blanches. Notice the feminine blanche.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.grey",
+          "target": "gris",
+          "meaning": "grey",
+          "example": "Je prends le pantalon gris.",
+          "exampleMeaning": "I will take the grey trousers.",
+          "note": "Adjective: gris, grise, gris, grises. Masculine plural keeps the same written form.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.pink",
+          "target": "rose",
+          "meaning": "pink",
+          "example": "Vous avez des chaussettes roses ?",
+          "exampleMeaning": "Do you have pink socks?",
+          "note": "Colour adjective: rose for singular; roses for plural. Here a colour, not a flower.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.orange-colour",
+          "target": "orange",
+          "meaning": "orange (colour)",
+          "example": "Je cherche une écharpe orange.",
+          "exampleMeaning": "I am looking for an orange scarf.",
+          "note": "As a simple colour adjective, orange is invariable: une veste orange, des vestes orange. Here the colour, not the fruit.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.brown",
+          "target": "marron",
+          "meaning": "brown",
+          "example": "Ces chaussures sont marron.",
+          "exampleMeaning": "These shoes are brown.",
+          "note": "As a simple colour adjective, marron is invariable: un pull marron, des chaussures marron. Here the colour, not a chestnut.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        }
+      ],
+      "dialogue": [
+        {
+          "role": "Customer",
+          "target": "Bonjour, vous avez cette veste en vert ou en bleu ?",
+          "meaning": "Hello, do you have this jacket in green or blue?"
+        },
+        {
+          "role": "Shop assistant",
+          "target": "Oui, en vert, en bleu et en noir. Il y a aussi une veste rouge.",
+          "meaning": "Yes, in green, blue and black. There is also a red jacket."
+        },
+        {
+          "role": "Customer",
+          "target": "Je prends la veste verte et la chemise blanche.",
+          "meaning": "I will take the green jacket and the white shirt."
+        },
+        {
+          "role": "Shop assistant",
+          "target": "Et pour le tee-shirt : jaune, gris, rose, orange ou marron ?",
+          "meaning": "And for the T-shirt: yellow, grey, pink, orange or brown?"
+        },
+        {
+          "role": "Customer",
+          "target": "Le tee-shirt jaune, s’il vous plaît.",
+          "meaning": "The yellow T-shirt, please."
+        }
+      ],
+      "grammar": {
+        "title": "Optional: colour after the noun",
+        "explanation": "A simple colour usually follows its noun: une veste verte, un pantalon gris. Most colour adjectives agree with the noun: blanc becomes blanche, and rose becomes roses in the plural. Orange and marron stay unchanged as simple colour adjectives: des chaussures marron. En + base colour asks for a colour option: vous avez ce pull en vert ? Reuse noir and bleu from the existing shopping bank; they are not new senses."
+      },
+      "pictureActivity": {
+        "mode": "meaning",
+        "prompt": "Choose the French for “green”.",
+        "entryId": "fr.shopping.green",
+        "choices": [
+          "fr.shopping.black",
+          "fr.shopping.green",
+          "fr.shopping.blue"
+        ]
+      },
+      "sentenceActivity": {
+        "id": "fr.shopping.basic-colour-choices.sentence",
+        "prompt": "Build: “I am looking for a red jacket.”",
+        "tokens": [
+          "rouge",
+          "une veste",
+          "Je cherche"
+        ],
+        "answers": [
+          "Je cherche une veste rouge."
+        ],
+        "hint": "Start Je cherche, then the item, then its colour.",
+        "explanation": "Rouge follows veste and has the same singular form for a masculine or feminine noun. Une rouge veste is not the neutral beginner pattern here.",
+        "almostAnswers": []
+      },
+      "provenance": {
+        "author": "Original SmartLingo AI-assisted editorial draft, 2026-11-16",
+        "rights": "editorial_example: newly composed examples and dialogue; exact existing SmartLingo canonical entries reused unchanged. No external text, image or audio copied. Context is a text-support placeholder, not a new media asset. See docs/curriculum/bridge-notes.md.",
+        "review": "Draft for owner review: French, gender and senses, English, estimated level, register, answer alternatives and task coherence. No native-speaker review, certified CEFR coverage, audio review or publication claimed."
+      }
+    },
+    {
+      "id": "fr.health.locate-body-pain",
+      "revision": 1,
+      "status": "draft",
+      "language": "fr-FR",
+      "explanationLanguage": "en",
+      "title": "Say where something hurts",
+      "subtitle": "Say where something hurts",
+      "outcome": "Name a body location and use avoir mal with au, à la, à l’ or aux to say where it hurts.",
+      "level": "A1",
+      "topic": "Health and appointments",
+      "role": "Patient",
+      "durationMinutes": 8,
+      "vocabulary": [
+        {
+          "id": "fr.health.mal",
+          "target": "avoir mal",
+          "meaning": "to be in pain / to hurt",
+          "example": "J’ai mal ici.",
+          "exampleMeaning": "It hurts here.",
+          "note": "Use avoir mal à plus the body part. This is a language pattern, not a diagnosis.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.tete",
+          "target": "la tête",
+          "meaning": "the head",
+          "example": "J’ai mal à la tête.",
+          "exampleMeaning": "I have a headache.",
+          "gender": "feminine",
+          "note": "À la stays separate.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.ventre",
+          "target": "le ventre",
+          "meaning": "the stomach / tummy area",
+          "example": "J’ai mal au ventre.",
+          "exampleMeaning": "My stomach hurts.",
+          "gender": "masculine",
+          "note": "Everyday word for the abdominal area.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.dos",
+          "target": "le dos",
+          "meaning": "the back",
+          "example": "J’ai mal au dos.",
+          "exampleMeaning": "My back hurts.",
+          "gender": "masculine",
+          "note": "The final s is silent.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.arm-body",
+          "target": "le bras",
+          "meaning": "the arm",
+          "example": "J’ai mal au bras.",
+          "exampleMeaning": "My arm hurts.",
+          "gender": "masculine",
+          "note": "Masculine. À + le becomes au. Final s is silent; le bras and les bras have the same noun spelling.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.leg-body",
+          "target": "la jambe",
+          "meaning": "the leg",
+          "example": "J’ai mal à la jambe.",
+          "exampleMeaning": "My leg hurts.",
+          "gender": "feminine",
+          "note": "Feminine. Keep à la as two words.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.foot-body",
+          "target": "le pied",
+          "meaning": "the foot",
+          "example": "J’ai mal au pied.",
+          "exampleMeaning": "My foot hurts.",
+          "gender": "masculine",
+          "note": "Masculine. À + le becomes au. The final d is silent.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.hand-body",
+          "target": "la main",
+          "meaning": "the hand",
+          "example": "J’ai mal à la main.",
+          "exampleMeaning": "My hand hurts.",
+          "gender": "feminine",
+          "note": "Feminine despite the ending. Keep à la as two words.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.ear-body",
+          "target": "l’oreille",
+          "meaning": "the ear",
+          "example": "J’ai mal à l’oreille.",
+          "exampleMeaning": "My ear hurts.",
+          "gender": "feminine",
+          "note": "Feminine: une oreille. La elides to l’ before the vowel; retain à before l’.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.teeth-body",
+          "target": "les dents",
+          "meaning": "the teeth",
+          "example": "J’ai mal aux dents.",
+          "exampleMeaning": "My teeth hurt.",
+          "gender": "feminine",
+          "note": "Feminine plural; singular une dent. À + les becomes aux. This body noun extends the existing se brosser les dents action target.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        }
+      ],
+      "dialogue": [
+        {
+          "role": "Doctor",
+          "target": "Bonjour. Vous avez mal où ?",
+          "meaning": "Hello. Where does it hurt?"
+        },
+        {
+          "role": "Patient",
+          "target": "J’ai mal à l’oreille.",
+          "meaning": "My ear hurts."
+        },
+        {
+          "role": "Doctor",
+          "target": "À l’oreille droite ou à l’oreille gauche ?",
+          "meaning": "Your right ear or your left ear?"
+        },
+        {
+          "role": "Patient",
+          "target": "À l’oreille gauche. Et j’ai mal à la tête.",
+          "meaning": "My left ear. And I have a headache."
+        },
+        {
+          "role": "Doctor",
+          "target": "Vous pouvez montrer où vous avez mal ?",
+          "meaning": "Can you show me where it hurts?"
+        },
+        {
+          "role": "Patient",
+          "target": "Oui, ici.",
+          "meaning": "Yes, here."
+        }
+      ],
+      "grammar": {
+        "title": "Optional: avoir mal + à + body part",
+        "explanation": "Say j’ai mal, then a location: au bras/au pied/au ventre/au dos (à + le); à la jambe/à la main/à la tête; à l’oreille before a vowel; aux dents (à + les). Use the definite article here rather than mon/ma: j’ai mal au bras. Avoir mal expresses pain; avoir du mal à + infinitive expresses difficulty and is different. This lesson practises describing a location, without diagnosis or treatment advice. Droite/gauche in the dialogue mean right/left; full adjective agreement can wait."
+      },
+      "pictureActivity": {
+        "mode": "meaning",
+        "prompt": "Choose the French for “the ear”.",
+        "entryId": "fr.health.ear-body",
+        "choices": [
+          "fr.health.mal",
+          "fr.health.ear-body",
+          "fr.health.tete"
+        ]
+      },
+      "sentenceActivity": {
+        "id": "fr.health.locate-body-pain.sentence",
+        "prompt": "Build: “My ear hurts.”",
+        "tokens": [
+          "à l’oreille",
+          "mal",
+          "J’ai"
+        ],
+        "answers": [
+          "J’ai mal à l’oreille."
+        ],
+        "hint": "Start J’ai mal, then the location with à l’.",
+        "explanation": "Oreille begins with a vowel, so use à l’oreille. The accent in à marks the preposition. Au oreille and à la oreille are not correct forms.",
+        "almostAnswers": [
+          "J’ai mal a l’oreille."
+        ]
+      },
+      "provenance": {
+        "author": "Original SmartLingo AI-assisted editorial draft, 2026-11-16",
+        "rights": "editorial_example: newly composed examples and dialogue; exact existing SmartLingo canonical entries reused unchanged. No external text, image or audio copied. Context is a text-support placeholder, not a new media asset. See docs/curriculum/bridge-notes.md.",
+        "review": "Draft for owner review: French, gender and senses, English, estimated level, register, answer alternatives and task coherence. No native-speaker review, certified CEFR coverage, audio review or publication claimed."
+      }
+    },
+    {
+      "id": "fr.numbers.compound-price-checks",
+      "revision": 1,
+      "status": "draft",
+      "language": "fr-FR",
+      "explanationLanguage": "en",
+      "title": "Check compound numbers in prices",
+      "subtitle": "Check compound numbers in prices",
+      "outcome": "Understand 21, 31, 61, 71, 80, 81 and 91 in whole-euro prices and check an amount.",
+      "level": "A1",
+      "topic": "Numbers and quantities",
+      "role": "Customer",
+      "durationMinutes": 8,
+      "vocabulary": [
+        {
+          "id": "fr.numbers.twenty-one",
+          "target": "vingt et un",
+          "meaning": "twenty-one",
+          "example": "Ce sac coûte vingt et un euros.",
+          "exampleMeaning": "This bag costs twenty-one euros.",
+          "note": "21 = 20 + 1. Traditional spelling uses et without surrounding hyphens; vingt-et-un is also valid under the 1990 spelling recommendations.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.numbers.thirty-one",
+          "target": "trente et un",
+          "meaning": "thirty-one",
+          "example": "Le total est de trente et un euros.",
+          "exampleMeaning": "The total is thirty-one euros.",
+          "note": "31 = 30 + 1. Trente-et-un is also a valid spelling. Here un goes with masculine euros.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.numbers.sixty-one",
+          "target": "soixante et un",
+          "meaning": "sixty-one",
+          "example": "Ce manteau coûte soixante et un euros.",
+          "exampleMeaning": "This coat costs sixty-one euros.",
+          "note": "61 = 60 + 1. Soixante-et-un is also a valid spelling.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.numbers.seventy-one",
+          "target": "soixante et onze",
+          "meaning": "seventy-one",
+          "example": "Le prix est de soixante et onze euros.",
+          "exampleMeaning": "The price is seventy-one euros.",
+          "note": "71 = 60 + 11 in metropolitan French. Keep et before onze. Soixante-et-onze is also valid.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.numbers.eighty",
+          "target": "quatre-vingts",
+          "meaning": "eighty",
+          "example": "Le total est de quatre-vingts euros.",
+          "exampleMeaning": "The total is eighty euros.",
+          "note": "Keep s for exactly eighty; no s before another number: quatre-vingt-deux.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.numbers.eighty-one",
+          "target": "quatre-vingt-un",
+          "meaning": "eighty-one",
+          "example": "Ce manteau coûte quatre-vingt-un euros.",
+          "exampleMeaning": "This coat costs eighty-one euros.",
+          "note": "81 = 4 × 20 + 1. No et and no s on vingt before un. Contrast exactly 80: quatre-vingts.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.numbers.ninety-one",
+          "target": "quatre-vingt-onze",
+          "meaning": "ninety-one",
+          "example": "Le total est de quatre-vingt-onze euros.",
+          "exampleMeaning": "The total is ninety-one euros.",
+          "note": "91 = 4 × 20 + 11. No et and no s on vingt before onze.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.work.verifier",
+          "target": "vérifier",
+          "meaning": "to check",
+          "example": "Je vais vérifier les numéros.",
+          "exampleMeaning": "I am going to check the numbers.",
+          "note": "Regular -er verb; use for checking accuracy.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.essentials.is-that-right",
+          "target": "c’est bien ça ?",
+          "meaning": "is that right?",
+          "example": "Dix heures demain, c’est bien ça ?",
+          "exampleMeaning": "Ten o’clock tomorrow, is that right?",
+          "note": "Use to check information you have just heard.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        }
+      ],
+      "dialogue": [
+        {
+          "role": "Customer",
+          "target": "Bonjour, ce sac coûte vingt et un euros, c’est bien ça ?",
+          "meaning": "Hello, this bag costs twenty-one euros, is that right?"
+        },
+        {
+          "role": "Shop assistant",
+          "target": "Oui. Avec ce tee-shirt, le total est de trente et un euros.",
+          "meaning": "Yes. With this T-shirt, the total is thirty-one euros."
+        },
+        {
+          "role": "Customer",
+          "target": "Et les manteaux : soixante et un ou soixante et onze euros ?",
+          "meaning": "And the coats: sixty-one or seventy-one euros?"
+        },
+        {
+          "role": "Shop assistant",
+          "target": "Je vais vérifier. Le manteau bleu coûte soixante et onze euros.",
+          "meaning": "I am going to check. The blue coat costs seventy-one euros."
+        },
+        {
+          "role": "Customer",
+          "target": "Le gris coûte quatre-vingts euros, le noir quatre-vingt-un et le rouge quatre-vingt-onze, c’est bien ça ?",
+          "meaning": "The grey one costs eighty euros, the black one eighty-one and the red one ninety-one, is that right?"
+        },
+        {
+          "role": "Shop assistant",
+          "target": "Oui, c’est ça.",
+          "meaning": "Yes, that is right."
+        }
+      ],
+      "grammar": {
+        "title": "Optional: build a number from known parts",
+        "explanation": "Use et un in 21, 31 and 61; 71 is soixante et onze. Metropolitan 80 is quatre-vingts; 81 is quatre-vingt-un and 91 is quatre-vingt-onze, with no et and no s on vingt before another number. These are compositional applications of the existing complete basic-number/tens sequence, not a claim that basic numbers were missing. The examples use traditional et spacing; 1990 hyphenated spellings are valid too. All sample prices are fictional whole-euro amounts. Centimes and decimal prices are a later task."
+      },
+      "pictureActivity": {
+        "mode": "meaning",
+        "prompt": "Choose the French for “seventy-one”.",
+        "entryId": "fr.numbers.seventy-one",
+        "choices": [
+          "fr.numbers.twenty-one",
+          "fr.numbers.seventy-one",
+          "fr.numbers.thirty-one"
+        ]
+      },
+      "sentenceActivity": {
+        "id": "fr.numbers.compound-price-checks.sentence",
+        "prompt": "Build: “The total is thirty-one euros.”",
+        "tokens": [
+          "euros",
+          "Le total",
+          "est de",
+          "trente et un"
+        ],
+        "answers": [
+          "Le total est de trente et un euros."
+        ],
+        "hint": "Start Le total est de, then the number, then euros.",
+        "explanation": "Keep et in 31. These fixed sentence pieces use traditional trente et un. Trente-et-un is also valid spelling, explained in the study note, but the fixed pieces do not offer that variant. Euros is plural.",
+        "almostAnswers": []
+      },
+      "provenance": {
+        "author": "Original SmartLingo AI-assisted editorial draft, 2026-11-16",
+        "rights": "editorial_example: newly composed examples and dialogue; exact existing SmartLingo canonical entries reused unchanged. No external text, image or audio copied. Context is a text-support placeholder, not a new media asset. See docs/curriculum/bridge-notes.md.",
+        "review": "Draft for owner review: French, gender and senses, English, estimated level, register, answer alternatives and task coherence. No native-speaker review, certified CEFR coverage, audio review or publication claimed."
+      }
+    },
+    {
+      "id": "fr.administration.payment-clarification",
+      "revision": 1,
+      "status": "draft",
+      "language": "fr-FR",
+      "explanationLanguage": "en",
+      "title": "Clarify a payment problem",
+      "subtitle": "Clarify a payment problem",
+      "outcome": "Ask a bank adviser to help clarify a possible duplicate card charge using an amount, date, statement and receipt.",
+      "level": "A2",
+      "topic": "Services and paperwork",
+      "role": "Customer",
+      "durationMinutes": 8,
+      "vocabulary": [
+        {
+          "id": "fr.restaurant.bank-card",
+          "target": "une carte bancaire",
+          "meaning": "a bank card",
+          "example": "Je paie par carte bancaire.",
+          "exampleMeaning": "I’m paying by bank card.",
+          "gender": "feminine",
+          "note": "Not the restaurant menu.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.refund",
+          "target": "un remboursement",
+          "meaning": "a refund",
+          "example": "Je voudrais un remboursement.",
+          "exampleMeaning": "I would like a refund.",
+          "gender": "masculine",
+          "note": "This phrase does not establish a right to a refund.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.shopping.proof-of-purchase",
+          "target": "un ticket de caisse",
+          "meaning": "a till receipt",
+          "example": "Voici le ticket de caisse.",
+          "exampleMeaning": "Here is the till receipt.",
+          "gender": "masculine",
+          "note": "A till receipt; keep it if you may need to return an item. Conditions vary by shop and situation.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.work.verifier",
+          "target": "vérifier",
+          "meaning": "to check",
+          "example": "Je vais vérifier les numéros.",
+          "exampleMeaning": "I am going to check the numbers.",
+          "note": "Regular -er verb; use for checking accuracy.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.administration.bank-statement",
+          "target": "un relevé bancaire",
+          "meaning": "a bank statement",
+          "example": "Je regarde mon relevé bancaire.",
+          "exampleMeaning": "I am looking at my bank statement.",
+          "gender": "masculine",
+          "note": "Masculine. A record of account transactions; this lesson makes no claim about its format or availability.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.administration.account-transaction",
+          "target": "une opération",
+          "meaning": "an account transaction",
+          "example": "Je vois deux opérations sur mon relevé bancaire.",
+          "exampleMeaning": "I can see two transactions on my bank statement.",
+          "gender": "feminine",
+          "note": "Feminine. Here an entry or transaction on an account, not a medical operation or a mathematical calculation.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.administration.charged-twice",
+          "target": "j’ai été débité deux fois",
+          "meaning": "I have been charged twice",
+          "example": "J’ai été débité deux fois pour cet achat.",
+          "exampleMeaning": "I have been charged twice for this purchase.",
+          "note": "Use débitée for a feminine speaker. Learn j’ai été débité/débitée as a bounded payment formula; full passive grammar is optional. Deux fois means twice.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.administration.payment-amount",
+          "target": "un montant",
+          "meaning": "an amount of money",
+          "example": "Vous pouvez vérifier le montant ?",
+          "exampleMeaning": "Can you check the amount?",
+          "gender": "masculine",
+          "note": "Masculine. Le montant is the sum of money, not a count of purchases.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        }
+      ],
+      "dialogue": [
+        {
+          "role": "Customer",
+          "target": "Bonjour, je crois que j’ai été débitée deux fois pour cet achat avec ma carte bancaire.",
+          "meaning": "Hello, I think I have been charged twice for this purchase with my bank card."
+        },
+        {
+          "role": "Bank adviser",
+          "target": "Quel est le montant ? Et à quelle date ?",
+          "meaning": "What is the amount? And on what date?"
+        },
+        {
+          "role": "Customer",
+          "target": "Trente et un euros, vendredi. Je vois deux opérations sur mon relevé bancaire.",
+          "meaning": "Thirty-one euros, on Friday. I can see two transactions on my bank statement."
+        },
+        {
+          "role": "Bank adviser",
+          "target": "Vous avez le ticket de caisse ?",
+          "meaning": "Do you have the till receipt?"
+        },
+        {
+          "role": "Customer",
+          "target": "Oui, le voici. Vous pouvez vérifier le montant ? Je voudrais aussi un renseignement sur un remboursement.",
+          "meaning": "Yes, here it is. Can you check the amount? I would also like some information about a refund."
+        },
+        {
+          "role": "Bank adviser",
+          "target": "Vous voulez vérifier ces deux opérations, c’est bien ça ?",
+          "meaning": "You want to check these two transactions, is that right?"
+        },
+        {
+          "role": "Customer",
+          "target": "Oui, je voudrais comprendre.",
+          "meaning": "Yes, I would like to understand."
+        }
+      ],
+      "grammar": {
+        "title": "Optional: describe a problem and ask for clarification",
+        "explanation": "Use vous with a bank adviser: vous pouvez vérifier le montant ? Je crois que means I think that and presents the possible duplicate charge as something to check. Two statement lines are observations, not proof of two completed charges. A speaker can say j’ai été débité (masculine) or j’ai été débitée (feminine); learn this as a bounded completed-event formula before full passive grammar. Je voudrais un renseignement sur un remboursement asks for information without asserting entitlement or timing. The dialogue offers language only; no bank procedure, promised outcome or legal rule is taught."
+      },
+      "pictureActivity": {
+        "mode": "meaning",
+        "prompt": "Choose the French for “an amount of money”.",
+        "entryId": "fr.administration.payment-amount",
+        "choices": [
+          "fr.restaurant.bank-card",
+          "fr.administration.payment-amount",
+          "fr.shopping.refund"
+        ]
+      },
+      "sentenceActivity": {
+        "id": "fr.administration.payment-clarification.sentence",
+        "prompt": "Build: “Can you check the amount, please?”",
+        "tokens": [
+          "s’il vous plaît",
+          "le montant",
+          "Vous pouvez",
+          "vérifier"
+        ],
+        "answers": [
+          "Vous pouvez vérifier le montant s’il vous plaît ?",
+          "S’il vous plaît vous pouvez vérifier le montant ?"
+        ],
+        "hint": "Keep vous pouvez before vérifier, then le montant. The polite phrase can start or end the request.",
+        "explanation": "Vérifier stays in the infinitive after pouvez. Both placements of s’il vous plaît are natural with these pieces. Keep the vous form when addressing staff.",
+        "almostAnswers": []
+      },
+      "provenance": {
+        "author": "Original SmartLingo AI-assisted editorial draft, 2026-11-16",
+        "rights": "editorial_example: newly composed examples and dialogue; exact existing SmartLingo canonical entries reused unchanged. No external text, image or audio copied. Context is a text-support placeholder, not a new media asset. See docs/curriculum/bridge-notes.md.",
+        "review": "Draft for owner review: French, gender and senses, English, estimated level, register, answer alternatives and task coherence. No native-speaker review, certified CEFR coverage, audio review or publication claimed."
+      }
+    },
+    {
+      "id": "fr.digital.short-postponement-message",
+      "revision": 1,
+      "status": "draft",
+      "language": "fr-FR",
+      "explanationLanguage": "en",
+      "title": "Write a short message to postpone",
+      "subtitle": "Write a short message to postpone",
+      "outcome": "Write a short polite message explaining an absence, proposing a later appointment and closing appropriately.",
+      "level": "A2",
+      "topic": "Phone and digital communication",
+      "role": "Learner",
+      "durationMinutes": 8,
+      "vocabulary": [
+        {
+          "id": "fr.education.absent",
+          "target": "absent",
+          "meaning": "absent / not attending",
+          "example": "Je serai absent jeudi.",
+          "exampleMeaning": "I will be absent on Thursday.",
+          "note": "Absente for a woman. Je serai is a useful future form of être.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.empechement",
+          "target": "un empêchement",
+          "meaning": "a conflicting commitment / something preventing attendance",
+          "example": "J’ai un empêchement jeudi.",
+          "exampleMeaning": "Something has come up on Thursday.",
+          "gender": "masculine",
+          "note": "A polite general explanation without personal details.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.leisure.reporter",
+          "target": "reporter",
+          "meaning": "to postpone / move to a later date",
+          "example": "On peut reporter la promenade à dimanche.",
+          "exampleMeaning": "We can postpone the walk until Sunday.",
+          "note": "Regular -er verb; here change a plan to a later time.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.health.disponible",
+          "target": "disponible",
+          "meaning": "available",
+          "example": "Je suis disponible jeudi.",
+          "exampleMeaning": "I am available on Thursday.",
+          "note": "Adjective; the same form for masculine and feminine.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.opinions.because",
+          "target": "parce que",
+          "meaning": "because",
+          "example": "Je prends le bus parce qu’il pleut.",
+          "exampleMeaning": "I am taking the bus because it is raining.",
+          "note": "Que becomes qu’ before il.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.digital.write-to-explain",
+          "target": "je vous écris pour",
+          "meaning": "I am writing to you to",
+          "example": "Je vous écris pour reporter notre rendez-vous.",
+          "exampleMeaning": "I am writing to you to postpone our appointment.",
+          "note": "A polite written opening. Follow pour with an infinitive: pour reporter. Écris is from écrire.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.digital.polite-possible-request",
+          "target": "serait-il possible de… ?",
+          "meaning": "would it be possible to…?",
+          "example": "Serait-il possible de venir vendredi ?",
+          "exampleMeaning": "Would it be possible to come on Friday?",
+          "note": "Learn this as a polite written request with de + infinitive. Full conditional formation can wait; de becomes d’ before a vowel.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        },
+        {
+          "id": "fr.digital.email-closing",
+          "target": "cordialement",
+          "meaning": "kind regards (email closing)",
+          "example": "Cordialement,\nAlex Martin",
+          "exampleMeaning": "Kind regards,\nAlex Martin",
+          "note": "A common neutral professional email closing. Put your name after it. A short friendly text to someone you know can use à bientôt instead.",
+          "picture": "context",
+          "pictureAlt": "An open vocabulary notebook"
+        }
+      ],
+      "dialogue": [
+        {
+          "role": "Learner",
+          "target": "Bonjour Madame,",
+          "meaning": "Hello Madam,"
+        },
+        {
+          "role": "Learner",
+          "target": "Je vous écris pour reporter notre rendez-vous.",
+          "meaning": "I am writing to you to postpone our appointment."
+        },
+        {
+          "role": "Learner",
+          "target": "Je serai absent jeudi parce que je dois travailler.",
+          "meaning": "I will be absent on Thursday because I have to work."
+        },
+        {
+          "role": "Learner",
+          "target": "Serait-il possible de reporter notre rendez-vous à vendredi ?",
+          "meaning": "Would it be possible to postpone our appointment until Friday?"
+        },
+        {
+          "role": "Learner",
+          "target": "Je suis disponible à dix heures.",
+          "meaning": "I am available at ten o’clock."
+        },
+        {
+          "role": "Learner",
+          "target": "Merci beaucoup. Cordialement, Alex Martin",
+          "meaning": "Thank you very much. Kind regards, Alex Martin"
+        },
+        {
+          "role": "Teacher",
+          "target": "Bonjour Alex, vendredi à dix heures, c’est possible. À vendredi !",
+          "meaning": "Hello Alex, Friday at ten o’clock is possible. See you on Friday!"
+        }
+      ],
+      "grammar": {
+        "title": "Optional: a clear, polite short message",
+        "explanation": "Use a greeting, purpose, short reason, proposed alternative, and closing. Pour and de take an infinitive here: pour reporter; serait-il possible de reporter ? Parce que introduces a complete reason with a verb: parce que je dois travailler. J’ai un empêchement is a more general reason when you do not want to give details. Je serai absent/absente is a useful future formula; je suis disponible stays the same for masculine and feminine. This message uses vous to a teacher and cordialement as a neutral email closing. Reporter moves the appointment later; annuler cancels it. These fixed future/conditional formulas keep an A2 task manageable without requiring full conjugation tables."
+      },
+      "pictureActivity": {
+        "mode": "meaning",
+        "prompt": "Choose the French for “kind regards (email closing)”.",
+        "entryId": "fr.digital.email-closing",
+        "choices": [
+          "fr.education.absent",
+          "fr.digital.email-closing",
+          "fr.health.empechement"
+        ]
+      },
+      "sentenceActivity": {
+        "id": "fr.digital.short-postponement-message.sentence",
+        "prompt": "Build: “I am available on Friday at ten o’clock.”",
+        "tokens": [
+          "vendredi",
+          "Je suis disponible",
+          "à dix heures"
+        ],
+        "answers": [
+          "Je suis disponible vendredi à dix heures.",
+          "Vendredi je suis disponible à dix heures."
+        ],
+        "hint": "Keep Je suis disponible together. Vendredi can go before the sentence or before the time.",
+        "explanation": "Use à for a clock time, but no preposition before this particular Friday. Both placements of vendredi work with these pieces. Je suis disponible vendredi dix heures is missing à.",
+        "almostAnswers": []
+      },
+      "provenance": {
+        "author": "Original SmartLingo AI-assisted editorial draft, 2026-11-16",
+        "rights": "editorial_example: newly composed examples and dialogue; exact existing SmartLingo canonical entries reused unchanged. No external text, image or audio copied. Context is a text-support placeholder, not a new media asset. See docs/curriculum/bridge-notes.md.",
+        "review": "Draft for owner review: French, gender and senses, English, estimated level, register, answer alternatives and task coherence. No native-speaker review, certified CEFR coverage, audio review or publication claimed."
+      }
+    }
+  ]
+}

@@ -53,6 +53,14 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e -- --workers=2
       - run: npm run test:offline
+      - run: npm run test:hosted
+      - run: npm run verify:beta
+      - name: Save upload-ready beta
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: smartlingo-beta
+          path: apps/learner/dist/
+          retention-days: 7
       - name: Save failed browser diagnostics
         if: failure()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5

@@ -1,6 +1,14 @@
 # Project status
 
-Updated: 2026-11-16 (Europe/Paris).
+## Deployment-ready complete-content beta (2026-11-17)
+
+Owner authorised all complete material for beta use before manual review. Current source now composes 129 lessons across 25 banks, six bridge additions and five grammar refinements; 819 vocabulary appearances, 757 canonical senses and 748 written forms. Historical payloads and IDs remain intact, with fingerprint-guarded seed updates protecting owner edits/publications. Incomplete seed/gap proposals remain research rather than empty course shells.
+
+Cloudflare Pages static export, runtime API URL configuration, offline integrity checks, hosted-browser acceptance and CI upload artifacts are implemented. Empty settings support ordinary learning with no account/domain/provider secrets; unavailable online features are explained. Optional Node API hosted mode adds separate owner/beta token authentication, exact origin/Host checks, persistent Docker volume and Caddy HTTPS configuration. Account-specific fields remain empty; no external site/server/domain or paid provider was created or called. See [manual deployment steps](DEPLOYMENT.md).
+
+The earlier entries below describe dated local-preview milestones. Their statements that public hosting is unsupported or 123 lessons are current are superseded by this beta preparation. Backend limits remain single-instance, global and intended for trusted testing; no accounts/sync or public billing system is added. Physical phone/Safari/provider quality checks follow actual publication. Final checks and release artifact provenance are in the session checkpoint.
+
+Updated: 2026-11-17 (UTC).
 
 SmartLingo is a runnable local web preview with first editor fields and explicit local draft preview/publication. Physical-phone and voice checks still prevent claiming the full M1 gate complete.
 

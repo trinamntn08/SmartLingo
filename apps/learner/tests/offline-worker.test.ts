@@ -77,7 +77,10 @@ function harness(options: { caches?: MemoryCaches; locks?: MutationLocks; timers
     const files = [...contents].map(([url, body]) => ({ url, size: Buffer.byteLength(body), sha256: digest(body) }));
     const manifest: OfflineManifest = { formatVersion: 1, buildId: digest(JSON.stringify(files)), totalBytes: files.reduce((sum, file) => sum + file.size, 0), files };
     network.set(`${origin}/offline-manifest.json`, async () => Response.json(manifest));
-    for (const [path, body] of contents) network.set(`${origin}${path}`, async () => new Response(body));
+    network.set(`${origin}/`, async () => new Response(contents.get('/index.html')));
+    for (const [path, body] of contents) {
+      if (path !== '/index.html') network.set(`${origin}${path}`, async () => new Response(body));
+    }
     return { manifest, contents };
   };
   const fetchAsset = async (path: string, options: { method?: string; mode?: string } = {}) => {
@@ -121,6 +124,18 @@ test('worker lifecycle never downloads; explicit download verifies and publishes
   assert.equal(worker.requests.length, before);
   worker.network.clear();
   assert.match(await (await worker.fetchAsset('/', { mode: 'navigate' }))!.text(), /one/);
+});
+
+test('host-shaped download fetches root for the exact index entry and caches it under /index.html', async () => {
+  const worker = harness();
+  const { manifest, contents } = worker.setPack('hosted');
+  assert.equal((await worker.command({ type: 'DOWNLOAD', expectedBuildId: manifest.buildId })).at(-1)?.type, 'RESULT');
+  assert.equal(worker.requests.includes(`${origin}/`), true);
+  assert.equal(worker.requests.includes(`${origin}/index.html`), false);
+  assert.equal(worker.requests.includes(`${origin}/assets/hosted.js`), true);
+  const cache = await worker.caches.open((await worker.caches.keys()).find(name => name.startsWith(prefix))!);
+  assert.equal(await (await cache.match('/index.html'))!.text(), contents.get('/index.html'));
+  assert.equal(await cache.match('/'), undefined);
 });
 
 test('hash failure leaves first attempt incomplete and retry publishes; no staged assets are served', async () => {
@@ -175,7 +190,7 @@ test('invalid manifests and mismatched expected build are rejected before creati
     { ...manifest, totalBytes: manifest.totalBytes + 1 },
     { ...manifest, buildId: 'version-one' },
     { ...manifest, files: [...manifest.files, manifest.files[0]] },
-    ...['https://elsewhere.test/x', '//elsewhere.test/x', '/api/x', '/editor/x', '/health', '/lessons', '/published-lessons/example', '/smartlingo-sw.js', '/offline-manifest.json', '/__smartlingo_offline_complete__', '/x?query=1', '/x#fragment', '/assets/../index.html', '/%61pi/x', '/x\\file', '/x%2ffile'].map(url => ({
+    ...['https://elsewhere.test/x', '//elsewhere.test/x', '/api/x', '/ai/practice/status', '/speech/status', '/editor/x', '/health', '/lessons', '/published-lessons/example', '/smartlingo-sw.js', '/offline-manifest.json', '/__smartlingo_offline_complete__', '/x?query=1', '/x#fragment', '/assets/../index.html', '/%61pi/x', '/x\\file', '/x%2ffile'].map(url => ({
       ...manifest, files: [{ ...manifest.files[0], url }, manifest.files[1]],
     })),
     { ...manifest, files: manifest.files.map(file => ({ ...file, size: 101 * 1024 * 1024 })) },
@@ -203,7 +218,7 @@ test('HTTP errors, redirects, excessive bodies and quota failures never publish 
         return cache;
       };
     } else {
-      worker.network.set(`${origin}/index.html`, async () => {
+      worker.network.set(`${origin}/`, async () => {
         if (kind === 'http') return new Response('not found', { status: 404 });
         if (kind === 'redirect') { const response = new Response(contents.get('/index.html')); Object.defineProperty(response, 'redirected', { value: true }); return response; }
         if (kind === 'hash') return new Response('x'.repeat(contents.get('/index.html')!.length));
@@ -215,6 +230,22 @@ test('HTTP errors, redirects, excessive bodies and quota failures never publish 
   }
 });
 
+test('non-root assets retain exact-path redirect and integrity rejection', async () => {
+  for (const kind of ['redirect', 'hash']) {
+    const worker = harness();
+    const { contents } = worker.setPack('strict');
+    worker.network.set(`${origin}/assets/strict.js`, async () => {
+      if (kind === 'hash') return new Response('x'.repeat(contents.get('/assets/strict.js')!.length));
+      const response = new Response(contents.get('/assets/strict.js'));
+      Object.defineProperty(response, 'redirected', { value: true });
+      return response;
+    });
+    assert.equal((await worker.command({ type: 'DOWNLOAD' })).at(-1)?.type, 'ERROR', kind);
+    assert.equal(worker.requests.includes(`${origin}/assets/strict.js`), true, kind);
+    assert.equal((await worker.status()).state, 'incomplete', kind);
+  }
+});
+
 test('mutating commands serialize; status during staging is incomplete and removal affects owned assets only', async () => {
   const worker = harness();
   worker.setPack('one');
@@ -222,7 +253,7 @@ test('mutating commands serialize; status during staging is incomplete and remov
   await unrelated.put('/private', new Response('retained'));
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
-  worker.network.set(`${origin}/index.html`, async () => { await gate; return new Response('<html>one</html>'); });
+  worker.network.set(`${origin}/`, async () => { await gate; return new Response('<html>one</html>'); });
   let downloading = false;
   const started = new Promise<void>(resolve => {
     void worker.command({ type: 'DOWNLOAD' }, reply => { if (reply.type === 'PROGRESS' && !downloading) { downloading = true; resolve(); } });
@@ -268,7 +299,7 @@ test('Web Locks serialize downloads and removal across worker generations', asyn
   oldWorker.setPack('one');
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
-  oldWorker.network.set(`${origin}/index.html`, async () => { await gate; return new Response('<html>one</html>'); });
+  oldWorker.network.set(`${origin}/`, async () => { await gate; return new Response('<html>one</html>'); });
   let started!: () => void;
   const staging = new Promise<void>(resolve => { started = resolve; });
   const download = oldWorker.command({ type: 'DOWNLOAD' }, reply => { if (reply.type === 'PROGRESS') started(); });

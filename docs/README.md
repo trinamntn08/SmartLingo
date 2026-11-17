@@ -1,5 +1,7 @@
 # Documentation index
 
+- [Deploy the complete-content beta for free](DEPLOYMENT.md): Cloudflare upload/build settings, blank account fields and optional protected API server.
+
 | Document | Purpose |
 | --- | --- |
 | [Product plan](../PROJECT_PLAN.md) | Requirements, decisions, assumptions, milestones |

@@ -1,3 +1,5 @@
+import { apiUrl, BackendUnavailableError } from '../../deployment/config';
+import { accessHeaders } from '../../deployment/access';
 import { speechRequestSchema, speechResponseSchema, speechStatusSchema, type SpeechRequest, type SpeechResponse, type SpeechStatus } from '@smartlingo/domain';
 import { verifyAsset } from './validation';
 
@@ -36,9 +38,9 @@ export function createSpeechClient(fetcher: typeof fetch = (...args) => globalTh
     const timer = setTimeout(cancel, 35000);
     try {
       if (controller.signal.aborted) throw new Error('Cancelled');
-      const response = await fetcher(`http://127.0.0.1:3001/speech/${path}`, {
+      const response = await fetcher(apiUrl(`/speech/${path}`), {
         method: command ? 'POST' : 'GET', credentials: 'omit', cache: 'no-store', redirect: 'error', signal: controller.signal,
-        headers: command ? { 'Content-Type': 'application/json', 'X-SmartLingo-Speech': '1' } : {},
+        headers: { ...accessHeaders('beta'), ...(command ? { 'Content-Type': 'application/json', 'X-SmartLingo-Speech': '1' } : {}) },
         body: command ? JSON.stringify(command) : undefined,
       });
       const result = await boundedJson(response, response.ok && command ? 720000 : 8192);
@@ -46,15 +48,16 @@ export function createSpeechClient(fetcher: typeof fetch = (...args) => globalTh
       if (!response.ok) {
         const terminal = !!result && typeof result === 'object' && 'code' in result && result.code === 'attempt_ended';
         throw new SpeechApiError(terminal ? 'This attempt ended without usable audio. A new explicit generation may use credits.'
-          : response.status === 503 ? 'Neural audio is unavailable. Configure Azure on the local API server, then refresh availability.'
+          : response.status === 503 ? 'Neural audio is unavailable. The site owner can configure Azure on the server, then refresh availability.'
             : response.status === 429 ? 'The speech generation limit has been reached. Try later. Failed attempts may count.'
-              : response.status === 403 ? 'The local server refused this browser origin. Use the configured local learner address.'
+              : response.status === 401 || response.status === 403 ? 'Audio access was refused. Apply your beta access token in Profile, then refresh availability. Local preview requires its configured localhost address.'
                 : 'Audio generation could not complete. Retry the same request explicitly to check its result.', terminal);
       }
       return result;
     } catch (error) {
       if (error instanceof SpeechApiError) throw error;
-      throw new SpeechApiError(signal?.aborted ? 'Audio request cancelled.' : 'The local audio server is offline, timed out or returned an invalid response. Retry the same request explicitly; nothing is sent automatically.');
+      if (error instanceof BackendUnavailableError) throw new SpeechApiError(error.message);
+      throw new SpeechApiError(signal?.aborted ? 'Audio request cancelled.' : 'The audio server is offline, timed out or returned an invalid response. Retry the same request explicitly; nothing is sent automatically.');
     } finally { clearTimeout(timer); signal?.removeEventListener('abort', cancel); }
   }
   return {

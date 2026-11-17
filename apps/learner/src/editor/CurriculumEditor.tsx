@@ -1,3 +1,4 @@
+import { deployment } from '../deployment/config';
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { lessonSchema, matchesLesson, type Lesson, type LessonPreview } from '@smartlingo/domain';
@@ -42,7 +43,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
   }
   function report(failure: unknown) {
     setValidationError(false);
-    setError(failure instanceof Error ? failure.message : 'The local API request failed. Your form has been kept.');
+    setError(failure instanceof Error ? failure.message : 'The curriculum API request failed. Your form has been kept.');
     setConflict(typeof failure === 'object' && failure !== null && 'status' in failure && failure.status === 409);
     scroll.current?.scrollTo({ y: 0, animated: false });
   }
@@ -84,7 +85,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
     try {
       const lesson = await localContentApi.saveDraft(parsed.data, saved.revision);
       setSaved(lesson); setDraft(editableDraft(lesson)); setDurationText(String(lesson.durationMinutes)); setCatalogue(current => current.map(item => item.id === lesson.id ? lesson : item));
-      setConflict(false); setMessage(`Draft revision ${lesson.revision} saved locally. Preview this revision before publishing.`);
+      setConflict(false); setMessage(`Draft revision ${lesson.revision} saved${deployment().hosted ? ' on the server' : ' locally'}. Preview this revision before publishing.`);
       return true;
     } catch (failure) { report(failure); return false; }
     finally { inFlight.current = false; setBusy(false); }
@@ -102,7 +103,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
     try {
       const published = await localContentApi.publishDraft(saved.id, saved.revision, preview.previewToken);
       setSaved(published); setDraft(editableDraft(published)); setDurationText(String(published.durationMinutes)); setCatalogue(current => current.map(item => item.id === published.id ? published : item));
-      resetReview(); setConflict(false); setMessage(`Published revision ${published.revision} to the local catalogue. Return to learning, open Profile, and load published lessons to use it.`);
+      resetReview(); setConflict(false); setMessage(`Published revision ${published.revision} to the ${deployment().hosted ? 'hosted' : 'local'} catalogue. Return to learning, open Profile, and load published lessons to use it.`);
       scroll.current?.scrollTo({ y: 0, animated: false });
     } catch (failure) { resetReview(); report(failure); }
     finally { inFlight.current = false; setBusy(false); }
@@ -138,11 +139,11 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
       {!!error && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>The editor request didn’t complete.</Text><Text style={s.body}>{error}</Text>
         {conflict ? <><Text style={s.body}>A newer revision may exist. Your form is still here. Reload latest explicitly before saving again; nothing is merged or retried automatically.</Text><Button disabled={busy || loading} onPress={() => requestNavigation({ kind: 'reload' })}>Reload latest revision</Button></>
           : validationError ? <Text style={s.body}>Correct the form, then save again. No revision has been sent.</Text>
-            : <><Text style={s.body}>For local editing, start the API with npm run dev:api, then retry your action. Learner lessons still work without it.</Text>{!saved && <Button disabled={loading} onPress={() => void loadLatest()}>Retry loading lessons</Button>}</>}
+            : <><Text style={s.body}>{deployment().hosted ? 'Check owner access in Profile, then retry loading lessons. Learner lessons still work without the workshop.' : 'For local editing, start the API with npm run dev:api, then retry your action. Learner lessons still work without it.'}</Text>{!saved && <Button disabled={loading} onPress={() => void loadLatest()}>Retry loading lessons</Button>}</>}
       </View>}
       {!!message && <View style={[s.notice, { backgroundColor: colors.green }]}><Text accessibilityLiveRegion="polite" style={s.body}>{message}</Text></View>}
-      {loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Loading local curriculum…</Text></View> : <>
-        {!catalogue.length && !error && <View style={s.card}><Text style={s.heading}>No local lessons yet.</Text><Text style={s.body}>The first editor updates existing curriculum. Start the local API with its bundled lesson seeds.</Text><Button onPress={() => void loadLatest()}>Reload catalogue</Button></View>}
+      {loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Loading curriculum…</Text></View> : <>
+        {!catalogue.length && !error && <View style={s.card}><Text style={s.heading}>No curriculum lessons yet.</Text><Text style={s.body}>The editor updates existing curriculum from the connected server.</Text><Button onPress={() => void loadLatest()}>Reload catalogue</Button></View>}
         {!!catalogue.length && <View style={{ gap: 12 }}>
           <TextInput accessibilityLabel="Search curriculum" placeholder="Find a topic or lesson" value={search} onChangeText={setSearch} style={s.input} />
           <ScrollView style={{ maxHeight: 240 }} nestedScrollEnabled keyboardShouldPersistTaps="handled">
@@ -164,9 +165,9 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
           <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Publication review</Text><Text style={s.body}>Check the French and English for naturalness and accuracy, the accepted exercise answers, picture meaning, level, and media rights. Device speech is synthetic and has not been reviewed.</Text>
             <Text style={s.muted}>{saved.provenance.rights}</Text><Text style={s.muted}>{preview && !dirty ? `Preview receipt: revision ${preview.lesson.revision}. Valid for up to 15 minutes.` : 'Save and preview the current draft to enable review and publication.'}</Text>
             <Pressable accessibilityRole="checkbox" aria-checked={reviewed} aria-disabled={busy || !preview || dirty} accessibilityState={{ checked: reviewed, disabled: busy || !preview || dirty }} disabled={busy || !preview || dirty} onFocus={() => setReviewFocused(true)} onBlur={() => setReviewFocused(false)} onPress={() => setReviewed(!reviewed)} style={({ pressed }) => [s.notice, { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: reviewed ? colors.green : colors.sand, borderWidth: 2, borderColor: reviewFocused ? '#246944' : 'transparent', opacity: pressed ? 0.7 : 1 }]}>
-              <Text style={s.heading}>{reviewed ? '☑' : '☐'}</Text><Text style={[s.body, { flex: 1 }]}>I have reviewed this saved revision for language, answers, suitability, and rights, and approve its local publication.</Text>
+              <Text style={s.heading}>{reviewed ? '☑' : '☐'}</Text><Text style={[s.body, { flex: 1 }]}>I have reviewed this saved revision for language, answers, suitability, and rights, and approve its publication.</Text>
             </Pressable>
-            <Button primary disabled={busy || conflict || !preview || !reviewed || dirty} onPress={() => void publishDraft()}>Publish reviewed revision</Button><Text style={s.muted}>Publication creates a new local revision. Earlier content and learner history are retained.</Text>
+            <Button primary disabled={busy || conflict || !preview || !reviewed || dirty} onPress={() => void publishDraft()}>Publish reviewed revision</Button><Text style={s.muted}>Publication creates a new saved revision. Earlier content and learner history are retained.</Text>
           </View>
         </>}
       </>}

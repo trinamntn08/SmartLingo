@@ -3,6 +3,7 @@ import type { LessonRepository } from './repository';
 import { EditorError } from './editor-error';
 import { registerEditorRoutes, lessonParams } from './editor-routes';
 import { registerLocalAccess } from './local-access';
+import { registerHostedAccess, type ApiAccessOptions } from './hosted-access';
 import { PreviewReceipts } from './preview-receipts';
 import { PracticeError, PracticeService, type PracticeOptions } from './practice/service';
 import { registerPracticeRoutes } from './practice/routes';
@@ -10,7 +11,7 @@ import { SpeechError, SpeechService, type SpeechOptions } from './speech/service
 import { registerSpeechRoutes } from './speech/routes';
 
 /** The app takes ownership of the repository and closes it with the server. */
-export function createApp(repository: LessonRepository, options: { now?: () => number; practice?: PracticeOptions; speech?: SpeechOptions } = {}) {
+export function createApp(repository: LessonRepository, options: { now?: () => number; practice?: PracticeOptions; speech?: SpeechOptions; access?: ApiAccessOptions } = {}) {
   const app = Fastify({
     logger: false,
     bodyLimit: 131_072,
@@ -24,7 +25,8 @@ export function createApp(repository: LessonRepository, options: { now?: () => n
   const receipts = new PreviewReceipts(options.now);
   const practice = new PracticeService({ now: options.now, ...options.practice });
   const speech = new SpeechService({ now: options.now, ...options.speech });
-  registerLocalAccess(app);
+  if (options.access?.mode === 'hosted') registerHostedAccess(app, options.access);
+  else registerLocalAccess(app);
   app.addHook('preClose', async () => { practice.close(); speech.close(); });
   app.addHook('onClose', async () => { receipts.clear(); repository.close(); });
   app.setErrorHandler<FastifyError>((error, _request, reply) => {

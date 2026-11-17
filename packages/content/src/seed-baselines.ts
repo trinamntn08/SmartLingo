@@ -22,8 +22,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"36ef81504d29f6c74c626e8c26214a87a767d88433a32a0de662930b20de44ad"},
   ],
   "fr.restaurant.finish-the-meal": [
-    {"revision":1,"sha256":"e8a8333fb5692d29db003467db4f90bf873ec7dd3d5b06a54f34818d4ef9785b","nextRevision":3},
-    {"revision":2,"sha256":"eaecf7cb752fe4403f0ee68f6a9a86d37e7bed481fc7c90e14b8c5b98c42e526"},
+    {"revision":1,"sha256":"e8a8333fb5692d29db003467db4f90bf873ec7dd3d5b06a54f34818d4ef9785b","nextRevision":4},
+    {"revision":2,"sha256":"eaecf7cb752fe4403f0ee68f6a9a86d37e7bed481fc7c90e14b8c5b98c42e526","nextRevision":4},
+    {"revision":3,"sha256":"7a9283a8e05955cd26294bbb1829eaf6cbda9879f671dd3c847d4c52de8ccf97","nextRevision":4},
   ],
   "fr.bakery.choose-bread": [
     {"revision":1,"sha256":"bbe0f6a336d2352bc31deffc3b134d422c9bebf0eea7df373ea09c7b13ff2abf","nextRevision":3},
@@ -34,8 +35,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"94942819bde9ef4d49905b3af1e3ff006b6c2c1e9d9281cfbb53210f66fe8bb0"},
   ],
   "fr.bakery.buy-lunch": [
-    {"revision":1,"sha256":"e47b9c8fd22088d6eeedbc930d201217312ada436e3431d5d9de67417ec2ed74","nextRevision":3},
-    {"revision":2,"sha256":"e4d55ecce8c9f30e4ea9963b4aebd8e09a382d980011efa1ae2baebbdac16ff7"},
+    {"revision":1,"sha256":"e47b9c8fd22088d6eeedbc930d201217312ada436e3431d5d9de67417ec2ed74","nextRevision":4},
+    {"revision":2,"sha256":"e4d55ecce8c9f30e4ea9963b4aebd8e09a382d980011efa1ae2baebbdac16ff7","nextRevision":4},
+    {"revision":3,"sha256":"f6db04a4e9742b28f9ea388bbd8731a4a648538dd50f55acd01cc5a4149e65b9","nextRevision":4},
   ],
   "fr.bakery.order-for-later": [
     {"revision":1,"sha256":"bd8820c9221ee765c1259c1c0496b69a4be9a0a322ba6029ca358902145e185d","nextRevision":3},
@@ -54,8 +56,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"8a5d09ff15f5e180455b13c83dcb7724f5ee625bbb4a9fd7da43a82d898cf568"},
   ],
   "fr.groceries.find-products": [
-    {"revision":1,"sha256":"edacb61c771439d781906d363e9ae2ccdacf9ac081a7228a3ac5a41a1ac7eaf0","nextRevision":3},
-    {"revision":2,"sha256":"4e6c5cf476361da5fecdbce54938730f869dacf18ca2e49fc16173303f881f84"},
+    {"revision":1,"sha256":"edacb61c771439d781906d363e9ae2ccdacf9ac081a7228a3ac5a41a1ac7eaf0","nextRevision":4},
+    {"revision":2,"sha256":"4e6c5cf476361da5fecdbce54938730f869dacf18ca2e49fc16173303f881f84","nextRevision":4},
+    {"revision":3,"sha256":"cab8abcbae2b2f002db57c94b3ffcd2decea183727723dbe8f7c8dfc4ef381d4","nextRevision":4},
   ],
   "fr.groceries.check-before-paying": [
     {"revision":1,"sha256":"79219428db1a554b5a509be19299d7edb726a39569affd6901ecab8edf9ff899","nextRevision":3},
@@ -94,8 +97,9 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"a369a405ad19cefdff052fe689bb00647bd784037c12dd39eea47552f097f269"},
   ],
   "fr.housing.ask-about-a-rental": [
-    {"revision":1,"sha256":"dc6379e7285ccc5763cd2204b94ee2f4e8304210b10252fbe978b17596d91dc8","nextRevision":3},
-    {"revision":2,"sha256":"8f86f9cc477b6e18cd6ba508c3f4d6661a8020dd5dedee76bae1eb0533372d5c"},
+    {"revision":1,"sha256":"dc6379e7285ccc5763cd2204b94ee2f4e8304210b10252fbe978b17596d91dc8","nextRevision":4},
+    {"revision":2,"sha256":"8f86f9cc477b6e18cd6ba508c3f4d6661a8020dd5dedee76bae1eb0533372d5c","nextRevision":4},
+    {"revision":3,"sha256":"03ecac6148ba88f52ae688780fead1c800907c5e6ddcf0fa1a938e70dafaf3a9","nextRevision":4},
   ],
   "fr.housing.report-a-home-problem": [
     {"revision":1,"sha256":"51325ac524543b7a60f40592fd2124c4ac63eabf04e774054905041360d97b5f","nextRevision":3},
@@ -155,9 +159,10 @@ export const previousSeedFingerprints = Object.freeze({
     {"revision":2,"sha256":"1d46642c9ae01b1f6d28123d1a1ae5f3fa91793aafbe49607915d051f335e2db"},
   ],
   "fr.work.organise-work": [
-    {"revision":1,"sha256":"654fdbe46fea7d2c40cc1326a8049bd4ef493863c2fffaf8f019f507b4e58a4d","nextRevision":4},
-    {"revision":2,"sha256":"2adabf7cec48997b36af663eb2c07db39f1766a46a8b5a64ddf643d08a6a21d0","nextRevision":4},
-    {"revision":3,"sha256":"93e6875a97e36b56d171f6717248a93dadb4524e10ebc1f2a9c8309bbe6c9f3e","nextRevision":4},
+    {"revision":1,"sha256":"654fdbe46fea7d2c40cc1326a8049bd4ef493863c2fffaf8f019f507b4e58a4d","nextRevision":5},
+    {"revision":2,"sha256":"2adabf7cec48997b36af663eb2c07db39f1766a46a8b5a64ddf643d08a6a21d0","nextRevision":5},
+    {"revision":3,"sha256":"93e6875a97e36b56d171f6717248a93dadb4524e10ebc1f2a9c8309bbe6c9f3e","nextRevision":5},
+    {"revision":4,"sha256":"00225ebeea5efc560f0c79347dc326e5bc9306729038ac522e3f1ffcb1958788","nextRevision":5},
   ],
   "fr.work.clarify-request": [
     {"revision":1,"sha256":"2dffbe868fa7a3aed27346ee941f0c27aee0e02f620656395a1d766fef5e3292","nextRevision":3},

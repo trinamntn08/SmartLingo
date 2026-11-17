@@ -1,0 +1,58 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    init: true
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      SMARTLINGO_API_MODE: hosted
+      HOST: 0.0.0.0
+      PORT: '3001'
+      SMARTLINGO_PUBLIC_HOST: ${SMARTLINGO_API_DOMAIN:?Fill SMARTLINGO_API_DOMAIN in deploy/.env}
+      SMARTLINGO_ALLOWED_ORIGINS: ${SMARTLINGO_ALLOWED_ORIGINS:?Fill the exact beta HTTPS origin}
+      SMARTLINGO_ADMIN_TOKEN: ${SMARTLINGO_ADMIN_TOKEN:?Generate a separate owner token}
+      SMARTLINGO_BETA_TOKEN: ${SMARTLINGO_BETA_TOKEN:?Generate a separate beta token}
+    volumes:
+      - curriculum:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3001/health',{headers:{Host:process.env.SMARTLINGO_PUBLIC_HOST}}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '2'
+  https:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      SMARTLINGO_API_DOMAIN: ${SMARTLINGO_API_DOMAIN:?Fill API hostname}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '2'
+volumes:
+  curriculum:
+  caddy_data:
+  caddy_config:

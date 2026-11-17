@@ -1,0 +1,9 @@
+{$SMARTLINGO_API_DOMAIN} {
+    # Provider bodies and Authorization headers are never written to access logs.
+    reverse_proxy api:3001
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy no-referrer
+        Cache-Control no-store
+    }
+}

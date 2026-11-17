@@ -1,0 +1,1822 @@
+{
+  "reviewStatus": "draft",
+  "exampleOrigin": "editorial_example",
+  "topics": [
+    {
+      "slug": "greetings",
+      "title": "Everyday greetings and politeness",
+      "prerequisites": [],
+      "clusters": [
+        {
+          "title": "Arrive and leave",
+          "vocabularyIds": [
+            "fr.bonjour",
+            "fr.greetings.bonsoir",
+            "fr.people.au-revoir",
+            "fr.greetings.bonne-journee",
+            "fr.greetings.bonne-soiree"
+          ]
+        },
+        {
+          "title": "Politeness and check-ins",
+          "vocabularyIds": [
+            "fr.silvousplait",
+            "fr.greetings.sil-te-plait",
+            "fr.merci",
+            "fr.greetings.comment-allez-vous",
+            "fr.greetings.ca-va-bien",
+            "fr.greetings.et-vous"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Greet an unfamiliar adult, answer a check-in and close the exchange.",
+        "lessonIds": [
+          "fr.greetings.hello-goodbye",
+          "fr.greetings.politeness",
+          "fr.greetings.check-in"
+        ]
+      },
+      "a2": {
+        "outcome": "Proposed revisit, no current A2 lesson: adapt a greeting or apology to a changed relationship.",
+        "lessonIds": []
+      },
+      "communicativeTask": {
+        "situation": "Meeting a neighbour at the building entrance",
+        "promptEn": "Role-play a daytime meeting with a neighbour addressed as vous. Ask how they are, answer their return question and leave politely. In a second round meet a friend.",
+        "modelFr": "Bonjour ! Comment allez-vous ? — Très bien, merci. Et vous ? — Ça va bien, merci. Bonne journée !",
+        "modelEn": "Hello! How are you? — Very well, thank you. And you? — I am well, thank you. Have a good day!",
+        "successCriteria": [
+          "Choose an arrival greeting and a departure wish for their different functions.",
+          "Keep vous forms together; use compatible familiar forms in the friend round."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [],
+        "transferTaskEn": "Choose an evening arrival and departure phrase for a new role card."
+      },
+      "gaps": [
+        "Shared fr.bonjour gloss omits afternoon; coordinate any support revision across all uses.",
+        "Add arrival-versus-leaving and register decisions beyond the current recognition question."
+      ],
+      "future": {
+        "B1": "Manage introductions and changes of register in a small group.",
+        "B2": "Handle nuanced greetings, interruptions and relationship-sensitive closings."
+      }
+    },
+    {
+      "slug": "essentials",
+      "title": "Essential conversation tools",
+      "prerequisites": [
+        "greetings"
+      ],
+      "clusters": [
+        {
+          "title": "Repair an exchange",
+          "vocabularyIds": [
+            "fr.essentials.not-understand",
+            "fr.essentials.repeat-please",
+            "fr.essentials.more-slowly",
+            "fr.essentials.understood"
+          ]
+        },
+        {
+          "title": "Ask and confirm",
+          "vocabularyIds": [
+            "fr.essentials.help-me",
+            "fr.essentials.write-it",
+            "fr.administration.epeler",
+            "fr.essentials.is-that-right",
+            "fr.essentials.may-i"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask for repetition or written help and check one understood detail.",
+        "lessonIds": [
+          "fr.essentials.repair",
+          "fr.essentials.polite-help",
+          "fr.essentials.yes-and-no",
+          "fr.essentials.simple-questions",
+          "fr.essentials.clarify"
+        ]
+      },
+      "a2": {
+        "outcome": "Proposed revisit, no current A2 lesson: clarify two linked instructions and explain the unclear part.",
+        "lessonIds": []
+      },
+      "communicativeTask": {
+        "situation": "A helper gives a hidden short code",
+        "promptEn": "Partner A sees a three-digit code. Ask for repetition or slower speech, write it and read it back. A confirms or corrects it.",
+        "modelFr": "Vous pouvez répéter plus lentement ? — Deux, six, huit. — Deux, six, huit, c’est bien ça ? — Oui.",
+        "modelEn": "Can you repeat that more slowly? — Two, six, eight. — Two, six, eight, is that right? — Yes.",
+        "successCriteria": [
+          "Recover the exact code after clarification.",
+          "Read it back for confirmation rather than only claim understanding."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "greetings"
+        ],
+        "transferTaskEn": "Ask a receptionist to write a fictional surname instead of a code."
+      },
+      "gaps": [
+        "Alphabet letter-name recognition needs early support; épeler alone is not an alphabet course.",
+        "Practise the repair-and-confirm loop beyond the current single sentence."
+      ],
+      "future": {
+        "B1": "Resolve a misunderstanding and reformulate an instruction.",
+        "B2": "Negotiate precise meaning and tactfully challenge ambiguity."
+      }
+    },
+    {
+      "slug": "numbers",
+      "title": "Numbers and quantities",
+      "prerequisites": [
+        "essentials"
+      ],
+      "clusters": [
+        {
+          "title": "Count people and read a code",
+          "vocabularyIds": [
+            "fr.routine.zero",
+            "fr.numbers.one",
+            "fr.routine.deux",
+            "fr.routine.quatre",
+            "fr.numbers.seven",
+            "fr.numbers.nine"
+          ]
+        },
+        {
+          "title": "Read prices and combine numbers",
+          "vocabularyIds": [
+            "fr.numbers.fifteen",
+            "fr.numbers.twenty",
+            "fr.numbers.thirty",
+            "fr.numbers.seventy",
+            "fr.numbers.eighty",
+            "fr.numbers.hundred",
+            "fr.numbers.how-many"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Give a small quantity or code and recognise common prices with supported number-building patterns.",
+        "lessonIds": [
+          "fr.numbers.zero-five",
+          "fr.numbers.six-eleven",
+          "fr.numbers.twelve-seventeen",
+          "fr.numbers.eighteen-fifty",
+          "fr.numbers.sixty-hundred"
+        ]
+      },
+      "a2": {
+        "outcome": "Proposed revisit, no current A2 lesson: compare totals and check a simple payment discrepancy.",
+        "lessonIds": []
+      },
+      "communicativeTask": {
+        "situation": "A counter with separate quantity and price cards",
+        "promptEn": "A sees the quantity order; B sees prices. Ask for the quantity and total, then read the total back. Start under twenty and repeat with a larger total.",
+        "modelFr": "Vous êtes combien ? — Nous sommes quatre. — Ça fait vingt euros en tout. — Vingt euros, c’est bien ça ?",
+        "modelEn": "How many of you are there? — There are four of us. — That is twenty euros altogether. — Twenty euros, is that right?",
+        "successCriteria": [
+          "Transfer the quantity accurately.",
+          "Confirm the total in euros; arithmetic may be supported."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "essentials"
+        ],
+        "transferTaskEn": "Read a fictional reference code digit by digit and distinguish it from a price."
+      },
+      "gaps": [
+        "Zero to nineteen and tens through one hundred already have targets; do not duplicate those cards.",
+        "Add varied construction and recognition practice for 21, 31, 71, 80, 81 and 91; rules alone do not establish independent numeracy."
+      ],
+      "future": {
+        "B1": "Explain a simple budget and correct a misunderstood amount.",
+        "B2": "Qualify numerical comparisons and budget trade-offs."
+      }
+    },
+    {
+      "slug": "people",
+      "title": "People and introductions",
+      "prerequisites": [
+        "essentials"
+      ],
+      "clusters": [
+        {
+          "title": "Name, home and languages",
+          "vocabularyIds": [
+            "fr.people.s-appeler",
+            "fr.people.prenom",
+            "fr.people.nom-de-famille",
+            "fr.people.habiter",
+            "fr.people.venir-de",
+            "fr.people.parler"
+          ]
+        },
+        {
+          "title": "People and settling in",
+          "vocabularyIds": [
+            "fr.people.famille",
+            "fr.people.frere",
+            "fr.people.soeur",
+            "fr.people.voisine",
+            "fr.people.arriver",
+            "fr.people.rencontrer"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Introduce yourself, say where you live and identify someone close to you.",
+        "lessonIds": [
+          "fr.people.first-meeting",
+          "fr.people.where-from",
+          "fr.people.family"
+        ]
+      },
+      "a2": {
+        "outcome": "Describe arriving recently and keep a short first conversation going with repair support.",
+        "lessonIds": [
+          "fr.people.conversation",
+          "fr.people.settling-in"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "First meeting in a shared building",
+        "promptEn": "Partners have different fictional names, origins, home cities and language cards. Exchange these details, then introduce one relative or friend.",
+        "modelFr": "Je m’appelle Alex. Je viens de Londres, mais j’habite à Nantes. Et vous ? — Moi, c’est Léa. Ma sœur habite ici.",
+        "modelEn": "My name is Alex. I come from London, but I live in Nantes. And you? — I am Léa. My sister lives here.",
+        "successCriteria": [
+          "Exchange a name and distinguish origin from residence.",
+          "Identify a relationship with an appropriate possessive."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "greetings",
+          "essentials"
+        ],
+        "transferTaskEn": "Ask how to spell an unfamiliar fictional surname."
+      },
+      "gaps": [
+        "Age, mother/father/partner and early contact-detail transfer are proposed additions.",
+        "Bridge canonical contact details from Administration into the early identity route.",
+        "First-meeting dialogue adds a second-floor ordinal before it is targeted; provide visible support."
+      ],
+      "future": {
+        "B1": "Describe relationships, changes of home and personal background.",
+        "B2": "Explain complex identity and belonging with nuanced relationship vocabulary."
+      }
+    },
+    {
+      "slug": "calendar",
+      "title": "Dates and availability",
+      "prerequisites": [
+        "numbers"
+      ],
+      "clusters": [
+        {
+          "title": "Weekdays and nearby days",
+          "vocabularyIds": [
+            "fr.routine.lundi",
+            "fr.calendar.tuesday",
+            "fr.calendar.friday",
+            "fr.routine.samedi",
+            "fr.calendar.sunday",
+            "fr.routine.aujourdhui",
+            "fr.bakery.tomorrow"
+          ]
+        },
+        {
+          "title": "Months and an agreed date",
+          "vocabularyIds": [
+            "fr.calendar.january",
+            "fr.calendar.june",
+            "fr.calendar.september",
+            "fr.calendar.december",
+            "fr.calendar.first-date",
+            "fr.health.disponible"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Name a weekday or month and agree a simple day.",
+        "lessonIds": [
+          "fr.calendar.working-week",
+          "fr.calendar.nearby-days",
+          "fr.calendar.january-june",
+          "fr.calendar.july-december"
+        ]
+      },
+      "a2": {
+        "outcome": "Offer an alternative calendar date and confirm availability.",
+        "lessonIds": [
+          "fr.calendar.dates-and-slots"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Two different appointment calendars",
+        "promptEn": "Give partners different free dates. Find a shared date, reject an unavailable one and confirm day and month. The first pass may use a visible calendar.",
+        "modelFr": "Vous êtes disponible le premier juin ? — Non, mais je peux venir le trois juin. — D’accord, le trois juin.",
+        "modelEn": "Are you available on the first of June? — No, but I can come on the third of June. — All right, the third of June.",
+        "successCriteria": [
+          "Find a date available to both people.",
+          "Repeat day and month, distinguishing premier from ordinary day numbers."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "numbers",
+          "essentials"
+        ],
+        "transferTaskEn": "Write the agreed date in a short fictional confirmation message."
+      },
+      "gaps": [
+        "All seven weekdays and all twelve months already appear as targets.",
+        "Practise specific lundi versus habitual le lundi in a schedule task.",
+        "Add supported year/date reading after checking number load."
+      ],
+      "future": {
+        "B1": "Explain scheduling constraints over several weeks.",
+        "B2": "Negotiate conflicting schedules and qualify uncertain availability."
+      }
+    },
+    {
+      "slug": "routine",
+      "title": "Time and daily routine",
+      "prerequisites": [
+        "numbers",
+        "calendar"
+      ],
+      "clusters": [
+        {
+          "title": "Get ready and leave",
+          "vocabularyIds": [
+            "fr.routine.wake-up",
+            "fr.routine.get-dressed",
+            "fr.routine.brush-teeth",
+            "fr.routine.hurry",
+            "fr.routine.ready",
+            "fr.routine.on-time"
+          ]
+        },
+        {
+          "title": "Clock times and sequence",
+          "vocabularyIds": [
+            "fr.routine.heure",
+            "fr.routine.midi",
+            "fr.routine.et-demie",
+            "fr.routine.se-lever",
+            "fr.routine.rentrer",
+            "fr.routine.ensuite"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Say when you get ready and leave, using a clock time and a simple habit.",
+        "lessonIds": [
+          "fr.routine.small-numbers",
+          "fr.routine.clock",
+          "fr.routine.calendar"
+        ]
+      },
+      "a2": {
+        "outcome": "Describe an ordered day and distinguish a usual habit from an occasional change.",
+        "lessonIds": [
+          "fr.routine.daily-actions",
+          "fr.routine.sequence"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Housemates coordinate their morning",
+        "promptEn": "Each partner has a different start time and bathroom slot. Ask about getting up and leaving, then agree a workable morning order.",
+        "modelFr": "Tu te lèves à quelle heure ? — À sept heures. Ensuite, je prends mon petit déjeuner. Et toi ? — À sept heures et demie.",
+        "modelEn": "What time do you get up? — At seven. Then I have breakfast. And you? — At half past seven.",
+        "successCriteria": [
+          "Exchange two meaningful clock times.",
+          "Give a two-step sequence and keep reflexive pronouns with their speaker."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "numbers",
+          "calendar"
+        ],
+        "transferTaskEn": "Describe a weekend change to the weekday routine."
+      },
+      "gaps": [
+        "Daily-actions is currently A2 although its supported task resembles A1; review level only with a complete revision.",
+        "Add quarter-hour and 24-hour practice; et demie alone is not full clock coverage.",
+        "Keep tard distinct from en retard and waking up distinct from getting up."
+      ],
+      "future": {
+        "B1": "Describe changing habits and explain a disrupted day.",
+        "B2": "Evaluate work-life routines and competing time demands."
+      }
+    },
+    {
+      "slug": "directions",
+      "title": "Finding your way on foot",
+      "prerequisites": [
+        "essentials"
+      ],
+      "clusters": [
+        {
+          "title": "Locate a service",
+          "vocabularyIds": [
+            "fr.directions.where-is",
+            "fr.administration.mairie",
+            "fr.administration.poste",
+            "fr.directions.library",
+            "fr.directions.next-to",
+            "fr.directions.opposite"
+          ]
+        },
+        {
+          "title": "Follow and check a route",
+          "vocabularyIds": [
+            "fr.directions.straight-on",
+            "fr.directions.turn-left",
+            "fr.directions.turn-right",
+            "fr.directions.bridge",
+            "fr.directions.turn-back",
+            "fr.directions.how-long-walk"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask where a service is and follow two short walking instructions.",
+        "lessonIds": [
+          "fr.directions.street-landmarks",
+          "fr.directions.location",
+          "fr.directions.route",
+          "fr.directions.local-places"
+        ]
+      },
+      "a2": {
+        "outcome": "Check walking time and correct a missed turn.",
+        "lessonIds": [
+          "fr.directions.check-distance"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A map with a missing destination label",
+        "promptEn": "A sees the library location; B has an incomplete map. Ask where it is, follow the route and mark it. In the revisit, start from the wrong side of the bridge.",
+        "modelFr": "Où se trouve la bibliothèque ? — Allez tout droit, puis tournez à droite au feu. — À droite au feu, c’est bien ça ?",
+        "modelEn": "Where is the library? — Go straight on, then turn right at the traffic light. — Right at the traffic light, is that right?",
+        "successCriteria": [
+          "Identify the same destination on both maps.",
+          "Clarify a turn or landmark before marking it."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "essentials",
+          "numbers"
+        ],
+        "transferTaskEn": "Locate a post office with a different pair of landmarks."
+      },
+      "gaps": [
+        "Add map transfer to current meaning recognition.",
+        "Bridge un bureau de poste in canonical support with la poste in dialogue."
+      ],
+      "future": {
+        "B1": "Explain a longer route and recover from an unexpected closure.",
+        "B2": "Compare urban access, transport design and mobility constraints."
+      }
+    },
+    {
+      "slug": "transport",
+      "title": "Transport",
+      "prerequisites": [
+        "numbers",
+        "calendar",
+        "directions"
+      ],
+      "clusters": [
+        {
+          "title": "Choose a route and ticket",
+          "vocabularyIds": [
+            "fr.transport.take-bus",
+            "fr.transport.stop",
+            "fr.transport.platform",
+            "fr.transport.single",
+            "fr.transport.return",
+            "fr.transport.buy-ticket"
+          ]
+        },
+        {
+          "title": "Connections and disruption",
+          "vocabularyIds": [
+            "fr.transport.connection",
+            "fr.transport.change-trains",
+            "fr.transport.delay",
+            "fr.transport.cancelled",
+            "fr.transport.replacement-bus",
+            "fr.transport.how-long"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask for a destination, identify a stop and buy a one-way or return ticket.",
+        "lessonIds": [
+          "fr.transport.choose-transport",
+          "fr.transport.find-your-stop",
+          "fr.transport.buy-a-ticket"
+        ]
+      },
+      "a2": {
+        "outcome": "Check a connection or ask for an alternative after a cancellation.",
+        "lessonIds": [
+          "fr.transport.understand-a-journey",
+          "fr.transport.handle-disruption"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A ticket desk with different timetable cards",
+        "promptEn": "A has a destination and arrival deadline; B has two fictional services. Choose a service and ticket. In A2, B cancels the first choice and offers a replacement.",
+        "modelFr": "Mon train est annulé. Il y a un autre itinéraire ? — Vous pouvez prendre le car de remplacement. — Il part d’où ?",
+        "modelEn": "My train is cancelled. Is there another route? — You can take the replacement coach. — Where does it leave from?",
+        "successCriteria": [
+          "Confirm the destination and a relevant service time in the first round.",
+          "Obtain an alternative and its departure point in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "numbers",
+          "calendar",
+          "directions"
+        ],
+        "transferTaskEn": "Ask which platform serves a changed connection."
+      },
+      "gaps": [
+        "Keep ticket-validation arrangements fictional or phrased as questions.",
+        "Separate transport service times from working hours.",
+        "Routine alternative requests do not amount to a formal compensation complaint."
+      ],
+      "future": {
+        "B1": "Explain a missed connection and negotiate a travel solution.",
+        "B2": "Evaluate disruption policies and sustainable mobility options."
+      }
+    },
+    {
+      "slug": "bakery",
+      "title": "Bakery",
+      "prerequisites": [
+        "essentials",
+        "numbers"
+      ],
+      "clusters": [
+        {
+          "title": "Choose bread and pastries",
+          "vocabularyIds": [
+            "fr.baguette",
+            "fr.croissant",
+            "fr.bakery.country-loaf",
+            "fr.bakery.slice",
+            "fr.bakery.two-of-them"
+          ]
+        },
+        {
+          "title": "Lunch and collection",
+          "vocabularyIds": [
+            "fr.bakery.portion",
+            "fr.bakery.take-away",
+            "fr.bakery.heat-up",
+            "fr.bakery.order-in-advance",
+            "fr.bakery.collect",
+            "fr.bakery.tomorrow"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Order bread or pastries with a quantity and close the purchase politely.",
+        "lessonIds": [
+          "fr.bakery.customer",
+          "fr.bakery.choose-bread",
+          "fr.bakery.choose-a-treat"
+        ]
+      },
+      "a2": {
+        "outcome": "Ask for a takeaway adjustment or arrange an order and collection time.",
+        "lessonIds": [
+          "fr.bakery.buy-lunch",
+          "fr.bakery.order-for-later"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A bakery order and availability card",
+        "promptEn": "Customer has a quantity and collection preference; baker has stock and two collection slots. Complete a basic purchase, then agree a later collection.",
+        "modelFr": "Je voudrais commander un gâteau pour samedi. — Pour combien de personnes ? — Pour six. Je peux venir le chercher à dix heures ?",
+        "modelEn": "I would like to order a cake for Saturday. — For how many people? — For six. Can I come and collect it at ten?",
+        "successCriteria": [
+          "Identify an available item and quantity in the basic round.",
+          "Agree day, collection time and number of people in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "greetings",
+          "numbers",
+          "calendar"
+        ],
+        "transferTaskEn": "Request sliced bread when the first choice is unavailable."
+      },
+      "gaps": [
+        "fr.bakery.buy-lunch has corrupted grammar question punctuation; a separate draft correction is supplied.",
+        "Shared polite examples mention coffee; use local dialogue for bakery transfer.",
+        "Regional pastry names are an extension, not a replacement canonical target."
+      ],
+      "future": {
+        "B1": "Clarify a custom order and resolve a collection misunderstanding.",
+        "B2": "Negotiate detailed event catering requirements and trade-offs."
+      }
+    },
+    {
+      "slug": "groceries",
+      "title": "Groceries",
+      "prerequisites": [
+        "numbers",
+        "bakery"
+      ],
+      "clusters": [
+        {
+          "title": "Products and quantities",
+          "vocabularyIds": [
+            "fr.groceries.need",
+            "fr.groceries.apple",
+            "fr.groceries.tomato",
+            "fr.groceries.kilogram",
+            "fr.groceries.packet",
+            "fr.groceries.rice"
+          ]
+        },
+        {
+          "title": "Find and check a purchase",
+          "vocabularyIds": [
+            "fr.groceries.look-for",
+            "fr.groceries.aisle-section",
+            "fr.groceries.checkout",
+            "fr.groceries.label",
+            "fr.groceries.price-error",
+            "fr.groceries.cash"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Buy a small food list and ask for a quantity or price.",
+        "lessonIds": [
+          "fr.groceries.fruit-and-vegetables",
+          "fr.groceries.fill-the-cupboard",
+          "fr.groceries.chilled-foods"
+        ]
+      },
+      "a2": {
+        "outcome": "Locate a product section and check a price discrepancy politely.",
+        "lessonIds": [
+          "fr.groceries.find-products",
+          "fr.groceries.check-before-paying"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A shopping list and mismatching receipt",
+        "promptEn": "Shopper has a list; assistant has section locations. Find the items, then compare a fictional shelf label with a receipt containing one mismatch.",
+        "modelFr": "Excusez-moi, il y a une erreur sur le prix. — Quel prix avez-vous vu ? — Deux euros sur l’étiquette.",
+        "modelEn": "Excuse me, there is a mistake in the price. — What price did you see? — Two euros on the label.",
+        "successCriteria": [
+          "Obtain the requested product and quantity in the basic round.",
+          "Identify the mismatching amount and ask for checking in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "numbers",
+          "bakery",
+          "directions"
+        ],
+        "transferTaskEn": "Repeat the checking exchange with a new product and amount."
+      },
+      "gaps": [
+        "fr.groceries.find-products has corrupted question punctuation; a separate correction is drafted.",
+        "Finding a section is A1-like supported performance despite its current A2 label; review separately.",
+        "A price-check request does not establish successful recovery of money."
+      ],
+      "future": {
+        "B1": "Explain a purchase problem and negotiate an available remedy.",
+        "B2": "Compare food costs, sourcing and consumption choices with qualified reasons."
+      }
+    },
+    {
+      "slug": "restaurant",
+      "title": "Restaurant",
+      "prerequisites": [
+        "essentials",
+        "numbers"
+      ],
+      "clusters": [
+        {
+          "title": "Find a table and order",
+          "vocabularyIds": [
+            "fr.restaurant.table",
+            "fr.restaurant.for-two",
+            "fr.carte",
+            "fr.restaurant.set-menu",
+            "fr.restaurant.ill-have",
+            "fr.addition"
+          ]
+        },
+        {
+          "title": "Check needs and finish",
+          "vocabularyIds": [
+            "fr.restaurant.allergy",
+            "fr.restaurant.contain",
+            "fr.restaurant.without",
+            "fr.restaurant.on-the-side",
+            "fr.restaurant.bank-card",
+            "fr.restaurant.separately"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Request a table, choose a drink or meal and ask for the bill.",
+        "lessonIds": [
+          "fr.restaurant.customer",
+          "fr.restaurant.find-a-table",
+          "fr.restaurant.choose-a-meal"
+        ]
+      },
+      "a2": {
+        "outcome": "State a food need, request information and ask about separate payment.",
+        "lessonIds": [
+          "fr.restaurant.explain-food-needs",
+          "fr.restaurant.finish-the-meal"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "An original menu and a diner request card",
+        "promptEn": "Server sees a short original menu; customer has a preference and party size. Agree an order. In A2 add an allergy card: server checks information instead of guessing.",
+        "modelFr": "J’ai une allergie aux œufs. Cette sauce contient des œufs ? — Je vais vérifier en cuisine. — Merci, je vais attendre.",
+        "modelEn": "I have an allergy to eggs. Does this sauce contain eggs? — I will check with the kitchen. — Thank you, I will wait.",
+        "successCriteria": [
+          "Agree party size and ordered item in the basic round.",
+          "State the allergy explicitly and request ingredient information; task completion is not a safety guarantee."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "greetings",
+          "numbers",
+          "groceries"
+        ],
+        "transferTaskEn": "Ask about separate payment and request a receipt after a new meal."
+      },
+      "gaps": [
+        "fr.restaurant.finish-the-meal has corrupted grammar punctuation; separate correction drafted.",
+        "Preserve la carte versus un menu and receipt versus transport-ticket senses.",
+        "Keep allergy and sauce-on-the-side requests distinct."
+      ],
+      "future": {
+        "B1": "Explain an order problem and request an appropriate resolution.",
+        "B2": "Discuss food-service choices and competing dietary requirements."
+      }
+    },
+    {
+      "slug": "shopping",
+      "title": "Clothes and shopping",
+      "prerequisites": [
+        "numbers"
+      ],
+      "clusters": [
+        {
+          "title": "Choose clothes and size",
+          "vocabularyIds": [
+            "fr.shopping.trousers",
+            "fr.shopping.shirt",
+            "fr.shopping.clothing-size",
+            "fr.shopping.shoe-size",
+            "fr.shopping.another-colour",
+            "fr.shopping.too-small"
+          ]
+        },
+        {
+          "title": "Try and explain a problem",
+          "vocabularyIds": [
+            "fr.shopping.try-on",
+            "fr.shopping.fitting-room",
+            "fr.shopping.fits-me",
+            "fr.shopping.defect",
+            "fr.shopping.exchange",
+            "fr.shopping.proof-of-purchase"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Find a garment and ask for another size or colour.",
+        "lessonIds": [
+          "fr.shopping.everyday-clothes",
+          "fr.shopping.shoes-and-accessories",
+          "fr.shopping.sizes-and-colours"
+        ]
+      },
+      "a2": {
+        "outcome": "Explain a fit problem or defect and ask whether an exchange is possible.",
+        "lessonIds": [
+          "fr.shopping.try-before-buying",
+          "fr.shopping.return-an-item"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A clothing request and a stock card",
+        "promptEn": "Customer needs a size and colour; assistant sees available options. Find an acceptable garment. In A2 use a defect card and proof of purchase to request an exchange.",
+        "modelFr": "Je voudrais rapporter ce pull. Il y a un défaut. — Vous avez le ticket de caisse ? — Oui. Un échange est possible ?",
+        "modelEn": "I would like to bring this jumper back. There is a defect. — Do you have the till receipt? — Yes. Is an exchange possible?",
+        "successCriteria": [
+          "Agree an available garment, size and colour.",
+          "Identify a defect and ask for a remedy without assuming entitlement."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "numbers",
+          "essentials"
+        ],
+        "transferTaskEn": "Change from clothing size to shoe size, using pointure."
+      },
+      "gaps": [
+        "Only blue and black are explicit basic colour targets; a bounded broader cluster is proposed.",
+        "Canonical chercher example is food-shop specific; local dialogue supplies clothes context.",
+        "Supported routine exchange enquiries differ from extended formal complaints."
+      ],
+      "future": {
+        "B1": "Explain a purchase history and negotiate a remedy.",
+        "B2": "Make a sustained tactful complaint and weigh policy terms."
+      }
+    },
+    {
+      "slug": "housing",
+      "title": "Home and housing",
+      "prerequisites": [
+        "people",
+        "directions"
+      ],
+      "clusters": [
+        {
+          "title": "Rooms and building access",
+          "vocabularyIds": [
+            "fr.housing.apartment",
+            "fr.housing.bedroom",
+            "fr.housing.kitchen",
+            "fr.housing.key",
+            "fr.housing.floor",
+            "fr.housing.ground-floor"
+          ]
+        },
+        {
+          "title": "Rent and a repair request",
+          "vocabularyIds": [
+            "fr.housing.rent",
+            "fr.housing.service-charges",
+            "fr.housing.tenancy-agreement",
+            "fr.housing.heating",
+            "fr.housing.leak",
+            "fr.housing.arrange-visit"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Describe a home and understand how to reach or enter it.",
+        "lessonIds": [
+          "fr.housing.rooms-at-home",
+          "fr.housing.furniture-and-essentials",
+          "fr.housing.arrive-at-a-building"
+        ]
+      },
+      "a2": {
+        "outcome": "Ask what rent includes or report a fault and agree a visit.",
+        "lessonIds": [
+          "fr.housing.ask-about-a-rental",
+          "fr.housing.report-a-home-problem"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Two floor plans and a repair diary",
+        "promptEn": "Describe rooms so a partner completes missing labels. In the revisit, tenant has a fault and availability card; contact has two visit slots. Agree a visit and repeat the fault.",
+        "modelFr": "Le chauffage ne fonctionne pas depuis hier. Vous pouvez faire venir quelqu’un ? — Demain matin ? — Oui, je serai là.",
+        "modelEn": "The heating has not worked since yesterday. Can you arrange for someone to come? — Tomorrow morning? — Yes, I will be there.",
+        "successCriteria": [
+          "Place two rooms or objects correctly in the basic round.",
+          "Give the fault, starting time and agreed visit slot in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "people",
+          "directions",
+          "calendar"
+        ],
+        "transferTaskEn": "Report another fault with the same request frame."
+      },
+      "gaps": [
+        "fr.housing.ask-about-a-rental has corrupted question punctuation; separate correction drafted.",
+        "Research viewing, deposit and guarantor language before adding targets.",
+        "Rent example uses eight hundred before explicit hundreds-building practice; provide numerical support."
+      ],
+      "future": {
+        "B1": "Explain rental constraints and follow up an unresolved repair.",
+        "B2": "Negotiate complex housing needs and evaluate housing-policy trade-offs."
+      }
+    },
+    {
+      "slug": "leisure",
+      "title": "Leisure and weather",
+      "prerequisites": [
+        "routine",
+        "calendar"
+      ],
+      "clusters": [
+        {
+          "title": "Activities and preferences",
+          "vocabularyIds": [
+            "fr.leisure.aimer",
+            "fr.leisure.lire",
+            "fr.leisure.marcher",
+            "fr.leisure.nager",
+            "fr.leisure.piscine"
+          ]
+        },
+        {
+          "title": "Weather and an alternative",
+          "vocabularyIds": [
+            "fr.leisure.beau",
+            "fr.leisure.pleuvoir",
+            "fr.leisure.vent",
+            "fr.leisure.si",
+            "fr.leisure.reporter",
+            "fr.leisure.musee"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Say what you like and agree an activity using the weather.",
+        "lessonIds": [
+          "fr.leisure.free-time",
+          "fr.leisure.weather",
+          "fr.leisure.sport"
+        ]
+      },
+      "a2": {
+        "outcome": "Suggest a weather-dependent alternative and postpone an outing.",
+        "lessonIds": [
+          "fr.leisure.invitations",
+          "fr.leisure.change-plans"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Activity preferences and different forecasts",
+        "promptEn": "Partners have different preferences and one forecast each. Find an activity both accept; in A2 agree a backup if it rains.",
+        "modelFr": "S’il pleut, on va au musée ? — Oui. On reporte la promenade à dimanche ? — D’accord.",
+        "modelEn": "If it rains, shall we go to the museum? — Yes. Shall we postpone the walk until Sunday? — All right.",
+        "successCriteria": [
+          "Choose one shared activity and time.",
+          "Make the condition and alternative explicit in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "routine",
+          "calendar"
+        ],
+        "transferTaskEn": "Invite a friend to a different indoor activity after a forecast change."
+      },
+      "gaps": [
+        "Weather is already present; seasons and snow remain proposed target gaps.",
+        "Recycled invitations belong here for a weather decision and in Social for arrangements.",
+        "Teach si in a short present-tense chunk before broader conditional grammar."
+      ],
+      "future": {
+        "B1": "Explain leisure habits and a changed plan with reasons.",
+        "B2": "Discuss access to leisure, cultural preferences and environmental constraints."
+      }
+    },
+    {
+      "slug": "social",
+      "title": "Invitations and shared plans",
+      "prerequisites": [
+        "people",
+        "leisure",
+        "calendar"
+      ],
+      "clusters": [
+        {
+          "title": "Invite, accept or decline",
+          "vocabularyIds": [
+            "fr.social.come-to-mine",
+            "fr.leisure.ca-te-dit",
+            "fr.social.suits-me",
+            "fr.social.free",
+            "fr.social.sorry-cannot",
+            "fr.social.thanks-anyway"
+          ]
+        },
+        {
+          "title": "Fix and change details",
+          "vocabularyIds": [
+            "fr.social.meet-up",
+            "fr.social.what-time",
+            "fr.social.set-time",
+            "fr.leisure.reporter",
+            "fr.health.confirmer",
+            "fr.social.change-plan"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Invite someone, accept or decline warmly and suggest another occasion.",
+        "lessonIds": [
+          "fr.social.invite",
+          "fr.social.join-plan",
+          "fr.social.decline"
+        ]
+      },
+      "a2": {
+        "outcome": "Agree place and time, change a plan and confirm new details.",
+        "lessonIds": [
+          "fr.social.organise",
+          "fr.social.change-plan"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Friends with conflicting availability cards",
+        "promptEn": "Each partner sees only their own free times. Invite, decline an unsuitable time, offer an alternative and confirm where and when.",
+        "modelFr": "Tu veux venir chez moi samedi ? — Désolée, je ne peux pas. Dimanche plutôt ? — Oui, à huit heures ? — Ça me va.",
+        "modelEn": "Do you want to come to my place on Saturday? — Sorry, I cannot. Sunday instead? — Yes, at eight? — That works for me.",
+        "successCriteria": [
+          "Respond to the actual invitation rather than recite a fixed acceptance.",
+          "Reach a shared day, time and place and repeat the changed detail."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "people",
+          "leisure",
+          "calendar"
+        ],
+        "transferTaskEn": "Write a two-line fictional message changing the meeting place."
+      },
+      "gaps": [
+        "Repeated Leisure invitation IDs are intentional recycling.",
+        "Provide a visible en retard gloss in organise before its later canonical bank.",
+        "Keep plan acceptance ça me va distinct from clothing fit."
+      ],
+      "future": {
+        "B1": "Maintain relationships while explaining and renegotiating a change.",
+        "B2": "Handle tactful disagreement and nuanced social expectations."
+      }
+    },
+    {
+      "slug": "health",
+      "title": "Health and appointments",
+      "prerequisites": [
+        "people",
+        "calendar"
+      ],
+      "clusters": [
+        {
+          "title": "Book and name a symptom",
+          "vocabularyIds": [
+            "fr.health.prendre-rendez-vous",
+            "fr.health.medecin",
+            "fr.health.mal",
+            "fr.health.tete",
+            "fr.health.fievre",
+            "fr.health.pharmacie"
+          ]
+        },
+        {
+          "title": "Duration and changed appointment",
+          "vocabularyIds": [
+            "fr.health.depuis",
+            "fr.health.tousser",
+            "fr.health.douleur",
+            "fr.health.deplacer",
+            "fr.health.creneau",
+            "fr.health.confirmer"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask for an appointment, state where something hurts and request explanation at a pharmacy.",
+        "lessonIds": [
+          "fr.health.appointment",
+          "fr.health.symptoms",
+          "fr.health.pharmacy"
+        ]
+      },
+      "a2": {
+        "outcome": "Describe symptom timing or change an appointment and confirm the new slot.",
+        "lessonIds": [
+          "fr.health.consultation",
+          "fr.health.change-appointment"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A fictional appointment diary and patient card",
+        "promptEn": "Patient sees a simple symptom and free-time card; receptionist sees the diary. Agree an appointment. In A2 add a conflict and negotiate a new slot. Use invented health details.",
+        "modelFr": "Je voudrais déplacer mon rendez-vous. Vous avez un créneau vendredi ? — À dix heures. — Merci, je confirme vendredi à dix heures.",
+        "modelEn": "I would like to reschedule my appointment. Do you have a slot on Friday? — At ten. — Thank you, I confirm Friday at ten.",
+        "successCriteria": [
+          "Communicate the intended appointment day and time.",
+          "Identify the conflict and confirm the new slot; symptom language stays descriptive."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "people",
+          "calendar",
+          "essentials"
+        ],
+        "transferTaskEn": "Ask a pharmacist to repeat and explain a fictional leaflet phrase."
+      },
+      "gaps": [
+        "Expand body parts with supported avoir mal à/au/aux; current examples already teach some contractions.",
+        "No dosage or emergency-service completeness is claimed.",
+        "Keep ongoing depuis separate from completed pendant duration."
+      ],
+      "future": {
+        "B1": "Explain a longer symptom history and ask follow-up questions.",
+        "B2": "Discuss health information and public-health choices with qualified claims."
+      }
+    },
+    {
+      "slug": "cooking",
+      "title": "Cooking",
+      "prerequisites": [
+        "groceries"
+      ],
+      "clusters": [
+        {
+          "title": "Prepare ingredients",
+          "vocabularyIds": [
+            "fr.cooking.wash-hands",
+            "fr.cooking.chopping-board",
+            "fr.cooking.wash-vegetables",
+            "fr.cooking.peel",
+            "fr.cooking.cut"
+          ]
+        },
+        {
+          "title": "Follow steps and serve",
+          "vocabularyIds": [
+            "fr.cooking.recipe",
+            "fr.cooking.a-little",
+            "fr.cooking.add",
+            "fr.cooking.mix",
+            "fr.cooking.cook",
+            "fr.cooking.serve"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask for utensils, prepare vegetables and follow a short supported recipe.",
+        "lessonIds": [
+          "fr.cooking.prepare-workspace",
+          "fr.cooking.prepare-vegetables",
+          "fr.cooking.follow-a-recipe"
+        ]
+      },
+      "a2": {
+        "outcome": "Explain an ordered cooking step, duration or request to put food away.",
+        "lessonIds": [
+          "fr.cooking.control-the-cooking",
+          "fr.cooking.serve-and-clear-away"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Housemates split an original recipe card",
+        "promptEn": "A sees ingredients and quantities; B sees preparation steps. Ask for missing information and agree who does two actions. This is a language practice card, not a tested recipe.",
+        "modelFr": "Tu peux laver les courgettes ? — Oui. Et l’oignon ? — Je le coupe. Ensuite, on ajoute un peu de sel.",
+        "modelEn": "Can you wash the courgettes? — Yes. And the onion? — I will cut it. Then we add a little salt.",
+        "successCriteria": [
+          "Transfer an ingredient and amount.",
+          "Agree two actions in order with an appropriate request form."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "groceries",
+          "housing",
+          "routine"
+        ],
+        "transferTaskEn": "Use another vegetable with the same quantity and sequence language."
+      },
+      "gaps": [
+        "Explain which familiar or polite partner gives an imperative.",
+        "Cooling/storage language examples are not complete food-safety instructions.",
+        "Create an original ordered card to supplement the single sentence activity."
+      ],
+      "future": {
+        "B1": "Explain a recipe variation and solve a preparation problem.",
+        "B2": "Compare food traditions and justify detailed menu choices."
+      }
+    },
+    {
+      "slug": "digital",
+      "title": "Phone and digital communication",
+      "prerequisites": [
+        "essentials",
+        "numbers"
+      ],
+      "clusters": [
+        {
+          "title": "Call, dictate and reply",
+          "vocabularyIds": [
+            "fr.digital.call-verb",
+            "fr.digital.voicemail",
+            "fr.administration.adresse-mail",
+            "fr.digital.at-sign",
+            "fr.digital.dot",
+            "fr.digital.reply"
+          ]
+        },
+        {
+          "title": "Connect and share a file",
+          "vocabularyIds": [
+            "fr.administration.se-connecter",
+            "fr.administration.mot-de-passe",
+            "fr.digital.download",
+            "fr.administration.piece-jointe",
+            "fr.digital.open",
+            "fr.digital.save"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Arrange a call, dictate a fictional email address and confirm a message.",
+        "lessonIds": [
+          "fr.digital.phone",
+          "fr.digital.email-address",
+          "fr.digital.messages"
+        ]
+      },
+      "a2": {
+        "outcome": "Explain a connection or file problem and request another way to receive a document.",
+        "lessonIds": [
+          "fr.digital.connection",
+          "fr.digital.files"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "An inaccessible attachment and fictional contact card",
+        "promptEn": "A cannot open an attachment; B can offer a link. Explain the problem, request a link and confirm the next action. Basic round dictates an address with one character correction.",
+        "modelFr": "Je ne peux pas ouvrir la pièce jointe. Vous pouvez m’envoyer le lien ? — Oui. — Merci, je vais télécharger le document.",
+        "modelEn": "I cannot open the attachment. Can you send me the link? — Yes. — Thank you, I will download the document.",
+        "successCriteria": [
+          "Transfer the fictional address accurately after a check.",
+          "Identify the inaccessible file and agree an alternative in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "essentials",
+          "numbers"
+        ],
+        "transferTaskEn": "Leave a short fictional voicemail giving a callback time."
+      },
+      "gaps": [
+        "Bridge contact expressions into early identity work without duplicate IDs.",
+        "Use a reserved example domain in a later revision: exemple.fr is labelled fictional but is not a reserved example domain.",
+        "Practice never requires a real password."
+      ],
+      "future": {
+        "B1": "Explain a technical problem and compare workarounds.",
+        "B2": "Discuss digital access, privacy and service-design trade-offs."
+      }
+    },
+    {
+      "slug": "accommodation",
+      "title": "Accommodation",
+      "prerequisites": [
+        "housing",
+        "calendar",
+        "digital"
+      ],
+      "clusters": [
+        {
+          "title": "Book and check in",
+          "vocabularyIds": [
+            "fr.accommodation.book-room",
+            "fr.accommodation.night",
+            "fr.accommodation.double-room",
+            "fr.accommodation.under-what-name",
+            "fr.accommodation.complete-form"
+          ]
+        },
+        {
+          "title": "Ask for services and help",
+          "vocabularyIds": [
+            "fr.accommodation.included",
+            "fr.accommodation.bath-towel",
+            "fr.accommodation.hot-water",
+            "fr.accommodation.change-rooms",
+            "fr.accommodation.leave-bags",
+            "fr.accommodation.until"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Book a simple stay, give the booking name and ask about an included service.",
+        "lessonIds": [
+          "fr.accommodation.book-a-room",
+          "fr.accommodation.check-in",
+          "fr.accommodation.settle-into-your-room"
+        ]
+      },
+      "a2": {
+        "outcome": "Describe a room problem or arrange luggage storage before departure.",
+        "lessonIds": [
+          "fr.accommodation.request-help-during-stay",
+          "fr.accommodation.check-out"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A booking request and hotel availability card",
+        "promptEn": "Guest has dates and room needs; receptionist has two offers. Agree a booking. In A2 add a room-problem card and confirm the offered solution.",
+        "modelFr": "Il n’y a pas d’eau chaude dans ma chambre. Est-ce que je peux changer de chambre ? — Oui, une autre chambre est disponible. — Merci.",
+        "modelEn": "There is no hot water in my room. Can I change rooms? — Yes, another room is available. — Thank you.",
+        "successCriteria": [
+          "Agree room type, arrival day and number of nights.",
+          "Name a problem and confirm an offered practical action in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "housing",
+          "calendar",
+          "digital",
+          "transport"
+        ],
+        "transferTaskEn": "Ask about checkout and leaving bags until a different time."
+      },
+      "gaps": [
+        "Retain the note that chambre double does not guarantee a bed arrangement.",
+        "Identity-document exchanges are fictional, not universal requirements.",
+        "Contrast à midi with jusqu’à midi in a timed luggage task."
+      ],
+      "future": {
+        "B1": "Explain a booking discrepancy and negotiate a suitable room.",
+        "B2": "Handle detailed accommodation complaints and compare contractual options."
+      }
+    },
+    {
+      "slug": "education",
+      "title": "Education and learning",
+      "prerequisites": [
+        "essentials",
+        "calendar"
+      ],
+      "clusters": [
+        {
+          "title": "Enrol and follow a task",
+          "vocabularyIds": [
+            "fr.education.s-inscrire",
+            "fr.education.niveau",
+            "fr.education.en-presentiel",
+            "fr.education.page",
+            "fr.education.ecouter",
+            "fr.education.travailler-a-deux"
+          ]
+        },
+        {
+          "title": "Attendance and a learning goal",
+          "vocabularyIds": [
+            "fr.education.emploi-du-temps",
+            "fr.education.prevenir",
+            "fr.education.reviser",
+            "fr.education.objectif",
+            "fr.education.avoir-du-mal-a",
+            "fr.education.a-son-rythme"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask to join a course and check a simple classroom instruction.",
+        "lessonIds": [
+          "fr.education.enrol",
+          "fr.education.class-actions"
+        ]
+      },
+      "a2": {
+        "outcome": "Report an absence, describe a difficulty and agree a practical learning goal.",
+        "lessonIds": [
+          "fr.education.attendance",
+          "fr.education.homework",
+          "fr.education.progress"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Course timetables and learner availability",
+        "promptEn": "Learner has a preferred format and free times; adviser has two courses. Choose a course. In A2 tell the teacher about an absence or difficulty and request a next step.",
+        "modelFr": "J’ai du mal à comprendre les nombres au téléphone. — On peut refaire un petit dialogue. — Oui, à mon rythme, s’il vous plaît.",
+        "modelEn": "I find it difficult to understand numbers on the phone. — We can do a short dialogue again. — Yes, at my own pace, please.",
+        "successCriteria": [
+          "Identify a suitable format and schedule.",
+          "State a specific difficulty and agree a practice action in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "essentials",
+          "calendar",
+          "digital"
+        ],
+        "transferTaskEn": "Ask which exercise and page to prepare after an absence."
+      },
+      "gaps": [
+        "Core classroom nouns currently live in Work.study; bridge them here using canonical recycling.",
+        "Keep avoir du mal à for difficulty distinct from physical pain.",
+        "Course labels and lesson completion are not proof of proficiency."
+      ],
+      "future": {
+        "B1": "Describe training experience and plan learning priorities.",
+        "B2": "Evaluate teaching approaches and argue for a training proposal."
+      }
+    },
+    {
+      "slug": "work",
+      "title": "Work and study",
+      "prerequisites": [
+        "people",
+        "routine",
+        "digital",
+        "education"
+      ],
+      "clusters": [
+        {
+          "title": "Find people and do a task",
+          "vocabularyIds": [
+            "fr.work.bureau",
+            "fr.work.collegue",
+            "fr.work.responsable",
+            "fr.work.aider",
+            "fr.work.imprimer",
+            "fr.work.document"
+          ]
+        },
+        {
+          "title": "Plan and clarify",
+          "vocabularyIds": [
+            "fr.work.horaire",
+            "fr.work.tache",
+            "fr.work.delai",
+            "fr.work.terminer",
+            "fr.work.consigne",
+            "fr.work.proposer"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Locate a colleague or room and request help with a simple task.",
+        "lessonIds": [
+          "fr.work.workplace",
+          "fr.work.study",
+          "fr.work.simple-tasks"
+        ]
+      },
+      "a2": {
+        "outcome": "Clarify an instruction, check a deadline and suggest a next action.",
+        "lessonIds": [
+          "fr.work.organise-work",
+          "fr.work.clarify-request"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A task card with an omitted deadline",
+        "promptEn": "Worker has a document task; colleague has the missing deadline and checking rule. Ask for both, repeat the instruction and propose a workable next action.",
+        "modelFr": "Il faut vérifier les noms et les numéros ? — Oui, avant midi. — D’accord. Je propose de vérifier le document ensemble.",
+        "modelEn": "Do we need to check the names and the numbers? — Yes, before noon. — All right. I suggest checking the document together.",
+        "successCriteria": [
+          "Request needed help or a room clearly in the basic round.",
+          "Confirm task and time constraint before proposing action in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "people",
+          "routine",
+          "digital",
+          "education"
+        ],
+        "transferTaskEn": "Clarify a changed work schedule instead of a document task."
+      },
+      "gaps": [
+        "fr.work.organise-work explanation refers to la absent from its dialogue; separate correction drafted.",
+        "Workplace training reuses Education concepts; it is not an unrelated new word count.",
+        "Resolve the earlier noon deadline explicitly when the dialogue also mentions a two-o’clock meeting."
+      ],
+      "future": {
+        "B1": "Explain a task delay and negotiate priorities.",
+        "B2": "Present and defend a workplace proposal with nuanced trade-offs."
+      }
+    },
+    {
+      "slug": "administration",
+      "title": "Services and paperwork",
+      "prerequisites": [
+        "people",
+        "digital"
+      ],
+      "clusters": [
+        {
+          "title": "Reception and contact details",
+          "vocabularyIds": [
+            "fr.administration.accueil",
+            "fr.administration.formulaire",
+            "fr.administration.aide",
+            "fr.administration.adresse",
+            "fr.administration.numero",
+            "fr.administration.epeler"
+          ]
+        },
+        {
+          "title": "Submission and missing documents",
+          "vocabularyIds": [
+            "fr.administration.procedure",
+            "fr.administration.submit-file",
+            "fr.administration.justificatif",
+            "fr.administration.signature",
+            "fr.administration.deadline",
+            "fr.administration.acknowledgement"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Ask at reception, give fictional contact details and send a letter.",
+        "lessonIds": [
+          "fr.administration.reception",
+          "fr.administration.contact-details",
+          "fr.administration.post"
+        ]
+      },
+      "a2": {
+        "outcome": "Check a missing document and clarify a submission route or final date.",
+        "lessonIds": [
+          "fr.administration.internet",
+          "fr.administration.paperwork"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "An original mock form and document checklist",
+        "promptEn": "Applicant has a partly completed fictional form; clerk has a checklist and submission date. Ask what is missing and where or when to submit it. No real eligibility decision is simulated.",
+        "modelFr": "Mon dossier est complet ? — Il manque votre signature sur cette page. — Je signe ici ? Et quelle est la date limite ?",
+        "modelEn": "Is my application file complete? — Your signature is missing from this page. — Do I sign here? And what is the deadline?",
+        "successCriteria": [
+          "Transfer a contact detail accurately in the basic round.",
+          "Identify the missing item and confirm the stated deadline or route in the revisit."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "people",
+          "digital",
+          "calendar",
+          "directions"
+        ],
+        "transferTaskEn": "Ask a post-office partner which stamp a fictional letter needs."
+      },
+      "gaps": [
+        "Introduce identity/contact details earlier through a bridge without duplicate address IDs.",
+        "Distinguish submission and acknowledgement from approval.",
+        "Banking/payment support remains a scoped future gap; this is not a complete administration or immigration guide."
+      ],
+      "future": {
+        "B1": "Explain an application problem and follow up a delay.",
+        "B2": "Understand and challenge complex service explanations with support."
+      }
+    },
+    {
+      "slug": "jobsearch",
+      "title": "Finding a job",
+      "prerequisites": [
+        "work",
+        "education"
+      ],
+      "clusters": [
+        {
+          "title": "State the work you want",
+          "vocabularyIds": [
+            "fr.jobsearch.metier",
+            "fr.jobsearch.emploi",
+            "fr.jobsearch.chercher-un-emploi",
+            "fr.jobsearch.temps-plein",
+            "fr.jobsearch.temps-partiel"
+          ]
+        },
+        {
+          "title": "Apply and give brief evidence",
+          "vocabularyIds": [
+            "fr.jobsearch.postuler",
+            "fr.jobsearch.cv",
+            "fr.jobsearch.experience",
+            "fr.jobsearch.savoir-utiliser",
+            "fr.jobsearch.entretien",
+            "fr.jobsearch.disponibilite"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "State a job goal and a full-time or part-time preference.",
+        "lessonIds": [
+          "fr.jobsearch.job-goal"
+        ]
+      },
+      "a2": {
+        "outcome": "In a short supported predictable exchange, ask how to apply, give one skill or past-work example and state availability.",
+        "lessonIds": [
+          "fr.jobsearch.application",
+          "fr.jobsearch.skills",
+          "fr.jobsearch.interview",
+          "fr.jobsearch.follow-up"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "A fictional vacancy and candidate profile",
+        "promptEn": "Recruiter has a vacancy with schedule and one skill requirement; candidate has a fictional profile. Use visible prompts to ask how to apply, give one relevant skill and agree a time. This is not a full spontaneous interview.",
+        "modelFr": "Je voudrais postuler à ce poste. Je sais utiliser une caisse. — Quelles sont vos disponibilités ? — Je peux travailler le matin.",
+        "modelEn": "I would like to apply for this position. I know how to use a till. — When are you available? — I can work in the mornings.",
+        "successCriteria": [
+          "State a job and schedule preference in the basic round.",
+          "Match one skill to the vacancy and exchange a concrete available time with support."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "work",
+          "education",
+          "digital",
+          "people"
+        ],
+        "transferTaskEn": "Write a short fictional email asking which application documents are needed."
+      },
+      "gaps": [
+        "Introduce j’ai travaillé as a supported chunk before the later full Past bank; do not add a later-bank prerequisite.",
+        "Une expérience target and de l’expérience example require count/mass explanation, not silent ID merging.",
+        "A full spontaneous job interview is a future B1 demand; qualifications do not establish recognition or hiring success."
+      ],
+      "future": {
+        "B1": "Give a connected career account and handle follow-up interview questions.",
+        "B2": "Argue for a professional proposal and negotiate complex role expectations."
+      }
+    },
+    {
+      "slug": "past",
+      "title": "Talking about recent experiences",
+      "prerequisites": [
+        "routine",
+        "social"
+      ],
+      "clusters": [
+        {
+          "title": "Place and sequence an event",
+          "vocabularyIds": [
+            "fr.past.last-weekend",
+            "fr.past.last-week",
+            "fr.past.then",
+            "fr.routine.ensuite",
+            "fr.past.during"
+          ]
+        },
+        {
+          "title": "Describe an activity and outcome",
+          "vocabularyIds": [
+            "fr.past.visit",
+            "fr.past.take-photos",
+            "fr.past.went-well",
+            "fr.past.lose",
+            "fr.past.find-again",
+            "fr.past.fortunately"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Proposed bridge, no current foundation/A1 lesson: recognise yesterday plus one fixed past-event chunk.",
+        "lessonIds": []
+      },
+      "a2": {
+        "outcome": "Give a short past account in sequence and explain the outcome of a small incident.",
+        "lessonIds": [
+          "fr.past.when",
+          "fr.past.sequence",
+          "fr.past.activities",
+          "fr.past.reaction",
+          "fr.past.small-incident"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Two people reconstruct a day from different cards",
+        "promptEn": "A sees places and activities; B sees times and a lost-key outcome. Ask what happened and reconstruct a short ordered account with a resolution.",
+        "modelFr": "Samedi, j’ai perdu mes clés. — Tu les as retrouvées ? — Oui, heureusement ! Elles étaient dans mon sac.",
+        "modelEn": "On Saturday, I lost my keys. — Did you find them? — Yes, fortunately! They were in my bag.",
+        "successCriteria": [
+          "State a time and two linked past events, with visible support if needed.",
+          "Explain how the incident ended rather than list isolated verbs."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "routine",
+          "social",
+          "calendar"
+        ],
+        "transferTaskEn": "Tell a two-event account about a missed bus with the same time and sequence tools."
+      },
+      "gaps": [
+        "Bound passé composé production and support c’était as evaluation before wider narrative-tense mastery.",
+        "Retrouvées agreement is explained for recognition, not an unsupported beginner production requirement.",
+        "Professional and lived expérience retain contextual IDs."
+      ],
+      "future": {
+        "B1": "Tell a connected story with background, causes and reactions.",
+        "B2": "Shape a detailed narrative with perspective and nuanced temporal relationships."
+      }
+    },
+    {
+      "slug": "opinions",
+      "title": "Preferences and simple comparisons",
+      "prerequisites": [
+        "shopping",
+        "leisure",
+        "past"
+      ],
+      "clusters": [
+        {
+          "title": "Choose and describe qualities",
+          "vocabularyIds": [
+            "fr.opinions.prefer",
+            "fr.opinions.practical",
+            "fr.opinions.quiet",
+            "fr.opinions.expensive",
+            "fr.opinions.comfortable"
+          ]
+        },
+        {
+          "title": "Compare and give a reason",
+          "vocabularyIds": [
+            "fr.opinions.more-than",
+            "fr.opinions.less-than",
+            "fr.opinions.better-adjective",
+            "fr.opinions.better-adverb",
+            "fr.opinions.because",
+            "fr.opinions.it-depends"
+          ]
+        }
+      ],
+      "foundationA1": {
+        "outcome": "Proposed bridge, no current foundation/A1 lesson: recycle aimer and a fixed je préfère response from Leisure.",
+        "lessonIds": []
+      },
+      "a2": {
+        "outcome": "Compare two familiar options and give a short practical reason for a choice.",
+        "lessonIds": [
+          "fr.opinions.preferences",
+          "fr.opinions.give-view",
+          "fr.opinions.compare",
+          "fr.opinions.qualities",
+          "fr.opinions.reasons"
+        ]
+      },
+      "communicativeTask": {
+        "situation": "Two offers with different constraints",
+        "promptEn": "A sees prices; B sees travel times or room qualities. Exchange information, choose together and give one comparison and a reason.",
+        "modelFr": "Je préfère cette chambre. Elle est plus calme que l’autre. — Mais elle est plus chère. — Oui, mais le calme est important pour moi.",
+        "modelEn": "I prefer this room. It is quieter than the other one. — But it is more expensive. — Yes, but peace and quiet matters to me.",
+        "successCriteria": [
+          "Use information from both partners in the decision.",
+          "Make one accurate comparison and give a relevant reason; extended argument is not required."
+        ]
+      },
+      "revision": {
+        "recycleFrom": [
+          "shopping",
+          "leisure",
+          "past",
+          "transport"
+        ],
+        "transferTaskEn": "Compare cafés or transport options with a new constraint and the same reason frame."
+      },
+      "gaps": [
+        "Teach supported preference formulas earlier through Leisure while retaining this A2 comparison route.",
+        "Distinguish meilleur adjective from mieux adverb rather than merge their English glosses.",
+        "Sustained argument and formal debate remain future work."
+      ],
+      "future": {
+        "B1": "Support opinions with linked reasons and respond to a different view.",
+        "B2": "Develop nuanced arguments, qualify comparisons and weigh counterarguments."
+      }
+    }
+  ]
+}

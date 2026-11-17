@@ -2,7 +2,13 @@
 
 A practical French learning preview for English-speaking newcomers to France. Web first; Android and iOS adapters are planned.
 
-**Current state:** local learner preview and first curriculum editor. Twenty-five practical draft topic banks across 123 short lessons, picture/meaning/sentence practice, personal vocabulary/review, optional AI text/recorded-input conversation, and explicit local preview/publication. New learners start with three Everyday greetings and politeness lessons. Bundled content remains draft until the owner reviews and publishes it; level labels are estimates.
+**Current state:** deployment-ready beta with 25 topic banks and 129 short lessons, including all complete research-pack additions and corrections. Picture/meaning/sentence practice, personal vocabulary/review, offline downloads and backups work without a backend. Optional AI, neural generation and owner editing can connect to a protected hosted API. The owner authorised beta inclusion before manual review; level labels remain estimates and content is not claimed to be teacher-validated.
+
+## Deploy the beta for free
+
+Run `npm run build:beta` and, from a clean committed checkout, `npm run verify:beta`. Upload `apps/learner/dist` to Cloudflare Pages Free for a supplied HTTPS address. No purchased domain or provider keys are needed for learning. Leave `deploy/beta.config.json` → `apiUrl` blank until you want online services.
+
+The [full deployment guide](docs/DEPLOYMENT.md) includes account steps, Git build settings, optional API Docker/HTTPS/persistent-storage setup, blank secret templates, backups and phone acceptance. No site/account/domain has been created by preparing the release.
 
 ## Run the preview
 
@@ -35,7 +41,7 @@ For editing, open the learner at `http://localhost:8081` (development) or `http:
 
 Estimated content levels are Foundations, A1 and A2; they do not measure learner proficiency. Bundled drafts include all three levels. Estimated duration is editable from 1 to 60 whole minutes. A published topic change moves that lesson into the new topic bank when you explicitly load publications. Match the learner role name to the relevant dialogue speaker labels; those labels are edited separately.
 
-Word notes may be empty, and noun gender can be changed separately. Five reviewed lessons are draft revision 4, fifty-five earlier lessons remain revision 3 and sixty earlier additions plus three new greeting lessons remain revision 1. The [vocabulary audit](docs/CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 redundant introduction slots with useful routine/paperwork expressions; their old canonical senses remain taught elsewhere with unchanged IDs and payloads. API startup appends seed updates only above explicitly fingerprinted, untouched historical drafts; owner edits, publications and newer revisions stay intact. The greeting opening adds new draft IDs without changing prior lesson revisions. Existing notebook examples and review history are preserved.
+Word notes may be empty, and noun gender can be changed separately. The beta adds six revision-1 bridge lessons and five grammar-only revision updates while preserving every prior payload and vocabulary ID. Inclusion is authorised for beta testing without prior manual review. The [vocabulary audit](docs/CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 redundant introduction slots with useful routine/paperwork expressions; their old canonical senses remain taught elsewhere with unchanged IDs and payloads. API startup appends seed updates only above explicitly fingerprinted, untouched historical drafts; owner edits, publications and newer revisions stay intact. The greeting opening adds new draft IDs without changing prior lesson revisions. Existing notebook examples and review history are preserved.
 
 Return to Profile → Load published lessons to save published revisions into this browser. Later draft changes stay separate. Previous attempts/notebook entries remain recorded when a new revision arrives. A newer revision starts its own lesson progress. Editor requests require the exact local browser origin and a guarded JSON request; this is local origin protection, not account authentication or public-hosting access control.
 
@@ -66,7 +72,7 @@ npm run build:web
 npm run preview:web
 ```
 
-Open `http://localhost:8082`. In Profile → Learn offline, choose Download for offline use and wait for Ready for offline use. This saves the app, bundled draft lessons and pictures included in that export (123 lessons in a fresh build of the current source). An already running older preview may contain fewer lessons/features until rebuilt. You can then disconnect or stop both local servers and reload at the same address. Loaded publications, saved vocabulary, progress and manual review use the existing browser storage. Learn offline does not generate or include voices; explicitly saved neural clips use their separate browser cache, while device speech may need a connection. Use the browser menu's Install/Add to Home Screen option if it is available; offline readiness is shown separately.
+Open `http://localhost:8082`. In Profile → Learn offline, choose Download for offline use and wait for Ready for offline use. This saves the app, bundled draft lessons and pictures included in that export (129 lessons in a fresh build of the current source). An already running older preview may contain fewer lessons/features until rebuilt. You can then disconnect or stop both local servers and reload at the same address. Loaded publications, saved vocabulary, progress and manual review use the existing browser storage. Learn offline does not generate or include voices; explicitly saved neural clips use their separate browser cache, while device speech may need a connection. Use the browser menu's Install/Add to Home Screen option if it is available; offline readiness is shown separately.
 
 Port 8082 has separate browser storage from development on 8081. To bring existing learning across, download a private learning backup from the old address, then explicitly restore it in Profile at the new address. Do not clear the old browser data to make that transfer.
 
@@ -166,4 +172,4 @@ For this initial repository, `npm run setup:finish` performs that installation, 
 
 The initial setup commit already exists; do not rerun `setup:finish` on this repository. During authorised work, the agent commits and pushes the assigned task branch automatically after each completed, reviewed, validated step under the [checkpoint policy](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits), then verifies the remote head. Merging, deployment and curriculum publication remain separate actions.
 
-Origin is configured for the owner-selected [SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Consult the [checkpoint](docs/SESSION_CHECKPOINT.md) for the latest live-remote verification; cached refs alone do not prove a successful push. No public deployment is configured. Reference image rights are unverified; keep them as local design inputs until resolved.
+Origin is configured for the owner-selected [SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Consult the [checkpoint](docs/SESSION_CHECKPOINT.md) for the latest live-remote verification; cached refs alone do not prove a successful push. Public deployment files are prepared; no host account or live deployment has been created. Reference image rights are unverified; keep them as local design inputs until resolved.

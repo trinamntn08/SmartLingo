@@ -126,6 +126,8 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 ## 7. Audio, pictures, and content production
 
+Owner planning direction, 2026-11-17: develop a plan for a complete A1–B1 daily course usable directly inside the website, using eligible open materials and original authoring. The final source constraint excludes proprietary Taxi reproduction and seeking publisher permission. [Plan 0027](docs/plans/0027-open-course-integration.md) and [ADR 0022](docs/decisions/0022-open-course-planning.md) define the source/licence checks, integration stages and unresolved coverage; no imported books or B1 functionality are claimed as delivered.
+
 Create original lessons and examples using reputable public references for research. Record sources, media attribution, and reuse permissions. Personal use is not a reason to copy entire courses or unlicensed image/audio collections; original content also makes later commercialisation easier.
 
 Use coherent topic banks, normally 30–50 distinct words/phrases across short 6–10-item lessons. The 24-expression greetings opening is an intentional compact exception. Foundation and A2-only banks are valid when the task demands justify them. The [content guide](docs/CONTENT_GUIDE.md) owns authoring rules; the [catalogue](docs/COURSE_CATALOGUE.md) lists bundled content and the [review pack](docs/curriculum/README.md) holds unpublished refinements, recycling and B1/B2 extension goals. Word counts and lesson completion do not establish complete CEFR coverage.

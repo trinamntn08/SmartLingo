@@ -22,6 +22,7 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 
 - [Content guide](CONTENT_GUIDE.md): authoring/publication rules; [course catalogue](COURSE_CATALOGUE.md): bundled lesson order/outcomes/targets.
 - [Current curriculum review pack](curriculum/README.md): all-topic A1/A2 plan, deduplicated teaching ledger, communicative/revision tasks and unregistered candidate lessons.
+- [Open A1–B1 course integration plan](plans/0027-open-course-integration.md): freely reusable source candidates, full website study, daily progression, phased implementation and parallel ownership; planning only.
 - [Curriculum research](CURRICULUM_RESEARCH.md): current versus historical research scope and sources. Earlier [topic-placement audit](CURRICULUM_TOPIC_AUDIT.md) and [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) retain their dated evidence.
 - [Photo coverage](PHOTO_COVERAGE.md), [photo rights](PHOTO_SOURCES.md) and [original illustration sources](MEDIA_SOURCES.md): exact media support and gaps. [Voice options](VOICE_OPTIONS.md) records dated investigation and audition criteria.
 

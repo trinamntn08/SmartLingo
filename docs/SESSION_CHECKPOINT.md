@@ -1,42 +1,36 @@
-# Session checkpoint
+﻿# Session checkpoint
 
-Updated: 2026-11-17, Europe/Paris. First daily-course pilot complete, reviewed and validated; curriculum remains draft. The commit containing this note is the checkpoint; its resulting hash and verified remote delivery are reported at handoff.
+Updated: 2026-11-19, Europe/Paris. A1–B1 listening resource library completed, reviewed and validated. The commit containing this note is the checkpoint; its actual SHA and verified upload are reported at handoff.
 
-## Request, scope and source
+## Request and outcome
 
-Owner authorised starting [the open-course integration plan](plans/0027-open-course-integration.md), requiring already reusable material and attribution without negotiating publisher permission. Implemented one complete beginner day as the first bounded slice, not the entire A1–B1 course. [Plan 0028](plans/0028-open-course-pilot.md) owns acceptance and actual checks; [ADR 0023](decisions/0023-open-course-draft-pilot.md) records the contract/storage/source boundaries.
+Owner requested more listening resources from A1 through B1, including YouTube. Practice → Browse listening resources now opens 11 editorial recommendations with level/format filters, four YouTube options, podcasts and guided video exercises. Each card includes a short original task, text-support/access notes, level caveats and a checked date. Back to practice restores the ordinary practice landing screen.
 
-Branch `feat/open-course-pilot`, source `2fc5f51`; started clean from the verified planning checkpoint on `docs/taxi-daily-course`. No unrelated work was found. No merge, deployment, curriculum publication or publisher contact is part of this step.
+Opening the library ends temporary conversation/draft/recording state; a visible notice explains this before the action. Links open safely on provider sites; browsing loads no remote media. The downloaded list/guidance works offline; external playback requires internet. No listening proficiency/completion events, runtime B1 lesson support, curriculum publication, copied media, storage migration, dependency changes or paid calls were added.
 
-## Completed behaviour and rights
+[Plan 0030](plans/0030-listening-resources.md) owns acceptance and actual checks. [Source evidence](curriculum/listening-resource-sources.md) records live primary-source inspection and known retrieval/access limits. [ADR 0024](decisions/0024-external-listening-resources.md) records the link-only boundary.
 
-- Today → Open daily course offers one draft “Meet a neighbour” day: seven sections with visible English study support, eight unchanged canonical phrases, original dialogue, three situational choices, optional manual self-review and deliberate completion. Exact saved section, hints, attempts and completion survive reload. Optional writing is explicitly transient; no raw recording is made. Completion records activity, not proficiency.
-- Adapted only the visible textual greeting resource on the BCcampus *Basic greetings* chapter. Source page/home and CC BY 4.0 deed/legal code were actually inspected on 2026-11-17. App/offline credits retain creator, source, copyright, licence and modifications. Source photo, recordings, H5P, scripts and external UT material are excluded. [The source record](curriculum/open-course-pilot-sources.md) distinguishes adaptation, original additions and existing canonical support; it does not claim whole-book clearance or source endorsement.
-- Separate typed course/day/block contracts and immutable revision-scoped course events preserve the existing 123 lessons, old events/notebook and server curriculum. IndexedDB v4 adds courseEvents; backup v3 includes them with atomic conflict detection and v1/v2 import compatibility. No server SQLite/schema/snapshot, dependency/lockfile or provider change.
-- Learner shows recoverable storage/save errors and retry with the same event ID. Storage-unavailable reading remains possible. Forged/inconsistent restored answer flags receive neutral re-answer feedback and cannot award correct completion.
-- Updated STATUS, architecture, local operations and docs index. Course editor/import/release publication, more days, complete open-source coverage, B1 runtime and complete A1–B1 curriculum remain future work.
+## Validation actually performed
 
-## Actual validation and review
+- npm.cmd run check: PASS repository/documentation and TypeScript; rerun after final UI/docs before delivery.
+- npm.cmd test: PASS 18 tooling / 202 application tests.
+- Final focused Chromium listening suite: PASS 6/6 desktop/narrow, including all level/format combinations, keyboard selection, reset, exact safe links, no provider requests, disclosure and navigation back to ordinary practice. 320px descendant bounds passed; screenshot inspected by primary/UI builder.
+- npm.cmd run build:web: PASS. Export 126 assets / 9,744,284 bytes / build 36dbd44b01c4212131003e7ba2818ca1c062e3eeb9c74d95424aa9ba41e44221.
+- New production cold-offline listening suite: PASS 2/2 desktop/320px. Explicit app download, offline cold start, B1 YouTube filter/guidance and no provider requests. Free port 8082 used by the isolated test server; no owner process stopped.
+- Independent read-only review: initial conversation-reset disclosure defect fixed and asserted before final browser checks; no unresolved actionable findings. git diff --check PASS. Final index/secret and cached-whitespace checks run before commit.
 
-- `npm.cmd test`: PASS 18 tooling / 202 application tests. Focused course/schema/canonical/answer/progress tests and IDB migration/immutable retry/legacy restore/all-store rollback coverage pass.
-- `npm.cmd run check`: PASS repository/documentation and TypeScript; final checkpoint/staged checks run before commit. `git diff --check`: PASS (one harmless CRLF-normalisation advisory in an edited existing test).
-- Focused Chromium: PASS 20 tests across desktop/narrow projects for new course and existing greetings, resume, published overrides and backup. Extended full course journey to export backup v3 and restore complete history, notebook and cursor in a fresh browser: PASS both projects in a second run. Existing app code did not change between those runs.
-- Production export PASS to ignored `.tmp/open-course-export`: final rights-wording refresh is 126 manifest assets / 9,730,168 bytes / build `2df1b92a8a4e9253d0bc85812d3f719be3c8b4777645967c5e5b4712d92673c3`. Confirmed the built bundle contains the reviewed answer-consistency fix. Source licence/credits remain attached to BCcampus material; original SmartLingo additions are not voluntarily relicensed by this task.
-- Focused cold-offline course test PASS in desktop/320 px projects: bundled source credits, notebook capture and persisted cursor/reload with zero source/licence requests. Used ignored temporary server/config copies on free port 18184 because owner listeners occupy 8082 and 8084; final wording refresh tests use 18185 alongside the clean 18184 task preview. Initial 8084 run refused reuse, then succeeded on the isolated port. No owner process stopped or normal dist overwritten; not a claim to have rerun the entire prior offline suite.
-- Inspected a 320 px screenshot; no horizontal overflow observed. Three implementation helpers plus an independent read-only reviewer contributed; reviewer independently ran 16 focused tests, verified the live source/licence scope, found one answer-feedback defect that was fixed/tested, and reported no unresolved final code/test/docs findings.
-- Final source-licence wording refresh: domain course tests PASS 5/5; fresh-browser course/backup journey PASS in both viewport projects; refreshed production cold-offline checks PASS in both projects. Final `npm.cmd run check` PASS. The independent reviewer confirmed retaining source CC permissions without a voluntary licence grant over independent owner additions.
-- No physical-phone/Safari/native/screen-reader, audible speech or native-teacher acceptance claimed. No paid calls or imported third-party media. Draft content remains subject to owner review/publication.
+Not verified: audiovisual quality, permanent provider availability, physical-phone/Safari/native/screen-reader acceptance. Native link-error UI exists but was not device tested. Current catalogue covers all filter combinations, so the empty branch is not reached by browser tests. RFI destination is its verified publisher podcast listing because direct RFI retrieval was restricted.
 
-## Local preview and delivery
+## Git and recovery
 
-A separate loopback task preview is running at `http://localhost:18184`, process 12340, from ignored `.tmp/open-course-preview.mjs` and the tested isolated export; HTTP 200 verified. Open Today → Open daily course. It is not a hosted website; localhost storage is distinct from the owner's 8082/8084 previews. Existing owner process 15600/listeners remain untouched. On resume verify listeners before restarting anything; do not stop owner previews.
+Task branch feat/listening-resources, base b09b12c. Started with unrelated untracked docs/plans/0029-japanese-course-b1.md; concurrent Japanese-session edits appeared and were later moved/cleared by that session. Preserve any remaining tests/e2e/backup.spec.ts status; it is unrelated and excluded from this commit. App integration was reapplied after the other session cleared it, then final tests passed. No merge, force push, deployment or main update authorised/performed.
 
-Commit/push procedure: stage only the deliberately reviewed implementation/tests/docs, excluding all `.tmp`, exports, databases and browser artifacts. Run `npm.cmd run check:staged` and `git diff --cached --check`, commit and push `feat/open-course-pilot` normally, then read live remote ref and compare with local HEAD. Report actual SHA and preserve a precise recovery action here on any failure. Do not merge or force-push. Inspect current local/remote state before repeating delivery on a later resume.
+Stage only listening UI/catalogue/tests and related documentation. Run check:staged and git diff --cached --check; commit; inspect live origin task ref; push normally; verify remote SHA matches local HEAD. If delivery fails, preserve the local checkpoint and record the exact failure/recovery action here. Prior course-pilot checkpoint b09b12c and its source evidence remain in Git.
 
-Next proposed course step: owner previews this draft day, then continue one complete reviewed unit using the same per-resource licence evidence and original replacements for unclear assets. More course-authoring/publishing support and B1 work stay in the larger roadmap; this completed checkpoint does not claim those gates achieved.
+This requested listening slice is complete; no further feature work is needed. Future additions can extend the static catalogue with verified sources; B1 curriculum/assessment and hosted deployment remain separate work.
 
 ## Delegation and usage
 
-Exposed `gpt-6.1-sol` / medium with fresh contexts: curriculum-author owned only pilot content/source record; api-builder owned browser persistence/backup panel and focused tests; ui-builder owned new course screens/hook and initial browser cases; independent change-reviewer stayed read-only. At most three subagents ran concurrently, rotating review into a free slot. Primary owned shared domain contracts/exports, integration, extra domain/offline/restore checks, docs, combined verification and Git. Prepared role files are not claimed to have loaded automatically.
+UI builder owned ListeningResources.tsx, App.tsx integration and focused e2e tests; independent change-reviewer remained read-only. Both used exposed gpt-6.1-sol / medium with fresh contexts per SESSION_WORKFLOW. Primary owned typed catalogue, source evidence, offline test, docs, combined verification and Git. Prepared role files are not claimed to have loaded automatically.
 
-Usage observation 2026-11-17: account-allowance reporting tool unavailable, not zero or unlimited. No automatic-resume schedule configured. Temporary build/test/preview artifacts remain ignored and outside the checkpoint.
+Account-allowance reporting unavailable in this client on 2026-11-19; this is not zero or unlimited. No automatic-resume schedule configured. Export/screenshots/caches stay ignored and outside the commit.

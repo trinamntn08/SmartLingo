@@ -20,6 +20,7 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 
 ## Curriculum and media
 
+- [A1–B1 listening resources](curriculum/listening-resource-sources.md): the Practice link library, verified providers, access/text-support notes and external-playback limits.
 - [Content guide](CONTENT_GUIDE.md): authoring/publication rules; [course catalogue](COURSE_CATALOGUE.md): bundled lesson order/outcomes/targets.
 - [Current curriculum review pack](curriculum/README.md): all-topic A1/A2 plan, deduplicated teaching ledger, communicative/revision tasks and unregistered candidate lessons.
 - [Open A1–B1 course integration plan](plans/0027-open-course-integration.md): freely reusable source candidates, full website study, daily progression, phased implementation and parallel ownership; planning only.

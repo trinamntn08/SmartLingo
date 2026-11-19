@@ -18,6 +18,7 @@ import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
+import { ListeningResources } from './src/listening/ListeningResources';
 import { openCoursePilot } from '@smartlingo/content';
 import { OpenCoursePanel } from './src/course/OpenCoursePanel';
 
@@ -57,12 +58,14 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   const [tab, setTab] = useState<Tab>('Today');
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [listeningOpen, setListeningOpen] = useState(false);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const wide = width >= 1050;
   const topics = groupLessonTopics(catalogue.lessons);
-  function navigate(next: Tab) { audio.stop(); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
-  function selectTopic(name: string | null) { audio.stop(); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function navigate(next: Tab) { audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function selectTopic(name: string | null) { audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function showListening(open: boolean) { audio.stop(); setListeningOpen(open); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function openLesson(next: Lesson) { audio.stop(); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   useEffect(() => () => audio.stop(), []);
   useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
@@ -81,7 +84,14 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <FrenchPractice lessons={catalogue.lessons} model={model} />}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
+            : tab === 'Practice' && listeningOpen ? <ListeningResources onClose={() => showListening(false)} />
+              : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <><View style={s.card}>
+                <View style={s.row}><Badge>Listening · A1 / A2 / B1</Badge><Badge>External resources</Badge></View>
+                <Text accessibilityRole="header" style={s.heading}>French listening library</Text>
+                <Text style={s.body}>Find videos, podcasts and guided listening, with text-support notes and short practice ideas. Playback needs an internet connection and opens on the provider’s site.</Text>
+                <Text style={s.muted}>Opening the library ends any temporary conversation and clears unsent messages and recordings.</Text>
+                <Button primary onPress={() => showListening(true)}>Browse listening resources</Button>
+              </View><FrenchPractice lessons={catalogue.lessons} model={model} /></>}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>

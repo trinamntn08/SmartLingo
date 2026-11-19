@@ -29,6 +29,8 @@ export type CourseChoice = Extract<CourseBlock, { kind: 'choice' }>;
 
 const courseDaySchema = z.object({
   id, dayNumber: z.number().int().positive(), title: text, outcome: text,
+  // An unchanged day may retain its original release's event scope when a course grows.
+  progressRevision: z.number().int().positive().optional(),
   level: z.enum(['foundation', 'A1', 'A2']),
   vocabulary: z.array(vocabularySchema).min(6).max(10),
   blocks: z.array(courseBlockSchema).min(3).max(30),
@@ -45,6 +47,9 @@ export const openCourseSchema = z.object({
     context.addIssue({ code: 'custom', message: 'Course days must have consecutive authored numbers starting at one' });
   }
   for (const day of course.days) {
+    if (day.progressRevision !== undefined && day.progressRevision > course.revision) {
+      context.addIssue({ code: 'custom', message: 'Day progress cannot reference a future course revision' });
+    }
     ids.push(day.id, ...day.blocks.map(block => block.id));
     const vocabularyIds = day.vocabulary.map(word => word.id);
     if (new Set(vocabularyIds).size !== vocabularyIds.length) context.addIssue({ code: 'custom', message: 'Duplicate day vocabulary IDs' });
@@ -62,6 +67,11 @@ export const openCourseSchema = z.object({
 });
 export type OpenCourse = z.infer<typeof openCourseSchema>;
 export type CourseDay = OpenCourse['days'][number];
+
+/** Only explicitly unchanged days reuse an earlier release's immutable event scope. */
+export function courseDayProgressRevision(course: OpenCourse, day: CourseDay): number {
+  return day.progressRevision ?? course.revision;
+}
 
 const eventFields = { id: z.string().uuid(), courseId: id, courseRevision: z.number().int().positive(),
   dayId: id, blockId: id, occurredAt: z.string().datetime({ offset: true }) };
@@ -95,7 +105,7 @@ function orderedEvents(inputs: readonly CourseEvent[]): CourseEvent[] {
 /** A study-day record describes activity, never independent skill or proficiency. */
 export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: readonly CourseEvent[]) {
   const blocks = new Map(day.blocks.map(block => [block.id, block]));
-  const events = orderedEvents(inputs).filter(event => event.courseId === course.id && event.courseRevision === course.revision
+  const events = orderedEvents(inputs).filter(event => event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day)
     && event.dayId === day.id && blocks.has(event.blockId));
   const completedBlockIds = new Set<string>();
   const supportedBlockIds = new Set<string>();
@@ -117,4 +127,15 @@ export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: re
 
 export function nextCourseDay(course: OpenCourse, events: readonly CourseEvent[]): CourseDay | undefined {
   return course.days.find(day => !courseDayProgress(course, day, events).completed);
+}
+
+/** Resume a deliberate visit, including a completed day; calendar time never skips material. */
+export function resumeCourseDay(course: OpenCourse, inputs: readonly CourseEvent[]): CourseDay | undefined {
+  const days = new Map(course.days.map(day => [day.id, day]));
+  for (const event of orderedEvents(inputs).reverse()) {
+    const day = days.get(event.dayId);
+    if (day && event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day)
+      && day.blocks.some(block => block.id === event.blockId)) return day;
+  }
+  return nextCourseDay(course, inputs) ?? course.days.at(-1);
 }

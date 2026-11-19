@@ -1,4 +1,5 @@
 import { openCourseSchema, type OpenCourse, type Vocabulary } from '@smartlingo/domain';
+import { buildOpenCourseDayTwo } from './open-course-day-two';
 
 const vocabularyIds = [
   'fr.bonjour', 'fr.greetings.bonsoir', 'fr.greetings.salut', 'fr.people.au-revoir',
@@ -6,7 +7,7 @@ const vocabularyIds = [
   'fr.greetings.ca-va-bien', 'fr.greetings.et-vous',
 ] as const;
 
-/** One owner-review draft day; canonical vocabulary support is reused unchanged. */
+/** Owner-review draft days; canonical vocabulary support is reused unchanged. */
 export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[]): OpenCourse {
   const vocabulary = vocabularyIds.map(id => {
     const entry = canonicalVocabulary.find(word => word.id === id);
@@ -14,10 +15,10 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
     return entry;
   });
   return openCourseSchema.parse({
-    id: 'fr.open-course-pilot', revision: 1, status: 'draft',
+    id: 'fr.open-course-pilot', revision: 2, status: 'draft',
     language: 'fr-FR', explanationLanguage: 'en',
     title: 'Everyday French: an open-course pilot',
-    description: 'One draft beginner study day for owner review. A credited CC BY 4.0 greeting-text source with original SmartLingo activities and unchanged existing vocabulary support. No complete course or certified level coverage claimed.',
+    description: 'Two draft beginner study days for owner review. Day 1 uses a credited CC BY 4.0 greeting-text source; day 2 is original SmartLingo material. Both reuse unchanged existing vocabulary support. No complete course or certified level coverage claimed.',
     sources: [{
       id: 'fr.open-course-pilot.source-basic-greetings',
       title: 'Basic greetings — Le Français Interactif – An Activity Companion Site',
@@ -37,7 +38,7 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
       ],
     }],
     days: [{
-      id: 'fr.open-course-pilot.day-1', dayNumber: 1,
+      id: 'fr.open-course-pilot.day-1', dayNumber: 1, progressRevision: 1,
       title: 'Meet a neighbour', level: 'foundation',
       outcome: 'Greet an adult neighbour in your building, ask how they are, give a short answer and leave politely.',
       vocabulary,
@@ -116,6 +117,6 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
           ],
         },
       ],
-    }],
+    }, buildOpenCourseDayTwo(canonicalVocabulary)],
   });
 }

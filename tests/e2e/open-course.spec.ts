@@ -1,9 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
-import type { CourseEvent } from '@smartlingo/domain';
+import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
 import { readFile } from 'node:fs/promises';
 
 const day = openCoursePilot.days[0];
+const secondDay = openCoursePilot.days[1];
 const coursePanel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => coursePanel(page).getByRole('button', { name, exact: true });
 
@@ -22,10 +23,29 @@ async function storedEvents(page: Page, store: 'courseEvents' | 'events' = 'cour
   }, store);
 }
 
-async function selectSection(page: Page, index: number) {
-  await button(page, `Section ${index + 1}: ${day.blocks[index].title}`).click();
-  await expect(coursePanel(page).getByRole('heading', { name: day.blocks[index].title, exact: true })).toBeVisible();
-  await expect(button(page, 'Section 1: ' + day.blocks[0].title)).toBeEnabled();
+async function selectSection(page: Page, index: number, selectedDay = day) {
+  await button(page, `Section ${index + 1}: ${selectedDay.blocks[index].title}`).click();
+  await expect(coursePanel(page).getByRole('heading', { name: selectedDay.blocks[index].title, exact: true })).toBeVisible();
+  await expect(button(page, 'Section 1: ' + selectedDay.blocks[0].title)).toBeEnabled();
+}
+
+const chooseDay = (page: Page, selectedDay: CourseDay) => button(page, `Choose day ${selectedDay.dayNumber}: ${selectedDay.title}`);
+const dayHeading = (page: Page, selectedDay: CourseDay) => coursePanel(page).getByRole('heading', { name: `Day ${selectedDay.dayNumber}: ${selectedDay.title}`, exact: true });
+
+async function seedEvents(page: Page, events: CourseEvent[]) {
+  await page.evaluate(async inputs => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('smartlingo-learning');
+      request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
+    });
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const transaction = database.transaction('courseEvents', 'readwrite');
+        transaction.oncomplete = () => resolve(); transaction.onabort = () => reject(transaction.error);
+        for (const input of inputs) transaction.objectStore('courseEvents').add(input);
+      });
+    } finally { database.close(); }
+  }, events);
 }
 
 test.beforeEach(async ({ context }) => {
@@ -38,7 +58,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
-  await expect(coursePanel(page).getByText('1 study day available · Draft preview', { exact: true })).toBeVisible();
+  await expect(coursePanel(page).getByText('2 study days available · Draft preview', { exact: true })).toBeVisible();
   await button(page, 'Open daily course').focus();
   await page.keyboard.press('Enter');
   await expect(button(page, 'Save study section')).toBeEnabled();
@@ -104,16 +124,45 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   await page.reload();
   await button(page, 'Open daily course').click();
   await expect(coursePanel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
+  await expect(dayHeading(page, day)).toBeVisible();
+  await button(page, `Continue to day 2: ${secondDay.title}`).click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await expect(coursePanel(page).getByText('0 of 7 sections saved', { exact: true })).toBeVisible();
+  await button(page, 'Save study section').click();
+  await selectSection(page, 2, secondDay);
+  await page.reload();
+  await button(page, 'Open daily course').click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await expect(coursePanel(page).getByRole('heading', { name: secondDay.blocks[2].title, exact: true })).toBeVisible();
+  await chooseDay(page, day).focus();
+  await page.keyboard.press('Enter');
+  await expect(dayHeading(page, day)).toBeVisible();
+  await expect(coursePanel(page).getByRole('heading', { name: day.blocks.at(-1)!.title, exact: true })).toBeVisible();
+  await expect(page.getByTestId(`course-day-${day.id}`).getByText('Study day saved', { exact: true })).toBeVisible();
+  await expect(page.getByTestId(`course-day-${secondDay.id}`).getByText('1 of 7 sections saved', { exact: true })).toBeVisible();
   const events = await storedEvents(page);
   expect(events.some(event => event.kind === 'choice' && event.result === 'incorrect')).toBe(true);
   expect(events.some(event => event.kind === 'choice' && event.result === 'correct' && event.supported)).toBe(true);
   expect(events.some(event => event.kind === 'support')).toBe(true);
   expect(events.some(event => event.kind === 'navigation')).toBe(true);
+  for (const selectedDay of openCoursePilot.days) {
+    const scoped = events.filter(event => event.dayId === selectedDay.id);
+    expect(scoped.length).toBeGreaterThan(0);
+    expect(scoped.every(event => event.courseRevision === courseDayProgressRevision(openCoursePilot, selectedDay))).toBe(true);
+  }
   expect(await storedEvents(page, 'events')).toEqual([]);
   await page.setViewportSize({ width: 320, height: 800 });
   await selectSection(page, vocabularyIndex);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('open-course-320.png'), fullPage: true });
+  await chooseDay(page, secondDay).click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  expect(await coursePanel(page).locator('*').evaluateAll(elements => elements.every(element => {
+    const bounds = element.getBoundingClientRect();
+    return !bounds.width || (bounds.left >= -1 && bounds.right <= innerWidth + 1);
+  }))).toBe(true);
+  await page.screenshot({ path: info.outputPath('open-course-day-two-320.png'), fullPage: true });
+  await chooseDay(page, day).click();
   expect(errors).toEqual([]);
 
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
@@ -140,6 +189,10 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
     await expect(coursePanel(restored).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
     await expect(button(restored, 'Save bonjour')).toBeDisabled();
     expect(await storedEvents(restored)).toHaveLength(backup.courseEvents.length);
+    await chooseDay(restored, secondDay).click();
+    await expect(dayHeading(restored, secondDay)).toBeVisible();
+    await expect(coursePanel(restored).getByRole('heading', { name: secondDay.blocks[2].title, exact: true })).toBeVisible();
+    await expect(restored.getByTestId(`course-day-${secondDay.id}`).getByText('1 of 7 sections saved', { exact: true })).toBeVisible();
   } finally { await restoredContext.close(); }
 });
 
@@ -179,12 +232,96 @@ test('course material remains browsable at 320px when browser storage is unavail
   await button(page, 'Open daily course').click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
   await expect(button(page, 'Save study section')).toBeDisabled();
-  for (let index = 0; index < day.blocks.length; index++) await selectSection(page, index);
-  await button(page, 'Read model exchange').click();
-  const reflection = day.blocks.at(-1)!;
-  if (reflection.kind === 'reflection') await expect(coursePanel(page).getByText(reflection.modelMeaning, { exact: true })).toBeVisible();
+  for (const selectedDay of openCoursePilot.days) {
+    await chooseDay(page, selectedDay).click();
+    for (let index = 0; index < selectedDay.blocks.length; index++) await selectSection(page, index, selectedDay);
+    await button(page, 'Read model exchange').click();
+    const reflection = selectedDay.blocks.at(-1)!;
+    if (reflection.kind === 'reflection') await expect(coursePanel(page).getByText(reflection.modelMeaning, { exact: true })).toBeVisible();
+  }
   await expect(button(page, 'Complete study day')).toBeDisabled();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('day switching waits for a saved navigation, retries the same event and supports discard', async ({ page }) => {
+  await page.goto('/');
+  await button(page, 'Open daily course').click();
+  await expect(chooseDay(page, secondDay)).toBeEnabled();
+  await selectSection(page, 1);
+  await page.evaluate(() => {
+    const original = IDBObjectStore.prototype.add;
+    Object.assign(window, { courseAttemptIds: [] as string[], failCourseNavigation: true });
+    IDBObjectStore.prototype.add = function (value, key) {
+      if (this.name === 'courseEvents') {
+        const state = window as unknown as { courseAttemptIds: string[]; failCourseNavigation: boolean };
+        state.courseAttemptIds.push((value as CourseEvent).id);
+        if (state.failCourseNavigation) throw new Error('Navigation storage unavailable');
+      }
+      return original.call(this, value, key);
+    };
+  });
+  await chooseDay(page, secondDay).click();
+  await expect(coursePanel(page).getByRole('alert')).toContainText('Navigation storage unavailable');
+  await expect(dayHeading(page, day)).toBeVisible();
+  await expect(chooseDay(page, secondDay)).toBeDisabled();
+  await expect(button(page, `Section 1: ${day.blocks[0].title}`)).toBeDisabled();
+  await button(page, 'Discard unsaved course action').click();
+  await expect(dayHeading(page, day)).toBeVisible();
+  await expect(chooseDay(page, secondDay)).toBeEnabled();
+  await chooseDay(page, secondDay).click();
+  await expect(coursePanel(page).getByRole('alert')).toContainText('Navigation storage unavailable');
+  await page.evaluate(() => { Object.assign(window, { failCourseNavigation: false }); });
+  await button(page, 'Retry course save').click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  const ids = await page.evaluate(() => (window as unknown as { courseAttemptIds: string[] }).courseAttemptIds);
+  expect(ids).toHaveLength(3);
+  expect(ids[1]).toBe(ids[2]);
+  expect(ids[0]).not.toBe(ids[1]);
+  await page.reload();
+  await button(page, 'Open daily course').click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await chooseDay(page, day).click();
+  await expect(coursePanel(page).getByRole('heading', { name: day.blocks[1].title, exact: true })).toBeVisible();
+});
+
+test('revision-one completed history survives the release and final completion stays on its day', async ({ page }) => {
+  await page.goto('/');
+  await button(page, 'Open daily course').click();
+  await expect(button(page, 'Save study section')).toBeEnabled();
+  let timestamp = Date.parse('2026-11-01T12:00:00Z');
+  const makeEvent = (selectedDay: CourseDay, blockId: string, kind: CourseEvent['kind']): CourseEvent => ({
+    id: crypto.randomUUID(), courseId: openCoursePilot.id,
+    courseRevision: courseDayProgressRevision(openCoursePilot, selectedDay), dayId: selectedDay.id,
+    blockId, occurredAt: new Date(timestamp++).toISOString(), kind,
+  } as CourseEvent);
+  const events = openCoursePilot.days.flatMap(selectedDay => selectedDay.blocks.map(block => {
+    if (block.kind === 'choice') return { ...makeEvent(selectedDay, block.id, 'choice'), kind: 'choice' as const,
+      choiceId: block.answerId, result: 'correct' as const, supported: false };
+    return makeEvent(selectedDay, block.id, block.kind === 'reflection' ? 'reflection' : 'study');
+  }));
+  events.push(makeEvent(day, day.blocks.at(-1)!.id, 'completion'));
+  // Newer events outside the immutable day scope must never steal the resume cursor.
+  events.push({ ...makeEvent(secondDay, secondDay.blocks[0].id, 'navigation'), courseRevision: 1 });
+  events.push({ ...makeEvent(secondDay, 'fr.unknown-block', 'navigation') });
+  events.push({ ...makeEvent(secondDay, secondDay.blocks[0].id, 'navigation'), dayId: 'fr.unknown-day' });
+  events.push({ ...makeEvent(secondDay, secondDay.blocks[0].id, 'navigation'), courseId: 'fr.other-course' });
+  await seedEvents(page, events);
+  await page.reload();
+  await button(page, 'Open daily course').click();
+  await expect(dayHeading(page, day)).toBeVisible();
+  await expect(coursePanel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
+  await expect(coursePanel(page).getByRole('heading', { name: day.blocks.at(-1)!.title, exact: true })).toBeVisible();
+  await button(page, `Continue to day 2: ${secondDay.title}`).click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await expect(button(page, 'Complete study day')).toBeEnabled();
+  await button(page, 'Complete study day').click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await expect(coursePanel(page).getByText('You have finished all available draft days. Revisit either day or explore another topic whenever you like.', { exact: true })).toBeVisible();
+  await page.reload();
+  await button(page, 'Open daily course').click();
+  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await chooseDay(page, day).click();
+  await expect(coursePanel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
 });
 
 test('restored inconsistent answers never display correct feedback or complete a section', async ({ page }) => {
@@ -195,21 +332,9 @@ test('restored inconsistent answers never display correct feedback or complete a
   const block = day.blocks[index];
   if (block.kind !== 'choice') throw new Error('The pilot needs choice practice.');
   const wrong = block.choices.find(choice => choice.id !== block.answerId)!;
-  const event: CourseEvent = { id: crypto.randomUUID(), courseId: openCoursePilot.id, courseRevision: openCoursePilot.revision,
+  const event: CourseEvent = { id: crypto.randomUUID(), courseId: openCoursePilot.id, courseRevision: courseDayProgressRevision(openCoursePilot, day),
     dayId: day.id, blockId: block.id, occurredAt: new Date().toISOString(), kind: 'choice', choiceId: wrong.id, result: 'correct', supported: false };
-  await page.evaluate(async input => {
-    const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open('smartlingo-learning');
-      request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
-    });
-    try {
-      await new Promise<void>((resolve, reject) => {
-        const transaction = database.transaction('courseEvents', 'readwrite');
-        transaction.oncomplete = () => resolve(); transaction.onabort = () => reject(transaction.error);
-        transaction.objectStore('courseEvents').add(input);
-      });
-    } finally { database.close(); }
-  }, event);
+  await seedEvents(page, [event]);
   await page.reload();
   await button(page, 'Open daily course').click();
   await expect(coursePanel(page).getByRole('heading', { name: block.title, exact: true })).toBeVisible();

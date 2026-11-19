@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Text, View } from 'react-native';
-import { courseDayProgress, gradeCourseChoice, nextCourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
+import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
@@ -26,20 +26,29 @@ function CourseJourney({ course, model }: { course: OpenCourse; model: LearningM
   const [selectedDay, setSelectedDay] = useState<string>();
   const [selectedBlock, setSelectedBlock] = useState<string>();
   const clock = useRef(0);
-  const day = course.days.find(item => item.id === selectedDay) ?? nextCourseDay(course, learning.events) ?? course.days.at(-1);
+  const day = course.days.find(item => item.id === selectedDay) ?? resumeCourseDay(course, learning.events);
   if (!day) return <View style={s.notice}><Text style={s.body}>No study days are available in this draft yet.</Text><CourseCredits course={course} /></View>;
   const progress = courseDayProgress(course, day, learning.events);
   const block = day.blocks.find(item => item.id === selectedBlock) ?? day.blocks.find(item => item.id === progress.lastBlockId) ?? day.blocks[0];
   const index = day.blocks.findIndex(item => item.id === block.id);
-  const scopedEvents = learning.events.filter(event => event.courseId === course.id && event.courseRevision === course.revision && event.dayId === day.id);
+  const scopedEvents = learning.events.filter(event => event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day) && event.dayId === day.id);
   const done = progress.completedBlockIds.has(block.id);
   const browseOnly = !!learning.loadError;
+  const navigationBlocked = learning.loading || learning.busy || !!learning.saveError;
+  const nextDay = nextCourseDay(course, learning.events);
 
-  function event(kind: CourseEvent['kind'], blockId = block.id): CourseEvent {
+  function event(kind: CourseEvent['kind'], blockId = block.id, targetDay = day!): CourseEvent {
     const latest = learning.events.reduce((value, saved) => Math.max(value, Date.parse(saved.occurredAt)), 0);
     clock.current = Math.max(Date.now(), clock.current + 1, latest + 1);
-    return { id: crypto.randomUUID(), courseId: course.id, courseRevision: course.revision, dayId: day!.id,
+    return { id: crypto.randomUUID(), courseId: course.id, courseRevision: courseDayProgressRevision(course, targetDay), dayId: targetDay.id,
       blockId, occurredAt: new Date(clock.current).toISOString(), kind } as CourseEvent;
+  }
+  function selectDay(target: CourseDay) {
+    if (navigationBlocked || target.id === day!.id) return;
+    const targetBlock = courseDayProgress(course, target, learning.events).lastBlockId;
+    const select = () => { setSelectedDay(target.id); setSelectedBlock(targetBlock); };
+    if (browseOnly) { select(); return; }
+    learning.save([event('navigation', targetBlock, target)], select);
   }
   function navigate(id: string) {
     if (learning.busy || learning.loading || learning.saveError) return;
@@ -76,6 +85,20 @@ function CourseJourney({ course, model }: { course: OpenCourse; model: LearningM
       <Button disabled={learning.busy} onPress={learning.discard}>Discard unsaved course action</Button>
     </View>}
     {learning.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving course progress…</Text>}
+    <View testID="course-day-chooser" style={[s.notice, { gap: 12 }]}>
+      <Text accessibilityRole="header" style={s.heading}>Choose a study day</Text>
+      <Text style={s.muted}>Every day is open. Return to any day at its saved section, with no locks or missed-day penalties.</Text>
+      {course.days.map(item => {
+        const saved = courseDayProgress(course, item, learning.events);
+        const status = learning.loading ? 'Loading saved progress…' : browseOnly ? 'Browsing only · progress unavailable'
+          : saved.completed ? 'Study day saved' : saved.completedBlockIds.size ? `${saved.completedBlockIds.size} of ${item.blocks.length} sections saved` : 'Not started';
+        return <View key={item.id} testID={`course-day-${item.id}`} style={{ gap: 6, minWidth: 0 }}>
+          <Button label={`Choose day ${item.dayNumber}: ${item.title}`} selected={item.id === day.id}
+            disabled={navigationBlocked} onPress={() => selectDay(item)}>Day {item.dayNumber}: {item.title}</Button>
+          <Text style={s.muted}>{status}</Text>
+        </View>;
+      })}
+    </View>
     <Text accessibilityRole="header" style={s.heading}>Day {day.dayNumber}: {day.title}</Text>
     <Text style={s.body}>{day.outcome}</Text>
     <Text accessibilityLiveRegion="polite" style={s.muted}>{progress.completedBlockIds.size} of {day.blocks.length} sections saved</Text>
@@ -107,8 +130,9 @@ function CourseJourney({ course, model }: { course: OpenCourse; model: LearningM
     </View>}
     {progress.completed && <View style={[s.notice, { backgroundColor: colors.green }]}>
       <Text accessibilityRole="header" style={s.heading}>Study day saved</Text>
-      <Text style={s.body}>You have finished the available draft day. Revisit any section or explore another topic whenever you like.</Text>
-      <Text style={s.muted}>This records your study activity, not a proficiency level. More study days are not yet available in this pilot.</Text>
+      <Text style={s.body}>{nextDay ? 'This day is saved. Continue with another study day whenever you are ready, or revisit any section.' : 'You have finished all available draft days. Revisit either day or explore another topic whenever you like.'}</Text>
+      <Text style={s.muted}>This records your study activity, not a proficiency level. These draft days await owner review; a complete course is not yet available.</Text>
+      {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to day {nextDay.dayNumber}: {nextDay.title}</Button>}
     </View>}
   </View>;
 }

@@ -4,7 +4,7 @@ import { vocabularySchema } from './content';
 const id = z.string().regex(/^[a-z0-9][a-z0-9.-]+$/).max(120);
 const text = z.string().trim().min(1).max(2000);
 const httpsUrl = z.string().url().refine(value => value.startsWith('https://'), 'Use an HTTPS source URL');
-const bilingual = z.object({ target: text, meaning: text });
+const bilingual = z.object({ target: text, meaning: text, reading: text.optional() });
 const blockFields = { id, title: text };
 
 export const courseSourceSchema = z.object({
@@ -29,17 +29,25 @@ export type CourseChoice = Extract<CourseBlock, { kind: 'choice' }>;
 
 const courseDaySchema = z.object({
   id, dayNumber: z.number().int().positive(), title: text, outcome: text,
-  level: z.enum(['foundation', 'A1', 'A2']),
-  vocabulary: z.array(vocabularySchema).min(6).max(10),
+  level: z.enum(['foundation', 'A1', 'A2', 'B1']),
+  vocabulary: z.array(vocabularySchema.extend({ reading: text.max(300).optional(), exampleReading: text.max(1000).optional() })).min(6).max(10),
   blocks: z.array(courseBlockSchema).min(3).max(30),
 });
 export const openCourseSchema = z.object({
   id, revision: z.number().int().positive(), status: z.literal('draft'),
-  language: z.literal('fr-FR'), explanationLanguage: z.literal('en'),
-  title: text, description: text, sources: z.array(courseSourceSchema).min(1).max(20),
+  language: z.enum(['fr-FR', 'ja-JP']), explanationLanguage: z.literal('en'),
+  title: text, description: text, sources: z.array(courseSourceSchema).max(20),
+  provenance: z.object({ author: text, rights: text, review: text }).optional(),
   days: z.array(courseDaySchema).min(1).max(100),
 }).superRefine((course, context) => {
+  if (!course.sources.length && !course.provenance) {
+    context.addIssue({ code: 'custom', message: 'Original courses need explicit authorship, rights and review provenance' });
+  }
+  if (course.language === 'ja-JP' && !course.provenance) {
+    context.addIssue({ code: 'custom', message: 'Japanese drafts need explicit provenance' });
+  }
   const ids = [course.id, ...course.sources.map(source => source.id)];
+  const vocabularyById = new Map<string, string>();
   const dayNumbers = course.days.map(day => day.dayNumber);
   if (new Set(dayNumbers).size !== dayNumbers.length || dayNumbers.some((number, index) => number !== index + 1)) {
     context.addIssue({ code: 'custom', message: 'Course days must have consecutive authored numbers starting at one' });
@@ -47,6 +55,16 @@ export const openCourseSchema = z.object({
   for (const day of course.days) {
     ids.push(day.id, ...day.blocks.map(block => block.id));
     const vocabularyIds = day.vocabulary.map(word => word.id);
+    for (const word of day.vocabulary) {
+      const payload = JSON.stringify(word);
+      if (vocabularyById.has(word.id) && vocabularyById.get(word.id) !== payload) {
+        context.addIssue({ code: 'custom', message: 'A shared vocabulary ID must preserve its canonical payload across days' });
+      }
+      vocabularyById.set(word.id, payload);
+    }
+    if (course.language === 'ja-JP' && day.vocabulary.some(word => !word.id.startsWith('ja.') || !word.reading || !word.exampleReading || word.gender)) {
+      context.addIssue({ code: 'custom', message: 'Japanese vocabulary needs Japanese IDs, readings and no French gender metadata' });
+    }
     if (new Set(vocabularyIds).size !== vocabularyIds.length) context.addIssue({ code: 'custom', message: 'Duplicate day vocabulary IDs' });
     if (!day.blocks.some(block => block.kind === 'choice') || !day.blocks.some(block => block.kind === 'vocabulary')) {
       context.addIssue({ code: 'custom', message: 'A pilot day needs vocabulary and interactive practice' });

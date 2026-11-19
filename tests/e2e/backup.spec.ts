@@ -19,7 +19,7 @@ async function eventCount(page: Page, storeName = 'events'): Promise<number> {
   }, storeName);
 }
 
-test('download and explicit restore recover learning in a fresh browser without overwriting local edits', async ({ page, browser }, info) => {
+test('download and explicit restore recover learning in a fresh browser without overwriting local edits', async ({ page, browser, baseURL }, info) => {
   test.setTimeout(60000);
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
@@ -41,7 +41,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   expect(backup.format).toBe('smartlingo-learning-backup');
   expect(backup.events).toHaveLength(1);
   expect(backup.notebook).toHaveLength(1);
-  expect(backup.version).toBe(3);
+  expect(backup.version).toBe(4);
   expect(backup.courseEvents).toEqual([]);
   expect(backup.reviewEvents).toHaveLength(1);
   expect(backup).not.toHaveProperty('credentials');
@@ -50,7 +50,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   await fresh.route('**/127.0.0.1:3001/**', route => route.abort());
   try {
     const restored = await fresh.newPage();
-    await restored.goto('http://localhost:8081');
+    await restored.goto(baseURL!);
     await restored.getByRole('button', { name: 'Profile', exact: true }).click();
     const input = restored.getByLabel('Choose a learning backup', { exact: true });
     await input.setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{broken') });

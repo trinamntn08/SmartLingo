@@ -13,6 +13,10 @@ export const learningEventSchema = z.object({
 export type LearningEvent = z.infer<typeof learningEventSchema>;
 export const notebookEntrySchema = z.object({
   id: z.string().min(1).max(160), sourceEntryId: z.string().min(1),
+  // Missing language preserves legacy French notes without rewriting their payloads.
+  language: z.enum(['fr-FR', 'ja-JP']).optional(),
+  reading: z.string().trim().min(1).max(300).optional(),
+  exampleReading: z.string().trim().min(1).max(1000).optional(),
   target: z.string().trim().min(1).max(300), meaning: z.string().trim().min(1).max(500),
   example: z.string().trim().max(1000), updatedAt: z.string().datetime({ offset: true }),
 });

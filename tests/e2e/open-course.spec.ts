@@ -122,7 +122,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   const backupPath = info.outputPath('course-learning-backup.json');
   await (await download).saveAs(backupPath);
   const backup = JSON.parse(await readFile(backupPath, 'utf8'));
-  expect(backup.version).toBe(3);
+  expect(backup.version).toBe(4);
   expect(backup.courseEvents).toHaveLength((await storedEvents(page)).length);
   expect(backup.events).toEqual([]);
   const restoredContext = await browser.newContext();

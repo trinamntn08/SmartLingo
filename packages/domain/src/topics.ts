@@ -4,7 +4,8 @@ export type LessonTopic = { name: string; lessons: Lesson[]; vocabulary: Vocabul
 export type CatalogueLevel = 'All' | Lesson['level'];
 
 export function normalizeSearch(value: string): string {
-  return value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('fr-FR')
+  // Fold Latin accents for French search, preserving meaning-changing kana dakuten.
+  return value.normalize('NFD').replace(/(\p{Script=Latin})\p{M}+/gu, '$1').normalize('NFC').toLocaleLowerCase('fr-FR')
     .replace(/[’‘]/g, "'").trim();
 }
 

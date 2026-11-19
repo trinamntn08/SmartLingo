@@ -4,6 +4,8 @@ A local French-learning preview for English-speaking adult newcomers to France. 
 
 See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bundled curriculum remains draft until owner review and explicit publication; lesson completion and level labels do not establish proficiency.
 
+Today also offers a separate Japanese draft route: 13 study days spanning foundations and estimated A1/A2/B1 tasks, with English meanings, kana readings, practice and saved progress. See [Japanese course instructions and limits](docs/LOCAL_OPERATIONS.md#try-the-japanese-route). These short units do not establish complete CEFR coverage.
+
 ## Run the preview
 
 Use Node 24.19.0, npm 11.x and Git. From the repository root:

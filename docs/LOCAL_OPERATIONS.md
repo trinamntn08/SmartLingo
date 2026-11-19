@@ -6,9 +6,17 @@ Current operational instructions for this source checkout. For installation and 
 
 In the current learner build, open **Today → Open daily course**. One draft day is available: study its bilingual sections, save useful words, answer three choices and explicitly save a manual self-review. Save each study section before using Next section; you may browse any section directly. Complete study day becomes available after every section is saved. Reopen the course after reload to resume the saved section. Missed calendar dates do not skip content.
 
-**Source credits and licence** shows the exact BCcampus text source, author, copyright, CC BY 4.0 link, changes and exclusions. Study does not fetch that website or require imported media/AI. Optional device speech is separate. Optional written self-review remains only on the current screen; course events, completion and notebook saves persist. Learning backup v3 includes course events and accepts earlier v1/v2 files; the normal explicit restore/reload flow applies.
+**Source credits and licence** shows the exact BCcampus text source, author, copyright, CC BY 4.0 link, changes and exclusions. Study does not fetch that website or require imported media/AI. Optional device speech is separate. Optional written self-review remains only on the current screen; course events, completion and notebook saves persist. Learning backup v4 includes course events and Japanese notebook metadata and accepts earlier v1/v2/v3 files; the normal explicit restore/reload flow applies. New backups require the updated app; older app versions cannot import v4.
 
 This is one bundled owner-review draft, not an imported book, published curriculum or complete A1–B1 course. [Pilot acceptance](plans/0028-open-course-pilot.md) and [source/rights record](curriculum/open-course-pilot-sources.md) describe the bounded release.
+
+## Try the Japanese route
+
+Open **Today → Open Japanese course**. Thirteen original draft study days span foundations and estimated A1/A2/B1 tasks. Filter days by level or browse freely; all study text, English support and kana readings are bundled. Save study sections, answer contextual choices and manually review a short production task before deliberately completing a day. Continue to next study day saves navigation. Reopening after reload restores the last saved day and section independently of French progress.
+
+Japanese vocabulary cards show readings, examples, translations and usage notes directly. Save useful phrases and find them under **Review**; notebook search includes kana readings. Japanese notes retain their language and editable readings, and recognition cards show Japanese → meaning. The personal-word creation form and optional speech/AI settings still serve French. Japanese study and notes use text support; Japanese audio, a full kana/kanji syllabus and automatic production assessment are not implemented.
+
+**Authorship and review** shows original AI-assisted provenance. No textbook text or media is imported and no third-party licence is claimed over these additions. These short draft units do not constitute complete CEFR-level coverage or certification. Owner and qualified Japanese review are pending. See the [implementation plan](plans/0029-japanese-course-b1.md) and [authorship/level research](curriculum/japanese-course-sources.md). Download the updated exported app through Profile for cold-offline use; ordinary Japanese study needs no API or AI key.
 
 ## Run the preview
 

@@ -4,7 +4,7 @@ Target product requirements, reviewed 2026-11-16. This plan describes intended b
 
 ## 1. Product direction
 
-Build an approachable language-learning app for adults who want to function confidently in a new country and eventually master its language. Launch French first, with English explanations. The initial learner is an English-speaking newcomer to France, including complete beginners. English and Japanese are future target languages.
+Build an approachable language-learning app for adults who want to function confidently in a new country and eventually master its language. Launch French first, with English explanations. The initial learner is an English-speaking newcomer to France, including complete beginners. The owner's 2026-11-19 request adds Japanese daily-course drafts through estimated B1 tasks; [plan 0029](docs/plans/0029-japanese-course-b1.md) records this bounded extension. English remains a future target language.
 
 The personal app runs locally. A learner-only free website is designed in [plan 0025](docs/plans/0025-free-web-testing.md), with implementation on a separate task branch; no live service or hosted API is established here. Preserve a path to a commercial product while deferring subscriptions and a full account system. The developer implements; the owner tests and reviews the curriculum.
 
@@ -16,9 +16,9 @@ The first content is practical A1–A2 material, not a claim of a complete CEFR 
 | --- | --- | --- |
 | Delivery | Web beta, then Android and iOS | Owner choice |
 | Audience | English-speaking adults, especially newcomers to France | Owner choice |
-| Teaching language | French; English explanations | Owner choice |
+| Teaching language | French plus a separate Japanese daily route; English explanations | Owner extension, 2026-11-19 |
 | French variety | Practical metropolitan French | Current owner project constraints |
-| Future languages | English and Japanese | Owner choice |
+| Future languages | English; broader Japanese curriculum and platform support | Japanese daily-route extension, 2026-11-19 |
 | Learning paths | Guided course plus free topic exploration | Owner choice |
 | Starting level | Include absolute beginners and foundational sounds | Owner choice |
 | Grammar | Optional explanation beside a phrase or activity | Owner choice |
@@ -206,7 +206,7 @@ Conceptual target model, not a claim that each row is a separate implemented tab
 | Conversation | topic, role, optional retained transcript, saved items |
 | API usage | request ID, operation, provider-reported usage, optional cost estimate |
 
-Store French morphology as extensible language-specific data, not mandatory columns for every language. Japanese scripts/readings and English-specific details will require their own content work later.
+Store French morphology as extensible language-specific data, not mandatory columns for every language. Japanese daily-course drafts now use optional kana readings and language-aware notebook metadata; broader Japanese script/kanji/audio support and English-specific details require further content work.
 
 ## 11. Editor scope
 

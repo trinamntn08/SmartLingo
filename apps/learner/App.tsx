@@ -18,7 +18,7 @@ import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
-import { openCoursePilot } from '@smartlingo/content';
+import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import { OpenCoursePanel } from './src/course/OpenCoursePanel';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
@@ -107,12 +107,14 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
     </View>
   </View>
   <OpenCoursePanel course={openCoursePilot} model={model} />
+  <OpenCoursePanel course={japaneseCourse} model={model} title="Your Japanese course" testID="japanese-course-panel"
+    openLabel="Open Japanese course" closeLabel="Close Japanese course" />
   </View>;
 }
 
 function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; catalogue: ReturnType<typeof useCatalogue>; onOpenEditor: () => void }) {
   const completed = model.events.filter(event => event.activity === 'completion' && event.result === 'completed').length;
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
+  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>French and Japanese drafts · English explanations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
     <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
     <OfflinePanel />

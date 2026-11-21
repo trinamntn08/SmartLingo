@@ -200,12 +200,12 @@ test('speaker icon plays and stops through keyboard controls', async ({ page }) 
 test('storage denial explains the problem and never claims a saved change', async ({ page }) => {
   await page.addInitScript(() => Object.defineProperty(window, 'indexedDB', { value: undefined }));
   await page.goto('/');
-  await expect(page.getByRole('alert')).toContainText('couldn’t be opened');
+  await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
   await openRestaurant(page);
   await expect(button(page, 'Save bonjour')).toBeDisabled();
   await expect(button(page, /Continue to dialogue/)).toBeDisabled();
   await button(page, 'Retry opening storage').click();
-  await expect(page.getByRole('alert')).toContainText('couldn’t be opened');
+  await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
 });
 
 test('failed save can retry once without duplicate practice', async ({ page }) => {

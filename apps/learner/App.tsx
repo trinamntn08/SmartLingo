@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { groupLessonTopics, lessonProgress, languageNames, notebookLanguage, type TargetLanguage, type Lesson } from '@smartlingo/domain';
+import { groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage, type Lesson } from '@smartlingo/domain';
 import { audio } from './src/audio';
 import { AudioPreferencesPanel } from './src/audio/AudioPreferencesPanel';
 import { GeneratedSpeechPanel } from './src/audio/generated/GeneratedSpeechPanel';
 import { Badge, Button } from './src/ui/controls';
-import { WordIllustration } from './src/ui/WordIllustration';
 import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
 import { TopicCatalogue } from './src/ui/TopicCatalogue';
@@ -20,13 +19,16 @@ import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
 import { ListeningResources } from './src/listening/ListeningResources';
 import { openCoursePilot, japaneseCourse } from '@smartlingo/content';
-import { OpenCoursePanel } from './src/course/OpenCoursePanel';
+import { TodayDashboard } from './src/dashboard/TodayDashboard';
+import { LearningReportScreen } from './src/dashboard/LearningReportScreen';
+import { LearnerNavigation, type LearnerTab } from './src/dashboard/LearnerNavigation';
+import { useLearningReport } from './src/dashboard/useLearningReport';
 
 import { useTargetLanguage } from './src/language/useTargetLanguage';
 import { LanguageChooser } from './src/language/LanguageChooser';
 
-const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
-type Tab = typeof tabs[number];
+const frenchCourses = [openCoursePilot];
+const japaneseCourses = [japaneseCourse];
 
 export default function App() {
   const [editorOpen, setEditorOpen] = useState(() => typeof window !== 'undefined' && window.location.hash === '#editor');
@@ -67,16 +69,21 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
     notebook: globalModel.notebook.filter(entry => language && notebookLanguage(entry) === language),
     events: globalModel.events.filter(event => catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
   };
-  const [tab, setTab] = useState<Tab>('Today');
+  const [tab, setTab] = useState<LearnerTab>('Today');
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [listeningOpen, setListeningOpen] = useState(false);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const wide = width >= 1050;
-  const lessons = catalogue.lessons.filter(lesson => lesson.language === language);
+  const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
+  const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses: language === 'ja-JP' ? japaneseCourses : frenchCourses });
+  const reportVisible = !!language && !choosing && !lesson && (tab === 'Today' || tab === 'Report');
+  useEffect(() => {
+    if (reportVisible && !childWriteBlocked && !globalModel.busy && !globalModel.loading && !globalModel.loadError) void reportState.refresh();
+  }, [reportVisible, tab, childWriteBlocked, globalModel.busy, globalModel.loading, globalModel.loadError, globalModel.events, globalModel.notebook, reportState.refresh]);
   const topics = groupLessonTopics(lessons);
-  function navigate(next: Tab) { if (switchingBlocked) return; audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function navigate(next: LearnerTab) { if (switchingBlocked) return; audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function selectTopic(name: string | null) { if (switchingBlocked) return; audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function showListening(open: boolean) { audio.stop(); setListeningOpen(open); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function openLesson(next: Lesson) { if (switchingBlocked) return; audio.stop(); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
@@ -89,13 +96,16 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   }
   function chooseHome() { if (!switchingBlocked) { setChoosing(true); onHome(); } }
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><BrandHome onPress={chooseHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={[s.row, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }]}><BrandHome onPress={chooseHome} /><Badge>LOCAL PREVIEW</Badge></View>
     {language && !choosing && <View style={s.row}><Badge>{languageNames[language]}</Badge><Button disabled={switchingBlocked} onPress={() => { audio.stop(); setChoosing(true); }}>Change language</Button></View>}
-    {language && !choosing && <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} disabled={switchingBlocked} onPress={() => navigate(name)}>{name}</Button>)}</View>}
+    {language && !choosing && !wide && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact />}
   </View></View>
     {language && !choosing && !wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
     <View style={{ flex: 1, width: '100%', maxWidth: 1440, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
-    {language && !choosing && wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />}
+    {language && !choosing && wide && <View style={{ width: 230, flexShrink: 0, backgroundColor: colors.card, borderRightWidth: 1, borderColor: colors.line }}>
+      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact={false} />
+      <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />
+    </View>}
     <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}><View style={[s.main, width < 600 && { padding: 16, paddingTop: 24 }]}>
       {!language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text></View> : <>
         {!!model.loadError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text><Text style={s.body}>{model.loadError}</Text><Text style={s.body}>You can browse the bundled lessons. Saving and lesson progress need browser storage.</Text><Button onPress={() => void model.load()}>Retry opening storage</Button></View>}
@@ -104,7 +114,8 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {!!selection.message && <Text accessibilityLiveRegion="polite" style={s.muted}>{selection.message}</Text>}
         {switchingBlocked && <Text style={s.muted}>Finish saving or resolve the save message before leaving this screen or changing language.</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
-          : tab === 'Today' ? <Today language={language} onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
+          : tab === 'Today' ? <TodayDashboard language={language} course={language === 'ja-JP' ? japaneseCourse : openCoursePilot} state={reportState} onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} onReview={() => navigate('Review')} onTopic={selectTopic} />
+            : tab === 'Report' ? <LearningReportScreen language={language} state={reportState} onTopic={selectTopic} onExplore={() => navigate('Explore')} onReview={() => navigate('Review')} />
             : tab === 'Practice' && listeningOpen ? <ListeningResources onClose={() => showListening(false)} />
               : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && language === 'fr-FR' && <><View style={s.card}>
                 <View style={s.row}><Badge>Listening · A1 / A2 / B1</Badge><Badge>External resources</Badge></View>
@@ -117,28 +128,6 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
       </>}
     </View></ScrollView>
     </View>
-  </View>;
-}
-
-function Today({ lessons, model, onOpen, onExplore, language, onWriteBlocked }: { language: TargetLanguage; onWriteBlocked: (blocked: boolean) => void; lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; onExplore: () => void }) {
-  const latest = [...model.events].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).find(event => lessons.some(lesson => lesson.id === event.lessonId));
-  const suggested = lessons.find(lesson => lesson.id === latest?.lessonId) ?? lessons[0];
-  if (!suggested) return <View style={s.card}><Text style={s.heading}>Your lessons are on their way.</Text><Text style={s.body}>No lessons are available for this language yet.</Text><Button onPress={onExplore}>Explore topics</Button></View>;
-  const progress = lessonProgress(suggested, model.events);
-  const started = model.events.some(event => event.lessonId === suggested.id && event.revision === suggested.revision);
-  return <View style={{ gap: 32 }}><View style={s.split}>
-    <View style={[s.column, { justifyContent: 'center', paddingVertical: 18 }]}><Text style={s.eyebrow}>Small steps. Real conversations.</Text>
-      <Text accessibilityRole="header" style={[s.hero, { fontSize: 44, lineHeight: 51 }]}>A little {languageNames[language]}.{ '\n' }A little more{ '\n' }at home.</Text>
-      <Text style={[s.body, { maxWidth: 430 }]}>Explore {groupLessonTopics(lessons).length} everyday topics, with short lessons and useful vocabulary.</Text>
-      <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested.id.startsWith('fr.greetings.') ? 'Start greetings practice →' : suggested.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
-    </View>
-    <View style={[s.card, s.column, { backgroundColor: '#E8ECD9', padding: 28 }]}><View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge><Badge>{suggested.level}</Badge></View>
-      <WordIllustration entry={suggested.vocabulary[1] ?? suggested.vocabulary[0]} size={290} />
-      <Text style={s.heading}>{suggested.subtitle}</Text><Text style={s.body}>{suggested.outcome}</Text><View style={s.row}><Badge>{suggested.role}</Badge><Text style={s.muted}>{suggested.durationMinutes} min · {suggested.vocabulary.length} useful words</Text></View>
-      <View style={s.divider} /><Text style={s.muted}>{progress.completed ? '✓ Session completed and saved' : `${progress.viewedIds.size} of ${suggested.vocabulary.length} words explored`} · {suggested.status === 'published' ? `Published revision ${suggested.revision}` : 'Draft preview'}</Text>
-    </View>
-  </View>
-  <OpenCoursePanel key={language} course={language === 'ja-JP' ? japaneseCourse : openCoursePilot} model={model} onWriteBlocked={onWriteBlocked} />
   </View>;
 }
 

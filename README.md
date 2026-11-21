@@ -6,6 +6,10 @@ See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bund
 
 Choose **French** or **Japanese** on the homepage, then use the same topic browser, vocabulary cards, lessons, dialogue, practice, notebook and review. Japanese offers 13 topics with 30 entries each across 65 short lessons, with English support, kana readings and independent saved progress. Original Japanese lessons/daily-course history are preserved. See [language selection and learning](docs/LOCAL_OPERATIONS.md#choose-a-language-and-learn) and [Japanese scope](docs/curriculum/japanese-topic-vocabulary.md). These short units do not establish complete CEFR/JLPT coverage.
 
+## Dashboard and report
+
+After choosing a language, **Today** opens a friendly dashboard with your next lesson and real activity summaries. **Report** shows your saved weekly activity and topic progress. The same widgets serve French and Japanese; report visits do not change learning history. [Report definitions and limits](docs/LOCAL_OPERATIONS.md#your-dashboard-and-learning-report).
+
 ## Run the preview
 
 Use Node 24.19.0, npm 11.x and Git. From the repository root:

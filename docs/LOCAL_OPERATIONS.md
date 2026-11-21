@@ -8,6 +8,14 @@ On a fresh homepage, choose **Learn French** or **Learn Japanese**. Both open th
 
 Use **Explore** for the topic vocabulary grid, then open a short lesson. Use **Review → Add personal word** for your own vocabulary in the selected language, with optional Japanese kana. Device speech/voice-speed settings are shared and language-specific; if no matching voice is installed, continue with text. Japanese never uses the French neural voice cache or provider. Optional French AI/listening/neural services remain French-only.
 
+## Your dashboard and learning report
+
+After choosing a language, **Today** shows your next lesson, four saved-activity summaries and your weekly rhythm in the same friendly layout for French and Japanese. **Report** opens the full learning report, including every topic's lesson and vocabulary counts. Use its Study topic buttons to return to a topic or Review saved words to open your notebook.
+
+The four summaries count current lesson sessions completed, distinct vocabulary explicitly studied, notebook entries saved and valid daily-course completions. The weekly chart counts saved lesson attempts, course study/practice/self-review/completion and recognition ratings in your browser's current timezone, Monday through Sunday. Browsing, practice-hint reveals and editing a note do not add practice actions. Repeated immutable event IDs count once; future timestamps/dates are excluded. These describe saved activity and do not assess independent language ability.
+
+Reports refresh after returning from learning, after confirmed writes, on focus and about once a minute. They read existing browser data without changing it. If history cannot be opened, **Retry report** retries the read and the report remains unavailable; no zero history is invented. You can still browse lessons. The report is included in the exported offline app; learning backups continue to contain the source history, with no new report store, account or AI requirement.
+
 ## Try the daily-course pilot
 
 Choose French, then **Today → Open daily course**. Two draft days are available: study bilingual sections, save useful words, answer contextual choices and explicitly save a manual self-review. Save each study section before using Next section; you may browse any section directly. Complete study day becomes available after every section is saved. Reopen after reload to resume the saved day/section. Missed calendar dates do not skip content.

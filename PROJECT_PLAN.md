@@ -16,6 +16,8 @@ Owner correction, 2026-11-21: the homepage offers French or Japanese, followed b
 
 The owner's subsequent minimum of 30 entries for every Japanese topic is implemented by [plan 0033](docs/plans/0033-japanese-topic-vocabulary.md): append short original lessons while preserving all earlier payloads and progress.
 
+Owner visual/report direction, 2026-11-21: use the supplied friendly dashboard reference for shared French/Japanese Today and an in-app learning report. [Plan 0034](docs/plans/0034-friendly-learning-report.md) and [ADR 0027](docs/decisions/0027-read-only-learning-report.md) define the real saved-activity metrics and responsive cream/burgundy/gold widgets. Reference fixture names, points, child age bands and levels are not learner facts.
+
 | Area | Decision | Basis |
 | --- | --- | --- |
 | Delivery | Web beta, then Android and iOS | Owner choice |

@@ -6,10 +6,15 @@ import { colors, styles as s } from '../ui/theme';
 import { audio, deviceAudio } from './index';
 import { preferencesForLanguage, audioRates, type AudioPreferences } from './preferences';
 import { getTargetVoices, selectTargetVoice, subscribeVoiceChanges, voiceId } from './voices';
+import { JapaneseAudioPreferencesPanel } from './japanese/JapaneseAudioPreferencesPanel';
 
 const previewText = 'Bonjour ! Je voudrais un café, s’il vous plaît.';
 
 export function AudioPreferencesPanel({ language = 'fr-FR' }: { language?: TargetLanguage }) {
+  return language === 'ja-JP' ? <JapaneseAudioPreferencesPanel /> : <DeviceAudioPreferencesPanel language={language} />;
+}
+
+function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage }) {
   const name = languageNames[language];
   const store = preferencesForLanguage(language);
   const sample = language === 'ja-JP' ? 'こんにちは。コーヒーをください。' : previewText;

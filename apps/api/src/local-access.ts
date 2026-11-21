@@ -3,8 +3,8 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 const origins = new Set(['http://localhost:8081', 'http://127.0.0.1:8081', 'http://localhost:8082', 'http://127.0.0.1:8082', 'http://localhost:8084', 'http://127.0.0.1:8084']);
 const editorPath = /^\/editor\/lessons\/[a-z0-9][a-z0-9.-]{1,119}\/(draft|preview|publish)$/;
 const practicePath = /^\/ai\/practice\/(sessions|turns|stop|transcribe)$/;
-const speechPath = /^\/speech\/generate$/;
-const readPath = /^\/(health|lessons|published-lessons|lessons\/[a-z0-9][a-z0-9.-]{1,119}|ai\/practice\/status|speech\/status)$/;
+const speechPath = /^\/speech\/(generate|japanese\/play)$/;
+const readPath = /^\/(health|lessons|published-lessons|lessons\/[a-z0-9][a-z0-9.-]{1,119}|ai\/practice\/status|speech\/(status|japanese\/status))$/;
 
 function isLoopbackHost(host: string | undefined): boolean {
   if (!host) return false;

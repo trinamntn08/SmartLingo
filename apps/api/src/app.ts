@@ -8,9 +8,11 @@ import { PracticeError, PracticeService, type PracticeOptions } from './practice
 import { registerPracticeRoutes } from './practice/routes';
 import { SpeechError, SpeechService, type SpeechOptions } from './speech/service';
 import { registerSpeechRoutes } from './speech/routes';
+import { JapaneseSpeechError, JapaneseSpeechService, type JapaneseSpeechOptions } from './japanese-speech/service';
+import { registerJapaneseSpeechRoutes } from './japanese-speech/routes';
 
 /** The app takes ownership of the repository and closes it with the server. */
-export function createApp(repository: LessonRepository, options: { now?: () => number; practice?: PracticeOptions; speech?: SpeechOptions } = {}) {
+export function createApp(repository: LessonRepository, options: { now?: () => number; practice?: PracticeOptions; speech?: SpeechOptions; japaneseSpeech?: JapaneseSpeechOptions } = {}) {
   const app = Fastify({
     logger: false,
     bodyLimit: 131_072,
@@ -24,10 +26,12 @@ export function createApp(repository: LessonRepository, options: { now?: () => n
   const receipts = new PreviewReceipts(options.now);
   const practice = new PracticeService({ now: options.now, ...options.practice });
   const speech = new SpeechService({ now: options.now, ...options.speech });
+  const japaneseSpeech = new JapaneseSpeechService(options.japaneseSpeech);
   registerLocalAccess(app);
-  app.addHook('preClose', async () => { practice.close(); speech.close(); });
+  app.addHook('preClose', async () => { practice.close(); speech.close(); japaneseSpeech.close(); });
   app.addHook('onClose', async () => { receipts.clear(); repository.close(); });
   app.setErrorHandler<FastifyError>((error, _request, reply) => {
+    if (error instanceof JapaneseSpeechError) return reply.code(error.statusCode).send({ error: error.message });
     if (error instanceof SpeechError) return reply.code(error.statusCode).send({ error: error.message, ...(error.terminal ? { code: 'attempt_ended' } : {}) });
     if (error instanceof PracticeError) return reply.code(error.statusCode).send({ error: error.message, ...(error.terminal ? { code: 'attempt_ended' } : {}) });
     if (error instanceof EditorError) return reply.code(error.statusCode).send({ error: error.message });
@@ -52,5 +56,6 @@ export function createApp(repository: LessonRepository, options: { now?: () => n
   registerEditorRoutes(app, repository, receipts);
   registerPracticeRoutes(app, practice);
   registerSpeechRoutes(app, speech);
+  registerJapaneseSpeechRoutes(app, japaneseSpeech);
   return app;
 }

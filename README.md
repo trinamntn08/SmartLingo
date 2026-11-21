@@ -43,6 +43,10 @@ Open `http://localhost:8082`, then Profile → Learn offline → Download for of
 
 Device speech is optional and synthetic. Explicit Azure generation/saving is a separate opt-in action that may use credits; ordinary playback never generates paid speech. Follow [neural speech setup and retention](docs/LOCAL_OPERATIONS.md#optional-saved-neural-french-audio). Real voice quality and physical-device checks remain open.
 
+## Free Japanese audio
+
+Japanese speaker buttons use a free local VOICEVOX fallback when no Japanese device voice is installed. Profile → Japanese audio lets you select and preview Shikoku Metan, set speed and remove saved clips. On Windows x64 with Python 3.12+, run `npm run setup:japanese-voice` once, then keep `npm run dev:japanese-voice` and `npm run dev:api` running in separate terminals. Already saved clips can replay offline. [Setup, research and voice credits](docs/JAPANESE_AUDIO.md) explains the local runtime and limits; no API key or paid speech is required.
+
 ## Back up and recover server curriculum
 
 Browser learning backups and server curriculum snapshots are separate. Use [server backup/recovery instructions](docs/LOCAL_OPERATIONS.md#back-up-and-recover-server-curriculum) for the implemented `backup:curriculum` / `restore:curriculum` commands; recovery writes a new file and never replaces the running database.

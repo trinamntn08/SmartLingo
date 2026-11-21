@@ -6,7 +6,7 @@ Current operational instructions for this source checkout. For installation and 
 
 On a fresh homepage, choose **Learn French** or **Learn Japanese**. Both open the same Today, Explore, Practice, Review and Profile screens, topic sidebar/list, vocabulary cards, dialogue, meaning/picture practice and sentence builder. English explanations are directly visible; Japanese adds kana readings within the same cards. **Change language** or **SmartLingo home** returns to the chooser. Your choice persists when browser settings storage is available; each language keeps its own displayed notebook and lesson progress. Private learning backups include both languages.
 
-Use **Explore** for the topic vocabulary grid, then open a short lesson. Use **Review → Add personal word** for your own vocabulary in the selected language, with optional Japanese kana. Device speech/voice-speed settings are shared and language-specific; if no matching voice is installed, continue with text. Japanese never uses the French neural voice cache or provider. Optional French AI/listening/neural services remain French-only.
+Use **Explore** for the topic vocabulary grid, then open a short lesson. Use **Review → Add personal word** for your own vocabulary in the selected language, with optional Japanese kana. Device speech/voice-speed settings are shared and language-specific. Japanese also has a free local VOICEVOX fallback when no matching device voice is installed; [Japanese audio setup and credits](JAPANESE_AUDIO.md) explains installation, preview and offline clips. Japanese never uses the French neural voice cache or provider. Optional French AI/listening/neural services remain French-only.
 
 ## Your dashboard and learning report
 

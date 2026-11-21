@@ -31,6 +31,8 @@
     "test": "npm run test:tooling && npm run test:app",
     "dev": "npm run web --workspace @smartlingo/learner",
     "dev:api": "npm run dev --workspace @smartlingo/api",
+    "setup:japanese-voice": "python -X utf8 scripts/japanese_voice/setup.py",
+    "dev:japanese-voice": "node scripts/japanese-voice.mjs",
     "backup:curriculum": "tsx apps/api/src/curriculum-backup-cli.ts backup",
     "restore:curriculum": "tsx apps/api/src/curriculum-backup-cli.ts restore",
     "typecheck": "tsc --noEmit",

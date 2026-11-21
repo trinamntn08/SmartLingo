@@ -5,6 +5,10 @@ import { HybridSpeechPlayer } from './generated/hybrid';
 import { generatedPreferences } from './generated/preferences';
 import { generatedAudioStore } from './generated/store';
 import { reportAudioNotice, savedClipPlayer } from './generated/runtime';
+import { BrowserClipPlayer } from './generated/player';
+import { JapaneseSpeechPlayer } from './japanese/player';
+import { japaneseSource } from './japanese/preferences';
+import { japaneseAudioStore, japaneseSpeechClient } from './japanese/runtime';
 
 export interface AudioPlayer {
   available(language?: TargetLanguage): boolean;
@@ -76,4 +80,6 @@ export class DeviceSpeechPlayer implements AudioPlayer {
 }
 
 export const deviceAudio: AudioPlayer = new DeviceSpeechPlayer();
-export const audio: AudioPlayer = new HybridSpeechPlayer(deviceAudio, generatedAudioStore, savedClipPlayer, generatedPreferences, reportAudioNotice);
+const frenchAudio = new HybridSpeechPlayer(deviceAudio, generatedAudioStore, savedClipPlayer, generatedPreferences, reportAudioNotice);
+export const audio: AudioPlayer = new JapaneseSpeechPlayer(frenchAudio, deviceAudio, japaneseSpeechClient, japaneseAudioStore,
+  new BrowserClipPlayer(), japaneseSource, () => preferencesForLanguage('ja-JP').get().rate);

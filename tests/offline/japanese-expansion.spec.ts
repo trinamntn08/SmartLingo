@@ -1,0 +1,41 @@
+import { expect, test } from '@playwright/test';
+import { japaneseLessons } from '@smartlingo/content';
+import { buildAcceptedSentence } from '../e2e/learner-journeys';
+
+test.use({ storageState: { cookies: [], origins: [] } });
+test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
+
+test('new Japanese topic vocabulary, search and short practice survive cold offline reload', async ({ page, context, baseURL }) => {
+  test.setTimeout(90000);
+  await context.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/'); await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  const remote: string[] = [];
+  context.on('request', request => { if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== new URL(baseURL!).origin) remote.push(request.url()); });
+  await context.setOffline(true); await page.close();
+  const cold = await context.newPage(); await cold.goto(baseURL!);
+  const lesson = japaneseLessons.find(lesson => lesson.id === 'ja.lesson.day-3.words-2')!;
+  const entry = lesson.vocabulary[0];
+  await cold.getByRole('button', { name: `Topic ${lesson.topic}`, exact: true }).click();
+  await expect(cold.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
+  await cold.getByRole('textbox', { name: 'Search lessons', exact: true }).fill(entry.reading!);
+  await cold.getByRole('button', { name: `Save ${entry.target}`, exact: true }).click();
+  await expect(cold.getByRole('button', { name: `Save ${entry.target}`, exact: true })).toBeDisabled();
+  await cold.getByRole('textbox', { name: 'Search lessons', exact: true }).fill('');
+  await cold.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
+  await cold.getByRole('button', { name: /Continue to dialogue/ }).click();
+  await cold.getByRole('button', { name: /Try meaning practice/ }).click();
+  await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
+  await cold.getByRole('button', { name: /Build a sentence/ }).click(); await buildAcceptedSentence(cold, lesson);
+  await cold.getByRole('button', { name: /^Continue/ }).click();
+  await cold.getByRole('button', { name: 'Finish and save session', exact: true }).click();
+  await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
+  await cold.reload(); await cold.getByRole('button', { name: /Revisit your lesson/ }).click();
+  await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
+  await cold.getByRole('button', { name: 'Review', exact: true }).click();
+  await expect(cold.getByTestId('notebook-entries').getByRole('heading', { name: entry.target, exact: true })).toBeVisible();
+  expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(remote).toEqual([]);
+});

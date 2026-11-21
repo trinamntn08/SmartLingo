@@ -11,9 +11,10 @@ function canBuild(lesson: Lesson, chosen: string[] = [], remaining = lesson.sent
 }
 
 test('all existing Japanese days use the shared Lesson contract with unchanged teaching vocabulary/dialogue', () => {
-  assert.equal(japaneseLessons.length, japaneseCourse.days.length);
+  const originalLessons = japaneseLessons.filter(lesson => /^ja\.lesson\.day-\d+$/.test(lesson.id));
+  assert.equal(originalLessons.length, japaneseCourse.days.length);
   assert.equal(new Set([...lessons, ...japaneseLessons].map(lesson => lesson.id)).size, lessons.length + japaneseLessons.length);
-  for (const [index, lesson] of japaneseLessons.entries()) {
+  for (const [index, lesson] of originalLessons.entries()) {
     assert.deepEqual(lessonSchema.parse(lesson), lesson);
     assert.equal(lesson.language, 'ja-JP'); assert.equal(lesson.status, 'draft');
     const day = japaneseCourse.days[index];

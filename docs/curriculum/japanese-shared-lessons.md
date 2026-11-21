@@ -2,6 +2,8 @@
 
 Drafted: 2026-11-21. Runtime adapter: `packages/content/src/japanese-lessons.ts`.
 
+This record describes the original 13 source-day lessons, which remain unchanged. The [topic vocabulary expansion](japanese-topic-vocabulary.md) appends 52 original lessons: the current learner has 13 topic banks of 30 distinct entries each, 65 short lessons total. Earlier lesson/course progress is preserved; new lessons have separate IDs.
+
 The shared catalogue presents each of the 13 existing Japanese course days as a `Lesson`, with a distinct topic using the day title. It preserves all 78 canonical vocabulary records, including IDs, meanings, examples and kana readings, and each day’s actual dialogue lines and readings. The first study block supplies the grammar title and explanation. The source `japaneseCourse` and its immutable IDs, revision and progress scopes are unchanged. Shared lessons have separate stable IDs `ja.lesson.day-1` through `ja.lesson.day-13`, revision 1, draft status, Japanese targets and English support. The ten-minute estimate describes this shorter shared activity view, not completion of the full course day or its open production task.
 
 The [existing authorship and research record](japanese-course-sources.md) applies to reused text. The adapter and 13 explicit sentence assembly exercises are original AI-assisted SmartLingo work. No external lesson text, media, recordings or proprietary course content is imported; no Creative Commons licence or third-party endorsement is claimed.

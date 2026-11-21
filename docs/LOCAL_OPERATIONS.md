@@ -18,7 +18,7 @@ These are bundled owner-review drafts, not an imported book, published curriculu
 
 ## Try the Japanese route
 
-Choose **Learn Japanese**. Its 13 original draft units appear in the same topic sidebar, Explore and short-lesson screens as French, with vocabulary, dialogue, meaning practice and sentence building. **Today → Open daily course** also retains the original daily-course activities and day/section progress. Filter days by level or browse freely; all study text, English support and kana readings are bundled. Completion and explicit next-day navigation remain independent of French.
+Choose **Learn Japanese**. Its 13 topic banks, each with 30 distinct entries across five short lessons, appear in the same topic sidebar, Explore and short-lesson screens as French, with vocabulary, dialogue, meaning practice and sentence building. **Today → Open daily course** also retains the original daily-course activities and day/section progress. Filter days by level or browse freely; all study text, English support and kana readings are bundled. Completion and explicit next-day navigation remain independent of French.
 
 Shared vocabulary cards show Japanese readings, examples, translations and usage notes directly. Save phrases and find them under **Review**; search includes kana readings and preserves dakuten distinctions. Notes retain editable readings and language. Existing daily-course events remain intact; completion of an old day does not invent completion of the new short-lesson exercises. Japanese device speech is optional; a full kana/kanji syllabus, Japanese neural/AI service and automatic production assessment remain unimplemented.
 

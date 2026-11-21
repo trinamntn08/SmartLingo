@@ -1,5 +1,9 @@
 import { lessonSchema, type Lesson } from '@smartlingo/domain';
 import { japaneseCourse } from './japanese-course';
+import { buildJapaneseExpansion } from './japanese-expansion';
+import { foundationsExpansions } from './japanese-vocabulary/foundations';
+import { routinesExpansions } from './japanese-vocabulary/routines';
+import { discussionExpansions } from './japanese-vocabulary/discussion';
 
 type SentenceDraft = Omit<Lesson['sentenceActivity'], 'id' | 'almostAnswers'>;
 
@@ -102,7 +106,7 @@ const sentenceDrafts: Record<number, SentenceDraft> = {
 };
 
 /** Shared Lesson views; the source daily course and its progress scopes stay unchanged. */
-export const japaneseLessons: Lesson[] = japaneseCourse.days.map(day => {
+const originalJapaneseLessons: Lesson[] = japaneseCourse.days.map(day => {
   const study = day.blocks.find(block => block.kind === 'study');
   const dialogue = day.blocks.find(block => block.kind === 'dialogue');
   const sentence = sentenceDrafts[day.dayNumber];
@@ -130,4 +134,17 @@ export const japaneseLessons: Lesson[] = japaneseCourse.days.map(day => {
       review: 'Draft requiring owner and qualified Japanese/native-speaker review of naturalness, readings, translations, register, sentence alternatives and level estimates before publication. Completion records activity only; no complete CEFR coverage, proficiency or JLPT equivalence is claimed.',
     },
   });
+});
+
+const expansions = [...foundationsExpansions, ...routinesExpansions, ...discussionExpansions];
+const byDay = new Map(expansions.map(topic => [topic.dayNumber, topic]));
+if (expansions.length !== japaneseCourse.days.length || byDay.size !== expansions.length) {
+  throw new Error('Each Japanese topic needs one complete vocabulary expansion.');
+}
+
+export const japaneseLessons: Lesson[] = originalJapaneseLessons.flatMap((lesson, index) => {
+  const day = japaneseCourse.days[index];
+  const expansion = byDay.get(day.dayNumber);
+  if (!expansion) throw new Error(`Missing Japanese vocabulary expansion for day ${day.dayNumber}`);
+  return [lesson, ...buildJapaneseExpansion(day, expansion)];
 });

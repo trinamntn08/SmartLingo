@@ -14,6 +14,8 @@ The first content is practical A1–A2 material, not a claim of a complete CEFR 
 
 Owner correction, 2026-11-21: the homepage offers French or Japanese, followed by the same core learner widgets and flow. [Plan 0032](docs/plans/0032-shared-language-learning.md) and [ADR 0026](docs/decisions/0026-shared-language-learning.md) implement that shared interface while preserving existing content/history and explicitly scoped optional services.
 
+The owner's subsequent minimum of 30 entries for every Japanese topic is implemented by [plan 0033](docs/plans/0033-japanese-topic-vocabulary.md): append short original lessons while preserving all earlier payloads and progress.
+
 | Area | Decision | Basis |
 | --- | --- | --- |
 | Delivery | Web beta, then Android and iOS | Owner choice |

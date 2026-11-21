@@ -12,7 +12,7 @@ async function choose(page: Page, name: string) {
   await expect(button(page, 'Change language').or(button(page, `Learn ${name}`))).toBeVisible();
   if (await button(page, 'Change language').isVisible()) await button(page, 'Change language').click();
   await button(page, `Learn ${name}`).click();
-  await expect(button(page, 'Explore')).toBeVisible();
+  await expect(button(page, 'Learn')).toBeVisible();
 }
 async function open(page: Page, lesson: Lesson) {
   await button(page, `Topic ${lesson.topic}`).click();
@@ -33,7 +33,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
   const pairs: Array<[string, Lesson]> = [['French', lessons[0]], ['Japanese', japaneseLessons[0]]];
   for (const [name, lesson] of pairs) {
     await choose(page, name);
-    for (const tab of ['Today', 'Explore', 'Practice', 'Review', 'Profile']) await expect(button(page, tab)).toBeVisible();
+    for (const tab of ['Today', 'Learn', 'Review', 'Report', 'Profile']) await expect(button(page, tab)).toBeVisible();
     await open(page, lesson);
     const word = lesson.vocabulary[0];
     const card = page.getByTestId(`vocabulary-${word.id}`);
@@ -124,9 +124,12 @@ test('Japanese personal vocabulary, kana search, provider isolation and recovera
   await expect(button(page, 'Change language')).toBeDisabled();
   await button(page, 'Dismiss rating save').click();
   await expect(button(page, 'Change language')).toBeEnabled();
-  await button(page, 'Practice').click();
+  await button(page, 'Learn').click();
+  await button(page, 'Speaking').click();
   await expect(page.getByTestId('french-practice')).toHaveCount(0);
-  await expect(button(page, 'Browse listening resources')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Speaking practice', exact: true })).toBeVisible();
+  await button(page, 'Listening & videos').click();
+  await expect(page.getByRole('heading', { name: 'Japanese listening library', exact: true })).toBeVisible();
   await choose(page, 'French'); await button(page, 'Review').click();
   await expect(page.getByTestId('notebook-entries')).toHaveCount(0);
 });

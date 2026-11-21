@@ -1,0 +1,49 @@
+import { expect, test } from '@playwright/test';
+import { japaneseAlphabetLessons } from '@smartlingo/content';
+
+test.use({ storageState: { cookies: [], origins: [{ origin: 'http://localhost:8082', localStorage: [{ name: 'smartlingo.target-language.v1', value: 'ja-JP' }] }] } });
+test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
+
+test('downloaded letters resume saved hiragana and freely browse katakana on a cold offline launch', async ({ page, context, baseURL }) => {
+  const apiRequests: string[] = [];
+  await context.route('**/127.0.0.1:3001/**', route => { apiRequests.push(route.request().url()); return route.abort(); });
+  await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
+  await page.goto('/'); await page.getByRole('button', { name: 'Start Hiragana', exact: true }).click();
+  const alphabet = page.getByTestId('japanese-alphabet');
+  await alphabet.getByRole('button', { name: 'Recognition practice', exact: true }).click();
+  const first = japaneseAlphabetLessons[0]!;
+  for (const [index, character] of first.characters.entries()) {
+    await alphabet.getByRole('button', { name: `Choose ${character.kana}`, exact: true }).click();
+    if (index < first.characters.length - 1) await alphabet.getByRole('button', { name: 'Next character', exact: true }).click();
+  }
+  await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
+  await expect(alphabet.getByTestId(`kana-row-${japaneseAlphabetLessons[1]!.id}`)).toHaveAttribute('aria-selected', 'true');
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  // Profile may check local voice availability; cold text study needs no API.
+  apiRequests.length = 0;
+  await context.setOffline(true); await page.close();
+  const cold = await context.newPage(); await cold.goto(baseURL!);
+  await cold.getByRole('button', { name: 'Continue Japanese letters', exact: true }).click();
+  const letters = cold.getByTestId('japanese-alphabet');
+  await expect(letters.getByRole('combobox')).toHaveCount(0);
+  await expect(letters.getByTestId(`kana-row-${japaneseAlphabetLessons[1]!.id}`)).toHaveAttribute('aria-selected', 'true');
+  await expect(letters.getByTestId(`kana-row-${first.id}`)).toContainText('Studied');
+  await expect(letters.getByTestId(`kana-row-${first.id}`)).not.toContainText('Not studied');
+  await expect(letters.getByTestId(`kana-row-${first.id}`)).toHaveAccessibleName(/Explore row.*Studied$/);
+  await expect(letters.getByText(/1 of 20 rows studied/)).toBeVisible();
+  // Visible readings and recognition continue even without a voice or server.
+  await expect(letters.getByText(japaneseAlphabetLessons[1]!.characters[0]!.romaji, { exact: true })).toBeVisible();
+  await letters.getByRole('button', { name: /Katakana$/ }).click();
+  await expect(letters.getByRole('heading', { name: japaneseAlphabetLessons[10]!.title, exact: true })).toBeVisible();
+  await letters.getByTestId(`kana-row-${japaneseAlphabetLessons[19]!.id}`).click();
+  await expect(letters.getByRole('heading', { name: japaneseAlphabetLessons[19]!.title, exact: true })).toBeVisible();
+  await letters.getByRole('button', { name: 'Recognition practice', exact: true }).click();
+  await letters.getByRole('button', { name: `Choose ${japaneseAlphabetLessons[19]!.characters[0]!.kana}`, exact: true }).click();
+  await expect(letters.getByText(/^Yes\./)).toBeVisible();
+  await cold.getByRole('button', { name: 'Vocabulary & lessons', exact: true }).click();
+  await expect(cold.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+  expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(apiRequests).toEqual([]);
+});

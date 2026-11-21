@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { restaurantLesson } from '@smartlingo/content';
 
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 
@@ -13,12 +14,23 @@ test('downloaded listening guidance and filters cold-start offline without provi
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
   await context.setOffline(true);
   await page.close();
   const cold = await context.newPage();
   await cold.goto(baseURL!);
-  await cold.getByRole('button', { name: 'Practice', exact: true }).click();
-  await cold.getByRole('button', { name: 'Browse listening resources', exact: true }).click();
+  await cold.getByRole('button', { name: 'Learn', exact: true }).click();
+  await cold.getByRole('button', { name: 'Listening & videos', exact: true }).click();
+  const comprehension = cold.getByTestId('listening-comprehension');
+  await comprehension.getByRole('combobox', { name: 'Listening lesson', exact: true }).selectOption(restaurantLesson.id);
+  await comprehension.getByRole('button', { name: 'Play sentence', exact: true }).click();
+  await expect(comprehension.getByRole('alert')).toContainText('Audio could not play');
+  const transcript = await comprehension.getByTestId('listening-transcript').innerText();
+  const sentence = restaurantLesson.vocabulary.find(entry => transcript.includes(entry.example))!;
+  expect(sentence).toBeDefined();
+  await comprehension.getByRole('button', { name: sentence.exampleMeaning, exact: true }).click();
+  await comprehension.getByRole('button', { name: 'Check answer', exact: true }).click();
+  await expect(comprehension.getByTestId('listening-feedback')).toContainText(sentence.exampleMeaning);
   const library = cold.getByTestId('listening-resources');
   await expect(library.getByText(/Online only: playback opens on an external provider/)).toBeVisible();
   await library.getByRole('button', { name: 'Listening level B1', exact: true }).click();

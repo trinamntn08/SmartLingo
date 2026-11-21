@@ -143,7 +143,7 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await page.setViewportSize({ width: 320, height: 740 });
   await page.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { value: undefined, configurable: true }));
   await page.goto('/');
-  await button(page, 'Explore').focus();
+  await button(page, 'Learn').focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('textbox', { name: 'Search lessons' })).toBeVisible();
   await expectNoHorizontalOverflow(page);

@@ -6,11 +6,12 @@ import { WordIllustration } from '../ui/WordIllustration';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { ReportMetrics, ReportStatus, WeeklyActivity, WeeklyRhythm, type ReportState } from './ReportWidgets';
+import { alphabetProgress } from '../alphabet/progress';
 
-export function TodayDashboard({ language, lessons, course, model, state, onWriteBlocked, onOpen, onExplore, onReview, onTopic }: {
+export function TodayDashboard({ language, lessons, course, model, state, onWriteBlocked, onOpen, onExplore, onReview, onTopic, onListen, onSpeak, onAlphabet }: {
   language: TargetLanguage; lessons: Lesson[]; course: OpenCourse; model: LearningModel; state: ReportState;
   onWriteBlocked: (blocked: boolean) => void; onOpen: (lesson: Lesson) => void; onExplore: () => void;
-  onReview: () => void; onTopic: (topic: string) => void;
+  onReview: () => void; onTopic: (topic: string) => void; onListen: () => void; onSpeak: () => void; onAlphabet: () => void;
 }) {
   const compact = useWindowDimensions().width < 600;
   const latest = [...model.events].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).find(event => lessons.some(lesson => lesson.id === event.lessonId));
@@ -19,7 +20,15 @@ export function TodayDashboard({ language, lessons, course, model, state, onWrit
   const started = suggested && model.events.some(event => event.lessonId === suggested.id && event.revision === suggested.revision);
   const startLabel = progress?.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested?.id.startsWith('fr.greetings.') ? 'Start greetings practice →' : suggested?.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →';
   const topics = groupLessonTopics(lessons);
+  const alphabet = alphabetProgress(model.events);
   return <View style={{ gap: 24, minWidth: 0 }}>
+    {language === 'ja-JP' && <View style={[s.card, { backgroundColor: '#FFF3CF', gap: 14 }]}>
+      <Badge>JAPANESE FIRST STEPS · DRAFT</Badge>
+      <Text accessibilityRole="header" style={s.heading}>Start with Japanese letters</Text>
+      <Text style={s.body}>Learn Hiragana first, then Katakana, in small groups before moving into words and conversations. You can explore any topic whenever you like.</Text>
+      <Text style={s.muted}>{model.loadError ? 'Saved alphabet progress is unavailable.' : `${alphabet.completed} / ${alphabet.total} rows studied`} · 46 basic Hiragana + 46 basic Katakana</Text>
+      <View style={s.row}><Button primary onPress={onAlphabet}>{alphabet.completed === 0 ? 'Start Hiragana' : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters'}</Button></View>
+    </View>}
     <View style={[s.card, { backgroundColor: '#FFF3CF', borderColor: '#F5E7BE', padding: compact ? 22 : 30, flexDirection: 'row', flexWrap: 'wrap', gap: 24, alignItems: 'center' }]}>
       <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 370, gap: 16, minWidth: 0 }}>
         <Text style={{ fontFamily: 'Georgia', fontStyle: 'italic', fontSize: 19, color: colors.ink }}>Welcome to your learning space</Text>
@@ -32,6 +41,11 @@ export function TodayDashboard({ language, lessons, course, model, state, onWrit
     </View>
     <ReportStatus state={state} />
     {state.report && !state.error && <ReportMetrics report={state.report} />}
+    <View style={s.card}>
+      <Text accessibilityRole="header" style={s.heading}>Listen, watch and speak</Text>
+      <Text style={s.body}>Understand a spoken sentence, find a short video or podcast, or practise responding aloud.</Text>
+      <View style={s.row}><Button primary onPress={onListen}>Listening & videos</Button><Button onPress={onSpeak}>Speaking practice</Button></View>
+    </View>
     <View style={[s.split, { gap: 20 }]}>
       <View style={[s.card, s.column, { flexBasis: 360, gap: 15 }]}>
         <View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge>{suggested && <Badge>{suggested.level}</Badge>}</View>

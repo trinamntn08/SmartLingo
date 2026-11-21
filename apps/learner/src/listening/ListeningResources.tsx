@@ -1,23 +1,32 @@
 import { useState } from 'react';
+import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { Linking, Platform, Text, View } from 'react-native';
 import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
-import { listeningFormats, listeningLevels, listeningResources, type ListeningFormat, type ListeningLevel, type ListeningResource } from './resources';
+import { getListeningResources, listeningFormats, listeningLevels, type ListeningFormat, type ListeningLevel, type ListeningResource } from './resources';
 
-export function ListeningResources({ onClose }: { onClose: () => void }) {
+type Props = { language?: TargetLanguage; onClose?: () => void };
+
+export function ListeningResources({ language = 'fr-FR', onClose }: Props) {
+  return <ListeningLibrary key={language} language={language} onClose={onClose} />;
+}
+
+function ListeningLibrary({ language = 'fr-FR', onClose }: Props) {
   const [level, setLevel] = useState<ListeningLevel | null>(null);
   const [format, setFormat] = useState<ListeningFormat | null>(null);
-  const filtered = listeningResources.filter(resource => (!level || resource.levels.includes(level)) && (!format || resource.format === format));
+  const languageName = languageNames[language];
+  const filtered = getListeningResources(language).filter(resource => (!level || resource.levels.includes(level)) && (!format || resource.format === format));
   function reset() { setLevel(null); setFormat(null); }
 
   return <View testID="listening-resources" style={{ gap: 20 }}>
-    <View style={s.row}><Button onPress={onClose}>← Back to practice</Button></View>
+    {onClose && <View style={s.row}><Button onPress={onClose}>← Back to practice</Button></View>}
     <View style={[s.card, { backgroundColor: colors.yellow }]}>
       <Text style={s.eyebrow}>Listen a little. Notice a little more.</Text>
-      <Text accessibilityRole="header" style={s.title}>French listening library</Text>
-      <Text style={s.body}>Find videos, podcasts and guided listening for everyday French. Choose something manageable, replay a short part and try the practice idea.</Text>
+      <Text accessibilityRole="header" style={s.title}>{languageName} listening library</Text>
+      <Text style={s.body}>Find videos, podcasts and guided listening for everyday {languageName}. Choose something manageable, replay a short part and try the practice idea.</Text>
       <Text style={s.body}>Online only: playback opens on an external provider. Nothing plays or loads from these providers until you open a link.</Text>
       <Text style={s.body}>A1, A2 and B1 are approximate resource recommendations, not assessments of your proficiency. Difficulty, captions and access vary by episode. Check the support notes before listening.</Text>
+      {language === 'ja-JP' && <Text style={s.body}>Japanese recommendations currently focus on starter and elementary listening. JF Standard labels are shown where the provider uses them; these are not JLPT ratings. Some filter combinations have no recommendations yet.</Text>}
     </View>
     <View style={s.card}>
       <Text accessibilityRole="header" style={s.heading}>Find your next listen</Text>

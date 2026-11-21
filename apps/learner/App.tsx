@@ -7,7 +7,6 @@ import { GeneratedSpeechPanel } from './src/audio/generated/GeneratedSpeechPanel
 import { Badge, Button } from './src/ui/controls';
 import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
-import { TopicCatalogue } from './src/ui/TopicCatalogue';
 import { TopicSidebar } from './src/ui/TopicSidebar';
 import { BrandHome } from './src/ui/BrandHome';
 import { colors, styles as s } from './src/ui/theme';
@@ -16,8 +15,8 @@ import { CurriculumEditor } from './src/editor/CurriculumEditor';
 import { useCatalogue } from './src/content/useCatalogue';
 import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
-import { FrenchPractice } from './src/practice/FrenchPractice';
-import { ListeningResources } from './src/listening/ListeningResources';
+import { LearningHub, type LearnMode } from './src/learn/LearningHub';
+import { isAlphabetLessonId } from './src/alphabet/progress';
 import { openCoursePilot, japaneseCourse } from '@smartlingo/content';
 import { TodayDashboard } from './src/dashboard/TodayDashboard';
 import { LearningReportScreen } from './src/dashboard/LearningReportScreen';
@@ -67,12 +66,12 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   const switchingBlocked = globalModel.busy || !!globalModel.saveError || childWriteBlocked;
   const model: LearningModel = { ...globalModel,
     notebook: globalModel.notebook.filter(entry => language && notebookLanguage(entry) === language),
-    events: globalModel.events.filter(event => catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
+    events: globalModel.events.filter(event => (language === 'ja-JP' && isAlphabetLessonId(event.lessonId)) || catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
   };
   const [tab, setTab] = useState<LearnerTab>('Today');
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
-  const [listeningOpen, setListeningOpen] = useState(false);
+  const [learnMode, setLearnMode] = useState<LearnMode>('Vocabulary & lessons');
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const wide = width >= 1050;
@@ -83,16 +82,17 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
     if (reportVisible && !childWriteBlocked && !globalModel.busy && !globalModel.loading && !globalModel.loadError) void reportState.refresh();
   }, [reportVisible, tab, childWriteBlocked, globalModel.busy, globalModel.loading, globalModel.loadError, globalModel.events, globalModel.notebook, reportState.refresh]);
   const topics = groupLessonTopics(lessons);
-  function navigate(next: LearnerTab) { if (switchingBlocked) return; audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
-  function selectTopic(name: string | null) { if (switchingBlocked) return; audio.stop(); setListeningOpen(false); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
-  function showListening(open: boolean) { audio.stop(); setListeningOpen(open); scroll.current?.scrollTo({ y: 0, animated: false }); }
-  function openLesson(next: Lesson) { if (switchingBlocked) return; audio.stop(); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function navigate(next: LearnerTab) { if (switchingBlocked) return; audio.stop(); setLearnMode(language === 'ja-JP' ? 'Japanese letters' : 'Vocabulary & lessons'); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function selectTopic(name: string | null) { if (switchingBlocked) return; audio.stop(); setLearnMode('Vocabulary & lessons'); setLesson(null); setSelectedTopic(name); setTab('Learn'); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function selectLearnMode(next: LearnMode) { if (switchingBlocked) return; audio.stop(); setLearnMode(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
+  function openLearnMode(next: LearnMode) { if (switchingBlocked) return; navigate('Learn'); setLearnMode(next); }
+  function openLesson(next: Lesson) { if (switchingBlocked) return; audio.stop(); setTab('Learn'); setLearnMode('Vocabulary & lessons'); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   useEffect(() => () => audio.stop(), []);
   useEffect(() => { if (homeRequest > 0 && !switchingBlocked) { navigate('Today'); setChoosing(true); } }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   function chooseLanguage(next: TargetLanguage) {
     if (switchingBlocked) return;
-    audio.stop(); selection.choose(next); setChoosing(false); navigate('Today');
+    audio.stop(); selection.choose(next); setChoosing(false); navigate('Today'); setLearnMode(next === 'ja-JP' ? 'Japanese letters' : 'Vocabulary & lessons');
   }
   function chooseHome() { if (!switchingBlocked) { setChoosing(true); onHome(); } }
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
@@ -114,17 +114,10 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {!!selection.message && <Text accessibilityLiveRegion="polite" style={s.muted}>{selection.message}</Text>}
         {switchingBlocked && <Text style={s.muted}>Finish saving or resolve the save message before leaving this screen or changing language.</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
-          : tab === 'Today' ? <TodayDashboard language={language} course={language === 'ja-JP' ? japaneseCourse : openCoursePilot} state={reportState} onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} onReview={() => navigate('Review')} onTopic={selectTopic} />
-            : tab === 'Report' ? <LearningReportScreen language={language} state={reportState} onTopic={selectTopic} onExplore={() => navigate('Explore')} onReview={() => navigate('Review')} />
-            : tab === 'Practice' && listeningOpen ? <ListeningResources onClose={() => showListening(false)} />
-              : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && language === 'fr-FR' && <><View style={s.card}>
-                <View style={s.row}><Badge>Listening · A1 / A2 / B1</Badge><Badge>External resources</Badge></View>
-                <Text accessibilityRole="header" style={s.heading}>French listening library</Text>
-                <Text style={s.body}>Find videos, podcasts and guided listening, with text-support notes and short practice ideas. Playback needs an internet connection and opens on the provider’s site.</Text>
-                <Text style={s.muted}>Opening the library ends any temporary conversation and clears unsent messages and recordings.</Text>
-                <Button primary onPress={() => showListening(true)}>Browse listening resources</Button>
-              </View><FrenchPractice lessons={lessons} model={model} /></>}<TopicCatalogue key={language} lessons={lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
-              : tab === 'Review' ? <Notebook key={language} language={language} onWriteBlocked={setChildWriteBlocked} model={model} onExplore={() => navigate('Explore')} /> : <Profile language={language} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
+          : tab === 'Today' ? <TodayDashboard language={language} course={language === 'ja-JP' ? japaneseCourse : openCoursePilot} state={reportState} onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model} onOpen={openLesson} onExplore={() => openLearnMode('Vocabulary & lessons')} onReview={() => navigate('Review')} onTopic={selectTopic} onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')} onAlphabet={() => openLearnMode('Japanese letters')} />
+            : tab === 'Report' ? <LearningReportScreen language={language} state={reportState} onTopic={selectTopic} onExplore={() => openLearnMode('Vocabulary & lessons')} onReview={() => navigate('Review')} />
+            : tab === 'Learn' ? <LearningHub language={language} lessons={lessons} model={model} mode={learnMode} onMode={selectLearnMode} selectedTopic={selectedTopic} onSelectTopic={selectTopic} onOpen={openLesson} disabled={switchingBlocked} active={active} />
+              : tab === 'Review' ? <Notebook key={language} language={language} onWriteBlocked={setChildWriteBlocked} model={model} onExplore={() => openLearnMode('Vocabulary & lessons')} /> : <Profile language={language} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
     </View>
@@ -137,7 +130,7 @@ function Profile({ model, catalogue, onOpenEditor, language }: { language: Targe
     {language === 'fr-FR' && <><View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
     </>}
-    {language === 'ja-JP' && <View style={s.card}><Text style={s.heading}>Japanese study support</Text><Text style={s.body}>Vocabulary, kana readings, dialogues, sentence building and your personal notebook work without AI. Optional AI conversation, the listening library, neural audio and the curriculum workshop currently support French only.</Text></View>}
+    {language === 'ja-JP' && <View style={s.card}><Text style={s.heading}>Japanese study support</Text><Text style={s.body}>Vocabulary, kana readings, dialogues, sentence building and your personal notebook work without AI. Learn includes listening comprehension, video/audio resources and guided speaking in Japanese. Optional AI conversation, Azure neural audio and the curriculum workshop currently support French only.</Text></View>}
     <OfflinePanel />
     <AudioPreferencesPanel key={language} language={language} />
     {language === 'fr-FR' && <GeneratedSpeechPanel />}

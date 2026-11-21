@@ -44,7 +44,7 @@ test('French voice and speed choices survive reload and apply to lesson playback
 test('bundled coffee photograph loads and has a local photo-credits route', async ({ page }, info) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Explore Restaurant →', exact: true }).click();
   const card = page.getByTestId('vocabulary-fr.cafe');
   const photo = card.locator('img').first();
@@ -60,7 +60,7 @@ test('bundled coffee photograph loads and has a local photo-credits route', asyn
   expect(await credits.text()).toContain('creativecommons.org');
   await page.route('**/vocabulary-photos/*.jpg', route => route.abort());
   await page.reload();
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Explore Restaurant →', exact: true }).click();
   await expect(card.locator('img').first()).toHaveAttribute('src', /^data:image\/svg/);
   await expect(card.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();

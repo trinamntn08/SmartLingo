@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { colors } from '../ui/theme';
 
-export const learnerTabs = ['Today', 'Explore', 'Practice', 'Review', 'Report', 'Profile'] as const;
+export const learnerTabs = ['Today', 'Learn', 'Review', 'Report', 'Profile'] as const;
 export type LearnerTab = typeof learnerTabs[number];
-const icons: Record<LearnerTab, string> = { Today: '⌂', Explore: '◇', Practice: '✎', Review: '↻', Report: '▥', Profile: '☺' };
+const icons: Record<LearnerTab, string> = { Today: '⌂', Learn: '◇', Review: '↻', Report: '▥', Profile: '☺' };
 
 export function LearnerNavigation({ selected, disabled, onSelect, compact }: {
   selected: LearnerTab; disabled: boolean; onSelect: (tab: LearnerTab) => void; compact: boolean;

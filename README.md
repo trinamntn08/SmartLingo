@@ -4,11 +4,17 @@ A local French-learning preview for English-speaking adult newcomers to France. 
 
 See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bundled curriculum remains draft until owner review and explicit publication; lesson completion and level labels do not establish proficiency.
 
-Choose **French** or **Japanese** on the homepage, then use the same topic browser, vocabulary cards, lessons, dialogue, practice, notebook and review. Japanese offers 13 topics with 30 entries each across 65 short lessons, with English support, kana readings and independent saved progress. Original Japanese lessons/daily-course history are preserved. See [language selection and learning](docs/LOCAL_OPERATIONS.md#choose-a-language-and-learn) and [Japanese scope](docs/curriculum/japanese-topic-vocabulary.md). These short units do not establish complete CEFR/JLPT coverage.
+Choose **French** or **Japanese** on the homepage, then use the same Learn area, vocabulary cards, lessons, dialogue, listening, speaking, notebook and review. Japanese offers 13 topics with 30 entries each across 65 short lessons, with English support, kana readings and independent saved progress. Original Japanese lessons/daily-course history are preserved. See [language selection and learning](docs/LOCAL_OPERATIONS.md#choose-a-language-and-learn) and [Japanese scope](docs/curriculum/japanese-topic-vocabulary.md). These short units do not establish complete CEFR/JLPT coverage.
 
 ## Dashboard and report
 
 After choosing a language, **Today** opens a friendly dashboard with your next lesson and real activity summaries. **Report** shows your saved weekly activity and topic progress. The same widgets serve French and Japanese; report visits do not change learning history. [Report definitions and limits](docs/LOCAL_OPERATIONS.md#your-dashboard-and-learning-report).
+
+## Learn, listen and speak
+
+**Learn** brings vocabulary and lessons together with **Listening & videos** and **Speaking**. Both French and Japanese offer sentence-meaning comprehension with replay/transcripts, guided dialogue role-play, and video/audio resource recommendations. Today links directly to listening and speaking. External resources open on the provider's site; the in-app activities use existing lesson text and shared speech. These temporary activities do not add assessed proficiency or saved lesson completions.
+
+Japanese starts with **Japanese letters**: 20 short draft groups teach basic Hiragana, then Katakana, with readings, audio, recognition practice and saved row continuation. Vocabulary stays freely available. [Alphabet scope and review limits](docs/curriculum/japanese-alphabet-sources.md).
 
 ## Run the preview
 
@@ -53,7 +59,7 @@ Browser learning backups and server curriculum snapshots are separate. Use [serv
 
 ## Optional AI French practice
 
-Practice supports explicit text exchanges and optional temporary recorded-input transcription, with English help and editable phrase capture. Server-only OpenAI settings and usage/privacy limits are documented in [AI practice setup](docs/LOCAL_OPERATIONS.md#optional-ai-french-practice). Ordinary downloaded lessons remain available without AI.
+Learn > Speaking supports explicit French AI text exchanges and optional temporary recorded-input transcription, with English help and editable phrase capture. Server-only OpenAI settings and usage/privacy limits are documented in [AI practice setup](docs/LOCAL_OPERATIONS.md#optional-ai-french-practice). Ordinary downloaded lessons remain available without AI.
 
 ## Tooling prerequisites
 

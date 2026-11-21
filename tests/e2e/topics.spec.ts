@@ -32,7 +32,7 @@ test('new foundations and A2 experience lessons expose translated study material
 test('topic words are directly readable, searchable and save to the notebook without API', async ({ page }, info) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await expect(page.getByText(`${topics.length} everyday topics · ${[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}`, { exact: true })).toBeVisible();
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
@@ -72,7 +72,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await page.setViewportSize({ width: 320, height: 740 });
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Explore Services and paperwork →', exact: true }).click();
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
@@ -122,7 +122,7 @@ test('desktop topic pane stays to the left and switches an open lesson directly 
   expect(topicsBox!.x + topicsBox!.width).toBeLessThanOrEqual(contentBox!.x + 1);
 
   const groceriesLesson = lessons.find(lesson => lesson.topic === 'Groceries')!;
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Explore Groceries →', exact: true }).click();
   await page.getByRole('button', { name: `Open ${groceriesLesson.subtitle}`, exact: true }).click();
   await expect(page.getByRole('heading', { name: groceriesLesson.vocabulary[0].target, exact: true })).toBeVisible();
@@ -147,7 +147,7 @@ test('320px horizontal topic strip reaches topics and topic changes clear stale 
   await page.setViewportSize({ width: 320, height: 740 });
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('bakery');
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();

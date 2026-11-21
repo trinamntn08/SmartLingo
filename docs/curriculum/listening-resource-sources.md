@@ -1,10 +1,10 @@
-# A1–B1 listening link library
+# French and Japanese listening link libraries
 
-Researched 2026-11-19 (Europe/Paris). The learner opens this library under **Practice → Listening resources**. The catalogue lives in [resources.ts](../../apps/learner/src/listening/resources.ts); this record owns its source evidence and limits.
+French sources researched 2026-11-19; Japanese sources researched 2026-11-21 (Europe/Paris). The learner opens the active language’s library under **Learn → Listening & videos**. [resources.ts](../../apps/learner/src/listening/resources.ts) preserves the eleven French entries and selects language-specific recommendations; [japanese-resources.ts](../../apps/learner/src/listening/japanese-resources.ts) contains the Japanese metadata. This record owns source evidence and limits.
 
 These are editorial link recommendations, not imported lessons, a complete listening syllabus, exam preparation guarantees or proficiency assessments. Provider levels are identified below; other level choices and all short practice suggestions are SmartLingo editorial judgments. Start with a familiar subject and move to an easier resource if the main idea remains unclear after supported replay.
 
-## Sources actually inspected
+## French sources actually inspected
 
 | Catalogue IDs | Primary evidence | Verified scope and limits |
 | --- | --- | --- |
@@ -20,6 +20,20 @@ These are editorial link recommendations, not imported lessons, a complete liste
 
 All table pages were retrieved or inspected through live indexed primary-source text on the research date. This is metadata verification, not a full audiovisual review. Unsuccessful candidate URLs were excluded; do not reuse old TV5MONDE `/niveaux/` URLs as verified links.
 
+## Japanese sources actually inspected
+
+Checked 2026-11-21 through live official pages or live indexed creator text. The five entries use the same cards and level/format filters as French. Japanese currently has starter/elementary recommendations; empty B1 or YouTube combinations are intentional and offer a reset. JF Standard A1/A2 labels identify provider pathways; Erin’s A1–A2 and Teppei’s A2 stretch placement are approximate SmartLingo editorial suggestions. No CEFR-to-JLPT equivalence, complete syllabus, independent listening assessment or guaranteed exam preparation is claimed.
+
+| Catalogue ID | Primary evidence | Verified scope and limits |
+| --- | --- | --- |
+| `ja-erin-skits` | [Erin contents library](https://www.erin.jpf.go.jp/en/), [lesson 1 basic skit](https://www.erin.jpf.go.jp/en/lesson/01/basic/), [Japan Foundation’s learning portal entry](https://nihongo-e-na.com/eng/site/id939.html) | Public beginner scenes. The inspected lesson lists Japanese and English script PDFs and audio; the Foundation portal describes subtitle selection for basic/advanced skits. School-age settings are disclosed; other sections need not have the same support. No account was required for the inspected page. |
+| `ja-marugoto-a1` | [Starter A1 landing page](https://a1.marugotoweb.jp/en/), [official description](https://a1.marugotoweb.jp/en/about_this_site.php), [Foundation materials listing](https://www.jpf.go.jp/jft-basic/e/support/index.html) | Provider JF Standard Starter A1. Video conversation practice supports showing/hiding the script and role choice. English interface/explanations, with no blanket claim of English captions. Free public companion site, distinct from purchasing the book or registering for Minato. Provider warns of possible phone/tablet limitations. |
+| `ja-marugoto-a2` | [Elementary 1 A2 landing page](https://a2.marugotoweb.jp/en/), [official description](https://a2.marugotoweb.jp/en/about/), [usage/environment](https://a2.marugotoweb.jp/en/how_to_use/index.html) | Provider JF Standard Elementary 1 A2. Listening section uses short-dialogue videos and questions; drama offers simulated interaction. English explanations; full translated captions not verified. Public companion activities; desktop recommended, some content uses pop-ups. No site-wide pop-up setting change is requested by SmartLingo. |
+| `ja-irodori-online` | [course destination](https://www.irodori-online.jpf.go.jp/), [Foundation’s current course overview](https://www.jpf.go.jp/jft-basic/e/support/index.html), [provider announcement](https://www.jpf.go.jp/e/about/press/2021/002.html), [provider registration FAQ](https://www.irodori-online.jpf.go.jp/faq/) | Free registration-based A1/A2 online learning, with practical videos, audio and support content; English explanations available. Destination/FAQ retrieved, but signed-in lessons were not inspected and no account was created. Do not promise every video has captions. This entry links to the interactive course, not the separate downloadable Irodori textbook. |
+| `ja-teppei-beginners` | [creator’s beginner podcast](https://nihongoconteppei.com/), [creator’s transcript announcement](https://www.patreon.com/nihongoconteppei/posts/ai-transcripts-90158421) | Creator explicitly calls this a beginner podcast. Public recent episodes expose audio links through a podcast host. Japanese-only audio is an editorial A2 stretch, not a from-zero course or provider CEFR rating. Inspected episode listings do not promise free translated/corrected transcripts. Creator sells access to AI transcripts via Patreon; those were not purchased or quality-reviewed. |
+
+These are source/access metadata checks, not an end-to-end playback, caption accuracy or qualified Japanese teaching review. Some dynamically rendered provider pages expose little text; their official explanatory pages establish the stated scope. No third-party recordings, thumbnails, scripts, translations or exercises are reproduced, and free-to-access does not establish a reuse licence. All descriptions and practice suggestions in SmartLingo are original editorial text. Availability and regional/browser behaviour can change after the research date.
+
 ## Access, privacy and reuse
 
 - SmartLingo bundles only original descriptions, provider names, links and practice suggestions. No third-party recordings, thumbnails, subtitles, exercise text or transcripts are copied or cached. This is not a media reuse licence audit or a claim of provider endorsement.
@@ -30,4 +44,4 @@ All table pages were retrieved or inspected through live indexed primary-source 
 
 ## Suggested short routine
 
-Choose one resource and work with a short section for roughly ten minutes. Listen for the main idea, use available French text or English help, then replay and note two useful expressions. Reading with a transcript is supported study; describe it honestly rather than treating it as independent listening success. English retelling is a valid way to check understanding without adding a speaking barrier.
+Choose one resource and work with a short section for roughly ten minutes. Listen for the main idea, use available French/Japanese text or English help, then replay and note two useful expressions. Reading with a transcript is supported study; describe it honestly rather than treating it as independent listening success. English retelling is a valid way to check understanding without adding a speaking barrier.

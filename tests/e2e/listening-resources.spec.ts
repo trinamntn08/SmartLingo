@@ -11,10 +11,8 @@ async function openLibrary(page: Page) {
     return route.abort();
   });
   await page.goto('/');
-  await page.getByRole('button', { name: 'Practice', exact: true }).click();
-  await expect(page.getByTestId('french-practice')).toBeVisible();
-  await expect(page.getByText('Opening the library ends any temporary conversation and clears unsent messages and recordings.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Browse listening resources', exact: true }).click();
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
+  await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
   const library = page.getByTestId('listening-resources');
   await expect(library.getByRole('heading', { name: 'French listening library', exact: true })).toBeVisible();
   await expect(page.getByTestId('french-practice')).toHaveCount(0);
@@ -47,17 +45,17 @@ test('listening level and format filters combine and reset without affecting ord
   await expect(library.getByRole('button', { name: 'All listening levels', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(library.getByRole('button', { name: 'All listening formats', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(library.getByRole('link')).toHaveCount(listeningResources.length);
-  await library.getByRole('button', { name: '← Back to practice', exact: true }).click();
+  await page.getByRole('button', { name: 'Speaking', exact: true }).click();
   const conversation = page.getByTestId('french-practice');
   await expect(conversation.getByRole('heading', { name: 'French conversation', exact: true })).toBeAttached();
   await expect(conversation.getByRole('textbox', { name: 'Search conversation lessons', exact: true })).toBeAttached();
   await expect(conversation.getByRole('button', { name: 'Start AI conversation', exact: true })).toBeDisabled();
-  await page.getByRole('button', { name: 'Browse listening resources', exact: true }).click();
-  await page.getByRole('button', { name: 'Explore', exact: true }).click();
+  await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
+  await page.getByRole('button', { name: 'Vocabulary & lessons', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Practice', exact: true }).click();
   await expect(page.getByTestId('listening-resources')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Browse listening resources', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Speaking', exact: true }).click();
+  await expect(page.getByTestId('french-practice')).toBeVisible();
 });
 
 test('resource links are explicit safe destinations and browsing requests no remote media', async ({ page }) => {

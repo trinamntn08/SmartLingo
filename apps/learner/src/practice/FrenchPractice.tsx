@@ -45,7 +45,7 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
     <Text style={s.body}>Try a short everyday conversation. French replies, English meanings and helpful feedback stay visible.</Text>
     <View style={s.notice}>
       <Text style={s.body}>Send message or Retry message sends your text, selected context and conversation to OpenAI through the local server. Transcribe recording or Retry transcription separately sends your local microphone clip to OpenAI. These explicit actions may use paid API credits.</Text>
-      <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Practice or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under your API account settings. Avoid private information.</Text>
+      <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Speaking or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under your API account settings. Avoid private information.</Text>
       <Text style={s.muted}>Starting, checking availability and recording locally use no AI credits. Local clips are cleared after successful transcription or when you discard, stop, leave or reload. A failed transcription keeps the clip temporarily for an explicit retry. Replay uses your device voice.</Text>
     </View>
     {!state.session && <>

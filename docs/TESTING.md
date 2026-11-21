@@ -27,13 +27,17 @@ git diff --check
 | `test:app` | Content IDs/answers/order/solvability and media guards; progress, review and notebook/backup persistence; IndexedDB and SQLite integrity/migrations; immutable seed refresh and editor/publication isolation; curriculum snapshot recovery; audio, temporary conversation/transcription and saved-speech boundaries. Provider calls use fakes. |
 | `test:e2e` | Chromium desktop and narrow learner/editor journeys, validation, explicit preview/publication, cache/reload, notebook/search/review/backups, fake AI/recording and saved speech. One duplicate narrow publication case is deliberately skipped because test content is shared. |
 | `build:web` | Expo export plus offline-manifest/worker preparation under ignored `apps/learner/dist`. This is not a deployment. |
-| `test:offline` | Six exported-browser cases across desktop/320px for explicit download, interrupted/corrupt transfer, update, removal and stalled-navigation fallback. Uses test-only response controls; the production server has none. |
+| `test:offline` | Exported-browser journeys across desktop/320px for explicit download, interrupted/corrupt transfer, update, removal, cold learning/report/resource use and stalled-navigation fallback. Uses test-only response controls; the production server has none. |
 
 `npm test` runs tooling and application suites. The [GitHub workflow](../.github/workflows/verify.yml) runs those checks plus Chromium and offline journeys on Ubuntu with isolated fixtures, read-only repository permissions and fake providers. It creates no deployment; remote job success must be verified separately.
 
 Development browser tests use `localhost:8081` (reusable outside CI) and an isolated in-memory curriculum API at `127.0.0.1:3002`. Only the tested browser is routed to that API. The offline suite starts its own server on `localhost:8082` and refuses to reuse a listener. Check listeners first. If the owner preview occupies 8082, preserve it: defer the suite or deliberately use reviewed temporary fixture/config copies with distinct ports and record the substitutions. Do not stop owner processes automatically.
 
 Tests use temporary databases and browser contexts, not owner databases/profiles. Browser traces/screenshots live in ignored `test-results/`. The staged scan rejects known protected paths/high-confidence credential patterns without printing values; it cannot detect every secret. Tooling checks do not prove runtime role/hook discovery or trust.
+
+The unified Learn coverage includes same-language sentence-question construction (duplicate/ambiguous mappings, contextual varied choices, fallback and immutability), language-separated resource metadata, French/Japanese listening/replay/transcript/feedback/error and scripted speaking roles, and optional French AI/microphone cleanup on mode changes. External resources remain link-only; tests check safe destinations and absence of provider requests, not provider audiovisual quality. The offline resource journey exercises no-voice transcript/answer fallback after a cold launch.
+
+Alphabet coverage checks the 92-form inventory and readings, known-ID/revision row progress, Hiragana-first continuation, wrong-answer study versus mastery, save retry identity and backup preservation. Visual-path browser cases check card selection, no dropdown, current/studied accessible names, keyboard Tab/Enter and320px overflow. A cold-offline case resumes saved Hiragana and freely browses/practises Katakana with visible readings and no API request. These checks do not establish handwriting or native-speaker pronunciation quality.
 
 ## Historical evidence
 
@@ -51,7 +55,7 @@ These describe their tested revisions, not a fresh run of the current checkout. 
 - Fake speech and an original test MP3 establish playback/control behaviour, not audible French quality, OS voice installation, real microphone hardware or provider/subscription compatibility. No paid provider success is established by these suites.
 - Real storage quota/eviction, power loss, ongoing multiprocess contention and some filesystem alias/durability scenarios remain unverified. Browser data can be cleared; keep private backups separately.
 - Automated content/schema checks do not establish French teaching accuracy, complete CEFR alignment, owner approval or media suitability. Curriculum remains subject to saved-revision preview and explicit publication.
-- Per-topic offline packs, bulk speech, full editor tools and production/listening or adaptive review remain future work. Whole-app download and explicit saved-speech replay are implemented.
+- Per-topic offline packs, bulk speech, full editor tools, independently assessed production/listening and adaptive review remain future work. Whole-app download, saved-speech replay and temporary guided listening/speaking are implemented.
 - The last recorded dependency audit (2026-11-15) reported three moderate Expo/fingerprint/minimatch findings and no high/critical findings. The attempted override was reverted; no remediation is claimed. Consult the [investigation](plans/0011-build-tool-audit.md) and run a fresh audit before making a current security claim.
 
 Hosted-mode implementation and its reported checks now exist on the separate `codex/free-learner-cloud-deploy` branch; they are not integrated into this checkout or included in the results above. [Plan 0025](plans/0025-free-web-testing.md) records the inspected branch/blocked publication. Local checks do not establish a live website, public hosted acceptance or account sync.

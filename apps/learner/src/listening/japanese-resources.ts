@@ -1,0 +1,61 @@
+import type { ListeningResource } from './resources';
+
+// Link-only recommendations. Primary-source evidence and limits are recorded in
+// docs/curriculum/listening-resource-sources.md; no provider media is bundled.
+export const japaneseListeningResources: readonly ListeningResource[] = [
+  {
+    id: 'ja-erin-skits', title: "Erin's Challenge: everyday video skits", provider: 'The Japan Foundation',
+    levels: ['A1', 'A2'], format: 'Video exercises',
+    url: 'https://www.erin.jpf.go.jp/en/',
+    description: 'Follow short scenes about greetings, requests, shopping and travel, set around a student’s life in Japan.',
+    support: 'Basic and advanced skits offer selectable subtitles and Japanese/English script PDFs. Other sections have different support.',
+    access: 'Free public contents library. No provider account was required to view the inspected lesson page.',
+    practice: 'Start with lesson 1’s basic skit. Notice the introduction, check the English script, then replay one exchange.',
+    levelNote: 'Suggested A1–A2 with scripts; advanced skits can be harder. These are editorial suggestions, not JLPT levels.',
+    checkedOn: '2026-11-21',
+  },
+  {
+    id: 'ja-marugoto-a1', title: 'Marugoto Plus: starter video activities', provider: 'The Japan Foundation',
+    levels: ['A1'], format: 'Video exercises',
+    url: 'https://a1.marugotoweb.jp/en/',
+    description: 'Practise introductions, food, home and shopping with short situational videos and role-play activities.',
+    support: 'English site navigation and explanations. Conversation practice lets you show or hide the written script.',
+    access: 'Free public companion site; separate from the paid coursebook and Minato courses. Some functions may work poorly on phones.',
+    practice: 'Choose Myself. Watch a short introduction, use the script to check one phrase, then listen again.',
+    levelNote: 'Provider Starter A1 using the JF Standard; a starting point for supported listening, not an assessment.',
+    checkedOn: '2026-11-21',
+  },
+  {
+    id: 'ja-marugoto-a2', title: 'Marugoto Plus: elementary listening and drama', provider: 'The Japan Foundation',
+    levels: ['A2'], format: 'Video exercises',
+    url: 'https://a2.marugotoweb.jp/en/',
+    description: 'Watch everyday conversations, answer listening questions and try the interactive drama after the basics.',
+    support: 'English navigation and grammar explanations. Check the chosen activity for script or caption options; full English subtitles are not promised.',
+    access: 'Free public companion activities. The provider recommends a desktop browser; some activities use pop-up windows.',
+    practice: 'Choose a familiar topic’s Listening activity. Identify the situation and one detail, then check with its questions.',
+    levelNote: 'Provider Elementary 1 A2 using the JF Standard. Video and task difficulty varies within the site.',
+    checkedOn: '2026-11-21',
+  },
+  {
+    id: 'ja-irodori-online', title: 'Irodori: practical Japanese with video and audio', provider: 'The Japan Foundation',
+    levels: ['A1', 'A2'], format: 'Video exercises',
+    url: 'https://www.irodori-online.jpf.go.jp/',
+    description: 'Use guided listening and conversation videos for daily life and work in Japan.',
+    support: 'Choose English for explanations. Word and grammar help accompanies the course; check individual videos for text support.',
+    access: 'Free provider registration is required for the online course. Your course progress is managed on that external site.',
+    practice: 'Start with a greeting or food lesson. Listen for the speaker’s request, check the course help, then replay.',
+    levelNote: 'Provider A1–A2 course options using the JF Standard. Choose Starter if you are new to spoken Japanese.',
+    checkedOn: '2026-11-21',
+  },
+  {
+    id: 'ja-teppei-beginners', title: 'Nihongo con Teppei: beginner podcast', provider: 'Nihongo con Teppei',
+    levels: ['A2'], format: 'Podcast',
+    url: 'https://nihongoconteppei.com/',
+    description: 'Explore short Japanese-only episodes on everyday interests once you recognise some common words.',
+    support: 'Japanese episode titles; no free English translation or corrected transcript is promised. The creator offers AI transcripts through paid Patreon membership.',
+    access: 'Free public audio episodes. Optional membership costs extra; playback uses an external podcast host.',
+    practice: 'Choose a familiar title. Replay thirty seconds and note the topic and two words you recognise; try a guided video if it feels too difficult.',
+    levelNote: 'Suggested A2 stretch, not a provider CEFR or JLPT rating. “Beginner” does not mean a course from zero.',
+    checkedOn: '2026-11-21',
+  },
+];

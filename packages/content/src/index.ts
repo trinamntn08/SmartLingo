@@ -16,6 +16,8 @@ export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
 export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
 export { courseSequence, orderCourseLessons } from './course-sequence';
+export { kanaScripts, japaneseAlphabetLessons, japaneseAlphabetNotes,
+  type KanaScript, type KanaCharacter, type JapaneseAlphabetLesson } from './japanese-alphabet';
 
 // Original preview curriculum. Publication requires owner review.
 const drafts = [

@@ -1,3 +1,6 @@
+import type { TargetLanguage } from '@smartlingo/domain';
+import { japaneseListeningResources } from './japanese-resources';
+
 export const listeningLevels = ['A1', 'A2', 'B1'] as const;
 export type ListeningLevel = typeof listeningLevels[number];
 export const listeningFormats = ['YouTube', 'Podcast', 'Video exercises'] as const;
@@ -130,3 +133,7 @@ export const listeningResources: readonly ListeningResource[] = [
     levelNote: 'Suggested B1 stretch. News vocabulary can be difficult even when the title says easy.', checkedOn: '2026-11-19',
   },
 ];
+
+export function getListeningResources(language: TargetLanguage): readonly ListeningResource[] {
+  return language === 'ja-JP' ? japaneseListeningResources : listeningResources;
+}

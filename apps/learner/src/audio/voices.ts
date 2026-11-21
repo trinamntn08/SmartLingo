@@ -23,6 +23,23 @@ export function getFrenchVoices(): SpeechSynthesisVoice[] {
   catch { return []; }
 }
 
+/** Never fall back to another target language when a matching voice is absent. */
+export function selectTargetVoice(voices: readonly SpeechSynthesisVoice[], target: 'fr-FR' | 'ja-JP', preferredId = ''): SpeechSynthesisVoice | undefined {
+  if (target === 'fr-FR') return selectFrenchVoice(voices, preferredId);
+  const japanese = voices.filter(voice => language(voice) === 'ja' || language(voice).startsWith('ja-'));
+  return japanese.find(voice => preferredId && voiceId(voice) === preferredId)
+    ?? japanese.find(voice => language(voice) === 'ja-jp' && voice.localService)
+    ?? japanese.find(voice => language(voice) === 'ja-jp')
+    ?? japanese.find(voice => voice.localService) ?? japanese[0];
+}
+
+export function getTargetVoices(target: 'fr-FR' | 'ja-JP'): SpeechSynthesisVoice[] {
+  try {
+    const prefix = target.split('-')[0];
+    return (globalThis.speechSynthesis?.getVoices() ?? []).filter(voice => language(voice) === prefix || language(voice).startsWith(`${prefix}-`));
+  } catch { return []; }
+}
+
 export function subscribeVoiceChanges(refresh: () => void): () => void {
   const synthesis = globalThis.speechSynthesis;
   synthesis?.addEventListener?.('voiceschanged', refresh);

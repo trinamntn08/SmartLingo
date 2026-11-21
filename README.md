@@ -4,6 +4,8 @@ A local French-learning preview for English-speaking adult newcomers to France. 
 
 See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bundled curriculum remains draft until owner review and explicit publication; lesson completion and level labels do not establish proficiency.
 
+Choose **French** or **Japanese** on the homepage, then use the same topic browser, vocabulary cards, lessons, dialogue, practice, notebook and review. Japanese reuses the existing 13 draft study days with English support, kana readings and independent saved progress. See [language selection and learning](docs/LOCAL_OPERATIONS.md#choose-a-language-and-learn) and [Japanese scope](docs/curriculum/japanese-shared-lessons.md). These short units do not establish complete CEFR/JLPT coverage.
+
 ## Run the preview
 
 Use Node 24.19.0, npm 11.x and Git. From the repository root:

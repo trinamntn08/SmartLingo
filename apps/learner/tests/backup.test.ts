@@ -7,7 +7,7 @@ import { openLearningRepository } from '../src/persistence';
 import { readBackupFile } from '../src/backup/files';
 
 const backup: LearningBackup = {
-  format: 'smartlingo-learning-backup', version: 3, createdAt: '2026-11-14T12:00:00Z',
+  format: 'smartlingo-learning-backup', version: 4, createdAt: '2026-11-14T12:00:00Z',
   events: [{ id: '77777777-7777-4777-8777-777777777777', lessonId: restaurantLesson.id, revision: 1, itemId: 'fr.cafe', activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T12:00:00Z' }],
   notebook: [{ id: 'notebook.fr.cafe', sourceEntryId: 'fr.cafe', target: 'un café', meaning: 'my coffee note', example: '', updatedAt: '2026-11-14T12:00:00Z' }],
   publishedLessons: [{ ...restaurantLesson, revision: 3, status: 'published' }],
@@ -31,7 +31,7 @@ test('download-format backup round-trips all learner stores; repeat merge keeps 
   assert.equal((await restored.listNotebook())[0].meaning, 'Keep my later edit');
   assert.deepEqual(await restored.listPublishedLessons(), backup.publishedLessons);
   assert.deepEqual(await restored.listReviewEvents(), backup.reviewEvents);
-  assert.equal(exported.version, 3);
+  assert.equal(exported.version, 4);
   assert.deepEqual(await restored.listCourseEvents(), backup.courseEvents);
   source.close(); restored.close();
 });
@@ -70,10 +70,10 @@ test('backup parsing rejects unknown versions, duplicate IDs, draft caches, corr
   await assert.rejects(readBackupFile(new File([bytes], 'corrupt-encoding.json')), /not valid UTF-8/);
 });
 
-test('version1 learning backups migrate to version3 without inventing review or course history', async () => {
+test('version1 learning backups migrate to version4 without inventing review or course history', async () => {
   const { reviewEvents: _ratings, courseEvents: _course, ...legacy } = backup;
   const migrated = parseBackupText(JSON.stringify({ ...legacy, version: 1 }));
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   assert.deepEqual(migrated.reviewEvents, []);
   assert.deepEqual(migrated.courseEvents, []);
   assert.deepEqual(migrated.events, backup.events);
@@ -92,7 +92,7 @@ test('version1 learning backups migrate to version3 without inventing review or 
 test('version2 backups preserve reviews and restore with no invented course history', async () => {
   const { courseEvents: _course, ...legacy } = backup;
   const migrated = parseBackupText(JSON.stringify({ ...legacy, version: 2 }));
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   assert.deepEqual(migrated.courseEvents, []);
   assert.deepEqual(migrated.reviewEvents, backup.reviewEvents);
   const store = await openLearningRepository({ factory: new IDBFactory() });

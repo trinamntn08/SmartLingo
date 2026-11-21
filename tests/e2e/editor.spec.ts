@@ -103,6 +103,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
+  await expect(page.getByTestId('language-chooser')).toBeVisible();
+  await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
   await expect(page.getByText('Published', { exact: true })).toBeVisible();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
@@ -145,6 +147,8 @@ test('narrow editor keeps unsaved text when returning to the learner', async ({ 
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('narrow-editor-form.png'), fullPage: true });
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
+  await expect(page.getByTestId('language-chooser')).toBeVisible();
+  await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();

@@ -5,7 +5,14 @@ export default defineConfig({
   timeout: 45000,
   expect: { timeout: 10000 },
   fullyParallel: true,
-  use: { baseURL: 'http://localhost:8081', trace: 'retain-on-failure', channel: 'chromium' },
+  use: {
+    baseURL: 'http://localhost:8081', trace: 'retain-on-failure', channel: 'chromium',
+    // Existing regression journeys start after the learner has chosen French.
+    // Gateway tests override this state to exercise a genuinely fresh visit.
+    storageState: { cookies: [], origins: [{ origin: 'http://localhost:8081',
+      localStorage: [{ name: 'smartlingo.target-language.v1', value: 'fr-FR' }],
+    }] },
+  },
   projects: [
     { name: 'desktop', use: { browserName: 'chromium', viewport: { width: 1440, height: 1000 } } },
     { name: 'small-screen', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },

@@ -13,7 +13,7 @@ export async function exportLearningBackup(database: IDBDatabase): Promise<Learn
     Promise.all(stores.map(name => requestResult(transaction.objectStore(name).getAll()))), done,
   ]);
   return learningBackupSchema.parse({
-    format: 'smartlingo-learning-backup', version: 3, createdAt: new Date().toISOString(),
+    format: 'smartlingo-learning-backup', version: 4, createdAt: new Date().toISOString(),
     events: rows[0], notebook: rows[1], publishedLessons: rows[2], reviewEvents: rows[3], courseEvents: rows[4],
   });
 }

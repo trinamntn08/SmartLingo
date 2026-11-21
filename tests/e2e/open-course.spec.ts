@@ -171,14 +171,15 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   const backupPath = info.outputPath('course-learning-backup.json');
   await (await download).saveAs(backupPath);
   const backup = JSON.parse(await readFile(backupPath, 'utf8'));
-  expect(backup.version).toBe(3);
+  expect(backup.version).toBe(4);
   expect(backup.courseEvents).toHaveLength((await storedEvents(page)).length);
   expect(backup.events).toEqual([]);
-  const restoredContext = await browser.newContext();
+  const restoredContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   await restoredContext.route('**/127.0.0.1:3001/**', route => route.abort());
   try {
     const restored = await restoredContext.newPage();
     await restored.goto(new URL('/', page.url()).href);
+    await restored.getByRole('button', { name: 'Learn French', exact: true }).click();
     await restored.getByRole('button', { name: 'Profile', exact: true }).click();
     await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(backupPath);
     await restored.getByRole('checkbox').check();

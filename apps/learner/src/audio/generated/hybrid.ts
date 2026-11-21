@@ -1,6 +1,6 @@
 import type { AudioPlayer } from '../index';
 import type { GeneratedPreferences } from './preferences';
-import { speechInputSchema, type SpeechInput } from '@smartlingo/domain';
+import { speechInputSchema, type SpeechInput, type TargetLanguage } from '@smartlingo/domain';
 
 export interface LocalSpeechLookup { get(input: SpeechInput): Promise<{ bytes: Uint8Array } | undefined> }
 export interface ClipPlayer { play(bytes: Uint8Array): Promise<void>; stop(): void }
@@ -9,9 +9,11 @@ export class HybridSpeechPlayer implements AudioPlayer {
   private sequence = 0;
   constructor(private readonly device: AudioPlayer, private readonly saved: LocalSpeechLookup, private readonly clips: ClipPlayer,
     private readonly preferences: { get(): GeneratedPreferences }, private readonly notice: (message: string) => void = () => {}) {}
-  available() { return this.device.available() || this.preferences.get().enabled; }
-  speak(text: string): Promise<void> {
+  available(language: TargetLanguage = 'fr-FR') { return this.device.available(language) || (language === 'fr-FR' && this.preferences.get().enabled); }
+  speak(text: string, language: TargetLanguage = 'fr-FR'): Promise<void> {
     this.stop();
+    // The saved-clip contract is French-only; Japanese never queries that cache.
+    if (language !== 'fr-FR') return this.device.speak(text, language);
     // Preserve synchronous device playback startup for the existing controls.
     const settings = this.preferences.get();
     if (!settings.enabled) return this.device.speak(text);

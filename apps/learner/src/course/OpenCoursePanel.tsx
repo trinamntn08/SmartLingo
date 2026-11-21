@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Text, View } from 'react-native';
 import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
@@ -8,21 +8,25 @@ import { CourseCredits } from './CourseCredits';
 import { CourseBlockView } from './CourseBlockView';
 import { useCourseLearning } from './useCourseLearning';
 
-export function OpenCoursePanel({ course, model }: { course: OpenCourse; model: LearningModel }) {
+export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked?: (blocked: boolean) => void }) {
   const [open, setOpen] = useState(false);
+  const [writeBlocked, setWriteBlocked] = useState(false);
+  const reportWrite = useCallback((blocked: boolean) => { setWriteBlocked(blocked); onWriteBlocked?.(blocked); }, [onWriteBlocked]);
   return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: 18 }]}>
     <Text accessibilityRole="header" style={s.heading}>Your daily course</Text>
     <Text style={s.eyebrow}>{course.days.length} study {course.days.length === 1 ? 'day' : 'days'} available · Draft preview</Text>
     <Text style={s.body}>{course.title}</Text>
     <Text style={s.muted}>Study at your own pace. Your next study day waits for you; missed dates never skip material.</Text>
-    <Button primary onPress={() => setOpen(value => !value)}>{open ? 'Close daily course' : 'Open daily course'}</Button>
-    {open && <CourseJourney course={course} model={model} />}
+    <Button primary disabled={writeBlocked || model.busy || !!model.saveError} onPress={() => setOpen(value => !value)}>{open ? 'Close daily course' : 'Open daily course'}</Button>
+    {open && <CourseJourney course={course} model={model} onWriteBlocked={reportWrite} />}
   </View>;
 }
 
-function CourseJourney({ course, model }: { course: OpenCourse; model: LearningModel }) {
+function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked: (blocked: boolean) => void }) {
   const learning = useCourseLearning();
+  useEffect(() => { onWriteBlocked(learning.busy || !!learning.saveError); }, [learning.busy, learning.saveError, onWriteBlocked]);
   // Keep a selected day stable while its completion event changes nextCourseDay.
+  const [level, setLevel] = useState<CourseDay['level'] | 'All'>('All');
   const [selectedDay, setSelectedDay] = useState<string>();
   const [selectedBlock, setSelectedBlock] = useState<string>();
   const clock = useRef(0);
@@ -88,7 +92,8 @@ function CourseJourney({ course, model }: { course: OpenCourse; model: LearningM
     <View testID="course-day-chooser" style={[s.notice, { gap: 12 }]}>
       <Text accessibilityRole="header" style={s.heading}>Choose a study day</Text>
       <Text style={s.muted}>Every day is open. Return to any day at its saved section, with no locks or missed-day penalties.</Text>
-      {course.days.map(item => {
+      <View style={s.row}>{(['All', 'foundation', 'A1', 'A2', 'B1'] as const).filter(value => value === 'All' || course.days.some(item => item.level === value)).map(value => <Button key={value} disabled={navigationBlocked} selected={level === value} onPress={() => setLevel(value)}>{value === 'All' ? 'All course levels' : value === 'foundation' ? 'Foundations' : value}</Button>)}</View>
+      {course.days.filter(item => level === 'All' || item.level === level).map(item => {
         const saved = courseDayProgress(course, item, learning.events);
         const status = learning.loading ? 'Loading saved progress…' : browseOnly ? 'Browsing only · progress unavailable'
           : saved.completed ? 'Study day saved' : saved.completedBlockIds.size ? `${saved.completedBlockIds.size} of ${item.blocks.length} sections saved` : 'Not started';
@@ -111,7 +116,7 @@ function CourseJourney({ course, model }: { course: OpenCourse; model: LearningM
     <View testID={`course-block-${block.id}`} style={{ gap: 16, minWidth: 0 }}>
       <Text style={s.eyebrow}>Section {index + 1} of {day.blocks.length}</Text>
       <Text accessibilityRole="header" style={s.heading}>{block.title}</Text>
-      <CourseBlockView key={block.id} block={block} day={day} model={model} events={scopedEvents}
+      <CourseBlockView key={block.id} language={course.language} block={block} day={day} model={model} events={scopedEvents}
         blocked={learning.blocked} revealBlocked={learning.loading || learning.busy || !!learning.saveError} onChoice={choose} onSupport={support} />
       {done && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: '#246944' }]}>Section saved.</Text>}
       {block.kind !== 'choice' && <Button primary disabled={learning.blocked || done} onPress={saveStep}>

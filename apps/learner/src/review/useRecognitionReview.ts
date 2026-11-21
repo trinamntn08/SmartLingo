@@ -70,5 +70,11 @@ export function useRecognitionReview() {
     } };
     void savePending();
   }
-  return { events, today, loading, busy, loadError, saveError, lastSaved, load, rate, retry: () => void savePending() };
+  function dismissSave() {
+    if (locked.current) return;
+    pending.current = null; setSaveError('');
+    // A transaction may have succeeded before a later read failed; reread persisted history.
+    void load(true);
+  }
+  return { events, today, loading, busy, loadError, saveError, lastSaved, load, rate, dismissSave, retry: () => void savePending() };
 }

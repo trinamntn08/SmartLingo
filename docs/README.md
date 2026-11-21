@@ -25,6 +25,7 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 - [Current curriculum review pack](curriculum/README.md): all-topic A1/A2 plan, deduplicated teaching ledger, communicative/revision tasks and unregistered candidate lessons.
 - [Open A1–B1 course integration plan](plans/0027-open-course-integration.md): freely reusable source candidates, full website study, daily progression, phased implementation and parallel ownership; planning only.
 - [First daily-course pilot](plans/0028-open-course-pilot.md) and [its source record](curriculum/open-course-pilot-sources.md): one bundled owner-review draft day, bounded CC BY text reuse, attribution and media exclusions.
+- [Japanese daily-course route](plans/0029-japanese-course-b1.md) and [authorship/level research](curriculum/japanese-course-sources.md): 13 original draft study days spanning foundations and estimated A1/A2/B1 tasks, with English/kana support; full level coverage and owner/native review remain pending.
 - [Curriculum research](CURRICULUM_RESEARCH.md): current versus historical research scope and sources. Earlier [topic-placement audit](CURRICULUM_TOPIC_AUDIT.md) and [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) retain their dated evidence.
 - [Photo coverage](PHOTO_COVERAGE.md), [photo rights](PHOTO_SOURCES.md) and [original illustration sources](MEDIA_SOURCES.md): exact media support and gaps. [Voice options](VOICE_OPTIONS.md) records dated investigation and audition criteria.
 

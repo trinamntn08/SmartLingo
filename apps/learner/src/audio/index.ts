@@ -1,13 +1,14 @@
-import { audioPreferences, type AudioPreferenceStore } from './preferences';
-import { selectFrenchVoice } from './voices';
+import { preferencesForLanguage, type AudioPreferenceStore } from './preferences';
+import { selectTargetVoice } from './voices';
+import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { HybridSpeechPlayer } from './generated/hybrid';
 import { generatedPreferences } from './generated/preferences';
 import { generatedAudioStore } from './generated/store';
 import { reportAudioNotice, savedClipPlayer } from './generated/runtime';
 
 export interface AudioPlayer {
-  available(): boolean;
-  speak(text: string): Promise<void>;
+  available(language?: TargetLanguage): boolean;
+  speak(text: string, language?: TargetLanguage): Promise<void>;
   stop(): void;
 }
 
@@ -23,23 +24,23 @@ const browserSpeech: SpeechEnvironment = {
 
 export class DeviceSpeechPlayer implements AudioPlayer {
   private cancelPending?: () => void;
-  constructor(private readonly environment: SpeechEnvironment = browserSpeech, private readonly preferences: AudioPreferenceStore = audioPreferences) {}
-  available(): boolean {
-    try { return !!this.environment.utterance('') && !!selectFrenchVoice(this.environment.synthesis()?.getVoices() ?? [], this.preferences.get().voiceId); }
+  constructor(private readonly environment: SpeechEnvironment = browserSpeech, private readonly preferences?: AudioPreferenceStore) {}
+  available(language: TargetLanguage = 'fr-FR'): boolean {
+    try { return !!this.environment.utterance('') && !!selectTargetVoice(this.environment.synthesis()?.getVoices() ?? [], language, (this.preferences ?? preferencesForLanguage(language)).get().voiceId); }
     catch { return false; }
   }
-  speak(text: string): Promise<void> {
+  speak(text: string, language: TargetLanguage = 'fr-FR'): Promise<void> {
     this.stop();
     const synthesis = this.environment.synthesis();
     let utterance: SpeechSynthesisUtterance | undefined;
     let voice: SpeechSynthesisVoice | undefined;
-    const preferences = this.preferences.get();
+    const preferences = (this.preferences ?? preferencesForLanguage(language)).get();
     try {
       utterance = this.environment.utterance(text);
-      voice = selectFrenchVoice(synthesis?.getVoices() ?? [], preferences.voiceId);
+      voice = selectTargetVoice(synthesis?.getVoices() ?? [], language, preferences.voiceId);
     } catch { /* Unsupported speech falls back to visible text. */ }
     if (!voice || !utterance || !synthesis) {
-      return Promise.reject(new Error('No French device voice is available. You can continue using the text.'));
+      return Promise.reject(new Error(`No ${languageNames[language]} device voice is available. You can continue using the text.`));
     }
     return new Promise((resolve, reject) => {
       utterance.voice = voice;

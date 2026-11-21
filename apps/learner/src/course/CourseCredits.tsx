@@ -12,10 +12,15 @@ export function CourseCredits({ course }: { course: OpenCourse }) {
     try { await Linking.openURL(url); } catch { setError('The external link could not be opened. All course study material is available here.'); }
   }
   return <View style={{ gap: 12, minWidth: 0 }}>
-    <Button onPress={() => setOpen(value => !value)}>{open ? 'Hide source credits' : 'Source credits and licence'}</Button>
+    <Button onPress={() => setOpen(value => !value)}>{open ? 'Hide source credits' : course.sources.length ? 'Source credits and licence' : 'Authorship and review'}</Button>
     {open && <View testID="course-source-credits" style={s.notice}>
       <Text accessibilityRole="header" style={s.heading}>Source credits</Text>
-      <Text style={s.muted}>All study material is included here. These optional links open the original source and licence.</Text>
+      {course.sources.length > 0 && <Text style={s.muted}>All study material is included here. These optional links open the original source and licence.</Text>}
+      {!!course.provenance && <View style={{ gap: 8 }}>
+        <Text style={s.body}>Author: {course.provenance.author}</Text>
+        <Text style={s.body}>Rights: {course.provenance.rights}</Text>
+        <Text style={s.muted}>Review: {course.provenance.review}</Text>
+      </View>}
       {course.sources.map(source => <View key={source.id} style={{ gap: 8 }}>
         <Text style={s.body}>{source.title}</Text>
         <Text style={s.body}>Creator: {source.creator}</Text>

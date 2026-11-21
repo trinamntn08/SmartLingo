@@ -33,7 +33,7 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Explore', exact: true }).click();
-  await expect(page.getByText(`${topics.length} everyday topics · Foundations, A1–A2`, { exact: true })).toBeVisible();
+  await expect(page.getByText(`${topics.length} everyday topics · ${[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}`, { exact: true })).toBeVisible();
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
   await page.getByRole('button', { name: 'Explore Health and appointments →', exact: true }).click();
@@ -131,11 +131,15 @@ test('desktop topic pane stays to the left and switches an open lesson directly 
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
+  await expect(page.getByTestId('language-chooser')).toBeVisible();
+  await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: /Start greetings practice/ }).click();
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).focus();
   await page.keyboard.press('Enter');
+  await expect(page.getByTestId('language-chooser')).toBeVisible();
+  await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
 });
 

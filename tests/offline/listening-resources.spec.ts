@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
+
 test('downloaded listening guidance and filters cold-start offline without provider requests', async ({ page, context, baseURL }) => {
   const providerRequests: string[] = [];
   context.on('request', request => {

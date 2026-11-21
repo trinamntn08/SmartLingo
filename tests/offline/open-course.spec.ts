@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 
+test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
+
 test('the daily-course pilot, credits and saved cursor cold-start offline without source requests', async ({ page, context, baseURL }, info) => {
   const sourceRequests: string[] = [];
   context.on('request', request => { if (/opentextbc|utexas|creativecommons/.test(request.url())) sourceRequests.push(request.url()); });

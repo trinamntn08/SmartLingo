@@ -66,7 +66,7 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
       {!lessons.length && <Text style={s.body}>Choose a conversation after lessons finish loading. Ordinary downloaded lessons remain available.</Text>}
       {state.status?.available === false && <View style={s.notice}><Text style={s.body}>AI practice is not configured. Configure the OpenAI API key and practice model on the local API server, restart it, then check again. Keep credentials out of the browser.</Text></View>}
       <View style={s.row}><Button primary disabled={!active || state.busy || !selected || state.status?.available !== true || atLimit}
-        onPress={() => { if (selected) void practice.start({ topic: selected.topic, role: selected.role, level: level ?? selected.level }); }}>Start AI conversation</Button>
+        onPress={() => { if (selected && selected.language === 'fr-FR' && selected.level !== 'B1') void practice.start({ topic: selected.topic, role: selected.role, level: level ?? selected.level }); }}>Start AI conversation</Button>
         <Button disabled={!active || state.busy} onPress={() => void practice.check()}>Check AI availability</Button></View>
     </>}
     {state.session && <>

@@ -20,7 +20,7 @@ function validate(value: unknown): AudioPreferences {
 }
 
 /** Browser settings are separate from learner history and backup data. */
-export function createAudioPreferenceStore(storage: () => PreferenceStorage | undefined): AudioPreferenceStore {
+export function createAudioPreferenceStore(storage: () => PreferenceStorage | undefined, storageKey = key): AudioPreferenceStore {
   let current: AudioPreferences = { ...defaults };
   let loaded = false;
   return {
@@ -28,7 +28,7 @@ export function createAudioPreferenceStore(storage: () => PreferenceStorage | un
       if (!loaded) {
         loaded = true;
         try {
-          const raw = storage()?.getItem(key);
+          const raw = storage()?.getItem(storageKey);
           if (raw) current = validate(JSON.parse(raw));
         } catch { /* Keep usable defaults when browser storage is unavailable. */ }
       }
@@ -40,7 +40,7 @@ export function createAudioPreferenceStore(storage: () => PreferenceStorage | un
       try {
         const target = storage();
         if (!target) return false;
-        target.setItem(key, JSON.stringify(current));
+        target.setItem(storageKey, JSON.stringify(current));
         return true;
       } catch { return false; }
     },
@@ -48,3 +48,7 @@ export function createAudioPreferenceStore(storage: () => PreferenceStorage | un
 }
 
 export const audioPreferences = createAudioPreferenceStore(() => globalThis.localStorage);
+export const japaneseAudioPreferences = createAudioPreferenceStore(() => globalThis.localStorage, 'smartlingo.audio-preferences.ja-JP.v1');
+export function preferencesForLanguage(language: 'fr-FR' | 'ja-JP') {
+  return language === 'ja-JP' ? japaneseAudioPreferences : audioPreferences;
+}

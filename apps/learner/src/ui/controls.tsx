@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import type { TargetLanguage } from '@smartlingo/domain';
 import { Image, Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import { audio } from '../audio';
 import { generatedPreferences } from '../audio/generated/preferences';
@@ -22,17 +23,18 @@ export function Badge({ children }: { children: ReactNode }) {
   return <View style={s.badge}><Text style={s.badgeText}>{children}</Text></View>;
 }
 
-export function Speak({ text, onError }: { text: string; onError?: (message: string) => void }) {
+export function Speak({ text, onError, language = 'fr-FR' }: { text: string; onError?: (message: string) => void; language?: TargetLanguage }) {
   const [state, setState] = useState<'idle' | 'playing'>('idle');
   const [error, setError] = useState('');
   const [focused, setFocused] = useState(false);
-  useEffect(() => () => audio.stop(), [text]);
+  useEffect(() => () => audio.stop(), [text, language]);
   const [neuralEnabled, setNeuralEnabled] = useState(() => generatedPreferences.get().enabled);
+  const canGenerate = language === 'fr-FR' && neuralEnabled;
   const [options, setOptions] = useState(false);
   const [optionsFocused, setOptionsFocused] = useState(false);
   useEffect(() => subscribeGeneratedPreferences(() => setNeuralEnabled(generatedPreferences.get().enabled)), []);
   useEffect(() => subscribeAudioNotice(message => { if (state === 'playing') { setError(message); onError?.(message); } }), [state, onError]);
-  useEffect(() => { setOptions(false); }, [text, neuralEnabled]);
+  useEffect(() => { setOptions(false); setError(''); }, [text, neuralEnabled, language]);
   useEffect(() => {
     if (!options || typeof document === 'undefined') return;
     // React Native Web activates its Escape handler after the modal's show lifecycle.
@@ -47,8 +49,8 @@ export function Speak({ text, onError }: { text: string; onError?: (message: str
   async function play() {
     if (state === 'playing') { audio.stop(); setState('idle'); return; }
     setError(''); onError?.(''); setState('playing');
-    try { await audio.speak(text); } catch (failure) {
-      const message = failure instanceof Error ? failure.message : 'Voice is unavailable. Read the French text instead.';
+    try { await audio.speak(text, language); } catch (failure) {
+      const message = failure instanceof Error ? failure.message : 'Voice is unavailable. You can continue using the text.';
       setError(message); onError?.(message);
     }
     finally { setState('idle'); }
@@ -63,10 +65,10 @@ export function Speak({ text, onError }: { text: string; onError?: (message: str
         borderRadius: 22, borderWidth: 2, borderColor: focused ? '#246944' : 'transparent', backgroundColor: pressed ? colors.sand : 'transparent' })}>
       <Image accessible={false} source={{ uri: icon }} style={{ width: 22, height: 22 }} />
     </Pressable>
-    {neuralEnabled && <Pressable accessibilityRole="button" accessibilityLabel={`Audio options for ${text}`} aria-expanded={options} onPress={() => setOptions(value => !value)}
+    {canGenerate && <Pressable accessibilityRole="button" accessibilityLabel={`Audio options for ${text}`} aria-expanded={options} onPress={() => setOptions(value => !value)}
       onFocus={() => setOptionsFocused(true)} onBlur={() => setOptionsFocused(false)}
       style={({ pressed }) => ({ minWidth: 44, minHeight: 44, justifyContent: 'center', alignItems: 'center', borderRadius: 22, borderWidth: 2, borderColor: optionsFocused ? '#246944' : 'transparent', backgroundColor: pressed ? colors.sand : 'transparent' })}><Text style={{ fontSize: 22, color: colors.ink }}>⋯</Text></Pressable>}</View>
-    {neuralEnabled && options && <Modal transparent visible animationType="none" onRequestClose={() => setOptions(false)}>
+    {canGenerate && options && <Modal transparent visible animationType="none" onRequestClose={() => setOptions(false)}>
       <View style={{ flex: 1, padding: 16, backgroundColor: 'rgba(25,32,29,0.35)', justifyContent: 'center', alignItems: 'center' }}>
         <ScrollView style={{ width: '100%', maxWidth: 520, maxHeight: '90%', backgroundColor: colors.card, borderRadius: 20 }} contentContainerStyle={{ padding: 18, gap: 14 }}>
           <Text accessibilityRole="header" style={s.heading}>Audio options</Text>

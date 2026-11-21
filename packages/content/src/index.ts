@@ -318,3 +318,5 @@ export const lessons: Lesson[] = orderCourseLessons([
 ]);
 export const restaurantLesson = lessons.find(lesson => lesson.id === 'fr.restaurant.customer')!;
 export const openCoursePilot = buildOpenCoursePilot(lessons.flatMap(lesson => lesson.vocabulary));
+export { japaneseCourse } from './japanese-course';
+export { japaneseLessons } from './japanese-lessons';

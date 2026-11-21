@@ -2,13 +2,27 @@
 
 Current operational instructions for this source checkout. For installation and the short command list, start with [README](../README.md). For verified scope and remaining work, use [STATUS](STATUS.md). Ports below are configured defaults, not a claim that a process is currently running. Keys are optional server-process settings; no real `.env` is loaded automatically.
 
+## Choose a language and learn
+
+On a fresh homepage, choose **Learn French** or **Learn Japanese**. Both open the same Today, Explore, Practice, Review and Profile screens, topic sidebar/list, vocabulary cards, dialogue, meaning/picture practice and sentence builder. English explanations are directly visible; Japanese adds kana readings within the same cards. **Change language** or **SmartLingo home** returns to the chooser. Your choice persists when browser settings storage is available; each language keeps its own displayed notebook and lesson progress. Private learning backups include both languages.
+
+Use **Explore** for the topic vocabulary grid, then open a short lesson. Use **Review → Add personal word** for your own vocabulary in the selected language, with optional Japanese kana. Device speech/voice-speed settings are shared and language-specific; if no matching voice is installed, continue with text. Japanese never uses the French neural voice cache or provider. Optional French AI/listening/neural services remain French-only.
+
 ## Try the daily-course pilot
 
-In the current learner build, open **Today → Open daily course**. One draft day is available: study its bilingual sections, save useful words, answer three choices and explicitly save a manual self-review. Save each study section before using Next section; you may browse any section directly. Complete study day becomes available after every section is saved. Reopen the course after reload to resume the saved section. Missed calendar dates do not skip content.
+Choose French, then **Today → Open daily course**. Two draft days are available: study bilingual sections, save useful words, answer contextual choices and explicitly save a manual self-review. Save each study section before using Next section; you may browse any section directly. Complete study day becomes available after every section is saved. Reopen after reload to resume the saved day/section. Missed calendar dates do not skip content.
 
-**Source credits and licence** shows the exact BCcampus text source, author, copyright, CC BY 4.0 link, changes and exclusions. Study does not fetch that website or require imported media/AI. Optional device speech is separate. Optional written self-review remains only on the current screen; course events, completion and notebook saves persist. Learning backup v3 includes course events and accepts earlier v1/v2 files; the normal explicit restore/reload flow applies.
+**Source credits and licence** shows the exact BCcampus text source, author, copyright, CC BY 4.0 link, changes and exclusions. Study does not fetch that website or require imported media/AI. Optional device speech is separate. Optional written self-review remains only on the current screen; course events, completion and notebook saves persist. Learning backup v4 includes course events and Japanese notebook metadata and accepts earlier v1/v2/v3 files; the normal explicit restore/reload flow applies. New backups require the updated app; older app versions cannot import v4.
 
-This is one bundled owner-review draft, not an imported book, published curriculum or complete A1–B1 course. [Pilot acceptance](plans/0028-open-course-pilot.md) and [source/rights record](curriculum/open-course-pilot-sources.md) describe the bounded release.
+These are bundled owner-review drafts, not an imported book, published curriculum or complete A1–B1 course. [Pilot acceptance](plans/0028-open-course-pilot.md), [continuation](plans/0031-daily-course-continuation.md) and [source/rights record](curriculum/open-course-pilot-sources.md) describe the bounded release.
+
+## Try the Japanese route
+
+Choose **Learn Japanese**. Its 13 original draft units appear in the same topic sidebar, Explore and short-lesson screens as French, with vocabulary, dialogue, meaning practice and sentence building. **Today → Open daily course** also retains the original daily-course activities and day/section progress. Filter days by level or browse freely; all study text, English support and kana readings are bundled. Completion and explicit next-day navigation remain independent of French.
+
+Shared vocabulary cards show Japanese readings, examples, translations and usage notes directly. Save phrases and find them under **Review**; search includes kana readings and preserves dakuten distinctions. Notes retain editable readings and language. Existing daily-course events remain intact; completion of an old day does not invent completion of the new short-lesson exercises. Japanese device speech is optional; a full kana/kanji syllabus, Japanese neural/AI service and automatic production assessment remain unimplemented.
+
+**Authorship and review** shows original AI-assisted provenance. No textbook text or media is imported and no third-party licence is claimed over these additions. These short draft units do not constitute complete CEFR-level coverage or certification. Owner and qualified Japanese review are pending. See the [implementation plan](plans/0029-japanese-course-b1.md) and [authorship/level research](curriculum/japanese-course-sources.md). Download the updated exported app through Profile for cold-offline use; ordinary Japanese study needs no API or AI key.
 
 ## Run the preview
 

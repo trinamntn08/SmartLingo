@@ -41,6 +41,8 @@ Alphabet coverage checks the 92-form inventory and readings, known-ID/revision r
 
 Maintenance coverage includes the API-local disconnect helper (pending/completed/already-disconnected responses and listener release after errors), invalid service options rejecting before speech database acquisition, and direct editor hash navigation cancelling learner speech while preserving the mounted lesson/activity. These use fakes or temporary storage. Content extraction is also checked against unchanged runtime payload fingerprints; see [maintenance review](CODEBASE_REVIEW.md). Shared design-token extraction preserves existing values rather than adding tests that merely restate token constants.
 
+French daily-course coverage checks five days in the opening A1 unit, original Day 1 and Day 2 payloads and progress, unit day order, review practice in Days 3–5, and exact section resume. The spelling day can be completed and revisited after a cold offline start. French daily vocabulary cards have an image-free fallback and retain text, optional audio and notebook saving.
+
 ## Optional Japanese voice protocol checks
 
 The compact Python service has model-free protocol tests, separate from `npm test`:

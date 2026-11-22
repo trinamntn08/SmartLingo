@@ -1,5 +1,6 @@
 import { openCourseSchema, type OpenCourse, type Vocabulary } from '@smartlingo/domain';
 import { buildOpenCourseDayTwo } from './open-course-day-two';
+import { buildOpenCourseOpeningDays } from './open-course-opening-days';
 
 const vocabularyIds = [
   'fr.bonjour', 'fr.greetings.bonsoir', 'fr.greetings.salut', 'fr.people.au-revoir',
@@ -7,18 +8,25 @@ const vocabularyIds = [
   'fr.greetings.ca-va-bien', 'fr.greetings.et-vous',
 ] as const;
 
-/** Owner-review draft days; canonical vocabulary support is reused unchanged. */
+/** First five owner-review draft days, including the original two pilot days. */
 export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[]): OpenCourse {
   const vocabulary = vocabularyIds.map(id => {
     const entry = canonicalVocabulary.find(word => word.id === id);
     if (!entry) throw new Error(`Missing open-course canonical vocabulary: ${id}`);
     return entry;
   });
+  const firstDayId = 'fr.open-course-pilot.day-1';
+  const followingDays = [buildOpenCourseDayTwo(canonicalVocabulary), ...buildOpenCourseOpeningDays(canonicalVocabulary)];
   return openCourseSchema.parse({
-    id: 'fr.open-course-pilot', revision: 2, status: 'draft',
+    id: 'fr.open-course-pilot', revision: 3, status: 'draft',
     language: 'fr-FR', explanationLanguage: 'en',
-    title: 'Everyday French: an open-course pilot',
-    description: 'Two draft beginner study days for owner review. Day 1 uses a credited CC BY 4.0 greeting-text source; day 2 is original SmartLingo material. Both reuse unchanged existing vocabulary support. No complete course or certified level coverage claimed.',
+    title: 'French A1: First steps in France',
+    description: 'Five draft study days for your first conversations in France.',
+    provenance: {
+      author: 'SmartLingo, with AI-assisted lesson drafting.',
+      rights: 'Day 1 includes a small greeting-text adaptation credited below. Days 2–5 use original dialogue and practice with existing SmartLingo vocabulary support.',
+      review: 'Draft for owner and French-language review.',
+    },
     sources: [{
       id: 'fr.open-course-pilot.source-basic-greetings',
       title: 'Basic greetings — Le Français Interactif – An Activity Companion Site',
@@ -37,8 +45,13 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
         'Name question, other chapters, cover, navigation and tracking scripts.',
       ],
     }],
+    units: [{
+      id: 'fr.open-course-pilot.unit-1', title: 'Your first conversations in France',
+      outcome: 'Greet someone, introduce yourself, spell a name, ask for repetition and confirm a time.',
+      dayIds: [firstDayId, ...followingDays.map(day => day.id)],
+    }],
     days: [{
-      id: 'fr.open-course-pilot.day-1', dayNumber: 1, progressRevision: 1,
+      id: firstDayId, dayNumber: 1, progressRevision: 1,
       title: 'Meet a neighbour', level: 'foundation',
       outcome: 'Greet an adult neighbour in your building, ask how they are, give a short answer and leave politely.',
       vocabulary,
@@ -117,6 +130,6 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
           ],
         },
       ],
-    }, buildOpenCourseDayTwo(canonicalVocabulary)],
+    }, ...followingDays],
   });
 }

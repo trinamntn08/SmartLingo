@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 First five French daily lessons
+
+- Request. Implement the first five lessons of the planned course for manual owner review. Count the two existing draft lessons as Days 1–2 and add original Days 3–5. Present the five lessons under the A1 opening unit in the learner.
+- Start. At 15:37 CET, Europe/Paris, the clean `D:/dev/projects/SmartLingo` checkout matched fetched and live `docs/french-course-design-direction` at `b73b51d2f5933f8e5c8a3a96d7cb4dff842c4d41`, ahead/behind `0/0`. Verified the full frontend ancestor's live ref at `66d03cc85814e1835d37c0e8594d9d63c5dad590`. Created `feat/french-daily-opening` from the verified task baseline with its origin ref absent. The separate browser-back worktree is outside this slice.
+- Acceptance. Offer five navigable study days with bilingual practice and saved progress, protect historic Days 1–2 and Day 1 credits, keep the French course image path clear of external imagery, verify desktop/narrow and offline behaviour, and provide a local preview for review.
+- Integrated the A1 course and opening unit, the three new original lesson days, and text-based French daily vocabulary cards. The curriculum-author and ui-builder agents worked in separate file sets on the inherited client model and effort. The primary owns course metadata, history compatibility, integration checks and preview. A separate change-reviewer agent checks the integrated slice.
+- Verification. `npm.cmd run check`, `git diff --check`, and all 275 tooling/application tests passed. Chromium passed 147 with one existing skip. All 24 offline tests passed, then all four focused French offline cases passed on the final export after a spelling sound cue was clarified. Independent review and 17 targeted domain tests confirmed the original two-day fingerprints and event scopes, grouping, bilingual text, answer choices and image policy. A separate 320 px smoke check passed.
+- Outcome. Started the final exported preview at `http://localhost:8082` with `npm.cmd run preview:web`. Verified manifest build `c5a7c2b99800`, a fresh French learner visit with all five lesson titles, and the updated spelling section in the served bundle. The draft uses text-based vocabulary cards. Optional device voice quality and owner review remain open.
+- Next. Stop after Day 5 for the owner's manual check. Record feedback before adding Days 6–7. The commit containing this entry is the implementation checkpoint.
+
 ## 2026-11-22 French daily-course plan and generated images
 
 - Request. Write an implementation plan covering courses, units and one lesson per day. Carry forward the A1–B1 scope and the first two pilot days. Document the owner's rule to generate images and photos with SmartLingo's models and keep external images out of the course.

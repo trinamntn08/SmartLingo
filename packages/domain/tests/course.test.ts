@@ -11,9 +11,11 @@ const event = (blockId: string, fields: Record<string, unknown> = {}): CourseEve
   blockId, occurredAt: '2026-11-17T09:00:00Z', kind: 'study', ...fields,
 });
 
-test('pilot is an explicitly scoped draft with exact canonical support and complete attribution', () => {
+test('five-day opening is a draft with exact canonical support and complete attribution', () => {
   assert.equal(openCourseSchema.parse(course).status, 'draft');
-  assert.equal(course.days.length, 2);
+  assert.deepEqual(course.days.map(studyDay => studyDay.title), [
+    'Meet a neighbour', 'Introduce yourself', 'Spell your name', 'Ask someone to repeat', 'Confirm a time',
+  ]);
   for (const studyDay of course.days) {
     assert.equal(studyDay.vocabulary.length >= 6 && studyDay.vocabulary.length <= 10, true);
     for (const word of studyDay.vocabulary) {
@@ -32,7 +34,17 @@ test('pilot is an explicitly scoped draft with exact canonical support and compl
   assert.throws(() => openCourseSchema.parse({ ...course, sources: [{ ...course.sources[0], license: 'unknown' }] }));
   assert.throws(() => openCourseSchema.parse({ ...course, sources: [{ ...course.sources[0], sourceUrl: 'http://insecure.example' }] }));
   const first = day.blocks[0];
-  assert.throws(() => openCourseSchema.parse({ ...course, days: [{ ...day, blocks: [first, ...day.blocks] }] }));
+  assert.throws(() => openCourseSchema.parse({ ...course, days: [{ ...day, blocks: [first, ...day.blocks] }, ...course.days.slice(1)] }), /Duplicate/);
+});
+
+test('optional unit metadata groups every authored day once and in order', () => {
+  const [unit] = course.units!;
+  assert.equal(unit.title, 'Your first conversations in France');
+  assert.deepEqual(unit.dayIds, course.days.map(studyDay => studyDay.id));
+  assert.equal(openCourseSchema.parse({ ...course, units: undefined }).units, undefined);
+  for (const dayIds of [unit.dayIds.slice(1), [...unit.dayIds].reverse(), [unit.dayIds[1], ...unit.dayIds.slice(1)]]) {
+    assert.throws(() => openCourseSchema.parse({ ...course, units: [{ ...unit, dayIds }] }), /cover each day once/);
+  }
 });
 
 test('choice validation rejects unavailable answers and schema rejects broken answer references', () => {
@@ -97,27 +109,34 @@ function completeDay(studyDay: CourseDay): CourseEvent[] {
   event(studyDay.blocks.at(-1)!.id, { ...scope, kind: 'completion' })];
 }
 
-test('the unchanged first day retains its original payload and revision-one history', () => {
+test('both pilot days keep their original payloads and history across the five-day release', () => {
   const { progressRevision, ...originalDay } = day;
   assert.equal(progressRevision, 1);
   assert.equal(createHash('sha256').update(JSON.stringify(originalDay)).digest('hex'),
     '79a94a54503782e5af2756bcb2164f74e936d2cc1f312e88d460bf05f8432ff1');
-  assert.equal(course.revision, 2);
-  assert.equal(courseDayProgressRevision(course, course.days[1]), 2);
+  const { progressRevision: secondRevision, ...originalSecondDay } = course.days[1];
+  assert.equal(secondRevision, 2);
+  assert.equal(createHash('sha256').update(JSON.stringify(originalSecondDay)).digest('hex'),
+    '81b0966bd50e30787d8d355e71eadce5e4585cbbab9370cebed9dfffda083d11');
+  assert.equal(course.revision, 3);
+  assert.deepEqual(course.days.map(studyDay => courseDayProgressRevision(course, studyDay)), [1, 2, 3, 3, 3]);
   const oldHistory = completeDay(day);
   assert.equal(oldHistory.every(attempt => attempt.courseRevision === 1), true);
   assert.equal(courseDayProgress(course, day, oldHistory).completed, true);
   assert.equal(courseDayProgress(course, course.days[1], oldHistory).completedBlockIds.size, 0);
   assert.equal(nextCourseDay(course, oldHistory)?.id, course.days[1].id);
-  assert.equal(nextCourseDay(course, [...oldHistory, ...completeDay(course.days[1])]), undefined);
+  const oldCompleted = [...oldHistory, ...completeDay(course.days[1])];
+  assert.equal(courseDayProgress(course, course.days[1], oldCompleted).completed, true);
+  assert.equal(nextCourseDay(course, oldCompleted)?.id, course.days[2].id);
+  assert.equal(nextCourseDay(course, course.days.flatMap(completeDay)), undefined);
 });
 
 test('days default to the current release and explicit progress scopes cannot point into the future', () => {
-  assert.equal(courseDayProgressRevision(course, { ...day, progressRevision: undefined }), 2);
-  const updatedDay = { ...day, progressRevision: 2 };
+  assert.equal(courseDayProgressRevision(course, { ...day, progressRevision: undefined }), 3);
+  const updatedDay = { ...day, progressRevision: 3 };
   assert.equal(courseDayProgress(course, updatedDay, completeDay(day)).completed, false);
-  for (const progressRevision of [0, -1, 1.5, 3]) {
-    assert.throws(() => openCourseSchema.parse({ ...course, days: [{ ...day, progressRevision }, course.days[1]] }));
+  for (const progressRevision of [0, -1, 1.5, 4]) {
+    assert.throws(() => openCourseSchema.parse({ ...course, days: [{ ...day, progressRevision }, ...course.days.slice(1)] }));
   }
 });
 

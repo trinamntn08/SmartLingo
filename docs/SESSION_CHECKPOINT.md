@@ -1,13 +1,11 @@
 # Session checkpoint
 
-Updated 2026-11-22 at 15:28 CET, Europe/Paris. The French A1–B1 daily-course plan and generated-only image policy are ready. [Work log](WORK_LOG.md#2026-11-22-french-daily-course-plan-and-generated-images)
+Updated 2026-11-22 at 15:53 CET, Europe/Paris. The five-day French A1 preview is ready for manual owner review on `feat/french-daily-opening`. The clean plan baseline matched live origin at `b73b51d2f5933f8e5c8a3a96d7cb4dff842c4d41` after fetch, ahead/behind `0/0`. [Work log](WORK_LOG.md#2026-11-22-first-five-french-daily-lessons)
 
-After fetch, the clean local and live `docs/french-course-design-direction` heads matched at `82bce28748789ff6e64ddaf90a7d5b1f973294c6`, ahead/behind `0/0`.
+The local preview is running at `http://localhost:8082` from export `c5a7c2b99800`. A fresh browser verified French → Today → Open daily course → Choose a study day and all five lessons. Days 1–2 keep original payloads and progress scopes, and Day 1 keeps its credits. Days 3–5 have original bilingual study and practice. The French daily course uses text cards with optional vocabulary audio.
 
-The [course plan](plans/0043-french-daily-course.md) links A1, A2 and B1 maps with 24 units and 168 study days, starting with the existing two pilot drafts. The [generated-only imagery decision](decisions/0037-model-generated-imagery.md) applies to new website imagery and informs the planned French course renderer. Current third-party legacy files continue to carry their credits.
+`npm.cmd run check`, all 275 tooling/application tests, 147 Chromium tests with one existing skip, 24 cold-offline tests, and all four focused French offline checks on the final export passed. Independent review and a 320 px smoke check passed. Physical-device audio quality and owner content approval are pending.
 
-The three maps passed the day count, sequence, table, pilot title and relative link checks. Independent review confirmed transfer cadence and progress compatibility. `npm.cmd run check`, `git diff --check`, the setup dry run and both visual skill validators passed. Course implementation, image generation and release review are pending.
-
-The commit containing this note is the checkpoint. Finish staged checks, push the topic branch and read back the live head. When implementing, start with D003 and the generated-only course renderer policy. Verify the existing first two days' identities, progress and credits through the new draft.
+The commit containing this note is the checkpoint. Finish staged checks and verify the topic branch upload. Keep the current preview for manual review and stop after Day 5. Resume with owner feedback before deciding how to complete the first unit.
 
 Account usage reporting is unavailable in this client. No automatic-resume schedule is configured.

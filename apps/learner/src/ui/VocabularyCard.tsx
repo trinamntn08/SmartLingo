@@ -8,7 +8,9 @@ import type { LearningModel } from './useLearning';
 import { WordIllustration } from './WordIllustration';
 import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
 
-export function VocabularyCard({ entry, model, language = 'fr-FR' }: { entry: Vocabulary; model: LearningModel; language?: TargetLanguage }) {
+export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustration = true }: {
+  entry: Vocabulary; model: LearningModel; language?: TargetLanguage; showIllustration?: boolean;
+}) {
   const [message, setMessage] = useState('');
   const [voiceError, setVoiceError] = useState('');
   const compact = useWindowDimensions().width < 600;
@@ -33,7 +35,7 @@ export function VocabularyCard({ entry, model, language = 'fr-FR' }: { entry: Vo
         {!!entry.reading && <Text style={s.body}>{entry.reading}</Text>}<Text style={[s.body, { fontWeight: '600' }]}>{entry.meaning}</Text>
     </View>
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
-    <WordIllustration entry={entry} size={compact ? 240 : 280} />
+    {showIllustration && <WordIllustration entry={entry} size={compact ? 240 : 280} />}
     <View style={{ gap: 6, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line }}>
       <Text style={s.eyebrow}>In a sentence</Text>
       <Text style={s.body}>{entry.example}</Text>{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}

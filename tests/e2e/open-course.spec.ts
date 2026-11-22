@@ -70,7 +70,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
-  await expect(coursePanel(page).getByText('2 study days available · Draft preview', { exact: true })).toBeVisible();
+  await expect(coursePanel(page).getByText('5 study days available · Draft preview', { exact: true })).toBeVisible();
   await button(page, 'Open daily course').focus();
   await page.keyboard.press('Enter');
   await expect(button(page, 'Save study section')).toBeEnabled();
@@ -158,7 +158,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   expect(events.some(event => event.kind === 'choice' && event.result === 'correct' && event.supported)).toBe(true);
   expect(events.some(event => event.kind === 'support')).toBe(true);
   expect(events.some(event => event.kind === 'navigation')).toBe(true);
-  for (const selectedDay of openCoursePilot.days) {
+  for (const selectedDay of [day, secondDay]) {
     const scoped = events.filter(event => event.dayId === selectedDay.id);
     expect(scoped.length).toBeGreaterThan(0);
     expect(scoped.every(event => event.courseRevision === courseDayProgressRevision(openCoursePilot, selectedDay))).toBe(true);
@@ -213,6 +213,37 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
     await expect(coursePanel(restored).getByRole('heading', { name: secondDay.blocks[2].title, exact: true })).toBeVisible();
     await expect(restored.getByTestId(`course-day-${secondDay.id}`).getByText('1 of 7 sections saved', { exact: true })).toBeVisible();
   } finally { await restoredContext.close(); }
+});
+
+test('the opening unit offers all five days and saves the new practice sections without legacy images', async ({ page }) => {
+  await page.goto('/');
+  await expect(coursePanel(page).getByRole('heading', { name: openCoursePilot.title, exact: true })).toBeVisible();
+  await button(page, 'Open daily course').click();
+  await revealDays(page);
+  await expect(coursePanel(page).getByRole('heading', { name: 'Unit 1: Your first conversations in France', exact: true })).toBeVisible();
+  for (const selectedDay of openCoursePilot.days) await expect(chooseDay(page, selectedDay)).toBeVisible();
+
+  for (const selectedDay of openCoursePilot.days.slice(2)) {
+    await revealDays(page);
+    await chooseDay(page, selectedDay).click();
+    await expect(dayHeading(page, selectedDay)).toBeVisible();
+    const vocabularyIndex = selectedDay.blocks.findIndex(block => block.kind === 'vocabulary');
+    await selectSection(page, vocabularyIndex, selectedDay);
+    const vocabulary = page.getByTestId(`course-block-${selectedDay.blocks[vocabularyIndex].id}`);
+    await expect(vocabulary.getByRole('img')).toHaveCount(0);
+    await expect(vocabulary.getByText(selectedDay.vocabulary[0].meaning, { exact: true })).toBeVisible();
+    const practiceIndex = selectedDay.blocks.findIndex(block => block.kind === 'choice');
+    const practice = selectedDay.blocks[practiceIndex];
+    if (practice.kind !== 'choice') throw new Error('A study day needs choice practice.');
+    await selectSection(page, practiceIndex, selectedDay);
+    await button(page, practice.choices.find(choice => choice.id === practice.answerId)!.target).click();
+    await expect(coursePanel(page).getByText('Correct — answer saved.', { exact: true })).toBeVisible();
+    await page.reload();
+    await button(page, 'Open daily course').click();
+    await expect(dayHeading(page, selectedDay)).toBeVisible();
+    await expect(page.getByTestId(`course-block-${practice.id}`)).toBeVisible();
+    await expect(coursePanel(page).getByText('Correct — answer saved.', { exact: true })).toBeVisible();
+  }
 });
 
 test('course save failure keeps the same event for retry and never shows unsaved completion', async ({ page }) => {
@@ -308,7 +339,7 @@ test('day switching waits for a saved navigation, retries the same event and sup
   await expect(coursePanel(page).getByRole('heading', { name: day.blocks[1].title, exact: true })).toBeVisible();
 });
 
-test('revision-one completed history survives the release and final completion stays on its day', async ({ page }) => {
+test('completed pilot history survives the release and final completion stays on its day', async ({ page }) => {
   await page.goto('/');
   await button(page, 'Open daily course').click();
   await expect(button(page, 'Save study section')).toBeEnabled();
@@ -323,7 +354,10 @@ test('revision-one completed history survives the release and final completion s
       choiceId: block.answerId, result: 'correct' as const, supported: false };
     return makeEvent(selectedDay, block.id, block.kind === 'reflection' ? 'reflection' : 'study');
   }));
-  events.push(makeEvent(day, day.blocks.at(-1)!.id, 'completion'));
+  for (const finishedDay of openCoursePilot.days.slice(0, -1)) {
+    events.push(makeEvent(finishedDay, finishedDay.blocks.at(-1)!.id, 'completion'));
+  }
+  events.push(makeEvent(day, day.blocks.at(-1)!.id, 'navigation'));
   // Newer events outside the immutable day scope must never steal the resume cursor.
   events.push({ ...makeEvent(secondDay, secondDay.blocks[0].id, 'navigation'), courseRevision: 1 });
   events.push({ ...makeEvent(secondDay, 'fr.unknown-block', 'navigation') });
@@ -335,15 +369,16 @@ test('revision-one completed history survives the release and final completion s
   await expect(dayHeading(page, day)).toBeVisible();
   await expect(coursePanel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
   await expect(coursePanel(page).getByRole('heading', { name: day.blocks.at(-1)!.title, exact: true })).toBeVisible();
-  await button(page, `Continue to day 2: ${secondDay.title}`).click();
-  await expect(dayHeading(page, secondDay)).toBeVisible();
+  const finalDay = openCoursePilot.days.at(-1)!;
+  await button(page, `Continue to day ${finalDay.dayNumber}: ${finalDay.title}`).click();
+  await expect(dayHeading(page, finalDay)).toBeVisible();
   await expect(button(page, 'Complete study day')).toBeEnabled();
   await button(page, 'Complete study day').click();
-  await expect(dayHeading(page, secondDay)).toBeVisible();
-  await expect(coursePanel(page).getByText('You have finished all available draft days. Revisit either day or explore another topic whenever you like.', { exact: true })).toBeVisible();
+  await expect(dayHeading(page, finalDay)).toBeVisible();
+  await expect(coursePanel(page).getByText('You have finished all available draft days. Revisit a study day or explore another topic whenever you like.', { exact: true })).toBeVisible();
   await page.reload();
   await button(page, 'Open daily course').click();
-  await expect(dayHeading(page, secondDay)).toBeVisible();
+  await expect(dayHeading(page, finalDay)).toBeVisible();
   await revealDays(page);
   await chooseDay(page, day).click();
   await expect(coursePanel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();

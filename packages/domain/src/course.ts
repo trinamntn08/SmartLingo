@@ -35,11 +35,14 @@ const courseDaySchema = z.object({
   vocabulary: z.array(vocabularySchema.extend({ reading: text.max(300).optional(), exampleReading: text.max(1000).optional() })).min(6).max(10),
   blocks: z.array(courseBlockSchema).min(3).max(30),
 });
+const courseUnitSchema = z.object({ id, title: text, outcome: text, dayIds: z.array(id).min(1).max(100) });
+
 export const openCourseSchema = z.object({
   id, revision: z.number().int().positive(), status: z.literal('draft'),
   language: z.enum(['fr-FR', 'ja-JP']), explanationLanguage: z.literal('en'),
   title: text, description: text, sources: z.array(courseSourceSchema).max(20),
   provenance: z.object({ author: text, rights: text, review: text }).optional(),
+  units: z.array(courseUnitSchema).min(1).max(100).optional(),
   days: z.array(courseDaySchema).min(1).max(100),
 }).superRefine((course, context) => {
   if (!course.sources.length && !course.provenance) {
@@ -48,11 +51,17 @@ export const openCourseSchema = z.object({
   if (course.language === 'ja-JP' && !course.provenance) {
     context.addIssue({ code: 'custom', message: 'Japanese drafts need explicit provenance' });
   }
-  const ids = [course.id, ...course.sources.map(source => source.id)];
+  const ids = [course.id, ...course.sources.map(source => source.id), ...(course.units ?? []).map(unit => unit.id)];
   const vocabularyById = new Map<string, string>();
   const dayNumbers = course.days.map(day => day.dayNumber);
   if (new Set(dayNumbers).size !== dayNumbers.length || dayNumbers.some((number, index) => number !== index + 1)) {
     context.addIssue({ code: 'custom', message: 'Course days must have consecutive authored numbers starting at one' });
+  }
+  if (course.units) {
+    const unitDayIds = course.units.flatMap(unit => unit.dayIds);
+    if (unitDayIds.length !== course.days.length || course.days.some((day, index) => day.id !== unitDayIds[index])) {
+      context.addIssue({ code: 'custom', path: ['units'], message: 'Course units must cover each day once in authored order' });
+    }
   }
   for (const day of course.days) {
     if (day.progressRevision !== undefined && day.progressRevision > course.revision) {
@@ -81,7 +90,7 @@ export const openCourseSchema = z.object({
       }
     }
   }
-  if (new Set(ids).size !== ids.length) context.addIssue({ code: 'custom', message: 'Duplicate course, source, day or block IDs' });
+  if (new Set(ids).size !== ids.length) context.addIssue({ code: 'custom', message: 'Duplicate course, source, unit, day or block IDs' });
 });
 export type OpenCourse = z.infer<typeof openCourseSchema>;
 export type CourseDay = OpenCourse['days'][number];

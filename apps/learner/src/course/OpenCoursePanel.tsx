@@ -6,6 +6,7 @@ import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
 import { CourseBlockView } from './CourseBlockView';
+import { CourseDayChooser } from './CourseDayChooser';
 import { useCourseLearning } from './useCourseLearning';
 
 export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked?: (blocked: boolean) => void }) {
@@ -15,7 +16,7 @@ export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: Ope
   return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: 20, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
     <View style={[s.row, { alignItems: 'center', justifyContent: 'space-between', gap: 16 }]}>
       <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 240, minWidth: 0, gap: 5 }}>
-        <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>Your daily course</Text>
+        <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.units?.length ? course.title : 'Your daily course'}</Text>
         <Text style={s.muted}>{course.days.length} study {course.days.length === 1 ? 'day' : 'days'} available · Draft preview</Text>
       </View>
       <Button expanded={open} primary={!open} disabled={writeBlocked || model.busy || !!model.saveError} onPress={() => setOpen(value => !value)}>{open ? 'Close daily course' : 'Open daily course'}</Button>
@@ -37,6 +38,7 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
   const clock = useRef(0);
   const day = course.days.find(item => item.id === selectedDay) ?? resumeCourseDay(course, learning.events);
   if (!day) return <View style={s.notice}><Text style={s.body}>No study days are available in this draft yet.</Text><CourseCredits course={course} /></View>;
+  const currentUnit = course.units?.find(unit => unit.dayIds.includes(day.id));
   const progress = courseDayProgress(course, day, learning.events);
   const block = day.blocks.find(item => item.id === selectedBlock) ?? day.blocks.find(item => item.id === progress.lastBlockId) ?? day.blocks[0];
   const index = day.blocks.findIndex(item => item.id === block.id);
@@ -94,6 +96,7 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
     </View>}
     {learning.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving course progress…</Text>}
     <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
+      {currentUnit && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
       <View style={s.row}><Badge>DAY {String(day.dayNumber).padStart(2, '0')}</Badge><Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level} · Guided study</Text></View>
       <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Day {day.dayNumber}: {day.title}</Text>
       <Text style={s.body}>{day.outcome}</Text>
@@ -105,25 +108,9 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
       </View>
       <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * progress.completedBlockIds.size / day.blocks.length}%` }]} /></View>
     </View>
-    {choosingDay && <View testID="course-day-chooser" style={[s.notice, { gap: 12 }]}>
-      <Text accessibilityRole="header" style={s.heading}>Choose a study day</Text>
-      <Text style={s.muted}>Every day is open. Return whenever you like.</Text>
-      <View style={s.row}>{(['All', 'foundation', 'A1', 'A2', 'B1'] as const).filter(value => value === 'All' || course.days.some(item => item.level === value)).map(value => <Button key={value} disabled={navigationBlocked} selected={level === value} onPress={() => setLevel(value)}>{value === 'All' ? 'All course levels' : value === 'foundation' ? 'Foundations' : value}</Button>)}</View>
-      <View style={[s.row, { alignItems: 'stretch' }]} accessibilityLabel="Available study days">
-      {course.days.filter(item => level === 'All' || item.level === level).map(item => {
-        const saved = courseDayProgress(course, item, learning.events);
-        const status = learning.loading ? 'Loading saved progress…' : browseOnly ? 'Browsing only · progress unavailable'
-          : saved.completed ? 'Study day saved' : saved.completedBlockIds.size ? `${saved.completedBlockIds.size} of ${item.blocks.length} sections saved` : 'Not started';
-        return <View key={item.id} testID={`course-day-${item.id}`} style={{ gap: 10, flexBasis: compact ? '100%' : 230,
-          flexGrow: 1, flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 320, padding: 14, borderRadius: 14,
-          backgroundColor: item.id === day.id ? colors.goldTint : colors.card, borderWidth: 1, borderColor: colors.line }}>
-          <Text style={s.eyebrow}>Day {String(item.dayNumber).padStart(2, '0')} · {item.level === 'foundation' ? 'Foundations' : item.level}</Text>
-          <Button label={`Choose day ${item.dayNumber}: ${item.title}`} selected={item.id === day.id}
-            disabled={navigationBlocked} onPress={() => selectDay(item)}>Day {item.dayNumber}: {item.title}</Button>
-          <Text style={s.muted}>{status}</Text>
-        </View>;
-      })}</View>
-    </View>}
+    {choosingDay && <CourseDayChooser course={course} currentDay={day} events={learning.events} level={level}
+      onLevelChange={setLevel} onSelectDay={selectDay} compact={compact} loading={learning.loading}
+      browseOnly={browseOnly} navigationBlocked={navigationBlocked} />}
     {choosingSection && <View style={[s.row, { alignItems: 'stretch', gap: 8 }]} accessibilityLabel="Study day sections">
       {day.blocks.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
         flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 270 }}>
@@ -155,7 +142,7 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
     </View>}
     {progress.completed && <View style={[s.notice, { backgroundColor: colors.green }]}>
       <Text accessibilityRole="header" style={s.heading}>Study day saved</Text>
-      <Text style={s.body}>{nextDay ? 'This day is saved. Continue with another study day whenever you are ready, or revisit any section.' : 'You have finished all available draft days. Revisit either day or explore another topic whenever you like.'}</Text>
+      <Text style={s.body}>{nextDay ? 'This day is saved. Continue with another study day whenever you are ready, or revisit any section.' : 'You have finished all available draft days. Revisit a study day or explore another topic whenever you like.'}</Text>
       <Text style={s.muted}>This records your study activity, not a proficiency level. These draft days await owner review; a complete course is not yet available.</Text>
       {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to day {nextDay.dayNumber}: {nextDay.title}</Button>}
     </View>}

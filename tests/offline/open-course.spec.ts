@@ -38,7 +38,7 @@ test('the daily-course pilot, credits and saved cursor cold-start offline withou
   await cold.screenshot({ path: info.outputPath('open-course-cold-offline.png'), fullPage: true });
 });
 
-test('the original second day can be studied and revisited with independent progress after a cold offline start', async ({ page, context, baseURL }, info) => {
+test('the new spelling day can be completed and revisited after a cold offline start', async ({ page, context, baseURL }, info) => {
   const externalRequests: string[] = [];
   context.on('request', request => {
     if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== new URL(baseURL!).origin) externalRequests.push(request.url());
@@ -56,13 +56,15 @@ test('the original second day can be studied and revisited with independent prog
   await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
   const panel = cold.getByTestId('open-course-panel');
   const button = (name: string) => panel.getByRole('button', { name, exact: true });
-  const second = openCoursePilot.days[1];
+  const spelling = openCoursePilot.days[2];
+  const savedWord = spelling.vocabulary[0];
+  const spellingDayLabel = `Choose day 3: ${spelling.title}`;
   await button('Choose a study day').click();
-  await button(`Choose day 2: ${second.title}`).click();
-  await expect(panel.getByRole('heading', { name: `Day 2: ${second.title}`, exact: true })).toBeVisible();
+  await button(spellingDayLabel).click();
+  await expect(panel.getByRole('heading', { name: `Day 3: ${spelling.title}`, exact: true })).toBeVisible();
   await button('Browse sections').click();
-  for (let index = 0; index < second.blocks.length; index++) {
-    const block = second.blocks[index];
+  for (let index = 0; index < spelling.blocks.length; index++) {
+    const block = spelling.blocks[index];
     await button(`Section ${index + 1}: ${block.title}`).click();
     if (block.kind === 'choice') {
       await button('Show practice hint').click();
@@ -74,9 +76,9 @@ test('the original second day can be studied and revisited with independent prog
       await button('Save manual self-review').click();
     } else {
       if (block.kind === 'vocabulary') {
-        const word = second.vocabulary.find(word => word.id === 'fr.people.prenom')!;
-        await button(`Save ${word.target}`).click();
-        await expect(panel.getByText(`Saved ${word.target} to your notebook.`, { exact: true })).toBeVisible();
+        await expect(panel.getByTestId(`course-block-${block.id}`).getByRole('img')).toHaveCount(0);
+        await button(`Save ${savedWord.target}`).click();
+        await expect(panel.getByText(`Saved ${savedWord.target} to your notebook.`, { exact: true })).toBeVisible();
       }
       await button('Save study section').click();
     }
@@ -86,16 +88,17 @@ test('the original second day can be studied and revisited with independent prog
   await expect(panel.getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
   await cold.reload();
   await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
-  await expect(panel.getByTestId(`course-block-${second.blocks.at(-1)!.id}`)).toBeVisible();
+  await expect(panel.getByTestId(`course-block-${spelling.blocks.at(-1)!.id}`)).toBeVisible();
   await expect(panel.getByText('7 of 7 sections saved', { exact: true })).toBeVisible();
   await button('Choose a study day').click();
   await button(`Choose day 1: ${openCoursePilot.days[0].title}`).click();
   await expect(panel.getByText('0 of 7 sections saved', { exact: true })).toBeVisible();
-  await button(`Choose day 2: ${second.title}`).click();
+  await button(spellingDayLabel).click();
   await expect(panel.getByText('7 of 7 sections saved', { exact: true })).toBeVisible();
   await button('Browse sections').click();
-  await button(`Section 2: ${second.blocks[1].title}`).click();
-  await expect(button(`Save ${second.vocabulary.find(word => word.id === 'fr.people.prenom')!.target}`)).toBeDisabled();
+  const vocabularyIndex = spelling.blocks.findIndex(block => block.kind === 'vocabulary');
+  await button(`Section ${vocabularyIndex + 1}: ${spelling.blocks[vocabularyIndex].title}`).click();
+  await expect(button(`Save ${savedWord.target}`)).toBeDisabled();
   // The local API may be probed by the app shell; no source/media/provider needs fetching.
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -106,6 +109,6 @@ test('the original second day can be studied and revisited with independent prog
       : [{ tag: element.tagName, role: element.getAttribute('role'), testId: element.getAttribute('data-testid'),
         text: element.textContent?.slice(0, 100), left: bounds.left, right: bounds.right }];
   }));
-  await cold.screenshot({ path: info.outputPath('open-course-day-two-cold-offline.png'), fullPage: true });
+  await cold.screenshot({ path: info.outputPath('open-course-spelling-cold-offline.png'), fullPage: true });
   expect(overflowing).toEqual([]);
 });

@@ -1,114 +1,89 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 import { openProfileSection } from '../e2e/learner-journeys';
 
-test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
+const panel = (page: Page) => page.getByTestId('open-course-panel');
+const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
+const step = (page: Page, name: string) => panel(page).getByRole('heading', { name, exact: true });
 
-test('the daily-course pilot, credits and saved cursor cold-start offline without source requests', async ({ page, context, baseURL }, info) => {
-  const sourceRequests: string[] = [];
-  context.on('request', request => { if (/opentextbc|utexas|creativecommons/.test(request.url())) sourceRequests.push(request.url()); });
-  await context.route('**/127.0.0.1:3001/**', route => route.abort());
+async function downloadApp(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+}
+
+test.beforeEach(async ({ request, context }) => {
+  await request.post('/__test__/mode');
+  await context.route('**/127.0.0.1:3001/**', route => route.abort());
+});
+
+test('the French dialogue, credits, notebook and saved cursor cold-start offline', async ({ page, context, baseURL }) => {
+  const sourceRequests: string[] = [];
+  context.on('request', request => { if (/opentextbc|utexas|creativecommons/.test(request.url())) sourceRequests.push(request.url()); });
+  await downloadApp(page);
   await context.setOffline(true);
   await page.close();
   const cold = await context.newPage();
   await cold.goto(baseURL!);
-  await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
-  const panel = cold.getByTestId('open-course-panel');
-  await panel.getByRole('button', { name: 'Source credits and licence', exact: true }).click();
-  await expect(panel.getByText(openCoursePilot.sources[0].copyrightNotice, { exact: true })).toBeVisible();
-  await expect(panel.getByRole('button', { name: 'Creative Commons Attribution 4.0 (CC BY 4.0)', exact: true })).toBeVisible();
-  await panel.getByRole('button', { name: 'Hide source credits', exact: true }).click();
-  await panel.getByRole('button', { name: 'Save study section', exact: true }).click();
-  await panel.getByRole('button', { name: 'Next section', exact: true }).click();
-  await panel.getByRole('button', { name: 'Save bonsoir', exact: true }).click();
-  await expect(panel.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
+  await button(cold, 'Open daily course').click();
+  await expect(step(cold, 'Dialogue')).toBeVisible();
+  await expect(panel(cold).getByTestId('course-dialogue-line-0').getByText('Hello! How are you?', { exact: true })).toBeVisible();
+  await button(cold, 'Source credits and licence').click();
+  await expect(panel(cold).getByText(openCoursePilot.sources[0].copyrightNotice, { exact: true })).toBeVisible();
+  await expect(button(cold, 'Creative Commons Attribution 4.0 (CC BY 4.0)')).toBeVisible();
+  await button(cold, 'Hide source credits').click();
+  await button(cold, 'Useful words').click();
+  await expect(panel(cold).getByRole('img')).toHaveCount(0);
+  await button(cold, 'Save bonsoir').click();
+  await expect(button(cold, 'bonsoir saved to notebook')).toBeDisabled();
+  await button(cold, 'Next section').click();
+  await expect(step(cold, 'Quick practice')).toBeVisible();
   await cold.reload();
-  await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
-  await expect(cold.getByTestId(`course-block-${openCoursePilot.days[0].blocks[1].id}`)).toBeVisible();
-  await panel.getByRole('button', { name: 'Choose a study day', exact: true }).click();
-  await expect(cold.getByTestId(`course-day-${openCoursePilot.days[0].id}`).getByText('1 of 7 sections saved', { exact: true })).toBeVisible();
-  await expect(cold.getByTestId('vocabulary-fr.greetings.bonsoir').getByRole('button', { name: 'Save bonsoir', exact: true })).toBeDisabled();
+  await button(cold, 'Open daily course').click();
+  await expect(step(cold, 'Quick practice')).toBeVisible();
+  await button(cold, 'Previous section').click();
+  await button(cold, 'Useful words').click();
+  await expect(button(cold, 'bonsoir saved to notebook')).toBeDisabled();
   expect(sourceRequests).toEqual([]);
-  expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await cold.screenshot({ path: info.outputPath('open-course-cold-offline.png'), fullPage: true });
 });
 
-test('the new spelling day can be completed and revisited after a cold offline start', async ({ page, context, baseURL }, info) => {
+test('the spelling lesson is browsable and finishable offline in three steps', async ({ page, context, baseURL }) => {
   const externalRequests: string[] = [];
   context.on('request', request => {
     if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== new URL(baseURL!).origin) externalRequests.push(request.url());
   });
-  await context.route('**/127.0.0.1:3001/**', route => route.abort());
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Profile', exact: true }).click();
-  await openProfileSection(page, 'Offline & backups');
-  await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
-  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await downloadApp(page);
   await context.setOffline(true);
   await page.close();
   const cold = await context.newPage();
   await cold.goto(baseURL!);
-  await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
-  const panel = cold.getByTestId('open-course-panel');
-  const button = (name: string) => panel.getByRole('button', { name, exact: true });
+  await button(cold, 'Open daily course').click();
   const spelling = openCoursePilot.days[2];
-  const savedWord = spelling.vocabulary[0];
-  const spellingDayLabel = `Choose day 3: ${spelling.title}`;
-  await button('Choose a study day').click();
-  await button(spellingDayLabel).click();
-  await expect(panel.getByRole('heading', { name: `Day 3: ${spelling.title}`, exact: true })).toBeVisible();
-  await button('Browse sections').click();
-  for (let index = 0; index < spelling.blocks.length; index++) {
-    const block = spelling.blocks[index];
-    await button(`Section ${index + 1}: ${block.title}`).click();
-    if (block.kind === 'choice') {
-      await button('Show practice hint').click();
-      await expect(panel.getByText(block.hint, { exact: true })).toBeVisible();
-      await button(block.choices.find(choice => choice.id === block.answerId)!.target).click();
-    } else if (block.kind === 'reflection') {
-      await button('Read model exchange').click();
-      await expect(panel.getByText(block.modelMeaning, { exact: true })).toBeVisible();
-      await button('Save manual self-review').click();
-    } else {
-      if (block.kind === 'vocabulary') {
-        await expect(panel.getByTestId(`course-block-${block.id}`).getByRole('img')).toHaveCount(0);
-        await button(`Save ${savedWord.target}`).click();
-        await expect(panel.getByText(`Saved ${savedWord.target} to your notebook.`, { exact: true })).toBeVisible();
-      }
-      await button('Save study section').click();
-    }
-    await expect(panel.getByText('Section saved.', { exact: true })).toBeVisible();
-  }
-  await button('Complete study day').click();
-  await expect(panel.getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
+  await button(cold, 'Choose a study day').click();
+  await button(cold, `Choose day 3: ${spelling.title}`).click();
+  await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
+  await expect(step(cold, 'Dialogue')).toBeVisible();
+  await button(cold, 'Next section').click();
+  await expect(step(cold, 'Quick practice')).toBeVisible();
+  await button(cold, 'Next section').click();
+  await expect(step(cold, 'Try it')).toBeVisible();
+  await button(cold, 'Show example').click();
+  const reflection = spelling.blocks.find(block => block.kind === 'reflection')!;
+  if (reflection.kind !== 'reflection') throw new Error('Missing reflection');
+  await expect(panel(cold).getByText(reflection.modelMeaning, { exact: true })).toBeVisible();
+  await button(cold, 'Finish lesson').click();
+  await expect(step(cold, 'Study day saved')).toBeVisible();
   await cold.reload();
-  await cold.getByRole('button', { name: 'Open daily course', exact: true }).click();
-  await expect(panel.getByTestId(`course-block-${spelling.blocks.at(-1)!.id}`)).toBeVisible();
-  await expect(panel.getByText('7 of 7 sections saved', { exact: true })).toBeVisible();
-  await button('Choose a study day').click();
-  await button(`Choose day 1: ${openCoursePilot.days[0].title}`).click();
-  await expect(panel.getByText('0 of 7 sections saved', { exact: true })).toBeVisible();
-  await button(spellingDayLabel).click();
-  await expect(panel.getByText('7 of 7 sections saved', { exact: true })).toBeVisible();
-  await button('Browse sections').click();
-  const vocabularyIndex = spelling.blocks.findIndex(block => block.kind === 'vocabulary');
-  await button(`Section ${vocabularyIndex + 1}: ${spelling.blocks[vocabularyIndex].title}`).click();
-  await expect(button(`Save ${savedWord.target}`)).toBeDisabled();
-  // The local API may be probed by the app shell; no source/media/provider needs fetching.
+  await button(cold, 'Open daily course').click();
+  await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
+  await expect(step(cold, 'Study day saved')).toBeVisible();
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  // Measure the course and its controls as well as the complete document.
-  const overflowing = await panel.evaluate(root => [root, ...root.querySelectorAll('*')].flatMap(element => {
+  const overflowing = await panel(cold).evaluate(root => [root, ...root.querySelectorAll('*')].filter(element => {
     const bounds = element.getBoundingClientRect();
-    return bounds.width === 0 || (bounds.left >= -1 && bounds.right <= innerWidth + 1) ? []
-      : [{ tag: element.tagName, role: element.getAttribute('role'), testId: element.getAttribute('data-testid'),
-        text: element.textContent?.slice(0, 100), left: bounds.left, right: bounds.right }];
-  }));
-  await cold.screenshot({ path: info.outputPath('open-course-spelling-cold-offline.png'), fullPage: true });
+    return bounds.width > 0 && (bounds.left < -1 || bounds.right > innerWidth + 1);
+  }).map(element => element.getAttribute('data-testid') ?? element.textContent?.slice(0, 70)));
   expect(overflowing).toEqual([]);
 });

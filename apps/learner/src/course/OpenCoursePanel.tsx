@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Text, useWindowDimensions, View } from 'react-native';
-import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { Platform, Text, useWindowDimensions, View } from 'react-native';
+import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseChoice, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
 import { CourseBlockView } from './CourseBlockView';
 import { CourseDayChooser } from './CourseDayChooser';
+import { CompactCourseContent } from './CompactCourseContent';
+import { compactCourseStepKind, compactCourseSteps } from './compactCourseSteps';
 import { useCourseLearning } from './useCourseLearning';
 
 export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked?: (blocked: boolean) => void }) {
@@ -40,8 +42,12 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
   if (!day) return <View style={s.notice}><Text style={s.body}>No study days are available in this draft yet.</Text><CourseCredits course={course} /></View>;
   const currentUnit = course.units?.find(unit => unit.dayIds.includes(day.id));
   const progress = courseDayProgress(course, day, learning.events);
-  const block = day.blocks.find(item => item.id === selectedBlock) ?? day.blocks.find(item => item.id === progress.lastBlockId) ?? day.blocks[0];
-  const index = day.blocks.findIndex(item => item.id === block.id);
+  const resumeBlock = day.blocks.find(item => item.id === selectedBlock) ?? day.blocks.find(item => item.id === progress.lastBlockId) ?? day.blocks[0];
+  const compactSteps = compactCourseSteps(day);
+  const currentStep = compactSteps?.find(step => step.kind === compactCourseStepKind(resumeBlock));
+  const block = currentStep?.anchor ?? resumeBlock;
+  const sections = compactSteps?.map(step => ({ id: step.anchor.id, title: step.title })) ?? day.blocks;
+  const index = sections.findIndex(item => item.id === block.id);
   const scopedEvents = learning.events.filter(event => event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day) && event.dayId === day.id);
   const done = progress.completedBlockIds.has(block.id);
   const browseOnly = !!learning.loadError;
@@ -61,25 +67,31 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
     if (browseOnly) { select(); return; }
     learning.save([event('navigation', targetBlock, target)], select);
   }
-  function navigate(id: string) {
+  function navigate(id: string, studyBlockId?: string) {
     if (learning.busy || learning.loading || learning.saveError) return;
     if (browseOnly) { setSelectedBlock(id); return; }
-    learning.save([event('navigation', id)], () => setSelectedBlock(id));
+    const events = studyBlockId ? [event('study', studyBlockId)] : [];
+    learning.save([...events, event('navigation', id)], () => setSelectedBlock(id));
   }
   function saveStep() {
     learning.save([event(block.kind === 'reflection' ? 'reflection' : 'study')]);
   }
   function next() {
-    const target = day!.blocks[index + 1];
-    if (target) navigate(target.id);
+    const target = sections[index + 1];
+    if (target) navigate(target.id, currentStep?.kind === 'dialogue' && !done ? block.id : undefined);
   }
-  function support() {
-    if (!learning.blocked) learning.save([event('support')]);
+  function support(blockId = block.id) {
+    if (!learning.blocked) learning.save([event('support', blockId)]);
   }
-  function choose(choiceId: string, supported: boolean) {
-    if (block.kind !== 'choice') return;
-    learning.save([{ ...event('choice'), kind: 'choice', choiceId, result: gradeCourseChoice(block, choiceId), supported }]);
+  function choose(choice: CourseChoice, choiceId: string, supported: boolean) {
+    learning.save([{ ...event('choice', choice.id), kind: 'choice', choiceId, result: gradeCourseChoice(choice, choiceId), supported }]);
   }
+  function finish() {
+    setSelectedDay(day!.id);
+    learning.save([event('completion')]);
+  }
+  const nextButton = index < sections.length - 1 && <Button primary
+    disabled={navigationBlocked || (!currentStep && !done && !browseOnly)} onPress={next}>Next section</Button>;
 
   return <View testID="course-journey" style={{ gap: 18, minWidth: 0 }}>
     {learning.loading && <Text accessibilityLiveRegion="polite" style={s.muted}>Loading saved course progress… You can read this section while it loads.</Text>}
@@ -100,52 +112,87 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
       <View style={s.row}><Badge>DAY {String(day.dayNumber).padStart(2, '0')}</Badge><Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level} · Guided study</Text></View>
       <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Day {day.dayNumber}: {day.title}</Text>
       <Text style={s.body}>{day.outcome}</Text>
-      <View style={[s.row, { justifyContent: 'space-between' }]}><Text accessibilityLiveRegion="polite" style={s.muted}>{progress.completedBlockIds.size} of {day.blocks.length} sections saved</Text>
+      <View style={[s.row, { justifyContent: 'space-between' }]}><Text accessibilityLiveRegion="polite" style={s.muted}>
+        {currentStep ? `Step ${index + 1} of ${sections.length}` : `${progress.completedBlockIds.size} of ${sections.length} sections saved`}
+      </Text>
         <View style={[s.row, { maxWidth: '100%', flexShrink: 1 }, compact && { width: '100%' }]}>
           <Button compact expanded={choosingDay} disabled={navigationBlocked} onPress={() => setChoosingDay(value => !value)}>{choosingDay ? 'Hide study days' : 'Choose a study day'}</Button>
           <Button compact expanded={choosingSection} disabled={navigationBlocked} onPress={() => setChoosingSection(value => !value)}>{choosingSection ? 'Hide sections' : 'Browse sections'}</Button>
         </View>
       </View>
-      <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * progress.completedBlockIds.size / day.blocks.length}%` }]} /></View>
+      <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * (currentStep ? index + 1 : progress.completedBlockIds.size) / sections.length}%` }]} /></View>
     </View>
     {choosingDay && <CourseDayChooser course={course} currentDay={day} events={learning.events} level={level}
       onLevelChange={setLevel} onSelectDay={selectDay} compact={compact} loading={learning.loading}
       browseOnly={browseOnly} navigationBlocked={navigationBlocked} />}
     {choosingSection && <View style={[s.row, { alignItems: 'stretch', gap: 8 }]} accessibilityLabel="Study day sections">
-      {day.blocks.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
+      {sections.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
         flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 270 }}>
         <Button compact label={`Section ${position + 1}: ${item.title}`} selected={item.id === block.id}
           disabled={navigationBlocked} onPress={() => navigate(item.id)}>
-          {position + 1}. {item.title}{progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
+          {position + 1}. {item.title}{!currentStep && progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
         </Button>
       </View>)}
     </View>}
     <View testID={`course-block-${block.id}`} style={{ gap: 24, minWidth: 0, padding: compact ? 0 : 22, paddingVertical: 22 }}>
-      <View style={{ gap: 10 }}><Text style={s.eyebrow}>Section {index + 1} of {day.blocks.length} · {block.kind === 'choice' ? 'Practice' : block.kind === 'reflection' ? 'Self-review' : 'Study'}</Text>
-      <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 27 : 36, lineHeight: compact ? 35 : 44, fontWeight: '500' }]}>{block.title}</Text></View>
-      <CourseBlockView key={block.id} language={course.language} block={block} day={day} model={model} events={scopedEvents}
-        blocked={learning.blocked} revealBlocked={learning.loading || learning.busy || !!learning.saveError} onChoice={choose} onSupport={support} />
-      {done && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: '#246944' }]}>Section saved.</Text>}
-      {block.kind !== 'choice' && <Button primary={!done} disabled={learning.blocked || done} onPress={saveStep}>
-        {block.kind === 'reflection' ? 'Save manual self-review' : 'Save study section'}
-      </Button>}
+      {currentStep ? <>
+        <View style={[s.row, { justifyContent: 'space-between', gap: 10 }]}>
+          <CompactStepHeading stepId={block.id} title={currentStep.title} narrow={compact} />
+          {currentStep.kind === 'practice' && <Button compact quiet disabled={navigationBlocked} onPress={next}>Skip practice</Button>}
+        </View>
+        <CompactCourseContent key={block.id} step={currentStep.kind} day={day} model={model} events={scopedEvents}
+          blocked={learning.blocked} revealBlocked={navigationBlocked} onChoice={choose} onSupport={support} />
+      </> : <>
+        <View style={{ gap: 10 }}><Text style={s.eyebrow}>Section {index + 1} of {sections.length} · {block.kind === 'choice' ? 'Practice' : block.kind === 'reflection' ? 'Self-review' : 'Study'}</Text>
+        <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 27 : 36, lineHeight: compact ? 35 : 44, fontWeight: '500' }]}>{block.title}</Text></View>
+        <CourseBlockView key={block.id} language={course.language} block={block} day={day} model={model} events={scopedEvents}
+          blocked={learning.blocked} revealBlocked={navigationBlocked} onChoice={(id, supported) => {
+            if (block.kind === 'choice') choose(block, id, supported);
+          }} onSupport={support} />
+        {done && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: '#246944' }]}>Section saved.</Text>}
+        {block.kind !== 'choice' && <Button primary={!done} disabled={learning.blocked || done} onPress={saveStep}>
+          {block.kind === 'reflection' ? 'Save manual self-review' : 'Save study section'}
+        </Button>}
+      </>}
       <View style={s.row}>
-        {index > 0 && <Button disabled={learning.loading || learning.busy || !!learning.saveError} onPress={() => navigate(day.blocks[index - 1].id)}>Previous section</Button>}
-        {index < day.blocks.length - 1 && <Button primary disabled={learning.loading || learning.busy || !!learning.saveError || (!done && !browseOnly)} onPress={next}>Next section</Button>}
+        {index > 0 && <Button disabled={navigationBlocked} onPress={() => navigate(sections[index - 1].id)}>Previous section</Button>}
+        {nextButton}
+        {currentStep?.kind === 'reflection' && !progress.completed && (progress.canComplete || browseOnly
+          ? <Button primary disabled={learning.blocked} onPress={finish}>Finish lesson</Button>
+          : <Button primary disabled={navigationBlocked} onPress={() => navigate(sections[0].id)}>Read the dialogue</Button>)}
       </View>
     </View>
-    {!progress.completed && <View style={s.notice}>
+    {!currentStep && !progress.completed && <View style={s.notice}>
       <Text style={s.body}>{progress.canComplete ? 'Every section is saved. You can now finish this study day.' : 'Keep going at your own pace. Complete every section to save the day.'}</Text>
-      <Button primary={progress.canComplete} disabled={learning.blocked || !progress.canComplete} onPress={() => {
-        setSelectedDay(day.id); learning.save([event('completion')]);
-      }}>Complete study day</Button>
+      <Button primary={progress.canComplete} disabled={learning.blocked || !progress.canComplete} onPress={finish}>Complete study day</Button>
     </View>}
     {progress.completed && <View style={[s.notice, { backgroundColor: colors.green }]}>
       <Text accessibilityRole="header" style={s.heading}>Study day saved</Text>
-      <Text style={s.body}>{nextDay ? 'This day is saved. Continue with another study day whenever you are ready, or revisit any section.' : 'You have finished all available draft days. Revisit a study day or explore another topic whenever you like.'}</Text>
-      <Text style={s.muted}>This records your study activity, not a proficiency level. These draft days await owner review; a complete course is not yet available.</Text>
+      {!currentStep && <>
+        <Text style={s.body}>{nextDay ? 'This day is saved. Continue with another study day whenever you are ready, or revisit any section.' : 'You have finished all available draft days. Revisit a study day or explore another topic whenever you like.'}</Text>
+        <Text style={s.muted}>This records your study activity, not a proficiency level. These draft days await owner review; a complete course is not yet available.</Text>
+      </>}
       {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to day {nextDay.dayNumber}: {nextDay.title}</Button>}
     </View>}
     <CourseCredits course={course} />
   </View>;
+}
+
+function CompactStepHeading({ stepId, title, narrow }: { stepId: string; title: string; narrow: boolean }) {
+  const headingId = useId();
+  const previousStep = useRef(stepId);
+
+  useLayoutEffect(() => {
+    if (previousStep.current === stepId) return;
+    previousStep.current = stepId;
+    if (Platform.OS !== 'web') return;
+    const heading = document.getElementById(headingId);
+    if (!heading) return;
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ block: 'start' });
+  }, [headingId, stepId]);
+
+  return <Text nativeID={headingId} accessibilityRole="header"
+    style={[s.heading, { minWidth: 0, flexShrink: 1, fontSize: narrow ? 24 : 30, lineHeight: narrow ? 32 : 38 }]}>{title}</Text>;
 }

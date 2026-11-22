@@ -1,4 +1,5 @@
-import { openCourseSchema, type OpenCourse, type Vocabulary } from '@smartlingo/domain';
+import { openCourseSchema, type CourseDay, type OpenCourse, type Vocabulary } from '@smartlingo/domain';
+import { withCompactCourseCopy } from './open-course-compact-copy';
 import { buildOpenCourseDayTwo } from './open-course-day-two';
 import { buildOpenCourseOpeningDays } from './open-course-opening-days';
 
@@ -18,7 +19,7 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
   const firstDayId = 'fr.open-course-pilot.day-1';
   const followingDays = [buildOpenCourseDayTwo(canonicalVocabulary), ...buildOpenCourseOpeningDays(canonicalVocabulary)];
   return openCourseSchema.parse({
-    id: 'fr.open-course-pilot', revision: 3, status: 'draft',
+    id: 'fr.open-course-pilot', revision: 4, status: 'draft',
     language: 'fr-FR', explanationLanguage: 'en',
     title: 'French A1: First steps in France',
     description: 'Five draft study days for your first conversations in France.',
@@ -50,7 +51,7 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
       outcome: 'Greet someone, introduce yourself, spell a name, ask for repetition and confirm a time.',
       dayIds: [firstDayId, ...followingDays.map(day => day.id)],
     }],
-    days: [{
+    days: ([{
       id: firstDayId, dayNumber: 1, progressRevision: 1,
       title: 'Meet a neighbour', level: 'foundation',
       outcome: 'Greet an adult neighbour in your building, ask how they are, give a short answer and leave politely.',
@@ -130,6 +131,6 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
           ],
         },
       ],
-    }, ...followingDays],
+    }, ...followingDays] satisfies CourseDay[]).map(withCompactCourseCopy),
   });
 }

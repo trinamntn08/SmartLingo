@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Simplify the French daily lessons
+
+- Request. Let learners advance directly with Next. Replace three overlapping study sections and long instructions with a compact bilingual dialogue in all five draft lessons.
+- Start. At 16:02 CET, Europe/Paris, `D:/dev/projects/SmartLingo` was clean. Fetch succeeded and local, tracking and live `feat/french-daily-opening` matched at `bc7999ef03d255342df0f724f0cd16ec6a2073c3`, ahead/behind `0/0`. The separate browser-back ref is `866236a27f0dc6e0c739d79d3fcced170e161f26`.
+- Acceptance. Open each French lesson on the dialogue, show each French line with its English translation, move through three compact steps without a separate study save, and preserve Day 1 credits, notebook access, and existing progress. Check the narrow layout, refresh, offline study and existing Japanese course entry.
+- Implemented the three-step presentation using the existing teaching blocks and event IDs. Two UI-builders and one curriculum author worked in separate files. The independent reviewer checked progress, grading and mobile navigation. All inherited the client model and effort. Incorporated brief feedback for wrong answers, ordered dialogue/finish validation and an accessible way to continue after the last practice question.
+- Interim validation. All 277 tooling/application tests passed before the final review adjustments. The first eight offline cases passed. The default Chromium origin on 8081 served another preview with two French days. The isolated Chromium suite uses the exact final static export on 8181, and the focused offline suite reruns against the same export on 8082.
+- Final validation. `npm.cmd run check`, 19 targeted domain checks, 26 isolated Chromium cases and eight cold-offline cases passed on the final changes. Verified paired translations at 390 px and 1,440 px, and directly exercised Next, Skip practice and Finish. The rebuilt local preview on `http://localhost:8082` served manifest `8d74e199621d` and passed a fresh Day 1 walkthrough. Existing listener and browser storage on other ports were preserved.
+- Outcome. The revised five French lessons are ready for manual review. The commit containing this entry is the checkpoint. Continue after owner feedback.
+
 ## 2026-11-22 First five French daily lessons
 
 - Request. Implement the first five lessons of the planned course for manual owner review. Count the two existing draft lessons as Days 1–2 and add original Days 3–5. Present the five lessons under the A1 opening unit in the learner.

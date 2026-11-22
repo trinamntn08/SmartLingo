@@ -87,8 +87,8 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   const french = page.getByTestId('open-course-panel');
   await french.getByRole('button', { name: 'Open daily course', exact: true }).click();
-  await french.getByRole('button', { name: 'Save study section', exact: true }).click();
-  await expect(french.getByText('Section saved.', { exact: true })).toBeVisible();
+  await french.getByRole('button', { name: 'Next section', exact: true }).click();
+  await expect(french.getByRole('heading', { name: 'Quick practice', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await page.reload();
@@ -98,7 +98,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(panel(page).getByText('Saved as practice with support.', { exact: true })).toBeVisible();
   await expect(button(page, 'Complete study day')).toBeDisabled();
   const events = await stored<CourseEvent>(page, 'courseEvents');
-  expect(events.filter(event => event.courseId === openCoursePilot.id)).toHaveLength(1);
+  expect(events.filter(event => event.courseId === openCoursePilot.id && event.kind === 'study')).toHaveLength(1);
   expect(events.filter(event => event.courseId === japaneseCourse.id).every(event => event.dayId === day.id)).toBe(true);
   expect(await stored(page, 'events')).toEqual([]);
   await page.setViewportSize({ width: 320, height: 800 });

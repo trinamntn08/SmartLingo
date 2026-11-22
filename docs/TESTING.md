@@ -41,7 +41,7 @@ Alphabet coverage checks the 92-form inventory and readings, known-ID/revision r
 
 Maintenance coverage includes the API-local disconnect helper (pending/completed/already-disconnected responses and listener release after errors), invalid service options rejecting before speech database acquisition, and direct editor hash navigation cancelling learner speech while preserving the mounted lesson/activity. These use fakes or temporary storage. Content extraction is also checked against unchanged runtime payload fingerprints; see [maintenance review](CODEBASE_REVIEW.md). Shared design-token extraction preserves existing values rather than adding tests that merely restate token constants.
 
-French daily-course coverage checks five days in the opening A1 unit, original Day 1 and Day 2 payloads and progress, unit day order, review practice in Days 3–5, and exact section resume. The spelling day can be completed and revisited after a cold offline start. French daily vocabulary cards have an image-free fallback and retain text, optional audio and notebook saving.
+French daily-course coverage checks five bilingual dialogues in the opening A1 unit, direct Next, optional practice, ordered completion and mapping older cursors into the three new steps. The tests check answer feedback, retry identity, notebook backup/restore and completion after a cold offline start. Canonical vocabulary is available in an optional text list with word audio and notebook saving.
 
 ## Optional Japanese voice protocol checks
 

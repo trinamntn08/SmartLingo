@@ -61,6 +61,14 @@ Owner scope, 2026-11-22. Stop the opening preview at D005. The existing D001 and
 - **Learner.** Open French → Today → Open daily course → Choose a study day. The unit chooser offers Days 1–5. Daily study keeps the exact day and section across visits and offers the next unfinished day after completion. French daily vocabulary uses text with optional existing word playback. The general library retains its media bindings.
 - **Review.** Try spelling and read-back, a slower repetition request, and confirming the time out loud or in the optional writing field. Check the French and English displayed in study and the usefulness of the wrong-answer feedback. Save a word, leave, return to the saved section, and revisit each pilot day. For the local preview and offline download, use the [local operations guide](../LOCAL_OPERATIONS.md#test-the-offline-ready-preview).
 
+### Shorter lesson flow after owner review
+
+The five French drafts use three screens: **Dialogue**, **Quick practice** and **Try it**. Start with the exchange and show English alongside each line on wide screens and just beneath it on narrow screens. Put one short teaching tip on the dialogue and place canonical words and notebook controls in an optional disclosure. Keep source acknowledgement in the lesson's credit panel. Group the original three practice questions on one screen, use shorter instructions and feedback, and keep a single speaking or writing prompt with an optional model on the final screen.
+
+**Next section** advances and records dialogue study in the same action. Practice responses are optional and retain their own feedback and saved results. **Finish lesson** records study after the dialogue is studied. Free navigation remains available. Consolidate older study, word and dialogue locations into the new dialogue step, and map practice attempts to the grouped practice step. Existing block IDs, answer keys, event scopes and finished days remain usable.
+
+Acceptance for this revision covers all five French dialogues, responsive translations, direct progression, stored practice and resume, original credits, prior progress and the offline preview. The Japanese daily course continues to use its existing activity renderer.
+
 | Phase | Deliverable | Acceptance before continuing |
 | --- | --- | --- |
 | 1 · Five-day preview | Append D003–D005 in the existing draft course, map canonical vocabulary and expose the opening unit. Apply text fallback under the generated-only visual policy. | Reach all five days and practise D003–D005. D001 and D002 history survive reload, backup/restore and draft growth. Existing credits stay visible. Pause for owner review. |

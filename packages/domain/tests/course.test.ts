@@ -47,6 +47,17 @@ test('optional unit metadata groups every authored day once and in order', () =>
   }
 });
 
+test('compact copy matches the original choice order and has a single dialogue and reflection', () => {
+  assert.ok(course.days.every(studyDay => studyDay.compact));
+  const compact = day.compact!;
+  for (const invalidDay of [
+    { ...day, compact: { ...compact, practice: [...compact.practice].reverse() } },
+    { ...day, blocks: day.blocks.filter(block => block.kind !== 'dialogue') },
+  ]) {
+    assert.throws(() => openCourseSchema.parse({ ...course, days: [invalidDay, ...course.days.slice(1)] }), /Compact days/);
+  }
+});
+
 test('choice validation rejects unavailable answers and schema rejects broken answer references', () => {
   for (const studyDay of course.days) for (const block of studyDay.blocks) if (block.kind === 'choice') {
     assert.equal(gradeCourseChoice(block, block.answerId), 'correct');
@@ -74,6 +85,24 @@ test('navigation and unsupported completion do not award study; each required ac
   assert.equal(nextCourseDay(course, completed)?.id, course.days[1].id);
   assert.equal(courseDayProgress({ ...course, revision: course.revision + 1 }, day, completed).completed, true);
   assert.equal(courseDayProgress(course, { ...day, progressRevision: course.revision + 1 }, completed).completed, false);
+});
+
+test('compact finish requires dialogue study and an explicit finish without awarding quiz credit', () => {
+  const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
+  const reflection = day.blocks.find(block => block.kind === 'reflection')!;
+  const navigation = event(reflection.id, { kind: 'navigation' });
+  const study = event(dialogue.id);
+  const finish = event(reflection.id, { kind: 'completion', occurredAt: '2026-11-17T09:01:00Z' });
+  assert.equal(courseDayProgress(course, day, [navigation, finish]).completed, false);
+  const earlyFinish = event(reflection.id, { kind: 'completion', occurredAt: '2026-11-17T08:59:00Z' });
+  assert.equal(courseDayProgress(course, day, [earlyFinish, study]).completed, false);
+  assert.equal(courseDayProgress(course, day, [study, navigation]).canComplete, true);
+  assert.equal(courseDayProgress(course, day, [study, navigation]).completed, false);
+  const finished = courseDayProgress(course, day, [study, navigation, finish]);
+  assert.equal(finished.completed, true);
+  assert.deepEqual([...finished.completedBlockIds], [dialogue.id]);
+  assert.equal(courseDayProgress(course, { ...day, compact: undefined }, [study, navigation, finish]).completed, false);
+  assert.equal(nextCourseDay(course, [study, navigation, finish])?.id, course.days[1].id);
 });
 
 test('wrong answers, forged result flags, unrelated blocks and other revisions cannot complete practice', () => {
@@ -110,15 +139,15 @@ function completeDay(studyDay: CourseDay): CourseEvent[] {
 }
 
 test('both pilot days keep their original payloads and history across the five-day release', () => {
-  const { progressRevision, ...originalDay } = day;
+  const { progressRevision, compact: _firstCopy, ...originalDay } = day;
   assert.equal(progressRevision, 1);
   assert.equal(createHash('sha256').update(JSON.stringify(originalDay)).digest('hex'),
     '79a94a54503782e5af2756bcb2164f74e936d2cc1f312e88d460bf05f8432ff1');
-  const { progressRevision: secondRevision, ...originalSecondDay } = course.days[1];
+  const { progressRevision: secondRevision, compact: _secondCopy, ...originalSecondDay } = course.days[1];
   assert.equal(secondRevision, 2);
   assert.equal(createHash('sha256').update(JSON.stringify(originalSecondDay)).digest('hex'),
     '81b0966bd50e30787d8d355e71eadce5e4585cbbab9370cebed9dfffda083d11');
-  assert.equal(course.revision, 3);
+  assert.equal(course.revision, 4);
   assert.deepEqual(course.days.map(studyDay => courseDayProgressRevision(course, studyDay)), [1, 2, 3, 3, 3]);
   const oldHistory = completeDay(day);
   assert.equal(oldHistory.every(attempt => attempt.courseRevision === 1), true);
@@ -132,10 +161,10 @@ test('both pilot days keep their original payloads and history across the five-d
 });
 
 test('days default to the current release and explicit progress scopes cannot point into the future', () => {
-  assert.equal(courseDayProgressRevision(course, { ...day, progressRevision: undefined }), 3);
-  const updatedDay = { ...day, progressRevision: 3 };
+  assert.equal(courseDayProgressRevision(course, { ...day, progressRevision: undefined }), 4);
+  const updatedDay = { ...day, progressRevision: 4 };
   assert.equal(courseDayProgress(course, updatedDay, completeDay(day)).completed, false);
-  for (const progressRevision of [0, -1, 1.5, 4]) {
+  for (const progressRevision of [0, -1, 1.5, 5]) {
     assert.throws(() => openCourseSchema.parse({ ...course, days: [{ ...day, progressRevision }, ...course.days.slice(1)] }));
   }
 });

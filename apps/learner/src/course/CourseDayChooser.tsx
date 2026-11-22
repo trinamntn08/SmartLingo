@@ -25,8 +25,9 @@ export function CourseDayChooser({ course, currentDay, events, level, onLevelCha
     return <View style={[s.row, { alignItems: 'stretch' }]} accessibilityLabel="Available study days">
       {days.map(day => {
         const saved = courseDayProgress(course, day, events);
+        const progressLabel = day.compact ? 'In progress' : `${saved.completedBlockIds.size} of ${day.blocks.length} sections saved`;
         const status = loading ? 'Loading saved progress…' : browseOnly ? 'Browsing only · progress unavailable'
-          : saved.completed ? 'Study day saved' : saved.completedBlockIds.size ? `${saved.completedBlockIds.size} of ${day.blocks.length} sections saved` : 'Not started';
+          : saved.completed ? 'Study day saved' : saved.completedBlockIds.size ? progressLabel : 'Not started';
         return <View key={day.id} testID={`course-day-${day.id}`} style={{ gap: 10, flexBasis: compact ? '100%' : 230,
           flexGrow: 1, flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 320, padding: 14, borderRadius: 14,
           backgroundColor: day.id === currentDay.id ? colors.goldTint : colors.card, borderWidth: 1, borderColor: colors.line }}>

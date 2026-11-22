@@ -27,6 +27,12 @@ export const courseBlockSchema = z.discriminatedUnion('kind', [
 export type CourseBlock = z.infer<typeof courseBlockSchema>;
 export type CourseChoice = Extract<CourseBlock, { kind: 'choice' }>;
 
+const compactDaySchema = z.object({
+  tip: text.max(180),
+  practice: z.array(z.object({ blockId: id, prompt: text.max(140), feedback: text.max(145), hint: text.max(95) })).min(1).max(6),
+  reflectionPrompt: text.max(165),
+});
+
 const courseDaySchema = z.object({
   id, dayNumber: z.number().int().positive(), title: text, outcome: text,
   // An unchanged day may retain its original release's event scope when a course grows.
@@ -34,6 +40,7 @@ const courseDaySchema = z.object({
   level: z.enum(['foundation', 'A1', 'A2', 'B1']),
   vocabulary: z.array(vocabularySchema.extend({ reading: text.max(300).optional(), exampleReading: text.max(1000).optional() })).min(6).max(10),
   blocks: z.array(courseBlockSchema).min(3).max(30),
+  compact: compactDaySchema.optional(),
 });
 const courseUnitSchema = z.object({ id, title: text, outcome: text, dayIds: z.array(id).min(1).max(100) });
 
@@ -82,6 +89,16 @@ export const openCourseSchema = z.object({
     if (new Set(vocabularyIds).size !== vocabularyIds.length) context.addIssue({ code: 'custom', message: 'Duplicate day vocabulary IDs' });
     if (!day.blocks.some(block => block.kind === 'choice') || !day.blocks.some(block => block.kind === 'vocabulary')) {
       context.addIssue({ code: 'custom', message: 'A pilot day needs vocabulary and interactive practice' });
+    }
+    const compact = day.compact;
+    if (compact) {
+      const choices = day.blocks.filter(block => block.kind === 'choice');
+      if (day.blocks.filter(block => block.kind === 'dialogue').length !== 1
+        || day.blocks.filter(block => block.kind === 'reflection').length !== 1
+        || compact.practice.length !== choices.length
+        || choices.some((block, index) => block.id !== compact.practice[index]?.blockId)) {
+        context.addIssue({ code: 'custom', message: 'Compact days need one dialogue, one reflection and concise copy for every choice in order' });
+      }
     }
     for (const block of day.blocks) if (block.kind === 'choice') {
       const choices = block.choices.map(choice => choice.id);
@@ -136,8 +153,12 @@ export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: re
     && event.dayId === day.id && blocks.has(event.blockId));
   const completedBlockIds = new Set<string>();
   const supportedBlockIds = new Set<string>();
+  let dialogueStudied = false;
+  let compactFinished = false;
   for (const event of events) {
     const block = blocks.get(event.blockId)!;
+    if (day.compact && event.kind === 'study' && block.kind === 'dialogue') dialogueStudied = true;
+    if (dialogueStudied && event.kind === 'completion' && block.kind === 'reflection') compactFinished = true;
     if (event.kind === 'support' || (event.kind === 'choice' && event.supported)) supportedBlockIds.add(block.id);
     if (event.kind === 'study' && ['study', 'vocabulary', 'dialogue'].includes(block.kind)) completedBlockIds.add(block.id);
     if (event.kind === 'reflection' && block.kind === 'reflection') completedBlockIds.add(block.id);
@@ -145,10 +166,11 @@ export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: re
       && block.choices.some(choice => choice.id === event.choiceId)
       && gradeCourseChoice(block, event.choiceId) === 'correct') completedBlockIds.add(block.id);
   }
-  const canComplete = day.blocks.every(block => completedBlockIds.has(block.id));
+  const allBlocksComplete = day.blocks.every(block => completedBlockIds.has(block.id));
+  // Preserve earlier full-lesson records. A compact finish records study, with practice scored separately.
+  const completed = compactFinished || (allBlocksComplete && events.some(event => event.kind === 'completion'));
   const last = events.filter(event => event.kind !== 'support' && event.kind !== 'completion').at(-1);
-  return { completedBlockIds, supportedBlockIds, canComplete,
-    completed: canComplete && events.some(event => event.kind === 'completion'),
+  return { completedBlockIds, supportedBlockIds, canComplete: allBlocksComplete || dialogueStudied, completed,
     lastBlockId: last?.blockId ?? day.blocks[0].id };
 }
 

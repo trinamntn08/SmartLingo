@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Make French Quick practice easier to scan
+
+- Request. Simplify Quick practice with less text and immediately recognisable A/B/C answers.
+- Start. At 21:31 CET, Europe/Paris, fetched the owner-selected origin. The primary worktree's local, tracking and live `feat/french-daily-opening` matched at `e35f03b39371368155571e84fe69b20136b3e9f5`, ahead/behind `0/0`. Its index and working tree held the separate generated-photo task, so started clean on `fix/quick-practice` in `D:/dev/projects/SmartLingo-sessions/quick-practice` from the matching fetched head.
+- Acceptance. Make short prompts and three lettered, keyboard-operable choices visible without interaction on wide and narrow screens. Keep optional hints, feedback, skip, saved answers and original grading. Verify online and cold offline before updating the shared review build.
+- Outcome. All five French days use shorter prompts and A/B/C answer cards. The cards align in a row on wide screens and stack on phones. Hints map English meanings to the same letters. The original choices, grading, progress and saved answers remain valid.
+- Validation. `npm.cmd run check`, `git diff --check`, 286 tooling/application tests, 22 Chromium journeys and four cold-offline cases passed. Final export `25c7bef2747a` passed the spelling quiz offline again at desktop and 320 px on isolated port 8191, plus direct Day 2 keyboard selection and reload checks at 918 and 320 px.
+- Handoff. The commit containing this note is the task checkpoint. At 21:40 CET the primary worktree still held the separate photo edits at `e35f03b`. Integrate this checkpoint into the primary learner after that work releases the checkout, then rebuild and verify the shared preview on port 8082.
+
 ## 2026-11-22 Move day and section navigation into the course outline
 
 - Request. Move Browse sections out of the French study-day summary and combine it with Choose a study day.

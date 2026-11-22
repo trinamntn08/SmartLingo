@@ -4,9 +4,9 @@ import { colors, designTokens, styles as s } from './theme';
 import { Icon, type IconName } from './Icon';
 import { routePress } from './routePress';
 
-export function Button({ children, onPress, href, primary, accent, selected, disabled, label, expanded, controls, compact, quiet, icon, trailingIcon }: {
+export function Button({ children, onPress, href, primary, accent, selected, disabled, label, expanded, controls, compact, quiet, icon, trailingIcon, marker }: {
   children: ReactNode; onPress: () => void; primary?: boolean; selected?: boolean; disabled?: boolean; label?: string;
-  accent?: boolean; expanded?: boolean; controls?: string; compact?: boolean; quiet?: boolean; icon?: IconName; trailingIcon?: IconName; href?: string;
+  accent?: boolean; expanded?: boolean; controls?: string; compact?: boolean; quiet?: boolean; icon?: IconName; trailingIcon?: IconName; href?: string; marker?: string;
 }) {
   const [focused, setFocused] = useState(false);
   const foreground = selected ? colors.primary : primary && !accent ? colors.onPrimary : colors.ink;
@@ -14,11 +14,14 @@ export function Button({ children, onPress, href, primary, accent, selected, dis
     aria-expanded={expanded} aria-controls={controls} accessibilityState={{ disabled: !!disabled, selected: !!selected, expanded }}
     disabled={disabled} {...routePress(disabled ? undefined : href, onPress)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }, compact && s.buttonCompact, quiet && s.buttonQuiet,
-      primary && s.buttonPrimary, accent && s.buttonAccent, selected && s.buttonSelected,
+      primary && s.buttonPrimary, accent && s.buttonAccent, selected && s.buttonSelected, !!marker && s.buttonMarked,
       focused && { outlineColor: colors.focusRing, outlineWidth: designTokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: designTokens.focus.outlineOffset },
       { opacity: disabled ? designTokens.opacity.disabled : pressed ? designTokens.opacity.pressed : 1 }]}>
     {icon && <Icon name={icon} size={18} color={foreground} />}
-    <Text style={[s.buttonText, { maxWidth: '100%', flexShrink: 1, color: foreground }]}>{children}</Text>
+    {!!marker && <View style={[s.buttonMarker, selected && { backgroundColor: colors.primary }]}>
+      <Text style={[s.buttonMarkerText, { color: selected ? colors.onPrimary : colors.primary }]}>{marker}</Text>
+    </View>}
+    <Text style={[s.buttonText, { maxWidth: '100%', flexShrink: 1, color: foreground }, !!marker && s.buttonMarkedText]}>{children}</Text>
     {trailingIcon && <Icon name={trailingIcon} size={18} color={foreground} />}
   </Pressable>;
 }

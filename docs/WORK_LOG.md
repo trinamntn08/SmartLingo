@@ -2,6 +2,23 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Find free French voices for browser-independent playback
+
+- Request. Find natural French speech sources that SmartLingo can run without the browser's speech engine or recurring synthesis fees.
+- Start. At 17:56 CET, Europe/Paris, origin fetch succeeded. Local, tracking and live `feat/today-study-actions` matched at `ab953bcce931893670fc3b6ebef420e6a5baef14`, ahead/behind `0/0`. Preserved the in-progress French voice discovery fix in the same isolated worktree.
+- Acceptance. Check downloadable French models, built-in voices, runtime requirements, provider demos and source licences. Recommend a candidate for a SmartLingo audition and a browser-independent delivery approach.
+- Findings. Kyutai Pocket TTS with built-in Estelle is the first choice for a Windows CPU pilot. The publisher's CC BY 4.0 weights for built-in voices are publicly downloadable. Kokoro `ff_siwis` and Qwen3-TTS VoiceDesign are comparison candidates. Voxtral's downloadable weights are noncommercial, and Piper's SIWIS model card and Lessac ancestry require more rights review. See [voice shortlist](VOICE_OPTIONS.md#shortlist-for-french-audio-independent-of-browser-voices).
+- Native trial. Verified the official Windows archive SHA-256 and ran Pocket TTS 3.3.0 from upstream release v4.0.1 in the isolated worktree. The compact French model with Estelle rendered a local 5.08-second 24 kHz mono WAV from three everyday French phrases. FFprobe parsed the file and FFmpeg reported signal below clipping. The engine reported 1.919 seconds of synthesis after model preparation for this single sample. The larger model hit the trial's 160-second limit during initial model download and produced no sample. Pronunciation and naturalness still need listening review.
+- Handoff. Pilot Estelle on the five A1 opening dialogues and compare the same lines in the shortlist before shipping audio. The voice study and browser discovery fix share the commit containing this entry. Local audition audio and model downloads are outside Git.
+
+## 2026-11-22 Diagnose unavailable French playback
+
+- Request. Investigate why SmartLingo reports that no French device voice is available during playback.
+- Start. At 17:52 CET, Europe/Paris, fetched owner-selected origin. Clean local, tracking and live `feat/today-study-actions` matched at `ab953bcce931893670fc3b6ebef420e6a5baef14`, ahead/behind `0/0`. The primary checkout had unrelated navigation work and its committed head matched live `feat/french-daily-opening` at `9d65155de8b2d7affd12a01859d8b520bbbd0936`, ahead/behind `0/0`. Use the isolated Today worktree, whose export was served on 8082 at inspection.
+- Acceptance. Check whether Windows, the browser or the learner's voice discovery causes the message. Verify French sample playback when a browser voice is available and preserve a useful fallback otherwise.
+- Findings and fix. Windows lists French Hortense, Julie and Paul. Chrome exposes an initially empty list and later publishes the French voices. With a simulated 300 ms delay on the actual Chrome list, the original export needed a second click. The change waits briefly on `voiceschanged`, cancels discovery on Stop, and points to French audio settings when the list remains empty. The rebuilt isolated export played on the first click with Microsoft Hortense and emitted the real speech completion event.
+- Checked. Repository and TypeScript checks, all 260 application tests, all 18 tooling tests on serial rerun, exported web build `15b79ecd1202`, and Chrome before/after reproduction. The shared port 8082 had a concurrent navigation build at observation. The audio fix was exercised against an isolated copy.
+
 ## 2026-11-22 Prioritise study actions on Today
 
 - Request. Redesign Today around the activities learners are likely to open most often and reduce the prominence of the notebook.

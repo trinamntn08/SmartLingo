@@ -2,6 +2,8 @@
 
 Prepared: 2026-11-17 (Europe/Paris). **Planning complete; broader implementation remains proposed.** Source baseline: `0ab3feb`, branch `docs/taxi-daily-course`. This planning task imported/published/deployed no book content. Subsequent owner authorisation started [pilot 0028](0028-open-course-pilot.md): one bundled draft day with a bounded CC BY text adaptation, not the full roadmap.
 
+The [current daily-course plan](0043-french-daily-course.md) specifies the independently authored units and lessons. For images, follow the later [generated-only owner decision](../decisions/0037-model-generated-imagery.md). The source and licence comparisons below explain the earlier plan and the pilot's text credits.
+
 ## Owner outcome and recommendation
 
 The owner initially requested Le Nouveau Taxi! **1, 2 and 3 (A1–B1)** usable directly in the website, with one textbook lesson assigned to each study day. The owner's final instruction rules out seeking publisher permission and requires material that can already be reproduced legally with attribution. Preserve the full in-website learning and daily progression goals; replace the proprietary source choice with eligible open materials and original SmartLingo content. A book-reference checklist alone would not fulfil this outcome.

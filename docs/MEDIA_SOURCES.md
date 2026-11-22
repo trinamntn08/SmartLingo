@@ -2,6 +2,17 @@
 
 Created 2026-11-14 for the visual topic browser. Current binding counts checked against [visuals.ts](../packages/content/src/visuals.ts) and the bundled catalogue on 2026-11-22: 125 French bindings, 122 used by current French lessons. The render/contact-sheet review described below remains historical evidence from the original batch. For photographs and their separate rights, use [photo sources](PHOTO_SOURCES.md) and [current coverage](PHOTO_COVERAGE.md).
 
+## Generated image workflow
+
+Generate all new SmartLingo website pictures, photos and illustrations using approved models. Use original prompts or documented SmartLingo-generated images as references. Exclude images sourced from the internet or any other outside source, even if they are licensed for reuse. Existing generated assets can be reused with a verified provenance record and a suitable crop. Existing code-drawn functional icons use the shared icon family. [Owner decision](decisions/0037-model-generated-imagery.md)
+
+1. Write a brief that identifies the lesson or interface, the visible subject, the needed crop and the exact teaching purpose. Use fictional people, generic local scenes and unbranded objects. Keep instructional words and numbers in the UI. Base style on the two generated homepage photos when helpful.
+2. Use a project-approved model and verify that the applicable terms cover the intended website, export and offline use. Keep originals and optimised outputs traceable to the same generation. Use accessible text or meaning practice when a suitable image is unavailable.
+3. Inspect the actual image for lookalikes, signatures, watermarks, logos, recognisable characters, branded packaging or artwork, and misleading details. Verify responsive cropping, informative alt text and the precise vocabulary sense where the image teaches a word. A contextual scene must have a clear textual counterpart. Reject or regenerate any image with unresolved provenance or resemblance concerns.
+4. Record the asset ID and path, lesson or surface, prompt and permitted references, model/version or available generation identifier, date, output hash, crop/export changes, model terms evidence, alt text, reviewer and release decision. Record provenance for existing generated assets before approving reuse. Verify this record and the bundled/offline asset path before public release.
+
+The legacy stock photo inventory has its own credits and is separate from the generated-only path for new work. The new French daily course requires generated or text-based visuals, including wherever its vocabulary cards inherit shared media bindings. [French course delivery plan](plans/0043-french-daily-course.md#images-photos-and-course-rights)
+
 ## Current language and media scope
 
 The drawing inventory below and [photo coverage](PHOTO_COVERAGE.md) apply to French. The 380 current Japanese canonical words/phrases have no match in the photo or drawing lookup; Japanese uses visible meanings/readings/examples and meaning matching, not a claimed literal picture. The 20 basic-kana row lessons display original typed characters and notes rather than a licensed picture collection. [Japanese course sources](curriculum/japanese-course-sources.md), [topic vocabulary](curriculum/japanese-topic-vocabulary.md) and [alphabet sources](curriculum/japanese-alphabet-sources.md) record original text, bounded planning references and review limits.

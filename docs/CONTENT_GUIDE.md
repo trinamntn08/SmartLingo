@@ -18,13 +18,15 @@ Initial learner: an English-speaking adult newcomer to France, from complete beg
 
 For current lesson inventory, use the [course catalogue](COURSE_CATALOGUE.md). The [curriculum review pack](curriculum/README.md) owns the latest full-payload review, proposed progression and separate unpublished bridge/correction candidates. For topic progression, research sources and vocabulary-coherence audits, use the repository [French curriculum researcher](../.agents/skills/french-curriculum-researcher/SKILL.md). Its 32 proposed topics and seeds are unreviewed planning material; the optional research schema is separate from runtime `lessonSchema`. Reconcile existing senses and convert proposals into the lesson structure below before owner preview/review. Installing the skill does not add or approve lessons.
 
+For the guided French route, use the [daily-course plan and level maps](plans/0043-french-daily-course.md). They specify the proposed unit goals, one lesson per study day and the review tasks that carry language into later situations.
+
 ## Draft a lesson
 - State one useful outcome and approximate level.
 - Teach 6-10 items in a situation rather than an isolated list.
 - Group short lessons into topic banks with 30–50 distinct words/phrases per topic. Use foundations, A1 and A2 where the communicative demands justify them; a foundations bank or an A2-only bank need not force an unsuitable level merely for symmetry. Labels are estimates subject to review.
 - Include noun articles/gender, a specific sense, natural French examples, English meaning, and register.
 - Prefer short, complete examples that actually demonstrate the target sense. Do not impose a minimum word count or add subordinate clauses merely to make an example longer. Teach common formulas before their full grammar when helpful, and explain that choice.
-- Pair concrete vocabulary with unambiguous pictures; use alt text.
+- Pair concrete vocabulary with clear SmartLingo-generated pictures when useful. Add alt text and follow the [generation and rights workflow](MEDIA_SOURCES.md#generated-image-workflow).
 - Use explicit meaning matching for abstract/unillustrated entries. A contextual notebook is not a literal depiction; do not test an abstract word against it as a picture.
 - Topic banks and lesson overviews show words together. Original bundled drawings in `packages/content/src/visuals.ts` associate stable IDs with exact targets without rewriting lesson revisions; see [media records](MEDIA_SOURCES.md). An abstraction can stay text-supported.
 - Include a short dialogue and sentence-building activity with accepted alternatives.
@@ -37,7 +39,7 @@ The greeting-first opening is a deliberately compact exception to the larger-ban
 
 Use draft -> owner review -> published -> revised/archived. Never automatically publish generated material.
 Review language, translation, difficulty, answer variants, pictures, audio, and practical usefulness.
-Record sources and media usage rights. Create original examples and avoid copying whole course collections.
+Record sources and media usage rights. Write examples, dialogues and exercises independently. Use the current generated-only policy when selecting pictures for the French daily course.
 Label AI speech and uncertain level estimates. Do not claim native-speaker validation, exam alignment, or certification without evidence.
 
 ## Feedback

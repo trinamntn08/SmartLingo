@@ -28,14 +28,14 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 - [A1–B1 listening resources](curriculum/listening-resource-sources.md): Learn → Listening & videos, 11 French/5 Japanese recommendations, source/access notes and external-playback limits.
 - [Content guide](CONTENT_GUIDE.md): authoring/publication rules; [course catalogue](COURSE_CATALOGUE.md): bundled lesson order/outcomes/targets.
 - [Current curriculum review pack](curriculum/README.md): all-topic A1/A2 plan, deduplicated teaching ledger, communicative/revision tasks and unregistered candidate lessons.
-- [Open A1–B1 course integration plan](plans/0027-open-course-integration.md): freely reusable source candidates, full website study, daily progression, phased implementation and parallel ownership; planning only.
+- [French A1–B1 daily-course plan](plans/0043-french-daily-course.md) maps 24 proposed units and 168 lessons for direct study on the website, with one recommended lesson per day. [Earlier source research](plans/0027-open-course-integration.md) explains the origin of the pilot.
 - [First daily-course pilot](plans/0028-open-course-pilot.md), [continuation](plans/0031-daily-course-continuation.md) and [source record](curriculum/open-course-pilot-sources.md): two French owner-review draft days; bounded day-one CC BY text reuse, original day two and media exclusions.
 - [Japanese daily-course route](plans/0029-japanese-course-b1.md) and [authorship/level research](curriculum/japanese-course-sources.md): 13 original draft study days spanning foundations and estimated A1/A2/B1 tasks, with English/kana support; full level coverage and owner/native review remain pending.
 - [Shared Japanese lessons](curriculum/japanese-shared-lessons.md) and [topic vocabulary](curriculum/japanese-topic-vocabulary.md): 13 banks, 65 short lessons, 390 appearances/380 canonical entries, preserved course history and shared practice widgets.
 - [Japanese letters](curriculum/japanese-alphabet-sources.md): 20 basic hiragana/katakana groups, readings, recognition practice and saved row continuation, separate from word totals.
 - [Japanese audio](JAPANESE_AUDIO.md): device voices, optional free local VOICEVOX setup, saved clips and credits. [Unified hub](plans/0036-unified-learning-hub.md) records shared listening and guided speaking.
 - [Curriculum research](CURRICULUM_RESEARCH.md): current versus historical research scope and sources. Earlier [topic-placement audit](CURRICULUM_TOPIC_AUDIT.md) and [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) retain their dated evidence.
-- [Photo coverage](PHOTO_COVERAGE.md), [photo rights](PHOTO_SOURCES.md) and [original illustration sources](MEDIA_SOURCES.md): exact media support and gaps. [Voice options](VOICE_OPTIONS.md) records dated investigation and audition criteria.
+- [Generated image workflow](MEDIA_SOURCES.md#generated-image-workflow), [photo coverage](PHOTO_COVERAGE.md) and [legacy photo rights](PHOTO_SOURCES.md) cover new image production and existing media. [Voice options](VOICE_OPTIONS.md) records dated investigation and audition criteria.
 
 ## Separate review and deployment work
 

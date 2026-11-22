@@ -1,11 +1,13 @@
 # Session checkpoint
 
-Updated 2026-11-22 (Europe/Paris). The copyright question about the proposed French course is answered on `docs/french-course-design-direction`. [Work log](WORK_LOG.md#2026-11-22-french-course-copyright-question)
+Updated 2026-11-22 at 15:28 CET, Europe/Paris. The French A1–B1 daily-course plan and generated-only image policy are ready. [Work log](WORK_LOG.md#2026-11-22-french-daily-course-plan-and-generated-images)
 
-After fetching, the clean local and live `docs/french-course-design-direction` heads matched at `09dd94a250c1262e825bceee4332d59f5e4b897c`, ahead/behind `0/0`.
+After fetch, the clean local and live `docs/french-course-design-direction` heads matched at `82bce28748789ff6e64ddaf90a7d5b1f973294c6`, ahead/behind `0/0`.
 
-Checked the proposed first-week outline and the prior source decision against French copyright law and WIPO guidance. The planned independent progression and original lessons can use general teaching methods as inspiration. The five additional days remain at the outline stage. `npm.cmd run check` and `git diff --check` passed. [Opening week design](WORK_LOG.md#2026-11-22-french-course-design)
+The [course plan](plans/0043-french-daily-course.md) links A1, A2 and B1 maps with 24 units and 168 study days, starting with the existing two pilot drafts. The [generated-only imagery decision](decisions/0037-model-generated-imagery.md) applies to new website imagery and informs the planned French course renderer. Current third-party legacy files continue to carry their credits.
 
-The commit containing this note is the checkpoint. Finish staged checks, push the topic branch and read back the live head. When implementing, map vocabulary and prerequisites for the proposed first-week continuation and append the first new draft day while preserving existing course-day identities and progress.
+The three maps passed the day count, sequence, table, pilot title and relative link checks. Independent review confirmed transfer cadence and progress compatibility. `npm.cmd run check`, `git diff --check`, the setup dry run and both visual skill validators passed. Course implementation, image generation and release review are pending.
+
+The commit containing this note is the checkpoint. Finish staged checks, push the topic branch and read back the live head. When implementing, start with D003 and the generated-only course renderer policy. Verify the existing first two days' identities, progress and credits through the new draft.
 
 Account usage reporting is unavailable in this client. No automatic-resume schedule is configured.

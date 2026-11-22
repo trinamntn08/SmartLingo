@@ -2,6 +2,8 @@
 
 Date: 2026-11-17. Status: accepted owner direction for planning; architecture and curriculum implementation remain proposed.
 
+The later [generated-only imagery decision](0037-model-generated-imagery.md) governs course pictures and photos. The text licensing decision below remains the basis for the first pilot day's credits.
+
 The owner requested a plan for full Le Nouveau Taxi! 1–3 integration, with one book lesson per study day and all learning usable inside SmartLingo. After discussing reproduction rights, the owner clarified that obtaining publisher permission is not feasible and requested sources already reusable legally, with attribution where needed.
 
 Preserve the full website learning and A1–B1 daily-course objective. Use an original SmartLingo course built from eligible open materials and original authoring; exclude proprietary Taxi reproduction and permission-negotiation work. Prefer verified CC BY resources, inspect individual asset exceptions and preserve credits/licence/change notices. Share-alike material is an optional supplement with its obligations tracked; noncommercial-only and unclear assets are excluded from the default course to preserve the planned commercial path.

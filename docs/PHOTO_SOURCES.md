@@ -1,5 +1,7 @@
 # Bundled vocabulary photographs: sources and rights
 
+This is a legacy rights inventory. New SmartLingo photography follows the [generated image workflow](MEDIA_SOURCES.md#generated-image-workflow). Preserve the records and credits below for assets still in use.
+
 Scope reconciled 2026-11-22: these bindings cover French vocabulary only. Japanese currently uses honest text support and has no assigned vocabulary photographs. [Coverage](PHOTO_COVERAGE.md) distinguishes both languages; the source/licence evidence below retains its original retrieval dates and is not a new rights audit.
 
 Created 2026-11-15 for the local learner preview. This catalogue is separate from lesson revisions and publication. Adding a photograph does not approve the French curriculum or claim that a learner has mastered a word. Licence summaries below describe the source terms recorded for that batch on its retrieval dates; the documentation refresh does not recheck live provider terms. Preserve the per-file records and recheck the source terms when collecting or redistributing a refreshed batch.

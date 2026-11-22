@@ -25,7 +25,7 @@ export function Disclosure({ title, description, children, keepMounted = true }:
         outlineStyle: 'solid', outlineOffset: designTokens.focus.outlineOffset,
       }]}>
       <View style={{ flex: 1, minWidth: 0, gap: 5 }}>
-        <Text style={[s.heading, { fontSize: 20 }]}>{title}</Text>
+        <Text style={[s.heading, designTokens.typography.compactHeading]}>{title}</Text>
         {!!description && <Text style={s.muted}>{description}</Text>}
       </View>
       <Text accessible={false} style={{ fontSize: 25, color: colors.ink }}>{expanded ? '−' : '+'}</Text>

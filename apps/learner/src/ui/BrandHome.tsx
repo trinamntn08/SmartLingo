@@ -12,7 +12,7 @@ export function BrandHome({ onPress }: { onPress: () => void }) {
       opacity: pressed ? designTokens.opacity.pressed : 1 })}>
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
       <Image accessible={false} aria-hidden source={{ uri: '/icon.svg' }} style={{ width: compact ? 34 : 40, height: compact ? 34 : 40 }} />
-      <Text style={[s.brand, compact && { fontSize: 21, lineHeight: 28 }]}>SmartLingo</Text>
+      <Text style={[s.brand, compact && designTokens.typography.compactBrand]}>SmartLingo</Text>
     </View>
   </Pressable>;
 }

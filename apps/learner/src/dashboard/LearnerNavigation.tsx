@@ -36,7 +36,7 @@ function NavigationItem({ tab, selected, disabled, onPress, href, mobile }: {
       backgroundColor: mobile ? 'transparent' : selected ? colors.green : iconColors[tab] }}>
       <Icon name={icons[tab]} size={mobile ? 20 : 17} color={selected ? colors.primary : colors.ink} />
     </View>
-    <Text style={{ fontFamily: designTokens.typography.body.fontFamily, color: selected ? colors.primary : colors.muted,
-      fontSize: mobile ? 12 : 15, lineHeight: mobile ? 17 : 21, fontWeight: selected ? '700' : '600' }}>{tab}</Text>
+    <Text style={{ ...(mobile ? designTokens.typography.caption : designTokens.typography.muted), textAlign: 'center', flexShrink: 1, color: selected ? colors.primary : colors.muted,
+      fontWeight: selected ? '700' : '600' }}>{tab}</Text>
   </Pressable>;
 }

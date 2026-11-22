@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Consolidate the learner review preview
+
+- Request. Restore the Today redesign and combine the completed local web learner previews at one address.
+- Start. The primary repository's local, tracking and live `feat/french-daily-opening` matched at `ee259774bf78ddec9164fd7bd863f6b57d588901`, ahead/behind `0/0`. Live and local Today/audio and Japanese typography refs matched at `e2b80f2040fb20c6b8f75ad58247cee2112f3da1` and `28f1f4eb0893eb9d1804935a20226fd7c9bbe10f`. Port 8082 initially served primary export `7eb75e9bcf8d` with navigation and the older Today layout.
+- Recovery. Resumed in `D:/dev/projects/SmartLingo-sessions/preview-consolidation` on `chore/consolidate-learner-preview` from the verified learner base. Its source changes were recovered by applying only the pending Today/audio patch. The other lesson session owns the primary checkout until its checkpoint. Its working changes and recovery files are outside this isolated checkout.
+- Acceptance. Keep completed compatible web changes together, preserve learner data and navigation, and verify the primary checkout's export at port 8082. [Execution plan](plans/0047-consolidated-learner-preview.md)
+- Port. Today and the French device-voice fix were adapted to the route-enabled learner. The prior Japanese pronunciation and typography changes were applied against the current source while preserving the newer listening player, editor guards and kana history. The primary completed the Japanese port after the worker returned no changes to the isolated checkout.
+- Scope. The French dialogue checkpoint is already in the learner history. The Japanese daily course is already in the shared learner catalogue. The browser-back prototype has a newer implementation in `ee25977`. The legacy deployment beta documented a separate, earlier split between learner and workshop builds. This consolidation uses the current shared web learner and its curriculum editor.
+- Isolated verification. Repository and TypeScript checks, the tooling suite and 266 application tests passed. Export `a58741711a90` passed 46 targeted Chromium cases on desktop and narrow widths at isolated port 8196 and six cold-offline navigation, Japanese course and listening cases at port 8197. The Today regression checks the keyboard order, browser Back, saved-word access and both languages. The Japanese regression checks `konnichiwa` and its icon-only speaker on a direct lesson link.
+- Next. Integrate this isolated checkpoint after the primary lesson checkpoint is visible on origin and its worktree is released. Use the existing port 8082 listener and verify the rebuilt primary export.
+
 ## 2026-11-22 Implement Back, Forward and direct learner links
 
 - Request. Implement the whole web navigation plan across both languages and the editor.

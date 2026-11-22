@@ -22,7 +22,7 @@ Open **Learn → Speaking**, or Today's **Speaking practice** shortcut. Choose a
 
 ## Your dashboard and learning report
 
-After choosing a language, **Today** offers one recommended lesson or Japanese row activity, a compact daily-course entry and secondary learning tools. **Learn** owns topic discovery; topics are no longer repeated across every page. **Report** owns the four saved-activity summaries, weekly chart and every topic's lesson and vocabulary counts. Use its Study topic buttons to return to a topic or Review saved words to open your notebook. **What counts here?** expands the metric definitions.
+After choosing a language, **Today** offers one recommended lesson or Japanese row activity followed by **Open daily course**. **Explore and practice** links directly to vocabulary and lessons, listening and videos, and speaking. Open **Review** for your saved words. **Learn** owns topic discovery. **Report** owns the four saved-activity summaries, weekly chart and every topic's lesson and vocabulary counts. Use its Study topic buttons to return to a topic or Review saved words to open your notebook. **What counts here?** expands the metric definitions.
 
 The four summaries count current lesson sessions completed, distinct vocabulary explicitly studied, notebook entries saved and valid daily-course completions. The weekly chart counts saved lesson attempts, course study/practice/self-review/completion and recognition ratings in your browser's current timezone, Monday through Sunday. Browsing, practice-hint reveals and editing a note do not add practice actions. Repeated immutable event IDs count once; future timestamps/dates are excluded. These describe saved activity and do not assess independent language ability.
 
@@ -83,7 +83,7 @@ Profile → Offline & backups also supports learning backup/restore. Download a 
 
 Device speech is optional, synthetic, and depends on an installed voice matching the selected language; Japanese can alternatively use saved clips or the free local engine. Text is always available. Optional text/recorded-input AI conversation and explicit saved neural speech are implemented; see setup below. Per-topic downloads, the complete curriculum editor and independently assessed production/listening remain planned. This branch has no Android build commands; Android test-APK work is on the separate branch described in [repository state](REPOSITORY_STATE.md).
 
-Profile → Audio & pronunciation → French audio lists this browser's French voices, lets you choose Slow/Gentle/Normal speed, and offers an explicit device sample preview. Automatic selection prefers France French on the device; it is not a voice-quality ranking. If the saved device voice is unavailable, another French voice is used. Profile → Audio & pronunciation → Neural French audio is a separate explicit Azure audition/save flow described below. Choices stay in this browser and are separate from learning backups. [Current voice options](VOICE_OPTIONS.md) records the investigation and listening limits. Ordinary speaker playback never generates paid speech.
+Profile → Audio & pronunciation → French audio lists this browser's French voices, lets you choose Slow/Gentle/Normal speed, and offers an explicit device sample preview. Automatic selection prefers France French on the device. If the saved voice is unavailable, another French voice is used. On a speaker click, playback waits briefly for a browser that is still discovering its voices. Use **Refresh voice list** and **Preview French voice** to check the current browser. Profile → Audio & pronunciation → Neural French audio is a separate explicit Azure audition/save flow described below. Choices stay in this browser and are separate from learning backups. Ordinary speaker playback never generates paid speech. [Current voice options](VOICE_OPTIONS.md)
 
 ## Optional saved neural French audio
 
@@ -104,6 +104,8 @@ The server retains generated clips and their French text in the separate ignored
 Use `http://localhost:8082` as the single local review preview. Keep the same hostname, port and browser profile so the learner keeps access to existing notebook entries, progress and downloads.
 
 Run `npm run build:web` from the review checkout for each new version. It replaces the export in `apps/learner/dist`. Once the build finishes, refresh the existing tab. A preview already serving that directory reads the updated files from disk, so it can keep running. Start `npm run preview:web` on the same address if the preview is stopped. The initial setup uses both commands.
+
+The review checkout is the primary SmartLingo learner worktree. Bring reviewed changes into its source before building. Use separate ports for temporary development and test worktree servers.
 
 ```sh
 npm run build:web

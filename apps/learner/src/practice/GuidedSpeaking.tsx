@@ -3,6 +3,7 @@ import type { Lesson, TargetLanguage } from '@smartlingo/domain';
 import { Platform, Text, View, useWindowDimensions } from 'react-native';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
+import { AudioIconButton } from '../audio/AudioIconButton';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { ScreenHeader } from '../ui/ScreenHeader';
@@ -28,8 +29,8 @@ export function GuidedSpeaking({ lessons }: { lessons: Lesson[] }) {
     {!lesson ? <View style={t.panel}><Text style={s.body}>No scripted dialogues are available yet. Choose another language or return to vocabulary and lessons to study useful phrases.</Text></View> : <View style={t.board}>
       <View style={[t.side, compact ? { gap: 8 } : t.panel]}>
       {!compact && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.sageTint }]}><Icon name="mic" size={24} /></View><Text accessibilityRole="header" style={t.sectionTitle}>Set the scene</Text></View>}
-      {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 15, display: 'grid', gap: 8, minWidth: 0 }}>Speaking lesson
-        <select id={selectId} value={lesson.id} onChange={event => chooseLesson(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: 16 }}>
+      {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: designTokens.typography.label.fontSize, display: 'grid', gap: 8, minWidth: 0 }}>Speaking lesson
+        <select id={selectId} value={lesson.id} onChange={event => chooseLesson(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: designTokens.typography.body.fontSize }}>
           {available.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
         </select>
       </label> : <View style={s.row}>{available.map(item => <Button key={item.id} selected={item.id === lesson.id} onPress={() => chooseLesson(item.id)}>{item.title}</Button>)}</View>}
@@ -100,12 +101,14 @@ function DialogueRound({ lesson, role, index, stateKey, onNext, onRepeat }: {
       {!compact && <View style={s.row}><Icon name={ownLine ? 'mic' : 'headphones'} size={24} /><Text style={s.eyebrow}>{ownLine ? 'Your reply' : 'Listen to your partner'}</Text></View>}
       <Text style={t.label}>English meaning</Text><Text style={s.body}>{line.meaning}</Text>
       {(!ownLine || revealed) ? <>
-        <Text testID="speaking-target" style={[s.target, { fontSize: 29, lineHeight: 40, fontWeight: '500' }]}>{line.target}</Text>
+        <View style={s.row}>
+          <Text testID="speaking-target" style={[s.target, { minWidth: 0, flexShrink: 1, fontSize: 31, lineHeight: 43, fontWeight: '500' }]}>{line.target}</Text>
+          <AudioIconButton playing={playing} label={ownLine ? 'Listen to model reply' : 'Listen to partner'} onPress={() => void play()} />
+        </View>
         {!!line.reading && <>
           <View style={s.row}><Button selected={reading} onPress={() => setReading(value => !value)}>{reading ? 'Hide reading' : 'Show reading'}</Button></View>
           {reading && <Text style={s.body}>{line.reading}</Text>}
         </>}
-        <View style={s.row}><Button icon="play" onPress={() => void play()}>{playing ? 'Stop audio' : ownLine ? 'Listen to model reply' : 'Listen to partner'}</Button></View>
       </> : <>
         <Text style={s.muted}>Try saying this meaning in your own words, then compare with the model.</Text>
         <View style={s.row}><Button onPress={() => setRevealed(true)}>Show model reply</Button></View>

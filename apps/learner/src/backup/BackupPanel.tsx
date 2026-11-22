@@ -3,7 +3,7 @@ import { ActivityIndicator, Text, View } from 'react-native';
 import type { LearningBackup, LearningRepository, RestoreReport } from '@smartlingo/domain';
 import { openLearningRepository } from '../persistence';
 import { Badge, Button } from '../ui/controls';
-import { colors, styles as s } from '../ui/theme';
+import { colors, designTokens, styles as s } from '../ui/theme';
 import { downloadBackup, readBackupFile } from './files';
 
 async function withRepository<T>(operation: (repository: LearningRepository) => Promise<T>): Promise<T> {
@@ -65,7 +65,7 @@ export function BackupPanel() {
     <View style={s.divider} />
     <Text accessibilityRole="header" style={s.heading}>Restore from a backup</Text>
     <Text style={s.body}>Choose a SmartLingo backup to inspect it first. Choosing a file does not change your learning data. Maximum file size: 5 MB.</Text>
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 10, color: colors.ink, fontSize: 17, lineHeight: '26px' }}>
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 10, color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: designTokens.typography.body.fontSize, lineHeight: `${designTokens.typography.body.lineHeight}px` }}>
       Choose a learning backup
       <input type="file" accept="application/json,.json" aria-label="Choose a learning backup" disabled={!!busy}
         onChange={event => {
@@ -89,7 +89,7 @@ export function BackupPanel() {
         <Text style={s.muted}>Course history includes study, support, choices, and your place in the day. Completion records activity; it does not establish proficiency.</Text>
         <Text style={s.muted}>Conflicting data for an immutable event or the same lesson revision stops the entire restore. There is no overwrite or reset option.</Text>
       </View>
-      <label style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: 16, background: colors.sand, borderRadius: 12, color: colors.ink, fontSize: 17, lineHeight: '26px' }}>
+      <label style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: 16, background: colors.sand, borderRadius: 12, color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: designTokens.typography.body.fontSize, lineHeight: `${designTokens.typography.body.lineHeight}px` }}>
         <input type="checkbox" checked={trusted} disabled={!!busy} onChange={event => setTrusted(event.currentTarget.checked)}
           style={{ minWidth: 22, width: 22, height: 22, margin: '2px 0 0', accentColor: '#246944' }} />
         <span>I trust this backup file and understand the merge policy.</span>

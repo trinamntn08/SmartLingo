@@ -1,8 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { colors, designTokens } from './theme';
 
-const fontFamily = designTokens.typography.body.fontFamily;
-
 /** Presentation shared by the notebook, report and practice workspaces. */
 export const toolsStyles = StyleSheet.create({
   page: { gap: 28, minWidth: 0 },
@@ -13,14 +11,14 @@ export const toolsStyles = StyleSheet.create({
   panelHeader: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 14, minWidth: 0 },
   icon: { width: 44, height: 44, borderRadius: 14, backgroundColor: colors.goldTint, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   stack: { gap: 8, minWidth: 0 },
-  sectionTitle: { fontFamily, fontSize: 21, lineHeight: 29, color: colors.ink, fontWeight: '700' },
-  label: { fontFamily, color: colors.muted, fontSize: 13, lineHeight: 20, fontWeight: '600' },
-  detail: { fontFamily, color: colors.muted, fontSize: 15, lineHeight: 23 },
+  sectionTitle: { ...designTokens.typography.sectionHeading, color: colors.ink },
+  label: { ...designTokens.typography.smallLabel, color: colors.muted },
+  detail: { ...designTokens.typography.muted, color: colors.muted },
   inset: { padding: 20, gap: 12, minWidth: 0, borderRadius: 16, backgroundColor: colors.sand },
   listRow: { paddingVertical: 22, gap: 14, borderTopWidth: 1, borderColor: colors.line, minWidth: 0 },
   fieldRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, minWidth: 0 },
   field: { flexGrow: 1, flexShrink: 1, flexBasis: 220, minWidth: 0, gap: 8 },
-  number: { fontFamily, fontSize: 38, lineHeight: 46, color: colors.ink, fontWeight: '600', letterSpacing: -1.3 },
+  number: { ...designTokens.typography.metric, color: colors.ink },
   stage: { padding: 24, gap: 22, borderRadius: 18, backgroundColor: colors.skyTint, minWidth: 0 },
   steps: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, minWidth: 0 },
   step: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },

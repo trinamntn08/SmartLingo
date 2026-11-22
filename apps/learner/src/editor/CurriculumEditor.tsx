@@ -170,7 +170,7 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
     }
   }
   return <View style={s.app}>
-    <View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}><View style={s.row}><BrandHome onPress={() => { if (!busy) onHome(); }} /><Badge>LOCAL EDITOR</Badge></View><Button disabled={busy} onPress={onExit}>← Return to learning</Button></View></View>
+    <View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}><View style={[s.row, { maxWidth: '100%' }]}><BrandHome onPress={() => { if (!busy) onHome(); }} /><Badge>LOCAL EDITOR</Badge></View><Button disabled={busy} onPress={onExit}>← Return to learning</Button></View></View>
     <ScrollView ref={scroll} keyboardShouldPersistTaps="handled"><View style={[s.main, { maxWidth: 1440 }, width < 600 && { padding: 16, paddingTop: 24 }]}>
       <View style={{ gap: 10 }}><Text style={s.eyebrow}>French curriculum workshop</Text><Text accessibilityRole="header" style={s.title}>Draft. Try. Review.</Text>
         <Text style={[s.body, { maxWidth: 760 }]}>A quiet workspace for shaping practical French lessons. Save a draft, try its saved revision, then approve publication.</Text>
@@ -237,7 +237,7 @@ function CatalogueLesson({ lesson, selected, disabled, onPress }: { lesson: Less
     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} style={({ pressed }) => ({ padding: 14, gap: 6, borderRadius: 12,
       borderWidth: 1, borderColor: selected ? colors.ink : colors.line, backgroundColor: selected ? colors.green : colors.card,
       opacity: pressed ? 0.75 : 1, ...(focused ? { outlineColor: colors.ink, outlineWidth: 3, outlineStyle: 'solid', outlineOffset: 2 } : {}) })}>
-    <Text style={s.eyebrow}>{lesson.topic}</Text><Text style={[s.body, { fontSize: 17, lineHeight: 24 }]}>{lesson.subtitle}</Text>
+    <Text style={s.eyebrow}>{lesson.topic}</Text><Text style={s.body}>{lesson.subtitle}</Text>
     <Text style={s.muted}>{lesson.level === 'foundation' ? 'Foundations' : lesson.level} · {lesson.status} · r{lesson.revision}</Text>
   </Pressable>;
 }

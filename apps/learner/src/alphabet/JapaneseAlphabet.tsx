@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import { audio } from '../audio';
 import { Badge, Button } from '../ui/controls';
@@ -14,6 +14,7 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   const [selectedId, setSelectedId] = useState('');
   const [choosingRow, setChoosingRow] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
+  const compact = useWindowDimensions().width < 600;
   const selectedRef = useRef(selectedId);
   selectedRef.current = selectedId;
   const lesson = japaneseAlphabetLessons.find(item => item.id === selectedId) ?? progress.next ?? japaneseAlphabetLessons[0];
@@ -31,10 +32,10 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
       if (selectedRef.current === savedId && next) setSelectedId(next.id);
     });
   }
-  return <View testID="japanese-alphabet" style={{ gap: 20 }}>
+  return <View testID="japanese-alphabet" style={{ gap: 24, minWidth: 0 }}>
     <View style={{ gap: 12 }}>
       <View style={[s.row, { justifyContent: 'space-between' }]}>
-        <View style={{ gap: 4, flexShrink: 1 }}><Text accessibilityRole="header" style={s.heading}>Japanese alphabet</Text>
+        <View style={{ gap: 8, flexShrink: 1 }}><Text accessibilityRole="header" style={[s.title, compact && { fontSize: 34, lineHeight: 42 }]}>Japanese alphabet</Text>
           <Text style={s.muted}>{model.loading ? 'Loading saved alphabet progress…' : model.loadError ? 'Saved progress is unavailable. You can still study and practise.' : `${progress.completed} of ${progress.total} rows studied`}</Text></View>
         <Button onPress={() => setChoosingRow(value => !value)}>{choosingRow ? 'Close row chooser' : 'Choose another row'}</Button>
       </View>
@@ -96,9 +97,9 @@ function KanaRowCard({ row, number, selected, studied, statusUnavailable, sugges
       borderColor: selected ? colors.ink : colors.line, backgroundColor: selected ? colors.yellow : colors.paper,
       opacity: pressed ? 0.8 : 1, ...(focused ? { outlineColor: colors.ink, outlineWidth: 3, outlineStyle: 'solid', outlineOffset: 2 } : {}) })}>
     <Text style={[s.eyebrow, { letterSpacing: 0.5, color: colors.ink }]}>{number.toString().padStart(2, '0')} · {positionStatus}</Text>
-    <Text style={{ fontSize: 25, lineHeight: 36, color: colors.ink }}>{row.characters.map(character => character.kana).join('')}</Text>
-    <Text style={[s.body, { fontSize: 15, lineHeight: 21, fontWeight: '700' }]}>{row.title}</Text>
-    <Text style={[s.muted, { fontSize: 13, lineHeight: 19 }]}>{studyStatus}</Text>
+    <Text style={[s.target, { fontSize: 28, lineHeight: 40 }]}>{row.characters.map(character => character.kana).join('')}</Text>
+    <Text style={[s.body, { fontSize: 17, lineHeight: 24, fontWeight: '700' }]}>{row.title}</Text>
+    <Text style={s.muted}>{studyStatus}</Text>
   </Pressable>;
 }
 
@@ -131,17 +132,18 @@ function AlphabetRow({ lesson, model, completed, onSave, onNext }: {
   const rows = japaneseAlphabetLessons.filter(row => row.script === lesson.script);
   const rowNumber = rows.findIndex(row => row.id === lesson.id) + 1;
   function switchMode(value: boolean) { playback.stop(); setPractice(value); }
-  return <View style={s.card}>
+  const compact = useWindowDimensions().width < 600;
+  return <View style={[s.card, { padding: compact ? 16 : 28, gap: 24, minWidth: 0 }]}>
     <View style={s.row}><Text style={s.eyebrow}>{lesson.script === 'hiragana' ? 'Hiragana' : 'Katakana'} · Row {rowNumber} of {rows.length} · Step {practice ? '2' : '1'} of 2</Text>{completed && <Badge>Row studied</Badge>}</View>
-    <Text accessibilityRole="header" style={s.heading}>{lesson.title}</Text>
+    <Text accessibilityRole="header" style={[s.title, compact && { fontSize: 32, lineHeight: 42 }]}>{lesson.title}</Text>
     <Text style={s.body}>{lesson.summary}</Text>
     <View style={s.row}><Button selected={!practice} onPress={() => switchMode(false)}>Study characters</Button><Button selected={practice} onPress={() => switchMode(true)}>Recognition practice</Button></View>
     {!practice ? <>
       <Text style={s.muted}>Read each character and its romaji (Latin-letter reading). Listen whenever you like.</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-        {lesson.characters.map(character => <View key={character.id} style={{ flexGrow: 1, flexBasis: 140, minWidth: 0, maxWidth: '100%', backgroundColor: colors.paper, borderRadius: 20, padding: 16, gap: 10, borderWidth: 1, borderColor: colors.line }}>
-          <Text style={{ color: colors.ink, fontSize: 64, lineHeight: 84, textAlign: 'center' }}>{character.kana}</Text>
-          <Text style={[s.heading, { textAlign: 'center' }]}>{character.romaji}</Text>
+        {lesson.characters.map(character => <View key={character.id} style={{ flexGrow: 1, flexBasis: 170, minWidth: 0, maxWidth: '100%', backgroundColor: colors.paper, borderRadius: 22, padding: 20, gap: 12, borderWidth: 1, borderColor: colors.line }}>
+          <View style={{ backgroundColor: colors.goldTint, borderRadius: 18, paddingVertical: 12 }}><Text style={[s.target, { fontSize: 72, lineHeight: 96, textAlign: 'center' }]}>{character.kana}</Text></View>
+          <Text style={[s.heading, { textAlign: 'center', fontSize: 28, lineHeight: 38 }]}>{character.romaji}</Text>
           {!!character.note && <Text style={s.muted}>{character.note}</Text>}
           <Button label={playback.playing === character.id ? `Stop audio for ${character.kana}` : `Listen to ${character.kana}`} onPress={() => void playback.play(character)}>{playback.playing === character.id ? 'Stop audio' : 'Listen'}</Button>
         </View>)}
@@ -183,7 +185,7 @@ function RecognitionRound({ lesson, round, playback, onAttempt, onRepeat }: {
     <Text style={s.eyebrow}>Recognition · {index + 1} of {lesson.characters.length}</Text>
     <Text accessibilityRole="header" style={s.heading}>Which character is “{character.romaji}”?</Text>
     <Text style={s.muted}>Choose a kana. Its reading and any notes appear after you answer.</Text>
-    <View style={s.row}>{choices.map(choice => <Button key={choice.id} label={`Choose ${choice.kana}`} selected={answer === choice.id} disabled={!!answer} onPress={() => { setAnswer(choice.id); onAttempt(character.id); }}>{<Text style={{ fontSize: 36, lineHeight: 48 }}>{choice.kana}</Text>}</Button>)}</View>
+    <View style={s.row}>{choices.map(choice => <Button key={choice.id} label={`Choose ${choice.kana}`} selected={answer === choice.id} disabled={!!answer} onPress={() => { setAnswer(choice.id); onAttempt(character.id); }}>{<Text style={{ fontSize: 48, lineHeight: 64 }}>{choice.kana}</Text>}</Button>)}</View>
     {!!answer && <View accessibilityLiveRegion="polite" style={s.notice}>
       <Text style={s.body}>{answer === character.id ? 'Yes.' : 'Keep practising.'} {character.kana} is read “{character.romaji}”.</Text>
       {!!character.note && <Text style={s.body}>{character.note}</Text>}

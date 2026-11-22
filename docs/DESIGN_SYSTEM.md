@@ -1,22 +1,23 @@
 # Learner design system
 
-Reviewed: 2026-11-22. The shared French/Japanese web learner retains its cream, burgundy and gold appearance. This is a guide to the implemented design boundary, not a claim of a complete component library or accessibility certification.
+Reviewed 2026-11-22. The French/Japanese web learner uses a warm cream canvas, dark plum text, gold primary actions and soft tinted surfaces. The visual pilot applies the shared scale to the shell and introduces photo-led Learn cards and a focused lesson stage. [Pilot decision](decisions/0034-visual-frontend-pilot.md)
 
 ## Source of shared values
 
 [designTokens.ts](../apps/learner/src/ui/designTokens.ts) owns the existing semantic palette, spacing scale, type styles, radii, focus/disabled values, minimum control sizes and shell dimensions. [theme.ts](../apps/learner/src/ui/theme.ts) composes those values into React Native styles and continues to export `colors`, `styles` and `designTokens`.
 
-Use tokens for shared decisions. Keep feature-specific layout and artwork values with that feature; do not turn every number into a global token. The calm learner redesign updates shared colors, typography, cards and buttons while preserving audio/domain boundaries. Feature components still contain local styles.
+Use tokens for shared decisions. Keep feature-specific layouts and artwork values with each feature. Shared visuals depend on the theme and base components. Learning, audio and storage concerns stay with their existing feature interfaces.
 
 | Concern | Current value or owner |
 | --- | --- |
 | Canvas, surface, text, muted text, primary action, danger | Semantic `colors` values |
-| Main body / secondary body / heading | Arial; 17/26, 15/23 and 22/29 font size/line height |
+| Main body / secondary body / heading | System font stack with Japanese fallback. Size/line height in pixels is 19/29, 16/24 and 24/31. |
+| Page titles and study targets | 42/49 page title with a 34/40 compact variant, and 36/44 target text with compact study adjustments |
 | Shared card | 22 radius, 24 padding, minimal shadow |
 | Touch targets | 44 minimum for icon controls; shared button 46 high; input 48 high |
 | Keyboard focus | Explicit focus state; shared button outline 3 with offset 3 |
-| Compact navigation threshold | Below 600px: labelled bottom destinations; otherwise top navigation |
-| Shell / content maximum widths | 1200 / 1080 pixels |
+| Navigation and topic rail | Labelled bottom destinations below 900px. Learn uses a 240px topic rail from 1050px and an inline topic selector at narrower widths. |
+| Shell / ordinary content / Learn library maximum widths | 1440 / 1080 / 1320 pixels |
 
 These values are current visual choices, not a mandate to override native accessibility scaling or a promise every feature-specific control already uses identical dimensions.
 
@@ -30,9 +31,9 @@ The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/
 
 ## Information hierarchy
 
-Today has one prominent recommended action, a compact course entry and quiet alternatives. Topics belong in Learn, metrics in Report and settings in Profile. Avoid repeating topic rails, metrics and the same recommendation across the homepage. Use burgundy for the main action and gold as an accent; keep meanings, examples, translations and reading aids visible during study.
+Today has one prominent recommended action, a compact course entry and quiet alternatives. Topics belong in Learn, metrics in Report and settings in Profile. Gold identifies primary actions, and dark plum identifies selected filters and text. Keep meanings, examples, translations and reading aids visible during study.
 
-Lessons show the current step separately from saved activity counts. Kana focuses on one row with an explicit row chooser. Course days and section navigation unfold when requested. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top.
+The library shows topic covers alongside searchable lessons and vocabulary. The lesson stage shows the current step with a read-only outline and a separate saved activity count. On the web, changing steps places focus on the new activity heading. Kana focuses on one row with an explicit row chooser and large glyphs. Course days and section navigation unfold when requested. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top.
 
 `ui/Disclosure` provides a named keyboard-accessible expansion button with expanded state and controlled content ID. Settings mount on first opening, then remain mounted and hidden when closed so backup/form state is retained. Optional AI uses `keepMounted={false}` to clear its temporary session/recording on collapse. See [ADR 0032](decisions/0032-calm-learner-interface.md).
 

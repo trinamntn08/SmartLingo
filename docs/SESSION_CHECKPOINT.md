@@ -1,17 +1,17 @@
 # Session checkpoint
 
-Updated: 2026-11-22 at 12:27 CET (Europe/Paris). Task: plan the whole SmartLingo frontend redesign. Branch `docs/ui-redesign-plan`. Planning complete.
+Updated: 2026-11-22 at 13:00 CET (Europe/Paris). Task: start implementing the visual frontend redesign. Branch `feat/visual-frontend-pilot`. Pilot implemented, reviewed and validated.
 
 ## Source and synchronization
 
-The clean starting `docs/repo-sync-tracking` local and live origin heads matched at `84502527237fca016d7ca9ad02433e69c0ca6612`, ahead/behind `0/0` after fetch. This contains the verified French/Japanese learner redesign ancestor `132144fcca3a8cf6142bbbd2c08690b357131175`. Created the planning topic branch from the synchronized source in `D:/dev/projects/SmartLingo`. [Work log](WORK_LOG.md#2026-11-22-whole-frontend-redesign-plan) records this request and the earlier tracking-rules checkpoint.
+The clean starting `docs/ui-redesign-plan` local and live origin heads matched at `9ebe354116b34dfc0066aae70104460e88b592ec`, ahead/behind `0/0` after fetch. The baseline includes learner ancestor `132144fcca3a8cf6142bbbd2c08690b357131175`, also verified on origin. Created the pilot branch from the synchronized plan in `D:/dev/projects/SmartLingo`. [Work log](WORK_LOG.md#2026-11-22-visual-frontend-pilot) records the request and source checks.
 
 ## Outcome and validation
 
-[Plan 0040](plans/0040-visual-frontend-redesign.md) proposes a photo-led Learn library, larger type, a focused lesson stage, full French/Japanese learner coverage and a French editor workspace. It includes media sourcing and offline rules, implementation slices and acceptance checks. This documentation checkpoint contains the proposed plan and tracking updates.
+The library and lesson pilot in [plan 0041](plans/0041-visual-frontend-pilot.md) delivers larger shared text, bundled photos with illustrated fallback, responsive topic navigation, browse-state return, a focused lesson stage and larger kana. The editor's existing saved-revision preview shares the lesson stage. [ADR 0034](decisions/0034-visual-frontend-pilot.md) records the design and media choices.
 
-`npm.cmd run check` passed repository and TypeScript checks. Reviewed the plan against the current source, project design references and repository docs. `git diff --check`, `npm.cmd run check:staged` and `git diff --cached --check` passed. Application, browser and offline suites belong to subsequent implementation. The actual commit SHA and origin equality are reported at handoff.
+PASS `npm.cmd run check`, `npm.cmd test` (274 cases), final complete browser suite (145 passed, one existing skip), complete offline suite (24 passed), and export (126 files, 10,241,303 bytes). The offline fixtures temporarily used `8182` and separate trace output to leave the existing preview on `8082` available. The primary agent inspected desktop and phone previews and reviewed the diff. Independent review found no actionable issues. The commit containing this note is the pilot checkpoint. Handoff reports its actual SHA and live origin status.
 
 ## Next action
 
-When implementation is requested, reconfirm the source, capture baseline desktop and mobile journeys and propose original Learn, lesson and editor mockups for review. Use the French Restaurant pilot and Japanese kana and word-lesson checks described in Phase 2 after the mockup phase. Account usage reporting unavailable in this client. No automatic-resume schedule is configured.
+Use the working pilot for visual review before expanding the learner layouts and media coverage. The French editor workspace, actual browser zoom, screen reader and physical device testing remain open. Account usage reporting unavailable in this client. No automatic-resume schedule is configured.

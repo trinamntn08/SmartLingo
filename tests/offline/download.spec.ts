@@ -110,9 +110,15 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await cold.goto('http://localhost:8082/');
   await expect(cold.getByText('Isolated cached publication', { exact: true })).toBeVisible();
   await button(cold, /Start restaurant practice/).click();
+  await expect(cold.getByTestId('lesson-stage')).toBeVisible();
   await expect(cold.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
   await expect(button(cold, 'Save bonjour')).toBeDisabled();
   await expect.poll(() => cold.locator('img').evaluateAll(images => images.length > 0 && images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  await button(cold, 'Learn').click();
+  await button(cold, 'Topic Restaurant').click();
+  const restaurantPhoto = cold.getByAltText(/^Topic context:/);
+  await expect(restaurantPhoto).toHaveAttribute('src', /\/restaurant\.jpg$/);
+  await expect.poll(() => restaurantPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await button(cold, 'Review').click();
   await expect(cold.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await button(cold, 'Profile').click();

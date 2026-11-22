@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
+import { groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
 import { openCoursePilot, japaneseCourse } from '@smartlingo/content';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
@@ -16,6 +16,7 @@ import { Button } from '../ui/controls';
 import { LessonScreen } from '../ui/LessonScreen';
 import { Notebook } from '../ui/Notebook';
 import { BrandHome } from '../ui/BrandHome';
+import { TopicSidebar } from '../ui/TopicSidebar';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { useLearning, type LearningModel } from '../ui/useLearning';
 import { useLearnerNavigation } from './useLearnerNavigation';
@@ -43,14 +44,31 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
     events: globalModel.events.filter(event => (language === 'ja-JP' && isAlphabetLessonId(event.lessonId)) || catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
   };
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  const scrollOffset = useRef(0);
+  const returnOffset = useRef<number | null>(null);
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
+  const mobileNav = width < designTokens.layout.desktopNavBreakpoint;
   const { choosing, tab, lesson, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
-    openLearnMode, openLesson, chooseLanguage, chooseHome, changeLanguage } = useLearnerNavigation({
+    openLearnMode, openLesson, exitLesson, chooseLanguage, chooseHome, changeLanguage, catalogueSearch } = useLearnerNavigation({
     language, blocked: switchingBlocked, homeRequest, onHome, onChooseLanguage: selection.choose,
-    scrollToTop: () => scroll.current?.scrollTo({ y: 0, animated: false }),
+    scrollToTop: () => {
+      scrollOffset.current = 0;
+      scroll.current?.scrollTo({ y: 0, animated: false });
+    },
+    getScrollOffset: () => scrollOffset.current,
+    restoreScrollAfterLesson: offset => { returnOffset.current = offset; },
   });
+  useLayoutEffect(() => {
+    if (lesson || returnOffset.current === null) return;
+    scrollOffset.current = returnOffset.current;
+    scroll.current?.scrollTo({ y: returnOffset.current, animated: false });
+    returnOffset.current = null;
+  }, [lesson]);
+  const showLibrary = !choosing && !lesson && tab === 'Learn' && learnMode === 'Vocabulary & lessons';
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
+  const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
+  const wideLibrary = showLibrary && width >= designTokens.layout.sidebarBreakpoint;
   const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses: language === 'ja-JP' ? japaneseCourses : frenchCourses });
   const reportVisible = !!language && !choosing && !lesson && tab === 'Report';
   useEffect(() => {
@@ -59,7 +77,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
 
   function renderDestination(targetLanguage: TargetLanguage) {
-    if (lesson) return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />;
+    if (lesson) return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={exitLesson} />;
     if (tab === 'Today') return <TodayDashboard
       language={targetLanguage} course={targetLanguage === 'ja-JP' ? japaneseCourse : openCoursePilot}
       onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model}
@@ -75,7 +93,8 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
     if (tab === 'Learn') return <LearningHub
       language={targetLanguage} lessons={lessons} model={model} mode={learnMode}
       onMode={selectLearnMode} selectedTopic={selectedTopic} onSelectTopic={selectTopic}
-      onOpen={openLesson} disabled={switchingBlocked} active={active}
+      onOpen={openLesson} disabled={switchingBlocked} active={active} catalogueSearch={catalogueSearch}
+      topics={topics} topicNavigation={showLibrary && !wideLibrary && renderTopicNavigation(true)}
     />;
     if (tab === 'Review') return <Notebook
       key={targetLanguage} language={targetLanguage} onWriteBlocked={setChildWriteBlocked}
@@ -84,19 +103,28 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
     return <ProfileScreen language={targetLanguage} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />;
   }
 
+  function renderTopicNavigation(compact: boolean) {
+    return <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} disabled={switchingBlocked} compact={compact} />;
+  }
+
   return <View style={s.app}>
-    <View style={[s.header, width < designTokens.layout.compactBreakpoint && { paddingHorizontal: 16 }]}>
-      <View style={[s.headerInner, compact && { gap: 8, flexWrap: 'nowrap' }]}>
+    <View style={[s.header, compact && { paddingHorizontal: 16 }]}>
+      <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
-        {language && !choosing && !compact && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact />}
-        {language && !choosing && <View style={s.row}>
+        {language && !choosing && !mobileNav && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} mobile={false} />}
+        {language && !choosing && <View style={{ flexShrink: 1, minWidth: 0 }}>
           <Button label="Change language" disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]} ⌄</Button>
         </View>}
       </View>
     </View>
     <View style={{ flex: 1, width: '100%', maxWidth: designTokens.layout.shellMaxWidth, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
-      <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={[s.main, width < designTokens.layout.compactBreakpoint && { padding: 16, paddingTop: 24 }]}>
+      {wideLibrary && !model.loading && !catalogue.loading && <View style={{ width: designTokens.layout.sidebarWidth, flexShrink: 0 }}>
+        {renderTopicNavigation(false)}
+      </View>}
+      <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled"
+        onScroll={event => { scrollOffset.current = event.nativeEvent.contentOffset.y; }} scrollEventThrottle={16}
+        contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 24 }, compact && { padding: 16, paddingTop: 20 }]}>
           {!language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
             <Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text>
@@ -124,8 +152,8 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
         </View>
       </ScrollView>
     </View>
-    {language && !choosing && compact && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 6, paddingBottom: 10 }}>
-      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact />
+    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 6, paddingBottom: 8 }}>
+      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} mobile />
     </View>}
   </View>;
 }

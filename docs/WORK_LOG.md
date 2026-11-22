@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22: visual frontend pilot
+
+- Request: begin implementing the frontend redesign from [plan 0040](plans/0040-visual-frontend-redesign.md).
+- Started: 12:30 CET (Europe/Paris). State: pilot implemented and validated.
+- Source: clean `D:/dev/projects/SmartLingo`, `docs/ui-redesign-plan`, local/live head `9ebe354116b34dfc0066aae70104460e88b592ec`, ahead/behind `0/0` after `git fetch origin --prune`. Verified learner ancestor `132144fcca3a8cf6142bbbd2c08690b357131175` on origin. Created `feat/visual-frontend-pilot` from the synchronized planning baseline. The task ref was absent on origin.
+- Scope: readable shared shell, responsive image-led Learn library, and a large lesson presentation exercised through the existing French café and Japanese kana/meaning-first journeys. Preserve the learning and offline paths. Use the working pilot for visual review before full rollout.
+- Implemented the pilot in [plan 0041](plans/0041-visual-frontend-pilot.md). The shared shell and study layouts use larger system-font text. Learn uses local photos, a topic rail or keyboard-accessible disclosure, and restores filters and scroll on explicit lesson exit. Lesson steps move focus to the next activity heading. The two builders and independent reviewer used exposed `gpt-6.1-sol` at medium effort.
+- Validation: `npm.cmd run check`, `npm.cmd test` (274 passed), final `npm.cmd run test:e2e -- --workers=3 --output .tmp/visual-e2e-results --reporter=dot` (145 passed, one existing skip) and the full offline suite (24 passed). The offline suite used an ignored copy with only port/import/output adjustments on `8182` because the existing preview uses `8082`. Isolating trace directories resolved first-run trace cleanup contention. Final export passed with 126 files and 10,241,303 bytes. Pilot screenshots inspected at 1,440, 390 and 320px. Independent reviewer found no actionable defects in the completed scope.
+- Checkpoint: the commit containing this entry on `feat/visual-frontend-pilot`. Final staged checks, normal upload and live origin readback are reported at handoff.
+- Next: use the working pilot for visual review, then continue full learner layouts and media curation under [plan 0040](plans/0040-visual-frontend-redesign.md).
+
 ## 2026-11-22: whole frontend redesign plan
 
 - Request: prepare a detailed SmartLingo frontend redesign plan using the two supplied references, larger type and more pictures and photos.

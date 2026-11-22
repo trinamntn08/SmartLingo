@@ -6,6 +6,46 @@ import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlin
 const topics = groupLessonTopics(lessons);
 const groceryCount = topics.find(topic => topic.name === 'Groceries')!.vocabulary.length;
 
+test('the visual library returns from a lesson to the same filtered topic and scroll position', async ({ page }, info) => {
+  const narrow = info.project.name === 'small-screen';
+  await page.setViewportSize({ width: narrow ? 320 : 1440, height: narrow ? 740 : 550 });
+  await page.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/');
+  const button = (name: string) => page.getByRole('button', { name, exact: true });
+  await button('Learn').click();
+  const topicSelector = button('Topics');
+  if (narrow) {
+    await topicSelector.press('Enter');
+    await expect(topicSelector).toHaveAttribute('aria-expanded', 'true');
+  }
+  await button('Browse topic Restaurant').press('Enter');
+  if (narrow) {
+    await expect(topicSelector).toHaveAttribute('aria-expanded', 'false');
+    await expect(topicSelector).toBeFocused();
+  }
+  const cover = page.getByAltText(/^Topic context:/);
+  await expect(cover).toBeVisible();
+  await expect(cover).toHaveAttribute('src', /\/restaurant\.jpg$/);
+  await expect.poll(() => cover.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const search = page.getByRole('textbox', { name: 'Search lessons' });
+  await search.fill('coffee');
+  await button('A1 level').click();
+  const openLesson = button('Open At the restaurant');
+  const scrollPosition = () => page.getByTestId('learner-content').evaluate(node => node.scrollTop);
+  await openLesson.scrollIntoViewIfNeeded();
+  const before = await scrollPosition();
+  expect(before).toBeGreaterThan(0);
+  await openLesson.click();
+  await expect(page.getByTestId('lesson-stage')).toBeVisible();
+  await expect.poll(scrollPosition).toBe(0);
+  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeFocused();
+  await button('← All lessons').click();
+  await expect(search).toHaveValue('coffee');
+  await expect(button('A1 level')).toHaveAttribute('aria-selected', 'true');
+  await expect.poll(async () => Math.abs(await scrollPosition() - before)).toBeLessThanOrEqual(2);
+});
+
 async function expectPicturesLoaded(page: import('@playwright/test').Page) {
   await expect.poll(() => page.locator('img').evaluateAll(images => images.length > 0
     && images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);

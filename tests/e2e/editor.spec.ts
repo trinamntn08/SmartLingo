@@ -98,11 +98,10 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.reload();
   await expect(page).toHaveURL(/\/profile\/fr$/);
-  await page.getByRole('button', { name: 'Today', exact: true }).click();
+  await openTopic(page, 'Café visits');
   await expect(page.getByText('A coffee with confidence', { exact: true })).toBeVisible();
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
-  await expect(page.getByTestId('today-next-step').getByText('12 min · 6 words', { exact: true })).toBeVisible();
-  await openTopic(page, 'Café visits');
+  await expect(page.getByText('6 words · 12 min · A2 · Published', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Vocabulary · 6', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Foundations level', exact: true }).click();
   await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
@@ -113,7 +112,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await page.getByRole('button', { name: /Start restaurant practice/ }).click();
+  await openTopic(page, 'Café visits');
+  await page.getByRole('button', { name: 'Open A coffee with confidence', exact: true }).click();
   await expect(page.getByText('A2 \u00b7 Caf\u00e9 visits \u00b7 Published', { exact: true })).toBeVisible();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
@@ -136,7 +136,7 @@ test('editor unavailable state preserves the independent learner flow', async ({
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('editor-unavailable.png'), fullPage: true });
   await page.getByRole('button', { name: /Return to learning/ }).click();
-  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
 });
 
 test('narrow editor keeps unsaved text when returning to the learner', async ({ page }, info) => {
@@ -158,7 +158,7 @@ test('narrow editor keeps unsaved text when returning to the learner', async ({ 
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Curriculum tools');
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();

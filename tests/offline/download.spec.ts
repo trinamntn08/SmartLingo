@@ -1,4 +1,4 @@
-import { buildAcceptedSentence, openProfileSection, openRestaurant } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openLessonFromTopics, openProfileSection, openRestaurant, openTopic } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -38,8 +38,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/');
-  await expect(cold.getByText(opening.subtitle, { exact: true })).toBeVisible();
-  await button(cold, /Start greetings practice/).click();
+  await openLessonFromTopics(cold, opening);
   for (const target of ['bonsoir', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;
     const card = cold.getByTestId(`vocabulary-${entry.id}`);
@@ -108,11 +107,12 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/');
-  await expect(cold.getByText('Isolated cached publication', { exact: true })).toBeVisible();
-  const todayPhoto = cold.getByAltText(/French neighbourhood bakery and caf/);
+  const todayPhoto = cold.getByTestId('today-next-step').getByRole('img');
   await expect.poll(() => todayPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect.poll(() => cold.evaluate(() => Array.from(document.fonts).some(font => font.family === 'Inter' && font.status === 'loaded'))).toBe(true);
-  await button(cold, /Start restaurant practice/).click();
+  await openTopic(cold, restaurantLesson.topic);
+  await expect(cold.getByText('Isolated cached publication', { exact: true })).toBeVisible();
+  await button(cold, 'Open Isolated cached publication').click();
   await expect(cold.getByTestId('lesson-stage')).toBeVisible();
   await expect(cold.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
   await expect(button(cold, 'Save bonjour')).toBeDisabled();
@@ -201,7 +201,7 @@ test('interrupted download and corrupted update can retry while preserving the l
   const updated = await context.newPage();
   await updated.goto('/');
   await expect(updated.locator('meta[name="smartlingo-test-build"]')).toHaveAttribute('content', 'updated');
-  await expect(button(updated, /Start greetings practice/)).toBeVisible();
+  await expect(button(updated, 'Open daily course')).toBeVisible();
 });
 
 test('a stalled connection falls back to the saved document within a few seconds', async ({ page, context, request }) => {
@@ -217,6 +217,6 @@ test('a stalled connection falls back to the saved document within a few seconds
   const stalled = await context.newPage();
   const start = Date.now();
   await stalled.goto('/?from=saved');
-  await expect(button(stalled, /Start greetings practice/)).toBeVisible();
+  await expect(button(stalled, 'Open daily course')).toBeVisible();
   expect(Date.now() - start).toBeLessThan(10000);
 });

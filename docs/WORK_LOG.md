@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Synchronize Today, Daily course and Learn
+
+- Request. Review the competing learner paths and make guided sessions and the Learn library work together.
+- Start. At 22:03 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` worktree. Local, tracking and live `feat/french-daily-opening` matched at `9c32e1b12f612868e2764b8fb9cb960334289cb5`, ahead/behind `0/0`.
+- Acceptance. Show the same next or in-progress day from Today and Learn, then connect relevant optional practice to the current day without corrupting either activity history. Keep the course outline, old routes, French free exploration and the Japanese kana-first opening. [Execution plan](plans/0048-unified-daily-learning-path.md)
+- Outcome. French Today features the shared guided recommendation, and Learn exposes the same route alongside the library. One course-event reader resumes the saved section and advances to the first unfinished day after completion. Eight existing lessons reinforce the five French days, with a validated return link to the same section. Japanese keeps its kana-first path. Learners can continue in the same visit.
+- Research and review. The curriculum scope mapped the existing lesson outcomes against CEFR, TV5MONDE and Hachette FLE references. The UI, curriculum, regression and independent review scopes used the inherited agent model and effort. The reviewer reproduced a global lock after a failed course save and browser Back from a reloaded route. Recovery now stays available in the learner shell, including on the language chooser. The reviewer and focused Chromium tests verified retry and resume.
+- Verification. Repository and TypeScript checks and all 286 tooling/application tests passed. Across the affected Chromium suite and rerun, all 99 executable cases passed with one existing publication skip. The rerun made a Learn topic test wait for the mode to render. All four new synchronization and retry cases passed. The broader export passed 20 cold-offline cases. The final export passed four further cold-offline runs after isolating the test output to prevent a simultaneous browser run from clearing its traces.
+- Handoff. The existing preview serves matching export `3d2da0193a5f`, checked at 1,440 and 320 px for the shared recommendation, section return and next day. The commit containing this note is the checkpoint. Next is owner review at `http://localhost:8082`. The guided French course currently has five draft days.
+
 ## 2026-11-22 Move the course outline to a left sidebar
 
 - Request. Make the course outline accessible on the left and show nearby days for direct selection.

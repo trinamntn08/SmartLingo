@@ -72,7 +72,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
   await button(page, 'Today').click();
   await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
   await expect(button(page, 'Change language')).toContainText('Japanese');
-  await page.getByRole('button', { name: /Revisit your lesson/ }).click();
+  await open(page, japaneseLessons[0]);
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Profile').click();
   await openProfileSection(page, 'Offline & backups');

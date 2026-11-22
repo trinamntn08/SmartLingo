@@ -16,10 +16,16 @@ export async function openCourseOutline(panel: Locator) {
 export async function openTopic(page: Page, name: string) {
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   const vocabulary = page.getByRole('button', { name: 'Vocabulary & lessons', exact: true });
-  if (await vocabulary.isVisible()) await vocabulary.click();
+  await vocabulary.click();
+  await expect(vocabulary).toHaveAttribute('aria-selected', 'true');
   const allTopics = page.getByRole('button', { name: 'All topics', exact: true });
   if (await allTopics.isVisible()) await allTopics.click();
   await page.getByRole('button', { name: `Topic ${name}`, exact: true }).click();
+}
+
+export async function openLessonFromTopics(page: Page, lesson: Pick<Lesson, 'topic' | 'subtitle'>) {
+  await openTopic(page, lesson.topic);
+  await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
 }
 
 /** Select the Restaurant journey explicitly, independent of the fresh Today suggestion. */

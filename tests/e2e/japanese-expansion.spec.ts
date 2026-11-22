@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons } from '@smartlingo/content';
 import { groupLessonTopics, type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence, openTopic, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openLessonFromTopics, openTopic, openProfileSection } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
@@ -60,8 +60,7 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await button(page, 'Reveal meaning').click(); await button(page, 'Needed help').click();
   await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   await page.reload();
-  await button(page, 'Today').click();
-  await page.getByRole('button', { name: /Revisit your lesson/ }).click();
+  await openLessonFromTopics(page, lesson);
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();

@@ -70,10 +70,11 @@ function MatchChoice({ name, correct, disabled, onPress }: { name: string; corre
 
 interface SentenceProps extends ActivityProps {
   completed: boolean; canComplete: boolean; onComplete: () => void; onReview: () => void; reviewLabel: string;
+  returnLabel?: string;
 }
 
 export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext,
-  completed, canComplete, onComplete, onReview, reviewLabel }: SentenceProps) {
+  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons' }: SentenceProps) {
   const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
   const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
   const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
@@ -112,7 +113,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         <View style={layout.actions}>
           <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly} disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
           {(completed || canComplete || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly}
-            onPress={canComplete && !browseOnly ? onComplete : onNext}>Back to lessons</Button>}
+            onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>}
         </View>
       </> : <>
         <View style={layout.pieces}>
@@ -125,7 +126,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
             <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>
             {!!selected.length && <Button quiet disabled={disabled} onPress={() => { setSelected([]); setFeedback(''); }}>Clear</Button>}
           </View>
-          {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>Back to lessons</Button>
+          {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
             : <Button primary disabled={disabled || selected.length !== exercise.tokens.length} onPress={check}>Check sentence</Button>}
         </View>
       </>}

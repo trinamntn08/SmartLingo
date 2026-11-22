@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons, lessons } from '@smartlingo/content';
-import { buildAcceptedSentence, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -11,7 +11,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await page.getByRole('button', { name: /Start greetings practice/ }).click();
+  await openLessonFromTopics(page, lessons[0]);
   const french = lessons[0].vocabulary[0];
   await page.getByRole('button', { name: `Save ${french.target}`, exact: true }).click();
   await expect(page.getByRole('button', { name: `Save ${french.target}`, exact: true })).toBeDisabled();

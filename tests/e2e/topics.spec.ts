@@ -1,4 +1,4 @@
-import { openTopic } from './learner-journeys';
+import { openLessonFromTopics, openTopic } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
@@ -176,14 +176,14 @@ test('Learn switches an open lesson back to its word bank and home resets the de
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toHaveCount(0);
-  await page.getByRole('button', { name: /Start greetings practice/ }).click();
+  await openLessonFromTopics(page, lessons[0]);
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
 });
 
 test('320px catalogue reaches topics and topic changes clear stale search and level filters', async ({ page }) => {

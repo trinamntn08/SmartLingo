@@ -15,8 +15,8 @@ function resumeStage(wordsStudied: boolean, progress: ReturnType<typeof lessonPr
   return progress.pictureDone ? 'sentence' : 'dialogue';
 }
 
-export function LessonScreen({ lesson, model, onExit, routed = false }: {
-  lesson: Lesson; model: LearningModel; onExit: () => void; routed?: boolean;
+export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = false }: {
+  lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; routed?: boolean;
 }) {
   const { route, navigate } = useNavigation();
   const progress = lessonProgress(lesson, model.events);
@@ -63,6 +63,8 @@ export function LessonScreen({ lesson, model, onExit, routed = false }: {
 
   const stageHref = (next: LessonStage) => lessonRoute ? routeHref({ ...lessonRoute, stage: next }) : undefined;
   const topicHref = lessonRoute ? routeHref({ kind: 'topics', language: lessonRoute.language, topic: topicRouteKey(lesson.topic) }) : undefined;
+  const exitHref = studyDayHref ?? topicHref;
+  const returnLabel = studyDayHref ? 'Back to study day' : undefined;
 
   function entry(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number): LearningEvent {
     return { id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints,
@@ -88,7 +90,7 @@ export function LessonScreen({ lesson, model, onExit, routed = false }: {
 
   return <View style={layout.page}>
     <View style={[s.row, layout.breadcrumb]}>
-      <Button compact quiet icon="arrow-left" href={topicHref} disabled={exitBlocked} onPress={onExit}>All lessons</Button>
+      <Button compact quiet icon="arrow-left" href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
       <Text style={[s.muted, layout.meta]}>{lesson.level} · {lesson.topic} · {lesson.status === 'draft' ? 'Draft' : 'Published'}</Text>
     </View>
     <View style={layout.intro}>
@@ -114,7 +116,7 @@ export function LessonScreen({ lesson, model, onExit, routed = false }: {
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
       {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
         done={progress.sentenceDone || progress.completed} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
-        record={record} nextHref={topicHref} onNext={onExit}
+        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel}
         onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
         reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
     </View>

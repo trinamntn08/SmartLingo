@@ -50,7 +50,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   page.on('pageerror', error => errors.push(error.message));
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
-  await expect(button(page, /Start greetings practice/)).toBeVisible();
+  await expect(button(page, 'Open daily course')).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await page.screenshot({ path: info.outputPath('today.png'), fullPage: true });
   await openRestaurant(page);
@@ -109,9 +109,10 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
   await page.reload();
   await expect(page.getByText('My morning greeting')).toBeVisible();
-  await button(page, 'Today').click();
-  await expect(button(page, /Revisit your lesson/)).toBeVisible();
-  await button(page, /Revisit your lesson/).click();
+  await openTopic(page, restaurantLesson.topic);
+  const revisit = button(page, `Open ${restaurantLesson.subtitle}`);
+  await expect(revisit).toContainText('Revisit');
+  await revisit.click();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Revisit the words').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();

@@ -43,7 +43,7 @@ export function useLearnerNavigation({ preferred, active, blocked, onChooseLangu
     return matches.size === 1 ? [...matches][0]! : topicKey;
   }, [lessons, language, topicKey, lesson?.topic]);
   const tab: LearnerTab = route.kind === 'review' ? 'Review' : route.kind === 'profile' ? 'Profile' : route.kind === 'report' ? 'Report'
-    : route.kind === 'today' || route.kind === 'home' || route.kind === 'course' ? 'Today' : 'Learn';
+    : route.kind === 'today' || route.kind === 'home' ? 'Today' : 'Learn';
   const learnMode: LearnMode = route.kind === 'letters' ? 'Japanese letters' : route.kind === 'listening' ? 'Listening & videos'
     : route.kind === 'speaking' ? 'Speaking' : 'Vocabulary & lessons';
 
@@ -61,8 +61,9 @@ export function useLearnerNavigation({ preferred, active, blocked, onChooseLangu
     navigate({ kind: 'today', language: next });
   }
 
-  function exitLesson() {
+  function exitLesson(studyDay?: Extract<AppRoute, { kind: 'course' }>) {
     if (!language) return;
+    if (studyDay) { backTo(studyDay, undefined, true); return; }
     const topic = lesson?.topic && topicRouteKey(lesson.topic);
     backTo({ kind: 'topics', language, topic }, previous => previous.kind === 'topics'
       && previous.language === language && (!previous.topic || previous.topic === topic), true);

@@ -14,9 +14,16 @@ for (const locale of ['fr', 'ja'] as const) {
     const vocabulary = button('Vocabulary & lessons');
     await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
     await expect(page.getByText('Open your notebook', { exact: true })).toHaveCount(0);
-    await recommendation.focus();
-    await page.keyboard.press('Tab');
-    await expect(course).toBeFocused();
+    await expect(recommendation).toHaveCount(1);
+    await expect(course).toHaveCount(1);
+    if (locale === 'ja') {
+      await recommendation.focus();
+      await page.keyboard.press('Tab');
+      await expect(course).toBeFocused();
+    } else {
+      await expect(recommendation).toHaveAccessibleName('Open daily course');
+      await course.focus();
+    }
     await page.keyboard.press('Tab');
     await expect(vocabulary).toBeFocused();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -24,6 +31,7 @@ for (const locale of ['fr', 'ja'] as const) {
     await course.click();
     await expect(page).toHaveURL(new RegExp(`/course/${locale}/`));
     await expect(page.getByRole('heading', { name: /^Day 1:/ })).toBeVisible();
+    await expect(button('Learn')).toHaveAttribute('aria-selected', 'true');
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`/today/${locale}$`));
 

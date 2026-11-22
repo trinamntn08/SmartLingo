@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
-import { openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] }, timezoneId: 'Europe/Paris' });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -72,13 +72,11 @@ test('downloaded report cold-starts, switches saved language histories and retri
   await expect(cold.getByTestId('report-saved')).toHaveCount(0);
   await button(cold, 'Retry report').click();
   await report(cold, 'Japanese');
-  await button(cold, 'Today').click();
-  await cold.getByRole('button', { name: /Continue your lesson/ }).click();
+  await openLessonFromTopics(cold, japaneseLessons[0]);
   await expect(cold.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await choose(cold, 'French'); await report(cold, 'French');
   await cold.screenshot({ path: info.outputPath('french-report-cold-offline.png'), fullPage: true });
-  await button(cold, 'Today').click();
-  await cold.getByRole('button', { name: /Continue your lesson/ }).click();
+  await openLessonFromTopics(cold, lessons[0]);
   await expect(cold.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   expect(remote).toEqual([]);
 });

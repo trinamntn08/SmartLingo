@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
-import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseChoice, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
+import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, type CourseChoice, type CourseDay, type CourseEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
 import { Badge, Button } from '../ui/controls';
 import { Icon } from '../ui/Icon';
 import { colors, designTokens, styles as s } from '../ui/theme';
@@ -10,72 +10,73 @@ import { CourseBlockView } from './CourseBlockView';
 import { CourseOutline, type CourseSidebar } from './CourseOutline';
 import { CompactCourseContent } from './CompactCourseContent';
 import { compactCourseStepKind, compactCourseSteps } from './compactCourseSteps';
-import { useCourseLearning } from './useCourseLearning';
+import type { CourseLearningModel } from './useCourseLearning';
+import { RelatedCoursePractice } from './RelatedCoursePractice';
+import { CourseWriteStatus } from './CourseWriteStatus';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, type AppRoute } from '../app/routes';
+import { tabRoute } from '../app/useLearnerNavigation';
 
 type CourseRoute = Extract<AppRoute, { kind: 'course' }>;
 
-export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked?: (blocked: boolean) => void }) {
+interface CourseProps {
+  course: OpenCourse;
+  route: CourseRoute;
+  recommendedDay: CourseDay;
+  learning: CourseLearningModel;
+  model: LearningModel;
+  lessons: readonly Lesson[];
+}
+
+export function OpenCoursePanel({ course, route, recommendedDay, learning, model, lessons }: CourseProps) {
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
   const sidebar: CourseSidebar | undefined = Platform.OS === 'web' && width >= 900
     ? (width >= designTokens.layout.desktopNavBreakpoint ? 'wide' : 'medium') : undefined;
-  const { route, navigate, backTo } = useNavigation();
-  const courseRoute = route.kind === 'course' && route.courseId === course.id && route.language === course.language ? route : undefined;
-  const open = !!courseRoute;
-  const today = { kind: 'today', language: course.language } as const;
-  const courseStart = { kind: 'course', language: course.language, courseId: course.id } as const;
+  const { backTo } = useNavigation();
+  const learn = tabRoute('Learn', course.language);
   const outlineId = useId();
   const [outlineOpen, setOutlineOpen] = useState(false);
-  const [writeBlocked, setWriteBlocked] = useState(false);
-  const reportWrite = useCallback((blocked: boolean) => { setWriteBlocked(blocked); onWriteBlocked?.(blocked); }, [onWriteBlocked]);
-  useEffect(() => { if (!open) setOutlineOpen(false); }, [open]);
-
-  function toggle() {
-    if (open) backTo(today, previous => previous.kind === 'today' && previous.language === course.language, true);
-    else navigate(courseStart);
+  function close() {
+    backTo(learn, previous => 'language' in previous && previous.language === course.language
+      && ['today', 'topics', 'letters', 'listening', 'speaking'].includes(previous.kind), true);
   }
 
   return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: compact ? 14 : 16, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
     <View style={[s.row, { justifyContent: 'space-between', gap: compact ? 10 : 16 }]}>
-      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact && open ? '100%' : 260, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 260, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: 10, backgroundColor: colors.goldTint, alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="calendar" size={22} color={colors.primary} />
         </View>
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
-          <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.units?.length ? course.title : 'Your daily course'}</Text>
+          <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.title}</Text>
           <Text style={s.muted}>{course.days.length} guided study {course.days.length === 1 ? 'day' : 'days'} · Draft preview</Text>
         </View>
       </View>
-      <View style={[s.row, { gap: 8, maxWidth: '100%' }, compact && open && { width: '100%', justifyContent: 'space-between' }]}>
-        {open && !sidebar && <Button compact expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
+      <View style={[s.row, { gap: 8, maxWidth: '100%' }, compact && { width: '100%', justifyContent: 'space-between' }]}>
+        {!sidebar && <Button compact expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
           trailingIcon={outlineOpen ? 'chevron-down' : 'chevron'} onPress={() => setOutlineOpen(value => !value)}>Course outline</Button>}
-        <Button expanded={open} primary={!open} compact={open} quiet={open} href={routeHref(open ? today : courseStart)}
-          label={open ? 'Close daily course' : undefined} disabled={writeBlocked || model.busy || !!model.saveError} onPress={toggle}>
-          {open ? (compact ? 'Close' : 'Close daily course') : 'Open daily course'}
+        <Button compact quiet href={routeHref(learn)} label="Close daily course"
+          disabled={learning.busy || !!learning.saveError || model.busy || !!model.saveError} onPress={close}>
+          {compact ? 'Close' : 'Close daily course'}
         </Button>
       </View>
     </View>
-    {courseRoute && <CourseJourney course={course} route={courseRoute} model={model} onWriteBlocked={reportWrite}
-      sidebar={sidebar} outlineId={sidebar || outlineOpen ? outlineId : undefined} onCloseOutline={() => setOutlineOpen(false)} />}
+    <CourseJourney course={course} route={route} recommendedDay={recommendedDay} learning={learning} model={model} lessons={lessons}
+      sidebar={sidebar} outlineId={sidebar || outlineOpen ? outlineId : undefined} onCloseOutline={() => setOutlineOpen(false)} />
   </View>;
 }
 
-function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onCloseOutline, sidebar }: {
-  course: OpenCourse; route: CourseRoute; model: LearningModel; onWriteBlocked: (blocked: boolean) => void;
+function CourseJourney({ course, route, model, recommendedDay, learning, lessons, outlineId, onCloseOutline, sidebar }: CourseProps & {
   outlineId?: string; onCloseOutline: () => void; sidebar?: CourseSidebar;
 }) {
   const { navigate, backTo } = useNavigation();
   const compact = useWindowDimensions().width < 600;
-  const learning = useCourseLearning();
-  useLayoutEffect(() => { onWriteBlocked(learning.busy || !!learning.saveError); }, [learning.busy, learning.saveError, onWriteBlocked]);
-  useLayoutEffect(() => () => onWriteBlocked(false), [onWriteBlocked]);
   const [level, setLevel] = useState<CourseDay['level'] | 'All'>('All');
   const clock = useRef(0);
   const requestedDay = course.days.find(item => item.id === route.dayId);
   const invalidDay = !!route.dayId && !requestedDay;
-  const resolvedDay = requestedDay ?? resumeCourseDay(course, learning.events);
+  const resolvedDay = requestedDay ?? recommendedDay;
   const progress = resolvedDay && courseDayProgress(course, resolvedDay, learning.events);
   const requestedBlock = !invalidDay && resolvedDay ? resolvedDay.blocks.find(item => item.id === route.sectionId) : undefined;
   const invalidSection = !!route.sectionId && !requestedBlock;
@@ -172,13 +173,7 @@ function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onClos
       <Text style={s.muted}>You can browse every section. Progress cannot be saved until browser storage is available.</Text>
       <Button onPress={() => void learning.load()}>Retry course storage</Button>
     </View>}
-    {!!learning.saveError && <View style={s.error}>
-      <Text accessibilityRole="alert" style={s.body}>{learning.saveError}</Text>
-      <Text style={s.muted}>This action has not finished saving. Retry keeps the same event IDs.</Text>
-      <Button disabled={learning.busy} onPress={learning.retry}>Retry course save</Button>
-      <Button disabled={learning.busy} onPress={learning.discard}>Discard unsaved course action</Button>
-    </View>}
-    {learning.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving course progress…</Text>}
+    <CourseWriteStatus learning={learning} />
     {!sidebar && outline}
     <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
       {currentUnit && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
@@ -230,6 +225,9 @@ function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onClos
       </>}
       {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to day {nextDay.dayNumber}: {nextDay.title}</Button>}
     </View>}
+    {(currentStep?.kind === 'reflection' || progress.completed) && <RelatedCoursePractice
+      section={{ ...route, dayId: day.id, sectionId: block.id }} lessons={lessons}
+      disabled={navigationBlocked || model.busy || !!model.saveError} />}
     <CourseCredits course={course} />
   </View>;
 

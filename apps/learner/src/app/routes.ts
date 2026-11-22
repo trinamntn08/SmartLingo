@@ -2,12 +2,13 @@ import type { TargetLanguage } from '@smartlingo/domain';
 
 export const lessonStages = ['vocabulary', 'dialogue', 'picture', 'sentence'] as const;
 export type LessonStage = typeof lessonStages[number];
+export interface StudyDayLink { courseId: string; dayId: string; sectionId: string }
 
 export type AppRoute =
   | { kind: 'home' | 'languages' | 'unavailable' }
   | { kind: 'today' | 'report' | 'profile'; language: TargetLanguage }
   | { kind: 'topics'; language: TargetLanguage; topic?: string }
-  | { kind: 'lesson'; language: TargetLanguage; lessonId: string; stage?: LessonStage }
+  | { kind: 'lesson'; language: TargetLanguage; lessonId: string; stage?: LessonStage; studyDay?: StudyDayLink }
   | { kind: 'course'; language: TargetLanguage; courseId: string; dayId?: string; sectionId?: string }
   | { kind: 'listening'; language: TargetLanguage; topic?: string; lessonId?: string; questionId?: string; library?: boolean; chooser?: boolean }
   | { kind: 'speaking'; language: TargetLanguage; topic?: string; lessonId?: string; revision?: number; line?: number }
@@ -58,7 +59,14 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
   }
   if (area === 'lesson' && parts.length <= 4 && section && id(section)) {
     const stage = item === 'finish' ? 'sentence' : lessonStages.find(value => value === item);
-    return item === undefined || stage ? { kind: 'lesson', language, lessonId: section, stage } : unavailable;
+    if (item !== undefined && !stage) return unavailable;
+    const query = new URLSearchParams(search);
+    const courseId = query.get('course') ?? undefined;
+    const dayId = query.get('day') ?? undefined;
+    const sectionId = query.get('section') ?? undefined;
+    const studyDay = courseId && dayId && sectionId && id(courseId) && id(dayId) && id(sectionId)
+      ? { courseId, dayId, sectionId } : undefined;
+    return { kind: 'lesson', language, lessonId: section, stage, ...(studyDay && { studyDay }) };
   }
   if (area === 'course' && parts.length <= 5 && section && id(section) && (item === undefined || id(item)) && (extra === undefined || id(extra))) {
     return { kind: 'course', language, courseId: section, dayId: item, sectionId: extra };
@@ -96,7 +104,11 @@ export function routeHref(route: AppRoute): string {
     case 'today': case 'report': case 'profile': return path(route.kind, lang);
     case 'review': return path('review', lang, route.view);
     case 'topics': return route.topic ? path('learn', lang, 'topics', route.topic) : path('learn', lang);
-    case 'lesson': return path('lesson', lang, route.lessonId, route.stage);
+    case 'lesson': {
+      const destination = path('lesson', lang, route.lessonId, route.stage);
+      const day = route.studyDay;
+      return day ? destination + '?' + new URLSearchParams({ course: day.courseId, day: day.dayId, section: day.sectionId }) : destination;
+    }
     case 'course': return path('course', lang, route.courseId, route.dayId, route.sectionId);
     case 'letters': return path('learn', lang, 'letters', route.rowId, route.mode, route.characterId);
     case 'listening': return path('learn', lang, 'listening', route.library ? 'library' : route.lessonId, route.library ? undefined : route.questionId)

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
-import { languageNames, lessonProgress, type Lesson, type OpenCourse, type TargetLanguage } from '@smartlingo/domain';
-import { OpenCoursePanel } from '../course/OpenCoursePanel';
+import { languageNames, type TargetLanguage } from '@smartlingo/domain';
+import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
 import { alphabetProgress, isAlphabetLessonId } from '../alphabet/progress';
 import { ContextImage } from '../ui/ContextImage';
-import { getContextPhoto, type ContextPhoto } from '../ui/contextPhotos';
+import { getContextPhoto } from '../ui/contextPhotos';
 import { Icon, type IconName } from '../ui/Icon';
 import { ScreenHeader } from '../ui/ScreenHeader';
 import { Button } from '../ui/controls';
@@ -14,9 +14,7 @@ import { routeHref } from '../app/routes';
 import { routePress } from '../ui/routePress';
 
 interface TodayDashboardProps {
-  language: TargetLanguage; lessons: Lesson[]; course: OpenCourse; model: LearningModel;
-  courseOnly?: boolean;
-  onWriteBlocked: (blocked: boolean) => void; onOpen: (lesson: Lesson) => void; onExplore: () => void;
+  language: TargetLanguage; courseLaunch: CourseLaunchProps; alphabetEvents: LearningModel['events']; onExplore: () => void;
   onListen: () => void; onSpeak: () => void; onAlphabet: () => void;
 }
 
@@ -29,14 +27,12 @@ interface Shortcut {
   href: string;
 }
 
-export function TodayDashboard({ language, lessons, course, model, courseOnly, onWriteBlocked, onOpen, onExplore, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
+export function TodayDashboard({ language, courseLaunch, alphabetEvents, onExplore, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
   const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
-  const recent = [...model.events].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
-  const latest = recent.find(event => lessons.some(lesson => lesson.id === event.lessonId));
-  const suggested = lessons.find(lesson => lesson.id === latest?.lessonId) ?? lessons[0];
+  const recent = [...alphabetEvents].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
   const japanese = language === 'ja-JP';
   const recommendLetters = japanese && (!recent[0] || isAlphabetLessonId(recent[0].lessonId));
-  const alphabet = alphabetProgress(model.events);
+  const alphabet = alphabetProgress(alphabetEvents);
   const alphabetAction = alphabet.completed === 0 ? 'Start Hiragana' : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
   const shortcuts: Shortcut[] = [
     { label: 'Vocabulary & lessons', description: 'Browse topics and useful words', icon: 'grid', tint: colors.skyTint, open: onExplore, href: routeHref({ kind: 'topics', language }) },
@@ -45,29 +41,14 @@ export function TodayDashboard({ language, lessons, course, model, courseOnly, o
   ];
 
   return <View style={{ gap: compact ? 14 : 18, minWidth: 0 }}>
-    {!courseOnly && <>
-      <ScreenHeader title="Today" eyebrow={languageNames[language]} />
-      {recommendLetters
-        ? <NextActivity compact={compact} photo={getContextPhoto(language)} label="Japanese letters"
-            title={alphabet.completed === 0 ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}
-            description={alphabet.next
-              ? `Hear and recognise ${alphabet.next.script}, one row at a time.`
-              : 'Revisit a hiragana or katakana row and practise recognising its characters.'}
-            detail={`${alphabet.completed} of ${alphabet.total} rows studied`} action={alphabetAction} open={onAlphabet} href="/learn/ja/letters" />
-        : suggested
-          ? <NextActivity compact={compact} photo={getContextPhoto(language, suggested.topic)} label={suggested.topic}
-              title={suggested.subtitle} description={suggested.outcome}
-              detail={`${suggested.durationMinutes} min · ${suggested.vocabulary.length} words`}
-              action={lessonAction(suggested, model)} open={() => onOpen(suggested)} href={routeHref({ kind: 'lesson', language, lessonId: suggested.id })} />
-          : <View testID="today-next-step" style={s.card}>
-              <Text accessibilityRole="header" style={s.heading}>No lessons available</Text>
-              <Text style={s.body}>Try the daily course or browse listening resources below.</Text>
-            </View>}
-      {!!model.loadError && <Text style={s.muted}>Your saved place is unavailable. You can still browse and study.</Text>}
-    </>}
-
-    <OpenCoursePanel key={language} course={course} model={model} onWriteBlocked={onWriteBlocked} />
-    {!courseOnly && <View style={{ gap: 10 }}>
+    <ScreenHeader title="Today" eyebrow={languageNames[language]} />
+    {recommendLetters
+      ? <>
+        <KanaRecommendation alphabet={alphabet} compact={compact} action={alphabetAction} onOpen={onAlphabet} />
+        <CourseLaunchCard {...courseLaunch} />
+      </>
+      : <View testID="today-next-step"><CourseLaunchCard {...courseLaunch} featured /></View>}
+    <View style={{ gap: 10 }}>
       <View style={[s.row, { justifyContent: 'space-between' }]}>
         <Text accessibilityRole="header" style={s.heading}>Explore and practice</Text>
         {japanese && !recommendLetters && <Button quiet compact icon="book" onPress={onAlphabet} href="/learn/ja/letters">{alphabetAction}</Button>}
@@ -75,36 +56,30 @@ export function TodayDashboard({ language, lessons, course, model, courseOnly, o
       <View style={{ flexDirection: compact ? 'column' : 'row', gap: 12 }}>
         {shortcuts.map(shortcut => <ShortcutTile key={shortcut.label} item={shortcut} compact={compact} />)}
       </View>
-    </View>}
+    </View>
   </View>;
 }
 
-function lessonAction(lesson: Lesson, model: LearningModel): string {
-  if (lessonProgress(lesson, model.events).completed) return 'Revisit your lesson →';
-  if (model.events.some(event => event.lessonId === lesson.id && event.revision === lesson.revision)) return 'Continue your lesson →';
-  if (lesson.id.startsWith('fr.greetings.')) return 'Start greetings practice →';
-  if (lesson.id === 'fr.restaurant.customer') return 'Start restaurant practice →';
-  return 'Start lesson →';
-}
-
-function NextActivity({ compact, photo, label, title, description, detail, action, open, href }: {
-  compact: boolean; photo: ContextPhoto; label: string; title: string; description: string;
-  detail: string; action: string; open: () => void; href: string;
+function KanaRecommendation({ alphabet, compact, action, onOpen }: {
+  alphabet: ReturnType<typeof alphabetProgress>; compact: boolean; action: string; onOpen: () => void;
 }) {
   return <View testID="today-next-step" style={{
     flexDirection: compact ? 'column-reverse' : 'row', backgroundColor: colors.dark, borderRadius: 20, overflow: 'hidden',
   }}>
     <View style={{ gap: compact ? 8 : 10, padding: compact ? 16 : 24, flex: compact ? undefined : 1,
       minWidth: 0, justifyContent: 'center' }}>
-      <Text style={[s.eyebrow, { color: colors.yellow }]}>{label}</Text>
+      <Text style={[s.eyebrow, { color: colors.yellow }]}>Japanese letters</Text>
       <Text accessibilityRole="header" style={[s.title, {
         color: colors.card, fontSize: compact ? 28 : 36, lineHeight: compact ? 34 : 43,
-      }]}>{title}</Text>
-      <Text style={[s.body, { color: colors.card, fontSize: compact ? 16 : 18, lineHeight: compact ? 22 : 26 }]}>{description}</Text>
-      <Text style={[s.muted, { color: '#C5DCD3', lineHeight: 21 }]}>{detail}</Text>
-      <View style={[s.row, { marginTop: 2 }]}><Button accent onPress={open} href={href}>{action}</Button></View>
+      }]}>{alphabet.completed === 0 ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}</Text>
+      <Text style={[s.body, { color: colors.card, fontSize: compact ? 16 : 18, lineHeight: compact ? 22 : 26 }]}>
+        {alphabet.next ? `Hear and recognise ${alphabet.next.script}, one row at a time.`
+          : 'Revisit a hiragana or katakana row and practise recognising its characters.'}
+      </Text>
+      <Text style={[s.muted, { color: '#C5DCD3', lineHeight: 21 }]}>{alphabet.completed} of {alphabet.total} rows studied</Text>
+      <View style={[s.row, { marginTop: 2 }]}><Button accent onPress={onOpen} href="/learn/ja/letters">{action}</Button></View>
     </View>
-    <ContextImage photo={photo} style={compact ? { width: '100%', height: 104 } : { flex: 1.15, minHeight: 244 }} />
+    <ContextImage photo={getContextPhoto('ja-JP')} style={compact ? { width: '100%', height: 104 } : { flex: 1.15, minHeight: 244 }} />
   </View>;
 }
 

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
-import { buildAcceptedSentence, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openProfileSection, openTopic } from './learner-journeys';
 
 const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
 const greetingTopic = 'Everyday greetings and politeness';
@@ -9,12 +9,12 @@ test.beforeEach(async ({ context }) => {
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
 });
 
-test('fresh Today starts greetings with readable arrival and departure support, saved words and persistent practice', async ({ page }, info) => {
+test('Learn opens greetings with readable arrival and departure support, saved words and persistent practice', async ({ page }, info) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByText(opening.subtitle, { exact: true })).toBeVisible();
-  const start = page.getByRole('button', { name: /Start greetings practice/ });
+  await openTopic(page, greetingTopic);
+  const start = page.getByRole('button', { name: `Open ${opening.subtitle}`, exact: true });
   await start.focus();
   await page.keyboard.press('Enter');
   for (const target of ['bonjour', 'bonsoir', 'bonne journée', 'bonne soirée']) {
@@ -80,7 +80,7 @@ for (const width of [1280, 320]) {
 
 test('a pre-existing Restaurant attempt still resumes its dialogue after the greetings-first update', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeEnabled();
   const oldEvent = { id: '3cf282d5-af5d-416f-bdaa-7a7ebf4c934c', lessonId: restaurantLesson.id, revision: restaurantLesson.revision,
     itemId: restaurantLesson.id, activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T10:00:00.000Z' };
   await page.evaluate(async event => {
@@ -97,8 +97,10 @@ test('a pre-existing Restaurant attempt still resumes its dialogue after the gre
     } finally { database.close(); }
   }, oldEvent);
   await page.reload();
-  await expect(page.getByText(restaurantLesson.subtitle, { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /Continue your lesson/ }).click();
+  await openTopic(page, restaurantLesson.topic);
+  const resume = page.getByRole('button', { name: `Open ${restaurantLesson.subtitle}`, exact: true });
+  await expect(resume).toContainText('Continue');
+  await resume.click();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await expect(page.getByText(restaurantLesson.dialogue[0].meaning, { exact: true })).toBeVisible();
 });
@@ -113,12 +115,11 @@ test('a cached published greeting override retains its content and first topic p
   await expect(page.getByText('1 published lesson saved in this browser.', { exact: true })).toBeVisible();
   await page.unroute('**/127.0.0.1:3001/published-lessons');
   await page.reload();
-  await page.getByRole('button', { name: 'Today', exact: true }).click();
-  await expect(page.getByText(published.subtitle, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await expect(page.getByRole('button', { name: /^Topic / }).first()).toHaveAttribute('aria-label', `Topic ${greetingTopic}`);
-  await page.getByRole('button', { name: 'Today', exact: true }).click();
-  await page.getByRole('button', { name: /Start greetings practice/ }).click();
+  await page.getByRole('button', { name: `Topic ${greetingTopic}`, exact: true }).click();
+  await expect(page.getByText(published.subtitle, { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: `Open ${published.subtitle}`, exact: true }).click();
   await expect(page.getByText(`${opening.level} \u00b7 ${greetingTopic} \u00b7 Published`, { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: published.subtitle, exact: true })).toBeVisible();
 });

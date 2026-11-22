@@ -1,4 +1,4 @@
-import { openTopic } from './learner-journeys';
+import { openLessonFromTopics, openTopic } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
@@ -157,8 +157,7 @@ test('report reads scoped saved history without writing, survives reload and ref
   await metrics(page, 'Japanese', 0, 1, 1, 0); await week(page, 3);
   await page.reload(); await button(page, 'Report').click();
   await metrics(page, 'Japanese', 0, 1, 1, 0); await week(page, 3);
-  await button(page, 'Today').click();
-  await page.getByRole('button', { name: /Continue your lesson/ }).click();
+  await openLessonFromTopics(page, japanese);
   await expect(page.getByRole('heading', { name: japanese.subtitle, exact: true })).toBeVisible();
   await choose(page, 'French'); await button(page, 'Report').click();
   await metrics(page, 'French', 1, frenchExplored, 2, 1);

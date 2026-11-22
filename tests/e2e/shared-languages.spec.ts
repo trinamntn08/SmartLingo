@@ -70,6 +70,8 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   }
   await page.reload();
+  await expect(page.getByTestId('notebook-entries')).toBeVisible();
+  await button(page, 'Today').click();
   await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
   await expect(button(page, 'Change language')).toContainText('Japanese');
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();

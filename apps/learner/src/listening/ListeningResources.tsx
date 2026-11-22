@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { Linking, Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { useVisitState } from '../app/WebNavigation';
 import { Button } from '../ui/controls';
 import { colors, designTokens as tokens, styles as s } from '../ui/theme';
 import { getListeningResources, listeningFormats, listeningLevels, type ListeningFormat, type ListeningLevel, type ListeningResource } from './resources';
@@ -14,9 +15,9 @@ export function ListeningResources({ language = 'fr-FR', onClose, headingId }: P
 function ListeningLibrary({ language = 'fr-FR', onClose, headingId }: Props) {
   const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
   const filtersId = useId();
-  const [filtersExpanded, setFiltersExpanded] = useState(false);
-  const [level, setLevel] = useState<ListeningLevel | null>(null);
-  const [format, setFormat] = useState<ListeningFormat | null>(null);
+  const [filtersExpanded, setFiltersExpanded] = useVisitState('listening-library-filters-open', false);
+  const [level, setLevel] = useVisitState<ListeningLevel | null>('listening-library-level', null);
+  const [format, setFormat] = useVisitState<ListeningFormat | null>('listening-library-format', null);
   const resources = getListeningResources(language);
   const availableLevels = listeningLevels.filter(choice => resources.some(resource => resource.levels.includes(choice)));
   const availableFormats = listeningFormats.filter(choice => resources.some(resource => resource.format === choice));
@@ -73,7 +74,7 @@ function ListeningLibrary({ language = 'fr-FR', onClose, headingId }: Props) {
 
 function ResourceCard({ resource }: { resource: ListeningResource }) {
   const contentId = useId();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useVisitState(`listening-library-notes:${resource.id}`, false);
   return <View testID={`listening-resource-${resource.id}`} style={layout.card}>
     <View style={layout.resourceRow}>
       <View style={layout.resourceCopy}>

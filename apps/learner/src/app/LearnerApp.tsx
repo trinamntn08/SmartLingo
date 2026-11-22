@@ -19,7 +19,9 @@ import { BrandHome } from '../ui/BrandHome';
 import { TopicSidebar } from '../ui/TopicSidebar';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { useLearning, type LearningModel } from '../ui/useLearning';
-import { useLearnerNavigation } from './useLearnerNavigation';
+import { tabRoute, useLearnerNavigation } from './useLearnerNavigation';
+import { useNavigation } from './WebNavigation';
+import { routeHref } from './routes';
 
 const frenchCourses = [openCoursePilot];
 const japaneseCourses = [japaneseCourse];
@@ -27,44 +29,36 @@ const japaneseCourses = [japaneseCourse];
 interface LearnerAppProps {
   active: boolean;
   onOpenEditor: () => void;
-  homeRequest: number;
-  onHome: () => void;
 }
 
-export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: LearnerAppProps) {
+export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const catalogue = useCatalogue();
   const globalModel = useLearning();
   const selection = useTargetLanguage();
   const [childWriteBlocked, setChildWriteBlocked] = useState(false);
-  const language = selection.language;
   const switchingBlocked = globalModel.busy || !!globalModel.saveError || childWriteBlocked;
+  const navigation = useNavigation();
+  const { registerBlock, read, write } = navigation;
+  useLayoutEffect(() => {
+    registerBlock(active && switchingBlocked, 'learner');
+    return () => registerBlock(false, 'learner');
+  }, [active, switchingBlocked, registerBlock]);
+  const { route, visit, language, choosing, tab, lesson, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
+    openLearnMode, openLesson, exitLesson, chooseLanguage, chooseHome, changeLanguage, catalogueSearch } = useLearnerNavigation({
+    preferred: selection.language, active, blocked: switchingBlocked, onChooseLanguage: selection.choose, lessons: catalogue.lessons,
+  });
   // Scope reads to the active language; all write operations still use the shared learning model.
   const model: LearningModel = { ...globalModel,
     notebook: globalModel.notebook.filter(entry => language && notebookLanguage(entry) === language),
     events: globalModel.events.filter(event => (language === 'ja-JP' && isAlphabetLessonId(event.lessonId)) || catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
   };
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
-  const scrollOffset = useRef(0);
-  const returnOffset = useRef<number | null>(null);
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
   const mobileNav = width < designTokens.layout.desktopNavBreakpoint;
-  const { choosing, tab, lesson, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
-    openLearnMode, openLesson, exitLesson, chooseLanguage, chooseHome, changeLanguage, catalogueSearch } = useLearnerNavigation({
-    language, blocked: switchingBlocked, homeRequest, onHome, onChooseLanguage: selection.choose,
-    scrollToTop: () => {
-      scrollOffset.current = 0;
-      scroll.current?.scrollTo({ y: 0, animated: false });
-    },
-    getScrollOffset: () => scrollOffset.current,
-    restoreScrollAfterLesson: offset => { returnOffset.current = offset; },
-  });
   useLayoutEffect(() => {
-    if (lesson || returnOffset.current === null) return;
-    scrollOffset.current = returnOffset.current;
-    scroll.current?.scrollTo({ y: returnOffset.current, animated: false });
-    returnOffset.current = null;
-  }, [lesson]);
+    if (active && !catalogue.loading && !model.loading) scroll.current?.scrollTo({ y: Number(read('learner.scroll') ?? 0), animated: false });
+  }, [visit, active, catalogue.loading, model.loading]);
   const showLibrary = !choosing && !lesson && tab === 'Learn' && learnMode === 'Vocabulary & lessons';
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
   const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
@@ -76,10 +70,24 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
   }, [reportVisible, tab, childWriteBlocked, globalModel.busy, globalModel.loading, globalModel.loadError, globalModel.events, globalModel.notebook, reportState.refresh]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
 
+  const course = language === 'ja-JP' ? japaneseCourse : openCoursePilot;
+  const missingDestination = route.kind === 'unavailable' || (route.kind === 'lesson' && !lesson)
+    || (route.kind === 'course' && route.courseId !== course.id)
+    || (route.kind === 'topics' && !!selectedTopic && !topics.some(topic => topic.name === selectedTopic));
+
+  function unavailable() {
+    return <View style={s.card}>
+      <Text accessibilityRole="header" style={s.heading}>This learning link is unavailable</Text>
+      <Text style={s.body}>The lesson or section may have changed, or it may need to be loaded on this device.</Text>
+      <View style={s.row}><Button onPress={() => language ? selectTopic(null) : chooseHome()}>{language ? 'Browse all lessons' : 'Choose a language'}</Button></View>
+    </View>;
+  }
+
   function renderDestination(targetLanguage: TargetLanguage) {
-    if (lesson) return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={exitLesson} />;
+    if (missingDestination) return unavailable();
+    if (lesson) return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={exitLesson} routed />;
     if (tab === 'Today') return <TodayDashboard
-      language={targetLanguage} course={targetLanguage === 'ja-JP' ? japaneseCourse : openCoursePilot}
+      language={targetLanguage} course={course} courseOnly={route.kind === 'course'}
       onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model}
       onOpen={openLesson} onExplore={() => openLearnMode('Vocabulary & lessons')}
       onReview={() => navigate('Review')}
@@ -111,7 +119,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
     <View style={[s.header, compact && { paddingHorizontal: 15, paddingVertical: 8 }]}>
       <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
-        {language && !choosing && !mobileNav && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} mobile={false} />}
+        {language && !choosing && !mobileNav && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile={false} />}
         {language && !choosing && <View style={{ flexShrink: 1, minWidth: 0 }}>
           <Button compact icon={compact ? undefined : 'globe'} trailingIcon="chevron-down" label="Change language"
             disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]}</Button>
@@ -123,10 +131,10 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
         {renderTopicNavigation(false)}
       </View>}
       <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled"
-        onScroll={event => { scrollOffset.current = event.nativeEvent.contentOffset.y; }} scrollEventThrottle={16}
+        onScroll={event => { if (active) write('learner.scroll', event.nativeEvent.contentOffset.y); }} scrollEventThrottle={16}
         contentContainerStyle={{ flexGrow: 1 }}>
         <View style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
-          {!language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
+          {route.kind === 'unavailable' ? unavailable() : !language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
             <Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text>
           </View> : <>
@@ -154,7 +162,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
       </ScrollView>
     </View>
     {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 5, paddingBottom: 7 }}>
-      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} mobile />
+      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile />
     </View>}
   </View>;
 }

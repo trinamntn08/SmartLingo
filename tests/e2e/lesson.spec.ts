@@ -74,8 +74,8 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await button(page, /Continue to dialogue/).click();
+  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
   await page.reload();
-  await button(page, /Continue your lesson/).click();
   await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
   await expect(page.getByText('Je voudrais means', { exact: false })).toBeVisible();
   await expect(page.getByText('Hello! What would you like?', { exact: true })).toBeVisible();
@@ -87,8 +87,9 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Show a hint').click();
   await button(page, 'Hide hint').click();
   await button(page, 'un café').click();
+  await expect(button(page, /Build a sentence/)).toBeEnabled();
   await page.reload();
-  await button(page, /Continue your lesson/).click();
+  await button(page, /Build a sentence/).click();
   for (const token of ['voudrais', 'Je', 'un café', 's’il vous plaît']) await button(page, token).click();
   await button(page, 'Check sentence').click();
   await expect(page.getByText('Try a different order.', { exact: false })).toBeVisible();
@@ -100,7 +101,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByText('That works. Your sentence is saved.')).toBeVisible();
   await page.screenshot({ path: info.outputPath('sentence.png'), fullPage: true });
   await page.reload();
-  await button(page, /Continue your lesson/).click();
+  await button(page, /^Continue/).click();
   await button(page, 'Finish and save session').click();
   await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   await button(page, 'Review').click();
@@ -109,7 +110,6 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Save changes').click();
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
   await page.reload();
-  await button(page, 'Review').click();
   await expect(page.getByText('My morning greeting')).toBeVisible();
   await button(page, 'Today').click();
   await expect(button(page, /Revisit your lesson/)).toBeVisible();
@@ -218,7 +218,8 @@ test('storage denial explains the problem and never claims a saved change', asyn
   await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
   await openRestaurant(page);
   await expect(button(page, 'Save bonjour')).toBeDisabled();
-  await expect(button(page, /Continue to dialogue/)).toBeDisabled();
+  await button(page, /Continue to dialogue/).click();
+  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
   await button(page, 'Retry opening storage').click();
   await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
 });

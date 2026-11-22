@@ -32,7 +32,6 @@ test('fresh Today starts greetings with readable arrival and departure support, 
   await expect(page.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
   await expect(page.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
   await page.reload();
-  await page.getByRole('button', { name: /Continue your lesson/ }).click();
   await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Try meaning practice/ }).click();
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
@@ -43,13 +42,12 @@ test('fresh Today starts greetings with readable arrival and departure support, 
   await buildAcceptedSentence(page, opening);
   await expect(page.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: /Continue your lesson/ }).click();
+  await page.getByRole('button', { name: /^Continue/ }).click();
   await page.getByRole('button', { name: 'Finish and save session', exact: true }).click();
   await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('bonsoir', { exact: true }).first()).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('bonsoir', { exact: true }).first()).toBeVisible();
   await page.screenshot({ path: info.outputPath('greetings-notebook.png'), fullPage: true });
   expect(errors).toEqual([]);
@@ -117,6 +115,7 @@ test('a cached published greeting override retains its content and first topic p
   await expect(page.getByText('1 published lesson saved in this browser.', { exact: true })).toBeVisible();
   await page.unroute('**/127.0.0.1:3001/published-lessons');
   await page.reload();
+  await page.getByRole('button', { name: 'Today', exact: true }).click();
   await expect(page.getByText(published.subtitle, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await expect(page.getByRole('button', { name: /^Topic / }).first()).toHaveAttribute('aria-label', `Topic ${greetingTopic}`);

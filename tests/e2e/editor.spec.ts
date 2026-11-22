@@ -67,7 +67,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   // Preview practice and word capture never touch the real notebook/history.
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(page.getByText('Host', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();
   expect(await learningRows(page, 'events')).toEqual(originalEvents);
@@ -91,6 +91,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.unroute('**/127.0.0.1:3001/**');
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.reload();
+  await expect(page).toHaveURL(/\/profile\/fr$/);
+  await page.getByRole('button', { name: 'Today', exact: true }).click();
   await expect(page.getByText('A coffee with confidence', { exact: true })).toBeVisible();
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
   await expect(page.getByTestId('today-next-step').getByText('12 min · 6 words', { exact: true })).toBeVisible();
@@ -113,7 +115,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toContainText('In notebook');
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(page.getByText('Host', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();
 });
@@ -122,6 +124,7 @@ test('editor unavailable state preserves the independent learner flow', async ({
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto('/#editor');
+  await expect(page).toHaveURL(/\/editor$/);
   await expect(page.getByRole('alert')).toContainText('editor request');
   await expect(page.getByRole('button', { name: 'Retry loading lessons', exact: true })).toBeVisible();
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);

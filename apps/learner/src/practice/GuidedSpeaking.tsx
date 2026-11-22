@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Lesson, TargetLanguage } from '@smartlingo/domain';
 import { Platform, Text, View, useWindowDimensions } from 'react-native';
+import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
@@ -10,20 +11,28 @@ import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 export function GuidedSpeaking({ lessons }: { lessons: Lesson[] }) {
   const compact = useWindowDimensions().width < 900;
+  const { route, navigate } = useNavigation();
+  const speaking = route.kind === 'speaking' ? route : undefined;
   const available = lessons.filter(lesson => lesson.dialogue.length > 0);
-  const [lessonId, setLessonId] = useState('');
-  const lesson = available.find(item => item.id === lessonId) ?? available[0];
+  const selected = available.find(item => item.id === speaking?.lessonId);
+  const lesson = selected ?? available[0];
   const selectId = useId();
+  function chooseLesson(id: string) {
+    const choice = available.find(item => item.id === id);
+    if (!choice) return;
+    navigate({ kind: 'speaking', language: choice.language as TargetLanguage, topic: speaking?.topic, lessonId: id, revision: choice.revision, line: 1 });
+  }
   return <View testID="guided-speaking" style={t.page}>
     <ScreenHeader eyebrow="Say it in context" title="Speaking practice" subtitle={compact ? 'Listen to your partner. Try your reply aloud.' : 'Take a part in an everyday conversation. Listen to your partner, then try your own reply.'} />
+    {speaking?.lessonId && !selected && lesson && <Text accessibilityLiveRegion="polite" style={s.muted}>That dialogue is unavailable. An available dialogue is shown instead.</Text>}
     {!lesson ? <View style={t.panel}><Text style={s.body}>No scripted dialogues are available yet. Choose another language or return to vocabulary and lessons to study useful phrases.</Text></View> : <View style={t.board}>
       <View style={[t.side, compact ? { gap: 8 } : t.panel]}>
       {!compact && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.sageTint }]}><Icon name="mic" size={24} /></View><Text accessibilityRole="header" style={t.sectionTitle}>Set the scene</Text></View>}
       {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 15, display: 'grid', gap: 8, minWidth: 0 }}>Speaking lesson
-        <select id={selectId} value={lesson.id} onChange={event => setLessonId(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: 16 }}>
+        <select id={selectId} value={lesson.id} onChange={event => chooseLesson(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: 16 }}>
           {available.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
         </select>
-      </label> : <View style={s.row}>{available.map(item => <Button key={item.id} selected={item.id === lesson.id} onPress={() => setLessonId(item.id)}>{item.title}</Button>)}</View>}
+      </label> : <View style={s.row}>{available.map(item => <Button key={item.id} selected={item.id === lesson.id} onPress={() => chooseLesson(item.id)}>{item.title}</Button>)}</View>}
       {!compact && <><Text style={s.body}>{lesson.outcome}</Text>
       <View style={s.divider} />
       <Text style={t.detail}>Use the English meaning to plan your line. Compare with the model whenever you need it.</Text>
@@ -38,22 +47,37 @@ export function GuidedSpeaking({ lessons }: { lessons: Lesson[] }) {
 
 function DialoguePractice({ lesson }: { lesson: Lesson }) {
   const compact = useWindowDimensions().width < 900;
+  const { route, navigate, visit } = useNavigation();
+  const speaking = route.kind === 'speaking' ? route : undefined;
   const roles = [...new Set(lesson.dialogue.map(line => line.role))];
-  const [role, setRole] = useState(roles[0]!);
-  const [round, setRound] = useState(0);
+  const stateKey = `speaking:${lesson.id}:${lesson.revision}`;
+  const [savedRole] = useVisitState(`${stateKey}:role`, roles[0]!);
+  const role = roles.includes(savedRole) ? savedRole : roles[0]!;
+  const requested = speaking?.lessonId === lesson.id ? speaking.line : undefined;
+  const valid = requested !== undefined && speaking?.revision === lesson.revision && requested <= lesson.dialogue.length;
+  const index = valid ? requested - 1 : 0;
+  function openLine(position: number, selectedRole: string, options: { reading?: boolean; repeat?: boolean } = {}) {
+    navigate({ kind: 'speaking', language: lesson.language as TargetLanguage, topic: speaking?.topic, lessonId: lesson.id, revision: lesson.revision, line: position + 1 },
+      { repeat: options.repeat, snapshot: { [`${stateKey}:role`]: selectedRole, [`${stateKey}:reading`]: options.reading ?? false } });
+  }
   return <View style={[t.main, t.panel, compact && { padding: 18, gap: 14 }]}>
     <Text style={s.eyebrow}>Choose your role</Text>
-    <View style={s.row}>{roles.map(choice => <Button compact={compact} key={choice} selected={choice === role} label={`Practise as ${choice}`} onPress={() => { setRole(choice); setRound(0); }}>{choice}</Button>)}</View>
+    <View style={s.row}>{roles.map(choice => <Button compact={compact} key={choice} selected={choice === role} label={`Practise as ${choice}`} onPress={() => {
+      if (choice !== role || index !== 0) openLine(0, choice, { repeat: true });
+    }}>{choice}</Button>)}</View>
     <View style={s.divider} />
-    <DialogueRound key={`${role}:${round}`} lesson={lesson} role={role} onRepeat={() => setRound(value => value + 1)} />
+    {requested !== undefined && !valid && <Text accessibilityLiveRegion="polite" style={s.muted}>That line is unavailable in this revision. The first line is shown below.</Text>}
+    <DialogueRound key={visit} lesson={lesson} role={role} index={index} stateKey={stateKey}
+      onNext={reading => openLine(index + 1, role, { reading })} onRepeat={() => openLine(0, role, { repeat: true })} />
   </View>;
 }
 
-function DialogueRound({ lesson, role, onRepeat }: { lesson: Lesson; role: string; onRepeat: () => void }) {
+function DialogueRound({ lesson, role, index, stateKey, onNext, onRepeat }: {
+  lesson: Lesson; role: string; index: number; stateKey: string; onNext: (reading: boolean) => void; onRepeat: () => void;
+}) {
   const compact = useWindowDimensions().width < 900;
-  const [index, setIndex] = useState(0);
-  const [reading, setReading] = useState(false);
-  const [revealed, setRevealed] = useState(false);
+  const [reading, setReading] = useVisitState(`${stateKey}:reading`, false);
+  const [revealed, setRevealed] = useVisitState(`${stateKey}:revealed`, false);
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState('');
   const request = useRef(0);
@@ -69,9 +93,8 @@ function DialogueRound({ lesson, role, onRepeat }: { lesson: Lesson; role: strin
     catch { if (current === request.current) setError('Audio could not play. You can retry, read the text and continue speaking aloud.'); }
     finally { if (current === request.current) setPlaying(false); }
   }
-  function next() { stop(); setIndex(value => value + 1); setRevealed(false); setError(''); }
   return <View style={{ gap: compact ? 14 : 22, minWidth: 0 }}>
-    <View style={t.panelHeader}><Text style={s.eyebrow}>Line {index + 1} of {lesson.dialogue.length}</Text><Text style={t.label}>{ownLine ? 'Your turn' : 'Your partner'} · {line.role}</Text></View>
+    <View style={t.panelHeader}><Text accessibilityLiveRegion="polite" style={s.eyebrow}>Line {index + 1} of {lesson.dialogue.length}</Text><Text style={t.label}>{ownLine ? 'Your turn' : 'Your partner'} · {line.role}</Text></View>
     <View style={s.progressTrack}><View style={[s.progressFill, { width: `${(index + 1) / lesson.dialogue.length * 100}%` }]} /></View>
     <View testID="speaking-line" style={[t.stage, { backgroundColor: ownLine ? colors.goldTint : colors.skyTint, paddingVertical: compact ? 18 : 30 }, compact && { paddingHorizontal: 18, gap: 14 }]}>
       {!compact && <View style={s.row}><Icon name={ownLine ? 'mic' : 'headphones'} size={24} /><Text style={s.eyebrow}>{ownLine ? 'Your reply' : 'Listen to your partner'}</Text></View>}
@@ -93,8 +116,8 @@ function DialogueRound({ lesson, role, onRepeat }: { lesson: Lesson; role: strin
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}
     {index === lesson.dialogue.length - 1 && <Text accessibilityLiveRegion="polite" style={s.body}>You have reached the last line. Repeat this role or try the other side of the dialogue.</Text>}
     <View style={s.row}>
-      {index < lesson.dialogue.length - 1 && <Button primary onPress={next}>Next line</Button>}
-      <Button onPress={() => { stop(); onRepeat(); }}>Repeat this role</Button>
+      {index < lesson.dialogue.length - 1 && <Button primary onPress={() => onNext(reading)}>Next line</Button>}
+      <Button onPress={onRepeat}>Repeat this role</Button>
     </View>
   </View>;
 }

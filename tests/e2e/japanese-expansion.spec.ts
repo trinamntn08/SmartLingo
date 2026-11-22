@@ -62,6 +62,7 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await button(page, 'Reveal meaning').click(); await button(page, 'Needed help').click();
   await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   await page.reload();
+  await button(page, 'Today').click();
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();
   await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();

@@ -1,126 +1,85 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { CatalogueLevel, Lesson, TargetLanguage } from '@smartlingo/domain';
-import { audio } from '../audio';
 import type { LearnerTab } from '../dashboard/LearnerNavigation';
 import type { LearnMode } from '../learn/LearningHub';
+import { useNavigation, useVisitState } from './WebNavigation';
+import { topicRouteKey, type AppRoute } from './routes';
 
-interface NavigationOptions {
-  language: TargetLanguage | null;
-  blocked: boolean;
-  homeRequest: number;
-  onHome: () => void;
-  onChooseLanguage: (language: TargetLanguage) => void;
-  scrollToTop: () => void;
-  getScrollOffset: () => number;
-  restoreScrollAfterLesson: (offset: number) => void;
+export function tabRoute(tab: LearnerTab, language: TargetLanguage): AppRoute {
+  switch (tab) {
+    case 'Learn': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
+    case 'Today': return { kind: 'today', language };
+    case 'Review': return { kind: 'review', language };
+    case 'Report': return { kind: 'report', language };
+    case 'Profile': return { kind: 'profile', language };
+  }
 }
 
-const openingMode = (language: TargetLanguage | null): LearnMode =>
-  language === 'ja-JP' ? 'Japanese letters' : 'Vocabulary & lessons';
-
-/** In-session destinations; learning progress and language persistence belong to their own models. */
-export function useLearnerNavigation({ language, blocked, homeRequest, onHome, onChooseLanguage,
-  scrollToTop, getScrollOffset, restoreScrollAfterLesson }: NavigationOptions) {
-  const [choosing, setChoosing] = useState(false);
-  const [tab, setTab] = useState<LearnerTab>('Today');
-  const [lesson, setLesson] = useState<Lesson | null>(null);
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
-  const [learnMode, setLearnMode] = useState<LearnMode>('Vocabulary & lessons');
-  const [query, setQuery] = useState('');
-  const [level, setLevel] = useState<CatalogueLevel>('All');
-  const catalogueOffset = useRef(0);
-
-  function clearCatalogueSearch() {
-    setQuery('');
-    setLevel('All');
+export function learnRoute(mode: LearnMode, language: TargetLanguage, topic?: string): AppRoute {
+  switch (mode) {
+    case 'Japanese letters': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
+    case 'Listening & videos': return { kind: 'listening', language, topic };
+    case 'Speaking': return { kind: 'speaking', language, topic };
+    case 'Vocabulary & lessons': return { kind: 'topics', language, topic };
   }
+}
 
-  function navigate(next: LearnerTab) {
-    if (blocked) return;
-    audio.stop();
-    clearCatalogueSearch();
-    setLearnMode(openingMode(language));
-    setLesson(null);
-    setSelectedTopic(null);
-    setTab(next);
-    scrollToTop();
-  }
+export function useLearnerNavigation({ preferred, active, blocked, onChooseLanguage, lessons }: {
+  preferred: TargetLanguage | null; active: boolean; blocked: boolean;
+  onChooseLanguage: (language: TargetLanguage) => void; lessons: Lesson[];
+}) {
+  const { route: current, visit, navigate, backTo } = useNavigation();
+  const lastLearnerRoute = useRef<AppRoute>({ kind: 'home' });
+  if (current.kind !== 'editor') lastLearnerRoute.current = current;
+  const route = lastLearnerRoute.current;
+  const language = 'language' in route ? route.language : preferred;
+  const choosing = route.kind === 'languages' || (route.kind === 'home' && !language);
+  const [search, setSearch] = useVisitState<{ query: string; level: CatalogueLevel }>('topic-search', { query: '', level: 'All' });
+  const lesson = route.kind === 'lesson' ? lessons.find(item => item.id === route.lessonId && item.language === route.language) : undefined;
+  const topicKey = 'topic' in route ? route.topic : undefined;
+  const selectedTopic = useMemo(() => {
+    if (!topicKey) return lesson?.topic ?? null;
+    const matches = new Set(lessons.filter(item => item.language === language && topicRouteKey(item.topic) === topicKey).map(item => item.topic));
+    return matches.size === 1 ? [...matches][0]! : topicKey;
+  }, [lessons, language, topicKey, lesson?.topic]);
+  const tab: LearnerTab = route.kind === 'review' ? 'Review' : route.kind === 'profile' ? 'Profile' : route.kind === 'report' ? 'Report'
+    : route.kind === 'today' || route.kind === 'home' || route.kind === 'course' ? 'Today' : 'Learn';
+  const learnMode: LearnMode = route.kind === 'letters' ? 'Japanese letters' : route.kind === 'listening' ? 'Listening & videos'
+    : route.kind === 'speaking' ? 'Speaking' : 'Vocabulary & lessons';
 
-  function selectTopic(name: string | null) {
-    if (blocked) return;
-    audio.stop();
-    if (name !== selectedTopic) clearCatalogueSearch();
-    setLearnMode('Vocabulary & lessons');
-    setLesson(null);
-    setSelectedTopic(name);
-    setTab('Learn');
-    scrollToTop();
-  }
+  useEffect(() => {
+    if (active && current.kind === 'home' && !blocked) navigate(language ? { kind: 'today', language } : { kind: 'languages' }, { replace: true });
+  }, [active, blocked, current.kind, language, navigate]);
 
-  function selectLearnMode(next: LearnMode) {
-    if (blocked) return;
-    audio.stop();
-    setLearnMode(next);
-    scrollToTop();
-  }
-
-  function openLearnMode(next: LearnMode) {
-    if (blocked) return;
-    navigate('Learn');
-    setLearnMode(next);
-  }
-
-  function openLesson(next: Lesson) {
-    if (blocked) return;
-    audio.stop();
-    const fromTopic = tab === 'Learn' && learnMode === 'Vocabulary & lessons' && selectedTopic === next.topic;
-    catalogueOffset.current = fromTopic ? getScrollOffset() : 0;
-    if (!fromTopic) clearCatalogueSearch();
-    setTab('Learn');
-    setLearnMode('Vocabulary & lessons');
-    setSelectedTopic(next.topic);
-    setLesson(next);
-    scrollToTop();
-  }
-
-  function exitLesson() {
-    if (blocked) return;
-    audio.stop();
-    restoreScrollAfterLesson(catalogueOffset.current);
-    setLesson(null);
-  }
-
-  function changeLanguage() {
-    if (blocked) return;
-    audio.stop();
-    setChoosing(true);
+  function selectTopic(topic: string | null) {
+    if (language) navigate({ kind: 'topics', language, topic: topic ? topicRouteKey(topic) : undefined });
   }
 
   function chooseLanguage(next: TargetLanguage) {
     if (blocked) return;
-    audio.stop();
     onChooseLanguage(next);
-    setChoosing(false);
-    navigate('Today');
-    setLearnMode(openingMode(next));
+    navigate({ kind: 'today', language: next });
   }
 
-  function chooseHome() {
-    if (blocked) return;
-    setChoosing(true);
-    onHome();
+  function exitLesson() {
+    if (!language) return;
+    const topic = lesson?.topic && topicRouteKey(lesson.topic);
+    backTo({ kind: 'topics', language, topic }, previous => previous.kind === 'topics'
+      && previous.language === language && (!previous.topic || previous.topic === topic), true);
   }
 
-  useEffect(() => () => audio.stop(), []);
-  // A home request is a deliberate action, not a queued transition after a failed save resolves.
-  useEffect(() => {
-    if (homeRequest > 0 && !blocked) {
-      navigate('Today');
-      setChoosing(true);
-    }
-  }, [homeRequest]);
-
-  return { choosing, tab, lesson, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
-    openLearnMode, openLesson, exitLesson, changeLanguage, chooseLanguage, chooseHome,
-    catalogueSearch: { query, level, onQueryChange: setQuery, onLevelChange: setLevel } };
+  return { route, visit, language, choosing, tab, lesson, selectedTopic, learnMode,
+    navigate: (next: LearnerTab) => { if (language) navigate(tabRoute(next, language)); },
+    selectTopic,
+    selectLearnMode: (mode: LearnMode) => { if (language) navigate(learnRoute(mode, language, topicKey ?? (selectedTopic ? topicRouteKey(selectedTopic) : undefined))); },
+    openLearnMode: (mode: LearnMode) => { if (language) navigate(learnRoute(mode, language)); },
+    openLesson: (next: Lesson) => navigate({ kind: 'lesson', language: next.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: next.id }),
+    exitLesson, chooseLanguage,
+    changeLanguage: () => navigate({ kind: 'languages' }),
+    chooseHome: () => navigate({ kind: 'languages' }),
+    catalogueSearch: { ...search,
+      onQueryChange: (query: string) => setSearch(current => ({ ...current, query })),
+      onLevelChange: (level: CatalogueLevel) => setSearch(current => ({ ...current, level })),
+    },
+  };
 }

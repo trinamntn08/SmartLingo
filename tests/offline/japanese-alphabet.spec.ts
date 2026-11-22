@@ -2,8 +2,10 @@ import { expect, test } from '@playwright/test';
 import { japaneseAlphabetLessons } from '@smartlingo/content';
 import { openProfileSection } from '../e2e/learner-journeys';
 
-test.use({ storageState: { cookies: [], origins: [{ origin: 'http://localhost:8082', localStorage: [{ name: 'smartlingo.target-language.v1', value: 'ja-JP' }] }] } });
-test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
+test.beforeEach(async ({ request, context }) => {
+  await request.post('/__test__/mode');
+  await context.addInitScript(() => localStorage.setItem('smartlingo.target-language.v1', 'ja-JP'));
+});
 
 test('downloaded letters resume saved hiragana and freely browse katakana on a cold offline launch', async ({ page, context, baseURL }) => {
   const apiRequests: string[] = [];

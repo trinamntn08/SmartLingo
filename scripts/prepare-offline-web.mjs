@@ -25,7 +25,7 @@ export async function prepareOfflineExport(directory = defaultDirectory) {
     html = html.replace('</head>', '  <link rel="manifest" href="/manifest.webmanifest" />\n    <meta name="theme-color" content="#F5F2E8" />\n  </head>');
     await writeFile(indexPath, html, 'utf8');
   }
-  for (const required of ['smartlingo-sw.js', 'manifest.webmanifest', 'icon.svg']) await readFile(path.join(directory, required));
+  for (const required of ['smartlingo-sw.js', 'learner-document.js', 'manifest.webmanifest', 'icon.svg']) await readFile(path.join(directory, required));
   const files = [];
   for (const filename of await exportFiles(directory)) {
     const bytes = await readFile(path.join(directory, filename));

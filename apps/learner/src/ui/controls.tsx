@@ -2,16 +2,17 @@ import { useState, type ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { colors, designTokens, styles as s } from './theme';
 import { Icon, type IconName } from './Icon';
+import { routePress } from './routePress';
 
-export function Button({ children, onPress, primary, accent, selected, disabled, label, expanded, controls, compact, quiet, icon, trailingIcon }: {
+export function Button({ children, onPress, href, primary, accent, selected, disabled, label, expanded, controls, compact, quiet, icon, trailingIcon }: {
   children: ReactNode; onPress: () => void; primary?: boolean; selected?: boolean; disabled?: boolean; label?: string;
-  accent?: boolean; expanded?: boolean; controls?: string; compact?: boolean; quiet?: boolean; icon?: IconName; trailingIcon?: IconName;
+  accent?: boolean; expanded?: boolean; controls?: string; compact?: boolean; quiet?: boolean; icon?: IconName; trailingIcon?: IconName; href?: string;
 }) {
   const [focused, setFocused] = useState(false);
   const foreground = selected ? colors.primary : primary && !accent ? colors.onPrimary : colors.ink;
   return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-selected={!!selected} aria-disabled={!!disabled}
     aria-expanded={expanded} aria-controls={controls} accessibilityState={{ disabled: !!disabled, selected: !!selected, expanded }}
-    disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+    disabled={disabled} {...routePress(disabled ? undefined : href, onPress)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }, compact && s.buttonCompact, quiet && s.buttonQuiet,
       primary && s.buttonPrimary, accent && s.buttonAccent, selected && s.buttonSelected,
       focused && { outlineColor: colors.focusRing, outlineWidth: designTokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: designTokens.focus.outlineOffset },

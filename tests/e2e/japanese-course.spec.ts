@@ -126,7 +126,6 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(notebook.getByText('My Japanese study note', { exact: true })).toBeVisible();
   await expect(page.getByText('Japanese → meaning', { exact: true })).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByTestId('notebook-entries').getByText('じぶんのよみ', { exact: true })).toBeVisible();
   expect((await stored<NotebookEntry>(page, 'notebook'))[0]).toMatchObject({ language: 'ja-JP', reading: 'じぶんのよみ', exampleReading: 'れいぶんのよみ' });
   expect(await stored(page, 'reviewEvents')).toHaveLength(1);
@@ -150,14 +149,12 @@ test('Japanese completion is deliberate and next day navigation survives reload'
   await button(page, 'Complete study day').click();
   await expect(panel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
   await page.reload();
-  await button(page, 'Open daily course').click();
   await expect(panel(page).getByRole('heading', { name: day.blocks.at(-1)!.title, exact: true })).toBeVisible();
   const next = japaneseCourse.days[1];
   await button(page, `Continue to day ${next.dayNumber}: ${next.title}`).click();
   await expect(panel(page).getByRole('heading', { name: `Day ${next.dayNumber}: ${next.title}`, exact: true })).toBeVisible();
   await expect(panel(page).getByRole('heading', { name: next.blocks[0].title, exact: true })).toBeVisible();
   await page.reload();
-  await button(page, 'Open daily course').click();
   await expect(panel(page).getByRole('heading', { name: `Day ${next.dayNumber}: ${next.title}`, exact: true })).toBeVisible();
   await expect(panel(page).getByRole('heading', { name: next.blocks[0].title, exact: true })).toBeVisible();
   const events = await stored<CourseEvent>(page, 'courseEvents');

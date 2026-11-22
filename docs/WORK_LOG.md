@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Implement Back, Forward and direct learner links
+
+- Request. Implement the whole web navigation plan across both languages and the editor.
+- Start. At 17:30 CET, Europe/Paris, the clean `D:/dev/projects/SmartLingo` checkout matched local, tracking and live `feat/french-daily-opening` at `9d65155de8b2d7affd12a01859d8b520bbbd0936`, ahead/behind `0/0` after fetch. Sibling `fix/browser-back` still matched `866236a27f0dc6e0c739d79d3fcced170e161f26`.
+- Scope. [Plan 0045](plans/0045-web-navigation-and-lesson-links.md). The primary owns the shared route contract, history, preview and offline delivery. Three UI builders on inherited model and effort own listening, lesson/course, and kana/speaking/review/editor respectively.
+- Progress. Integrated the navigation coordinator, activity routes and matching preview/worker path rules. An independent reviewer on the inherited model and effort found long identifiers, an unpinned kana entry and unbounded speaking snapshots. Addressed those findings and added regression coverage. Rebuilt the existing port 8082 preview. A direct 390 px smoke test passed listening Back, Forward, reload and a bookmarked French dialogue on export `7eb75e9bcf8d`.
+- Intermediate checks. Repository and tooling/application tests passed before the final combined browser run. Isolated feature suites verified the core listening, lesson/course and secondary surface routes, including guarded saves. The first combined editor rerun used a test origin that the temporary proxy rejected. Recheck those cases with the accepted fixture origin. The full offline browser suite runs on test port 8185.
+- Final checks. `npm.cmd run check` and all 281 tooling/application tests passed. The combined Chromium cases passed after rerunning editor with the matching isolated API origin and fixing the course-backup test's Today selector after refresh. That accounts for 109 passed and one existing single-writer skip. All 26 exported offline cases passed across the initial run and the two download-readiness reruns. The prior 10-second timeout expired while the affected downloads were still progressing. The offline fixture now uses 8185 and a 25-second readiness assertion allowance. Firefox and WebKit were unavailable on this workstation.
+- Outcome. Browser Back/Forward, direct lesson links and refresh are implemented across the local web learner and editor. The existing port 8082 preview served the same `7eb75e9bcf8d` manifest as the export and returned HTTP 200 for the direct French dialogue. The stable preview browser test verified the Japanese listening scenario. [Navigation decision](decisions/0038-web-navigation.md)
+- Handoff. Review at `http://localhost:8082`. Update an older offline copy through Profile before using nested links offline. The commit containing this note is the task checkpoint.
+
 ## 2026-11-22 Plan browser Back, Forward and direct learner links
 
 - Request. Plan the project-wide navigation fixes, starting with returning to an earlier listening sentence using browser Back and giving lessons direct URLs.

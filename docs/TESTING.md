@@ -31,7 +31,7 @@ git diff --check
 
 `npm test` runs tooling and application suites. The [GitHub workflow](../.github/workflows/verify.yml) runs those checks plus Chromium and offline journeys on Ubuntu with isolated fixtures, read-only repository permissions and fake providers. It creates no deployment; remote job success must be verified separately.
 
-Development browser tests use `localhost:8081` (reusable outside CI) and an isolated in-memory curriculum API at `127.0.0.1:3002`. Only the tested browser is routed to that API. The offline suite starts its own server on `localhost:8082` and refuses to reuse a listener. Check listeners first. If the owner preview occupies 8082, preserve it: defer the suite or deliberately use reviewed temporary fixture/config copies with distinct ports and record the substitutions. Do not stop owner processes automatically.
+Development browser tests use `localhost:8081` (reusable outside CI) and an isolated in-memory curriculum API at `127.0.0.1:3002`. Only the tested browser is routed to that API. The offline suite starts its own test server on `localhost:8185` and refuses to reuse a listener. The owner review preview uses port 8082.
 
 Tests use temporary databases and browser contexts, not owner databases/profiles. Browser traces/screenshots live in ignored `test-results/`. The staged scan rejects known protected paths/high-confidence credential patterns without printing values; it cannot detect every secret. Tooling checks do not prove runtime role/hook discovery or trust.
 

@@ -53,7 +53,6 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await button(cold, /Continue to dialogue/).click();
   await expect(cold.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
   await cold.reload();
-  await button(cold, /Continue your lesson/).click();
   await expect(cold.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
   await button(cold, /Try meaning practice/).click();
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
@@ -63,7 +62,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await buildAcceptedSentence(cold, opening);
   await expect(cold.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
   await cold.reload();
-  await button(cold, /Continue your lesson/).click();
+  await button(cold, /^Continue/).click();
   await button(cold, 'Finish and save session').click();
   await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
   await cold.reload();
@@ -107,7 +106,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await context.setOffline(true);
   await page.close();
   const cold = await context.newPage();
-  await cold.goto('http://localhost:8082/');
+  await cold.goto('/');
   await expect(cold.getByText('Isolated cached publication', { exact: true })).toBeVisible();
   const todayPhoto = cold.getByAltText(/French neighbourhood bakery and caf/);
   await expect.poll(() => todayPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
@@ -140,7 +139,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   expect(await cold.evaluate(() => caches.keys())).toEqual(['unrelated-owner-cache']);
   await cold.close();
   const removed = await context.newPage();
-  await expect(removed.goto('http://localhost:8082/')).rejects.toThrow();
+  await expect(removed.goto('/')).rejects.toThrow();
 });
 
 test('interrupted download and corrupted update can retry while preserving the last complete copy', async ({ page, context, request }, info) => {
@@ -172,7 +171,7 @@ test('interrupted download and corrupted update can retry while preserving the l
   await context.setOffline(true);
   await page.close();
   const old = await context.newPage();
-  await old.goto('http://localhost:8082/');
+  await old.goto('/');
   await expect(old.locator('meta[name="smartlingo-test-build"]')).toHaveCount(0);
   await button(old, 'Profile').click();
   await openProfileSection(old, 'Offline & backups');
@@ -196,7 +195,7 @@ test('interrupted download and corrupted update can retry while preserving the l
   await context.setOffline(true);
   await old.close();
   const updated = await context.newPage();
-  await updated.goto('http://localhost:8082/');
+  await updated.goto('/');
   await expect(updated.locator('meta[name="smartlingo-test-build"]')).toHaveAttribute('content', 'updated');
   await expect(button(updated, /Start greetings practice/)).toBeVisible();
 });
@@ -213,7 +212,7 @@ test('a stalled connection falls back to the saved document within a few seconds
   await page.close();
   const stalled = await context.newPage();
   const start = Date.now();
-  await stalled.goto('http://localhost:8082/?from=saved');
+  await stalled.goto('/?from=saved');
   await expect(button(stalled, /Start greetings practice/)).toBeVisible();
   expect(Date.now() - start).toBeLessThan(10000);
 });

@@ -1,6 +1,8 @@
 /* Explicit, integrity-checked web assets only. Learner IndexedDB is never accessed here. */
 'use strict';
 
+importScripts('/learner-document.js');
+
 const CACHE_PREFIX = 'smartlingo-assets-v1-';
 const RECORD_PATH = '/__smartlingo_offline_complete__';
 const MAX_TOTAL_BYTES = 100 * 1024 * 1024;
@@ -232,8 +234,7 @@ async function fetchDocument(request) {
   }
 }
 
-async function serveAsset(request, url) {
-  const document = request.mode === 'navigate' && (url.pathname === '/' || url.pathname === '/index.html');
+async function serveAsset(request, url, document) {
   let networkResponse;
   let networkError;
   if (document) {
@@ -243,12 +244,19 @@ async function serveAsset(request, url) {
     } catch (error) { networkError = error; }
   }
   const saved = await inspectCaches();
+  const nested = document && url.pathname !== '/' && url.pathname !== '/index.html';
   for (const entry of saved.complete) {
+    if (nested && !entry.manifest.files.some(file => file.url === '/learner-document.js')) continue;
     const path = document ? '/index.html' : url.pathname;
     if (entry.manifest.files.some(file => file.url === path)) {
       const response = await entry.cache.match(path);
       if (response) return response;
     }
+  }
+  if (nested && saved.complete.length) {
+    return new Response('<!doctype html><html lang="en"><meta charset="utf-8"><title>Update offline SmartLingo</title><p>This link needs a newer offline copy.</p><p><a href="/">Open SmartLingo</a> and update the offline copy in Profile when you are online.</p></html>', {
+      status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
   }
   if (networkResponse) return networkResponse;
   if (networkError) throw networkError;
@@ -258,7 +266,7 @@ async function serveAsset(request, url) {
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
-  const document = request.mode === 'navigate' && (url.pathname === '/' || url.pathname === '/index.html');
-  if (request.method !== 'GET' || url.origin !== self.location.origin || (url.search && !document) || url.hash || reservedPath(url.pathname)) return;
-  event.respondWith(serveAsset(request, url));
+  const document = request.mode === 'navigate' && isLearnerDocumentPath(url.pathname);
+  if (request.method !== 'GET' || url.origin !== self.location.origin || (url.search && !document) || url.hash || (!document && reservedPath(url.pathname))) return;
+  event.respondWith(serveAsset(request, url, document));
 });

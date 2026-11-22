@@ -37,7 +37,6 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await card.getByRole('button', { name: `Save ${word.target}`, exact: true }).click();
   await expect(card.getByText(`Saved ${word.target} to your notebook.`, { exact: true })).toBeVisible();
   await cold.reload();
-  await panel.getByRole('button', { name: 'Open daily course', exact: true }).click();
   await expect(panel.getByTestId(`course-block-${day.blocks[index].id}`)).toBeVisible();
   await expect(panel.getByRole('button', { name: `Save ${word.target}`, exact: true })).toBeDisabled();
   await panel.getByRole('button', { name: 'Authorship and review', exact: true }).click();

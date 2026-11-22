@@ -1,6 +1,6 @@
 # Browser Back, Forward and direct lesson links
 
-Status: proposed
+Status: implemented in the local web learner
 
 Owner: SmartLingo web learner team
 
@@ -20,19 +20,19 @@ Browser Back and Forward change the screen. Saved practice and progress are appe
 
 ## Route contract
 
-These routes are proposed for the local web app. Encode validated path segments and use `fr` and `ja` as URL language codes mapped to `fr-FR` and `ja-JP`. Angle brackets denote placeholders. URLs select the displayed language for that visit. The explicit language chooser sets the home preference. A valid direct link and a restored route can resolve while preference storage is unavailable.
+The local web app uses `fr` and `ja` as URL language codes mapped to `fr-FR` and `ja-JP`. Angle brackets denote placeholders. URLs select the displayed language for that visit. The explicit language chooser sets the home preference. A valid direct link and a restored route can resolve while preference storage is unavailable.
 
-| Destination | Proposed path or pattern | Restore behavior |
+| Destination | Path or pattern | Restore behavior |
 | --- | --- | --- |
 | Entry, Today and language chooser | `/`, `/today/fr`, `/today/ja`, `/languages` | `/` uses the existing home preference or opens the chooser. Normalize after initialization without adding a Back step. |
-| Learn and topics | `/learn/<lang>`, `/learn/<lang>/topics/<topic-key>` | Restore tab, selected topic, list filters and scroll in the same tab. Topic models currently expose display names. Define collision-checked keys for bundled topics and a resolution and alias policy for owner-created or renamed topics. |
+| Learn and topics | `/learn/<lang>`, `/learn/<lang>/topics/<topic-key>` | Restore tab, selected topic, list filters and scroll in the same tab. Use the encoded topic name or a compact key for a long name. An ambiguous or renamed topic offers the topic browser. |
 | Shared lessons | `/lesson/fr/fr.essentials.repair/dialogue` and `/lesson/<lang>/<lesson-id>[/<stage>]` | Base link opens the current lesson and resolves saved resume. A valid explicit stage opens vocabulary, dialogue, meaning/picture matching, sentence building or the available finish view. It gives access to the relevant content and respects existing prerequisites for saving completion. |
 | Daily courses | `/course/<lang>/<course-id>[/<day-id>[/<section-key>]]` | Base link resolves the current/resumable day. Explicit links identify a stable day and section. French links use the existing anchors under Dialogue, Practice and Try it. Japanese uses the existing authored block IDs. |
 | Listening | `/learn/<lang>/listening[/<lesson-id>[/<question-key>]]` and `/learn/<lang>/listening/library` | Landing opens the player. Lesson and question select an authored sentence. Use `?topic=<topic-key>` for a topic-filtered deck. The library is its own destination. |
 | Guided speaking | `/learn/<lang>/speaking[/<lesson-id>[/<revision>/<line-number>]]` | Restore lesson, dialogue turn and supported role selection for the visit. Existing dialogue lines have no separate IDs. Resolve the 1-based line within its lesson revision and fall back to a safe turn if the revision or order changes. |
 | Japanese letters | `/learn/ja/letters[/<row-id>[/<mode>[/<character-id>]]]` | Resolve the stable kana row, study/recognition mode and optional character. Keep round order and feedback scoped to the recognized visit. |
 | Review, Report and Profile | `/review/<lang>[/notebook\|practice]`, `/report/<lang>`, `/profile/<lang>` | Open populated feature views. Keep drafts and the current review queue in the tab; revisit a saved rating as already rated or return to the current queue. Profile groups remain disclosures unless a group needs an explicit link, such as support for offline setup. |
-| Local editor | `/editor[/<lesson-id>[/<revision-view>]]` | Base or saved-revision links open the relevant local editor view. Normalize legacy `/#editor` via replace and keep editor work separate from learner progress. Direct draft edits require the existing local catalogue/API. |
+| Local editor | `/editor[/<lesson-id>[/<revision-number>]]` | Base or saved-revision links open the relevant local editor view. Normalize legacy `/#editor` via replace and keep editor work separate from learner progress. Direct draft edits require the existing local catalogue/API. |
 
 Use current IDs for routing independently of display titles. A typed URL parser validates language, route shape, enums and segment lengths. Resolve entity membership after the relevant catalogue or course is ready. Canonicalize known aliases or defaults with `replaceState`. Unknown route shapes get a clear unavailable-page screen or server 404 as appropriate. For unknown IDs, removed revisions, invalid steps or unavailable offline content, explain what could be opened and offer a valid parent destination, a retry or the current lesson. An explicit valid URL takes priority over the last saved cursor. Reopening a previously visited step never writes a new navigation cursor by itself.
 
@@ -74,6 +74,8 @@ When a required save is busy or has a recoverable error, keep Retry/Dismiss avai
 
 Run `npm.cmd run check`, `npm.cmd test`, targeted Playwright navigation and feature suites, and dedicated exported cold-offline cases. Include route codec, valid/invalid document fallback and worker tests. Inspect the exported build on `http://localhost:8082` and verify key deep links there. Distinguish simulated speech and offline fallback from listening to actual device or external audio.
 
+The implementation passed repository checks, 281 tooling/application tests, 109 Chromium cases across desktop and narrow views, and 26 exported offline cases. One existing editor case only runs in the desktop project. The current preview passed the direct listening regression and bookmarked dialogue check at 390 px. Browser coverage uses Chromium on this workstation. [Verification record](../WORK_LOG.md#2026-11-22-implement-back-forward-and-direct-learner-links)
+
 ## Handoff
 
-Start implementation from the current French/Japanese learner branch. First deliver the listening Back regression end to end with clean URL, refresh and offline behavior. Browser-history implementation, migration and visual verification of the new routes are follow-up milestones under this plan.
+Review the current `http://localhost:8082` preview. Open a [Japanese listening session](http://localhost:8082/learn/ja/listening) to try Back and Forward after moving between sentences, or open the [French example dialogue](http://localhost:8082/lesson/fr/fr.essentials.repair/dialogue) and refresh. Use the same origin and an updated app download for offline study. [Implementation decision](../decisions/0038-web-navigation.md)

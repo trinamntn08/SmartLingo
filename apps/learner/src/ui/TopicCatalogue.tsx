@@ -7,6 +7,7 @@ import { colors, designTokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { VocabularyCard } from './VocabularyCard';
 import { TopicCover } from './TopicCover';
+import { routeHref, topicRouteKey } from '../app/routes';
 
 export type CatalogueSearch = {
   query: string; level: CatalogueLevel;
@@ -76,7 +77,8 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
             <Text style={s.muted}>{topic.vocabulary.length} words · {topic.lessons.length} short lessons</Text>
             <View style={{ marginTop: 'auto', paddingTop: 8, gap: 8 }}>
               {!!completed && <Text style={s.muted}>{completed} sessions saved</Text>}
-              <Button compact label={`Topic ${topic.name}`} disabled={disabled} onPress={() => onSelectTopic(topic.name)}>Explore topic →</Button>
+              <Button compact label={`Topic ${topic.name}`} disabled={disabled} onPress={() => onSelectTopic(topic.name)}
+                href={routeHref({ kind: 'topics', language, topic: topicRouteKey(topic.name) })}>Explore topic →</Button>
             </View>
           </View>
         </View>;
@@ -112,7 +114,8 @@ function ShortLessons({ lessons, model, onOpen, disabled }: { lessons: Lesson[];
               <Text style={s.muted}>{lesson.outcome}</Text>
               <Text style={s.muted}>{lesson.vocabulary.length} words · {lesson.durationMinutes} min · {lesson.level} · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
             </View>
-            <Button compact label={`Open ${lesson.subtitle}`} disabled={disabled} onPress={() => onOpen(lesson)}>
+            <Button compact label={`Open ${lesson.subtitle}`} disabled={disabled} onPress={() => onOpen(lesson)}
+              href={routeHref({ kind: 'lesson', language: lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: lesson.id })}>
               {progress.completed ? 'Revisit →' : progress.viewedIds.size ? 'Continue →' : 'Start lesson →'}
             </Button>
           </View>

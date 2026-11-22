@@ -154,7 +154,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await page.getByRole('button', { name: 'Check sentence', exact: true }).click();
   await expect(page.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: /Continue your lesson/ }).click();
+  await page.getByRole('button', { name: /^Continue/ }).click();
   await page.getByRole('button', { name: 'Finish and save session', exact: true }).click();
   await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   expect(errors).toEqual([]);

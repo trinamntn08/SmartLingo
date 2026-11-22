@@ -4,12 +4,12 @@ import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import type { LearningEvent } from '@smartlingo/domain';
 
-test.use({ storageState: { cookies: [], origins: [{ origin: 'http://localhost:8081', localStorage: [{ name: 'smartlingo.target-language.v1', value: 'ja-JP' }] }] } });
 const first = japaneseAlphabetLessons[0]!;
 const second = japaneseAlphabetLessons[1]!;
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
 
 async function revealRows(page: Page) {
+  await expect(page.getByTestId('japanese-alphabet')).toBeVisible();
   const toggle = button(page, 'Choose another row');
   if (await toggle.isVisible()) await toggle.click();
 }
@@ -46,6 +46,7 @@ async function tryRow(page: Page, row: JapaneseAlphabetLesson, wrongFirst = fals
 test.beforeEach(async ({ page }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {
+    localStorage.setItem('smartlingo.target-language.v1', 'ja-JP');
     const voices = ['en-GB', 'fr-FR', 'ja-JP'].map(lang => ({ name: `Test ${lang}`, voiceURI: `test.${lang}`, lang, localService: true, default: lang === 'en-GB' }));
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(public text: string) {} } });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
@@ -99,8 +100,13 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   const saved = await events(page);
   expect(saved).toEqual(expect.arrayContaining(oldEvents));
   expect(saved.filter(event => event.lessonId === first.id)).toEqual([expect.objectContaining({ revision: 1, itemId: `${first.id}.completion`, activity: 'completion', result: 'completed', hints: 0 })]);
+  for (let step = 0; step <= first.characters.length; step++) await page.goBack();
+  await expect(page).toHaveURL(url => url.pathname === `/learn/ja/letters/${first.id}/study`);
+  await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
+  expect(await events(page)).toEqual(saved);
+  for (let step = 0; step <= first.characters.length; step++) await page.goForward();
+  await expect(alphabet.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
   await page.reload();
-  await button(page, 'Continue Japanese letters').click();
   await revealRows(page);
   await expect(alphabet.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
   await revealRows(page);
@@ -124,7 +130,10 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
     await openProfileSection(restored, 'Offline & backups'); await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(path);
     await restored.getByRole('checkbox').check(); await button(restored, 'Restore backup').click();
     await expect(restored.getByText('Backup merged successfully', { exact: true })).toBeVisible();
-    await button(restored, 'Reload learning').click(); await button(restored, 'Continue Japanese letters').click();
+    await button(restored, 'Reload learning').click();
+    await expect(restored).toHaveURL(/\/profile\/ja$/);
+    await button(restored, 'Today').click();
+    await button(restored, 'Continue Japanese letters').click();
     await revealRows(restored);
     await expect(restored.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
     expect(await events(restored)).toEqual(expect.arrayContaining(saved));

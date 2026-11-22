@@ -6,6 +6,7 @@ import vm from 'node:vm';
 import type { OfflineManifest, OfflineStatus } from '../src/offline/contracts';
 
 const source = readFileSync(new URL('../public/smartlingo-sw.js', import.meta.url), 'utf8');
+const learnerDocuments = readFileSync(new URL('../public/learner-document.js', import.meta.url), 'utf8');
 const origin = 'http://localhost:8082';
 const prefix = 'smartlingo-assets-v1-';
 const digest = (value: string) => createHash('sha256').update(value).digest('hex');
@@ -49,8 +50,12 @@ function harness(options: { caches?: MemoryCaches; locks?: MutationLocks; timers
     skipWaiting: async () => { skipped++; },
     clients: { claim: async () => { claims++; } },
   };
-  vm.runInNewContext(source, {
+  const context = vm.createContext({
     self, caches, navigator: { locks: options.locks }, crypto: webcrypto, URL, Headers, Response, TextDecoder, Uint8Array, AbortController,
+    importScripts(path: string) {
+      assert.equal(path, '/learner-document.js');
+      vm.runInContext(learnerDocuments, context);
+    },
     setTimeout: options.timers?.setTimeout ?? setTimeout, clearTimeout: options.timers?.clearTimeout ?? clearTimeout,
     fetch: async (request: string | { url: string }, init?: { signal?: AbortSignal }) => {
       const url = typeof request === 'string' ? request : request.url;
@@ -61,6 +66,7 @@ function harness(options: { caches?: MemoryCaches; locks?: MutationLocks; timers
       return handler();
     },
   });
+  vm.runInContext(source, context);
   const dispatch = async (type: string, event: WorkerEvent = {}) => {
     let pending: Promise<unknown> | undefined;
     listeners.get(type)!({ ...event, waitUntil: value => { pending = value; } });
@@ -101,6 +107,16 @@ function fakeWorkerTimers() {
   };
   return { timers, pending, expire };
 }
+
+test('a legacy complete pack remains usable at home and explains nested link upgrades', async () => {
+  const worker = harness();
+  const { manifest } = worker.setPack('legacy');
+  await worker.command({ type: 'DOWNLOAD', expectedBuildId: manifest.buildId });
+  const link = await worker.fetchAsset('/lesson/fr/fr.essentials.repair/dialogue', { mode: 'navigate' });
+  assert.equal(link?.status, 503);
+  assert.match(await link!.text(), /newer offline copy/);
+  assert.match(await (await worker.fetchAsset('/', { mode: 'navigate' }))!.text(), /legacy/);
+});
 
 test('worker lifecycle never downloads; explicit download verifies and publishes a complete pack', async () => {
   const worker = harness();

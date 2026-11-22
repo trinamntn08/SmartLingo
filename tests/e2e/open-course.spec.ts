@@ -112,7 +112,6 @@ test('Next saves dialogue and resumes practice without requiring answers before 
   await expect(question.getByText(/Correct/)).toBeVisible();
 
   await page.reload();
-  await button(page, 'Open daily course').click();
   await expect(step(page, 'Quick practice')).toBeVisible();
   await expect(question.getByText(/Correct/)).toBeVisible();
   await button(page, 'Next section').click();
@@ -160,6 +159,8 @@ test('notebook, progress and the resume step survive backup and restore', async 
     await restored.getByRole('button', { name: 'Restore backup', exact: true }).click();
     await expect(restored.getByText('Backup merged successfully', { exact: true })).toBeVisible();
     await restored.getByRole('button', { name: 'Reload learning', exact: true }).click();
+    await expect(restored).toHaveURL(/\/profile\/fr$/);
+    await restored.getByRole('button', { name: 'Today', exact: true }).click();
     await button(restored, 'Open daily course').click();
     await expect(step(restored, 'Quick practice')).toBeVisible();
     await button(restored, 'Previous section').click();
@@ -225,8 +226,7 @@ test('legacy day completion and vocabulary or practice cursor survive the new la
   const laterPractice = thirdDay.blocks.filter(block => block.kind === 'choice').at(-1)!;
   await seedEvents(page, [...firstHistory, courseEvent(firstDay, firstDay.blocks.at(-1)!.id, 'completion', 10),
     courseEvent(secondDay, oldSecondCursor.id, 'navigation', 11), courseEvent(thirdDay, laterPractice.id, 'navigation', 12)]);
-  await page.reload();
-  await button(page, 'Open daily course').click();
+  await page.goto(`/course/fr/${openCoursePilot.id}`);
   await expect(dayHeading(page, thirdDay)).toBeVisible();
   await expect(step(page, 'Quick practice')).toBeVisible();
   await revealDays(page);
@@ -246,8 +246,7 @@ test('a restored inconsistent choice never shows correct feedback', async ({ pag
   const wrong = block.choices.find(choice => choice.id !== block.answerId)!;
   await seedEvents(page, [{ ...courseEvent(firstDay, block.id, 'choice', 0), kind: 'choice',
     choiceId: wrong.id, result: 'correct', supported: false }]);
-  await page.reload();
-  await button(page, 'Open daily course').click();
+  await page.goto(`/course/fr/${openCoursePilot.id}`);
   await expect(step(page, 'Quick practice')).toBeVisible();
   const question = coursePanel(page).getByTestId(`course-choice-${block.id}`);
   await expect(question.getByText('Please answer again to update your saved choice.', { exact: true })).toBeVisible();

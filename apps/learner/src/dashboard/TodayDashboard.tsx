@@ -10,9 +10,12 @@ import { ScreenHeader } from '../ui/ScreenHeader';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
+import { routeHref } from '../app/routes';
+import { routePress } from '../ui/routePress';
 
 interface TodayDashboardProps {
   language: TargetLanguage; lessons: Lesson[]; course: OpenCourse; model: LearningModel;
+  courseOnly?: boolean;
   onWriteBlocked: (blocked: boolean) => void; onOpen: (lesson: Lesson) => void; onExplore: () => void;
   onReview: () => void; onListen: () => void; onSpeak: () => void; onAlphabet: () => void;
 }
@@ -22,9 +25,10 @@ interface Shortcut {
   icon: IconName;
   tint: string;
   open: () => void;
+  href: string;
 }
 
-export function TodayDashboard({ language, lessons, course, model, onWriteBlocked, onOpen, onExplore, onReview, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
+export function TodayDashboard({ language, lessons, course, model, courseOnly, onWriteBlocked, onOpen, onExplore, onReview, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
   const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const recent = [...model.events].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
   const latest = recent.find(event => lessons.some(lesson => lesson.id === event.lessonId));
@@ -34,24 +38,25 @@ export function TodayDashboard({ language, lessons, course, model, onWriteBlocke
   const alphabet = alphabetProgress(model.events);
   const alphabetAction = alphabet.completed === 0 ? 'Start Hiragana' : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
   const shortcuts: Shortcut[] = [
-    { label: 'Explore lessons', icon: 'grid', tint: colors.skyTint, open: onExplore },
-    { label: 'Open your notebook', icon: 'bookmark', tint: colors.goldTint, open: onReview },
-    { label: 'Listening & videos', icon: 'headphones', tint: colors.lilacTint, open: onListen },
-    { label: 'Speaking practice', icon: 'mic', tint: colors.sageTint, open: onSpeak },
+    { label: 'Explore lessons', icon: 'grid', tint: colors.skyTint, open: onExplore, href: routeHref({ kind: 'topics', language }) },
+    { label: 'Open your notebook', icon: 'bookmark', tint: colors.goldTint, open: onReview, href: routeHref({ kind: 'review', language }) },
+    { label: 'Listening & videos', icon: 'headphones', tint: colors.lilacTint, open: onListen, href: routeHref({ kind: 'listening', language }) },
+    { label: 'Speaking practice', icon: 'mic', tint: colors.sageTint, open: onSpeak, href: routeHref({ kind: 'speaking', language }) },
   ];
 
   return <View style={{ gap: compact ? 18 : 24, minWidth: 0 }}>
+    {!courseOnly && <>
     <ScreenHeader title="Today" eyebrow={languageNames[language]} />
     {recommendLetters
       ? <NextActivity compact={compact} photo={getContextPhoto(language)} label="Japanese letters"
           title={alphabet.completed === 0 ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}
           description="Meet the hiragana characters, hear their sounds, and try recognising a row."
-          detail={`${alphabet.completed} of ${alphabet.total} rows studied`} action={alphabetAction} open={onAlphabet} />
+          detail={`${alphabet.completed} of ${alphabet.total} rows studied`} action={alphabetAction} open={onAlphabet} href="/learn/ja/letters" />
       : suggested
         ? <NextActivity compact={compact} photo={getContextPhoto(language, suggested.topic)} label={suggested.topic}
             title={suggested.subtitle} description={suggested.outcome}
             detail={`${suggested.durationMinutes} min · ${suggested.vocabulary.length} words`}
-            action={lessonAction(suggested, model)} open={() => onOpen(suggested)} />
+            action={lessonAction(suggested, model)} open={() => onOpen(suggested)} href={routeHref({ kind: 'lesson', language, lessonId: suggested.id })} />
         : <View testID="today-next-step" style={s.card}>
             <Text accessibilityRole="header" style={s.heading}>No lessons available</Text>
             <Text style={s.body}>You can still open your notebook or listen to a resource below.</Text>
@@ -61,7 +66,8 @@ export function TodayDashboard({ language, lessons, course, model, onWriteBlocke
     <View style={[s.row, { alignItems: 'stretch', gap: compact ? 10 : 12 }]}>
       {shortcuts.map(shortcut => <ShortcutTile key={shortcut.label} item={shortcut} compact={compact} />)}
     </View>
-    {japanese && !recommendLetters && <View style={s.row}><Button compact icon="book" onPress={onAlphabet}>{alphabetAction}</Button></View>}
+    {japanese && !recommendLetters && <View style={s.row}><Button compact icon="book" onPress={onAlphabet} href="/learn/ja/letters">{alphabetAction}</Button></View>}
+    </>}
 
     <OpenCoursePanel key={language} course={course} model={model} onWriteBlocked={onWriteBlocked} />
   </View>;
@@ -75,9 +81,9 @@ function lessonAction(lesson: Lesson, model: LearningModel): string {
   return 'Start lesson →';
 }
 
-function NextActivity({ compact, photo, label, title, description, detail, action, open }: {
+function NextActivity({ compact, photo, label, title, description, detail, action, open, href }: {
   compact: boolean; photo: ContextPhoto; label: string; title: string; description: string;
-  detail: string; action: string; open: () => void;
+  detail: string; action: string; open: () => void; href: string;
 }) {
   return <View testID="today-next-step" style={{
     flexDirection: compact ? 'column-reverse' : 'row', backgroundColor: colors.dark, borderRadius: 20, overflow: 'hidden',
@@ -88,7 +94,7 @@ function NextActivity({ compact, photo, label, title, description, detail, actio
       <Text accessibilityRole="header" style={[s.title, compact && s.compactTitle, { color: colors.card }]}>{title}</Text>
       <Text style={[s.body, { color: colors.card }]}>{description}</Text>
       <Text style={[s.muted, { color: '#C5DCD3' }]}>{detail}</Text>
-      <View style={[s.row, { marginTop: 2 }]}><Button accent onPress={open}>{action}</Button></View>
+      <View style={[s.row, { marginTop: 2 }]}><Button accent onPress={open} href={href}>{action}</Button></View>
     </View>
     <ContextImage photo={photo} style={compact ? { width: '100%', height: 146 } : { flex: 1.25, minHeight: 292 }} />
   </View>;
@@ -97,7 +103,7 @@ function NextActivity({ compact, photo, label, title, description, detail, actio
 function ShortcutTile({ item, compact }: { item: Shortcut; compact: boolean }) {
   const [focused, setFocused] = useState(false);
   return <Pressable accessibilityRole="button" accessibilityLabel={item.label} onFocus={() => setFocused(true)}
-    onBlur={() => setFocused(false)} onPress={item.open} style={({ pressed }) => ({
+    onBlur={() => setFocused(false)} {...routePress(item.href, item.open)} style={({ pressed }) => ({
       flex: 1, flexBasis: compact ? '44%' : 205, minWidth: 0, maxWidth: '100%', minHeight: compact ? 68 : 72,
       flexDirection: 'row', alignItems: 'center', gap: compact ? 9 : 12, padding: compact ? 11 : 15,
       borderRadius: 13, borderWidth: 1, borderColor: colors.line, backgroundColor: pressed ? item.tint : colors.card,

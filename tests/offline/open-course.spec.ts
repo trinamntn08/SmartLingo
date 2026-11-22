@@ -44,7 +44,6 @@ test('the French dialogue, credits, notebook and saved cursor cold-start offline
   await button(cold, 'Next section').click();
   await expect(step(cold, 'Quick practice')).toBeVisible();
   await cold.reload();
-  await button(cold, 'Open daily course').click();
   await expect(step(cold, 'Quick practice')).toBeVisible();
   await button(cold, 'Previous section').click();
   await button(cold, 'Useful words').click();
@@ -84,7 +83,6 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   await button(cold, 'Finish lesson').click();
   await expect(step(cold, 'Study day saved')).toBeVisible();
   await cold.reload();
-  await button(cold, 'Open daily course').click();
   await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Study day saved')).toBeVisible();
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);

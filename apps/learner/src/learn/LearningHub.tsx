@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { type Lesson, type LessonTopic, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
@@ -11,6 +11,9 @@ import { ListeningComprehension } from '../listening/ListeningComprehension';
 import { GuidedSpeaking } from '../practice/GuidedSpeaking';
 import { FrenchPractice } from '../practice/FrenchPractice';
 import { JapaneseAlphabet } from '../alphabet/JapaneseAlphabet';
+import { useNavigation } from '../app/WebNavigation';
+import { routeHref, topicRouteKey } from '../app/routes';
+import { learnRoute } from '../app/useLearnerNavigation';
 
 export const learnModes = ['Japanese letters', 'Vocabulary & lessons', 'Listening & videos', 'Speaking'] as const;
 export type LearnMode = typeof learnModes[number];
@@ -28,12 +31,13 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   const studyLessons = selectedTopic ? lessons.filter(lesson => lesson.topic === selectedTopic) : lessons;
   const visibleModes = learnModes.filter(choice => language === 'ja-JP' || choice !== 'Japanese letters');
   const activeMode = visibleModes.includes(mode) ? mode : 'Vocabulary & lessons';
+  const hrefForMode = (choice: LearnMode) => routeHref(learnRoute(choice, language, selectedTopic ? topicRouteKey(selectedTopic) : undefined));
   return <View style={{ gap: 16, minWidth: 0 }}>
     <View style={{ gap: 10, paddingBottom: 12, borderBottomWidth: 1, borderColor: colors.line }}>
       {compact ? <ScrollView horizontal accessibilityLabel="Learning sections" showsHorizontalScrollIndicator contentContainerStyle={{ gap: 6, paddingVertical: 3 }} style={{ maxWidth: '100%' }}>
-        {visibleModes.map(choice => <View key={choice} style={{ flexShrink: 0 }}><Button compact quiet selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)}>{choice}</Button></View>)}
+        {visibleModes.map(choice => <View key={choice} style={{ flexShrink: 0 }}><Button compact quiet selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)} href={hrefForMode(choice)}>{choice}</Button></View>)}
       </ScrollView> : <View accessibilityLabel="Learning sections" style={s.row}>
-        {visibleModes.map(choice => <Button compact quiet key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)}>{choice}</Button>)}
+        {visibleModes.map(choice => <Button compact quiet key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)} href={hrefForMode(choice)}>{choice}</Button>)}
       </View>}
       {!!selectedTopic && activeMode !== 'Vocabulary & lessons' && activeMode !== 'Japanese letters' && <View style={s.row}>
         <Text style={s.muted}>{selectedTopic}</Text><Button compact quiet disabled={disabled} onPress={() => onSelectTopic(null)}>All topics</Button>
@@ -54,7 +58,9 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
 }
 
 function ListeningSection({ lessons, language, active }: { lessons: Lesson[]; language: TargetLanguage; active: boolean }) {
-  const [browsing, setBrowsing] = useState(false);
+  const { route, navigate, backTo } = useNavigation();
+  const listening = route.kind === 'listening' ? route : undefined;
+  const browsing = !!listening?.library;
   const previousView = useRef(browsing);
   const practiceHeading = useId();
   const libraryHeading = useId();
@@ -70,10 +76,8 @@ function ListeningSection({ lessons, language, active }: { lessons: Lesson[]; la
     heading.scrollIntoView({ block: 'nearest' });
   }, [browsing, libraryHeading, practiceHeading]);
 
-  return <>
-    <View style={browsing ? { display: 'none' } : undefined}>
-      <ListeningComprehension lessons={lessons} active={active && !browsing} headingId={practiceHeading} onBrowse={() => setBrowsing(true)} />
-    </View>
-    {browsing && <ListeningResources language={language} headingId={libraryHeading} onClose={() => setBrowsing(false)} />}
-  </>;
+  const topic = listening?.topic;
+  if (browsing) return <ListeningResources language={language} headingId={libraryHeading} onClose={() => backTo({ kind: 'listening', language, topic },
+    previous => previous.kind === 'listening' && previous.language === language && previous.topic === topic && !previous.library && !previous.chooser, true)} />;
+  return <ListeningComprehension lessons={lessons} active={active} headingId={practiceHeading} onBrowse={() => navigate({ kind: 'listening', language, topic, library: true }, { replace: listening?.chooser })} />;
 }

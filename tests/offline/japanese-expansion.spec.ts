@@ -33,7 +33,7 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   await cold.getByRole('button', { name: /^Continue/ }).click();
   await cold.getByRole('button', { name: 'Finish and save session', exact: true }).click();
   await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
-  await cold.reload(); await cold.getByRole('button', { name: /Revisit your lesson/ }).click();
+  await cold.reload();
   await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(cold.getByTestId('notebook-entries').getByRole('heading', { name: entry.target, exact: true })).toBeVisible();

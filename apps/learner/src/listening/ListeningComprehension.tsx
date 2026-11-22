@@ -1,6 +1,8 @@
-import { useEffect, useId, useMemo, useRef, useState, type ComponentRef, type RefObject } from 'react';
+import { useId, useLayoutEffect, useMemo, useRef, useState, type ComponentRef, type RefObject } from 'react';
 import { matchesLesson, type Lesson, type TargetLanguage } from '@smartlingo/domain';
 import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
+import type { AppRoute } from '../app/routes';
+import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
 import { Button } from '../ui/controls';
 import { Icon } from '../ui/Icon';
@@ -8,6 +10,7 @@ import { colors, designTokens as tokens, styles as s } from '../ui/theme';
 import { buildListeningQuestions, type ListeningQuestion } from './comprehension';
 
 type PlayRef = RefObject<ComponentRef<typeof Pressable> | null>;
+type ListeningRoute = Extract<AppRoute, { kind: 'listening' }>;
 
 export function ListeningComprehension({ lessons, onBrowse, active = true, headingId }: {
   lessons: Lesson[];
@@ -15,28 +18,63 @@ export function ListeningComprehension({ lessons, onBrowse, active = true, headi
   active?: boolean;
   headingId?: string;
 }) {
+  const { route, navigate, backTo, visit } = useNavigation();
   const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
   const questions = useMemo(() => buildListeningQuestions(lessons), [lessons]);
   const lessonIds = useMemo(() => new Set(questions.map(question => question.lessonId)), [questions]);
-  const available = lessons.filter(lesson => lessonIds.has(lesson.id));
-  const [lessonId, setLessonId] = useState('');
-  const [choosing, setChoosing] = useState(false);
-  const lesson = available.find(item => item.id === lessonId) ?? available[0];
+  const available = useMemo(() => lessons.filter(lesson => lessonIds.has(lesson.id)), [lessons, lessonIds]);
+  const listeningRoute = route.kind === 'listening' && !route.library ? route : undefined;
+  const choosing = listeningRoute?.chooser === true;
+  const requestedLesson = available.find(item => item.id === listeningRoute?.lessonId);
+  const lesson = requestedLesson ?? available[0];
+  const deck = useMemo(() => questions.filter(question => question.lessonId === lesson?.id), [questions, lesson?.id]);
+  const requestedIndex = deck.findIndex(question => question.id === listeningRoute?.questionId);
+  const position = Math.max(0, requestedIndex);
+  const question = deck[position];
+  const unavailable = Boolean((listeningRoute?.lessonId && !requestedLesson) || (listeningRoute?.questionId && requestedIndex < 0));
   const pickerId = useId();
   const playRef = useRef<ComponentRef<typeof Pressable>>(null);
-  const restorePlayFocus = useRef(false);
+  const previousVisit = useRef(visit);
 
-  useEffect(() => {
-    if (!choosing && active && restorePlayFocus.current) {
-      restorePlayFocus.current = false;
-      playRef.current?.focus();
-    }
-  }, [active, choosing]);
+  useLayoutEffect(() => {
+    const changed = previousVisit.current !== visit;
+    previousVisit.current = visit;
+    if (changed && !choosing && active) playRef.current?.focus();
+  }, [active, choosing, visit]);
+
+  if (!listeningRoute) return null;
+
+  const playerRoute: ListeningRoute = {
+    kind: 'listening',
+    language: listeningRoute.language,
+    topic: listeningRoute.topic,
+    lessonId: listeningRoute.lessonId,
+    questionId: listeningRoute.questionId,
+  };
+
+  function questionRoute(question: ListeningQuestion): ListeningRoute {
+    return { ...playerRoute, lessonId: question.lessonId, questionId: question.id };
+  }
+
+  function closeChooser() {
+    backTo(playerRoute, candidate => sameDeck(candidate, playerRoute) &&
+      candidate.lessonId === playerRoute.lessonId && candidate.questionId === playerRoute.questionId);
+  }
 
   function choose(id: string) {
-    restorePlayFocus.current = true;
-    setLessonId(id);
-    setChoosing(false);
+    if (id === lesson?.id && !unavailable) closeChooser();
+    else navigate({ ...playerRoute, lessonId: id, questionId: undefined }, { replace: true });
+  }
+
+  function previous() {
+    const previousQuestion = deck[position - 1];
+    if (!previousQuestion) return;
+    backTo(questionRoute(previousQuestion), candidate => {
+      if (!sameDeck(candidate, playerRoute)) return false;
+      const candidateLesson = candidate.lessonId ?? available[0]?.id;
+      const candidateQuestion = candidate.questionId ?? deck[0]?.id;
+      return candidateLesson === previousQuestion.lessonId && candidateQuestion === previousQuestion.id;
+    });
   }
 
   return <View testID="listening-comprehension" style={layout.page}>
@@ -44,31 +82,47 @@ export function ListeningComprehension({ lessons, onBrowse, active = true, headi
       <Text nativeID={headingId} accessibilityRole="header" style={[s.title, layout.destinationHeading, compact && s.compactTitle]}>
         Listening
       </Text>
-      {onBrowse && <Button compact quiet label="Browse videos & audio" icon={compact ? undefined : 'headphones'} onPress={() => { setChoosing(false); onBrowse(); }}>
+      {onBrowse && <Button compact quiet label="Browse videos & audio" icon={compact ? undefined : 'headphones'} onPress={onBrowse}>
         {compact ? 'Videos & audio' : 'Browse videos & audio'}
       </Button>}
     </View>
-    {lesson ? <>
+    {unavailable && <View style={s.notice}>
+      <Text accessibilityRole="alert" style={s.body}>
+        {question ? 'That listening sentence is unavailable. Here is a sentence you can practise instead.' : 'That listening link is unavailable.'}
+      </Text>
+      {question && <Button compact onPress={() => navigate(questionRoute(question), { replace: true })}>Use this sentence</Button>}
+    </View>}
+    {lesson && question ? <>
       <View style={layout.lessonRow}>
         <Text style={[s.heading, layout.lessonTitle]}>{lesson.title}</Text>
         {available.length > 1 && <Button compact quiet label="Change lesson" trailingIcon="chevron-down" expanded={choosing}
-          controls={choosing ? pickerId : undefined} onPress={() => setChoosing(open => !open)}>{compact ? 'Change' : 'Change lesson'}</Button>}
+          controls={choosing ? pickerId : undefined} onPress={() => choosing ? closeChooser() : navigate({ ...playerRoute, chooser: true })}>
+          {compact ? 'Change' : 'Change lesson'}
+        </Button>}
       </View>
       {choosing && <LessonPicker id={pickerId} lessons={available} selected={lesson.id} onChoose={choose} compact={compact} />}
-      <View style={choosing && { display: 'none' }}>
-        <SentenceSession key={`${lesson.id}:${lesson.revision}`} questions={questions.filter(question => question.lessonId === lesson.id)}
-          active={active && !choosing} playRef={playRef} compact={compact} />
-      </View>
+      {!choosing && <SentenceQuestion key={`${visit}:${lesson.revision}:${question.id}`} question={question} revision={lesson.revision}
+        position={position + 1} total={deck.length} active={active} playRef={playRef} compact={compact}
+        onPrevious={position > 0 ? previous : undefined}
+        onNext={() => navigate(questionRoute(deck[(position + 1) % deck.length]!), { repeat: true })} />}
     </> : <View style={s.notice}>
       <Text style={s.body}>There are no listening questions for these lessons yet.</Text>
+      {listeningRoute.topic && <Button compact onPress={() => navigate({ kind: 'listening', language: listeningRoute.language }, { replace: true })}>
+        Listen across all topics
+      </Button>}
     </View>}
   </View>;
+}
+
+function sameDeck(candidate: AppRoute, route: ListeningRoute): candidate is ListeningRoute {
+  return candidate.kind === 'listening' && !candidate.library && !candidate.chooser
+    && candidate.language === route.language && candidate.topic === route.topic;
 }
 
 function LessonPicker({ id, lessons, selected, onChoose, compact }: {
   id: string; lessons: Lesson[]; selected: string; onChoose: (id: string) => void; compact: boolean;
 }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useVisitState('listening-lesson-search', '');
   const visibleLessons = lessons.filter(lesson => matchesLesson(lesson, query));
 
   return <View nativeID={id} style={[s.card, layout.picker]}>
@@ -82,38 +136,35 @@ function LessonPicker({ id, lessons, selected, onChoose, compact }: {
   </View>;
 }
 
-function SentenceSession({ questions, active, playRef, compact }: {
-  questions: ListeningQuestion[]; active: boolean; playRef: PlayRef; compact: boolean;
-}) {
-  const [index, setIndex] = useState(0);
-  const position = index % questions.length;
-
-  useEffect(() => {
-    if (index > 0) playRef.current?.focus();
-  }, [index, playRef]);
-
-  return <SentenceQuestion key={`${questions[position]!.id}:${index}`} question={questions[position]!} position={position + 1}
-    total={questions.length} active={active} playRef={playRef} compact={compact} onNext={() => setIndex(value => value + 1)} />;
+interface Attempt {
+  selected: number | null;
+  checked: boolean;
+  transcriptOverride: boolean | null;
+  usedTranscript: boolean;
+  played: boolean;
 }
 
-function SentenceQuestion({ question, position, total, active, playRef, compact, onNext }: {
-  question: ListeningQuestion; position: number; total: number; active: boolean; playRef: PlayRef; compact: boolean; onNext: () => void;
+const emptyAttempt: Attempt = { selected: null, checked: false, transcriptOverride: null, usedTranscript: false, played: false };
+
+function SentenceQuestion({ question, revision, position, total, active, playRef, compact, onPrevious, onNext }: {
+  question: ListeningQuestion; revision: number; position: number; total: number; active: boolean; playRef: PlayRef;
+  compact: boolean; onPrevious?: () => void; onNext: () => void;
 }) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const [checked, setChecked] = useState(false);
-  const [transcriptOverride, setTranscriptOverride] = useState<boolean | null>(null);
+  // A revised example or a different set or order of options needs a clean attempt.
+  const attemptKey = JSON.stringify(['listening-attempt', question.id, revision, question.sentence, question.reading, question.choices, question.correctIndex]);
+  const [attempt, setAttempt] = useVisitState(attemptKey, emptyAttempt);
+  const { selected, checked, transcriptOverride, usedTranscript, played } = attempt;
   const transcriptVisible = transcriptOverride ?? checked;
-  const [usedTranscript, setUsedTranscript] = useState(false);
-  const [played, setPlayed] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [playFocused, setPlayFocused] = useState(false);
   const [transcriptFocused, setTranscriptFocused] = useState(false);
   const [error, setError] = useState('');
   const request = useRef<symbol | null>(null);
+  const focusFeedback = useRef(false);
   const transcriptId = useId();
   const feedbackId = useId();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!active) setPlaying(false);
     return () => {
       if (!request.current) return;
@@ -122,8 +173,9 @@ function SentenceQuestion({ question, position, total, active, playRef, compact,
     };
   }, [active]);
 
-  useEffect(() => {
-    if (!checked || Platform.OS !== 'web') return;
+  useLayoutEffect(() => {
+    if (!checked || !focusFeedback.current || Platform.OS !== 'web') return;
+    focusFeedback.current = false;
     const feedback = document.getElementById(feedbackId);
     if (feedback) {
       feedback.tabIndex = -1;
@@ -145,13 +197,12 @@ function SentenceQuestion({ question, position, total, active, playRef, compact,
     request.current = current;
     setError('');
     setPlaying(true);
-    setPlayed(true);
+    setAttempt(previous => ({ ...previous, played: true }));
     try { await audio.speak(question.sentence, question.language as TargetLanguage); }
     catch {
       if (current !== request.current) return;
       setError('Audio could not play. Try again or use the transcript.');
-      setTranscriptOverride(true);
-      if (!checked) setUsedTranscript(true);
+      setAttempt(previous => ({ ...previous, transcriptOverride: true, usedTranscript: previous.usedTranscript || !previous.checked }));
     }
     finally {
       if (current === request.current) {
@@ -179,10 +230,9 @@ function SentenceQuestion({ question, position, total, active, playRef, compact,
           <Text style={[s.buttonText, layout.playText]}>{playLabel}</Text>
         </Pressable>
         <Pressable accessibilityRole="button" accessibilityState={{ expanded: transcriptVisible }} aria-expanded={transcriptVisible}
-          aria-controls={transcriptVisible ? transcriptId : undefined} onPress={() => {
-            setTranscriptOverride(!transcriptVisible);
-            if (!transcriptVisible && !checked) setUsedTranscript(true);
-          }} onFocus={() => setTranscriptFocused(true)} onBlur={() => setTranscriptFocused(false)}
+          aria-controls={transcriptVisible ? transcriptId : undefined} onPress={() => setAttempt(previous => ({
+            ...previous, transcriptOverride: !transcriptVisible, usedTranscript: previous.usedTranscript || (!transcriptVisible && !previous.checked),
+          }))} onFocus={() => setTranscriptFocused(true)} onBlur={() => setTranscriptFocused(false)}
           style={({ pressed }) => [layout.transcriptAction, transcriptFocused && layout.focus,
             transcriptFocused && layout.inverseFocus, pressed && layout.pressed]}>
           <Text style={[s.buttonText, layout.transcriptActionText]}>{transcriptVisible ? 'Hide transcript' : 'Show transcript'}</Text>
@@ -199,7 +249,8 @@ function SentenceQuestion({ question, position, total, active, playRef, compact,
       <View style={layout.question}>
         <Text accessibilityRole="header" style={[s.heading, layout.questionTitle]}>What does the sentence mean?</Text>
         <View style={layout.choices}>{question.choices.map((choice, index) => <ChoiceRow key={choice} label={choice} selected={selected === index}
-          disabled={checked} correct={checked && index === question.correctIndex} onPress={() => setSelected(index)} />)}</View>
+          disabled={checked} correct={checked && index === question.correctIndex}
+          onPress={() => setAttempt(previous => ({ ...previous, selected: index }))} />)}</View>
       </View>
       {checked && <View accessibilityLiveRegion="polite" testID="listening-feedback" style={[layout.feedback, isCorrect ? layout.feedbackCorrect : layout.feedbackOther]}>
         <Text nativeID={feedbackId} accessibilityRole="header" style={[s.heading, layout.feedbackTitle]}>
@@ -209,11 +260,19 @@ function SentenceQuestion({ question, position, total, active, playRef, compact,
         <Text style={s.muted}>{usedTranscript ? 'You used transcript support for this sentence.' : played
           ? 'Replay and compare the sentence with its meaning.' : 'Try listening before answering the next sentence.'}</Text>
       </View>}
-      <View style={[layout.footer, checked && layout.footerChecked]}>
-        {!checked && <Button compact={compact} quiet label="Skip sentence" onPress={() => { stop(); onNext(); }}>{compact ? 'Skip' : 'Skip sentence'}</Button>}
-        {checked
-          ? <Button compact={compact} primary trailingIcon="arrow-right" onPress={() => { stop(); onNext(); }}>Next sentence</Button>
-          : <Button compact={compact} primary disabled={selected === null} onPress={() => { stop(); setChecked(true); }}>Check answer</Button>}
+      <View style={layout.footer}>
+        <Button compact={compact} quiet label="Previous sentence" disabled={!onPrevious}
+          onPress={() => { stop(); onPrevious?.(); }}>{compact ? 'Previous' : 'Previous sentence'}</Button>
+        <View style={layout.answerActions}>
+          {!checked && <Button compact={compact} quiet label="Skip sentence" onPress={() => { stop(); onNext(); }}>{compact ? 'Skip' : 'Skip sentence'}</Button>}
+          {checked
+            ? <Button compact={compact} primary trailingIcon="arrow-right" onPress={() => { stop(); onNext(); }}>Next sentence</Button>
+            : <Button compact={compact} primary disabled={selected === null} onPress={() => {
+              stop();
+              focusFeedback.current = true;
+              setAttempt(previous => ({ ...previous, checked: true }));
+            }}>Check answer</Button>}
+        </View>
       </View>
     </View>
   </View>;
@@ -280,7 +339,7 @@ const layout = StyleSheet.create({
   feedbackOther: { backgroundColor: colors.goldTint },
   feedbackTitle: { fontSize: 20, lineHeight: 27 },
   footer: { ...s.row, justifyContent: 'space-between', gap: 5 },
-  footerChecked: { justifyContent: 'flex-end' },
+  answerActions: { ...s.row, justifyContent: 'flex-end', gap: 5 },
   picker: { padding: 12, gap: 9 },
   pickerRows: { padding: 4, gap: 6 },
   focus: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 2 },

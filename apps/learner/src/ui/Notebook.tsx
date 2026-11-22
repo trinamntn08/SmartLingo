@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import { normalizeSearch, notebookEntrySchema, languageNames, notebookLanguage, type TargetLanguage, type NotebookEntry } from '@smartlingo/domain';
+import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { Button } from './controls';
 import { Speak } from '../audio/Speak';
 import { colors, styles as s } from './theme';
@@ -12,15 +13,20 @@ import { Icon } from './Icon';
 import { toolsStyles as t } from './learnerToolsStyles';
 
 export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked }: { model: LearningModel; onExplore: () => void; language?: TargetLanguage; onWriteBlocked?: (blocked: boolean) => void }) {
-  const [query, setQuery] = useState('');
-  const [focusRecall, setFocusRecall] = useState(false);
+  const { route, navigate, backTo } = useNavigation();
+  const [query, setQuery] = useVisitState(`notebook:${language}:query`, '');
+  const focusRecall = route.kind === 'review' && route.view === 'practice';
   const name = languageNames[language];
   const normalized = normalizeSearch(query);
   const matches = new Set(model.notebook.filter(entry => normalizeSearch(`${entry.target} ${entry.reading ?? ''} ${entry.meaning} ${entry.example} ${entry.exampleReading ?? ''}`).includes(normalized)).map(entry => entry.id));
+  function toggleFocus() {
+    if (focusRecall) backTo({ kind: 'review', language, view: 'notebook' }, previous => previous.kind === 'review' && previous.language === language && previous.view !== 'practice');
+    else navigate({ kind: 'review', language, view: 'practice' });
+  }
   return <View style={t.page}>
     <ScreenHeader eyebrow={name} title="Review saved words" subtitle="Recall due words, or search and edit your notes."
-      action={model.notebook.length ? <Button compact icon={focusRecall ? 'bookmark' : 'layers'} selected={focusRecall}
-        onPress={() => setFocusRecall(value => !value)}>{focusRecall ? 'Show notebook' : 'Focus review'}</Button> : null} />
+      action={focusRecall || model.notebook.length ? <Button compact icon={focusRecall ? 'bookmark' : 'layers'} selected={focusRecall}
+        onPress={toggleFocus}>{focusRecall ? 'Show notebook' : 'Focus review'}</Button> : null} />
     <View style={t.board}>
       <View style={[t.side, { flexBasis: 380 }, focusRecall && { flexBasis: '100%', maxWidth: 700 }]}>
         <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />

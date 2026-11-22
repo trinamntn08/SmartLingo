@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { createWebPreview } from '../../scripts/serve-web.mjs';
 
 const directory = fileURLToPath(new URL('../../apps/learner/dist/', import.meta.url));
+const port = 8185;
+const origin = `http://localhost:${port}`;
 const baseManifest = JSON.parse(await readFile(`${directory}offline-manifest.json`, 'utf8'));
 const updatedIndex = Buffer.from((await readFile(`${directory}index.html`, 'utf8')).replace('</head>', '<meta name="smartlingo-test-build" content="updated" /></head>'));
 const updatedFiles = baseManifest.files.map(file => file.url === '/index.html' ? {
@@ -20,7 +22,7 @@ let corruptNextAsset = false;
 let stallDocument = false;
 
 createServer(async (request, response) => {
-  const url = new URL(request.url, 'http://localhost:8082');
+  const url = new URL(request.url, origin);
   if (request.method === 'POST' && url.pathname === '/__test__/mode') {
     updated = url.searchParams.get('updated') === '1';
     failNextAsset = url.searchParams.get('fail') === '1';
@@ -45,4 +47,4 @@ createServer(async (request, response) => {
     response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' }).end(updatedIndex); return;
   }
   await serve(request, response);
-}).listen(8082, '127.0.0.1', () => console.log('Isolated offline browser test server on localhost:8082'));
+}).listen(port, '127.0.0.1', () => console.log(`Isolated offline browser test server on ${origin}`));

@@ -2,11 +2,12 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import learnerDocuments from '../apps/learner/public/learner-document.js';
 
 const defaultDirectory = fileURLToPath(new URL('../apps/learner/dist/', import.meta.url));
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.svg': 'image/svg+xml', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.woff2': 'font/woff2', '.ttf': 'font/ttf' };
 
-/** Local exported-build preview; never a public deployment or SPA/API fallback. */
+/** Local preview for exported files and known learner documents. */
 export function createWebPreview(directory = defaultDirectory) {
   const root = path.resolve(directory);
   return createServer(async (request, response) => {
@@ -18,7 +19,10 @@ export function createWebPreview(directory = defaultDirectory) {
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405).end(); return; }
     try {
       const url = new URL(request.url ?? '/', 'http://localhost');
-      const relative = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname).slice(1);
+      const destination = request.headers['sec-fetch-dest'];
+      const documentRequest = !destination || destination === 'document';
+      const document = url.pathname === '/' || (documentRequest && learnerDocuments.isLearnerDocumentPath(url.pathname));
+      const relative = decodeURIComponent(document ? '/index.html' : url.pathname).slice(1);
       const filename = path.resolve(root, relative);
       if (!filename.startsWith(`${root}${path.sep}`) || relative.includes('\\') || relative.split('/').some(part => part.startsWith('.'))) {
         response.writeHead(404).end(); return;

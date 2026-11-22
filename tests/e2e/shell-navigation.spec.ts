@@ -2,6 +2,64 @@ import { openTopic } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
+test('Back and Forward restore shell screens and a bookmarked lesson keeps its language', async ({ page, context }) => {
+  await page.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/languages');
+  const button = (name: string) => page.getByRole('button', { name, exact: true });
+  await button('Learn French').click();
+  await expect(page).toHaveURL(/\/today\/fr$/);
+  await button('Learn').click();
+  await expect(page).toHaveURL(/\/learn\/fr$/);
+  await button('Topic Restaurant').click();
+  await expect(page).toHaveURL(/\/learn\/fr\/topics\/Restaurant$/);
+  const open = button('Open At the restaurant');
+  await expect(open).toHaveAttribute('href', '/lesson/fr/fr.restaurant.customer');
+  await open.click();
+  await expect(page).toHaveURL(/\/lesson\/fr\/fr\.restaurant\.customer/);
+  await page.goBack();
+  await expect(open).toBeVisible();
+  await page.goBack();
+  await expect(button('Topic Restaurant')).toBeVisible();
+  await page.goForward();
+  await expect(open).toBeVisible();
+  await page.goForward();
+  await expect(page.getByTestId('lesson-stage')).toBeVisible();
+
+  const tab = await context.newPage();
+  try {
+    const lesson = japaneseLessons[0]!;
+    await tab.goto('/lesson/ja/' + lesson.id + '/dialogue');
+    await expect(tab.getByRole('heading', { name: 'A small conversation' })).toBeVisible();
+    await expect(tab.getByRole('button', { name: 'Change language' })).toContainText('Japanese');
+    expect(await tab.evaluate(() => localStorage.getItem('smartlingo.target-language.v1'))).toBe('fr-FR');
+  } finally { await tab.close(); }
+});
+
+test('browser Back keeps a failed learning save on screen for dismissal or retry', async ({ page }) => {
+  await page.goto('/learn/fr/topics/Restaurant');
+  await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
+  await page.evaluate(() => {
+    const add = IDBObjectStore.prototype.add;
+    IDBObjectStore.prototype.add = function (...args: Parameters<typeof add>) {
+      if (this.name === 'events') throw new Error('Test write failure');
+      return add.apply(this, args);
+    };
+  });
+  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  const dismiss = page.getByRole('button', { name: 'Dismiss and continue', exact: true });
+  await expect(dismiss).toBeVisible();
+  const failedPlace = page.url();
+  await page.evaluate(() => new Promise<void>(resolve => {
+    window.addEventListener('popstate', () => window.addEventListener('popstate', () => resolve(), { once: true }), { once: true });
+    history.back();
+  }));
+  await expect(page).toHaveURL(failedPlace);
+  await expect(dismiss).toBeVisible();
+  await dismiss.click();
+  await page.goBack();
+  await expect(page).toHaveURL(/\/learn\/fr\/topics\/Restaurant$/);
+});
+
 test('hash navigation cancels hidden learner speech and preserves the mounted lesson', async ({ page }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {

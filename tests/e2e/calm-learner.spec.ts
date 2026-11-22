@@ -22,6 +22,27 @@ for (const language of ['French', 'Japanese'] as const) {
     for (const id of ['lessons', 'explored', 'saved', 'days', 'week']) await expect(page.getByTestId(`report-${id}`)).toHaveCount(0);
     await expect(page.getByRole('button', { name: /^Topic / })).toHaveCount(0);
     await expectContained(page);
+    await expect(button(page, 'Open your notebook')).toHaveCount(0);
+    await next.getByRole('button').focus();
+    await page.keyboard.press('Tab');
+    const course = button(page, 'Open daily course');
+    await expect(course).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(button(page, 'Vocabulary & lessons')).toBeFocused();
+    await course.click();
+    await expect(page.getByRole('heading', { name: /^Day 1:/ })).toBeVisible();
+    await button(page, 'Close daily course').click();
+    await button(page, 'Vocabulary & lessons').click();
+    await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+    await button(page, 'Today').click();
+    await button(page, 'Listening & videos').click();
+    await expect(page.getByTestId('listening-comprehension')).toBeVisible();
+    await button(page, 'Today').click();
+    await button(page, 'Speaking practice').click();
+    await expect(page.getByRole('heading', { name: 'Speaking practice', exact: true })).toBeVisible();
+    await button(page, 'Review').click();
+    await expect(button(page, 'Add personal word')).toBeVisible();
+    await button(page, 'Today').click();
     await next.getByRole('button').click();
     if (language === 'French') {
       const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;

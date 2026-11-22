@@ -31,7 +31,7 @@ The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/
 
 ## Information hierarchy
 
-Today has one photo-led primary recommendation, four direct activity shortcuts and a compact course entry. Topics belong in Learn, metrics in Report and settings in Profile. Pine identifies ordinary primary actions, gold highlights the lead recommendation and sage identifies selections. Keep meanings, examples, translations and reading aids visible during study.
+Today leads with one photo-led recommendation followed by the guided daily course. Explore and practice groups direct links to vocabulary and lessons, listening and videos, and speaking. Saved words are available under Review. Topics belong in Learn, metrics in Report and settings in Profile. Pine identifies ordinary primary actions, gold highlights the lead recommendation and sage identifies selections. Keep meanings, examples, translations and reading aids visible during study.
 
 The library shows topic covers alongside searchable lessons and vocabulary. The lesson canvas places readable word text before bounded photographs and keeps the read-only step outline separate from saved activity. Changing steps moves web focus to the new heading. Kana focuses on one row with an explicit row chooser and large glyphs. Daily-course day and section choices reflow when expanded. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top. Focus review hides the notebook while retaining unsaved form text. The editor has a lesson rail and an explicit draft, preview and publication sequence.
 

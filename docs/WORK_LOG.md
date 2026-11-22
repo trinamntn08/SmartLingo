@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Prioritise study actions on Today
+
+- Request. Redesign Today around the activities learners are likely to open most often and reduce the prominence of the notebook.
+- Start. At 17:33 CET, Europe/Paris, origin fetch succeeded and local, tracking and live `feat/french-daily-opening` matched at `9d65155de8b2d7affd12a01859d8b520bbbd0936`, ahead/behind `0/0`. The checkout was initially clean. An unrelated untracked navigation file appeared during inspection. Created a clean isolated worktree at `D:/dev/projects/SmartLingo-sessions/today-study-actions` on new branch `feat/today-study-actions` from the verified head. No corresponding remote task branch existed at inspection.
+- Acceptance. In both languages, show a single recommended activity, then the guided daily course, then direct choices for vocabulary and lessons, listening and speaking. Keep saved words reachable from Review. Verify each path and narrow layout without changing learning storage.
+- Evidence. The current beta has no learner navigation analytics or completed learner trials. Treat the order as a product hypothesis and record a first-choice test for learner review.
+- Implementation. The recommendation keeps the existing photo and has a shorter layout. The daily course follows it, then three descriptive activity links. Review still opens saved words. Documented the rationale and learner observation procedure in [ADR 0038](decisions/0038-today-study-priorities.md).
+- Preview. The existing port 8082 listener serves build `574463b4b1b6`. Saved its prior export `237d259910a1` under the isolated worktree's ignored `.cache/prior-preview-237d259910a1` before copying the checked export. Verified the served manifest and both languages at 320, 390, 768 and 1,299 px across the test views.
+- Verified. `npm.cmd run check`, `git diff --check`, 277 tooling/application tests and 28 targeted Chromium tests passed. Four cold-offline cases passed in an isolated rerun with a longer fixture wait after some downloads exceeded the default 10-second assertion during concurrent browser tests. The repository test configuration did not change.
+- Handoff. Refresh the local review preview and try Today in both languages. The checkpoint is the commit containing this entry. Next, use the first-choice learner trial to confirm the order of study actions.
+
 ## 2026-11-22 Plan browser Back, Forward and direct learner links
 
 - Request. Plan the project-wide navigation fixes, starting with returning to an earlier listening sentence using browser Back and giving lessons direct URLs.

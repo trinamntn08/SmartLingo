@@ -82,7 +82,6 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
       language={targetLanguage} course={targetLanguage === 'ja-JP' ? japaneseCourse : openCoursePilot}
       onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model}
       onOpen={openLesson} onExplore={() => openLearnMode('Vocabulary & lessons')}
-      onReview={() => navigate('Review')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
       onAlphabet={() => openLearnMode('Japanese letters')}
     />;
@@ -128,7 +127,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
         <View style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
           {!language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
-            <Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text>
+            <Text accessibilityLiveRegion="polite" style={s.body}>Loading your learning space…</Text>
           </View> : <>
             {!!model.loadError && <View style={s.error}>
               <Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text>

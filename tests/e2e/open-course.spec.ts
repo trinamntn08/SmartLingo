@@ -67,7 +67,7 @@ test('all five opening lessons offer a full French transcript, full translation 
   await page.keyboard.press('Enter');
   await revealDays(page);
   await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
-  await expect(coursePanel(page).getByText('5 study days available', { exact: false })).toBeVisible();
+  await expect(coursePanel(page).getByText('5 guided study days · Draft preview', { exact: true })).toBeVisible();
 
   for (const day of openCoursePilot.days) {
     await revealDays(page);

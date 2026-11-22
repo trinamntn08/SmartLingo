@@ -20,7 +20,7 @@ Open **Learn → Speaking**, or Today's **Speaking practice** shortcut. Choose a
 
 ## Your dashboard and learning report
 
-After choosing a language, **Today** offers one recommended lesson or Japanese row activity, a compact daily-course entry and secondary learning tools. **Learn** owns topic discovery; topics are no longer repeated across every page. **Report** owns the four saved-activity summaries, weekly chart and every topic's lesson and vocabulary counts. Use its Study topic buttons to return to a topic or Review saved words to open your notebook. **What counts here?** expands the metric definitions.
+After choosing a language, **Today** offers a recommended lesson or Japanese row activity, followed by **Open daily course**. **Explore and practice** links directly to vocabulary and lessons, listening and videos, and speaking. Open **Review** for your saved words. **Learn** owns topic discovery. **Report** owns the four saved-activity summaries, weekly chart and every topic's lesson and vocabulary counts. Use its Study topic buttons to return to a topic or Review saved words to open your notebook. **What counts here?** expands the metric definitions.
 
 The four summaries count current lesson sessions completed, distinct vocabulary explicitly studied, notebook entries saved and valid daily-course completions. The weekly chart counts saved lesson attempts, course study/practice/self-review/completion and recognition ratings in your browser's current timezone, Monday through Sunday. Browsing, practice-hint reveals and editing a note do not add practice actions. Repeated immutable event IDs count once; future timestamps/dates are excluded. These describe saved activity and do not assess independent language ability.
 

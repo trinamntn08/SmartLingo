@@ -156,7 +156,7 @@ Current learner navigation: homepage language choice, then Today, Learn, Review,
 
 Owner direction, 2026-11-22. Plan browser Back and Forward across learner screens and activity steps, with clean direct URLs for lessons and sections. Start with listening sentences, then shared lessons, daily courses and the remaining web journeys. [Browser navigation plan](docs/plans/0045-web-navigation-and-lesson-links.md)
 
-- Today: one next activity, Japanese alphabet recommendation or recent word-lesson resume, compact daily course and secondary review/listening/speaking links.
+- Today offers one recommended activity, a prominent daily-course entry and direct links to vocabulary and lessons, listening and videos, and speaking. Learners open saved words under Review.
 - Learn: Japanese letters when relevant, Vocabulary & lessons with topic cards/filters/search, Listening & videos and Speaking.
 - Topic: useful outcomes, lesson list, progress, download status.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.

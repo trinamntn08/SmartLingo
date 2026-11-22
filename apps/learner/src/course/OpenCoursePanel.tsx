@@ -2,7 +2,8 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
 import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseChoice, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 import { Badge, Button } from '../ui/controls';
-import { colors, styles as s } from '../ui/theme';
+import { Icon } from '../ui/Icon';
+import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
 import { CourseBlockView } from './CourseBlockView';
@@ -12,14 +13,20 @@ import { compactCourseStepKind, compactCourseSteps } from './compactCourseSteps'
 import { useCourseLearning } from './useCourseLearning';
 
 export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked?: (blocked: boolean) => void }) {
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const [open, setOpen] = useState(false);
   const [writeBlocked, setWriteBlocked] = useState(false);
   const reportWrite = useCallback((blocked: boolean) => { setWriteBlocked(blocked); onWriteBlocked?.(blocked); }, [onWriteBlocked]);
-  return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: 20, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
-    <View style={[s.row, { alignItems: 'center', justifyContent: 'space-between', gap: 16 }]}>
-      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 240, minWidth: 0, gap: 5 }}>
-        <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.units?.length ? course.title : 'Your daily course'}</Text>
-        <Text style={s.muted}>{course.days.length} study {course.days.length === 1 ? 'day' : 'days'} available · Draft preview</Text>
+  return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: compact ? 14 : 16, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
+    <View style={[s.row, { alignItems: 'center', justifyContent: 'space-between', gap: compact ? 10 : 16 }]}>
+      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 260, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 10, backgroundColor: colors.goldTint, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="calendar" size={22} color={colors.primary} />
+        </View>
+        <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
+          <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.units?.length ? course.title : 'Your daily course'}</Text>
+          <Text style={s.muted}>{course.days.length} guided study {course.days.length === 1 ? 'day' : 'days'} · Draft preview</Text>
+        </View>
       </View>
       <Button expanded={open} primary={!open} disabled={writeBlocked || model.busy || !!model.saveError} onPress={() => setOpen(value => !value)}>{open ? 'Close daily course' : 'Open daily course'}</Button>
     </View>

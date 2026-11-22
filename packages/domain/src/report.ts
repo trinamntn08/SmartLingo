@@ -70,7 +70,8 @@ export function buildLearningReport(input: LearningReportInput): LearningReport 
   const notebook = new Map(input.notebook.filter(entry => notebookLanguage(entry) === input.language).map(entry => [entry.id, entry]));
   const reviews = uniqueEvents(input.reviewEvents).filter(event => notebook.has(event.notebookId) && recorded(event.occurredAt));
   const addAction = (instant: string) => { const day = days.get(localStudyDate(instant, input.timeZone)); if (day && !day.future) day.actions++; };
-  events.forEach(event => addAction(event.occurredAt));
+  events.filter(event => event.activity !== 'completion' || !event.automaticCompletion)
+    .forEach(event => addAction(event.occurredAt));
   courseEvents.filter(event => isCourseAction(event, courseById.get(event.courseId)!)).forEach(event => addAction(event.occurredAt));
   reviews.forEach(event => addAction(event.occurredAt));
 

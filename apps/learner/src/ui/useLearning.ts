@@ -38,12 +38,18 @@ export function useLearning() {
     catch (failure) { setSaveError(failure instanceof Error ? failure.message : 'Could not save to this browser.'); }
     finally { writing.current = false; setBusy(false); }
   }
-  function record(event: LearningEvent, after: () => void = () => {}) {
-    if (pending.current) return;
-    void execute({ run: store => store.recordEvent(event), apply: () => {
-      setEvents(current => current.some(saved => saved.id === event.id) ? current : [...current, event]); after();
+  function recordMany(batch: readonly LearningEvent[], after: () => void = () => {}) {
+    if (!batch.length || pending.current) return;
+    void execute({ run: store => store.recordEvents(batch), apply: () => {
+      setEvents(current => {
+        const next = new Map(current.map(event => [event.id, event]));
+        for (const event of batch) if (!next.has(event.id)) next.set(event.id, event);
+        return next.size === current.length ? current : [...next.values()];
+      });
+      after();
     } });
   }
+  function record(event: LearningEvent, after?: () => void) { recordMany([event], after); }
   function saveEntry(entry: NotebookEntry, after: () => void = () => {}) {
     if (pending.current) return;
     void execute({ run: store => store.saveNotebook(entry), apply: () => {
@@ -57,7 +63,7 @@ export function useLearning() {
       setNotebook(current => [...current.filter(saved => saved.id !== captured.id), captured]); after();
     } });
   }
-  return { events, notebook, loading, loadError, saveError, busy, load, record, saveEntry, captureEntry,
+  return { events, notebook, loading, loadError, saveError, busy, load, record, recordMany, saveEntry, captureEntry,
     blocked: loading || !!loadError || busy || !!saveError,
     retry: () => { if (pending.current) void execute(pending.current); },
     cancelWrite: () => { pending.current = null; setSaveError(''); },

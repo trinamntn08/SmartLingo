@@ -1,4 +1,4 @@
-import { openRestaurant, openTopic, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openRestaurant, openTopic, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -70,6 +70,12 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Try picture practice' }).click();
+  const pictureWord = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
+  await page.getByRole('button', { name: pictureWord.target, exact: true }).click();
+  await page.getByRole('button', { name: 'Build a sentence', exact: true }).click();
+  await buildAcceptedSentence(page, restaurantLesson);
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   expect(await learningRows(page, 'events')).toEqual(originalEvents);
   expect(await learningRows(page, 'notebook')).toEqual(originalNotebook);
   await expect(page.getByText('Accepted sentence answers', { exact: false })).toBeVisible();

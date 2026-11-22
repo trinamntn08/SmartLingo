@@ -60,12 +60,9 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await expect(cold.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
   await button(cold, /Build a sentence/).click();
   await buildAcceptedSentence(cold, opening);
-  await expect(cold.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
+  await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.reload();
-  await button(cold, /^Continue/).click();
-  await button(cold, 'Finish and save session').click();
-  await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
-  await cold.reload();
+  await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(cold, 'Review').click();
   await expect(cold.getByText('bonsoir', { exact: true }).first()).toBeVisible();
   const [events, notebook] = await learningSnapshot(cold);

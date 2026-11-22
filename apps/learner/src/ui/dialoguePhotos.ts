@@ -14,7 +14,9 @@ const workshop: ContextPhoto = {
 };
 
 export function getLessonDialoguePhoto(lessonId: string): ContextPhoto | undefined {
-  return lessonId.startsWith('fr.restaurant.') ? bistro : undefined;
+  if (lessonId.startsWith('fr.restaurant.')) return bistro;
+  if (lessonId.startsWith('fr.greetings.')) return neighbours;
+  return undefined;
 }
 
 export function getDailyDialoguePhoto(dayId: string): ContextPhoto | undefined {

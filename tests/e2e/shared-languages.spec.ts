@@ -48,15 +48,13 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`${name.toLowerCase()}-shared-words.png`), fullPage: true });
     await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-    await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
     await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
     const correct = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
     await button(page, correct.target).click();
     await page.getByRole('button', { name: /Build a sentence/ }).click();
     await buildAcceptedSentence(page, lesson);
-    await page.getByRole('button', { name: /^Continue/ }).click();
-    await button(page, 'Finish and save session').click();
-    await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+    await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
     await button(page, 'Review').click();
     const notebook = page.getByTestId('notebook-entries');
     await expect(notebook.getByRole('heading', { name: word.target, exact: true })).toBeVisible();
@@ -75,7 +73,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
   await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
   await expect(button(page, 'Change language')).toContainText('Japanese');
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Profile').click();
   await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download');

@@ -13,11 +13,22 @@ export function transactionDone(transaction: IDBTransaction): Promise<void> {
   });
 }
 
-export async function appendImmutable<T extends { id: string }>(database: IDBDatabase, name: string, value: T, parse: (input: unknown) => T): Promise<void> {
+export function appendImmutable<T extends { id: string }>(database: IDBDatabase, name: string, value: T, parse: (input: unknown) => T): Promise<void> {
+  return appendImmutableBatch(database, name, [value], parse);
+}
+
+export async function appendImmutableBatch<T extends { id: string }>(database: IDBDatabase, name: string, values: readonly T[], parse: (input: unknown) => T): Promise<void> {
+  const distinct = new Map<string, T>();
+  for (const value of values) {
+    const previous = distinct.get(value.id);
+    if (previous && JSON.stringify(previous) !== JSON.stringify(value)) throw new Error('This event ID already belongs to a different attempt.');
+    distinct.set(value.id, value);
+  }
+  if (!distinct.size) return;
   const transaction = database.transaction(name, 'readwrite');
   const done = transactionDone(transaction);
   const store = transaction.objectStore(name);
-  const write = new Promise<void>((resolve, reject) => {
+  const writes = [...distinct.values()].map(value => new Promise<void>((resolve, reject) => {
     const request = store.get(value.id);
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
@@ -29,6 +40,6 @@ export async function appendImmutable<T extends { id: string }>(database: IDBDat
         resolve();
       } catch (error) { reject(error); transaction.abort(); }
     };
-  });
-  await Promise.all([write, done]);
+  }));
+  await Promise.all([...writes, done]);
 }

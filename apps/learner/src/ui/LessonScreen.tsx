@@ -1,46 +1,37 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { Platform, Text, View } from 'react-native';
-import { checkAnswer, lessonProgress, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
+import { Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
 import { Button } from './controls';
-import { Speak } from '../audio/Speak';
-import { Illustration } from './Illustration';
-import { VocabularyCard } from './VocabularyCard';
-import { colors, styles as s } from './theme';
+import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
-import { getContextPhoto } from './contextPhotos';
-import { ContextImage } from './ContextImage';
-import { BilingualDialogue } from './BilingualDialogue';
-import { getLessonDialoguePhoto } from './dialoguePhotos';
-import { GrammarNote } from './GrammarNote';
-import { useNavigation, useVisitState } from '../app/WebNavigation';
-import { lessonStages as stageOrder, routeHref, type LessonStage as Stage } from '../app/routes';
+import { LessonConversation, LessonWords } from './LessonStudy';
+import { PictureActivity, SentenceActivity } from './LessonPractice';
+import { useNavigation } from '../app/WebNavigation';
+import { lessonStages, routeHref, topicRouteKey, type LessonStage } from '../app/routes';
 
-function resumeStage(lesson: Lesson, progress: ReturnType<typeof lessonProgress>): Stage {
-  if (progress.completed) return 'finish';
-  if (lesson.vocabulary.some(entry => !progress.viewedIds.has(entry.id))) return 'vocabulary';
-  if (!progress.pictureDone) return 'dialogue';
-  return progress.sentenceDone ? 'finish' : 'sentence';
+function resumeStage(wordsStudied: boolean, progress: ReturnType<typeof lessonProgress>): LessonStage {
+  if (progress.completed) return 'sentence';
+  if (!wordsStudied) return 'vocabulary';
+  return progress.pictureDone ? 'sentence' : 'dialogue';
 }
 
-export function LessonScreen({ lesson, model, onExit, routed = false }: { lesson: Lesson; model: LearningModel; onExit: () => void; routed?: boolean }) {
+export function LessonScreen({ lesson, model, onExit, routed = false }: {
+  lesson: Lesson; model: LearningModel; onExit: () => void; routed?: boolean;
+}) {
   const { route, navigate } = useNavigation();
   const progress = lessonProgress(lesson, model.events);
-  const [localStage, setLocalStage] = useState(() => resumeStage(lesson, progress));
+  const wordsStudied = lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id));
+  const resume = resumeStage(wordsStudied, progress);
+  const [localStage, setLocalStage] = useState(resume);
+  const [returnAfterCompletion, setReturnAfterCompletion] = useState(false);
   const lessonRoute = routed && route.kind === 'lesson' && route.lessonId === lesson.id && route.language === lesson.language ? route : undefined;
-  const stage = lessonRoute ? lessonRoute.stage ?? resumeStage(lesson, progress) : localStage;
-  const [canvasWidth, setCanvasWidth] = useState(0);
+  const stage = lessonRoute ? lessonRoute.stage ?? resume : localStage;
   const headingId = useId();
-  const outlineId = useId();
   const previousStage = useRef(stage);
-  const compact = canvasWidth > 0 && canvasWidth < 600;
-  const step = stageOrder.indexOf(stage) + 1;
-  const french = lesson.language !== 'ja-JP';
-  const dialoguePhoto = french && stage === 'dialogue' ? getLessonDialoguePhoto(lesson.id) : undefined;
-  const stepTitle = stage === 'vocabulary' ? `Study ${lesson.vocabulary.length} words together`
-    : stage === 'dialogue' ? 'Read a conversation' : stage === 'picture' ? lesson.pictureActivity.mode === 'meaning' ? 'Match the meaning' : 'Match a picture'
-      : stage === 'sentence' ? 'Build a sentence' : 'Save your session';
-  const readyToFinish = lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id)) && progress.pictureDone && progress.sentenceDone;
-  const count = lesson.vocabulary.filter(entry => progress.viewedIds.has(entry.id)).length + Number(progress.pictureDone) + Number(progress.sentenceDone);
+  const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
+  const meaningMatch = lesson.pictureActivity.mode === 'meaning';
+  const { heading } = stageLabels(stage, meaningMatch);
+  const canComplete = wordsStudied && progress.pictureDone && !progress.completed;
   const exitBlocked = model.busy || !!model.saveError;
   const browseOnly = !!model.loadError;
 
@@ -48,158 +39,134 @@ export function LessonScreen({ lesson, model, onExit, routed = false }: { lesson
     if (lessonRoute && !lessonRoute.stage && !model.loading) navigate({ ...lessonRoute, stage }, { replace: true });
   }, [lessonRoute, model.loading, navigate, stage]);
 
+  useEffect(() => {
+    if (!returnAfterCompletion || exitBlocked) return;
+    setReturnAfterCompletion(false);
+    onExit();
+  }, [exitBlocked, onExit, returnAfterCompletion]);
+
   useLayoutEffect(() => {
     if (previousStage.current === stage) return;
     previousStage.current = stage;
     if (Platform.OS !== 'web') return;
-    const heading = document.getElementById(headingId);
-    if (!heading) return;
-    heading.tabIndex = -1;
-    heading.focus({ preventScroll: true });
-    heading.scrollIntoView({ block: 'start' });
+    const headingElement = document.getElementById(headingId);
+    if (!headingElement) return;
+    headingElement.tabIndex = -1;
+    headingElement.focus({ preventScroll: true });
+    headingElement.scrollIntoView({ block: 'start' });
   }, [headingId, stage]);
 
-  function setStage(next: Stage, afterSave = false) {
+  function setStage(next: LessonStage, afterSave = false) {
     if (lessonRoute) navigate({ ...lessonRoute, stage: next }, { afterSave });
     else setLocalStage(next);
   }
-  const stageHref = (next: Stage) => lessonRoute ? routeHref({ ...lessonRoute, stage: next }) : undefined;
-  const topicHref = lessonRoute ? routeHref({ kind: 'topics', language: lessonRoute.language, topic: lesson.topic }) : undefined;
+
+  const stageHref = (next: LessonStage) => lessonRoute ? routeHref({ ...lessonRoute, stage: next }) : undefined;
+  const topicHref = lessonRoute ? routeHref({ kind: 'topics', language: lessonRoute.language, topic: topicRouteKey(lesson.topic) }) : undefined;
+
+  function entry(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number): LearningEvent {
+    return { id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints,
+      occurredAt: new Date().toISOString(), ...(activity === 'completion' ? { automaticCompletion: true } : {}) };
+  }
 
   function record(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints = 0, after?: () => void) {
-    model.record({ id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints, occurredAt: new Date().toISOString() }, after);
+    const attempt = entry(activity, itemId, result, hints);
+    if (activity === 'sentence' && result === 'correct' && canComplete) {
+      model.recordMany([attempt, entry('completion', lesson.id, 'completed', 0)], after);
+    } else {
+      model.record(attempt, after);
+    }
   }
+
   function reviewVocabulary() {
-    if (browseOnly || lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id))) setStage('dialogue');
+    if (browseOnly || wordsStudied) setStage('dialogue');
     else record('vocabulary', lesson.id, 'viewed', 0, () => setStage('dialogue', true));
   }
-  return <View onLayout={event => setCanvasWidth(event.nativeEvent.layout.width)} style={{ gap: 16, minWidth: 0 }}>
-    <View style={[s.row, { gap: 8 }]}><Button compact quiet href={topicHref} disabled={exitBlocked} onPress={onExit}>← All lessons</Button><Text style={s.muted}>{lesson.level} · {lesson.topic} · {lesson.status === 'draft' ? 'Draft' : 'Published'}</Text></View>
-    <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center', minWidth: 0 }}>
-      <View style={{ gap: 6, flex: 1, minWidth: 0 }}><Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text><Text style={s.body}>{lesson.outcome}</Text><Text style={s.muted}>{lesson.vocabulary.length} words · {lesson.durationMinutes} min · Read, listen, then practise</Text></View>
-      {!compact && canvasWidth > 0 && !dialoguePhoto && <ContextImage photo={getContextPhoto(french ? 'fr-FR' : 'ja-JP', lesson.topic)} style={{ width: 190, height: 112, borderRadius: 14 }} />}
+
+  const reviewStage = progress.completed || !wordsStudied ? 'vocabulary' : 'picture';
+  const reviewLabel = progress.completed ? 'Revisit the words' : !wordsStudied ? 'Study the words' : meaningMatch ? 'Match the meanings' : 'Match the picture';
+
+  return <View style={layout.page}>
+    <View style={[s.row, layout.breadcrumb]}>
+      <Button compact quiet icon="arrow-left" href={topicHref} disabled={exitBlocked} onPress={onExit}>All lessons</Button>
+      <Text style={[s.muted, layout.meta]}>{lesson.level} · {lesson.topic} · {lesson.status === 'draft' ? 'Draft' : 'Published'}</Text>
     </View>
-    <LessonOutline id={outlineId} lesson={lesson} stage={stage} progress={progress} compact={compact} />
-    <View testID="lesson-stage" style={[s.card, { minWidth: 0, padding: compact ? 14 : 24, gap: 18, boxShadow: 'none', borderRadius: 18 }]}>
-      <View style={{ gap: 7 }} accessibilityLabel={`${count} of ${lesson.vocabulary.length + 2} activities saved`}>
-        <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}><Text accessibilityLiveRegion="polite" style={s.eyebrow}>Step {step} of 5 · {stage === 'vocabulary' ? 'Study' : stage === 'dialogue' ? 'Conversation' : stage === 'picture' ? 'Match' : stage === 'sentence' ? 'Build' : 'Save'}</Text><Text style={s.muted}>{count}/{lesson.vocabulary.length + 2} activities saved</Text></View>
-        <View style={[s.progressTrack, { height: 4 }]}><View style={[s.progressFill, { width: `${step / 5 * 100}%`, height: 4 }]} /></View>
-      </View>
-      <View style={[s.row, { justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }]}>
-        <Text nativeID={headingId} accessibilityRole="header" style={[s.heading, { flexShrink: 1 }]}>{stepTitle}</Text>
-        {stage === 'vocabulary' && <Button compact primary disabled={model.blocked && !browseOnly} onPress={reviewVocabulary}>Continue to dialogue →</Button>}
-      </View>
-    {stage === 'vocabulary' && <View style={{ gap: 20 }}>
-      <View style={[s.split, { gap: 16 }]}>{lesson.vocabulary.map(entry => <View key={entry.id} style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 340, minWidth: 0 }}>
-        <VocabularyCard entry={entry} model={model} language={lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR'} />
-      </View>)}</View>
-      <Text style={s.muted}>Continue when you have reviewed these words.</Text>
-      <View style={s.row}><Button primary disabled={model.blocked && !browseOnly} label="Continue after studying" onPress={reviewVocabulary}>Continue to conversation →</Button></View>
-    </View>}
-    {stage === 'dialogue' && <View style={{ gap: 20, minWidth: 0 }}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text>
-      {french ? <BilingualDialogue turns={lesson.dialogue} photo={dialoguePhoto} highlightedRole={lesson.role} /> : <>
-        <Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
-        {lesson.dialogue.map((line, index) => <DialogueLine key={index} line={line} highlighted={line.role === lesson.role} language="ja-JP" />)}
+    <View style={layout.intro}>
+      <Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text>
+      <Text style={[s.body, layout.outcome]}>{lesson.outcome}</Text>
+    </View>
+    <LessonProgress stage={stage} compact={compact} meaningMatch={meaningMatch} />
+    <View testID="lesson-stage" style={layout.stage}>
+      <Text nativeID={headingId} accessibilityRole="header" style={[s.heading, layout.stageHeading]}>{heading}</Text>
+      {stage === 'vocabulary' && <>
+        <LessonWords lesson={lesson} model={model} compact={compact} />
+        <WordsAction disabled={model.blocked && !browseOnly} onNext={reviewVocabulary} />
       </>}
-      <GrammarNote lessonId={lesson.id} note={lesson.grammar} />
-      <Button primary href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>{lesson.pictureActivity.mode === 'meaning' ? 'Try meaning practice →' : 'Try picture practice →'}</Button>
-    </View>}
-    {stage === 'picture' && <PictureActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly} done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
-    {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly} done={progress.sentenceDone} record={record} nextHref={stageHref('finish')} onNext={() => setStage('finish')} />}
-    {stage === 'finish' && <View style={{ gap: 20, minWidth: 0 }}>
-      <Text style={s.eyebrow}>{progress.completed ? 'Session saved' : 'One final step'}</Text><Text accessibilityRole="header" style={s.heading}>{progress.completed ? 'Your practice is saved.' : 'You’ve put the pieces together.'}</Text>
-      <Text style={s.muted}>This records your practice. Revisit the lesson whenever you need.</Text>
-      {!progress.completed && <Button primary disabled={model.blocked || !readyToFinish} onPress={() => record('completion', lesson.id, 'completed')}>Finish and save session</Button>}
-      {!readyToFinish && <Text style={s.muted}>Study every word and solve both activities before finishing.</Text>}
-      <View style={s.row}><Button href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Revisit the words</Button><Button primary={progress.completed} href={topicHref} disabled={exitBlocked} onPress={onExit}>Back to lessons →</Button></View>
-    </View>}
+      {stage === 'dialogue' && <>
+        <LessonConversation lesson={lesson} />
+        <View style={layout.actions}>
+          <Button primary trailingIcon="arrow-right" href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>
+            {meaningMatch ? 'Try meaning practice' : 'Try picture practice'}
+          </Button>
+        </View>
+      </>}
+      {stage === 'picture' && <PictureActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
+        done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
+      {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
+        done={progress.sentenceDone || progress.completed} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
+        record={record} nextHref={topicHref} onNext={onExit}
+        onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
+        reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
     </View>
   </View>;
 }
 
-function LessonOutline({ id, lesson, stage, progress, compact }: { id: string; lesson: Lesson; stage: Stage; progress: ReturnType<typeof lessonProgress>; compact: boolean }) {
-  const labels = ['Study words', 'Conversation', lesson.pictureActivity.mode === 'meaning' ? 'Match meanings' : 'Match a picture', 'Build a sentence', 'Save session'];
-  const shortLabels = ['Words', 'Talk', 'Match', 'Build', 'Save'];
-  const saved = [lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id)), false, progress.pictureDone, progress.sentenceDone, progress.completed];
-  return <View nativeID={id} accessibilityLabel="Lesson steps in order" style={{ flexDirection: 'row', gap: compact ? 4 : 8 }}>
-    {stageOrder.map((item, index) => {
-      const current = stage === item;
-      const status = current ? 'Current step' : saved[index] ? 'Saved' : item === 'dialogue' ? 'Read together' : 'To do';
-      return <View key={item} accessibilityLabel={`${index + 1}. ${labels[index]}. ${status}`} style={{ flex: 1, minWidth: 0, flexDirection: compact ? 'column' : 'row', alignItems: compact ? 'center' : 'flex-start', padding: compact ? 6 : 10, gap: compact ? 4 : 8, borderRadius: 12,
-        borderWidth: 1, borderColor: current ? colors.ink : colors.line, backgroundColor: current ? colors.goldTint : colors.card }}>
-        <View style={{ width: compact ? 24 : 28, height: compact ? 24 : 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, backgroundColor: current ? colors.yellow : saved[index] ? colors.sageTint : colors.sand }}>
-          <Text style={[s.body, { fontWeight: '700', fontSize: 14, lineHeight: 20 }]}>{saved[index] ? '✓' : index + 1}</Text>
-        </View>
-        <View style={{ flex: compact ? undefined : 1, minWidth: 0 }}>
-          <Text style={[s.body, { fontWeight: current ? '700' : '500', fontSize: compact ? 12 : 15, lineHeight: compact ? 18 : 21, textAlign: compact ? 'center' : 'left' }]}>{compact ? shortLabels[index] : labels[index]}</Text>
-          {!compact && <Text style={[s.muted, { fontSize: 12, lineHeight: 18 }]}>{status}</Text>}
-        </View>
+function WordsAction({ disabled, onNext }: { disabled: boolean; onNext: () => void }) {
+  const button = <Button primary trailingIcon="arrow-right" disabled={disabled} onPress={onNext}>Continue to dialogue</Button>;
+  if (Platform.OS !== 'web') return <View style={layout.actions}>{button}</View>;
+  return <div style={{ position: 'sticky', bottom: 0, zIndex: 1, display: 'flex', justifyContent: 'flex-end',
+    paddingBlock: 8, backgroundColor: colors.paper, borderTop: '1px solid ' + colors.line }}>{button}</div>;
+}
+
+function stageLabels(stage: LessonStage, meaningMatch: boolean) {
+  switch (stage) {
+    case 'vocabulary': return { label: 'Study words', short: 'Words', heading: 'Study words' };
+    case 'dialogue': return { label: 'Conversation', short: 'Talk', heading: 'Read a conversation' };
+    case 'picture': return { label: meaningMatch ? 'Match meanings' : 'Match a picture', short: 'Match', heading: meaningMatch ? 'Match the meaning' : 'Match a picture' };
+    case 'sentence': return { label: 'Build a sentence', short: 'Build', heading: 'Build a sentence' };
+  }
+}
+
+function LessonProgress({ stage, compact, meaningMatch }: { stage: LessonStage; compact: boolean; meaningMatch: boolean }) {
+  const current = lessonStages.indexOf(stage);
+  return <View accessibilityLabel="Lesson steps in order" style={layout.progress}>
+    {lessonStages.map((step, index) => {
+      const { label, short } = stageLabels(step, meaningMatch);
+      const active = step === stage;
+      return <View key={step} testID={'lesson-step-' + step} aria-current={active ? 'step' : undefined}
+        accessibilityLabel={label + ', step ' + (index + 1) + ' of ' + lessonStages.length}
+        style={[layout.segment, active && layout.activeSegment]}>
+        <Text style={[s.badgeText, layout.stepLabel, active && layout.activeLabel]}>{compact ? short : label}</Text>
       </View>;
     })}
+    <Text accessibilityLiveRegion="polite" style={layout.screenReaderText}>{'Step ' + (current + 1) + ' of ' + lessonStages.length}</Text>
   </View>;
 }
 
-type ActivityProps = { lesson: Lesson; routed: boolean; browseOnly: boolean; disabled: boolean; done: boolean; record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints?: number, after?: () => void) => void; nextHref?: string; onNext: () => void };
-
-function useActivityState<T>(routed: boolean, field: string, initial: T) {
-  const local = useState<T>(initial);
-  const visit = useVisitState<T>(field, initial);
-  return routed ? visit : local;
-}
-
-function DialogueLine({ line, highlighted, language }: { language: TargetLanguage; line: Lesson['dialogue'][number]; highlighted: boolean }) {
-  const [voiceError, setVoiceError] = useState('');
-  return <View style={[s.notice, { backgroundColor: highlighted ? colors.goldTint : colors.skyTint, padding: 18, gap: 8, borderRadius: 14 }, highlighted && { borderLeftWidth: 4, borderColor: colors.yellow }]}>
-    <Text style={s.eyebrow}>{line.role}</Text><View style={s.row}>
-      <Text style={[s.target, { flex: 1, minWidth: 0, fontSize: 30, lineHeight: 42 }]}>{line.target}</Text><Speak language={language} text={line.target} onError={setVoiceError} />
-    </View>{!!line.reading && <Text style={s.muted}>{line.reading}</Text>}<Text style={s.body}>{line.meaning}</Text>
-    {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
-  </View>;
-}
-
-function PictureActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext }: ActivityProps) {
-  const key = `lesson:${lesson.id}:${lesson.revision}:picture`;
-  const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
-  const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
-  const [hintUsed, setHintUsed] = useActivityState(routed, `${key}:hint-used`, false);
-  const target = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
-  const meaningMode = lesson.pictureActivity.mode === 'meaning';
-  function choose(id: string) {
-    const correct = id === target.id;
-    record('picture', target.id, correct ? 'correct' : 'incorrect', Number(hintUsed), () => setFeedback(correct
-      ? meaningMode ? 'That’s it. You matched the meaning.' : 'That’s it. You matched the picture.'
-      : meaningMode ? 'Try again. Match the meaning with the phrase.' : 'Take another look. Compare the object in the picture with the words. You can try again.'));
-  }
-  return <View style={{ gap: 20, minWidth: 0 }}><Text style={s.eyebrow}>{meaningMode ? 'Meaning practice' : 'Picture practice'}</Text><Text accessibilityRole="header" style={s.heading}>{lesson.pictureActivity.prompt}</Text>
-    {meaningMode ? <View style={s.notice}><Text accessibilityRole="header" style={s.heading}>{target.meaning}</Text></View>
-      : <View style={[s.notice, { backgroundColor: colors.skyTint }]}><Illustration picture={target.picture} alt={target.pictureAlt} size={250} /></View>}
-    <View style={{ gap: 10 }}>{lesson.pictureActivity.choices.map(id => <Button key={id} disabled={disabled || done} onPress={() => choose(id)}>{lesson.vocabulary.find(entry => entry.id === id)!.target}</Button>)}</View>
-    <Text accessibilityLiveRegion="polite" style={[s.body, { color: done ? '#2C653B' : colors.ink }]}>{feedback || (done ? `✓ ${meaningMode ? 'Meaning' : 'Picture'} matched. Your result is saved.` : 'Choose a phrase. There’s no timer.')}</Text>
-    <View style={s.row}><Button compact quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button></View>{hint && <Text style={s.body}>{meaningMode ? target.example : target.meaning}</Text>}
-    {(done || browseOnly) && <Button primary href={nextHref} disabled={disabled && !browseOnly} onPress={onNext}>Build a sentence →</Button>}
-  </View>;
-}
-
-function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext }: ActivityProps) {
-  const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
-  const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
-  const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
-  const [hintUsed, setHintUsed] = useActivityState(routed, `${key}:hint-used`, false);
-  const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
-  const exercise = lesson.sentenceActivity;
-  const answer = selected.map(index => exercise.tokens[index]).join(' ');
-  function check() {
-    const result = checkAnswer(answer, exercise);
-    record('sentence', exercise.id, result, Number(hintUsed), () => setFeedback(result === 'correct' ? 'That works. Your sentence is saved.' : result === 'almost' ? 'Very close. Check the accents, then try again.' : 'Try a different order. Tap a chosen piece to return it, or use the hint.'));
-  }
-  return <View style={{ gap: 20, minWidth: 0 }}><Text style={s.eyebrow}>Sentence building</Text><Text accessibilityRole="header" style={s.heading}>{exercise.prompt}</Text>
-    <View style={[s.notice, { minHeight: 110 }]}><Text style={s.eyebrow}>Your sentence</Text><View style={s.row}>
-      {selected.length ? selected.map((index, position) => <Button key={index} disabled={disabled || done} label={`Remove ${exercise.tokens[index]}`} onPress={() => setSelected(selected.filter((_, at) => at !== position))}>{exercise.tokens[index]} ×</Button>) : <Text style={s.muted}>Tap the pieces below to put them in order.</Text>}
-    </View></View>
-    <View style={s.row}>{exercise.tokens.map((token, index) => <Button key={index} disabled={selected.includes(index) || disabled || done} onPress={() => setSelected([...selected, index])}>{token}</Button>)}</View>
-    {!done && <View style={s.row}><Button primary disabled={disabled || selected.length !== exercise.tokens.length} onPress={check}>Check sentence</Button><Button disabled={disabled || !selected.length} onPress={() => { setSelected([]); setFeedback(''); }}>Clear</Button><Button onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button></View>}
-    {hint && <Text style={s.body}>{exercise.hint}</Text>}<Text accessibilityLiveRegion="polite" style={s.body}>{feedback || (done ? '✓ Sentence solved. Your result is saved.' : 'You can change your answer and try again.')}</Text>
-    {done && <Text style={s.body}>{exercise.explanation}</Text>}
-    {(done || browseOnly) && <Button primary href={nextHref} disabled={disabled && !browseOnly} onPress={onNext}>Continue →</Button>}
-  </View>;
-}
+const layout = StyleSheet.create({
+  page: { width: '100%', maxWidth: 900, alignSelf: 'center', minWidth: 0, gap: 16 },
+  breadcrumb: { gap: 8 },
+  meta: { flexShrink: 1, minWidth: 0 },
+  intro: { gap: 4 },
+  outcome: { color: colors.muted, maxWidth: 690 },
+  stage: { minWidth: 0, gap: 14 },
+  stageHeading: { outlineWidth: 0 },
+  actions: { alignItems: 'flex-end' },
+  progress: { flexDirection: 'row', gap: 5, marginTop: 2 },
+  segment: { flex: 1, minWidth: 0, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3, paddingVertical: 9,
+    borderRadius: 8, borderWidth: 1, borderColor: 'transparent', backgroundColor: colors.sand },
+  activeSegment: { backgroundColor: colors.goldTint, borderColor: colors.yellow },
+  stepLabel: { textAlign: 'center', color: colors.muted },
+  activeLabel: { color: colors.ink, fontWeight: '700' },
+  screenReaderText: { position: 'absolute', width: 1, height: 1, overflow: 'hidden' },
+});

@@ -40,6 +40,19 @@ test('independent tabs append without losing each other’s attempts', async () 
   first.close(); second.close();
 });
 
+test('a conflicting completion rolls back the whole attempt batch and retries preserve IDs', async () => {
+  const repository = await openLearningRepository({ factory: new IDBFactory() });
+  const sentence: LearningEvent = { ...attempt, activity: 'sentence', result: 'correct', itemId: restaurantLesson.sentenceActivity.id };
+  const completion: LearningEvent = { ...attempt, id: '88888888-8888-4888-8888-888888888888', activity: 'completion', result: 'completed', itemId: attempt.lessonId };
+  await repository.recordEvent(completion);
+  await assert.rejects(repository.recordEvents([sentence, { ...completion, hints: 1 }]), /different attempt/);
+  assert.deepEqual(await repository.listEvents(), [completion]);
+  await repository.recordEvents([sentence, completion]);
+  await repository.recordEvents([sentence, completion]);
+  assert.deepEqual(await repository.listEvents(), [sentence, completion]);
+  repository.close();
+});
+
 test('a stale lesson capture cannot overwrite personal edits from another tab', async () => {
   const factory = new IDBFactory();
   const first = await openLearningRepository({ factory });

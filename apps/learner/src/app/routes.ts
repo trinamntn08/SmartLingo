@@ -1,6 +1,6 @@
 import type { TargetLanguage } from '@smartlingo/domain';
 
-export const lessonStages = ['vocabulary', 'dialogue', 'picture', 'sentence', 'finish'] as const;
+export const lessonStages = ['vocabulary', 'dialogue', 'picture', 'sentence'] as const;
 export type LessonStage = typeof lessonStages[number];
 
 export type AppRoute =
@@ -57,7 +57,7 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
     return unavailable;
   }
   if (area === 'lesson' && parts.length <= 4 && section && id(section)) {
-    const stage = lessonStages.find(value => value === item);
+    const stage = item === 'finish' ? 'sentence' : lessonStages.find(value => value === item);
     return item === undefined || stage ? { kind: 'lesson', language, lessonId: section, stage } : unavailable;
   }
   if (area === 'course' && parts.length <= 5 && section && id(section) && (item === undefined || id(item)) && (extra === undefined || id(extra))) {

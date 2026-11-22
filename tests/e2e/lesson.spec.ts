@@ -74,9 +74,9 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await button(page, /Continue to dialogue/).click();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await expect(page.getByText('Je voudrais means', { exact: false })).toBeVisible();
   await expect(page.getByText('Hello! What would you like?', { exact: true })).toBeVisible();
   await expect(button(page, /Show translation|Show grammar help/)).toHaveCount(0);
@@ -98,12 +98,10 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Hide hint').click();
   for (const token of ['Je', 'voudrais', 'un café', 's’il vous plaît']) await button(page, token).click();
   await button(page, 'Check sentence').click();
-  await expect(page.getByText('That works. Your sentence is saved.')).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await page.screenshot({ path: info.outputPath('sentence.png'), fullPage: true });
   await page.reload();
-  await button(page, /^Continue/).click();
-  await button(page, 'Finish and save session').click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Review').click();
   await button(page, 'Edit note').click();
   await page.getByRole('textbox', { name: 'English meaning', exact: true }).fill('My morning greeting');
@@ -114,7 +112,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Today').click();
   await expect(button(page, /Revisit your lesson/)).toBeVisible();
   await button(page, /Revisit your lesson/).click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Revisit the words').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();
   await expect(button(page, 'Save bonjour')).toContainText('In notebook');
@@ -180,7 +178,7 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await expect(page.getByRole('heading', { name: 'une baguette', exact: true })).toBeVisible();
   await expect(button(page, /Continue to dialogue/)).toBeEnabled();
   await button(page, /Continue to dialogue/).click();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
 });
 
 test('speaker icon plays and stops through keyboard controls', async ({ page }) => {
@@ -219,7 +217,7 @@ test('storage denial explains the problem and never claims a saved change', asyn
   await openRestaurant(page);
   await expect(button(page, 'Save bonjour')).toBeDisabled();
   await button(page, /Continue to dialogue/).click();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await button(page, 'Retry opening storage').click();
   await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
 });

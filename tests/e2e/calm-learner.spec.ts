@@ -25,11 +25,12 @@ for (const language of ['French', 'Japanese'] as const) {
     await next.getByRole('button').click();
     if (language === 'French') {
       const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
-      await expect(page.getByText(/^Step 1 of 5/)).toBeVisible();
-      await expect(page.getByText(`0/${opening.vocabulary.length + 2} activities saved`, { exact: true })).toBeVisible();
+      await expect(page.getByTestId('lesson-step-vocabulary')).toHaveAttribute('aria-current', 'step');
+      await expect(page.getByRole('heading', { name: 'Study words', exact: true })).toBeVisible();
+      await expect(page.getByTestId(/^lesson-step-/)).toHaveCount(4);
       await expect(page.getByText(opening.vocabulary[0].meaning, { exact: true })).toBeVisible();
       await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-      await expect(page.getByText(/^Step 2 of 5/)).toBeVisible();
+      await expect(page.getByTestId('lesson-step-dialogue')).toHaveAttribute('aria-current', 'step');
       await expect(page.getByRole('button', { name: /Try meaning practice/ })).toBeVisible();
     } else {
       const first = japaneseAlphabetLessons[0]!;

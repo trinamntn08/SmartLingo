@@ -2,7 +2,7 @@ import {
   learningEventSchema, notebookEntrySchema, lessonSchema, reviewEventSchema, courseEventSchema,
   type LearningEvent, type LearningRepository, type NotebookEntry, type Lesson, type LearningBackup, type RestoreReport, type ReviewEvent, type CourseEvent,
 } from '@smartlingo/domain';
-import { requestResult, transactionDone, appendImmutable } from './transactions';
+import { requestResult, transactionDone, appendImmutable, appendImmutableBatch } from './transactions';
 import { exportLearningBackup, restoreLearningBackup } from './backup-store';
 
 const databaseName = 'smartlingo-learning';
@@ -53,9 +53,13 @@ class IndexedDbLearningRepository implements LearningRepository {
     return (await this.list('events')).map(row => learningEventSchema.parse(row));
   }
 
-  async recordEvent(input: LearningEvent): Promise<void> {
-    const event = learningEventSchema.parse(input);
-    await appendImmutable(this.database, 'events', event, row => learningEventSchema.parse(row));
+  recordEvent(input: LearningEvent): Promise<void> {
+    return this.recordEvents([input]);
+  }
+
+  async recordEvents(inputs: readonly LearningEvent[]): Promise<void> {
+    const events = inputs.map(input => learningEventSchema.parse(input));
+    await appendImmutableBatch(this.database, 'events', events, row => learningEventSchema.parse(row));
   }
 
   async listReviewEvents(): Promise<ReviewEvent[]> { return (await this.list('reviewEvents')).map(row => reviewEventSchema.parse(row)); }

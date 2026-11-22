@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, openCoursePilot, restaurantLesson } from '@smartlingo/content';
 import type { CourseEvent, LearningEvent } from '@smartlingo/domain';
+import { buildAcceptedSentence } from './learner-journeys';
 
 async function storedEvents<T>(page: Page, store: 'events' | 'courseEvents'): Promise<T[]> {
   return page.evaluate(async name => {
@@ -35,7 +36,7 @@ test('lesson Back restores its stage and Forward restores the previous hint in t
 
   await page.goBack();
   await expect(page).toHaveURL(`${location}/dialogue`);
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.goForward();
   await expect(page.getByRole('button', { name: 'Hide hint', exact: true })).toBeVisible();
   await page.reload();
@@ -45,6 +46,68 @@ test('lesson Back restores its stage and Forward restores the previous hint in t
   const events = await storedEvents<LearningEvent>(page, 'events');
   expect(events).toHaveLength(1);
   expect(events[0]).toMatchObject({ activity: 'vocabulary', result: 'viewed' });
+});
+
+test('the final answer completes the lesson in place and retries both records together', async ({ page }) => {
+  const location = '/lesson/fr/' + restaurantLesson.id;
+  await page.goto(location + '/vocabulary');
+  await expect(page.locator('[data-testid^="lesson-step-"]')).toHaveCount(4);
+  await page.getByRole('button', { name: 'Continue to dialogue', exact: true }).click();
+  await page.getByRole('button', { name: /Try picture practice/ }).click();
+  const match = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
+  await page.getByRole('button', { name: match.target, exact: true }).click();
+  await page.getByRole('button', { name: /Build a sentence/ }).click();
+  await expect(page.getByTestId('lesson-step-sentence')).toHaveAttribute('aria-current', 'step');
+  await page.evaluate(() => {
+    const add = IDBObjectStore.prototype.add;
+    let rejected = false;
+    IDBObjectStore.prototype.add = function (...args: Parameters<typeof add>) {
+      const value = args[0] as Partial<LearningEvent>;
+      if (this.name === 'events' && value.activity === 'completion' && !rejected) {
+        rejected = true;
+        throw new Error('Test interrupted completion');
+      }
+      return add.apply(this, args);
+    };
+  });
+  await buildAcceptedSentence(page, restaurantLesson);
+  const retry = page.getByRole('button', { name: 'Retry save', exact: true });
+  await expect(retry).toBeVisible();
+  expect((await storedEvents<LearningEvent>(page, 'events')).map(event => event.activity).sort()).toEqual(['picture', 'vocabulary']);
+  await retry.click();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(location + '/sentence');
+  const saved = await storedEvents<LearningEvent>(page, 'events');
+  expect(saved.map(event => event.activity).sort()).toEqual(['completion', 'picture', 'sentence', 'vocabulary']);
+  await page.goBack();
+  await expect(page).toHaveURL(location + '/picture');
+  await page.goForward();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
+  await page.goto(location + '/finish');
+  await expect(page).toHaveURL(location + '/sentence');
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
+  expect(await storedEvents<LearningEvent>(page, 'events')).toEqual(saved);
+
+  const completion = saved.find(event => event.activity === 'completion')!;
+  expect(completion.automaticCompletion).toBe(true);
+  await page.evaluate(id => new Promise<void>((resolve, reject) => {
+    const request = indexedDB.open('smartlingo-learning');
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      const database = request.result;
+      const transaction = database.transaction('events', 'readwrite');
+      transaction.oncomplete = () => { database.close(); resolve(); };
+      transaction.onabort = () => { database.close(); reject(transaction.error); };
+      transaction.objectStore('events').delete(id);
+    };
+  }), completion.id);
+  await page.reload();
+  const backToLessons = page.getByRole('button', { name: 'Back to lessons', exact: true });
+  await expect(backToLessons).toBeVisible();
+  expect((await storedEvents<LearningEvent>(page, 'events')).some(event => event.activity === 'completion')).toBe(false);
+  await backToLessons.click();
+  await expect(page).toHaveURL(/\/learn\/fr\/topics\/Restaurant$/);
+  expect((await storedEvents<LearningEvent>(page, 'events')).map(event => event.activity).sort()).toEqual(['completion', 'picture', 'sentence', 'vocabulary']);
 });
 
 test('French course section history is read-only and refresh keeps the same section', async ({ page }) => {

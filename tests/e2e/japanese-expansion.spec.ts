@@ -38,9 +38,7 @@ async function complete(page: Page, lesson: Lesson) {
   await button(page, answer.target).click();
   await page.getByRole('button', { name: /Build a sentence/ }).click();
   await buildAcceptedSentence(page, lesson);
-  await page.getByRole('button', { name: /^Continue/ }).click();
-  await button(page, 'Finish and save session').click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
 }
 
 test('added foundation/A1/A2/B1 lessons complete, save notes and resume without changing original progress', async ({ page }, info) => {
@@ -64,9 +62,9 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await page.reload();
   await button(page, 'Today').click();
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await button(page, 'Profile').click();
   await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download'); await button(page, 'Download learning backup').click();

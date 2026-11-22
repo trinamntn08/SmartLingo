@@ -40,7 +40,7 @@ test('the visual library returns from a lesson to the same filtered topic and sc
   await expect.poll(scrollPosition).toBe(0);
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeFocused();
-  await button('← All lessons').click();
+  await button('All lessons').click();
   await expect(search).toHaveValue('coffee');
   await expect(button('A1 level')).toHaveAttribute('aria-selected', 'true');
   await expect.poll(async () => Math.abs(await scrollPosition() - before)).toBeLessThanOrEqual(2);
@@ -152,11 +152,9 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
     remaining.splice(remaining.indexOf(next), 1);
   }
   await page.getByRole('button', { name: 'Check sentence', exact: true }).click();
-  await expect(page.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: /^Continue/ }).click();
-  await page.getByRole('button', { name: 'Finish and save session', exact: true }).click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   expect(errors).toEqual([]);
 });
 

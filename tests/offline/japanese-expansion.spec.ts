@@ -30,11 +30,9 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   await cold.getByRole('button', { name: /Try meaning practice/ }).click();
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
   await cold.getByRole('button', { name: /Build a sentence/ }).click(); await buildAcceptedSentence(cold, lesson);
-  await cold.getByRole('button', { name: /^Continue/ }).click();
-  await cold.getByRole('button', { name: 'Finish and save session', exact: true }).click();
-  await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.reload();
-  await expect(cold.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(cold.getByTestId('notebook-entries').getByRole('heading', { name: entry.target, exact: true })).toBeVisible();
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

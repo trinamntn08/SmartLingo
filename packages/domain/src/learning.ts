@@ -9,6 +9,7 @@ export const learningEventSchema = z.object({
   itemId: z.string().min(1), activity: z.enum(['vocabulary', 'picture', 'sentence', 'completion']),
   result: z.enum(['viewed', 'correct', 'almost', 'incorrect', 'completed']),
   hints: z.number().int().min(0), occurredAt: z.string().datetime({ offset: true }),
+  automaticCompletion: z.literal(true).optional(),
 });
 export type LearningEvent = z.infer<typeof learningEventSchema>;
 export const notebookEntrySchema = z.object({
@@ -24,6 +25,7 @@ export type NotebookEntry = z.infer<typeof notebookEntrySchema>;
 export interface LearningRepository {
   listEvents(): Promise<LearningEvent[]>;
   recordEvent(event: LearningEvent): Promise<void>;
+  recordEvents(events: readonly LearningEvent[]): Promise<void>;
   listNotebook(): Promise<NotebookEntry[]>;
   captureNotebook(entry: NotebookEntry): Promise<NotebookEntry>;
   saveNotebook(entry: NotebookEntry): Promise<void>;

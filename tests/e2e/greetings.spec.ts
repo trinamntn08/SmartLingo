@@ -32,7 +32,7 @@ test('fresh Today starts greetings with readable arrival and departure support, 
   await expect(page.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
   await expect(page.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Try meaning practice/ }).click();
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();
@@ -40,11 +40,9 @@ test('fresh Today starts greetings with readable arrival and departure support, 
   await expect(page.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Build a sentence/ }).click();
   await buildAcceptedSentence(page, opening);
-  await expect(page.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: /^Continue/ }).click();
-  await page.getByRole('button', { name: 'Finish and save session', exact: true }).click();
-  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('bonsoir', { exact: true }).first()).toBeVisible();
   await page.reload();
@@ -101,7 +99,7 @@ test('a pre-existing Restaurant attempt still resumes its dialogue after the gre
   await page.reload();
   await expect(page.getByText(restaurantLesson.subtitle, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Continue your lesson/ }).click();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await expect(page.getByText(restaurantLesson.dialogue[0].meaning, { exact: true })).toBeVisible();
 });
 

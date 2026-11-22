@@ -77,6 +77,14 @@ test('old valid revisions count as activity without pretending the latest lesson
   assert.throws(() => buildLearningReport(input({ events: [overview, { ...overview, result: 'incorrect' }] })), /Conflicting saved activity IDs/);
 });
 
+test('automatic lesson completion counts the finished lesson and one final answer action', () => {
+  const answer = event(french, 'sentence');
+  const completion = { ...event(french, 'completion'), automaticCompletion: true as const };
+  const report = buildLearningReport(input({ events: [answer, completion] }));
+  assert.equal(report.completedLessons, 1);
+  assert.equal(report.actionsThisWeek, 1);
+});
+
 test('viewer-local weeks handle midnight, year boundaries and both Paris DST transitions', () => {
   const cases = [
     { now: '2026-11-15T23:30:00Z', today: '2026-11-16', start: '2026-11-16', activity: '2026-11-15T23:15:00Z' },

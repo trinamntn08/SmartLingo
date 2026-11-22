@@ -29,7 +29,7 @@ test('Back and Forward restore shell screens and a bookmarked lesson keeps its l
   try {
     const lesson = japaneseLessons[0]!;
     await tab.goto('/lesson/ja/' + lesson.id + '/dialogue');
-    await expect(tab.getByRole('heading', { name: 'A small conversation' })).toBeVisible();
+    await expect(tab.getByRole('heading', { name: 'Read a conversation' })).toBeVisible();
     await expect(tab.getByRole('button', { name: 'Change language' })).toContainText('Japanese');
     expect(await tab.evaluate(() => localStorage.getItem('smartlingo.target-language.v1'))).toBe('fr-FR');
   } finally { await tab.close(); }

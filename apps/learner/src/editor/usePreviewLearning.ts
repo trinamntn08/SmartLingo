@@ -10,10 +10,14 @@ export function usePreviewLearning(): LearningModel {
     setNotebook(current => [...current.filter(saved => saved.id !== entry.id), entry]);
     after();
   }
+  function recordMany(batch: readonly LearningEvent[], after: () => void = () => {}) {
+    setEvents(current => [...current, ...batch]);
+    after();
+  }
   return {
     events, notebook, loading: false, loadError: '', saveError: '', busy: false, blocked: false,
     load: async () => {}, retry: () => {}, cancelWrite: () => {},
-    record: (event, after = () => {}) => { setEvents(current => [...current, event]); after(); },
+    record: (event, after) => recordMany([event], after), recordMany,
     saveEntry,
     captureEntry: (entry, after = () => {}) => {
       setNotebook(current => current.some(saved => saved.id === entry.id) ? current : [...current, entry]);

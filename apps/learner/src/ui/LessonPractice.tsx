@@ -1,0 +1,162 @@
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { checkAnswer, normalizeAnswer, type LearningEvent, type Lesson } from '@smartlingo/domain';
+import { useVisitState } from '../app/WebNavigation';
+import { Button } from './controls';
+import { Icon } from './Icon';
+import { Illustration } from './Illustration';
+import { colors, designTokens as tokens, styles as s } from './theme';
+
+interface ActivityProps {
+  lesson: Lesson; routed: boolean; browseOnly: boolean; disabled: boolean; done: boolean;
+  record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints?: number, after?: () => void) => void;
+  nextHref?: string;
+  onNext: () => void;
+}
+
+function useActivityState<T>(routed: boolean, field: string, initial: T) {
+  const local = useState(initial);
+  const visit = useVisitState(field, initial);
+  return routed ? visit : local;
+}
+
+export function PictureActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext }: ActivityProps) {
+  const key = `lesson:${lesson.id}:${lesson.revision}:picture`;
+  const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
+  const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
+  const [hintUsed, setHintUsed] = useActivityState(routed, `${key}:hint-used`, false);
+  const target = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
+  const meaningMode = lesson.pictureActivity.mode === 'meaning';
+  const matched = meaningMode ? 'That’s it. You matched the meaning.' : 'That’s it. You matched the picture.';
+
+  function choose(id: string) {
+    const correct = id === target.id;
+    record('picture', target.id, correct ? 'correct' : 'incorrect', Number(hintUsed), () => setFeedback(correct ? matched
+      : meaningMode ? 'Try again. Match the meaning with the phrase.' : 'Take another look. Compare the picture with the choices.'));
+  }
+
+  return <View style={layout.card}>
+    <View style={layout.lead}>
+      <Text accessibilityRole="header" style={[s.body, layout.prompt]}>{lesson.pictureActivity.prompt}</Text>
+      {meaningMode ? <Text style={[s.heading, layout.clue]}>{target.meaning}</Text>
+        : <View style={layout.illustration}><Illustration picture={target.picture} alt={target.pictureAlt} size={160} /></View>}
+    </View>
+    <View style={layout.body}>
+      <View style={layout.choices}>
+        {lesson.pictureActivity.choices.map(id => <MatchChoice key={id} name={lesson.vocabulary.find(entry => entry.id === id)!.target}
+          correct={done && id === target.id} disabled={disabled || done} onPress={() => choose(id)} />)}
+      </View>
+      {!!(done || feedback) && <Text accessibilityLiveRegion="polite" style={[s.body, layout.feedback, done && layout.correct]}>{done ? matched : feedback}</Text>}
+      {hint && <Text style={[s.body, layout.hint]}>{meaningMode ? target.example : target.meaning}</Text>}
+      <View style={layout.actions}>
+        <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>
+        {(done || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly} onPress={onNext}>Build a sentence</Button>}
+      </View>
+    </View>
+  </View>;
+}
+
+function MatchChoice({ name, correct, disabled, onPress }: { name: string; correct: boolean; disabled: boolean; onPress: () => void }) {
+  const [focused, setFocused] = useState(false);
+  return <Pressable accessibilityRole="button" accessibilityLabel={name} accessibilityState={{ disabled, selected: correct }}
+    disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+    style={({ pressed }) => [layout.choice, correct && layout.choiceCorrect, focused && layout.focus, pressed && layout.pressed]}>
+    <View aria-hidden={true} style={[layout.indicator, correct && layout.indicatorCorrect]}>
+      {correct && <Icon name="check" size={13} color={colors.onPrimary} />}
+    </View>
+    <Text style={[s.body, layout.choiceText]}>{name}</Text>
+  </Pressable>;
+}
+
+interface SentenceProps extends ActivityProps {
+  completed: boolean; canComplete: boolean; onComplete: () => void; onReview: () => void; reviewLabel: string;
+}
+
+export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext,
+  completed, canComplete, onComplete, onReview, reviewLabel }: SentenceProps) {
+  const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
+  const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
+  const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
+  const [hintUsed, setHintUsed] = useActivityState(routed, `${key}:hint-used`, false);
+  const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
+  const exercise = lesson.sentenceActivity;
+  const answer = selected.map(index => exercise.tokens[index]).join(' ');
+  const accepted = done ? exercise.answers.find(value => normalizeAnswer(value) === normalizeAnswer(answer)) ?? exercise.answers[0] : '';
+
+  function check() {
+    const result = checkAnswer(answer, exercise);
+    record('sentence', exercise.id, result, Number(hintUsed), () => setFeedback(result === 'correct' ? ''
+      : result === 'almost' ? 'Very close. Check the accents, then try again.' : 'Try a different order. Tap a piece in your sentence to move it back.'));
+  }
+
+  return <View style={layout.card}>
+    <View style={layout.lead}>
+      <Text accessibilityRole="header" style={[s.body, layout.prompt]}>{exercise.prompt}</Text>
+      <View style={layout.tray}>
+        {done ? <Text style={[s.heading, layout.clue]}>{accepted}</Text>
+          : selected.length ? <View style={layout.pieces}>
+            {selected.map(index => <Button compact accent disabled={disabled} key={index} label={`Remove ${exercise.tokens[index]}`}
+              onPress={() => setSelected(selected.filter(item => item !== index))}>{exercise.tokens[index]} ×</Button>)}
+          </View> : <Text style={[s.muted, layout.trayPlaceholder]}>{browseOnly ? 'Sentence practice' : 'Tap the pieces below to build your sentence.'}</Text>}
+      </View>
+    </View>
+    <View style={layout.body}>
+      {done ? <>
+        <View style={layout.result} accessibilityLiveRegion="polite">
+          <View style={[s.row, { gap: 8 }]}>
+            <Icon name="check" size={19} color={colors.primary} />
+            <Text accessibilityRole="header" style={[s.heading, layout.resultTitle]}>{completed ? 'Lesson complete' : 'Sentence solved'}</Text>
+          </View>
+          <Text style={s.body}>{exercise.explanation}</Text>
+        </View>
+        <View style={layout.actions}>
+          <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly} disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
+          {(completed || canComplete || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly}
+            onPress={canComplete && !browseOnly ? onComplete : onNext}>Back to lessons</Button>}
+        </View>
+      </> : <>
+        <View style={layout.pieces}>
+          {exercise.tokens.map((token, index) => <Button key={index} disabled={selected.includes(index) || disabled} onPress={() => setSelected([...selected, index])}>{token}</Button>)}
+        </View>
+        {!!feedback && <Text accessibilityLiveRegion="polite" style={[s.body, layout.feedback]}>{feedback}</Text>}
+        {hint && <Text style={[s.body, layout.hint]}>{exercise.hint}</Text>}
+        <View style={layout.actions}>
+          <View style={layout.secondary}>
+            <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>
+            {!!selected.length && <Button quiet disabled={disabled} onPress={() => { setSelected([]); setFeedback(''); }}>Clear</Button>}
+          </View>
+          {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>Back to lessons</Button>
+            : <Button primary disabled={disabled || selected.length !== exercise.tokens.length} onPress={check}>Check sentence</Button>}
+        </View>
+      </>}
+    </View>
+  </View>;
+}
+
+const layout = StyleSheet.create({
+  card: { minWidth: 0, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card },
+  lead: { paddingVertical: 18, paddingHorizontal: 16, gap: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, backgroundColor: colors.dark },
+  prompt: { color: colors.sageTint, fontWeight: '600', fontSize: 16, lineHeight: 23 },
+  clue: { color: colors.onPrimary, fontSize: 27, lineHeight: 35 },
+  illustration: { alignSelf: 'flex-start', backgroundColor: colors.goldTint, borderRadius: 10, maxWidth: '100%' },
+  body: { padding: 14, gap: 12, minWidth: 0 },
+  choices: { gap: 8, minWidth: 0 },
+  choice: { minHeight: 49, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 9,
+    borderWidth: 1, borderColor: colors.line, borderRadius: 10, backgroundColor: colors.card },
+  choiceCorrect: { backgroundColor: colors.sageTint, borderColor: colors.primary },
+  choiceText: { fontSize: 17, lineHeight: 24, fontWeight: '500', flex: 1, minWidth: 0 },
+  indicator: { width: 19, height: 19, borderRadius: 10, borderWidth: 1, borderColor: colors.inputBorder, alignItems: 'center', justifyContent: 'center' },
+  indicatorCorrect: { backgroundColor: colors.primary, borderColor: colors.primary },
+  focus: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 2 },
+  pressed: { backgroundColor: colors.paper },
+  feedback: { fontSize: 16, lineHeight: 24 },
+  correct: { color: colors.primary, fontWeight: '600' },
+  hint: { padding: 10, backgroundColor: colors.goldTint, borderRadius: 8 },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
+  tray: { minHeight: 61, justifyContent: 'center', padding: 8, borderWidth: 1, borderStyle: 'dashed', borderColor: '#73988B', borderRadius: 10 },
+  trayPlaceholder: { color: colors.sageTint, paddingHorizontal: 3 },
+  pieces: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, minWidth: 0 },
+  secondary: { flexDirection: 'row', flexWrap: 'wrap', gap: 3 },
+  result: { backgroundColor: colors.sageTint, padding: 13, borderRadius: 10, gap: 5 },
+  resultTitle: { fontSize: 21, lineHeight: 26 },
+});

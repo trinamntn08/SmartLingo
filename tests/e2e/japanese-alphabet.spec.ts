@@ -83,7 +83,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await button(page, `Save ${oldLesson.vocabulary[0]!.target}`).click();
   await expect(button(page, `Save ${oldLesson.vocabulary[0]!.target}`)).toBeDisabled();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
   await button(page, 'Today').click();

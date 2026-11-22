@@ -1,6 +1,8 @@
 # SmartLingo — Codex instructions
 
 ## Start here
+- First action for every task and status/progress request: inspect local Git state/worktrees, fetch the owner-selected origin, compare the relevant local and live remote heads, and safely synchronize the intended task baseline before reporting or editing. Follow `docs/SESSION_WORKFLOW.md#repository-check-and-synchronization-first`; preserve local edits and never merge unrelated branches or change main automatically. If synchronization fails or is unsafe, record and report the exact mismatch; do not claim the checkout is current.
+- Start/update a dated entry in `docs/WORK_LOG.md` for every work request, including status checks, reviews and documentation tasks. Record source/sync evidence, scope, progress, actual checks, outcome and next action. Keep `docs/SESSION_CHECKPOINT.md` current while working and at handoff; preserve earlier task entries in the log.
 - Read `docs/STATUS.md`, then the relevant part of `PROJECT_PLAN.md`.
 - Read `docs/SESSION_CHECKPOINT.md` and follow `docs/SESSION_WORKFLOW.md` for usage checks, efficient work, and interruption recovery.
 - Read `docs/ARCHITECTURE.md` before changing module boundaries or storage.

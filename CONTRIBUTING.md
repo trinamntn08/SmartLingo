@@ -1,6 +1,6 @@
 # Development workflow
 
-Read [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md), [the latest checkpoint](docs/SESSION_CHECKPOINT.md) and the relevant [product requirements](PROJECT_PLAN.md). The [documentation index](docs/README.md) distinguishes current guides from dated records.
+First follow [repository check and synchronization](docs/SESSION_WORKFLOW.md#repository-check-and-synchronization-first), even for a status/progress request. Inspect local work, fetch origin, compare relevant local/live remote heads and safely synchronize before reporting or editing. Then read [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md), [the latest checkpoint](docs/SESSION_CHECKPOINT.md) and the relevant [product requirements](PROJECT_PLAN.md). The [documentation index](docs/README.md) distinguishes current guides from dated records.
 
 ## Branches and scope
 
@@ -24,6 +24,6 @@ The pre-commit hook runs structural/whitespace and staged-secret checks, not the
 
 Keep keys, databases, recordings, transcripts, generated audio, exports and installed dependencies out of Git. Reproducible seed content belongs in `packages/content`; optional API settings are documented in [.env.example](.env.example) and [local operations](docs/LOCAL_OPERATIONS.md). No real environment file is read automatically by the API. Use deterministic provider fakes for ordinary tests; only explicitly authorised live checks may spend credits.
 
-Update STATUS for capability changes and the checkpoint for each completed step. Use [execution plans](docs/templates/EXECUTION_PLAN.md) for substantial work and [decision records](docs/templates/ADR.md) for material architecture choices. Link current procedures instead of repeating them across status, setup and plans. Preserve dated sources and unique audit evidence.
+Record every work request, including status checks, reviews and documentation changes, in the dated [work log](docs/WORK_LOG.md). Start the entry before substantial work and update it with progress, actual checks, outcome, synchronization/commit evidence and next action. Keep the checkpoint current during work and at handoff; update STATUS for capability changes. Use [execution plans](docs/templates/EXECUTION_PLAN.md) for substantial work and [decision records](docs/templates/ADR.md) for material choices. Link current procedures instead of repeating them across status, setup and plans. Preserve dated sources and unique audit evidence.
 
 No application licence has been chosen. Public distribution/commercial release requires a deliberate licence and media-rights decision.

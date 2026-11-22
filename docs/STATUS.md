@@ -2,6 +2,8 @@
 
 Reviewed: 2026-11-22 (Europe/Paris), against this checkout's source. This is the current capability summary; [PROJECT_PLAN](../PROJECT_PLAN.md) describes target requirements, [local operations](LOCAL_OPERATIONS.md) owns run/setup instructions, and [the session checkpoint](SESSION_CHECKPOINT.md) records the latest task and actual checks. A documented localhost address does not establish that a service is currently running.
 
+Before every status/progress answer, complete the [local/remote repository check and safe synchronization](SESSION_WORKFLOW.md#repository-check-and-synchronization-first), then record the observation and work in [WORK_LOG](WORK_LOG.md). This dated summary alone does not prove the checkout is current.
+
 Source baseline: `feat/calm-learner-redesign` starts from maintainable-foundation checkpoint `786219d`, descended from unified-hub head `d8274ee`, containing Japanese and French. Android APK work (`0d21d67`) and the older hosted learner (`c88bc41`) are separate branches, not absent work and not integrated features here. [Repository and branch state](REPOSITORY_STATE.md) records the earlier inspected heads and safe continuation procedure.
 
 ## Implemented

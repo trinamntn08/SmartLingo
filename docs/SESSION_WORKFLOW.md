@@ -2,13 +2,27 @@
 
 Owner preference recorded: 2026-11-14. Use the available plan allowance efficiently and preserve progress so authorised work can continue without re-explanation. Current tool/usage availability belongs in the session checkpoint; do not assume a subscription or a previous session's capabilities.
 
+## Repository check and synchronization first
+
+Owner instruction, recorded 2026-11-22: every work request, including asking for status or progress, starts by checking the local repository against the remote and safely synchronizing the relevant source. Do this before relying on existing status documents, reporting capabilities or editing files. A previous turn's fetch or successful push is not a fresh check.
+
+1. Inspect `git status --short --branch`, staged/unstaged changes, `git worktree list`, the current branch/upstream and the origin URL. Preserve owner edits, in-progress commits and other sessions' worktrees. The selected origin is `https://github.com/trinamntn08/SmartLingo.git`; do not silently replace it.
+2. Run `git fetch origin --prune`. Inspect the relevant fetched history, compare local/upstream SHAs and ahead/behind counts, and read the task branch's live ref with `git ls-remote --heads origin <branch>`. Check sibling task history when needed to locate the intended implementation. Latest means the relevant source lineage, not whichever branch has the newest timestamp or an assumption that main contains every feature.
+3. Synchronize according to the observed state:
+   - Equal heads: record already synchronized; no merge is needed.
+   - Clean topic branch strictly behind its matching remote: fast-forward only, for example `git merge --ff-only origin/<branch>`, then verify equality. Do not update main automatically.
+   - Local commits ahead: preserve them, inspect their scope and validation, and upload only completed, reviewed, checked task work under the existing checkpoint rules. Do not push unfinished or unrelated work just to make heads equal.
+   - Dirty, divergent, detached, missing-upstream or mismatched-remote state: inspect and choose a safe task baseline/worktree where possible. A new topic branch may start from a verified relevant origin ref. Never reset, discard, auto-stash owner edits, force-push, rewrite published history or combine unrelated feature branches to achieve synchronization. Resolve within existing task authorization where possible; record a blocking conflict when no safe continuation exists.
+4. If fetching or reading the live remote fails, keep local work and report the failed command, available local SHA and unverified remote state. Do not describe the checkout as latest or synchronized. Continue independent safe work when useful, clearly distinguishing local evidence from remote verification.
+5. Record the time/timezone, repository/worktree, branch, local/remote SHAs, dirty state, ahead/behind counts, synchronization action/result and any blocker in [WORK_LOG](WORK_LOG.md). Recheck if the branch changes or remote work arrives before integration/push. Git synchronization does not rebuild a running preview, transfer browser learning data, deploy or publish curriculum.
+
 ## Start and work
 
-1. Read STATUS.md and SESSION_CHECKPOINT.md, inspect Git status, then read only the relevant plan sections and source files. Preserve unrelated and uncommitted work.
+1. Complete the repository check/synchronization above, then read STATUS.md and SESSION_CHECKPOINT.md and only the relevant plan sections/source files. Preserve unrelated and uncommitted work.
 2. Select one small, complete step within the owner's existing request. Record acceptance criteria and exact next actions before substantial implementation. A backlog entry alone is not permission to start a new feature.
 3. If the client exposes usage limits, check at session start, before substantial work/delegation, and before handoff. Record the observation time, remaining allowance for each available window, and reset times with timezone. Missing data means unavailable, not zero or unlimited. Do not repeatedly retry a failed usage tool in the same session.
 4. Use targeted searches, bounded output, batched independent reads, and concise updates. Reuse verified findings. Delegate only substantial independent tasks with exclusive ownership; extra agents also consume allowance. Run appropriate checks once after a coherent change, repeating only for new changes or unresolved failures.
-5. Update SESSION_CHECKPOINT.md after each meaningful completed step, before risky or long work, before compaction when signalled, and before stopping. Keep it short and replace stale details. Update STATUS.md for milestones and meaningful blockers; record material decisions in decisions/.
+5. Start a dated WORK_LOG.md entry before substantial work on every request, including a status-only check, review or documentation task. Record the request, source/synchronization evidence, scope and intended next action; update the same entry at meaningful milestones and handoff with changes/findings, actual validation, outcome, blockers and commit/upload evidence. Preserve earlier entries. Update SESSION_CHECKPOINT.md while work is in progress, after meaningful steps, before risky/long work, before compaction when signalled and before stopping. Keep the checkpoint concise with the exact recovery action. Update STATUS.md for capability/milestone changes and meaningful blockers; record material decisions in decisions/. Do not claim implementation or tests merely because a status/log entry was written.
 6. After reviewing and validating a completed step, create its checkpoint commit and push the assigned task branch to origin under the standing owner authorisation below. Verify the local commit and remote head; report the hash and upload result. Do not leave completed validated work uncommitted or unpushed by default.
 
 ## Automatic checkpoint commits
@@ -21,7 +35,7 @@ For each completed step:
 
 1. Review the entire proposed change, including new files, for correctness, relevant failure paths, architecture standards, scope, and sensitive data. Resolve applicable findings. Use an independent read-only reviewer for substantial work with separable review scope; keep small sequential edits in the primary agent.
 2. Run the documented checks and relevant application verification. Do not commit a known failing step as though complete, disable hooks, or replace meaningful checks with placeholders.
-3. Update SESSION_CHECKPOINT.md with the completed outcome, actual validation, remaining limitations, and exact next step. Update STATUS.md and decision records when warranted. Include these task-related notes in the same checkpoint commit.
+3. Finalize the task's WORK_LOG.md entry and update SESSION_CHECKPOINT.md with the completed outcome, actual validation, remaining limitations, and exact next step. Update STATUS.md and decision records when warranted. Include task-related notes in the same checkpoint commit. For that commit's own SHA, identify the commit containing the note and report the resulting hash/upload verification at handoff; do not create recursive documentation-only commits just to embed a commit's own hash.
 4. Inspect the index, stage only deliberate task paths, then inspect the complete staged diff. Preserve unrelated or pre-staged owner work; exclude it from the checkpoint commit. Never use blanket staging when unrelated changes may exist.
 5. Run `npm.cmd run check:staged` and `git diff --cached --check` on the final staged content. Create a focused commit with a descriptive subject, then verify `git log -1` and `git status --short`. Report the actual hash and any remaining uncommitted work. Do not create an empty commit when the step changes nothing.
 6. Inspect the live origin head for the assigned task branch, then push that branch normally. Create/use a named topic branch if the checkout is detached or on main. Preserve unrelated remote commits; reconcile changes safely within the task or report the blocker. Never force-push, push all branches by default, or infer permission to merge from permission to push.
@@ -57,6 +71,7 @@ Context capacity and account usage limits are different. Compaction does not res
 
 ## Checkpoint contents
 
+- Current local/remote synchronization evidence and a link to the durable WORK_LOG.md task entry.
 - Current authorised request, scope, and completion/paused/in-progress state.
 - Completed steps, relevant files, and current uncommitted work to preserve.
 - Latest successful checkpoint commit hash, or identify the commit containing the checkpoint when documenting that same commit (a commit cannot contain its own hash). Report the resulting hash after committing.

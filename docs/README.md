@@ -10,6 +10,8 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 | [STATUS](STATUS.md) | Implemented capabilities, milestone gates and remaining work. |
 | [Repository and branch state](REPOSITORY_STATE.md) | Current Japanese-enabled baseline, separate Android/hosting work, source heads and safe synchronization. |
 | [Session checkpoint](SESSION_CHECKPOINT.md) | Latest task, actual validation, commit/upload state and recovery action. |
+| [Work log](WORK_LOG.md) | Dated tracking for every task/status request, source synchronization, progress and outcomes. |
+| [Session workflow](SESSION_WORKFLOW.md) | Required local/remote synchronization before every request, ongoing documentation and checkpoint procedure. |
 | [Product plan](../PROJECT_PLAN.md) | Target requirements and product constraints, including future scope. |
 | [Local operations](LOCAL_OPERATIONS.md) | Learner/editor use, backups, offline study and optional speech/AI setup. |
 | [Architecture](ARCHITECTURE.md) | Module responsibilities, boundaries and implementation/review standards. |
@@ -49,4 +51,4 @@ The separate `feat/android-test-apk` branch contains verified debug-APK tooling 
 - [ADR template](templates/ADR.md) and [execution-plan template](templates/EXECUTION_PLAN.md) are reusable formats, not pending tasks.
 - [Visual-reference instructions](../references/AGENTS.md), [fixture boundaries](../tests/fixtures/README.md) and [prepared tooling](../tooling/README.md) explain their specific directories. Installed `.agents/` and prepared `tooling/agents/` skill copies intentionally coexist for repeatable installation.
 
-Keep one authoritative home for each current fact or procedure. Link to it from entry points; put new per-step evidence in its plan/checkpoint rather than appending another competing current-status narrative.
+Keep one authoritative home for each current fact or procedure. Link to it from entry points; track every task in WORK_LOG and keep the latest recovery state in SESSION_CHECKPOINT. Put detailed implementation evidence in linked plans/decisions rather than creating competing capability summaries.

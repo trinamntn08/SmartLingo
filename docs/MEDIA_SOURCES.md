@@ -1,6 +1,6 @@
 # Visual media sources and rights
 
-Created 2026-11-14 for the visual topic browser. Current binding counts checked against [visuals.ts](../packages/content/src/visuals.ts) and the bundled catalogue on 2026-11-22: 125 French bindings, 122 used by current French lessons. The render/contact-sheet review described below remains historical evidence from the original batch. For photographs and their separate rights, use [photo sources](PHOTO_SOURCES.md) and [current coverage](PHOTO_COVERAGE.md).
+Created 2026-11-14 for the visual topic browser. Current binding counts checked against [visuals.ts](../packages/content/src/visuals.ts) and the bundled catalogue on 2026-11-22: 125 French bindings, 122 used by current French lessons. The render/contact-sheet review described below remains historical evidence from the original batch. See [generated vocabulary photographs](#generated-vocabulary-photographs), [current coverage](PHOTO_COVERAGE.md) and [historical stock photo rights](PHOTO_SOURCES.md).
 
 ## Generated image workflow
 
@@ -11,13 +11,21 @@ Generate all new SmartLingo website pictures, photos and illustrations using app
 3. Inspect the actual image for lookalikes, signatures, watermarks, logos, recognisable characters, branded packaging or artwork, and misleading details. Verify responsive cropping, informative alt text and the precise vocabulary sense where the image teaches a word. A contextual scene must have a clear textual counterpart. Reject or regenerate any image with unresolved provenance or resemblance concerns.
 4. Record the asset ID and path, lesson or surface, prompt and permitted references, model/version or available generation identifier, date, output hash, crop/export changes, model terms evidence, alt text, reviewer and release decision. Record provenance for existing generated assets before approving reuse. Verify this record and the bundled/offline asset path before public release.
 
-The legacy stock photo inventory has its own credits and is separate from the generated-only path for new work. The new French daily course requires generated or text-based visuals, including wherever its vocabulary cards inherit shared media bindings. [French course delivery plan](plans/0043-french-daily-course.md#images-photos-and-course-rights)
+The current learner and editor use generated photography. The archived stock inventory and its credit page remain in the previous release. The French daily course uses generated or text-based visuals. [French course delivery plan](plans/0043-french-daily-course.md#images-photos-and-course-rights)
 
 ## Current language and media scope
 
 The drawing inventory below and [photo coverage](PHOTO_COVERAGE.md) apply to French. The 380 current Japanese canonical words/phrases have no match in the photo or drawing lookup; Japanese uses visible meanings/readings/examples and meaning matching, not a claimed literal picture. The 20 basic-kana row lessons display original typed characters and notes rather than a licensed picture collection. [Japanese course sources](curriculum/japanese-course-sources.md), [topic vocabulary](curriculum/japanese-topic-vocabulary.md) and [alphabet sources](curriculum/japanese-alphabet-sources.md) record original text, bounded planning references and review limits.
 
 Optional speech has separate provenance and operating boundaries: [Japanese audio](JAPANESE_AUDIO.md) records device voices and the free local VOICEVOX fallback/credits, while [voice options](VOICE_OPTIONS.md) covers the French/provider work. Saved synthetic audio is not a reusable human-recording licence or pronunciation approval. The shared Listening & videos library links to 11 French and 5 Japanese external resources; [its source record](curriculum/listening-resource-sources.md) records access, text support and limits. Those links do not import or relicense provider media, and media does not load before an explicit external link.
+
+## Generated vocabulary photographs
+
+On 2026-11-22 the built-in OpenAI ImageGen tool produced ten original photo sheets for SmartLingo, plus one dedicated wholemeal-bread photo after a visual review. The two SmartLingo homepage photos were the only visual references. The written briefs identify individual French vocabulary objects and useful activity settings. Each approved tile was trimmed at the grid boundary and encoded as a local JPEG. The 120 JPEGs total 3,985,024 bytes and replace all 120 retired stock photos. The exact 397 vocabulary bindings remain, with alternative text rewritten to describe the generated images.
+
+The [generation record](generated-vocabulary-photos.json) contains all final prompts, output identifiers, crop details and byte hashes. The [runtime catalogue](../packages/content/src/photos/catalogue.json) holds the image descriptions and language associations. This batch was visually reviewed for the local preview. Owner review for wider release remains open. Generated images and historical stock records have separate provenance. [OpenAI Europe Terms of Use](https://openai.com/policies/eu-terms-of-use/#content)
+
+The current export and its offline pack use /generated-vocabulary-photos/ for these files. Previously installed builds can retain their own stock assets and credits. The new paths keep those older cached files separate from current image requests. [Historical stock photo rights](PHOTO_SOURCES.md)
 
 ## French illustration inventory
 
@@ -68,7 +76,7 @@ The offline web manifest and app header use an original code-drawn open book in 
 
 ## Bundled presentation scenes and type
 
-The 2026-11-22 frontend rework uses four original photorealistic contextual scenes generated with the built-in ImageGen tool from the written prompts below. No outside image or supplied interface artwork was an input. The scenes depict illustrative places and fictional people. The workspace JPEGs were resized and recompressed from the generated PNGs, keeping the composition intact. They travel in the web/offline asset pack and load locally. Spot-checks cover scene clarity and cropping. Owner review of presentation suitability remains open. The existing word-photo licence inventory and answer bindings apply independently. [Photo sources](PHOTO_SOURCES.md)
+The 2026-11-22 frontend rework uses four original photorealistic contextual scenes generated with the built-in ImageGen tool from the written prompts below. No outside image or supplied interface artwork was an input. The scenes depict illustrative places and fictional people. The workspace JPEGs were resized and recompressed from the generated PNGs, keeping the composition intact. They travel in the web/offline asset pack and load locally. Spot-checks cover scene clarity and cropping. Owner review of presentation suitability remains open. Word photo provenance and practice bindings are documented independently. [Generated vocabulary photographs](#generated-vocabulary-photographs)
 
 | Asset | Use | SHA-256 |
 | --- | --- | --- |

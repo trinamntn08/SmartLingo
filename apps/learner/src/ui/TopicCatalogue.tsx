@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Platform, ScrollView, Text, TextInput, View, useWindowDimensions } from 'react-native';
+import { ScrollView, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { groupLessonTopics, languageNames, lessonProgress, matchesLesson, matchesVocabulary, normalizeSearch,
   type CatalogueLevel, type Lesson, type LessonTopic, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from './controls';
@@ -93,10 +93,6 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
           <VocabularyCard entry={entry} model={model} language={language} />
         </View>)}</View>
     </>}
-    {Platform.OS === 'web' && language === 'fr-FR' && <a href="/vocabulary-photos/credits.html"
-      target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, fontFamily: designTokens.typography.button.fontFamily, fontSize: designTokens.typography.button.fontSize, lineHeight: `${designTokens.typography.button.lineHeight}px`, minHeight: 34, display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start' }}>
-      Photo credits and licences
-    </a>}
   </View>;
 }
 

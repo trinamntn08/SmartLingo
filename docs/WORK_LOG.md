@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Replace third-party learner photographs
+
+- Request. Replace externally sourced app photos with SmartLingo-generated photos and remove the learner-facing Photo credits section.
+- Start. At 21:20 CET, fetched the owner-selected origin and confirmed that local, tracking and live feat/french-daily-opening matched at 1d7c6bc57946d4b4497e3d7a47aa018efa60b617, ahead/behind 0/0. The primary checkout had separate course-outline edits and an empty index. Started the media task in isolated feat/generated-photo-library from that head. The course-outline checkpoint then finished. The primary was clean and local, tracking and live matched at e35f03b39371368155571e84fe69b20136b3e9f5. Transferred the four scoped UI and test edits back onto that shared preview baseline. Usage is unavailable and no resume schedule is configured.
+- Acceptance. Retire all 120 stock photos from current app assets and offline packs. Use approved generated photos in reviewed literal and contextual bindings, with drawing or text fallback where necessary. Retain historical rights evidence and course-text attribution. Verify both languages and the local review preview.
+- Review. A read-only media audit traced the stock files to word cards and French topic covers and found no editor image upload or external thumbnail. A UI builder removed the credits links and updated browser checks. Both used the inherited client model with no overrides. Usage data was unavailable.
+
+- Delivery. Generated 120 local ImageGen photos using only the two documented homepage anchors. Replaced every stock image and kept all 397 exact word/target bindings. Revised the wholemeal-bread image after independent review. Removed the learner-facing photo credits links and page, public stock licence manifest, and obsolete external photo scripts. The Git archive and older offline copies preserve their own rights records. French course-text attribution still appears.
+- Verification. Repository and TypeScript checks passed. All 18 tooling and 268 application tests passed on the final rerun. An earlier parallel rerun triggered the ten-second advisory hook timeout and passed when retried with the build finished. All 22 selected Chromium cases and 14 cold-offline cases passed. The final export c3e0e5b4b7a1 passed both cold-offline asset download and retained-data checks again. A direct Chromium run decoded all 120 vocabulary photos from port 8082, inspected desktop and narrow layout and confirmed the legacy credits page and a former stock photo returned 404. The served and local manifest IDs matched.
+- Outcome. The commit containing this note is the task checkpoint for feat/french-daily-opening. Next is owner review at http://localhost:8082. The generated media record includes the final prompts and hashes.
+
 ## 2026-11-22 Move day and section navigation into the course outline
 
 - Request. Move Browse sections out of the French study-day summary and combine it with Choose a study day.

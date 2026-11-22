@@ -43,25 +43,23 @@ test('French voice and speed choices survive reload and apply to lesson playback
   });
 });
 
-test('bundled coffee photograph loads and has a local photo-credits route', async ({ page }, info) => {
+test('generated coffee photograph loads locally and falls back to an illustration', async ({ page }, info) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
   const card = page.getByTestId('vocabulary-fr.cafe');
-  const photo = card.locator('img[src^="/vocabulary-photos/"]');
-  await expect(photo).toHaveAttribute('src', /\/vocabulary-photos\//);
+  const photo = card.locator('img[src^="/generated-vocabulary-photos/"]');
+  await expect(photo).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
   await expect.poll(() => photo.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await card.scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('vocabulary-photograph.png') });
   await expect(page.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Photo credits and licences' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'About SmartLingo');
-  await expect(page.getByRole('link', { name: 'Photo credits and licences' })).toHaveAttribute('href', '/vocabulary-photos/credits.html');
-  const credits = await page.request.get('/vocabulary-photos/credits.html');
-  expect(credits.status()).toBe(200);
-  expect(await credits.text()).toContain('creativecommons.org');
-  await page.route('**/vocabulary-photos/*.jpg', route => route.abort());
+  await expect(page.getByRole('link', { name: 'Photo credits and licences' })).toHaveCount(0);
+  await page.route('**/generated-vocabulary-photos/espresso.jpg', route => route.abort());
   await page.reload();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();

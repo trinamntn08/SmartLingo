@@ -136,7 +136,7 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 Owner planning direction, 2026-11-17: develop a plan for an A1–B1 daily course usable directly inside the website, using eligible open materials and original authoring. The final source constraint excludes proprietary Taxi reproduction and seeking publisher permission. [Plan 0027](docs/plans/0027-open-course-integration.md) and [ADR 0022](docs/decisions/0022-open-course-planning.md) define the source/licence checks, integration stages and unresolved coverage. French currently has five draft days in its A1 opening unit. Japanese has 13 original draft days and shared lessons through selected estimated B1 tasks.
 
-Owner direction, 2026-11-22. Use the [French daily-course plan](docs/plans/0043-french-daily-course.md) for the proposed A1–B1 route. Each course has eight seven-lesson units. Today recommends one lesson per study day, with resume and free exploration. Generate all new website pictures, photos and illustrations using SmartLingo-approved models and apply the generated-only rule to the full French daily-course image path. [Imagery decision](docs/decisions/0037-model-generated-imagery.md)
+Owner direction, 2026-11-22. Use the [French daily-course plan](docs/plans/0043-french-daily-course.md) for the proposed A1–B1 route. Each course has eight seven-lesson units. Today recommends one lesson per study day, with resume and free exploration. Use SmartLingo-approved generated photography throughout the learner and editor, including the full French daily-course image path. [Imagery decision](docs/decisions/0037-model-generated-imagery.md)
 
 Create original lessons and examples using reputable public references for research. Record sources, media attribution, and reuse permissions. Personal use is not a reason to copy entire courses or unlicensed image/audio collections; original content also makes later commercialisation easier.
 
@@ -144,7 +144,7 @@ Use coherent topic banks, normally 30–50 distinct words/phrases across short 6
 
 Provide topic discovery and switching in Learn, with search and a clear All topics return. Clicking SmartLingo returns home. Keep the searchable word grid and full lesson vocabulary with visible English support; short-lesson entry is placed above the topic grid. Disclose synthetic speech in Profile rather than repeating labels beside every speaker. [ADR 0010](docs/decisions/0010-visual-word-overviews.md) records the word-grid baseline; [ADR 0032](docs/decisions/0032-calm-learner-interface.md) supersedes the global sidebar layout under the owner's redesign request.
 
-Use simple illustrations for objects/actions when clear. Use realistic photographs selectively for menus, places, and practical contexts when permission allows. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
+Use simple illustrations for objects/actions when clear. Use SmartLingo-generated photographs selectively for places and practical contexts. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
 
 Generate stable AI audio for approved content and cache it by text + language + voice + generation-settings hash. Reuse it rather than generate on every playback. A text change invalidates related audio until regenerated/reviewed. Clearly identify synthetic speech.
 

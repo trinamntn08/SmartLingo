@@ -1,4 +1,4 @@
-import { Platform, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { AudioPreferencesPanel } from '../audio/AudioPreferencesPanel';
 import { GeneratedSpeechPanel } from '../audio/generated/GeneratedSpeechPanel';
@@ -53,7 +53,7 @@ export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScre
       </View>
     </Disclosure>}
 
-    <Disclosure title="About SmartLingo" description="Study support, draft content and photo credits.">
+    <Disclosure title="About SmartLingo" description="Study support and draft content.">
       <View style={[t.stack, { padding: 8, gap: 16 }]}>
         {language === 'ja-JP' && <>
           <Text accessibilityRole="header" style={s.heading}>Japanese study support</Text>
@@ -62,7 +62,6 @@ export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScre
         <Text style={s.body}>Bundled lessons don’t need the local API or an AI key. {language === 'ja-JP' ? 'Japanese listening uses a device voice, saved clip or free local VOICEVOX voice.' : 'French listening uses a device voice or explicitly saved neural audio.'} You can always read and practise from the text.</Text>
         <Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text>
         <Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>
-        {Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}
       </View>
     </Disclosure>
       </View>

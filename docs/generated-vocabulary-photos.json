@@ -1,0 +1,927 @@
+{
+  "generator": "OpenAI ImageGen",
+  "generated": "2026-11-22",
+  "generationGroup": "01a204e9-c88e-7a62-9177-f3ed128022c6",
+  "referenceImages": [
+    "apps/learner/public/learning-scenes/french-street.jpg",
+    "apps/learner/public/learning-scenes/japanese-street.jpg"
+  ],
+  "terms": "https://openai.com/policies/eu-terms-of-use/#content",
+  "optimisation": "1536 ? 1024 PNG sheets, ordered left-to-right and top-to-bottom in 3 columns and 4 rows. Each 512 ? 256 tile was trimmed by 6 pixels on all edges and encoded as a 500 ? 244 JPEG at quality 87. The separate wholemeal bread image was centre-cropped to 1774 ? 866 and resized to the same JPEG dimensions and quality.",
+  "review": "Visual and sense checks for the local learner preview. Owner review remains pending.",
+  "sources": [
+    {
+      "id": 1,
+      "output": "exec-bff2339a-3fab-4f04-ad0b-a6726419134d.png",
+      "sha256": "0b9117fa31c08608b93109e75763933479911949f7f5934c6fc916c54d1464c0",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: single small white espresso cup filled with dark espresso and golden crema on a saucer, close three-quarter angle | one whole long thin traditional French baguette with crisp slashed crust beside two cut slices | Several golden croissants.\nRow 2, left to right: one round bistro dining table laid with two place settings and water glasses, no people | three whole chicken eggs in an open plain pulp carton | golden cooked chicken pieces on a simple plate, clearly not fried or breaded.\nRow 3, left to right: an individual small plated layered chocolate dessert with a spoon | plain unbranded payment card held next to a card-payment terminal, screen blank | whole round rustic country loaf on a bakery counter.\nRow 4, left to right: neat slices of a soft square sandwich loaf with the remaining loaf behind | A rectangular chocolate-filled pastry | whole golden braided brioche loaf and one cut slice showing a soft yellow crumb."
+    },
+    {
+      "id": 2,
+      "output": "exec-3ff8f07f-e347-4641-a517-9cb6be137a1f.png",
+      "sha256": "7ace338fac7fec89e380a780ebee79729e80fbfff47ad8b89fc0b62e30cea148",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: a French folded half-moon apple turnover with puff pastry and a defined folded edge | one small individual fruit tart with fresh berries in a fluted pastry shell | A filled baguette sandwich with onions and cheese.\nRow 2, left to right: round sponge cake with one wedge removed, visible layered interior | Red apples growing on a tree | Red tomatoes growing on a potted plant.\nRow 3, left to right: Carrots of several colours arranged with their green tops | A display of yellow bananas | White rice in a bowl.\nRow 4, left to right: Several shapes of dry pasta | White flour | A bottle of olive oil."
+    },
+    {
+      "id": 3,
+      "output": "exec-cbec50a1-a607-49b8-8c81-456bb1725ee3.png",
+      "sha256": "56b09317bab954669160e35de958d9af3975ff177148c7e176d3934f599ad482",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: White sugar cubes | two clearly visible wedges of cheese on a small board, no meat | Yogurt served in a bowl.\nRow 2, left to right: Slices of cooked ham | A supermarket aisle with stocked shelves and shopping trolleys | Supermarket checkout counters.\nRow 3, left to right: Euro coins and a receipt on a small payment tray | A person wearing a pair of light-coloured trousers | A short-sleeved grey T-shirt laid flat.\nRow 4, left to right: A beige winter coat with a hood | a pair of simple closed brown leather everyday shoes, no boots | A pair of lace-up trainers."
+    },
+    {
+      "id": 4,
+      "output": "exec-470095f5-c0c0-4d65-9bfb-9128e11cc318.png",
+      "sha256": "fd18b50fb47b836c505d1d45f32cc0103e8050c1003147954b688e8f89fdab7a",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: A pair of red knitted socks with split toes | A knitted scarf draped around a coat collar | A leather belt and buckle worn with jeans.\nRow 2, left to right: A kitchen with cupboards, a refrigerator and a small dining table | A bedroom with a partly visible bed behind red drapes | A toilet and washbasin in a small bathroom.\nRow 3, left to right: Outdoor chairs beside a small round table | An ornate upholstered sofa | A household refrigerator.\nRow 4, left to right: A front-loading washing machine | An ornate wooden wardrobe with closed doors | An old metal lock and its key."
+    },
+    {
+      "id": 5,
+      "output": "exec-015f6e6a-ed41-4205-96d3-a7f6ffc55bc3.png",
+      "sha256": "40acb8b0d0af9d0fa2e2c798aac97d3f288fa86eff9995081dff6d91d44a4bf2",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: A red entrance door with glass panes | Closed lift doors | A wall-mounted heating radiator.\nRow 2, left to right: A window in a wooden wall | unbranded city bus with visible rubber wheels beside the curb | unbranded French-style passenger train beside a railway platform.\nRow 3, left to right: A bicycle leaning against a wall beside a blue door | unbranded low-floor city tram on visible tracks beside an urban stop | A pharmacy entrance marked by an illuminated green cross.\nRow 4, left to right: An open notebook with handwriting and a pen | A desktop computer on a desk | Several adults seated together in an office meeting."
+    },
+    {
+      "id": 6,
+      "output": "exec-f2db3809-8197-48c6-96af-714328edffc3.png",
+      "sha256": "6a1b0efc66fe37621fed48ac8c87271a4b97145e1638d8ce728c7afcced68103",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: generic modest French town hall with civic stone façade and a small French tricolour, no sign | a generic neighbourhood post office counter with plain yellow accents and an adult handing over a parcel, no branding or signage | A cardboard parcel.\nRow 2, left to right: simple analogue wall clock, clear hands but no text | A croissant and a cup of coffee served for breakfast | an adult reading an open book beside a window.\nRow 3, left to right: pedestrians with umbrellas in visible rain on a wet street | a sunny meadow with warm sunlight and a clear blue sky | Snow covering young trees beside a road.\nRow 4, left to right: an adult jogging on a park track | two adults walking at an ordinary pace on a park path | front door of a modest art museum with a stone facade and exhibition vestibule."
+    },
+    {
+      "id": 7,
+      "output": "exec-0c43364b-7467-44d3-b09f-7293390cdc99.png",
+      "sha256": "2c057a166738669a8cbb310184d4b006147229dde546c51fec90eab742496cf7",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: A town square in France | four-way intersection where two paved roads cross clearly, viewed from a slight elevation | white zebra pedestrian crossing across a quiet paved street in daylight.\nRow 2, left to right: Chopped garlic, garlic cloves and a knife on a wooden chopping board | Two spoons, a fork and a knife arranged side by side | small kitchen scales with a bowl resting on the weighing platform.\nRow 3, left to right: hands lathering with soap under running tap water at a sink | Small red onions sprouting in soil | Peeled garlic cloves in a clear jar.\nRow 4, left to right: Salt in a small container beside a loaf of bread | A frying pan | A kitchen oven."
+    },
+    {
+      "id": 8,
+      "output": "exec-1448c74b-5da8-47d9-b504-9f15bfd9dc4a.png",
+      "sha256": "cd8d44c3df55ed969f04051abeeae3c61289880ac960a71d59352d5008456861",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: A hotel bedroom with part of a bed made with white linen | A brown striped suitcase with a handle | white split air-conditioner unit high on an interior wall, open louvers visible.\nRow 2, left to right: An old French dictionary photographed open beside its spine | A mobile phone held in a hand inside a car | A person outdoors taking a photograph with a long-lens camera.\nRow 3, left to right: Adults seated at tables for a formal banquet | A glass containing drinking water | Outdoor restaurant tables with umbrellas.\nRow 4, left to right: A glass of milk | short narrow itemized till receipt in a hand, any print softly out of focus and unreadable | A whole savoury egg tart with vegetables."
+    },
+    {
+      "id": 9,
+      "output": "exec-0ab435c8-850a-4817-ac69-0a87d20d3355.png",
+      "sha256": "45be478de66b7c0b4f2eed019cbfa8f08c2e42668c9c7fcbc18ff12c1e5f9cd0",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: three whole clean potatoes lying on a kitchen worktop | a partly unwrapped block of pale butter on plain parchment beside a small butter knife | A hand gripping the handle of a wire shopping trolley.\nRow 2, left to right: A blue collared shirt with buttons | A straw hat with a striped band | A dark buttoned jacket laid flat.\nRow 3, left to right: a clothing shop fitting-room alcove with closed deep teal curtain and an adjacent full-length mirror, no signage | A bathtub in a bathroom | A living room with a sofa, low table and large windows.\nRow 4, left to right: A desktop laser printer | A narrow street between buildings in France | an adult swimming one lane in a simple outdoor pool."
+    },
+    {
+      "id": 10,
+      "output": "exec-acecbeb9-8572-495f-a3a5-7becb0c73fa3.png",
+      "sha256": "48c8f0da2fa21480c0ed0d1b48b1cfa66a585368a08f340756f051cc84a5b683",
+      "prompt": "Use case: photorealistic-natural. Generate a single contact sheet of 12 original photographs for SmartLingo, each to be cropped as a separate independent photo. Strict perfectly regular edge-to-edge grid of exactly THREE columns and FOUR rows of equal rectangles, with boundaries exactly at one third and two thirds of canvas width and one quarter, half and three quarters of canvas height. Wide landscape canvas. No gutters, borders, text, numbering, captions, composite objects that cross between cells, branding or watermark. Contemporary French everyday editorial photography, gentle natural daylight, realistic textures, warm cream, muted teal and wood accents inspired by the supplied two SmartLingo-generated homepage style references. Use the references only for photographic tone. Make the one distinct subject of each cell clearly readable at thumbnail size and keep it within the middle 70 percent of that cell, with room for a wide crop.\nRow 1, left to right: standard vertical three-lamp road traffic light showing only a red top light | A display of green courgettes | whole black peppercorns gathered in a small heap beside a simple mill.\nRow 2, left to right: A saucepan with its lid on a wooden surface | A close-up of striped towel fabric | A toothbrush standing in a cup.\nRow 3, left to right: Three adults seated around a desk with papers for a job interview | Two adults talking in a clinic beside an examination bench | Two people shaking hands.\nRow 4, left to right: Two adults with notebooks seated in a classroom | open paper desk calendar with an unlabelled date grid | close-up of an adult filling out a form at a desk, writing unreadable."
+    },
+    {
+      "id": 11,
+      "output": "exec-86452296-240f-4fa5-b3a8-4fb724eba3c6.png",
+      "sha256": "cd4bd854795482a8f85494943ea86d7a235000fd02e0e280d812d603e9ac4622",
+      "prompt": "Use case: photorealistic-natural. Create one original wide landscape vocabulary photo for SmartLingo, making traditional French wholemeal bread (pain complet) immediately distinct from white bread. On a warm wooden bakery worktop, a small unsweetened whole-wheat loaf with a deep nut-brown crust and a clearly brown, speckled whole-wheat crumb. Arrange two freshly cut brown slices flat in front, showing the darker crumb, with the rest of the sliced loaf immediately beside them. No white bread or seeds on top. Soft window daylight, natural texture, warm cream and muted teal hints, quiet everyday French bakery atmosphere. Use the two attached SmartLingo homepage photographs as style references only. Compose all bread and slices within the middle half of the image, with breathing room for a horizontal 2:1 centre crop. No people, text, logos or watermark.",
+      "crop": {
+        "x": 0,
+        "y": 10,
+        "width": 1774,
+        "height": 866
+      }
+    }
+  ],
+  "assets": [
+    {
+      "key": "espresso",
+      "source": 1,
+      "tile": 1,
+      "bytes": 26978,
+      "sha256": "64547c6b36c9d999fea34253723e248f1b3de4edcf5aadd4fd36dc1d71504b49"
+    },
+    {
+      "key": "baguette",
+      "source": 1,
+      "tile": 2,
+      "bytes": 39809,
+      "sha256": "365ce570c1479627768b96ab2f562b8bb57fbb72ca216ac3a53cac93269af260"
+    },
+    {
+      "key": "croissant",
+      "source": 1,
+      "tile": 3,
+      "bytes": 32770,
+      "sha256": "23445f6f4811a4cd4c254e1b22cf7a0084817f247ba5958f966afc2d1f371086"
+    },
+    {
+      "key": "table",
+      "source": 1,
+      "tile": 4,
+      "bytes": 40474,
+      "sha256": "133a078869805816de55d8e9ee2e8563d24cca1d8dfbf99e6c88470b25aa5805"
+    },
+    {
+      "key": "egg",
+      "source": 1,
+      "tile": 5,
+      "bytes": 28215,
+      "sha256": "be4676ac96e029f0fe2df64db2ec2c8d6ee13a2a114ed18c1f4534b5e7e680cd"
+    },
+    {
+      "key": "chicken",
+      "source": 1,
+      "tile": 6,
+      "bytes": 34861,
+      "sha256": "6c82d8ab589a2e248908afd993b6fc795765528a3f9e9eb8da39848d5fa4ff70"
+    },
+    {
+      "key": "dessert",
+      "source": 1,
+      "tile": 7,
+      "bytes": 30978,
+      "sha256": "1238bd365581d0cc875d12cbe35c84a310e26b497e1a68b01cbdf0a3a9a5308f"
+    },
+    {
+      "key": "card",
+      "source": 1,
+      "tile": 8,
+      "bytes": 24112,
+      "sha256": "48d95e5716b74670b9ac461efd66d0f21a6b5fb73079b60307a5a8a6c2f0637a"
+    },
+    {
+      "key": "bread",
+      "source": 1,
+      "tile": 9,
+      "bytes": 38337,
+      "sha256": "5a995bb262b27488182532184d40aee15e81be7c5d23e8ebb3ed4401029a71bb"
+    },
+    {
+      "key": "sliced-bread",
+      "source": 11,
+      "bytes": 40675,
+      "sha256": "97b168b843d5ef7a8f0263eb255ee9806ad4a1b89de2e81782969ae79328eb71"
+    },
+    {
+      "key": "pain-chocolat",
+      "source": 1,
+      "tile": 11,
+      "bytes": 31371,
+      "sha256": "bc6fdeb39f212e546c3f59823d36aa86526c02d71bdb0ae2f609cb67b9e4f8ad"
+    },
+    {
+      "key": "brioche",
+      "source": 1,
+      "tile": 12,
+      "bytes": 34156,
+      "sha256": "d5a9025cc42ea61344d7402836bc8c5b329c88527a87b59bace3d62d41f20459"
+    },
+    {
+      "key": "apple-turnover",
+      "source": 2,
+      "tile": 1,
+      "bytes": 33601,
+      "sha256": "db76aaa45865b5750105e2416aac6e816c29052fcc225afccbd2f429c503bbce"
+    },
+    {
+      "key": "tartlet",
+      "source": 2,
+      "tile": 2,
+      "bytes": 31669,
+      "sha256": "1dfd7a20154fc1743617b2c7598c178e54c02d920d4d3915a8bb63bb63bd451d"
+    },
+    {
+      "key": "sandwich",
+      "source": 2,
+      "tile": 3,
+      "bytes": 35648,
+      "sha256": "4c0cf3a96b19bab37871c1795580a44cac7f4a3469fdb32372d40fa630ec0116"
+    },
+    {
+      "key": "cake",
+      "source": 2,
+      "tile": 4,
+      "bytes": 40254,
+      "sha256": "cac798de56c82e420183a0b8d49b391caeae0e92bce2212f33617fc0bfcb06f3"
+    },
+    {
+      "key": "apple",
+      "source": 2,
+      "tile": 5,
+      "bytes": 36442,
+      "sha256": "ef7e8d332fe00417f617218cd4969412b4cb62205cd3e6a402243920868ce0fc"
+    },
+    {
+      "key": "tomato",
+      "source": 2,
+      "tile": 6,
+      "bytes": 37691,
+      "sha256": "fe7b258909069cf370b2aa5efeed0ee0e85be194956d826130e4acf9aa99f7ae"
+    },
+    {
+      "key": "carrot",
+      "source": 2,
+      "tile": 7,
+      "bytes": 40994,
+      "sha256": "9b7b885d686061519a28e01ebff86c4f214c070f816514187d12502a35fc4273"
+    },
+    {
+      "key": "banana",
+      "source": 2,
+      "tile": 8,
+      "bytes": 34425,
+      "sha256": "1bc1746bee58b75016d38b835f1ffdc4c1391c6e432d5ccbdb88abfec395b1f4"
+    },
+    {
+      "key": "rice",
+      "source": 2,
+      "tile": 9,
+      "bytes": 32768,
+      "sha256": "ddf49579c0500d7e58812c7f72379b7ba5137bbef0d56ab2178ddb482c3f666f"
+    },
+    {
+      "key": "pasta",
+      "source": 2,
+      "tile": 10,
+      "bytes": 36136,
+      "sha256": "794573046c494964c92d7c89516af4783185e2fc4253d4a6c4421c78556090d0"
+    },
+    {
+      "key": "flour",
+      "source": 2,
+      "tile": 11,
+      "bytes": 36235,
+      "sha256": "c6c63793d7a9bc345223a7bc8b0d7d6c5da9a42eceaedf33fa65a89ee517b207"
+    },
+    {
+      "key": "oil",
+      "source": 2,
+      "tile": 12,
+      "bytes": 29992,
+      "sha256": "189ab10e6eff96b6f2ea21c14dbcdb91226ad02d7986e66957c22edfd19c2432"
+    },
+    {
+      "key": "sugar",
+      "source": 3,
+      "tile": 1,
+      "bytes": 27847,
+      "sha256": "79241643868640d2e611da59e6e4cfd95d800fd45752ea298f76cfb96cf87787"
+    },
+    {
+      "key": "cheese",
+      "source": 3,
+      "tile": 2,
+      "bytes": 27638,
+      "sha256": "030319377257df33d6cab8b3e41b2a5abdcbf431cf2237961a31574dd1320c3e"
+    },
+    {
+      "key": "yogurt",
+      "source": 3,
+      "tile": 3,
+      "bytes": 30154,
+      "sha256": "d24a716ae287f946a838a1aee3a40b62db69e13b700ccf67af354aea6696abd1"
+    },
+    {
+      "key": "ham",
+      "source": 3,
+      "tile": 4,
+      "bytes": 33865,
+      "sha256": "1b0fe869dfaab3299c918faf7ad465534ac1e9981c1c47b02dc20f697e8d6b82"
+    },
+    {
+      "key": "supermarket",
+      "source": 3,
+      "tile": 5,
+      "bytes": 49751,
+      "sha256": "52e44e7740cc07d8a35ff7dd4ebef521389b054e4d642e8a90732be0e0f5e66c"
+    },
+    {
+      "key": "checkout",
+      "source": 3,
+      "tile": 6,
+      "bytes": 34282,
+      "sha256": "ae8be6e3f908d0de65b2b6432528dec9e61041f479a1ebab6f5c312ab720ccd0"
+    },
+    {
+      "key": "coins",
+      "source": 3,
+      "tile": 7,
+      "bytes": 31647,
+      "sha256": "e3bfd4b8c247307a1f92ae36b71b41ff4f0e50c087009048c3a042b543c87a33"
+    },
+    {
+      "key": "trousers",
+      "source": 3,
+      "tile": 8,
+      "bytes": 37963,
+      "sha256": "699ee2fe920effa2ace3c79710d0995d094bfa83b66062d6e6e6c6eec3246943"
+    },
+    {
+      "key": "tshirt",
+      "source": 3,
+      "tile": 9,
+      "bytes": 34510,
+      "sha256": "a2737895ef34b16df3ab8ef4a0d5b32cf7047b7e9ac853eb1bcd3975cf58da6f"
+    },
+    {
+      "key": "coat",
+      "source": 3,
+      "tile": 10,
+      "bytes": 34140,
+      "sha256": "ab90f5344f5ffe699211e84ab7ab3fbf866b4606175fc6daf7559f8aada5efe8"
+    },
+    {
+      "key": "shoes",
+      "source": 3,
+      "tile": 11,
+      "bytes": 35392,
+      "sha256": "d1e6994f0d4797a69256286f793c8e33596504abb8e4d62bfa01aa74a01a6b1b"
+    },
+    {
+      "key": "trainers",
+      "source": 3,
+      "tile": 12,
+      "bytes": 35720,
+      "sha256": "786d769b6d986a89798d26127676fbea92d83c98e6f4cb8f17bf35bab4ba2d22"
+    },
+    {
+      "key": "socks",
+      "source": 4,
+      "tile": 1,
+      "bytes": 35111,
+      "sha256": "ea592e84094ffd374c0c9ce0cd2a71c3c7e36d5c759fcd29aef48cdc0a7eec02"
+    },
+    {
+      "key": "scarf",
+      "source": 4,
+      "tile": 2,
+      "bytes": 31765,
+      "sha256": "fcd7feafaa1c2b7cdfc094464ee9f2dae890922a185a66157b48a820b61de5a2"
+    },
+    {
+      "key": "belt",
+      "source": 4,
+      "tile": 3,
+      "bytes": 28132,
+      "sha256": "a3119d742b4a105aaea3250184f7b33ee49356bdb91ded58b0c56ac06c500c9f"
+    },
+    {
+      "key": "kitchen",
+      "source": 4,
+      "tile": 4,
+      "bytes": 33943,
+      "sha256": "aa3f1b4adcfd344a4de199a986526a2a1426d929e047c9cbb713f0da76ab8ee1"
+    },
+    {
+      "key": "bedroom",
+      "source": 4,
+      "tile": 5,
+      "bytes": 27477,
+      "sha256": "6f5f7377fe718835dd4e50e913355871aa34d3ede2fddf78bd1b5a03a74c9f64"
+    },
+    {
+      "key": "toilet",
+      "source": 4,
+      "tile": 6,
+      "bytes": 26753,
+      "sha256": "2dbd76228f99f84930ce73b6d37720413cd8be990973a36cf1c76791be93b1f6"
+    },
+    {
+      "key": "chair",
+      "source": 4,
+      "tile": 7,
+      "bytes": 41802,
+      "sha256": "fd4ea7a86b4da73fcc09bd720d7479343a8c1f3ddd95e28f8b8fda19e0d4699b"
+    },
+    {
+      "key": "sofa",
+      "source": 4,
+      "tile": 8,
+      "bytes": 32878,
+      "sha256": "1cf3911b5bdb206eb9d494b3a941fa9d5871cd9afb2c633bdea03e5f28a9822e"
+    },
+    {
+      "key": "fridge",
+      "source": 4,
+      "tile": 9,
+      "bytes": 24447,
+      "sha256": "88115bf25327ff911b4ab5673ba2ceeeafcde6d8203c11ba05ccce16db1bcafc"
+    },
+    {
+      "key": "washer",
+      "source": 4,
+      "tile": 10,
+      "bytes": 31845,
+      "sha256": "e5d039303d7e901ad1960bcc47cf399fc55c604677768d6f32d9e81884c620d0"
+    },
+    {
+      "key": "wardrobe",
+      "source": 4,
+      "tile": 11,
+      "bytes": 28701,
+      "sha256": "7c1943786799b95984057dfef345a03571455858af58c940e4186e4bf906ebfc"
+    },
+    {
+      "key": "key",
+      "source": 4,
+      "tile": 12,
+      "bytes": 34649,
+      "sha256": "6cead6ae7d7202831e8c36466abbbf5adef1ad19d651c2b07d6f84b7494892eb"
+    },
+    {
+      "key": "door",
+      "source": 5,
+      "tile": 1,
+      "bytes": 42867,
+      "sha256": "26040f8e72aa3f0a2d2e55b5ed4f376952328936ac9a6e83e22e56366b44b683"
+    },
+    {
+      "key": "lift",
+      "source": 5,
+      "tile": 2,
+      "bytes": 26362,
+      "sha256": "31dda8841b7b77add681d1d8a84807c6c18ae5348738d848ae6b2ec426b5e45b"
+    },
+    {
+      "key": "radiator",
+      "source": 5,
+      "tile": 3,
+      "bytes": 24432,
+      "sha256": "ee51f564fba3152c6371241779f46e707458dfb283157655d660632c9324b6bb"
+    },
+    {
+      "key": "window",
+      "source": 5,
+      "tile": 4,
+      "bytes": 41763,
+      "sha256": "2bace2d41b955ec139fccb6b3ac4d5dc534dafc79b43acf909b0fdd8444f883a"
+    },
+    {
+      "key": "bus",
+      "source": 5,
+      "tile": 5,
+      "bytes": 47334,
+      "sha256": "831d659fc84cf5c937c1aac191ffb6f3a6e3f96d7f19ae78b38d4d585dfe6407"
+    },
+    {
+      "key": "train",
+      "source": 5,
+      "tile": 6,
+      "bytes": 45170,
+      "sha256": "d2fe2916fe9b2e89b886e7a373e8d89f7d8dcfc1aafd94211d93218be1b4859b"
+    },
+    {
+      "key": "bicycle",
+      "source": 5,
+      "tile": 7,
+      "bytes": 42619,
+      "sha256": "117370f991912d362a2706b9dfada02d5783d09d0c77ed26f8db147363927e62"
+    },
+    {
+      "key": "tram",
+      "source": 5,
+      "tile": 8,
+      "bytes": 48117,
+      "sha256": "e6e4371d5fc9dc611190eec8a51a958d441a79c94bff4120054a8f07aedd9e98"
+    },
+    {
+      "key": "pharmacy",
+      "source": 5,
+      "tile": 9,
+      "bytes": 38860,
+      "sha256": "050beba4e740bece1142c35366c4bda9c3229fd1e0ccbdc1e19ef1e58ddc94c7"
+    },
+    {
+      "key": "notebook",
+      "source": 5,
+      "tile": 10,
+      "bytes": 28882,
+      "sha256": "5f0f6d993bb29c847c2eb1c226684fb63498786d52e03c539e4452bfcab74ad6"
+    },
+    {
+      "key": "computer",
+      "source": 5,
+      "tile": 11,
+      "bytes": 29284,
+      "sha256": "33cec08b8086ea674bfc39449cc93fbe19df0b505588139fd8ee2be59551273c"
+    },
+    {
+      "key": "meeting",
+      "source": 5,
+      "tile": 12,
+      "bytes": 35150,
+      "sha256": "60c8d7ac511a40b0d4be4ebb90f2a030df87332f4cf16ffe3a5b1ab21d6c1714"
+    },
+    {
+      "key": "townhall",
+      "source": 6,
+      "tile": 1,
+      "bytes": 51047,
+      "sha256": "0590c6f5f016b6ebfa3854a3c5f1e47e727bfe7f7743f3937573310a59c1dd7f"
+    },
+    {
+      "key": "postoffice",
+      "source": 6,
+      "tile": 2,
+      "bytes": 30245,
+      "sha256": "df942b6d9025346d0ff7241733542d293127a537d496193021ca531e08a81d1b"
+    },
+    {
+      "key": "parcel",
+      "source": 6,
+      "tile": 3,
+      "bytes": 23810,
+      "sha256": "3e9df9296386a9212b6682cd3209d962e29769a165c98dcd0fe7e6c37a70148b"
+    },
+    {
+      "key": "clock",
+      "source": 6,
+      "tile": 4,
+      "bytes": 31666,
+      "sha256": "d76a95063d3a80082990e638a635e142f041b99f8812f5916ff500045bc132f2"
+    },
+    {
+      "key": "breakfast",
+      "source": 6,
+      "tile": 5,
+      "bytes": 31144,
+      "sha256": "814c4cd9655abb90807451a15a5cb3948a7d985b55b3a46163e6c5d392a82c2a"
+    },
+    {
+      "key": "reading",
+      "source": 6,
+      "tile": 6,
+      "bytes": 33999,
+      "sha256": "37302aea85e9ad8dd3b953c8322eebe61fbe12cc016c0e6ba6fedb52b6b32b1d"
+    },
+    {
+      "key": "rain",
+      "source": 6,
+      "tile": 7,
+      "bytes": 37706,
+      "sha256": "6d029dec5d3407f1c819033ba4d17189f919e2799532972f290074d5fbe7b5ef"
+    },
+    {
+      "key": "sun",
+      "source": 6,
+      "tile": 8,
+      "bytes": 47291,
+      "sha256": "3d4c4cfa5d19cc865e3112c8ca3e29762a70fab53011c01c91752f4a46af8ca4"
+    },
+    {
+      "key": "snow",
+      "source": 6,
+      "tile": 9,
+      "bytes": 55050,
+      "sha256": "ffb517804a78a47890fc5915289ec9c5962b53afa1425c7a367c4ecf72a336be"
+    },
+    {
+      "key": "running",
+      "source": 6,
+      "tile": 10,
+      "bytes": 44681,
+      "sha256": "2ddf8386a6a3b481688d87d6f4e197feae563122b3d8741f00afb1b6cc310bfe"
+    },
+    {
+      "key": "walking",
+      "source": 6,
+      "tile": 11,
+      "bytes": 41783,
+      "sha256": "542f463f9110ce06229a1629adca82cb823a42dfdb0fcf7246367966da4036fc"
+    },
+    {
+      "key": "museum",
+      "source": 6,
+      "tile": 12,
+      "bytes": 36564,
+      "sha256": "1431e2d93a07f8761b8ec29f0e854d18eb105c559d90c78d597683effdb39dc9"
+    },
+    {
+      "key": "square",
+      "source": 7,
+      "tile": 1,
+      "bytes": 51306,
+      "sha256": "a37b4fe4d200d4131ba4272520d2a7303a4016c66044d43873d03136cfc33517"
+    },
+    {
+      "key": "crossroads",
+      "source": 7,
+      "tile": 2,
+      "bytes": 40440,
+      "sha256": "eae898ba6d2c475c78a5f02aa460cdee4f054f976907277a840bf358537ca227"
+    },
+    {
+      "key": "crossing",
+      "source": 7,
+      "tile": 3,
+      "bytes": 37137,
+      "sha256": "654215a68263982a7cd26666c9d222c0febb7a2e00abed6ff63217dfdc524880"
+    },
+    {
+      "key": "board",
+      "source": 7,
+      "tile": 4,
+      "bytes": 32510,
+      "sha256": "e767e4b305277ac8a745014d0e6e7ac96e08e9609dcc48922491526ed18b17d4"
+    },
+    {
+      "key": "spoon",
+      "source": 7,
+      "tile": 5,
+      "bytes": 36314,
+      "sha256": "0d20b8d5cad542abbd4901bfcf34917d16e0a0359ab92db8e352905507bf12b0"
+    },
+    {
+      "key": "scales",
+      "source": 7,
+      "tile": 6,
+      "bytes": 25826,
+      "sha256": "fd5bcc299db2cccdc510d08c84e68e02184f20daae18e6c2de6d53b1ff9584e5"
+    },
+    {
+      "key": "handwashing",
+      "source": 7,
+      "tile": 7,
+      "bytes": 24193,
+      "sha256": "65071fe4e03b596e6e373fd69c5b504a1e6a9355b1d22f345e56dc4264eb7b45"
+    },
+    {
+      "key": "onion",
+      "source": 7,
+      "tile": 8,
+      "bytes": 40999,
+      "sha256": "00f7138ea02461538fb17b68fe539be1e5f522087e8fd5dfc2c95d575d437272"
+    },
+    {
+      "key": "garlic",
+      "source": 7,
+      "tile": 9,
+      "bytes": 28381,
+      "sha256": "739bb00c731ac8d3b10273fbd49320b36712bb1ae5f1bc0e76810ba9c1c5e6fc"
+    },
+    {
+      "key": "salt",
+      "source": 7,
+      "tile": 10,
+      "bytes": 38042,
+      "sha256": "94c9dc708c050a1b0d1b9214c72ebb3ab7c517c5118e8d3ef00e9c3da457edf2"
+    },
+    {
+      "key": "frying-pan",
+      "source": 7,
+      "tile": 11,
+      "bytes": 25055,
+      "sha256": "696b85074962061dcbf7253ad6aed58eef488061cef33f2c6da5a36d323b14ba"
+    },
+    {
+      "key": "oven",
+      "source": 7,
+      "tile": 12,
+      "bytes": 25193,
+      "sha256": "fd7191b3f3053c7b2741c9903c984b3e08df7a3ac67ff3fb372f07ccf88d5428"
+    },
+    {
+      "key": "hotel-bed",
+      "source": 8,
+      "tile": 1,
+      "bytes": 26321,
+      "sha256": "97e2802090e9b8cd89bd21f45151360bf9e1d9db402420ff694ddb02ea92ba86"
+    },
+    {
+      "key": "luggage",
+      "source": 8,
+      "tile": 2,
+      "bytes": 28537,
+      "sha256": "00c40f329c351bba747dfe6f46616f6e61bf8d9bceef5f50c5a8a83cbf8b035a"
+    },
+    {
+      "key": "airconditioner",
+      "source": 8,
+      "tile": 3,
+      "bytes": 15503,
+      "sha256": "62842e37fe53b87835b4ba9d04b7f86070ca903d321e506e4bf08648a57ecd78"
+    },
+    {
+      "key": "dictionary",
+      "source": 8,
+      "tile": 4,
+      "bytes": 31689,
+      "sha256": "67a8134580cb13e66a9cecbcbc9b5791f01ca26aab6613f62e2ecc6f2d2b7a6f"
+    },
+    {
+      "key": "phone",
+      "source": 8,
+      "tile": 5,
+      "bytes": 23254,
+      "sha256": "cb23b61c273d858e1df57ad0afa16ef80802483782482908e7b59c3828a5d9c3"
+    },
+    {
+      "key": "camera",
+      "source": 8,
+      "tile": 6,
+      "bytes": 34581,
+      "sha256": "8f5a27390d052fd2ef89707f7dd4ef3a42f17675933d7d97e0cf79395a7d3a3d"
+    },
+    {
+      "key": "restaurant-dinner",
+      "source": 8,
+      "tile": 7,
+      "bytes": 36045,
+      "sha256": "d1daa74198ca6de5c49fb60394153691c2d29aa149a9f918a68e1634c9b9349a"
+    },
+    {
+      "key": "water",
+      "source": 8,
+      "tile": 8,
+      "bytes": 25363,
+      "sha256": "523f2ede72de00c38f7d71b97dd1bbf0a586fd4572153e2ec360eca80c3b7e0b"
+    },
+    {
+      "key": "restaurant",
+      "source": 8,
+      "tile": 9,
+      "bytes": 46054,
+      "sha256": "905974a6fddf0c589983704cf246853e22f644fa6979af8c5249edaad855249f"
+    },
+    {
+      "key": "milk",
+      "source": 8,
+      "tile": 10,
+      "bytes": 23948,
+      "sha256": "f156bfe5bbec2d27b874840f70857ed20793125d835d38b447d88577a9915769"
+    },
+    {
+      "key": "receipt",
+      "source": 8,
+      "tile": 11,
+      "bytes": 15582,
+      "sha256": "db7f3d7729d9d731cd1d4f2a1a8f696cc94670c7a36102b173cd36231184b8f7"
+    },
+    {
+      "key": "quiche",
+      "source": 8,
+      "tile": 12,
+      "bytes": 37641,
+      "sha256": "9cf812a38213195208a092ec6f7e70ca941cb6f3c504887c6206a3d921124209"
+    },
+    {
+      "key": "potato",
+      "source": 9,
+      "tile": 1,
+      "bytes": 25826,
+      "sha256": "71b7cbcf9204685be4a29f963a07289d9c3eb5b347065358cdf10a26a7fb28c0"
+    },
+    {
+      "key": "butter",
+      "source": 9,
+      "tile": 2,
+      "bytes": 25726,
+      "sha256": "99b8b1b3ca826ee4097ec19636e283730896fed0f6e39d9c7abb0c5d9e94abaf"
+    },
+    {
+      "key": "trolley",
+      "source": 9,
+      "tile": 3,
+      "bytes": 28243,
+      "sha256": "0a9215b43fa16aff09b624728cb38c2122b88e7e2d6129a90f46990e978b4255"
+    },
+    {
+      "key": "shirt",
+      "source": 9,
+      "tile": 4,
+      "bytes": 27038,
+      "sha256": "8733bb461dfd942f5f7fbcae390b36e9ca5ac270cc2f7ce9fe7e79d741072ccd"
+    },
+    {
+      "key": "hat",
+      "source": 9,
+      "tile": 5,
+      "bytes": 33725,
+      "sha256": "2934759eba5166c6d7586ad7147bd19231a32bf6e9b9360ee871de11de7b9294"
+    },
+    {
+      "key": "jacket",
+      "source": 9,
+      "tile": 6,
+      "bytes": 24352,
+      "sha256": "39c6cee712b7724e94de774e6c900162e3817fc8642c0e664b147626ed526d3f"
+    },
+    {
+      "key": "fitting-room",
+      "source": 9,
+      "tile": 7,
+      "bytes": 26882,
+      "sha256": "85b57ee6a9b280bf5206d2cac6b0409c3cfb47ec3ad3d7b3062f584439d31dee"
+    },
+    {
+      "key": "bathroom",
+      "source": 9,
+      "tile": 8,
+      "bytes": 22635,
+      "sha256": "06606a01011ceca62fe1bea85f482db99eb5ef889867a89c8cf59761fc4fec4b"
+    },
+    {
+      "key": "living-room",
+      "source": 9,
+      "tile": 9,
+      "bytes": 35768,
+      "sha256": "05a22fe9ac16fc2524dd5952ed7578dd7ca150f00b6c6730faea613bb9be55d9"
+    },
+    {
+      "key": "printer",
+      "source": 9,
+      "tile": 10,
+      "bytes": 22948,
+      "sha256": "d132c095fbdc361f05f79e2ce2acb071e80478796b23405e063178a78676795a"
+    },
+    {
+      "key": "street",
+      "source": 9,
+      "tile": 11,
+      "bytes": 46435,
+      "sha256": "def27826f464aeac14558c7e1f912713fc154836e542e3a1a09b2d1600406f03"
+    },
+    {
+      "key": "swimming",
+      "source": 9,
+      "tile": 12,
+      "bytes": 43547,
+      "sha256": "e169012aa62f118c55cf389329d14136238b266b33afae2386f232b009a6d704"
+    },
+    {
+      "key": "traffic-light",
+      "source": 10,
+      "tile": 1,
+      "bytes": 29303,
+      "sha256": "1c38c3a1dc8dc4483b0c737597ee26e3b00dd2f2b0e0ab1828c4f9db3559157c"
+    },
+    {
+      "key": "courgette",
+      "source": 10,
+      "tile": 2,
+      "bytes": 36911,
+      "sha256": "6e129c210458a702755832b8f45146090ca982e20fc9def04ff4ad212541a00a"
+    },
+    {
+      "key": "pepper",
+      "source": 10,
+      "tile": 3,
+      "bytes": 27507,
+      "sha256": "b7ee8850da2efd7a3251a9b9ee4e0a1981f8a7eb3468e4bd623914122eed0c93"
+    },
+    {
+      "key": "saucepan",
+      "source": 10,
+      "tile": 4,
+      "bytes": 22578,
+      "sha256": "561d40e5e3c7e73d4e1f96f22b8985af7abe7731b771bd4744b6ceb1cbbd57ac"
+    },
+    {
+      "key": "towel",
+      "source": 10,
+      "tile": 5,
+      "bytes": 41496,
+      "sha256": "f5de8449dfcad6c98141754cda1c3834554d80b9af870b52b0670cf26da0eb6f"
+    },
+    {
+      "key": "toothbrush",
+      "source": 10,
+      "tile": 6,
+      "bytes": 17483,
+      "sha256": "dcc5495e5112f8defa04abf29929435604292865e2cc52de0f933b44c8d8e246"
+    },
+    {
+      "key": "interview",
+      "source": 10,
+      "tile": 7,
+      "bytes": 28505,
+      "sha256": "9cb79c0e71237a3be2c0f14b78bfa7e56d3f532a2f26cec2d9c3dfa8692e52d7"
+    },
+    {
+      "key": "medical-visit",
+      "source": 10,
+      "tile": 8,
+      "bytes": 27371,
+      "sha256": "6bf438ba4e13e7af490118ca8af58913071ef238eef53a3ae8780304ef821e49"
+    },
+    {
+      "key": "greeting",
+      "source": 10,
+      "tile": 9,
+      "bytes": 29996,
+      "sha256": "9d493621b7ae9dd88be2e6685c3c7b4c78c8d5b2c01c6c0d071937bf88be2ce5"
+    },
+    {
+      "key": "adult-class",
+      "source": 10,
+      "tile": 10,
+      "bytes": 31594,
+      "sha256": "13d499d8d72dd42e316a06e0f9f9d432f8c82652ad55535cc0831249215427f7"
+    },
+    {
+      "key": "calendar",
+      "source": 10,
+      "tile": 11,
+      "bytes": 23582,
+      "sha256": "88c799418e0e8b6d69bf3637e11848e34119585fbc00151735a3f0bf3bcb004b"
+    },
+    {
+      "key": "paperwork",
+      "source": 10,
+      "tile": 12,
+      "bytes": 20830,
+      "sha256": "2b68b1afd41fb795fff8ad319cf5afab9c4a1a8e352c5920b244f687c2af5eea"
+    }
+  ]
+}

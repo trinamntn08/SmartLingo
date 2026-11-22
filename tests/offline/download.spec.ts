@@ -70,7 +70,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   expect(notebook).toEqual([expect.objectContaining({ sourceEntryId: 'fr.greetings.bonsoir', target: 'bonsoir', meaning: 'good evening' })]);
 });
 
-test('explicit download cold-loads offline and asset removal preserves every learner store', async ({ page, context }, info) => {
+test('explicit download cold-loads offline and asset removal preserves every learner store', async ({ page, context, request }, info) => {
   await page.goto('/');
   await openRestaurant(page);
   await button(page, 'Save bonjour').click();
@@ -94,6 +94,10 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await expect(button(page, 'Download for offline use')).toBeEnabled();
   expect(await page.evaluate(() => caches.keys())).toEqual([]);
   expect(await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length)).toBe(0);
+  const manifest = await request.get('/offline-manifest.json');
+  expect(manifest.ok()).toBe(true);
+  const { files } = await manifest.json() as { files: { url: string }[] };
+  expect(files.filter(({ url }) => url.startsWith('/vocabulary-photos/'))).toEqual([]);
   await button(page, 'Download for offline use').click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
   await expect(button(page, 'Refresh offline status')).toBeEnabled();
@@ -116,8 +120,11 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await button(cold, 'Learn').click();
   await button(cold, 'Topic Restaurant').click();
   const restaurantPhoto = cold.getByAltText(/^Topic context:/);
-  await expect(restaurantPhoto).toHaveAttribute('src', /\/restaurant\.jpg$/);
+  await expect(restaurantPhoto).toHaveAttribute('src', '/generated-vocabulary-photos/restaurant.jpg');
   await expect.poll(() => restaurantPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const coffeePhoto = cold.getByTestId('vocabulary-fr.cafe').locator('img[src^="/generated-vocabulary-photos/"]');
+  await expect(coffeePhoto).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
+  await expect.poll(() => coffeePhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await button(cold, 'Review').click();
   await expect(cold.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await button(cold, 'Profile').click();

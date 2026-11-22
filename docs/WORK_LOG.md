@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Plan browser Back, Forward and direct learner links
+
+- Request. Plan the project-wide navigation fixes, starting with returning to an earlier listening sentence using browser Back and giving lessons direct URLs.
+- Start. At 17:22 CET, Europe/Paris, the clean `D:/dev/projects/SmartLingo` checkout matched local, tracking and live `feat/french-daily-opening` at `0177e844f4ed3f2b35edf954b5a3ffa7bb46f531`, ahead/behind `0/0` after fetch. The separate clean browser-back worktree matched live `fix/browser-back` at `866236a27f0dc6e0c739d79d3fcced170e161f26`. The branches share base `82bce28748789ff6e64ddaf90a7d5b1f973294c6`.
+- Scope. Inspect the current and earlier navigation, inventory the learner and editor routes, and document browser behavior, recovery, ownership and acceptance checks. The requested deliverable for this turn is the implementation plan.
+- Findings. Two read-only explorers on the inherited model and effort checked the earlier shell/history work and current activity state. On the current 8082 preview, both Skip and checked-answer Next reached Japanese sentence 2 with the same URL and history length. Browser Back returned to the previous document. A GET for `/lesson/fr/fr.essentials.repair/dialogue` returned 404. The app shell, local preview and offline worker all need coordinated route support.
+- Outcome. [Plan 0045](plans/0045-web-navigation-and-lesson-links.md) defines the route table, topic-scoped listening links, in-tab answer restoration, save/retry rules, editor transitions, offline refresh and regression cases. `npm.cmd run check` and `git diff --check` passed the planning checkpoint. Product implementation starts with the shell and listening routes. The commit containing this entry is the plan checkpoint.
+
 ## 2026-11-22 Focus the Listening & videos experience
 
 - Request. Redesign the entire listening screen around the act of listening. Remove the session sidebar and lesson combobox, and redesign the Japanese listening library and its placement.

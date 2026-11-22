@@ -37,7 +37,17 @@ Tests use temporary databases and browser contexts, not owner databases/profiles
 
 The unified Learn coverage includes same-language sentence-question construction (duplicate/ambiguous mappings, contextual varied choices, fallback and immutability), language-separated resource metadata, French/Japanese listening/replay/transcript/feedback/error and scripted speaking roles, and optional French AI/microphone cleanup on mode changes. External resources remain link-only; tests check safe destinations and absence of provider requests, not provider audiovisual quality. The offline resource journey exercises no-voice transcript/answer fallback after a cold launch.
 
-Alphabet coverage checks the 92-form inventory and readings, known-ID/revision row progress, Hiragana-first continuation, wrong-answer study versus mastery, save retry identity and backup preservation. Visual-path browser cases check card selection, no dropdown, current/studied accessible names, keyboard Tab/Enter and320px overflow. A cold-offline case resumes saved Hiragana and freely browses/practises Katakana with visible readings and no API request. These checks do not establish handwriting or native-speaker pronunciation quality.
+Alphabet coverage checks the 92-form inventory and readings, known-ID/revision row progress, Hiragana-first continuation, wrong-answer study versus mastery, save retry identity and backup preservation. Visual-path browser cases check card selection, no dropdown, current/studied accessible names, keyboard Tab/Enter and 320px overflow. A cold-offline case resumes saved Hiragana and freely browses/practises Katakana with visible readings and no API request. These checks do not establish handwriting or native-speaker pronunciation quality.
+
+## Optional Japanese voice protocol checks
+
+The compact Python service has model-free protocol tests, separate from `npm test`:
+
+```sh
+python -X utf8 -m unittest discover -s scripts/japanese_voice -p test_server.py
+```
+
+Live synthesis requires the explicit setup and running services in [Japanese audio](JAPANESE_AUDIO.md). Ordinary suites fake the speech boundary and do not download models or make paid calls. Written kana/romaji checks and decoded playback do not establish native-speaker pronunciation quality. This documentation sync does not claim a fresh live-engine or browser run.
 
 ## Historical evidence
 
@@ -51,10 +61,10 @@ These describe their tested revisions, not a fresh run of the current checkout. 
 
 ## Known gaps
 
-- Chromium viewport/touch emulation is not physical-phone, Safari, Android/iOS or screen-reader verification. Native packages/adapters remain future work.
+- Chromium viewport/touch emulation is not physical-phone, Safari, Android/iOS or screen-reader verification. This branch has no Android build/run commands. Separate Android test-APK work on `origin/feat/android-test-apk` (`0d21d67` at inspection) is not covered by these commands; consult [repository state](REPOSITORY_STATE.md). iOS packaging and remaining native adapters are not established by this branch.
 - Fake speech and an original test MP3 establish playback/control behaviour, not audible French quality, OS voice installation, real microphone hardware or provider/subscription compatibility. No paid provider success is established by these suites.
 - Real storage quota/eviction, power loss, ongoing multiprocess contention and some filesystem alias/durability scenarios remain unverified. Browser data can be cleared; keep private backups separately.
-- Automated content/schema checks do not establish French teaching accuracy, complete CEFR alignment, owner approval or media suitability. Curriculum remains subject to saved-revision preview and explicit publication.
+- Automated content/schema checks do not establish French/Japanese teaching accuracy, complete CEFR alignment, JLPT equivalence, owner approval or media suitability. Bundled drafts require owner/qualified review; the French editor additionally requires saved-revision preview and explicit publication.
 - Per-topic offline packs, bulk speech, full editor tools, independently assessed production/listening and adaptive review remain future work. Whole-app download, saved-speech replay and temporary guided listening/speaking are implemented.
 - The last recorded dependency audit (2026-11-15) reported three moderate Expo/fingerprint/minimatch findings and no high/critical findings. The attempted override was reverted; no remediation is claimed. Consult the [investigation](plans/0011-build-tool-audit.md) and run a fresh audit before making a current security claim.
 

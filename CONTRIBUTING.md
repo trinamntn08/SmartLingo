@@ -6,6 +6,8 @@ Read [AGENTS.md](AGENTS.md), [current status](docs/STATUS.md), [the latest check
 
 Use `feat/<topic>`, `fix/<topic>`, `docs/<topic>` or `chore/<topic>` for one reviewable outcome. Preserve unrelated owner edits. Inspect live remote history before integrating with the [owner-selected repository](https://github.com/trinamntn08/SmartLingo); uploaded topic branches are not automatically merged into main.
 
+Read [repository and branch state](docs/REPOSITORY_STATE.md) before selecting a baseline. The current shared French/Japanese learner is on the unified-hub lineage; the Android APK and older hosted builds have separate histories. An older checkout or `main` may not contain already implemented features. Fetch and compare heads, preserve other worktrees and start from the source relevant to the task.
+
 For parallel work, assign exclusive files and agree shared schemas first. One owner controls manifests/lockfiles; the primary integrates and verifies. Do not move other sessions' unfinished work or stop their servers. Commands from an unmerged task branch are not installed features of this checkout.
 
 ## Validation and checkpoints

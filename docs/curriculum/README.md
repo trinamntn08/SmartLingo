@@ -1,10 +1,12 @@
-# A1–A2 curriculum research and review pack
+# French A1–A2 curriculum research and review pack
 
 Navigation: [current course catalogue](../COURSE_CATALOGUE.md) · [authoring and publication guide](../CONTENT_GUIDE.md) · [review-pack overview](README.md).
 
-Prepared 2026-11-16 for English-speaking adult newcomers to France. Original AI-assisted editorial work using the repository French curriculum researcher and French authoring skills. **All proposals remain drafts.** The app still ships 25 banks / 123 lessons; this pack does not publish or register candidates.
+Prepared 2026-11-16 for English-speaking adult newcomers to France. Original AI-assisted editorial work using the repository French curriculum researcher and French authoring skills. **All proposals remain drafts.** The French runtime still ships 25 banks / 123 lessons; this pack does not publish or register candidates.
 
-Start with [the per-topic review](topic-review.md), then [the structured progression](topic-progression.json). The latter covers every current lesson, two or more coherent lexical subclusters per bank, A1/A2 outcomes, a communicative task with French/English model and success criteria, planned transfer/revision, gaps and B1/B2 extensions. Every vocabulary reference resolves to the [canonical ledger](vocabulary-ledger.json), which contains its full current French, English meaning, example/translation, gender where supplied, notes and all lesson occurrences. This avoids maintaining another divergent copy of each study card.
+Scope checked 2026-11-22: this pack's ledger, fingerprints, counts and proposed progression concern French only. The shared learner also includes Japanese: 13 banks / 65 short lessons, a separate 13-day draft course and 20 basic-kana row lessons. Start with [the current catalogue](../COURSE_CATALOGUE.md), [Japanese course sources](japanese-course-sources.md), [shared lessons](japanese-shared-lessons.md), [topic vocabulary](japanese-topic-vocabulary.md) and [alphabet sources](japanese-alphabet-sources.md). Their selected B1 task labels do not make this French review pack a B1 course or establish CEFR/JLPT completeness.
+
+Start with [the per-topic review](topic-review.md), then [the structured progression](topic-progression.json). The latter covers every current French lesson, two or more coherent lexical subclusters per bank, A1/A2 outcomes, a communicative task with French/English model and success criteria, planned transfer/revision, gaps and B1/B2 extensions. Every vocabulary reference resolves to the [canonical ledger](vocabulary-ledger.json), which contains its full current French, English meaning, example/translation, gender where supplied, notes and all lesson occurrences. This avoids maintaining another divergent copy of each study card.
 
 [Six bridge lessons](bridge-lessons.json) and [their teaching notes](bridge-notes.md) address selected gaps. [Five corrected existing-lesson candidates](refined-lessons.json) fix confirmed grammar-support defects while preserving all other fields and IDs. The change records give exact before/after text. These are complete runtime `Lesson` objects inside review envelopes; the progression and ledger are research manifests, **not** the skill's optional research-topic schema or app import files.
 
@@ -14,7 +16,7 @@ Reviewed [the architecture](../ARCHITECTURE.md), [domain content contract](../..
 
 | Boundary | Finding and consequence for this pack |
 | --- | --- |
-| Content versus domain | `lessonSchema` is authoritative. Runtime permits foundation/A1/A2, 6–10 target items, bilingual support, dialogue, grammar and matching/sentence activities. Planning metadata stays outside this contract. |
+| Content versus domain | `lessonSchema` is authoritative. Runtime permits foundation/A1/A2/B1 (B1 is used by Japanese task drafts), 6–10 target items, bilingual support, dialogue, grammar and matching/sentence activities. Planning metadata stays outside this contract. |
 | Sense versus topic | A stable vocabulary ID owns one exact support payload. Aliases are explicit; the builder replaces shared entries with canonical support. Use lesson dialogue for contextual reuse. Changing a shared card requires coordinated review of every occurrence. |
 | Ordering versus learning path | The app now consumes bank ordering, beginning with greetings. It does not consume this pack's two-pass route, prerequisites, transfer tasks or B1/B2 goals. Prerequisites are support guidance, not access locks. |
 | Draft versus publication | SQLite keeps immutable revisions. New drafts do not replace publications; exact seed baselines protect owner edits. These files never open an owner database or modify baseline hashes. |
@@ -24,9 +26,9 @@ Reviewed [the architecture](../ARCHITECTURE.md), [domain content contract](../..
 
 No boundary change, storage migration, runtime level extension, dependency addition or new importer is needed for research. A later integration should preserve the architecture rather than adding research fields to production `Lesson` objects. Rebase correction candidates against actual current heads; `revision + 1` here refers only to the bundled baseline and cannot override an owner-edited head.
 
-## Current inventory and deduplication
+## French inventory and deduplication
 
-The ledger fingerprints **the full payload** of all 123 current lessons, including dialogues, grammar and activities. It also verifies identical support for every repeated canonical ID. Current inventory: 765 appearances, 722 canonical IDs, 713 exact written forms. Counts are content measures, not acquired vocabulary or proficiency.
+The ledger fingerprints **the full payload** of all 123 current French lessons, including dialogues, grammar and activities. It also verifies identical support for every repeated canonical ID. French inventory: 765 appearances, 722 canonical IDs, 713 exact written forms. Counts are content measures, not acquired vocabulary or proficiency.
 
 Forty-three appearances already reuse an existing ID. One additional same-sense pair is explicitly linked for teaching: `fr.routine.petit-dejeuner` (le petit déjeuner) and `fr.accommodation.breakfast` (un petit déjeuner). The research route therefore counts **721 provisional teaching concepts and 44 recycled appearances**, preserving both historical IDs and their exact examples. This is conservative editorial deduplication, not a claim that all semantic overlap has been eliminated.
 
@@ -114,7 +116,7 @@ A1 support is present for questions/negation, articles/gender, present verbs, po
 
 The review pack adds a writing model but the existing runtime activity contract has no free-writing assessment or document-reading exercise. It cannot validate real-world listening merely by playing synthetic speech beside a transcript. Native-teacher/owner linguistic review, listening-media suitability, pronunciation, accessibility/device checks and learner trials remain outstanding. Medical/banking/administrative scenarios teach language only.
 
-For B1/B2, preserve existing topic slugs as parents, canonical sense IDs and separate extension goals in each plan record. B1 develops connected accounts, explanations and less predictable problems; B2 adds nuanced viewpoints, trade-offs and negotiation. Future grammar/assessment/media and runtime level extensions require deliberate product work. No B1/B2 runtime records, empty lesson stubs or speculative storage fields are added here.
+For B1/B2, preserve existing topic slugs as parents, canonical sense IDs and separate extension goals in each plan record. B1 develops connected accounts, explanations and less predictable problems; B2 adds nuanced viewpoints, trade-offs and negotiation. Further French grammar/assessment/media and B1/B2 curriculum require deliberate product work. This pack adds no B1/B2 runtime records, empty lesson stubs or speculative storage fields. The shared runtime already permits B1 for selected Japanese task drafts; it has no B2 lesson level.
 
 ## Validation and review
 
@@ -127,6 +129,6 @@ npm.cmd run check
 node --import tsx --test packages/domain/tests/topics.test.ts packages/domain/tests/examples.test.ts packages/domain/tests/greetings.test.ts packages/domain/tests/learning.test.ts packages/domain/tests/review.test.ts
 ```
 
-The new validator checks all current full-payload fingerprints/canonical support; topic/lesson coverage, bands, prerequisites, vocabulary references, tasks and future goals; six new runtime-schema drafts; five precisely bounded correction candidates; all candidate accepted sentence paths and matching choices; notebook field limits; draft state and encoding. Existing lessons require at least one buildable sentence: legacy accepted spelling variants such as sœur/soeur can share one fixed token spelling. Eight negative fixtures exercise invalid references/prerequisites, missing coverage, stale fingerprints, unsolvable sentences, changed canonical support, unrecorded edits and accidental publication.
+The new validator checks all current French full-payload fingerprints/canonical support; topic/lesson coverage, bands, prerequisites, vocabulary references, tasks and future goals; six new runtime-schema drafts; five precisely bounded correction candidates; all candidate accepted sentence paths and matching choices; notebook field limits; draft state and encoding. Existing lessons require at least one buildable sentence: legacy accepted spelling variants such as sœur/soeur can share one fixed token spelling. Eight negative fixtures exercise invalid references/prerequisites, missing coverage, stale fingerprints, unsolvable sentences, changed canonical support, unrecorded edits and accidental publication.
 
 The ledger can be regenerated deliberately with `--refresh-inventory` after reviewing catalogue changes. That option updates only the derived ledger and does not bless changed content. Source date/structure validation is not an online recheck. Structural tests cannot establish natural French, pedagogical effectiveness or complete CEFR coverage. Final executed results and independent review are recorded in [the session checkpoint](../SESSION_CHECKPOINT.md).

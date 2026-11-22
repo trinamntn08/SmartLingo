@@ -1,6 +1,12 @@
 # Free Japanese audio
 
-Researched and implemented: 2026-11-21. Japanese speaker buttons can now work without a Japanese browser voice. The default automatic source uses an available Japanese device voice first, then saved clips or a free local VOICEVOX voice. Profile → Japanese audio also lets you choose the free voice explicitly and preview it.
+Research/implementation evidence dated 2026-11-21; this guide was checked against source on 2026-11-22. Linked external terms and quality claims were not freshly revalidated during this documentation sync. Japanese speaker buttons can now work without a Japanese browser voice. The default automatic source uses an available Japanese device voice first, then saved clips or a free local VOICEVOX voice. Profile → Japanese audio also lets you choose the free voice explicitly and preview it.
+
+## Readings and where to listen
+
+Choose **Learn Japanese** on the homepage, then use Today, Learn, Review, Report or Profile. **Learn > Japanese letters** shows basic kana with romaji readings and optional sound; **Learn > Vocabulary & lessons** shows Japanese words and examples with written kana readings. These written aids are bundled and remain available without the API. They are not a universal romaji/IPA pronunciation guide or pronunciation scoring.
+
+Speaker buttons speak their supplied Japanese text through the selected audio source; word cards do not synthesize from the separate reading field. **Profile > Japanese audio** controls the source and Slow/Gentle/Normal speed. In Automatic mode, an available device voice is selected first; a device playback failure does not automatically retry through VOICEVOX. Select Free local voice explicitly to use saved local clips or the engine instead.
 
 ## Choice and evidence
 

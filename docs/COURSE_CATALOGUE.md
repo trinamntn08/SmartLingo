@@ -1,6 +1,27 @@
-# French course catalogue — review draft
+# Course catalogue - review drafts
 
-Snapshot: 2026-11-16. Original editorial material requiring owner review. The app now uses this explicit topic order for fresh starts, Explore and the topic sidebar. Returning learners resume their previously studied lesson; free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
+Source inventory checked 2026-11-22 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Vocabulary & lessons opens topic study; Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
+
+| Language | Topic banks | Short lessons | Vocabulary appearances | Canonical IDs | Exact written forms |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| French | 25 | 123 | 765 | 722 | 713 |
+| Japanese | 13 | 65 | 390 | 380 | 380 |
+
+These counts come from `lessons` and `japaneseLessons` in [the content entry point](../packages/content/src/index.ts). They describe bundled drafts, not published curriculum, acquired words or proficiency. The French and Japanese daily-course views reuse selected vocabulary and are counted separately from these short lessons; Japanese letters are a separate activity.
+
+## Japanese catalogue and letters
+
+[Japanese short lessons](../packages/content/src/japanese-lessons.ts) provide 13 banks of 30 distinct entries across five six-entry lessons each. The inventory contains 5 foundation, 20 A1, 20 A2 and 20 B1-labelled task drafts. The [topic vocabulary record](curriculum/japanese-topic-vocabulary.md) lists all 13 topics, authorship and review limits; [the shared-lesson record](curriculum/japanese-shared-lessons.md) explains the original 13 lesson views and sentence exercises. All entries provide kana reading, English meaning, an original example with reading/translation and usage support. Japanese vocabulary uses explicit meaning matching; no literal photographs are supplied.
+
+The unchanged [Japanese daily course](../packages/content/src/japanese-course.ts) has 13 draft days with 78 vocabulary appearances, bilingual study/dialogue, two contextual choice activities and manual reflection per day. Its day progress remains independent from the 65 short lessons. [Course sources](curriculum/japanese-course-sources.md) records provenance. The [French daily pilot](../packages/content/src/open-course-pilot.ts) has two draft days; its source and rights details are in [day 1](curriculum/open-course-pilot-sources.md) and [day 2](curriculum/open-course-day-two.md).
+
+Today recommends Hiragana before Katakana; Learn defaults to Japanese letters while vocabulary/topics remain freely accessible. [The alphabet module](../packages/content/src/japanese-alphabet.ts) contains 20 draft row lessons: 10 per script, 46 basic forms each (92 total). Recognition and explicitly saved row study have their own progress and resume; characters do not increase vocabulary-lesson/report totals. [Alphabet scope and sources](curriculum/japanese-alphabet-sources.md) describes the excluded advanced forms, handwriting and review needs.
+
+All Japanese text remains original AI-assisted material for owner and qualified Japanese review. Labels describe selected task demands; neither route claims complete CEFR coverage, JLPT equivalence or assessed proficiency. [Japanese audio](JAPANESE_AUDIO.md) documents optional device speech and the free local fallback; audio availability is not pronunciation approval.
+
+## French catalogue
+
+French editorial snapshot: 2026-11-16; inventory rechecked 2026-11-22. Original editorial material requiring owner review. The app now uses this explicit topic order for fresh starts, Learn > Vocabulary & lessons and the topic sidebar. Returning learners resume their previously studied lesson; free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
 
 The [latest curriculum review pack](curriculum/README.md) owns the full-payload ledger, proposed two-pass progression, six bridge drafts and five support-correction candidates. Those candidates are unregistered and unpublished; they are not included in the inventory below.
 

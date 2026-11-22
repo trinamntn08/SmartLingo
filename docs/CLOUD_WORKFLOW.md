@@ -2,6 +2,8 @@
 
 Prepared: 2026-11-16 (Europe/Paris). Environment activation and remote check results are recorded in [the session checkpoint](SESSION_CHECKPOINT.md); this guide alone does not establish that an environment is published.
 
+Source selection refreshed 2026-11-22: use the Japanese-enabled unified-hub lineage for current learner work. Client navigation and external service details retain their original check date below; this documentation refresh did not activate a Cloud environment or revalidate the client UI.
+
 ## Scope and acceptance
 
 The owner requested a second working route that can be driven from a phone without keeping the Windows computer running. GitHub stores the source and pull requests; Codex Cloud supplies the computer that edits and tests it. This does not deploy the learner app, transfer personal study data, publish curriculum, or configure automatic task resumption.
@@ -10,7 +12,9 @@ Accept this setup when the current source is on GitHub without rewriting history
 
 ## Source baseline
 
-For the free learner website continuation, inspect `codex/free-learner-cloud-deploy` and use the [copyable deployment prompt](CLOUD_DEPLOY_PROMPT.md). The branch now contains the hosted implementation and reports account/network-blocked publication; no live URL is recorded. Documentation review baseline `cf4fedb` is its ancestor; `main` was verified at `1c6e943` on 2026-11-16 and does not contain this learner. These are dated Git observations, not permanent remote-head or CI-success claims.
+For the current French/Japanese learner, inspect `origin/feat/unified-learning-hub` and the latest documentation task branch. [Repository state](REPOSITORY_STATE.md) records fetched heads and worktrees. The hub includes language choice, Japanese topic/course/kana lessons, shared Learn/listening/speaking and reports. Older `main` and the separate Android branch are not this learner baseline.
+
+For an explicitly requested hosted continuation, also inspect `codex/free-learner-cloud-deploy` and the [historical deployment brief](CLOUD_DEPLOY_PROMPT.md). That older branch contains hosting capability gates, not the current Japanese hub; its checkpoint reports account/network-blocked publication and no live URL. A release of the current app needs deliberate reconciliation and validation before deployment. Fetch again before relying on any recorded SHA; Git synchronization alone does not combine the implementations.
 
 The earlier `chore/cloud-workflow` preparation is preserved in Git. Account-specific work and `chore/concurrent-sessions` tooling remain separate branch work, not capabilities established by this checkout. The owner's later automatic task-branch commit/push instruction is reconciled here through [ADR 0021](decisions/0021-automatic-task-branch-pushes.md); it is policy, not installed automation. Do not select a branch simply because its name sounds relevant.
 
@@ -25,8 +29,10 @@ Give the setup conversation this brief:
 ```text
 Prepare a reusable Codex Cloud environment named SmartLingo for
 https://github.com/trinamntn08/SmartLingo.git.
-Fetch origin and inspect codex/free-learner-cloud-deploy, not older main.
-Confirm that cf4fedb is an ancestor of the selected remote source.
+Fetch origin and inspect feat/unified-learning-hub and the latest
+documentation task branch, not older main or the Android-only source.
+Read docs/REPOSITORY_STATE.md and confirm the intended source ancestry.
+Do not silently substitute the older hosted implementation for the current app.
 Inspect live history before creating a separate setup task branch.
 Read AGENTS.md, docs/STATUS.md, docs/SESSION_CHECKPOINT.md and
 docs/SESSION_WORKFLOW.md. Inspect the working tree before changing anything.
@@ -57,10 +63,12 @@ On the phone open **Codex**, select the published SmartLingo environment, and se
 ```text
 Verify this SmartLingo cloud setup without changing source files.
 Fetch origin and inspect the working tree and selected source branch.
-Use codex/free-learner-cloud-deploy only if switching preserves existing work;
+Use feat/unified-learning-hub or its reviewed documentation descendant
+only if switching preserves existing work;
 report a blocker rather than overwriting another task. Report
-git branch --show-current, git log -1 --oneline, and whether cf4fedb
-is an ancestor of HEAD. Read AGENTS.md and docs/SESSION_CHECKPOINT.md.
+git branch --show-current, git log -1 --oneline and the fetched source head.
+Confirm the shared Japanese learner is present. Read AGENTS.md,
+docs/REPOSITORY_STATE.md and docs/SESSION_CHECKPOINT.md.
 Run npm run check and npm test. Report the results and any blockers.
 ```
 

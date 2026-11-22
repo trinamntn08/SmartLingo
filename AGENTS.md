@@ -6,11 +6,12 @@
 - Read `docs/ARCHITECTURE.md` before changing module boundaries or storage.
 - Treat explicit owner instructions as authoritative. Record material decisions in `docs/decisions/`.
 - Inspect the working tree before edits. Preserve unrelated work.
+- Check `docs/REPOSITORY_STATE.md` and fetched branch/worktree history before declaring a feature missing. The current learner baseline includes Japanese; Android APK and hosted implementations have separate histories.
 - This repository contains a local learner preview and curriculum API/editor. Check `docs/STATUS.md` for verified behaviour and remaining milestone work; do not claim planned functionality exists.
 
 ## Product constraints
-- English-speaking adult newcomers to France; practical metropolitan French, A1–A2 and beginner foundations.
-- Web beta first, Android/iOS later. Future target languages: English and Japanese.
+- English-speaking adults; practical metropolitan French for newcomers to France, plus Japanese with English explanations and readings. Both use the shared learner. French covers draft foundations/A1–A2; Japanese includes basic kana and selected draft tasks through estimated B1, without full CEFR/JLPT coverage claims.
+- Web beta first. English remains a future target language. Android APK testing exists on a separate branch; integration with the Japanese hub, full native adapters and iOS remain later work.
 - Follow `references/1.jpg` through `references/7.jpg` closely in visual character. Use English interface text.
 - Prioritise pictures, vocabulary, sentence building, contextual speaking, and calm review.
 - Display lesson meanings, examples, translations and explanations directly. Keep recall reveals and hints for practice. Support guided learning and free exploration.
@@ -34,7 +35,7 @@
 - Follow the implementation standards in `docs/ARCHITECTURE.md` for every feature and fix: clean, modular, extensible code with explicit responsibilities.
 - Give each function one coherent job. Keep UI, domain rules, persistence, and external services separate; depend on small typed contracts at their boundaries.
 - Prefer simple, readable designs and composition. Add abstractions for concrete variation or reuse; avoid speculative frameworks and unrelated refactors.
-- Planned stack: TypeScript, Expo/React Native, local Node/Fastify API, SQLite, browser IndexedDB.
+- Current stack: TypeScript, Expo/React Native web, local Node/Fastify API, server SQLite and browser IndexedDB. Full native storage/audio adapters remain planned.
 - Preserve provider/storage adapters and shared language-independent domain logic.
 - Use stable content IDs, revisions, validated input, idempotent learning events, and versioned migrations.
 - Keep permanent API keys on the server. Never print, commit, or embed them in client assets.

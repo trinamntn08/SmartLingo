@@ -1,5 +1,7 @@
 # French voice options
 
+This document covers French only. The current learner also has language-specific Japanese device voices and an optional free local voice fallback; see [Japanese audio](JAPANESE_AUDIO.md). Its original dated provider research below has not been revalidated by the 2026-11-22 documentation refresh.
+
 Provider/platform research checked 2026-11-15; the implemented-code description was reviewed 2026-11-16. External catalogues, prices and model availability must be rechecked before a provider change. This is a technical comparison, not a listening assessment. No paid generation, provider credentials, recordings or owner learner data were used.
 
 Owner preference: natural, calm French with no gender preference. The current implementation provides an explicit Azure audition/save flow for Denise/Henri with gentle neutral pacing, not a declared voice-quality winner. It caches verified clips for offline replay and keeps ordinary playback free of generation calls. [Setup and privacy boundaries](../README.md#optional-saved-neural-french-audio), [decision](decisions/0018-explicit-cached-neural-speech.md). Actual provider quality remains unverified without the owner's listening test.

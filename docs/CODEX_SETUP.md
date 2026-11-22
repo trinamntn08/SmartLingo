@@ -8,6 +8,8 @@ Repository files reviewed on 2026-11-16. Client-specific setup guidance and offi
 
 Git history and the owner-selected origin are established. Run `npm run setup` in each clone to configure its local Git hook path; tracked files alone do not carry that setting. Consult the [current checkpoint](SESSION_CHECKPOINT.md) for remote verification.
 
+For application work, first consult [repository and branch state](REPOSITORY_STATE.md). Japanese, shared Learn and kana are implemented on the unified-hub lineage; the separate Android/hosting branches and older `main` do not establish their absence. Setup files do not select or synchronize the intended application branch automatically. The French curriculum skill remains French-specific; its presence is not a Japanese teaching review.
+
 `npm run setup:finish` is a one-time bootstrap helper for repositories without history. It checks for conflicts/pre-staged changes/existing history, installs prepared config, verifies the setup, stages explicit bootstrap paths, sets the pre-commit executable index bit for POSIX clones, and commits locally. It never creates a remote, pushes, or sets hook trust. Do not rerun it to continue this already-initialized project. If it stops in a new bootstrap, inspect git status; it preserves files rather than resetting them.
 
 ## Files and responsibilities

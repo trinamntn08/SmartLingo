@@ -10,7 +10,7 @@ Project .npmrc keeps the cache under ignored .cache/npm, saves exact dependency 
 
 Use npm ci for reproducible installation from the lockfile. Use npm install only when intentionally adding/updating dependencies, then review and commit the lockfile change. Do not permanently disable dependency install scripts without verifying package needs.
 
-There is no Python application component. Isolated research/validation tools do not change the application runtime. If one is introduced, create a local ignored .venv and a separate pinned Python dependency manifest. Do not mix Python environment management into the Node application.
+The learner and API use Node/TypeScript. Optional free Japanese speech also has a Python component: on Windows x64, `npm run setup:japanese-voice` requires Python 3.12+ and installs pinned, hash-checked VOICEVOX artifacts into ignored `data/japanese-voice/`, including a private `venv`. `npm run dev:japanese-voice` starts that environment's Python service; it does not use global Python packages. Python and model downloads are unnecessary for ordinary text study or an installed device voice. See [Japanese audio](JAPANESE_AUDIO.md) for setup, the alternative official engine and limits.
 
 This is dependency separation, not an operating-system sandbox. A container can be added if native/server tooling later needs stronger runtime reproducibility.
 
@@ -18,7 +18,7 @@ This is dependency separation, not an operating-system sandbox. A container can 
 
 The root package is private to prevent accidental npm publication. Its files allowlist makes the bootstrap tooling package inspectable without bundling learner data, API keys, caches, node_modules, or unverified reference images.
 
-Run npm run pack:check to inspect a tooling-package dry run; this root allowlist is not an application deployment artifact. `npm run build:web` exports local web assets under `apps/learner/dist`. Android and iOS builds remain planned. Databases and generated artifacts stay ignored.
+Run npm run pack:check to inspect a tooling-package dry run; this root allowlist is not an application deployment artifact. `npm run build:web` exports local web assets under `apps/learner/dist`. This branch has no Android build/run scripts or native package configuration. Android test-APK work is separate on `origin/feat/android-test-apk` (inspected revision `0d21d67`); its commands do not apply to this checkout. iOS packaging remains planned. See [repository state](REPOSITORY_STATE.md) before switching branches. Databases and generated artifacts stay ignored.
 
 For GitHub, version source/configuration and package-lock.json; teammates restore dependencies with npm ci. Origin is configured for the [owner-selected SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Verify live history before integrating; a local checkpoint commit does not itself prove a remote backup.
 

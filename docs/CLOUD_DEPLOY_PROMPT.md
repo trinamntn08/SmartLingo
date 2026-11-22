@@ -1,11 +1,20 @@
 # Copyable Codex Cloud task: free learner website
 
+**Historical release brief, scope warning added 2026-11-22.** The prompt below targets the older French hosted branch. The current French/Japanese learner is on the unified-hub lineage, with kana, shared Learn and reports; see [repository state](REPOSITORY_STATE.md). Do not use this prompt to publish an older app as the current release. A new current-app deployment task must first reconcile the old hosting capability gates with the new learner and validate both languages. This documentation task performs no deployment and grants no new publication authorization.
+
 Prepared and reviewed: 2026-11-16 (Europe/Paris). This is a continuation brief, not evidence of a deployment. Remote inspection found the hosted implementation on `codex/free-learner-cloud-deploy` (head `c88bc41` at inspection); its checkpoint reports publication blocked and no live URL. The detailed research, hosting constraints and acceptance checklist are in [plan 0025](plans/0025-free-web-testing.md).
 
 Select the SmartLingo repository/environment in Codex Cloud. Select `codex/free-learner-cloud-deploy` as the starting branch where the client allows it. Paste the following prompt. It directs the agent to inspect completed work and fetch the correct source if the environment initially checks out older code.
 
 ```text
 Continue and deploy SmartLingo's free learner test website remotely.
+
+Historical source scope: this brief predates the Japanese-enabled unified hub.
+Before acting on a NEW request for the CURRENT app, read REPOSITORY_STATE.md,
+compare origin/feat/unified-learning-hub, preserve its French/Japanese features,
+and reconcile hosting gates in a separate implementation branch. Do not ship
+the older French-only artifact as the latest app or infer deployment permission
+from a documentation-only synchronization request.
 
 Repository: https://github.com/trinamntn08/SmartLingo.git
 Starting source: origin/codex/free-learner-cloud-deploy.

@@ -8,7 +8,7 @@ Each of the 13 existing topic banks retains its original six-entry lesson and ad
 
 The original French lessons, 13 original Japanese lessons and the entire Japanese daily course are protected by frozen payload hashes. Their IDs, revisions, canonical vocabulary and previous progress remain unchanged. Additions have separate stable IDs (`ja.expansion.*`, `ja.lesson.day-N.words-2` through `words-5`) and revision 1. Shared senses, such as company, ticket, weekend and items to bring, reuse one canonical payload across topics. Topic counts use distinct normalized targets, not repeated appearances or punctuation variants. Useful quantities/counters and fixed request formulas are counted as distinct teaching entries; arbitrary inflections are not used to fill banks.
 
-The unchanged daily-course day still contains its original selected vocabulary. The expanded bank and five short lessons are available through the same topic sidebar/Explore view used for French. Completing an old course day does not invent completion of newly added exercises.
+The unchanged daily-course day still contains its original selected vocabulary. The expanded bank and five short lessons are available through Learn → Vocabulary & lessons and the same topic sidebar used for French. Japanese letters is a separate Learn mode. Completing an old course day does not invent completion of newly added exercises.
 
 | Topic | Estimated task level | Entries | Short lessons |
 | --- | --- | ---: | ---: |

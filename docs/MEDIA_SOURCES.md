@@ -1,6 +1,14 @@
 # Vocabulary illustration sources and rights
 
-Created 2026-11-14 for the visual topic browser. Current binding counts checked against [visuals.ts](../packages/content/src/visuals.ts) and the bundled catalogue on 2026-11-16: 125 bindings, 122 used by current lessons. The render/contact-sheet review described below remains historical evidence from the original batch. For photographs and their separate rights, use [photo sources](PHOTO_SOURCES.md) and [current coverage](PHOTO_COVERAGE.md).
+Created 2026-11-14 for the visual topic browser. Current binding counts checked against [visuals.ts](../packages/content/src/visuals.ts) and the bundled catalogue on 2026-11-22: 125 French bindings, 122 used by current French lessons. The render/contact-sheet review described below remains historical evidence from the original batch. For photographs and their separate rights, use [photo sources](PHOTO_SOURCES.md) and [current coverage](PHOTO_COVERAGE.md).
+
+## Current language and media scope
+
+The drawing inventory below and [photo coverage](PHOTO_COVERAGE.md) apply to French. The 380 current Japanese canonical words/phrases have no match in the photo or drawing lookup; Japanese uses visible meanings/readings/examples and meaning matching, not a claimed literal picture. The 20 basic-kana row lessons display original typed characters and notes rather than a licensed picture collection. [Japanese course sources](curriculum/japanese-course-sources.md), [topic vocabulary](curriculum/japanese-topic-vocabulary.md) and [alphabet sources](curriculum/japanese-alphabet-sources.md) record original text, bounded planning references and review limits.
+
+Optional speech has separate provenance and operating boundaries: [Japanese audio](JAPANESE_AUDIO.md) records device voices and the free local VOICEVOX fallback/credits, while [voice options](VOICE_OPTIONS.md) covers the French/provider work. Saved synthetic audio is not a reusable human-recording licence or pronunciation approval. The shared Listening & videos library links to 11 French and 5 Japanese external resources; [its source record](curriculum/listening-resource-sources.md) records access, text support and limits. Those links do not import or relicense provider media, and media does not load before an explicit external link.
+
+## French illustration inventory
 
 Curriculum rework, 2026-11-15: the 125 existing bindings are retained, with 122 used by the current banks. Three bindings (`fr.bakery.chouquette`, `fr.administration.telephone`, `fr.administration.enveloppe`) remain explicitly historical so older notebook captures and lesson revisions keep their original pictures. New topics add no images. Abstract/unillustrated entries use visible meanings and meaning matching; the expanded course does not claim full picture coverage.
 

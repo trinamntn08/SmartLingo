@@ -1,6 +1,8 @@
 # SmartLingo
 
-A local French-learning preview for English-speaking adult newcomers to France. Web first; Android and iOS remain planned. Start with everyday greetings, explore practical topics, and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
+A local French and Japanese learning preview for English-speaking adults. Start French with everyday greetings, or Japanese with hiragana and katakana, then explore practical topics and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
+
+This checkout uses the Japanese-enabled shared learner. Android APK tooling and the older hosted release live on separate branches; [repository and branch state](docs/REPOSITORY_STATE.md) explains what each contains. Full native Android/iOS integration remains planned.
 
 See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bundled curriculum remains draft until owner review and explicit publication; lesson completion and level labels do not establish proficiency.
 
@@ -72,6 +74,8 @@ Use `npm.cmd` in PowerShell if execution policy blocks `npm.ps1`. Dependencies/c
 | `npm test` | Tooling and application/domain/storage/API tests; no paid calls. |
 | `npm run check:staged` | Repository checks plus staged secret scan before commit. |
 | `npm run doctor` | Inspect runtime, hooks and Codex CLI availability. |
+| `npm run setup:japanese-voice` | Install the optional pinned local Japanese voice runtime on Windows x64. |
+| `npm run dev:japanese-voice` | Start the optional local Japanese voice server; use with `dev:api`. |
 | `npm run test:e2e` | Chromium desktop/narrow journeys; install Chromium with `npx playwright install chromium` first. |
 | `npm run test:offline` | Build and verify isolated cold-offline/update/removal journeys. |
 | `npm run setup:codex:plan` | Preview repository Codex configuration installation. |
@@ -83,6 +87,7 @@ Detailed commands, fixtures and verification limits belong in [Testing](docs/TES
 ## Start here
 
 - [Documentation index](docs/README.md): choose the current guide for your task.
+- [Repository and branch state](docs/REPOSITORY_STATE.md): locate the Japanese learner, separate Android/hosting work and safe synchronization steps.
 - [Current status](docs/STATUS.md) and [session checkpoint](docs/SESSION_CHECKPOINT.md): capabilities, gaps and latest handoff.
 - [Product plan](PROJECT_PLAN.md) and [architecture](docs/ARCHITECTURE.md): target requirements and implementation boundaries.
 - [Development workflow](CONTRIBUTING.md), [Codex setup](docs/CODEX_SETUP.md) and [cloud workflow](docs/CLOUD_WORKFLOW.md).

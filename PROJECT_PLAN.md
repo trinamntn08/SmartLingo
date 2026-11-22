@@ -1,6 +1,6 @@
 # SmartLingo — implementation plan
 
-Target product requirements, reviewed 2026-11-16. This plan describes intended behaviour; [STATUS](docs/STATUS.md) is authoritative for what this checkout implements and which milestone gates remain open. Commands belong in [README](README.md) and [local operations](docs/LOCAL_OPERATIONS.md).
+Target product requirements, reconciled with current source on 2026-11-22. This plan describes intended behaviour; [STATUS](docs/STATUS.md) is authoritative for what this checkout implements and which milestone gates remain open. [Repository state](docs/REPOSITORY_STATE.md) distinguishes the current Japanese-enabled learner from separate Android and hosted work. Commands belong in [README](README.md) and [local operations](docs/LOCAL_OPERATIONS.md).
 
 ## 1. Product direction
 
@@ -18,13 +18,15 @@ The owner's subsequent minimum of 30 entries for every Japanese topic is impleme
 
 Owner visual/report direction, 2026-11-21: use the supplied friendly dashboard reference for shared French/Japanese Today and an in-app learning report. [Plan 0034](docs/plans/0034-friendly-learning-report.md) and [ADR 0027](docs/decisions/0027-read-only-learning-report.md) define the real saved-activity metrics and responsive cream/burgundy/gold widgets. Reference fixture names, points, child age bands and levels are not learner facts.
 
+The shared learner now uses Today, Learn, Review, Report and Profile. [Plan 0036](docs/plans/0036-unified-learning-hub.md) combines vocabulary, listening/videos and guided speaking; Japanese starts with 20 basic hiragana/katakana row lessons and independent saved continuation. The owner's 2026-11-22 request for gentler initial pacing, pronunciation display and reorganized widgets is an outstanding UI improvement, not a result of this documentation refresh.
+
 | Area | Decision | Basis |
 | --- | --- | --- |
 | Delivery | Web beta, then Android and iOS | Owner choice |
 | Audience | English-speaking adults, especially newcomers to France | Owner choice |
-| Teaching language | French plus a separate Japanese daily route; English explanations | Owner extension, 2026-11-19 |
+| Teaching language | French and Japanese in one shared learner; English explanations | Owner extensions, 2026-11-19 through 2026-11-22 |
 | French variety | Practical metropolitan French | Current owner project constraints |
-| Future languages | English; broader Japanese curriculum and platform support | Japanese daily-route extension, 2026-11-19 |
+| Future languages | English; broader coverage and review for implemented French/Japanese | Japanese shared learner is implemented |
 | Learning paths | Guided course plus free topic exploration | Owner choice |
 | Starting level | Include absolute beginners and foundational sounds | Owner choice |
 | Grammar | Optional explanation beside a phrase or activity | Owner choice |
@@ -45,7 +47,7 @@ Owner visual/report direction, 2026-11-21: use the supplied friendly dashboard r
 | Dark mode | Later release; theme tokens now | Owner choice |
 | Working name | SmartLingo | Owner choice |
 
-Begin with greetings and essentials, then practical daily situations including restaurants/cafés, shopping, transport, education and work. Support both customer/visitor and employee roles where useful. The current ordering is in the [course catalogue](docs/COURSE_CATALOGUE.md); the [curriculum review pack](docs/curriculum/README.md) proposes a separate A1/A2 revisit route.
+French begins with greetings and essentials, then practical daily situations including restaurants/cafés, shopping, transport, education and work. Japanese recommends basic hiragana before katakana, with topic vocabulary and daily courses freely accessible. Support both customer/visitor and employee roles where useful. The current ordering is in the [course catalogue](docs/COURSE_CATALOGUE.md); the French [curriculum review pack](docs/curriculum/README.md) proposes a separate A1/A2 revisit route.
 
 ## 3. Scope boundaries
 
@@ -79,12 +81,12 @@ Historical starting scope, retained to explain the milestone design. The current
 
 - Android and iOS release, optional accounts and cross-device sync.
 - Larger A1–A2 curriculum, then B1/B2 based on demand and review capacity.
-- English/Japanese courses, dark mode, culture, game elements.
+- English as a target language, broader Japanese coverage, dark mode, culture and game elements. Japanese basic kana, topic lessons and selected B1-labelled course tasks are already implemented drafts.
 - Validated pronunciation assessment, richer adaptive learning, exams, billing, public community features.
 
 ## 4. Learning flow
 
-Onboarding: choose beginner/A1/A2 self-assessment, reason for learning, interests, and a proposed 10-minute daily goal. All choices remain editable. Allow skipping onboarding and browsing freely. Do not treat self-assessment or app activity as a certified level.
+Implemented entry: choose French or Japanese, then use Today or Learn with independent language-scoped history. Japanese recommends basic kana first; vocabulary browsing remains free. Planned fuller onboarding: choose beginner/A1/A2 self-assessment, reason for learning, interests, and a proposed 10-minute daily goal. All choices should remain editable and skippable. Do not treat self-assessment or app activity as a certified level.
 
 Today: continue a lesson, review due items, or start a suggested short session. Do not punish missed days.
 
@@ -132,7 +134,7 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 ## 7. Audio, pictures, and content production
 
-Owner planning direction, 2026-11-17: develop a plan for a complete A1–B1 daily course usable directly inside the website, using eligible open materials and original authoring. The final source constraint excludes proprietary Taxi reproduction and seeking publisher permission. [Plan 0027](docs/plans/0027-open-course-integration.md) and [ADR 0022](docs/decisions/0022-open-course-planning.md) define the source/licence checks, integration stages and unresolved coverage; no imported books or B1 functionality are claimed as delivered.
+Owner planning direction, 2026-11-17: develop a plan for a complete A1–B1 daily course usable directly inside the website, using eligible open materials and original authoring. The final source constraint excludes proprietary Taxi reproduction and seeking publisher permission. [Plan 0027](docs/plans/0027-open-course-integration.md) and [ADR 0022](docs/decisions/0022-open-course-planning.md) define the source/licence checks, integration stages and unresolved coverage. French currently has two draft days; Japanese has 13 original draft days and shared lessons through selected estimated B1 tasks. No imported books, complete B1 curriculum, certification or JLPT equivalence are claimed.
 
 Create original lessons and examples using reputable public references for research. Record sources, media attribution, and reuse permissions. Personal use is not a reason to copy entire courses or unlicensed image/audio collections; original content also makes later commercialisation easier.
 
@@ -148,18 +150,18 @@ Content lifecycle: draft -> owner review -> published -> revised/archived. AI dr
 
 ## 8. Screens and visual direction
 
-Learner navigation: Today, Explore, Practice, Review, Profile. Notebook is accessible from Review and the global save action. Editor is a separate local route.
+Current learner navigation: homepage language choice, then Today, Learn, Review, Report and Profile. Notebook is accessible from Review and vocabulary save actions. The French editor is a separate local route. The list below distinguishes implemented destinations from planned controls.
 
-- Today: next activity, continue lesson, reviews due, understated progress.
-- Explore: topic cards, level filter, roles, free search.
+- Today: next activity, Japanese alphabet recommendation, daily course, review/listening/speaking links and saved activity summaries.
+- Learn: Japanese letters when relevant, Vocabulary & lessons with topic cards/filters/search, Listening & videos and Speaking.
 - Topic: useful outcomes, lesson list, progress, download status.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
 - Vocabulary: article + word, visible meaning, example/translation, explanation, image, audio, notebook action.
-- Practice: choose a skill or situation without following a course.
-- Speaking: role selection, short brief, microphone, transcript, help, correction summary.
-- Review: due queue, flashcards, mistakes, notebook.
-- Profile/settings: goals, backup, audio/privacy options, usage, typography.
-- Editor: curriculum tree, searchable entries, visual preview, publication status.
+- Speaking within Learn: scripted role selection, model/partner playback and visible meanings/readings in either language; optional French AI conversation/recording remains separate.
+- Review: language-scoped notebook, saved words, due recognition queue and manual supported/independent ratings. A dedicated mistakes collection remains planned.
+- Report: read-only current-revision lesson/word/topic totals and weekly saved activity. No proficiency, points or inferred study-time metric.
+- Profile: implemented backup/restore, offline download, language-specific audio and French workshop/publication controls. Goals, broader learner controls and typography preferences remain planned.
+- Editor: implemented French draft fields, saved-revision preview and explicit publication; full curriculum-tree/media management remains planned.
 
 Match references closely: warm cream base, white rounded cards, dark text, yellow primary accents, green secondary accents, subtle raised borders/shadows, generous spacing. Preserve intent rather than reproducing desktop screenshots at phone scale. English replaces Vietnamese interface copy. Build semantic theme tokens for later dark mode and additional scripts.
 
@@ -212,7 +214,7 @@ Conceptual target model, not a claim that each row is a separate implemented tab
 | Conversation | topic, role, optional retained transcript, saved items |
 | API usage | request ID, operation, provider-reported usage, optional cost estimate |
 
-Store French morphology as extensible language-specific data, not mandatory columns for every language. Japanese daily-course drafts now use optional kana readings and language-aware notebook metadata; broader Japanese script/kanji/audio support and English-specific details require further content work.
+Store French morphology as extensible language-specific data, not mandatory columns for every language. Shared Japanese lessons/course/notebook use kana readings and language-aware metadata; basic kana study has separate event-scoped progress. Device speech and optional free local Japanese audio are implemented. Broader script/kanji instruction, pronunciation assessment and English-specific details require further work.
 
 ## 11. Editor scope
 
@@ -279,7 +281,7 @@ The original scaffolding/first-lesson backlog has been completed. Choose the nex
 ## 16. Remaining dependencies and non-blocking decisions
 
 - Owner supplies an API key through local environment configuration when API testing begins; never through a committed file or a public chat artifact. Ordinary lesson implementation does not depend on the key.
-- Owner reviews draft French/English content and early UX previews.
+- Owner reviews draft French/Japanese content, English support, readings, media and early UX previews.
 - The optional 10-minute goal and future onboarding/preferences need product review; metropolitan French, greetings-first entry and directly visible study support are current constraints.
 - Public branding, billing, future account restrictions, hosted API/accounts, store release and launch date remain open. A free learner-only hosting proposal is separate from those larger decisions.
 

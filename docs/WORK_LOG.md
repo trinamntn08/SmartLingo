@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22: whole frontend redesign plan
+
+- Request: prepare a detailed SmartLingo frontend redesign plan using the two supplied references, larger type and more pictures and photos.
+- Started: 12:23 CET (Europe/Paris). State: plan complete.
+- Source: clean `D:/dev/projects/SmartLingo`, `docs/repo-sync-tracking`; local and live origin both `84502527237fca016d7ca9ad02433e69c0ca6612`, ahead/behind `0/0`. `git fetch origin --prune` succeeded. Verified live `feat/calm-learner-redesign` at `132144fcca3a8cf6142bbbd2c08690b357131175` is an ancestor of the current source. Created `docs/ui-redesign-plan` from the verified documentation and learner baseline. The new task ref was absent on origin.
+- Scope: inventory the existing French/Japanese learner and French curriculum editor, then plan visual direction, responsive layouts, media, delivery slices and acceptance checks.
+- Outcome: [plan 0040](plans/0040-visual-frontend-redesign.md) specifies larger typography, an image-led library, a focused lesson stage, the editor workspace, asset selection and rights, responsive behaviour, five delivery phases and acceptance checks. Reviewed both supplied screenshots, the seven repository references, current learner and editor source, and design, media and test documentation. Decisions are proposals for mockup and pilot review.
+- Validation: `npm.cmd run check` passed repository checks and TypeScript. Reviewed the plan against current source and checked the staged documentation with `npm.cmd run check:staged`, `git diff --check` and `git diff --cached --check`. Browser, application and offline suites are reserved for implementation.
+- Checkpoint: the commit containing this entry on `docs/ui-redesign-plan`. Actual SHA and live origin verification are reported at handoff after final staged checks.
+- Next: when implementation is requested, begin Phase 1 by capturing the current desktop and phone journeys and proposing the Learn, lesson and editor mockups.
+
 ## 2026-11-22: repository synchronization and tracking rules
 
 - Request: check local and remote first for every task/status request, synchronize the relevant source and record all work in documentation.

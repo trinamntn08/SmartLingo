@@ -99,12 +99,18 @@ The server retains generated clips and their French text in the separate ignored
 
 ## Test the offline-ready preview
 
+Use `http://localhost:8082` as the single local review preview. Keep the same hostname, port and browser profile so the learner keeps access to existing notebook entries, progress and downloads.
+
+Run `npm run build:web` from the review checkout for each new version. It replaces the export in `apps/learner/dist`. Once the build finishes, refresh the existing tab. A preview already serving that directory reads the updated files from disk, so it can keep running. Start `npm run preview:web` on the same address if the preview is stopped. The initial setup uses both commands.
+
 ```sh
 npm run build:web
 npm run preview:web
 ```
 
-Open `http://localhost:8082`. In Profile → Offline & backups → Learn offline, choose Download for offline use and wait for Ready for offline use. This saves the app, bundled draft lessons and pictures included in that export (French and Japanese short lessons, daily-course text and basic Japanese letters). An already running older preview may contain fewer lessons/features until rebuilt. You can then disconnect or stop both local servers and reload at the same address. Loaded publications, saved vocabulary, progress and manual review use the existing browser storage. Learn offline does not generate speech or install voices/VOICEVOX. Saved French neural clips and Japanese clips use separate browser caches; previously uncached Japanese speech needs a device voice or the API plus local engine. Device speech may need a connection. Use the browser menu's Install/Add to Home Screen option if it is available; offline readiness is shown separately.
+Verify that the served `/offline-manifest.json` build ID matches `apps/learner/dist/offline-manifest.json` and check the change at the same review address. If a listener is serving another workspace or a test fixture, identify it before switching the review service.
+
+In Profile → Offline & backups → Learn offline, choose **Download for offline use** or **Update offline copy** and wait for **Ready for offline use**. This saves the app, bundled draft lessons and pictures included in that export (French and Japanese short lessons, daily-course text and basic Japanese letters). You can then disconnect or stop both local servers and reload at the same address. Loaded publications, saved vocabulary, progress and manual review use the existing browser storage. Learn offline does not generate speech or install voices/VOICEVOX. Saved French neural clips and Japanese clips use separate browser caches; previously uncached Japanese speech needs a device voice or the API plus local engine. Device speech may need a connection. Use the browser menu's Install/Add to Home Screen option if it is available; offline readiness is shown separately.
 
 Port 8082 has separate browser storage from development on 8081. To bring existing learning across, download a private learning backup from the old address, then explicitly restore it in Profile at the new address. Do not clear the old browser data to make that transfer.
 

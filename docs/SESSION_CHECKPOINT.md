@@ -1,5 +1,7 @@
 # Session checkpoint
 
+Completed on 2026-11-22, Europe/Paris. Documented one stable local review preview on `feat/french-daily-opening`, which started at matching local and live heads `1e831c369330178b0987ae9858740831dcec958e`. Port 8082 serves combined export `8a4564f0b2b9` and the temporary port 8186 preview was stopped. Repository checks and a fresh Chromium review of the listening update passed. The commit containing this note is the checkpoint. Rebuild in place and refresh the existing tab for the next owner review. [Work log](WORK_LOG.md#2026-11-22-reuse-one-local-review-preview)
+
 Updated 2026-11-22 at 16:42 CET, Europe/Paris. Complete French and English dialogue transcripts and three generated scenes are ready for review on `feat/french-daily-opening`. The starting checkout matched live origin at `a6a560c33526efb049d9992dd9c1f92bf3bcbb82`, ahead/behind `0/0` after fetch. The feature branch later advanced to the separately completed listening commit `2fd222e2334a397be01585523d4df9a0cb9fda9c`, which matched live origin before this checkpoint. [Work log](WORK_LOG.md#2026-11-22-full-french-and-english-dialogue-columns)
 
 The local preview at `http://localhost:8082` serves combined export `8a4564f0b2b9`. French and English read as two complete transcripts, side by side where space allows and stacked by language on phones. Day 1, Days 2–5 and restaurant lessons use the generated neighbour, workshop and bistro contexts respectively. [Media provenance](MEDIA_SOURCES.md#french-dialogue-scenes)

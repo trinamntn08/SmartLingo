@@ -45,7 +45,7 @@ npm run build:web
 npm run preview:web
 ```
 
-Open `http://localhost:8082`, then Profile → Offline & backups → Learn offline → Download for offline use. Wait for Ready before testing a cold offline reload. Build again after source changes. Development mode does not offer app downloads. [Offline use and storage transfer](docs/LOCAL_OPERATIONS.md#test-the-offline-ready-preview) explains updates, removal and browser-storage limits.
+Use `http://localhost:8082` for each version you review locally. When the preview is already running, rebuild with `npm run build:web` and refresh the same tab. For offline testing, go to Profile → Offline & backups → Learn offline, download or update the offline copy, and wait for **Ready for offline use** before testing a cold offline reload. [Local preview updates and browser storage](docs/LOCAL_OPERATIONS.md#test-the-offline-ready-preview)
 
 ## Optional saved neural French audio
 

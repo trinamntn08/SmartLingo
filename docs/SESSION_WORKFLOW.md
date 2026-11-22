@@ -25,6 +25,10 @@ Owner instruction, recorded 2026-11-22: every work request, including asking for
 5. Start a dated WORK_LOG.md entry before substantial work on every request, including a status-only check, review or documentation task. Record the request, source/synchronization evidence, scope and intended next action; update the same entry at meaningful milestones and handoff with changes/findings, actual validation, outcome, blockers and commit/upload evidence. Preserve earlier entries. Update SESSION_CHECKPOINT.md while work is in progress, after meaningful steps, before risky/long work, before compaction when signalled and before stopping. Keep the checkpoint concise with the exact recovery action. Update STATUS.md for capability/milestone changes and meaningful blockers; record material decisions in decisions/. Do not claim implementation or tests merely because a status/log entry was written.
 6. After reviewing and validating a completed step, create its checkpoint commit and push the assigned task branch to origin under the standing owner authorisation below. Verify the local commit and remote head; report the hash and upload result. Do not leave completed validated work uncommitted or unpushed by default.
 
+## Keep one local review preview
+
+Owner instruction, recorded 2026-11-22. Use the existing `http://localhost:8082` for every new version handed to the owner for local review. Rebuild the intended checkout in place, verify the served build, and hand back the same address. Keep any isolated development or test servers out of the owner handoff. Follow the [local preview update steps](LOCAL_OPERATIONS.md#test-the-offline-ready-preview).
+
 ## Automatic checkpoint commits
 
 Owner instruction, recorded 2026-11-14: automatically commit after each completed step so there is a recoverable Git checkpoint. This is standing authorisation for the primary agent to make local commits during authorised work without repeated confirmation. A step is a small, coherent, reviewable outcome with acceptance criteria; it is not each individual edit, command, or subagent response.

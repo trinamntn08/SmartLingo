@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Reuse one local review preview
+
+- Request. Document that each new learner version refreshes the existing local review preview at the same address.
+- Start. At 16:48 CET, Europe/Paris, the clean `D:/dev/projects/SmartLingo` checkout matched local, tracking and live `feat/french-daily-opening` at `1e831c369330178b0987ae9858740831dcec958e`, ahead/behind `0/0` after fetch.
+- Scope. Document the in-place rebuild and same-address browser reload. Keep automated test servers separate from the owner’s review preview. Check that port 8082 already serves both the dialogue and listening changes before retiring the temporary listening preview.
+- Outcome. Local operations, the session workflow and README point to the same review address. The instructions explain rebuilding in place, refreshing the existing tab, confirming the build and updating an offline copy.
+- Verified. `npm.cmd run check` and `git diff --check` passed. The live port 8082 manifest matched local export `8a4564f0b2b9`, and a fresh Chromium visit verified the listening controls. Stopped the temporary preview on port 8186 and verified port 8082 kept serving the same export.
+- Handoff. Update and review future versions at `http://localhost:8082`. The commit containing these notes is the task checkpoint.
+
 ## 2026-11-22 Listening playback and transcript toggle
 
 - Request. Replace the decorative headphones in the listening question with a large speaker button and let learners show or hide the transcript.

@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Make French Quick practice easier to scan
+
+- Request. Simplify Quick practice with less text and immediately recognisable A/B/C answers.
+- Start. At 21:31 CET, Europe/Paris, the primary worktree's local, tracking and live `feat/french-daily-opening` matched at `e35f03b39371368155571e84fe69b20136b3e9f5`, ahead/behind `0/0` after fetch. The index and working tree held the separate photo task. Started from that verified head in a clean, isolated `fix/quick-practice` worktree.
+- Outcome. All five French days use shorter prompts and A/B/C answer cards in a row on wide screens and stacked on phones. Hints map English meanings to the same letters. The original choices, grading and saved answers remain valid.
+- Isolated validation. `npm.cmd run check`, `git diff --check`, 286 tooling/application tests, 22 Chromium cases and four cold-offline cases passed. Final export `25c7bef2747a` passed the quiz offline again at desktop and 320 px, plus direct Day 2 keyboard selection and reload at 918 and 320 px. Pushed and verified isolated checkpoint `0c810dbf8035122625eda4c504ef2be4bd0e01b9`.
+- Integration. Applied the focused patch to the clean primary source after the local photo checkpoint `c585c48369b865062d112bb065f1832271b07e03`. The previous live head was `e35f03b` while that upload was in flight. At 21:42 CET the local, tracking and live photo checkpoint matched, ahead/behind `0/0`.
+- Shared preview. Repository and TypeScript checks and two combined spelling quiz cold-offline cases passed. The served manifest at port 8082 matched local export `ce811146d617`. Day 2 passed layout, keyboard answer and reload checks at 918 and 320 px. The served export retained the generated photo and returned 404 for its former stock path.
+- Handoff. The commit containing this entry is the primary checkpoint. Review at `http://localhost:8082`.
+
 ## 2026-11-22 Replace third-party learner photographs
 
 - Request. Replace externally sourced app photos with SmartLingo-generated photos and remove the learner-facing Photo credits section.

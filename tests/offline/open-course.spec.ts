@@ -74,6 +74,12 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   await expectDialoguePhoto(panel(cold), 'french-workshop-dialogue.jpg');
   await button(cold, 'Next section').click();
   await expect(step(cold, 'Quick practice')).toBeVisible();
+  const practice = spelling.blocks.find(block => block.kind === 'choice')!;
+  if (practice.kind !== 'choice') throw new Error('Missing practice');
+  const choices = panel(cold).getByTestId(`course-choice-${practice.id}`).getByRole('button', { name: /^[ABC]\. / });
+  await expect(choices).toHaveCount(3);
+  await choices.nth(practice.choices.findIndex(choice => choice.id === practice.answerId)).click();
+  await expect(panel(cold).getByText(/^Correct\./)).toBeVisible();
   await button(cold, 'Next section').click();
   await expect(step(cold, 'Try it')).toBeVisible();
   await button(cold, 'Show example').click();

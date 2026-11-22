@@ -12,6 +12,8 @@ Use warm neutral surfaces, pine primary actions, gold highlights and bundled var
 
 Put the daily course outline beside the course title. The outline shows the current day's sections first, followed by all study days. It starts collapsed and closes after successful navigation to a selection so learners can begin reading at the destination.
 
+For French daily-course Quick practice, use short prompts with lettered answer cards directly below. Keep all questions available in the same section and use the same letters to identify English meanings in the optional hint.
+
 Bundle original contextual scenes and the font with the offline export. Context photos are presentation media. Literal word-photo associations and exercise answers remain bound to the existing content. The editor preserves its explicit save, saved-revision preview and publication, including stale revision and unsaved edit protections. [Asset provenance](../MEDIA_SOURCES.md#bundled-presentation-scenes-and-type)
 
 ## Consequences

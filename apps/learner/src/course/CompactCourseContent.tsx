@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { gradeCourseChoice, type CourseBlock, type CourseChoice, type CourseDay, type CourseEvent, type Vocabulary } from '@smartlingo/domain';
 import { Speak } from '../audio/Speak';
 import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
@@ -7,7 +7,7 @@ import { BilingualDialogue } from '../ui/BilingualDialogue';
 import { Button } from '../ui/controls';
 import { getDailyDialoguePhoto } from '../ui/dialoguePhotos';
 import type { ContextPhoto } from '../ui/contextPhotos';
-import { colors, styles as s } from '../ui/theme';
+import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 
 type DialogueBlock = Extract<CourseBlock, { kind: 'dialogue' }>;
@@ -105,28 +105,33 @@ function CompactChoice({ block, copy, events, blocked, revealBlocked, onChoice, 
   block: CourseChoice; copy: PracticeCopy; events: CourseEvent[]; blocked: boolean; revealBlocked: boolean;
   onChoice: (id: string, supported: boolean) => void; onSupport: () => void;
 }) {
+  const narrow = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const [hintOpen, setHintOpen] = useState(false);
   const supported = events.some(event => event.blockId === block.id && (event.kind === 'support' || (event.kind === 'choice' && event.supported)));
   const latest = events.filter((event): event is Extract<CourseEvent, { kind: 'choice' }> =>
     event.blockId === block.id && event.kind === 'choice').at(-1);
   const valid = latest && block.choices.some(choice => choice.id === latest.choiceId) && gradeCourseChoice(block, latest.choiceId) === latest.result;
   const showHint = hintOpen || supported;
+  const options = block.choices.map((choice, index) => ({ ...choice, letter: String.fromCharCode(65 + index) }));
 
-  return <View testID={`course-choice-${block.id}`} style={[s.notice, { backgroundColor: colors.paper, padding: 12, gap: 8 }]}>
-    <Text style={[s.body, { fontWeight: '600' }]}>{copy.prompt}</Text>
-    <View style={[s.row, { gap: 6 }]}>
-      {block.choices.map(choice => <Button compact key={choice.id} selected={valid && latest.choiceId === choice.id} disabled={blocked}
-        onPress={() => onChoice(choice.id, showHint)}>{choice.target}</Button>)}
+  return <View testID={`course-choice-${block.id}`} style={[s.notice, { backgroundColor: colors.paper, padding: narrow ? 14 : 18, gap: 10 }]}>
+    <Text accessibilityRole="header" style={[s.body, { fontWeight: '700' }]}>{copy.prompt}</Text>
+    <View style={[s.row, { gap: 8, alignItems: 'stretch' }]}>
+      {options.map(({ id, target, letter }) => <View key={id} style={{ flexBasis: narrow ? '100%' : 0, flexGrow: 1, minWidth: 0 }}>
+        <Button compact marker={letter} label={`${letter}. ${target}`} selected={valid && latest.choiceId === id} disabled={blocked}
+          onPress={() => onChoice(id, showHint)}>{target.replace(/ (?=[!?])/g, '\u202F')}</Button>
+      </View>)}
     </View>
-    {showHint ? <View>
-      <Text style={s.muted}>{copy.hint}</Text>
-      {block.choices.map(choice => <Text key={choice.id} style={s.muted}>{choice.target} — {choice.meaning}</Text>)}
-    </View> : <View style={{ alignItems: 'flex-start' }}>
-      <Button compact quiet disabled={revealBlocked} onPress={() => { setHintOpen(true); onSupport(); }}>Show hint</Button>
+    <View style={[s.row, { gap: 8 }]}>
+      {!showHint && <Button compact quiet disabled={revealBlocked} onPress={() => { setHintOpen(true); onSupport(); }}>Hint</Button>}
+      <Text accessibilityLiveRegion="polite" style={[s.muted, { flexShrink: 1 }, valid && latest.result === 'correct' && { color: colors.primary }]}>
+        {latest && (valid ? latest.result === 'correct' ? `Correct. ${copy.feedback}` : 'Try again.' : 'Please answer again to update your saved choice.')}
+      </Text>
+    </View>
+    {showHint && <View style={{ gap: 3 }}>
+      <Text style={[s.muted, { fontWeight: '600' }]}>{copy.hint}</Text>
+      {options.map(({ id, meaning, letter }) => <Text key={id} style={s.muted}>{letter}. {meaning}</Text>)}
     </View>}
-    {latest && <Text accessibilityLiveRegion="polite" style={[s.muted, valid && latest.result === 'correct' && { color: colors.primary }]}>
-      {valid ? latest.result === 'correct' ? `Correct. ${copy.feedback}` : 'Try again.' : 'Please answer again to update your saved choice.'}
-    </Text>}
   </View>;
 }
 

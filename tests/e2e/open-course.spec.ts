@@ -101,14 +101,20 @@ test('Next saves dialogue and resumes practice without requiring answers before 
   const practice = firstDay.blocks.find(block => block.kind === 'choice')!;
   if (practice.kind !== 'choice') throw new Error('Missing practice');
   const question = coursePanel(page).getByTestId(`course-choice-${practice.id}`);
-  const wrong = practice.choices.find(choice => choice.id !== practice.answerId)!;
-  await question.getByRole('button', { name: wrong.target, exact: true }).click();
+  const choices = practice.choices.map((choice, index) => ({
+    ...choice, label: `${'ABC'[index]}. ${choice.target}`,
+  }));
+  await expect(question.getByRole('heading', { name: 'How do you greet a neighbour during the day?' })).toBeVisible();
+  await expect(question.getByRole('button', { name: /^[ABC]\. / })).toHaveCount(3);
+  for (const { label } of choices) await expect(question.getByRole('button', { name: label, exact: true })).toBeVisible();
+  const wrong = choices.find(choice => choice.id !== practice.answerId)!;
+  await question.getByRole('button', { name: wrong.label, exact: true }).press('Enter');
   await expect(question.getByText(/Try again/)).toBeVisible();
   await expect(question.getByText(firstDay.compact!.practice[0].feedback, { exact: false })).toHaveCount(0);
   await question.getByRole('button', { name: /hint/i }).click();
   await expect(question.getByText(firstDay.compact!.practice[0].hint, { exact: true })).toBeVisible();
-  const correct = practice.choices.find(choice => choice.id === practice.answerId)!;
-  await question.getByRole('button', { name: correct.target, exact: true }).click();
+  const correct = choices.find(choice => choice.id === practice.answerId)!;
+  await question.getByRole('button', { name: correct.label, exact: true }).click();
   await expect(question.getByText(/Correct/)).toBeVisible();
 
   await page.reload();

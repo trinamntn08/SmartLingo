@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Check the daily course source credits
+
+- Request. Confirm whether the course credits are still needed and identify material written for SmartLingo.
+- Start. At 22:51 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `9dca7ec7aad1e83f0d5595c13c6319c31e535c13`, ahead/behind `0/0`.
+- Scope. Review the authored source record, embedded material, credit disclosure and CC BY terms. Verify the current preview and document the finding.
+- Finding. French Day 1 still bundles a small greeting-text adaptation from Mirabelle Tinio's [Basic greetings](https://opentextbc.ca/francaisinteractif/chapter/00-basic-greetings/). Its dialogue and practice, French Days 2–5, and the Japanese daily course are SmartLingo drafts. The learner photos were generated for SmartLingo. This review concerns the course credit.
+- Decision for review. Keep the attribution with the Day 1 adaptation in the web and offline exports. [CC BY 4.0 section 3](https://creativecommons.org/licenses/by/4.0/legalcode.en#s3) permits presentation appropriate to the medium, including a linked detailed credit. A compact Day 1 credit with author, source, licence and change notice would suit the study flow. This request verifies the credit and leaves the implementation decision for owner direction.
+- Verification. Reopened the source and licence on 2026-11-22. Chromium confirmed the Day 1 credit, source and licence controls and change notice in the matching served export `dee751880a5c`. The served bundle still contains the adapted study text. Repository, TypeScript and whitespace checks passed.
+
 ## 2026-11-22 Present topics as a sequence of lesson cards
 
 - Request. Replace the short-lesson rows with distinct cards that show how lessons fit into a topic and make consecutive study easy.

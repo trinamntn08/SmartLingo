@@ -2,6 +2,69 @@ import { openTopic } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
+test('browser Back and Forward restore visited learner screens before leaving SmartLingo', async ({ page, baseURL }) => {
+  const earlierPage = 'https://previous-page.test/';
+  await page.route(earlierPage, route => route.fulfill({ contentType: 'text/html', body: '<h1>Previous website</h1>' }));
+  await page.addInitScript(() => {
+    if (location.hostname === 'localhost') localStorage.removeItem('smartlingo.target-language.v1');
+  });
+  await page.goto(earlierPage);
+  await page.goto('/');
+  const choice = page.getByRole('heading', { name: 'Choose a language', exact: true });
+  const today = page.getByRole('button', { name: 'Today', exact: true });
+  const library = page.getByRole('heading', { name: 'Explore topics', exact: true });
+  const topic = page.getByRole('heading', { name: 'Restaurant', exact: true });
+  const lesson = page.getByRole('heading', { name: 'At the restaurant', exact: true });
+
+  await expect(choice).toBeVisible();
+  await page.getByRole('button', { name: 'Learn French', exact: true }).click();
+  await openTopic(page, 'Restaurant');
+  await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
+  await expect(lesson).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(new URL('/', baseURL).href);
+  await expect(topic).toBeVisible();
+  await page.goForward();
+  await expect(lesson).toBeVisible();
+  await page.goBack();
+  await expect(topic).toBeVisible();
+  await page.goBack();
+  await expect(library).toBeVisible();
+  await page.goBack();
+  await expect(today).toHaveAttribute('aria-selected', 'true');
+  await page.goBack();
+  await expect(choice).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(earlierPage);
+});
+
+test('browser Back keeps a failed learning save available for retry or dismissal', async ({ page }) => {
+  await page.goto('/');
+  await openTopic(page, 'Restaurant');
+  await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
+  await page.evaluate(() => {
+    const add = IDBObjectStore.prototype.add;
+    IDBObjectStore.prototype.add = function (...args: Parameters<typeof add>) {
+      if (this.name === 'events') throw new Error('Test write failure');
+      return add.apply(this, args);
+    };
+  });
+  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  const dismiss = page.getByRole('button', { name: 'Dismiss and continue', exact: true });
+  await expect(dismiss).toBeVisible();
+
+  // A blocked Back traverses once to the topic and then returns to the lesson's entry.
+  await page.evaluate(() => new Promise<void>(resolve => {
+    window.addEventListener('popstate', () => window.addEventListener('popstate', () => resolve(), { once: true }), { once: true });
+    window.history.back();
+  }));
+  await expect(page.getByRole('heading', { name: 'At the restaurant', exact: true })).toBeVisible();
+  await expect(dismiss).toBeVisible();
+  await dismiss.click();
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'Restaurant', exact: true })).toBeVisible();
+});
+
 test('hash navigation cancels hidden learner speech and preserves the mounted lesson', async ({ page }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {

@@ -21,7 +21,8 @@ The [maintenance review](CODEBASE_REVIEW.md) records the 2026-11-22 cleanup and 
 | --- | --- |
 | `apps/learner/App.tsx` | Learner/editor mounting and hash routing; preserves mounted workspaces and stops speech on route changes. |
 | `apps/learner/src/app/LearnerApp.tsx` | Scoped learning/catalogue/report composition and destination rendering. |
-| `apps/learner/src/app/useLearnerNavigation.ts` | In-session destination/chooser state, guarded transitions, scroll reset and speech cancellation. Does not store learning progress. |
+| `apps/learner/src/app/useLearnerNavigation.ts` | In-session destination/chooser state, guarded transitions, scroll restoration and speech cancellation. |
+| `apps/learner/src/app/learnerHistory.ts` | Web session history entries for learner destinations and the editor hash. Lesson references use catalogue IDs. Search and scroll state stay in memory. |
 | `apps/learner/src/profile/ProfileScreen.tsx` | Named expandable groups compose existing language-specific settings panels. Shared `ui/Disclosure` owns expansion, lazy mounting and optional retained child state only. |
 | `apps/learner/src/ui/designTokens.ts`, `theme.ts`, `controls.tsx` | Shared visual values/styles and Button/Badge primitives, independent of provider/audio/storage modules. See [design system](DESIGN_SYSTEM.md). |
 | `apps/learner/src/audio/Speak.tsx` | Speaker/stop/options UI over existing audio adapters; composes base controls. |

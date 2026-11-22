@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Learner browser Back and Forward
+
+- Request. Fix the browser's Back arrow leaving SmartLingo during a learner journey.
+- Start. At 15:24 CET, Europe/Paris, `git fetch origin --prune` succeeded. Local, tracking and live `docs/french-course-design-direction` matched at `82bce28748789ff6e64ddaf90a7d5b1f973294c6`, ahead/behind `0/0`. The primary checkout had two modified tracking documents and an untracked French course plan. The running Expo process uses that checkout. Its learner source matches the local, tracking and live frontend rework head `66d03cc85814e1835d37c0e8594d9d63c5dad590`. Created clean worktree `D:/dev/projects/SmartLingo-sessions/browser-back` on `fix/browser-back` from the verified documentation head. The fix branch has no prior remote ref.
+- Acceptance. Browser Back and Forward restore visited learner screens, including the topic that opened a lesson. Back can leave normally after the first SmartLingo history entry. Preserve existing language choice, save guards, lesson progress and the editor hash route. Verify against desktop and narrow Chromium.
+- Implementation. Learner transitions now record destination IDs in browser history. Search text and scroll stay in memory. Back and Forward restore visited screens without changing the saved language preference. The existing editor hash and learner save guards are exercised by browser tests.
+- Validation. The new desktop regression reproduced the exit on the unchanged Expo preview at port 8081. On the fix, all six desktop and narrow shell-navigation cases passed on port 8084, including Back/Forward, keeping a failed save visible, and editor hash routing with an open lesson. The six selected browser suites had 45 passes, four editor failures from the initial port 8083 origin, and one deliberate duplicate-publication skip. The full editor suite rerun on accepted origin 8084 passed all nine applicable cases, resolving those four failures. `npm.cmd run check`, all 256 application tests, and `git diff --check` passed.
+- Origin recheck at 15:35 CET. Fetch and live ref inspection found that the separate French planning branch advanced from `82bce28` to `b73b51d2f5933f8e5c8a3a96d7cb4dff842c4d41` with documentation and curriculum planning only. The tested learner source matches the same frontend baseline. The fix branch still had no live ref and remains based on the originally verified source.
+- Outcome. The fixed web preview runs at `http://localhost:8084` from this worktree with its own browser storage. The commit containing this entry is the checkpoint. Verify the task branch SHA on origin after pushing.
+
 ## 2026-11-22 French course copyright question
 
 - The owner asked whether the proposed use of *Le Nouveau Taxi !* as a teaching reference would violate copyright. Scope is the proposed opening week and the applicable copyright distinction.

@@ -28,45 +28,40 @@ interface LearnerAppProps {
   active: boolean;
   onOpenEditor: () => void;
   homeRequest: number;
-  onHome: () => void;
 }
 
-export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: LearnerAppProps) {
+export function LearnerApp({ active, onOpenEditor, homeRequest }: LearnerAppProps) {
   const catalogue = useCatalogue();
   const globalModel = useLearning();
   const selection = useTargetLanguage();
   const [childWriteBlocked, setChildWriteBlocked] = useState(false);
-  const language = selection.language;
   const switchingBlocked = globalModel.busy || !!globalModel.saveError || childWriteBlocked;
-  // Scope reads to the active language; all write operations still use the shared learning model.
-  const model: LearningModel = { ...globalModel,
-    notebook: globalModel.notebook.filter(entry => language && notebookLanguage(entry) === language),
-    events: globalModel.events.filter(event => (language === 'ja-JP' && isAlphabetLessonId(event.lessonId)) || catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
-  };
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const scrollOffset = useRef(0);
   const returnOffset = useRef<number | null>(null);
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
   const mobileNav = width < designTokens.layout.desktopNavBreakpoint;
-  const { choosing, tab, lesson, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
+  const { language, choosing, tab, lessonId, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
     openLearnMode, openLesson, exitLesson, chooseLanguage, chooseHome, changeLanguage, catalogueSearch } = useLearnerNavigation({
-    language, blocked: switchingBlocked, homeRequest, onHome, onChooseLanguage: selection.choose,
-    scrollToTop: () => {
-      scrollOffset.current = 0;
-      scroll.current?.scrollTo({ y: 0, animated: false });
-    },
+    active, language: selection.language, blocked: switchingBlocked, homeRequest, onChooseLanguage: selection.choose,
     getScrollOffset: () => scrollOffset.current,
-    restoreScrollAfterLesson: offset => { returnOffset.current = offset; },
+    restoreScroll: offset => { returnOffset.current = offset; },
   });
   useLayoutEffect(() => {
-    if (lesson || returnOffset.current === null) return;
+    if (returnOffset.current === null) return;
     scrollOffset.current = returnOffset.current;
     scroll.current?.scrollTo({ y: returnOffset.current, animated: false });
     returnOffset.current = null;
-  }, [lesson]);
-  const showLibrary = !choosing && !lesson && tab === 'Learn' && learnMode === 'Vocabulary & lessons';
+  });
+  // Scope reads to the active language; all write operations still use the shared learning model.
+  const model: LearningModel = { ...globalModel,
+    notebook: globalModel.notebook.filter(entry => language && notebookLanguage(entry) === language),
+    events: globalModel.events.filter(event => (language === 'ja-JP' && isAlphabetLessonId(event.lessonId)) || catalogue.lessons.some(lesson => lesson.id === event.lessonId && lesson.language === language)),
+  };
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
+  const lesson = lessons.find(lesson => lesson.id === lessonId);
+  const showLibrary = !choosing && !lesson && tab === 'Learn' && learnMode === 'Vocabulary & lessons';
   const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
   const wideLibrary = showLibrary && width >= designTokens.layout.sidebarBreakpoint;
   const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses: language === 'ja-JP' ? japaneseCourses : frenchCourses });

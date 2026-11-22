@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { audio } from './src/audio';
 import { CurriculumEditor } from './src/editor/CurriculumEditor';
 import { LearnerApp } from './src/app/LearnerApp';
+import { setEditorHash } from './src/app/learnerHistory';
 import { styles as s } from './src/ui/theme';
 
 export default function App() {
@@ -24,12 +25,12 @@ export default function App() {
     audio.stop();
     if (open) setEditorVisited(true);
     setEditorOpen(open);
-    if (typeof window !== 'undefined') window.location.hash = open ? 'editor' : '';
+    setEditorHash(open);
   }
   function goHome() { showEditor(false); setHomeRequest(current => current + 1); }
   return <View style={s.app}>
     {/* Keep both workspaces mounted after the first editor visit to preserve unsaved work. */}
-    <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp active={!editorOpen} onOpenEditor={() => showEditor(true)} homeRequest={homeRequest} onHome={goHome} /></View>
+    <View style={{ flex: 1, display: editorOpen ? 'none' : 'flex' }}><LearnerApp active={!editorOpen} onOpenEditor={() => showEditor(true)} homeRequest={homeRequest} /></View>
     {editorVisited && <View style={{ flex: 1, display: editorOpen ? 'flex' : 'none' }}><CurriculumEditor onExit={() => showEditor(false)} onHome={goHome} /></View>}
   </View>;
 }

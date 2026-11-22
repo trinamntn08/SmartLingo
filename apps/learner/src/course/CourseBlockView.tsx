@@ -28,7 +28,7 @@ export function CourseBlockView({ block, day, language = 'fr-FR', model, events,
     </View>)}</View>
   </View>;
   if (block.kind === 'vocabulary') return <View style={{ gap: 16 }}>
-    <Text style={s.body}>{language === 'ja-JP' ? 'Read the words, kana readings and examples. Save any useful words to your notebook.' : 'Read the words and examples. Save any useful words to your notebook; listening is optional.'}</Text>
+    <Text style={s.body}>Save any useful words to your notebook.</Text>
     {day.vocabulary.map(entry => <VocabularyCard key={entry.id} entry={entry} model={model} language={language} />)}
     {!!model.loadError && <Text accessibilityRole="alert" style={s.muted}>{model.loadError}</Text>}
     {!!model.saveError && <View style={s.error}>

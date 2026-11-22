@@ -18,6 +18,7 @@ test('every Japanese topic exposes thirty distinct supported entries and five sh
     await openTopic(page, topic.name);
     await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
     await expect(page.getByTestId(/^vocabulary-/)).toHaveCount(30);
+    await expect(page.getByTestId('word-pronunciation')).toHaveCount(30);
     await expect(page.getByRole('button', { name: /^Open / })).toHaveCount(5);
     const entry = topic.lessons.at(-1)!.vocabulary.at(-1)!;
     await page.getByRole('textbox', { name: 'Search lessons', exact: true }).fill(entry.reading!);
@@ -48,6 +49,9 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await page.goto('/'); await button(page, 'Learn Japanese').click();
   const original = japaneseLessons.find(lesson => lesson.id === 'ja.lesson.day-1')!;
   await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();
+  const greeting = page.getByTestId('vocabulary-ja.greetings.konnichiwa');
+  await expect(greeting.getByTestId('word-pronunciation')).toHaveText('konnichiwa');
+  await expect(greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true })).toHaveText('');
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   for (const day of [1, 3, 8, 13]) await complete(page, extension(day));
   const lesson = extension(13); const entry = lesson.vocabulary[0];
@@ -56,10 +60,14 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await expect(button(page, `Save ${entry.target}`)).toBeDisabled();
   await button(page, 'Review').click();
   const notebook = page.getByTestId('notebook-entries');
+  await expect(notebook.getByTestId('word-pronunciation')).toBeVisible();
   await notebook.getByRole('button', { name: 'Edit note', exact: true }).click();
   await notebook.getByRole('textbox', { name: 'English meaning', exact: true }).fill('My expanded Japanese note');
   await notebook.getByRole('button', { name: 'Save changes', exact: true }).click();
-  await button(page, 'Reveal meaning').click(); await button(page, 'Needed help').click();
+  await expect(page.getByTestId('word-pronunciation')).toHaveCount(1);
+  await button(page, 'Reveal meaning').click();
+  await expect(page.getByTestId('word-pronunciation')).toHaveCount(2);
+  await button(page, 'Needed help').click();
   await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();

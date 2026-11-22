@@ -11,8 +11,9 @@ Use tokens for shared decisions. Keep feature-specific layouts and artwork value
 | Concern | Current value or owner |
 | --- | --- |
 | Canvas, surface, text, muted text, primary action, danger | Semantic `colors` values |
-| Main body / secondary body / heading | Bundled Inter with a system fallback for Japanese. Size/line height in pixels is 18/28, 15/23 and 24/31. |
-| Page titles and study targets | 39/47 page title with a 32/39 compact variant, and 36/46 target text with compact study adjustments |
+| Main body / secondary body / heading | Bundled Inter with a system fallback for Japanese. Size/line height in pixels is 20/30, 17/25 and 26/34. |
+| Page titles and study targets | 41/50 page title with a 34/42 compact variant, and 38/49 target text with compact study adjustments |
+| Labels / controls / captions | 16/23 labels, 18/26 button text and 14/20 captions. Small labels use 15/22; mobile navigation uses captions and desktop navigation uses secondary body. |
 | Shared card | 18 radius, 24 padding, minimal shadow |
 | Touch targets | 44 minimum for icon controls; shared button 46 high; input 48 high |
 | Keyboard focus | Explicit focus state; shared button outline 3 with offset 3 |
@@ -21,11 +22,13 @@ Use tokens for shared decisions. Keep feature-specific layouts and artwork value
 
 These values are current visual choices, not a mandate to override native accessibility scaling or a promise every feature-specific control already uses identical dimensions.
 
+The shared reading scale is larger by about two pixels than the previous baseline, with corresponding line heights. Inputs use the body style, including its line height. Compact headings, section headings and report metrics have named token variants so shared workspaces do not recreate smaller text locally. Controls retain minimum heights and grow with wrapped labels; mobile navigation keeps five labelled destinations with flexible widths. Preserve browser zoom and native text scaling rather than using a global transform or fixed-height text boxes.
+
 ## Components and dependency direction
 
 [ui/controls.tsx](../apps/learner/src/ui/controls.tsx) contains `Button` and `Badge`. The button supports compact, quiet, primary, gold accent and selected treatments. Shared [screen headings](../apps/learner/src/ui/ScreenHeader.tsx), [icons](../apps/learner/src/ui/Icon.tsx) and [context photography](../apps/learner/src/ui/ContextImage.tsx) compose with these controls. Preserve selected/disabled semantics, wrapping text, keyboard focus and visible error text when composing them.
 
-[audio/Speak.tsx](../apps/learner/src/audio/Speak.tsx) owns the feature-specific speaker/stop control and optional French generated-audio options. It composes base buttons and audio adapters. Import `Speak` from this feature module, rather than routing audio dependencies through generic UI controls. French playback/generation boundaries and Japanese free/device playback remain unchanged.
+[audio/AudioIconButton.tsx](../apps/learner/src/audio/AudioIconButton.tsx) renders the named speaker/stop control with a 44px minimum target. [audio/Speak.tsx](../apps/learner/src/audio/Speak.tsx) binds that control to standalone playback and optional French generated-audio options. The alphabet, listening and guided speaking use the same control with their own activity state.
 
 The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/Report widgets in `src/dashboard/`. They compose feature components. A new widget should receive the data/callbacks it needs; it should not open a database or invoke a provider while rendering. Existing progress/error/loading contracts remain with their feature models.
 
@@ -33,7 +36,7 @@ The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/
 
 Today has one photo-led primary recommendation, four direct activity shortcuts and a compact course entry. Topics belong in Learn, metrics in Report and settings in Profile. Pine identifies ordinary primary actions, gold highlights the lead recommendation and sage identifies selections. Keep meanings, examples, translations and reading aids visible during study.
 
-The library shows topic covers alongside searchable lessons and vocabulary. The lesson canvas places readable word text before bounded photographs and keeps the read-only step outline separate from saved activity. Changing steps moves web focus to the new heading. Kana focuses on one row with an explicit row chooser and large glyphs. Daily-course day and section choices reflow when expanded. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top. Focus review hides the notebook while retaining unsaved form text. The editor has a lesson rail and an explicit draft, preview and publication sequence.
+The library shows topic covers alongside searchable lessons and vocabulary. The lesson canvas places readable word text before bounded photographs and keeps the read-only step outline separate from saved activity. Japanese vocabulary places kana and romaji beside the word and reflows the reading on narrow cards. Changing steps moves web focus to the new heading. Kana focuses on one row with an explicit row chooser and large glyphs. Daily-course day and section choices reflow when expanded. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top. Focus review hides the notebook while retaining unsaved form text. The editor has a lesson rail and an explicit draft, preview and publication sequence.
 
 `ui/Disclosure` provides a named keyboard-accessible expansion button with expanded state and controlled content ID. Settings mount on first opening, then remain mounted and hidden when closed so backup/form state is retained. Optional AI uses `keepMounted={false}` to clear its temporary session/recording on collapse. See [ADR 0032](decisions/0032-calm-learner-interface.md).
 

@@ -107,8 +107,8 @@ function ShortcutTile({ item, compact }: { item: Shortcut; compact: boolean }) {
       borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
       <Icon name={item.icon} size={compact ? 17 : 20} color={colors.primary} />
     </View>
-    <Text style={[s.body, { flex: 1, minWidth: 0, fontSize: compact ? 14 : 16, lineHeight: compact ? 20 : 23,
-      fontWeight: '600' }]}>{item.label}</Text>
+    <Text style={[s.body, { flex: 1, minWidth: 0, ...(compact ? designTokens.typography.label : designTokens.typography.button),
+      textAlign: 'left', fontWeight: '600' }]}>{item.label}</Text>
     {!compact && <Icon name="chevron" size={16} color={colors.muted} />}
   </Pressable>;
 }

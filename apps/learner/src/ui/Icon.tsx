@@ -18,6 +18,8 @@ const iconPaths = {
   'arrow-right': 'M4 12h15m-6-6 6 6-6 6',
   'arrow-left': 'M20 12H5m6-6-6 6 6 6',
   play: 'm9 5 12 7-12 7z',
+  speaker: 'M3 9h4l5-4v14l-5-4H3zM16 8q4 4 0 8m3-11q7 7 0 14',
+  stop: 'M6 6h12v12H6z',
   check: 'm5 12 4 4L19 6',
   offline: 'M5 17v3h14v-3M12 4v12m-4-4 4 4 4-4',
   globe: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-18 0h18m-9-9c-4 4-4 14 0 18 4-4 4-14 0-18Z',

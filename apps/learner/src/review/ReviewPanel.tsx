@@ -6,6 +6,7 @@ import { Disclosure } from '../ui/Disclosure';
 import { colors, styles as s } from '../ui/theme';
 import { useRecognitionReview } from './useRecognitionReview';
 import { Icon } from '../ui/Icon';
+import { JapaneseWordReading } from '../ui/JapaneseWordReading';
 import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 const ratingLabels: Record<ReviewEvent['rating'], string> = { again: 'Again', helped: 'Needed help', remembered: 'Remembered' };
@@ -52,9 +53,15 @@ function RecognitionCard({ entry, remaining, disabled, onRate }: {
   const compact = useWindowDimensions().width < 600;
   return <View style={{ gap: 20 }}>
     <View style={s.row}><Badge>{remaining} {remaining === 1 ? 'card' : 'cards'} due</Badge><Badge>{entry.language === 'ja-JP' ? 'Japanese' : 'French'} → meaning</Badge></View>
-    <View style={[t.stage, { paddingHorizontal: compact ? 16 : 20, paddingVertical: compact ? 24 : 36, backgroundColor: colors.sageTint, alignItems: 'center' }]}><Text style={s.eyebrow}>What does this mean?</Text><Text accessibilityRole="header" style={[s.target, { fontWeight: '500', textAlign: 'center', maxWidth: '100%', flexShrink: 1 }, compact && { fontSize: 29, lineHeight: 38 }]}>{entry.target}</Text></View>
+    <View style={[t.stage, { paddingHorizontal: compact ? 16 : 20, paddingVertical: compact ? 24 : 36, backgroundColor: colors.sageTint, alignItems: 'center' }]}>
+      <Text style={s.eyebrow}>What does this mean?</Text>
+      <View style={[s.row, { justifyContent: 'center' }]}>
+        <Text accessibilityRole="header" style={[s.target, { fontWeight: '500', textAlign: 'center', maxWidth: '100%', flexShrink: 1 }, compact && { fontSize: 31, lineHeight: 41 }]}>{entry.target}</Text>
+        {revealed && entry.language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
+      </View>
+    </View>
     <Button primary={!revealed} disabled={disabled} onPress={() => setRevealed(!revealed)}>{revealed ? 'Hide meaning' : 'Reveal meaning'}</Button>
-    {revealed && <><View style={[t.inset, { backgroundColor: colors.goldTint }]}><Text style={s.eyebrow}>Your saved meaning</Text><Text style={s.heading}>{entry.meaning}</Text>{!!entry.reading && <Text style={s.body}>{entry.reading}</Text>}{!!entry.example && <Text style={s.body}>{entry.example}</Text>}{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}</View>
+    {revealed && <><View style={[t.inset, { backgroundColor: colors.goldTint }]}><Text style={s.eyebrow}>Your saved meaning</Text><Text style={s.heading}>{entry.meaning}</Text>{entry.language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}{!!entry.example && <Text style={s.body}>{entry.example}</Text>}{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}</View>
       <Text style={t.detail}>Thinking back to before you revealed the meaning, how did it go?</Text>
       <View style={s.row}><Button disabled={disabled} onPress={() => onRate('again')}>Again</Button><Button disabled={disabled} onPress={() => onRate('helped')}>Needed help</Button><Button primary disabled={disabled} onPress={() => onRate('remembered')}>Remembered</Button></View>
     </>}

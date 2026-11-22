@@ -110,8 +110,8 @@ function LessonOutline({ id, lesson, stage, progress, compact }: { id: string; l
           <Text style={[s.body, { fontWeight: '700', fontSize: 14, lineHeight: 20 }]}>{saved[index] ? '✓' : index + 1}</Text>
         </View>
         <View style={{ flex: compact ? undefined : 1, minWidth: 0 }}>
-          <Text style={[s.body, { fontWeight: current ? '700' : '500', fontSize: compact ? 12 : 15, lineHeight: compact ? 18 : 21, textAlign: compact ? 'center' : 'left' }]}>{compact ? shortLabels[index] : labels[index]}</Text>
-          {!compact && <Text style={[s.muted, { fontSize: 12, lineHeight: 18 }]}>{status}</Text>}
+          <Text style={[s.body, { fontWeight: current ? '700' : '500', fontSize: compact ? 14 : 17, lineHeight: compact ? 20 : 25, textAlign: compact ? 'center' : 'left' }]}>{compact ? shortLabels[index] : labels[index]}</Text>
+          {!compact && <Text style={s.muted}>{status}</Text>}
         </View>
       </View>;
     })}

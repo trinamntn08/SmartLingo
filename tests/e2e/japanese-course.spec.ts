@@ -60,6 +60,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   const word = day.vocabulary[0];
   const card = panel(page).getByTestId(`vocabulary-${word.id}`);
   await expect(card.getByText(word.reading!, { exact: true })).toBeVisible();
+  await expect(card.getByTestId('word-pronunciation')).toBeVisible();
   await expect(card.getByText(word.exampleReading!, { exact: true })).toBeVisible();
   await expect(card.getByText(word.exampleMeaning, { exact: true })).toBeVisible();
   await expect(card.getByRole('button', { name: `Listen to ${word.target}`, exact: true })).toBeVisible();

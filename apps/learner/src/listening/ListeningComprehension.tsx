@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { Lesson, TargetLanguage } from '@smartlingo/domain';
 import { Platform, Text, View, useWindowDimensions } from 'react-native';
 import { audio } from '../audio';
+import { AudioIconButton } from '../audio/AudioIconButton';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { buildListeningQuestions, type ListeningQuestion } from './comprehension';
@@ -22,8 +23,8 @@ export function ListeningComprehension({ lessons, onBrowse }: { lessons: Lesson[
     {!lesson ? <View style={t.panel}><Text style={s.body}>No sentence questions are available yet. This activity needs three distinct sentence meanings in the same language. You can still study the lessons and their translations.</Text></View> : <View style={t.board}>
       <View style={[t.side, compact ? { gap: 8 } : t.panel]}>
       {!compact && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.skyTint }]}><Icon name="headphones" size={24} /></View><Text accessibilityRole="header" style={t.sectionTitle}>Your listening session</Text></View>}
-      {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 15, display: 'grid', gap: 8, minWidth: 0 }}>Listening lesson
-        <select id={selectId} value={lesson.id} onChange={event => setLessonId(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: 16 }}>
+      {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: designTokens.typography.label.fontSize, display: 'grid', gap: 8, minWidth: 0 }}>Listening lesson
+        <select id={selectId} value={lesson.id} onChange={event => setLessonId(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: designTokens.typography.body.fontSize }}>
           {available.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
         </select>
       </label> : <View style={s.row}>{available.map(item => <Button key={item.id} selected={item.id === lesson.id} onPress={() => setLessonId(item.id)}>{item.title}</Button>)}</View>}
@@ -70,7 +71,7 @@ function SentenceQuestion({ question, position, total, onNext }: { question: Lis
     <View style={[t.stage, { alignItems: 'center', paddingVertical: compact ? 16 : 30, paddingHorizontal: compact ? 12 : 24 }]}>
       {!compact && <><View style={[t.icon, { width: 64, height: 64, borderRadius: 22, backgroundColor: colors.card }]}><Icon name="headphones" size={32} /></View><Text style={t.sectionTitle}>Listen for the meaning</Text></>}
       <View style={[s.row, { justifyContent: 'center' }, compact && { flexWrap: 'nowrap', width: '100%', gap: 8 }]}>
-        <Button compact={compact} primary icon="play" onPress={() => void play()}>{playing ? 'Stop audio' : played ? 'Replay sentence' : 'Play sentence'}</Button>
+        <AudioIconButton playing={playing} label={played ? 'Replay sentence' : 'Play sentence'} onPress={() => void play()} />
         {!transcript && !checked && <Button compact={compact} quiet onPress={() => setTranscript(true)}>Show transcript</Button>}
       </View>
     </View>

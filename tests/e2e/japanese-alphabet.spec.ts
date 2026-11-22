@@ -72,7 +72,11 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
     await expect(alphabet.getByText(character.kana, { exact: true })).toBeVisible();
     await expect(alphabet.getByText(character.romaji, { exact: true })).toBeVisible();
   }
-  await alphabet.getByRole('button', { name: `Listen to ${first.characters[0]!.kana}`, exact: true }).click();
+  const speaker = alphabet.getByRole('button', { name: `Listen to ${first.characters[0]!.kana}`, exact: true });
+  await expect(speaker).toHaveText('');
+  await expect(speaker).toHaveCSS('min-width', '44px');
+  await speaker.focus();
+  await page.keyboard.press('Enter');
   await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}'))).toEqual({ text: first.characters[0]!.audioText, language: 'ja-JP' });
   // Vocabulary remains available before any character practice or saved row.
   await button(page, 'Vocabulary & lessons').click();

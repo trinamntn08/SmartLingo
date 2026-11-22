@@ -2,6 +2,8 @@
 
 Current operational instructions for this source checkout. For installation and the short command list, start with [README](../README.md). For verified scope and remaining work, use [STATUS](STATUS.md). Ports below are configured defaults, not a claim that a process is currently running. Keys are optional server-process settings; no real `.env` is loaded automatically.
 
+For an installable Android phone test, use [Android APK instructions](ANDROID_TESTING.md). The bundled Android test shell has separate device-local learning data and hides the computer's loopback API features.
+
 ## Try the daily-course pilot
 
 In the current learner build, open **Today → Open daily course**. One draft day is available: study its bilingual sections, save useful words, answer three choices and explicitly save a manual self-review. Save each study section before using Next section; you may browse any section directly. Complete study day becomes available after every section is saved. Reopen the course after reload to resume the saved section. Missed calendar dates do not skip content.

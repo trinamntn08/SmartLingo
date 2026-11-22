@@ -35,6 +35,11 @@
     "restore:curriculum": "tsx apps/api/src/curriculum-backup-cli.ts restore",
     "typecheck": "tsc --noEmit",
     "build:web": "npm run export --workspace @smartlingo/learner && node scripts/prepare-offline-web.mjs",
+    "android:doctor": "node scripts/android-apk.mjs doctor",
+    "build:apk": "node scripts/android-apk.mjs build",
+    "android:install": "node scripts/android-apk.mjs install",
+    "android:open": "node scripts/android-apk.mjs open",
+    "test:android-contract": "npm run build:web && playwright test --config playwright.android.config.ts",
     "preview:web": "node scripts/serve-web.mjs",
     "test:offline": "npm run build:web && playwright test --config playwright.offline.config.ts",
     "test:app": "tsx --test packages/domain/tests/*.test.ts apps/learner/tests/*.test.ts apps/api/tests/*.test.ts",
@@ -46,6 +51,8 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/cli": "8.6.2",
     "@playwright/test": "1.65.1",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",

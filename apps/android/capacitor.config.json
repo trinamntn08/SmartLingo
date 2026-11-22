@@ -1,0 +1,9 @@
+{
+  "appId": "com.smartlingo.preview",
+  "appName": "SmartLingo Preview",
+  "webDir": "../learner/dist",
+  "loggingBehavior": "none",
+  "server": { "hostname": "localhost", "androidScheme": "https" },
+  "android": { "allowMixedContent": false },
+  "plugins": { "SystemBars": { "insetsHandling": "disable" } }
+}

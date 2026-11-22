@@ -21,18 +21,19 @@ import { FrenchPractice } from './src/practice/FrenchPractice';
 import { ListeningResources } from './src/listening/ListeningResources';
 import { openCoursePilot } from '@smartlingo/content';
 import { OpenCoursePanel } from './src/course/OpenCoursePanel';
+import { isAndroidApp } from './src/platform/runtime';
 
 const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
 
 export default function App() {
-  const [editorOpen, setEditorOpen] = useState(() => typeof window !== 'undefined' && window.location.hash === '#editor');
+  const [editorOpen, setEditorOpen] = useState(() => !isAndroidApp() && typeof window !== 'undefined' && window.location.hash === '#editor');
   const [editorVisited, setEditorVisited] = useState(editorOpen);
   const [homeRequest, setHomeRequest] = useState(0);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const updateRoute = () => {
-      const open = window.location.hash === '#editor';
+      const open = !isAndroidApp() && window.location.hash === '#editor';
       setEditorOpen(open);
       if (open) setEditorVisited(true);
     };
@@ -40,6 +41,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', updateRoute);
   }, []);
   function showEditor(open: boolean) {
+    if (open && isAndroidApp()) return;
     audio.stop();
     if (open) setEditorVisited(true);
     setEditorOpen(open);
@@ -71,7 +73,7 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={[s.row, { minWidth: 0, maxWidth: '100%', flexShrink: 1 }]}><BrandHome onPress={onHome} /><Badge>{isAndroidApp() ? 'ANDROID TEST PREVIEW' : 'LOCAL PREVIEW'}</Badge></View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
     {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
@@ -91,7 +93,7 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
                 <Text style={s.body}>Find videos, podcasts and guided listening, with text-support notes and short practice ideas. Playback needs an internet connection and opens on the provider’s site.</Text>
                 <Text style={s.muted}>Opening the library ends any temporary conversation and clears unsent messages and recordings.</Text>
                 <Button primary onPress={() => showListening(true)}>Browse listening resources</Button>
-              </View><FrenchPractice lessons={catalogue.lessons} model={model} /></>}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
+              </View>{!isAndroidApp() && <FrenchPractice lessons={catalogue.lessons} model={model} />}</>}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
               : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
@@ -123,12 +125,14 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
 function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; catalogue: ReturnType<typeof useCatalogue>; onOpenEditor: () => void }) {
   const completed = model.events.filter(event => event.activity === 'completion' && event.result === 'completed').length;
   return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
+    {isAndroidApp() ? <View style={s.card}><Text style={s.heading}>Ready for offline study</Text><Text style={s.body}>Lessons and pictures are included in this app. You can study and save your notebook without internet or a computer.</Text><Text style={s.body}>This phone test includes lessons, daily courses and personal vocabulary. Curriculum editing, loading new publications, AI conversation, recording and neural voice generation require the separate computer preview.</Text><Text style={s.muted}>Install a newer test APK to update bundled content. Keep a learning backup before changing build machines or uninstalling.</Text></View> : <>
     <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
     <OfflinePanel />
+    </>}
     <AudioPreferencesPanel />
-    <GeneratedSpeechPanel />
+    {!isAndroidApp() && <GeneratedSpeechPanel />}
     <BackupPanel />
-    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
+    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>{isAndroidApp() ? 'Your progress and notebook stay in this app on this phone. There is no account or sync. Clearing app storage or uninstalling removes these notes. Browser learning data is separate; transfer it using a learning backup.' : 'Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.'}</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; local storage may be cleared.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
   </View>;
 }

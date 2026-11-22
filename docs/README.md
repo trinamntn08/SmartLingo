@@ -11,6 +11,7 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 | [Session checkpoint](SESSION_CHECKPOINT.md) | Latest task, actual validation, commit/upload state and recovery action. |
 | [Product plan](../PROJECT_PLAN.md) | Target requirements and product constraints, including future scope. |
 | [Local operations](LOCAL_OPERATIONS.md) | Learner/editor use, backups, offline study and optional speech/AI setup. |
+| [Android phone testing](ANDROID_TESTING.md) | Build/install a test APK, preserve phone data and perform device acceptance. |
 | [Architecture](ARCHITECTURE.md) | Module responsibilities, boundaries and implementation/review standards. |
 | [Testing](TESTING.md) | Commands, test isolation, coverage and unverified areas. |
 | [Environment](ENVIRONMENT.md) | Pinned runtime, dependency installation and packaging boundaries. |

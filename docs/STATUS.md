@@ -1,6 +1,6 @@
 # Project status
 
-Reviewed: 2026-11-19 (Europe/Paris), against this checkout's source. This is the current capability summary; [PROJECT_PLAN](../PROJECT_PLAN.md) describes target requirements, [local operations](LOCAL_OPERATIONS.md) owns run/setup instructions, and [the session checkpoint](SESSION_CHECKPOINT.md) records the latest task and actual checks. A documented localhost address does not establish that a service is currently running.
+Reviewed: 2026-11-22 (Europe/Paris), against this checkout's source. This is the current capability summary; [PROJECT_PLAN](../PROJECT_PLAN.md) describes target requirements, [local operations](LOCAL_OPERATIONS.md) owns run/setup instructions, and [the session checkpoint](SESSION_CHECKPOINT.md) records the latest task and actual checks. A documented localhost address does not establish that a service is currently running.
 
 ## Implemented
 
@@ -19,6 +19,7 @@ Reviewed: 2026-11-19 (Europe/Paris), against this checkout's source. This is the
 | Speech | Optional device French voices/rate preferences. Separate explicit Azure Denise/Henri generation and saved browser replay; normal playback never generates paid audio. Server speech/text and reserved-attempt records live in a separate bounded SQLite cache. Real audible quality remains unverified. |
 | Optional AI | Explicit text conversation and temporary recorded-input transcription, visible French/English help/feedback, editable transcript and separate Send. Explicit notebook capture is durable; raw clips and unsaved conversations remain temporary. Server-only credentials and bounded fake-tested provider adapters. |
 | Tooling | TypeScript workspaces, repository/secret checks, application/browser/offline suites and GitHub CI configuration. Installed/prepared Codex files are validated copies, not proof of client loading/trust. |
+| Android phone testing | Verified debug APK build with Capacitor shell bundles the existing web learner/lessons/pictures, reuses IndexedDB for phone-local learning, and exports JSON backups through Android's document picker. Build/preflight/explicit USB-install commands and device checklist are in [Android testing](ANDROID_TESTING.md). PC-loopback editor/publication refresh, AI recording/conversation, neural generation and web downloads are hidden. Gradle assembly, signature/package/assets checks passed; physical-phone/document-provider acceptance remains open. |
 
 ## Research and deployment boundaries
 
@@ -39,7 +40,7 @@ Code and documentation have been uploaded on topic branches; that does not mean 
 | M2 — speaking/personal vocabulary | Partial: conversation, capture, recorded input and explicit saved speech exist; real-provider/device quality and broader speaking work remain. |
 | M3 — personal web beta | Partial: review/search/offline/publication/backups exist; owner approval, full editor, learner controls and per-topic packs remain. |
 | M4 — learner observation | Future owner/learner testing and improvement. |
-| M5 — mobile | Native storage/audio adapters, packages and device/store preparation remain future work. |
+| M5 — mobile | Early Android web-shell test packaging implemented. Full native SQLite/audio adapters, physical-phone acceptance, iOS and release/store preparation remain future work. |
 
 ## Verification and limits
 
@@ -55,6 +56,6 @@ These are opportunities, not blanket authorisation to implement or publish:
 2. If continuing the website task, resume the separate hosted implementation branch, verify its current clean artifact/checks against [plan 0025](plans/0025-free-web-testing.md), then resolve secure account/network access for deployment and actual hosted/phone acceptance. No live URL is claimed yet.
 3. Extend the editor one journey at a time: target/exercise/media editing, dialogue structure, create/archive/restore/import/export/unpublish, preserving immutable revisions and explicit preview/publication.
 4. Add reviewed learner controls: safe data reset, onboarding/preferences, per-topic downloads and production/listening practice. Expand media only with clear targets and rights records.
-5. Resolve build-tool audit findings compatibly before distribution. Native packages, accounts/sync, hosted API and realtime voice require separate work.
+5. Test the Android APK on the owner's phone using the [device checklist](ANDROID_TESTING.md), and resolve build-tool audit findings compatibly before wider distribution. Full native adapters, iOS, release signing, accounts/sync, hosted API and realtime voice require separate work.
 
 No launch date, curriculum approval or proficiency claim is established by this status page.

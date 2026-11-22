@@ -1,6 +1,6 @@
 # SmartLingo
 
-A local French-learning preview for English-speaking adult newcomers to France. Web first; Android and iOS remain planned. Start with everyday greetings, explore practical topics, and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
+A local French-learning preview for English-speaking adult newcomers to France. Web first, with an Android APK test shell; full native Android/iOS remain planned. Start with everyday greetings, explore practical topics, and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
 
 See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bundled curriculum remains draft until owner review and explicit publication; lesson completion and level labels do not establish proficiency.
 
@@ -23,6 +23,17 @@ npm run dev:api
 The API defaults to `http://127.0.0.1:3001`. Keep learner data at the same browser/hostname/port; other origins have separate storage. Do not expose this loopback API to the public internet.
 
 For lesson, notebook, editor/publication, private learning-backup and voice instructions, use [Local operations](docs/LOCAL_OPERATIONS.md). Credentials are optional server-process settings described in [.env.example](.env.example); real `.env` files are not loaded automatically.
+
+## Test on an Android phone
+
+Follow [Android APK build and installation](docs/ANDROID_TESTING.md) for Java/SDK prerequisites, phone installation, backups and the device checklist. From a prepared computer:
+
+```sh
+npm run android:doctor
+npm run build:apk
+```
+
+Transfer `dist/android/SmartLingo-preview.apk` to your phone and open it to install. It bundles lessons for offline study; phone data stays separate from browser data. PC API features and full native audio/storage integration are outside this test shell.
 
 ## Test the offline-ready preview
 
@@ -56,6 +67,10 @@ Use `npm.cmd` in PowerShell if execution policy blocks `npm.ps1`. Dependencies/c
 | `npm test` | Tooling and application/domain/storage/API tests; no paid calls. |
 | `npm run check:staged` | Repository checks plus staged secret scan before commit. |
 | `npm run doctor` | Inspect runtime, hooks and Codex CLI availability. |
+| `npm run android:doctor` | Check JDK and Android SDK prerequisites for APK assembly. |
+| `npm run build:apk` | Export and bundle the learner in a debug Android APK. |
+| `npm run android:install` | Explicitly install the generated APK on an authorised USB device. |
+| `npm run test:android-contract` | Build the web export and check Android bridge/UI contracts in Chromium; not device testing. |
 | `npm run test:e2e` | Chromium desktop/narrow journeys; install Chromium with `npx playwright install chromium` first. |
 | `npm run test:offline` | Build and verify isolated cold-offline/update/removal journeys. |
 | `npm run setup:codex:plan` | Preview repository Codex configuration installation. |

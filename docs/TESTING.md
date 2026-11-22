@@ -11,6 +11,7 @@ npm run check
 npm test
 npm run test:e2e -- --workers=2
 npm run test:offline
+npm run test:android-contract
 npm run build:web
 npm run check:staged
 git diff --check
@@ -45,9 +46,13 @@ git show cf4fedb:docs/TESTING.md
 
 These describe their tested revisions, not a fresh run of the current checkout. Focused records remain in the [saved-speech plan](plans/0022-cached-french-speech.md), [offline plan](plans/0010-offline-web-downloads.md) and [build-tool audit investigation](plans/0011-build-tool-audit.md). Use [status](STATUS.md) for current product scope and the checkpoint for the latest validation.
 
+## Android test package
+
+`npm run android:doctor` checks local JDK/SDK prerequisites; `npm run build:apk` exports current assets and assembles a debug APK. See [Android testing](ANDROID_TESTING.md) for install/update/data-loss limits and the physical-device checklist. Tooling tests cover prerequisite/argument handling and build failure paths. `test:android-contract` runs isolated exported Chromium fixtures on port 8084, simulating Capacitor to check hidden PC features, notebook/course persistence, delayed/cancelled document-save feedback and unchanged web backup downloads. It does not run Android Java, a system document picker or a real phone. Native Gradle/signature/package inspection and device observations must be recorded separately.
+
 ## Known gaps
 
-- Chromium viewport/touch emulation is not physical-phone, Safari, Android/iOS or screen-reader verification. Native packages/adapters remain future work.
+- Chromium viewport/touch emulation is not physical-phone, Safari, Android/iOS or screen-reader verification. An Android test shell is available; full native SQLite/audio adapters remain future work.
 - Fake speech and an original test MP3 establish playback/control behaviour, not audible French quality, OS voice installation, real microphone hardware or provider/subscription compatibility. No paid provider success is established by these suites.
 - Real storage quota/eviction, power loss, ongoing multiprocess contention and some filesystem alias/durability scenarios remain unverified. Browser data can be cleared; keep private backups separately.
 - Automated content/schema checks do not establish French teaching accuracy, complete CEFR alignment, owner approval or media suitability. Curriculum remains subject to saved-revision preview and explicit publication.

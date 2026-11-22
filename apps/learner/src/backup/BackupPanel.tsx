@@ -5,6 +5,7 @@ import { openLearningRepository } from '../persistence';
 import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import { downloadBackup, readBackupFile } from './files';
+import { isAndroidApp } from '../platform/runtime';
 
 async function withRepository<T>(operation: (repository: LearningRepository) => Promise<T>): Promise<T> {
   const repository = await openLearningRepository();
@@ -36,8 +37,8 @@ export function BackupPanel() {
     if (!begin('download')) return;
     try {
       const backup = await withRepository(repository => repository.exportBackup());
-      downloadBackup(backup);
-      setMessage('Backup download requested. Keep the file somewhere private and check that your browser saved it.');
+      await downloadBackup(backup);
+      setMessage(isAndroidApp() ? 'Learning backup saved to your chosen location. Keep the file somewhere private.' : 'Backup download requested. Keep the file somewhere private and check that your browser saved it.');
     } catch (failure) { showError(failure); }
     finally { finish(); }
   }

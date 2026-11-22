@@ -18,7 +18,7 @@ This is dependency separation, not an operating-system sandbox. A container can 
 
 The root package is private to prevent accidental npm publication. Its files allowlist makes the bootstrap tooling package inspectable without bundling learner data, API keys, caches, node_modules, or unverified reference images.
 
-Run npm run pack:check to inspect a tooling-package dry run; this root allowlist is not an application deployment artifact. `npm run build:web` exports local web assets under `apps/learner/dist`. Android and iOS builds remain planned. Databases and generated artifacts stay ignored.
+Run npm run pack:check to inspect a tooling-package dry run; this root allowlist is not an application deployment artifact. `npm run build:web` exports local web assets under `apps/learner/dist`. `npm run build:apk` bundles that learner in a Capacitor Android test shell and produces `dist/android/SmartLingo-preview.apk`; see [Android prerequisites and installation](ANDROID_TESTING.md). Full native adapters and iOS remain planned. Databases, APKs, SDK paths, signing keys, downloaded tools and generated artifacts stay ignored.
 
 For GitHub, version source/configuration and package-lock.json; teammates restore dependencies with npm ci. Origin is configured for the [owner-selected SmartLingo repository](https://github.com/trinamntn08/SmartLingo). Verify live history before integrating; a local checkpoint commit does not itself prove a remote backup.
 

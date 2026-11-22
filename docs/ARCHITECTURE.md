@@ -1,10 +1,11 @@
 # Architecture baseline
 
-Status: local web learning, first editor/publication, optional conversation/transcription and explicit cached neural speech implemented; native adapters and full editor remain planned. Actual provider voice quality still requires audition.
+Status: local web learning, first editor/publication, optional conversation/transcription and explicit cached neural speech implemented. Android testing uses a bundled web shell; full native adapters and full editor remain planned. Actual provider voice quality still requires audition.
 
 | Location | Responsibility |
 | --- | --- |
 | apps/learner | Expo/React Native learner app; web first, native later |
+| apps/android | Capacitor test shell, Android document backup adapter and native project; bundles the web learner |
 | apps/api | Local Node/Fastify API, private credentials, media generation/cache, SQLite content |
 | packages/domain | Language-independent types, answer checking, review scheduling |
 | packages/content | Schema-validated draft curriculum and bundled media metadata |
@@ -19,6 +20,7 @@ Status: local web learning, first editor/publication, optional conversation/tran
 - Optional practice -> validated shared contracts -> expiring in-memory session service -> injected conversation/transcription providers. Explicit actions share bounded attempts/single flight and idempotent request tombstones; terminal failures permit a new deliberate attempt. Browser recording is temporary and separate from editable message text and notebook persistence. Only explicitly saved phrases reach learner storage. See [ADR 0016](decisions/0016-optional-ai-practice.md).
 - Local published content/media -> downloaded lessons -> offline activities.
 - Implemented browser IndexedDB adapter -> stable learning events, notebook and reviews. A native SQLite adapter remains planned behind the shared contracts.
+- Android test shell -> bundled Expo web assets at stable `https://localhost` -> existing IndexedDB learning adapter in WebView. `platform/runtime.ts` detects the shell and exposes only the narrow Android document-save plugin. No server URL or API credentials are bundled. PC-only API features and web asset downloads are hidden. Android JSON export confirms document writing before success; import retains shared backup validation/atomic merge. Native system insets keep the web content inside bars/cutouts/keyboard. Android automatic backup is disabled; explicit private backups remain available. See [ADR 0026](decisions/0026-android-webview-test-package.md).
 - Explicit exported-web download -> size/hash-validated staged CacheStorage -> complete offline app copy. A separate typed browser asset manager/worker never opens learner IndexedDB. Web Locks serialize updates/removal across worker generations; removing owned asset caches preserves learner data and unrelated caches. See [ADR 0012](decisions/0012-offline-web-assets.md).
 - Learner backup files -> bounded UTF-8/schema validation -> explicit atomic merge of notebook/events/cached publications. Server curriculum database is a separate backup concern.
 - Server curriculum snapshots -> read-only SQLite online backup -> full integrity/schema/history validation -> exclusive fresh-file publication. CLI recovery never replaces the active database; explicit existing-file configuration controls later API startup. Snapshot adapter remains separate from repository migrations/seeding and browser backup. See [ADR 0013](decisions/0013-curriculum-snapshots.md).

@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 French course materials readiness
+
+- The owner asked whether the book or additional materials are needed to start implementing the first week. This was a readiness check.
+- At 15:12 CET (Europe/Paris), the `D:/dev/projects/SmartLingo` checkout was clean. `git fetch origin --prune` succeeded, and the local, tracking and live `docs/french-course-design-direction` heads matched at `fda0447bc1d025962189280acaa23934d8b443ed`, ahead/behind `0/0`. Live refs for the course planning and frontend branches still matched their local tracking heads.
+- Inspected the French pilot, the course catalogue, the existing vocabulary and the progress decision. Existing spelling, clarification, time and directions content gives the proposed five days a starting point. The pilot already supports bilingual study, optional device read-aloud audio, contextual choices, review and day/section resume. The publisher's public description was reviewed in the preceding design task. A full textbook copy is unnecessary for original authoring.
+- The materials are sufficient to start a first-week draft. New scenarios, exercises and connective teaching material still need authoring and review. Any new photo or recording needs a source and rights record. The next implementation step is to map the proposed days to existing vocabulary and append the first new draft day while retaining the first two days' identities and progress.
+- Reviewed the documentation diff. `npm.cmd run check` and `git diff --check` passed. The checkpoint contains documentation only.
+
 ## 2026-11-22 French course design
 
 - Request and scope. Assess whether the teaching approach can inform an original SmartLingo website course and propose a concrete opening week. Treat this as a design and feasibility request.

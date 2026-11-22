@@ -1,3 +1,4 @@
+import { openTopic, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
@@ -7,6 +8,11 @@ test.use({ storageState: { cookies: [], origins: [{ origin: 'http://localhost:80
 const first = japaneseAlphabetLessons[0]!;
 const second = japaneseAlphabetLessons[1]!;
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
+
+async function revealRows(page: Page) {
+  const toggle = button(page, 'Choose another row');
+  if (await toggle.isVisible()) await toggle.click();
+}
 
 async function events(page: Page): Promise<LearningEvent[]> {
   return page.evaluate(async () => {
@@ -60,6 +66,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
   await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
+  await revealRows(page);
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).toHaveAttribute('aria-selected', 'true');
   for (const character of first.characters) {
     await expect(alphabet.getByText(character.kana, { exact: true })).toBeVisible();
@@ -70,7 +77,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   // Vocabulary remains available before any character practice or saved row.
   await button(page, 'Vocabulary & lessons').click();
   const oldLesson = japaneseLessons[0]!;
-  await button(page, `Topic ${oldLesson.topic}`).click();
+  await openTopic(page, oldLesson.topic);
   await button(page, `Open ${oldLesson.subtitle}`).click();
   await button(page, `Save ${oldLesson.vocabulary[0]!.target}`).click();
   await expect(button(page, `Save ${oldLesson.vocabulary[0]!.target}`)).toBeDisabled();
@@ -82,6 +89,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await button(page, 'Start Hiragana').click();
   await tryRow(page, first, true);
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
+  await revealRows(page);
   await expect(alphabet.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).toContainText('Studied');
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).not.toContainText('Not studied');
@@ -93,7 +101,9 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   expect(saved.filter(event => event.lessonId === first.id)).toEqual([expect.objectContaining({ revision: 1, itemId: `${first.id}.completion`, activity: 'completion', result: 'completed', hints: 0 })]);
   await page.reload();
   await button(page, 'Continue Japanese letters').click();
+  await revealRows(page);
   await expect(alphabet.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
+  await revealRows(page);
   await alphabet.getByRole('button', { name: /Katakana$/, exact: false }).click();
   await expect(alphabet.getByRole('heading', { name: japaneseAlphabetLessons[10]!.title, exact: true })).toBeVisible();
   await alphabet.getByTestId(`kana-row-${japaneseAlphabetLessons[19]!.id}`).click();
@@ -101,6 +111,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('japanese-letters.png'), fullPage: false });
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download'); await button(page, 'Download learning backup').click();
   const path = info.outputPath('kana-backup.json'); await (await download).saveAs(path);
   const backup = JSON.parse(await readFile(path, 'utf8'));
@@ -109,10 +120,12 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   try {
     await fresh.route('**/127.0.0.1:3001/**', route => route.abort());
     const restored = await fresh.newPage(); await restored.goto(baseURL!); await button(restored, 'Learn Japanese').click();
-    await button(restored, 'Profile').click(); await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(path);
+    await button(restored, 'Profile').click();
+    await openProfileSection(restored, 'Offline & backups'); await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(path);
     await restored.getByRole('checkbox').check(); await button(restored, 'Restore backup').click();
     await expect(restored.getByText('Backup merged successfully', { exact: true })).toBeVisible();
     await button(restored, 'Reload learning').click(); await button(restored, 'Continue Japanese letters').click();
+    await revealRows(restored);
     await expect(restored.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
     expect(await events(restored)).toEqual(expect.arrayContaining(saved));
     await button(restored, 'Review').click();
@@ -125,6 +138,7 @@ test('visual kana rows support keyboard choices at 320px without a dropdown or s
   await page.goto('/'); await button(page, 'Start Hiragana').click();
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
+  await revealRows(page);
   const current = alphabet.getByTestId(`kana-row-${first.id}`);
   const next = alphabet.getByTestId(`kana-row-${second.id}`);
   await expect(current).toHaveAttribute('role', 'button');
@@ -153,6 +167,7 @@ test('failed alphabet saving keeps the current row and retries the same event on
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto('/'); await button(page, 'Learn').click();
   await expect(page.getByTestId('japanese-alphabet')).toBeVisible();
+  await revealRows(page);
   await tryRow(page, first);
   await page.evaluate(() => {
     const original = IDBObjectStore.prototype.add; let fail = true;
@@ -167,9 +182,11 @@ test('failed alphabet saving keeps the current row and retries the same event on
   });
   await button(page, 'Mark row studied').click();
   await expect(page.getByText('Simulated alphabet save failure', { exact: true })).toBeVisible();
+  await revealRows(page);
   await expect(page.getByTestId(`kana-row-${first.id}`)).toHaveAttribute('aria-selected', 'true');
   await expect(button(page, 'Vocabulary & lessons')).toBeDisabled(); expect(await events(page)).toHaveLength(0);
   await button(page, 'Retry save').click();
+  await revealRows(page);
   await expect(page.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
   const attempts = await page.evaluate(() => (window as unknown as { kanaAttemptIds: string[] }).kanaAttemptIds);
   expect(attempts).toHaveLength(2); expect(attempts[0]).toBe(attempts[1]); expect(await events(page)).toHaveLength(1);

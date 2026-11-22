@@ -30,7 +30,7 @@ export function PersonalWordForm({ model, language = 'fr-FR' }: { model: Learnin
 
   return <View style={s.card} testID="personal-word-form">
     <Text accessibilityRole="header" style={s.heading}>Your own vocabulary</Text>
-    <Text style={s.body}>Keep a word or phrase from everyday life, with your own meaning and example.</Text>
+    {open && <Text style={s.body}>Add a word with its English meaning and an optional example.</Text>}
     {!open ? <Button disabled={model.blocked} onPress={() => { setSaved(''); setOpen(true); }}>Add personal word</Button> : <>
       <Text style={s.body}>{languageNames[language]} word or phrase</Text>
       <TextInput accessibilityLabel={`New ${languageNames[language]} word or phrase`} value={target} onChangeText={setTarget} maxLength={300} editable={!locked} style={s.input} />
@@ -45,6 +45,6 @@ export function PersonalWordForm({ model, language = 'fr-FR' }: { model: Learnin
       {!!model.saveError && <Text style={s.muted}>Your form is kept. Use Retry save above to retry this same entry, or Dismiss and continue before editing it.</Text>}
     </>}
     {!!saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Saved {saved} to your notebook.</Text>}
-    <Text style={s.muted}>Personal entries stay in this browser and are included in learning backups. They do not change lesson content.</Text>
+    {open && <Text style={s.muted}>Saved privately in this browser and included in learning backups.</Text>}
   </View>;
 }

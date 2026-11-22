@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
+import { languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
 import { openCoursePilot, japaneseCourse } from '@smartlingo/content';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
@@ -12,10 +12,9 @@ import { useTargetLanguage } from '../language/useTargetLanguage';
 import { LanguageChooser } from '../language/LanguageChooser';
 import { LearningHub } from '../learn/LearningHub';
 import { ProfileScreen } from '../profile/ProfileScreen';
-import { Badge, Button } from '../ui/controls';
+import { Button } from '../ui/controls';
 import { LessonScreen } from '../ui/LessonScreen';
 import { Notebook } from '../ui/Notebook';
-import { TopicSidebar } from '../ui/TopicSidebar';
 import { BrandHome } from '../ui/BrandHome';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { useLearning, type LearningModel } from '../ui/useLearning';
@@ -45,7 +44,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
   };
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
-  const wide = width >= designTokens.layout.sidebarBreakpoint;
+  const compact = width < designTokens.layout.compactBreakpoint;
   const { choosing, tab, lesson, selectedTopic, learnMode, navigate, selectTopic, selectLearnMode,
     openLearnMode, openLesson, chooseLanguage, chooseHome, changeLanguage } = useLearnerNavigation({
     language, blocked: switchingBlocked, homeRequest, onHome, onChooseLanguage: selection.choose,
@@ -53,20 +52,19 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
   });
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
   const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses: language === 'ja-JP' ? japaneseCourses : frenchCourses });
-  const reportVisible = !!language && !choosing && !lesson && (tab === 'Today' || tab === 'Report');
+  const reportVisible = !!language && !choosing && !lesson && tab === 'Report';
   useEffect(() => {
     if (reportVisible && !childWriteBlocked && !globalModel.busy && !globalModel.loading && !globalModel.loadError) void reportState.refresh();
   }, [reportVisible, tab, childWriteBlocked, globalModel.busy, globalModel.loading, globalModel.loadError, globalModel.events, globalModel.notebook, reportState.refresh]);
-  const topics = groupLessonTopics(lessons);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
 
   function renderDestination(targetLanguage: TargetLanguage) {
     if (lesson) return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />;
     if (tab === 'Today') return <TodayDashboard
       language={targetLanguage} course={targetLanguage === 'ja-JP' ? japaneseCourse : openCoursePilot}
-      state={reportState} onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model}
+      onWriteBlocked={setChildWriteBlocked} lessons={lessons} model={model}
       onOpen={openLesson} onExplore={() => openLearnMode('Vocabulary & lessons')}
-      onReview={() => navigate('Review')} onTopic={selectTopic}
+      onReview={() => navigate('Review')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
       onAlphabet={() => openLearnMode('Japanese letters')}
     />;
@@ -88,24 +86,15 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
 
   return <View style={s.app}>
     <View style={[s.header, width < designTokens.layout.compactBreakpoint && { paddingHorizontal: 16 }]}>
-      <View style={s.headerInner}>
-        <View style={[s.row, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }]}>
-          <BrandHome onPress={chooseHome} />
-          <Badge>LOCAL PREVIEW</Badge>
-        </View>
+      <View style={[s.headerInner, compact && { gap: 8, flexWrap: 'nowrap' }]}>
+        <BrandHome onPress={chooseHome} />
+        {language && !choosing && !compact && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact />}
         {language && !choosing && <View style={s.row}>
-          <Badge>{languageNames[language]}</Badge>
-          <Button disabled={switchingBlocked} onPress={changeLanguage}>Change language</Button>
+          <Button label="Change language" disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]} ⌄</Button>
         </View>}
-        {language && !choosing && !wide && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact />}
       </View>
     </View>
-    {language && !choosing && !wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
     <View style={{ flex: 1, width: '100%', maxWidth: designTokens.layout.shellMaxWidth, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
-      {language && !choosing && wide && <View style={{ width: designTokens.layout.sidebarWidth, flexShrink: 0, backgroundColor: colors.card, borderRightWidth: 1, borderColor: colors.line }}>
-        <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact={false} />
-        <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />
-      </View>}
       <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <View style={[s.main, width < designTokens.layout.compactBreakpoint && { padding: 16, paddingTop: 24 }]}>
           {!language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
@@ -135,5 +124,8 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
         </View>
       </ScrollView>
     </View>
+    {language && !choosing && compact && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 6, paddingBottom: 10 }}>
+      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} compact />
+    </View>}
   </View>;
 }

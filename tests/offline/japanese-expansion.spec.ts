@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
-import { buildAcceptedSentence } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -10,6 +10,7 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/'); await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
   const remote: string[] = [];
@@ -18,7 +19,7 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   const cold = await context.newPage(); await cold.goto(baseURL!);
   const lesson = japaneseLessons.find(lesson => lesson.id === 'ja.lesson.day-3.words-2')!;
   const entry = lesson.vocabulary[0];
-  await cold.getByRole('button', { name: `Topic ${lesson.topic}`, exact: true }).click();
+  await openTopic(cold, lesson.topic);
   await expect(cold.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
   await cold.getByRole('textbox', { name: 'Search lessons', exact: true }).fill(entry.reading!);
   await cold.getByRole('button', { name: `Save ${entry.target}`, exact: true }).click();

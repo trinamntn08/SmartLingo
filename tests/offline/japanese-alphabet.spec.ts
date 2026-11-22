@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseAlphabetLessons } from '@smartlingo/content';
+import { openProfileSection } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [{ origin: 'http://localhost:8082', localStorage: [{ name: 'smartlingo.target-language.v1', value: 'ja-JP' }] }] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -17,8 +18,10 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
     if (index < first.characters.length - 1) await alphabet.getByRole('button', { name: 'Next character', exact: true }).click();
   }
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
+  await alphabet.getByRole('button', { name: 'Choose another row', exact: true }).click();
   await expect(alphabet.getByTestId(`kana-row-${japaneseAlphabetLessons[1]!.id}`)).toHaveAttribute('aria-selected', 'true');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
   // Profile may check local voice availability; cold text study needs no API.
@@ -27,6 +30,7 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   const cold = await context.newPage(); await cold.goto(baseURL!);
   await cold.getByRole('button', { name: 'Continue Japanese letters', exact: true }).click();
   const letters = cold.getByTestId('japanese-alphabet');
+  await letters.getByRole('button', { name: 'Choose another row', exact: true }).click();
   await expect(letters.getByRole('combobox')).toHaveCount(0);
   await expect(letters.getByTestId(`kana-row-${japaneseAlphabetLessons[1]!.id}`)).toHaveAttribute('aria-selected', 'true');
   await expect(letters.getByTestId(`kana-row-${first.id}`)).toContainText('Studied');

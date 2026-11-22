@@ -46,6 +46,7 @@ test('listening level and format filters combine and reset without affecting ord
   await expect(library.getByRole('button', { name: 'All listening formats', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(library.getByRole('link')).toHaveCount(listeningResources.length);
   await page.getByRole('button', { name: 'Speaking', exact: true }).click();
+  await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
   const conversation = page.getByTestId('french-practice');
   await expect(conversation.getByRole('heading', { name: 'French conversation', exact: true })).toBeAttached();
   await expect(conversation.getByRole('textbox', { name: 'Search conversation lessons', exact: true })).toBeAttached();
@@ -55,6 +56,7 @@ test('listening level and format filters combine and reset without affecting ord
   await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
   await expect(page.getByTestId('listening-resources')).toHaveCount(0);
   await page.getByRole('button', { name: 'Speaking', exact: true }).click();
+  await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
   await expect(page.getByTestId('french-practice')).toBeVisible();
 });
 

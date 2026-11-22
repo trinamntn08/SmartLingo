@@ -1,3 +1,4 @@
+import { openTopic } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
@@ -131,7 +132,7 @@ test('first-run reports show real catalogue sizes and no invented activity in ei
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`${language.toLowerCase()}-empty-report.png`), fullPage: true });
     await button(page, 'Today').click();
-    await metrics(page, language, 0, 0, 0, 0); await week(page, 0);
+    for (const id of ['lessons', 'explored', 'saved', 'days', 'week']) await expect(page.getByTestId(`report-${id}`)).toHaveCount(0);
     await page.screenshot({ path: info.outputPath(`${language.toLowerCase()}-friendly-today.png`), fullPage: true });
   }
 });
@@ -182,7 +183,7 @@ test('unavailable storage offers report retry without fabricated zeroes while le
     await expect(page.getByTestId('report-week')).toHaveCount(0);
     await button(page, 'Retry report').click();
     await expect(button(page, 'Retry report')).toBeVisible();
-    await button(page, `Topic ${lesson.topic}`).click();
+    await openTopic(page, lesson.topic);
     await button(page, `Open ${lesson.subtitle}`).click();
     await expect(page.getByTestId(`vocabulary-${lesson.vocabulary[0].id}`)).toBeVisible();
   }

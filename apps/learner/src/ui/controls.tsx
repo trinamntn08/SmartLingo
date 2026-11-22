@@ -10,7 +10,7 @@ export function Button({ children, onPress, primary, selected, disabled, label }
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }, primary && s.buttonPrimary, selected && s.buttonSelected,
       focused && { outlineColor: colors.ink, outlineWidth: designTokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: designTokens.focus.outlineOffset }, { opacity: disabled ? designTokens.opacity.disabled : pressed ? designTokens.opacity.pressed : 1 }]}>
-    <Text style={[s.buttonText, { maxWidth: '100%', flexShrink: 1 }, selected && { color: colors.card }]}>{children}</Text>
+    <Text style={[s.buttonText, { maxWidth: '100%', flexShrink: 1 }, (selected || primary) && { color: colors.card }]}>{children}</Text>
   </Pressable>;
 }
 

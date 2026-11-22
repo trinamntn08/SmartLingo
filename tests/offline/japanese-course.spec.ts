@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseCourse } from '@smartlingo/content';
+import { openProfileSection } from '../e2e/learner-journeys';
 
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 
@@ -14,6 +15,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
   await context.setOffline(true);
@@ -22,10 +24,12 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await cold.goto(baseURL!);
   const panel = cold.getByTestId('open-course-panel');
   await panel.getByRole('button', { name: 'Open daily course', exact: true }).click();
+  await panel.getByRole('button', { name: 'Choose a study day', exact: true }).click();
   await panel.getByRole('button', { name: 'B1', exact: true }).click();
   const day = japaneseCourse.days.at(-1)!;
   await panel.getByRole('button', { name: `Choose day ${day.dayNumber}: ${day.title}`, exact: true }).click();
   const index = day.blocks.findIndex(block => block.kind === 'vocabulary');
+  await panel.getByRole('button', { name: 'Browse sections', exact: true }).click();
   await panel.getByRole('button', { name: `Section ${index + 1}: ${day.blocks[index].title}`, exact: true }).click();
   const word = day.vocabulary[0];
   const card = panel.getByTestId(`vocabulary-${word.id}`);

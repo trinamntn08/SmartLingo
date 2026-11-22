@@ -1,4 +1,4 @@
-import { openRestaurant } from './learner-journeys';
+import { openRestaurant, openProfileSection } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 
 test('French voice and speed choices survive reload and apply to lesson playback without AI', async ({ page }, info) => {
@@ -20,6 +20,7 @@ test('French voice and speed choices survive reload and apply to lesson playback
   });
   await page.goto('/');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   const voice = page.getByRole('combobox', { name: 'French voice', exact: true });
   await expect(voice.getByRole('option', { name: /English sample/ })).toHaveCount(0);
   await voice.selectOption({ label: 'French alternative sample · fr-FR · Network' });
@@ -31,6 +32,7 @@ test('French voice and speed choices survive reload and apply to lesson playback
   await page.screenshot({ path: info.outputPath('french-voice-choice.png'), fullPage: true });
   await page.reload();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   await expect(voice).toHaveValue(JSON.stringify(['test.fr.alternative', 'French alternative sample', 'fr-FR']));
   await expect(page.getByRole('button', { name: 'Speaking speed: Slow', exact: true })).toHaveAttribute('aria-selected', 'true');
   await page.getByRole('button', { name: 'Today', exact: true }).click();
@@ -45,7 +47,7 @@ test('bundled coffee photograph loads and has a local photo-credits route', asyn
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  await page.getByRole('button', { name: 'Explore Restaurant →', exact: true }).click();
+  await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
   const card = page.getByTestId('vocabulary-fr.cafe');
   const photo = card.locator('img').first();
   await expect(photo).toHaveAttribute('src', /\/vocabulary-photos\//);
@@ -54,6 +56,7 @@ test('bundled coffee photograph loads and has a local photo-credits route', asyn
   await page.screenshot({ path: info.outputPath('vocabulary-photograph.png') });
   await expect(page.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'About SmartLingo');
   await expect(page.getByRole('link', { name: 'Photo credits and licences' })).toHaveAttribute('href', '/vocabulary-photos/credits.html');
   const credits = await page.request.get('/vocabulary-photos/credits.html');
   expect(credits.status()).toBe(200);
@@ -61,7 +64,7 @@ test('bundled coffee photograph loads and has a local photo-credits route', asyn
   await page.route('**/vocabulary-photos/*.jpg', route => route.abort());
   await page.reload();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  await page.getByRole('button', { name: 'Explore Restaurant →', exact: true }).click();
+  await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
   await expect(card.locator('img').first()).toHaveAttribute('src', /^data:image\/svg/);
   await expect(card.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
 });

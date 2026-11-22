@@ -1,4 +1,4 @@
-import { openRestaurant } from './learner-journeys';
+import { openRestaurant, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -32,6 +32,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   await page.getByRole('button', { name: 'Needed help', exact: true }).click();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   const downloaded = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download learning backup', exact: true }).click();
   const file = await downloaded;
@@ -53,6 +54,7 @@ test('download and explicit restore recover learning in a fresh browser without 
     await restored.goto(baseURL!);
     await restored.getByRole('button', { name: 'Learn French', exact: true }).click();
     await restored.getByRole('button', { name: 'Profile', exact: true }).click();
+    await openProfileSection(restored, 'Offline & backups');
     const input = restored.getByLabel('Choose a learning backup', { exact: true });
     await input.setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{broken') });
     await expect(restored.getByRole('alert')).toContainText('not a supported');
@@ -62,6 +64,11 @@ test('download and explicit restore recover learning in a fresh browser without 
     expect(await eventCount(restored)).toBe(0);
     await expect(restored.getByRole('button', { name: 'Restore backup', exact: true })).toBeDisabled();
     await restored.getByRole('checkbox').check();
+    await restored.getByRole('button', { name: 'Offline & backups', exact: true }).click();
+    await expect(input).not.toBeVisible();
+    await openProfileSection(restored, 'Offline & backups');
+    await expect(restored.getByText('learning-backup.json', { exact: true })).toBeVisible();
+    await expect(restored.getByRole('checkbox')).toBeChecked();
     await restored.screenshot({ path: info.outputPath('backup-preview.png'), fullPage: true });
     await restored.getByRole('button', { name: 'Restore backup', exact: true }).click();
     await expect(restored.getByText('Backup merged successfully', { exact: true })).toBeVisible();
@@ -77,6 +84,7 @@ test('download and explicit restore recover learning in a fresh browser without 
     await restored.getByRole('button', { name: 'Save changes', exact: true }).click();
     await expect(restored.getByText('Changes saved in this browser.')).toBeVisible();
     await restored.getByRole('button', { name: 'Profile', exact: true }).click();
+    await openProfileSection(restored, 'Offline & backups');
     await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(path);
     await restored.getByRole('checkbox').check();
     await restored.getByRole('button', { name: 'Restore backup', exact: true }).click();

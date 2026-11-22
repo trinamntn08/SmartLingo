@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons } from '@smartlingo/content';
 import { groupLessonTopics, type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence } from './learner-journeys';
+import { buildAcceptedSentence, openTopic, openProfileSection } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
@@ -15,7 +15,7 @@ test('every Japanese topic exposes thirty distinct supported entries and five sh
   await page.goto('/'); await button(page, 'Learn Japanese').click();
   const topics = groupLessonTopics(japaneseLessons);
   for (const topic of topics) {
-    await button(page, `Topic ${topic.name}`).click();
+    await openTopic(page, topic.name);
     await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
     await expect(page.getByTestId(/^vocabulary-/)).toHaveCount(30);
     await expect(page.getByRole('button', { name: /^Open / })).toHaveCount(5);
@@ -31,7 +31,7 @@ test('every Japanese topic exposes thirty distinct supported entries and five sh
 });
 
 async function complete(page: Page, lesson: Lesson) {
-  await button(page, `Topic ${lesson.topic}`).click(); await button(page, `Open ${lesson.subtitle}`).click();
+  await openTopic(page, lesson.topic); await button(page, `Open ${lesson.subtitle}`).click();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await page.getByRole('button', { name: /Try meaning practice/ }).click();
   const answer = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
@@ -47,11 +47,11 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   test.setTimeout(120000);
   await page.goto('/'); await button(page, 'Learn Japanese').click();
   const original = japaneseLessons.find(lesson => lesson.id === 'ja.lesson.day-1')!;
-  await button(page, `Topic ${original.topic}`).click(); await button(page, `Open ${original.subtitle}`).click();
+  await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   for (const day of [1, 3, 8, 13]) await complete(page, extension(day));
   const lesson = extension(13); const entry = lesson.vocabulary[0];
-  await button(page, `Topic ${lesson.topic}`).click();
+  await openTopic(page, lesson.topic);
   await button(page, `Save ${entry.target}`).click();
   await expect(button(page, `Save ${entry.target}`)).toBeDisabled();
   await button(page, 'Review').click();
@@ -64,9 +64,10 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await page.reload();
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();
   await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
-  await button(page, `Topic ${original.topic}`).click(); await button(page, `Open ${original.subtitle}`).click();
+  await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();
   await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download'); await button(page, 'Download learning backup').click();
   const file = await download; const path = info.outputPath('expanded-japanese-backup.json'); await file.saveAs(path);
   const backup = JSON.parse(await readFile(path, 'utf8'));

@@ -1,3 +1,4 @@
+import { openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
@@ -24,9 +25,20 @@ async function storedEvents(page: Page, store: 'courseEvents' | 'events' = 'cour
 }
 
 async function selectSection(page: Page, index: number, selectedDay = day) {
+  await revealSections(page);
   await button(page, `Section ${index + 1}: ${selectedDay.blocks[index].title}`).click();
   await expect(coursePanel(page).getByRole('heading', { name: selectedDay.blocks[index].title, exact: true })).toBeVisible();
   await expect(button(page, 'Section 1: ' + selectedDay.blocks[0].title)).toBeEnabled();
+}
+
+async function revealDays(page: Page) {
+  const toggle = button(page, 'Choose a study day');
+  if (await toggle.isVisible()) await toggle.click();
+}
+
+async function revealSections(page: Page) {
+  const toggle = button(page, 'Browse sections');
+  if (await toggle.isVisible()) await toggle.click();
 }
 
 const chooseDay = (page: Page, selectedDay: CourseDay) => button(page, `Choose day ${selectedDay.dayNumber}: ${selectedDay.title}`);
@@ -134,6 +146,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   await button(page, 'Open daily course').click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
   await expect(coursePanel(page).getByRole('heading', { name: secondDay.blocks[2].title, exact: true })).toBeVisible();
+  await revealDays(page);
   await chooseDay(page, day).focus();
   await page.keyboard.press('Enter');
   await expect(dayHeading(page, day)).toBeVisible();
@@ -155,6 +168,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
   await selectSection(page, vocabularyIndex);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('open-course-320.png'), fullPage: true });
+  await revealDays(page);
   await chooseDay(page, secondDay).click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
   expect(await coursePanel(page).locator('*').evaluateAll(elements => elements.every(element => {
@@ -162,10 +176,12 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
     return !bounds.width || (bounds.left >= -1 && bounds.right <= innerWidth + 1);
   }))).toBe(true);
   await page.screenshot({ path: info.outputPath('open-course-day-two-320.png'), fullPage: true });
+  await revealDays(page);
   await chooseDay(page, day).click();
   expect(errors).toEqual([]);
 
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download learning backup', exact: true }).click();
   const backupPath = info.outputPath('course-learning-backup.json');
@@ -181,6 +197,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
     await restored.goto(new URL('/', page.url()).href);
     await restored.getByRole('button', { name: 'Learn French', exact: true }).click();
     await restored.getByRole('button', { name: 'Profile', exact: true }).click();
+    await openProfileSection(restored, 'Offline & backups');
     await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(backupPath);
     await restored.getByRole('checkbox').check();
     await restored.getByRole('button', { name: 'Restore backup', exact: true }).click();
@@ -190,6 +207,7 @@ test('daily course studies, saves canonical vocabulary, resumes exact practice a
     await expect(coursePanel(restored).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
     await expect(button(restored, 'Save bonjour')).toBeDisabled();
     expect(await storedEvents(restored)).toHaveLength(backup.courseEvents.length);
+    await revealDays(restored);
     await chooseDay(restored, secondDay).click();
     await expect(dayHeading(restored, secondDay)).toBeVisible();
     await expect(coursePanel(restored).getByRole('heading', { name: secondDay.blocks[2].title, exact: true })).toBeVisible();
@@ -234,6 +252,7 @@ test('course material remains browsable at 320px when browser storage is unavail
   await expect(button(page, 'Retry course storage')).toBeVisible();
   await expect(button(page, 'Save study section')).toBeDisabled();
   for (const selectedDay of openCoursePilot.days) {
+    await revealDays(page);
     await chooseDay(page, selectedDay).click();
     for (let index = 0; index < selectedDay.blocks.length; index++) await selectSection(page, index, selectedDay);
     await button(page, 'Read model exchange').click();
@@ -247,6 +266,7 @@ test('course material remains browsable at 320px when browser storage is unavail
 test('day switching waits for a saved navigation, retries the same event and supports discard', async ({ page }) => {
   await page.goto('/');
   await button(page, 'Open daily course').click();
+  await revealDays(page);
   await expect(chooseDay(page, secondDay)).toBeEnabled();
   await selectSection(page, 1);
   await page.evaluate(() => {
@@ -261,6 +281,7 @@ test('day switching waits for a saved navigation, retries the same event and sup
       return original.call(this, value, key);
     };
   });
+  await revealDays(page);
   await chooseDay(page, secondDay).click();
   await expect(coursePanel(page).getByRole('alert')).toContainText('Navigation storage unavailable');
   await expect(dayHeading(page, day)).toBeVisible();
@@ -269,6 +290,7 @@ test('day switching waits for a saved navigation, retries the same event and sup
   await button(page, 'Discard unsaved course action').click();
   await expect(dayHeading(page, day)).toBeVisible();
   await expect(chooseDay(page, secondDay)).toBeEnabled();
+  await revealDays(page);
   await chooseDay(page, secondDay).click();
   await expect(coursePanel(page).getByRole('alert')).toContainText('Navigation storage unavailable');
   await page.evaluate(() => { Object.assign(window, { failCourseNavigation: false }); });
@@ -281,6 +303,7 @@ test('day switching waits for a saved navigation, retries the same event and sup
   await page.reload();
   await button(page, 'Open daily course').click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
+  await revealDays(page);
   await chooseDay(page, day).click();
   await expect(coursePanel(page).getByRole('heading', { name: day.blocks[1].title, exact: true })).toBeVisible();
 });
@@ -321,6 +344,7 @@ test('revision-one completed history survives the release and final completion s
   await page.reload();
   await button(page, 'Open daily course').click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
+  await revealDays(page);
   await chooseDay(page, day).click();
   await expect(coursePanel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
 });

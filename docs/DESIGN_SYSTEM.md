@@ -6,17 +6,17 @@ Reviewed: 2026-11-22. The shared French/Japanese web learner retains its cream, 
 
 [designTokens.ts](../apps/learner/src/ui/designTokens.ts) owns the existing semantic palette, spacing scale, type styles, radii, focus/disabled values, minimum control sizes and shell dimensions. [theme.ts](../apps/learner/src/ui/theme.ts) composes those values into React Native styles and continues to export `colors`, `styles` and `designTokens`.
 
-Use tokens for shared decisions. Keep genuinely feature-specific layout and artwork values with that feature; do not turn every number into a global token. The current refactor preserves existing sizes/colors and adopts tokens in shared styles, base buttons, speech controls and the app shell. Existing feature components still contain local styles; they have not all been restyled or mechanically rewritten.
+Use tokens for shared decisions. Keep feature-specific layout and artwork values with that feature; do not turn every number into a global token. The calm learner redesign updates shared colors, typography, cards and buttons while preserving audio/domain boundaries. Feature components still contain local styles.
 
 | Concern | Current value or owner |
 | --- | --- |
 | Canvas, surface, text, muted text, primary action, danger | Semantic `colors` values |
-| Main body / secondary body / heading | 17/26, 15/23 and 24/31 font size/line height |
-| Shared card | 28 radius, 24 padding, subtle shadow |
+| Main body / secondary body / heading | Arial; 17/26, 15/23 and 22/29 font size/line height |
+| Shared card | 22 radius, 24 padding, minimal shadow |
 | Touch targets | 44 minimum for icon controls; shared button 46 high; input 48 high |
 | Keyboard focus | Explicit focus state; shared button outline 3 with offset 3 |
-| Compact content / desktop sidebar thresholds | 600 / 1050 pixels |
-| Shell / content maximum widths | 1440 / 1160 pixels |
+| Compact navigation threshold | Below 600px: labelled bottom destinations; otherwise top navigation |
+| Shell / content maximum widths | 1200 / 1080 pixels |
 
 These values are current visual choices, not a mandate to override native accessibility scaling or a promise every feature-specific control already uses identical dimensions.
 
@@ -28,12 +28,20 @@ These values are current visual choices, not a mandate to override native access
 
 The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/Report widgets in `src/dashboard/`. They compose feature components. A new widget should receive the data/callbacks it needs; it should not open a database or invoke a provider while rendering. Existing progress/error/loading contracts remain with their feature models.
 
+## Information hierarchy
+
+Today has one prominent recommended action, a compact course entry and quiet alternatives. Topics belong in Learn, metrics in Report and settings in Profile. Avoid repeating topic rails, metrics and the same recommendation across the homepage. Use burgundy for the main action and gold as an accent; keep meanings, examples, translations and reading aids visible during study.
+
+Lessons show the current step separately from saved activity counts. Kana focuses on one row with an explicit row chooser. Course days and section navigation unfold when requested. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top.
+
+`ui/Disclosure` provides a named keyboard-accessible expansion button with expanded state and controlled content ID. Settings mount on first opening, then remain mounted and hidden when closed so backup/form state is retained. Optional AI uses `keepMounted={false}` to clear its temporary session/recording on collapse. See [ADR 0032](decisions/0032-calm-learner-interface.md).
+
 ## Extension and review
 
 1. Reuse a current primitive and token when the same behavior/visual role exists. Extract a new shared component only after concrete reuse, rather than introducing a general widget framework.
 2. Keep English interface copy and visible study support. Japanese reading aids and French grammar/gender are language-specific content, not theme logic.
 3. Verify keyboard, narrow-width wrapping, focus, selected/disabled feedback, loading and recoverable errors in the affected journey. Do not rely on color alone or make speaking mandatory.
 4. Preserve the seven [visual references](../references/AGENTS.md) when deliberately changing appearance. A structural extraction does not require a visual redesign.
-5. Follow [testing](TESTING.md) and record actual checks in [the checkpoint](SESSION_CHECKPOINT.md). The earlier owner request for gentler kana pacing and clearer pronunciation needs its own learner-facing implementation and review; design tokens alone do not deliver it.
+5. Follow [testing](TESTING.md) and record actual checks in [the checkpoint](SESSION_CHECKPOINT.md). Written kana/romaji remain visible; further pronunciation content and owner acceptance of beginner pacing remain separate work.
 
 Dark mode, a cross-application `packages/ui` package and broad typography preferences remain future work. The current learner is the only consumer requiring this shared design layer.

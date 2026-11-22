@@ -13,9 +13,10 @@ export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked 
   const name = languageNames[language];
   const normalized = normalizeSearch(query);
   const matches = new Set(model.notebook.filter(entry => normalizeSearch(`${entry.target} ${entry.reading ?? ''} ${entry.meaning} ${entry.example} ${entry.exampleReading ?? ''}`).includes(normalized)).map(entry => entry.id));
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Review at your pace</Text><Text accessibilityRole="header" style={s.title}>{`Your ${name}, kept close.`}</Text><Text style={s.body}>Practise your recall, then browse your saved words and meanings below. Make the notes your own.</Text>
-    <PersonalWordForm model={model} language={language} />
+  return <View style={{ gap: 24 }}>
+    <View style={{ gap: 8 }}><Text style={s.eyebrow}>{name} · Your notebook</Text><Text accessibilityRole="header" style={s.title}>Review saved words</Text><Text style={s.body}>A little recall practice, then your own words and notes.</Text></View>
     <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />
+    <PersonalWordForm model={model} language={language} />
     {!!model.notebook.length && <View style={s.card}>
       <Text accessibilityRole="header" style={s.heading}>Find a saved word</Text>
       <TextInput accessibilityLabel="Search notebook" placeholder={`${name}, reading, English or a personal note`} value={query} onChangeText={setQuery} style={s.input} />

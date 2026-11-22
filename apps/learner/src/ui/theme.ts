@@ -5,11 +5,11 @@ export { colors, designTokens } from './designTokens';
 
 export const styles = StyleSheet.create({
   app: { flex: 1, backgroundColor: colors.paper },
-  header: { backgroundColor: colors.paper, borderBottomWidth: 1, borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 18 },
+  header: { backgroundColor: colors.paper, borderBottomWidth: 1, borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 12 },
   headerInner: { width: '100%', maxWidth: tokens.layout.shellMaxWidth, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.xl, flexWrap: 'wrap' },
   brand: { ...tokens.typography.brand, color: colors.ink },
   nav: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, maxWidth: '100%', flexShrink: 1 },
-  main: { width: '100%', maxWidth: tokens.layout.contentMaxWidth, alignSelf: 'center', padding: tokens.space.xxl, paddingTop: 36, paddingBottom: 64, gap: tokens.space.xxl },
+  main: { width: '100%', maxWidth: tokens.layout.contentMaxWidth, alignSelf: 'center', padding: tokens.space.xxl, paddingTop: 40, paddingBottom: 48, gap: tokens.space.xxl },
   row: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: tokens.space.md },
   split: { flexDirection: 'row', flexWrap: 'wrap', gap: 28, alignItems: 'stretch' },
   column: { flexGrow: 1, flexShrink: 1, flexBasis: 330, minWidth: 0, gap: 20 },
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   badge: { backgroundColor: colors.sand, borderRadius: tokens.radius.lg, paddingHorizontal: 10, paddingVertical: 6, maxWidth: '100%', flexShrink: 1 },
   badgeText: { ...tokens.typography.label, color: colors.ink },
   button: { minHeight: tokens.control.buttonHeight, borderRadius: tokens.radius.pill, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, paddingHorizontal: tokens.space.xl, paddingVertical: tokens.space.md, justifyContent: 'center', alignItems: 'center' },
-  buttonPrimary: { backgroundColor: colors.yellow, borderColor: colors.yellow },
+  buttonPrimary: { backgroundColor: colors.ink, borderColor: colors.ink },
   buttonSelected: { backgroundColor: colors.ink, borderColor: colors.ink },
   buttonText: { ...tokens.typography.button, color: colors.ink },
   input: { backgroundColor: colors.card, borderColor: colors.inputBorder, borderWidth: 1, borderRadius: tokens.radius.input, padding: 14, fontSize: tokens.typography.body.fontSize, color: colors.ink, minHeight: tokens.control.inputHeight },

@@ -1,4 +1,4 @@
-import { openRestaurant } from './learner-journeys';
+import { openRestaurant, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -61,6 +61,7 @@ const savedCount = (page: Page) => page.evaluate(async () => {
 async function openPanel(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   return page.getByRole('heading', { name: 'Neural French audio', exact: true }).locator('..');
 }
 
@@ -72,6 +73,7 @@ test('explicit neural save, actual MP3 playback, reload and browser-only removal
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   const panel = page.getByRole('heading', { name: 'Neural French audio', exact: true }).locator('..');
   await expect(panel.getByText('Local generation is configured.', { exact: false })).toBeVisible();
   expect(fake.requests).toHaveLength(0);
@@ -97,6 +99,7 @@ test('explicit neural save, actual MP3 playback, reload and browser-only removal
   expect(await page.getByRole('button', { name: 'Generate and save (may use credits)', exact: true }).evaluate(button => button.getBoundingClientRect().right <= button.parentElement!.getBoundingClientRect().right + 1)).toBe(true);
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   await expect(panel.getByRole('combobox', { name: 'Neural French voice' })).toHaveValue('fr-FR-HenriNeural');
   await page.evaluate(async () => { const unrelated = await caches.open('unrelated-owner-cache'); await unrelated.put('/keep', new Response('keep')); });
   await panel.getByRole('button', { name: 'Remove saved browser audio', exact: true }).click();

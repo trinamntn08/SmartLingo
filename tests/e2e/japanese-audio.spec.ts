@@ -1,3 +1,4 @@
+import { openTopic, openProfileSection } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
@@ -50,6 +51,7 @@ test('voice-less Japanese playback uses free local audio, replays offline, and r
   await expect(page.getByRole('button', { name: 'Profile', exact: true })).toBeVisible();
   expect(synthesis).toEqual([]);
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   await expect(page.getByText('Free local voice ready: Shikoku Metan.', { exact: true })).toBeVisible();
   await expect(page.getByText(/No Japanese device voice is available/)).toBeVisible();
   await page.getByRole('combobox', { name: 'Japanese audio source', exact: true }).selectOption('voicevox');
@@ -63,6 +65,7 @@ test('voice-less Japanese playback uses free local audio, replays offline, and r
   offline = true;
   await page.reload();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Audio & pronunciation');
   await expect(page.getByRole('combobox', { name: 'Japanese audio source', exact: true })).toHaveValue('voicevox');
   await expect(page.getByRole('button', { name: 'Speaking speed: Slow', exact: true })).toHaveAttribute('aria-selected', 'true');
   await page.getByRole('button', { name: 'Preview Japanese voice', exact: true }).click();
@@ -76,7 +79,7 @@ test('voice-less Japanese playback uses free local audio, replays offline, and r
   // The same ordinary vocabulary button uses the new route without Profile being open.
   offline = false;
   const lesson = japaneseLessons[0];
-  await page.getByRole('button', { name: `Topic ${lesson.topic}`, exact: true }).click();
+  await openTopic(page, lesson.topic);
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
   await page.getByRole('button', { name: `Listen to ${lesson.vocabulary[0].target}`, exact: true }).click();
   await expect.poll(() => page.evaluate(() => sessionStorage.getItem('japanese-clips-played'))).toBe('3');

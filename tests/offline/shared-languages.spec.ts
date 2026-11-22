@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons, lessons } from '@smartlingo/content';
-import { buildAcceptedSentence } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -16,6 +16,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   await page.getByRole('button', { name: `Save ${french.target}`, exact: true }).click();
   await expect(page.getByRole('button', { name: `Save ${french.target}`, exact: true })).toBeDisabled();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
   context.on('request', request => { if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== new URL(baseURL!).origin) remote.push(request.url()); });
@@ -23,8 +24,9 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   const cold = await context.newPage(); await cold.goto(baseURL!);
   await cold.getByRole('button', { name: 'Change language', exact: true }).click();
   await cold.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
-  await cold.getByRole('button', { name: 'Start lesson →', exact: true }).click();
   const lesson = japaneseLessons[0]; const japanese = lesson.vocabulary[0];
+  await openTopic(cold, lesson.topic);
+  await cold.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
   const card = cold.getByTestId(`vocabulary-${japanese.id}`);
   await expect(card.getByText(japanese.exampleMeaning, { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true }).click();

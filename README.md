@@ -10,7 +10,7 @@ Choose **French** or **Japanese** on the homepage, then use the same Learn area,
 
 ## Dashboard and report
 
-After choosing a language, **Today** opens a friendly dashboard with your next lesson and real activity summaries. **Report** shows your saved weekly activity and topic progress. The same widgets serve French and Japanese; report visits do not change learning history. [Report definitions and limits](docs/LOCAL_OPERATIONS.md#your-dashboard-and-learning-report).
+After choosing a language, **Today** offers one clear next activity and a compact daily-course entry. **Learn** owns topic browsing; **Report** shows real activity summaries, saved weekly activity and topic progress. Desktop top navigation becomes labelled bottom navigation on small screens. [Interface and report guidance](docs/LOCAL_OPERATIONS.md#your-dashboard-and-learning-report).
 
 ## Learn, listen and speak
 
@@ -45,7 +45,7 @@ npm run build:web
 npm run preview:web
 ```
 
-Open `http://localhost:8082`, then Profile → Learn offline → Download for offline use. Wait for Ready before testing a cold offline reload. Build again after source changes. Development mode does not offer app downloads. [Offline use and storage transfer](docs/LOCAL_OPERATIONS.md#test-the-offline-ready-preview) explains updates, removal and browser-storage limits.
+Open `http://localhost:8082`, then Profile → Offline & backups → Learn offline → Download for offline use. Wait for Ready before testing a cold offline reload. Build again after source changes. Development mode does not offer app downloads. [Offline use and storage transfer](docs/LOCAL_OPERATIONS.md#test-the-offline-ready-preview) explains updates, removal and browser-storage limits.
 
 ## Optional saved neural French audio
 
@@ -53,7 +53,7 @@ Device speech is optional and synthetic. Explicit Azure generation/saving is a s
 
 ## Free Japanese audio
 
-Japanese speaker buttons use a free local VOICEVOX fallback when no Japanese device voice is installed. Profile → Japanese audio lets you select and preview Shikoku Metan, set speed and remove saved clips. On Windows x64 with Python 3.12+, run `npm run setup:japanese-voice` once, then keep `npm run dev:japanese-voice` and `npm run dev:api` running in separate terminals. Already saved clips can replay offline. [Setup, research and voice credits](docs/JAPANESE_AUDIO.md) explains the local runtime and limits; no API key or paid speech is required.
+Japanese speaker buttons use a free local VOICEVOX fallback when no Japanese device voice is installed. Profile → Audio & pronunciation → Japanese audio lets you select and preview Shikoku Metan, set speed and remove saved clips. On Windows x64 with Python 3.12+, run `npm run setup:japanese-voice` once, then keep `npm run dev:japanese-voice` and `npm run dev:api` running in separate terminals. Already saved clips can replay offline. [Setup, research and voice credits](docs/JAPANESE_AUDIO.md) explains the local runtime and limits; no API key or paid speech is required.
 
 ## Back up and recover server curriculum
 

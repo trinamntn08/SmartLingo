@@ -1,4 +1,4 @@
-import { buildAcceptedSentence, openRestaurant } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openProfileSection, openRestaurant } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -29,6 +29,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
   await page.goto('/');
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   await expect(button(page, 'Download for offline use')).toBeEnabled();
   await button(page, 'Download for offline use').click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
@@ -84,6 +85,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await button(page, 'Needed help').click();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Curriculum tools');
   await page.route('**/127.0.0.1:3001/published-lessons', route => route.fulfill({ json: {
     lessons: [{ ...restaurantLesson, revision: 10, status: 'published', subtitle: 'Isolated cached publication' }],
   } }));
@@ -92,6 +94,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await page.unroute('**/127.0.0.1:3001/published-lessons');
   const before = await learningSnapshot(page);
   expect(before.map(rows => rows.length)).toEqual([1, 1, 1, 1]);
+  await openProfileSection(page, 'Offline & backups');
   await expect(button(page, 'Download for offline use')).toBeEnabled();
   expect(await page.evaluate(() => caches.keys())).toEqual([]);
   expect(await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length)).toBe(0);
@@ -113,6 +116,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await button(cold, 'Review').click();
   await expect(cold.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await button(cold, 'Profile').click();
+  await openProfileSection(cold, 'Offline & backups');
   await expect(cold.getByText('Ready for offline use', { exact: true })).toBeVisible();
   expect(await learningSnapshot(cold)).toEqual(before);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -133,6 +137,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
 test('interrupted download and corrupted update can retry while preserving the last complete copy', async ({ page, context, request }, info) => {
   await page.goto('/');
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   await expect(button(page, 'Download for offline use')).toBeEnabled();
   await request.post('/__test__/mode?fail=1');
   await button(page, 'Download for offline use').click();
@@ -161,6 +166,7 @@ test('interrupted download and corrupted update can retry while preserving the l
   await old.goto('http://localhost:8082/');
   await expect(old.locator('meta[name="smartlingo-test-build"]')).toHaveCount(0);
   await button(old, 'Profile').click();
+  await openProfileSection(old, 'Offline & backups');
   await expect(old.getByText('Ready for offline use', { exact: true })).toBeVisible();
   await context.setOffline(false);
   await button(old, 'Refresh offline status').click();
@@ -189,6 +195,7 @@ test('interrupted download and corrupted update can retry while preserving the l
 test('a stalled connection falls back to the saved document within a few seconds', async ({ page, context, request }) => {
   await page.goto('/');
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   await expect(button(page, 'Download for offline use')).toBeEnabled();
   await button(page, 'Download for offline use').click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();

@@ -1,4 +1,4 @@
-import { openRestaurant } from './learner-journeys';
+import { openRestaurant, openTopic, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -35,6 +35,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Curriculum tools');
   const originalEvents = await learningRows(page, 'events');
   const originalNotebook = await learningRows(page, 'notebook');
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();
@@ -92,9 +93,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.reload();
   await expect(page.getByText('A coffee with confidence', { exact: true })).toBeVisible();
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
-  await expect(page.getByText('Guest', { exact: true })).toBeVisible();
-  await expect(page.getByText('12 min · 6 useful words', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Topic Café visits', exact: true }).click();
+  await expect(page.getByText('12 min · 6 useful words · English meanings included', { exact: true })).toBeVisible();
+  await openTopic(page, 'Café visits');
   await expect(page.getByRole('heading', { name: 'Vocabulary · 6', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Foundations level', exact: true }).click();
   await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
@@ -106,7 +106,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await page.getByRole('button', { name: /Start restaurant practice/ }).click();
-  await expect(page.getByText('Published', { exact: true })).toBeVisible();
+  await expect(page.getByText('A2 \u00b7 Caf\u00e9 visits \u00b7 Published', { exact: true })).toBeVisible();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   await expect(page.getByText('In France, un café usually means an espresso.', { exact: true })).toHaveCount(0);
@@ -151,6 +151,7 @@ test('narrow editor keeps unsaved text when returning to the learner', async ({ 
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Curriculum tools');
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();
   await expect(title).toHaveValue('Unsaved local form');
   await expect(duration).toHaveValue('17');

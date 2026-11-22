@@ -1,11 +1,24 @@
 import type { Page } from '@playwright/test';
 import { normalizeAnswer, type Lesson } from '@smartlingo/domain';
 
+export async function openProfileSection(page: Page, name: string) {
+  const toggle = page.getByRole('button', { name, exact: true });
+  if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
+}
+
+/** Browse a topic through Learn, including the Japanese letters-first entry. */
+export async function openTopic(page: Page, name: string) {
+  await page.getByRole('button', { name: 'Learn', exact: true }).click();
+  const vocabulary = page.getByRole('button', { name: 'Vocabulary & lessons', exact: true });
+  if (await vocabulary.isVisible()) await vocabulary.click();
+  const allTopics = page.getByRole('button', { name: 'All topics', exact: true });
+  if (await allTopics.isVisible()) await allTopics.click();
+  await page.getByRole('button', { name: `Topic ${name}`, exact: true }).click();
+}
+
 /** Select the Restaurant journey explicitly, independent of the fresh Today suggestion. */
 export async function openRestaurant(page: Page) {
-  const topic = page.getByRole('button', { name: 'Topic Restaurant', exact: true });
-  await topic.scrollIntoViewIfNeeded();
-  await topic.click();
+  await openTopic(page, 'Restaurant');
   await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
 }
 

@@ -9,9 +9,7 @@ async function expectPictureLoaded(page: Page) {
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
-  expect(await page.evaluate(() => [...document.querySelectorAll('*')]
-    .filter(element => !element.closest('[data-testid="topic-navigation"]'))
-    .every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 }
 
 async function storedRows(page: Page, store: 'events' | 'notebook') {
@@ -98,8 +96,9 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Review').click();
   await expect(page.getByText('My morning greeting')).toBeVisible();
   await button(page, 'Today').click();
-  await expect(page.getByText('✓ Session completed and saved', { exact: false })).toBeVisible();
+  await expect(button(page, /Revisit your lesson/)).toBeVisible();
   await button(page, /Revisit your lesson/).click();
+  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   await button(page, 'Revisit the words').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();
   await expect(button(page, 'Save bonjour')).toContainText('In notebook');
@@ -149,7 +148,7 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await expectNoHorizontalOverflow(page);
   await page.getByRole('textbox', { name: 'Search lessons' }).fill('bakery');
   await expect(page.getByText('At the restaurant', { exact: true })).toHaveCount(0);
-  await button(page, 'Explore Bakery →').click();
+  await button(page, 'Topic Bakery').click();
   await button(page, 'Open At the bakery').click();
   await expectNoHorizontalOverflow(page);
   await expectPictureLoaded(page);

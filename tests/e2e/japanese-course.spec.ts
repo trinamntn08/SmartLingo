@@ -21,6 +21,8 @@ async function stored<T>(page: Page, storeName: string) {
 }
 
 async function section(page: Page, day: CourseDay, index: number) {
+  const toggle = button(page, 'Browse sections');
+  if (await toggle.isVisible()) await toggle.click();
   await button(page, `Section ${index + 1}: ${day.blocks[index].title}`).click();
   await expect(panel(page).getByRole('heading', { name: day.blocks[index].title, exact: true })).toBeVisible();
   await expect(button(page, `Section ${index + 1}: ${day.blocks[index].title}`)).toBeEnabled();
@@ -45,6 +47,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(panel(page).getByText(`Author: ${japaneseCourse.provenance!.author}`, { exact: true })).toBeVisible();
   await expect(panel(page).getByText(`Rights: ${japaneseCourse.provenance!.rights}`, { exact: true })).toBeVisible();
   await expect(panel(page).getByRole('button', { name: /Creative Commons/ })).toHaveCount(0);
+  await button(page, 'Choose a study day').click();
   await button(page, 'B1').click();
   await expect(panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose day / })).toHaveCount(4);
   await button(page, `Choose day ${day.dayNumber}: ${day.title}`).click();
@@ -171,6 +174,7 @@ test('Japanese days remain readable without browser storage', async ({ page }) =
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await button(page, 'Open daily course').click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
+  await button(page, 'Choose a study day').click();
   await button(page, 'B1').click();
   const day = japaneseCourse.days.at(-1)!;
   await button(page, `Choose day ${day.dayNumber}: ${day.title}`).click();

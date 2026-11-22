@@ -43,6 +43,7 @@ async function openPractice(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Speaking', exact: true }).click();
+  await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
   return page.getByTestId('french-practice');
 }
 
@@ -78,6 +79,7 @@ test('optional AI exchange saves only an explicit editable phrase and discards t
   await expect(page.getByText('My useful café request', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Speaking', exact: true }).click();
+  await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
   await expect(page.getByTestId('french-practice').getByText(reply.french, { exact: true })).toHaveCount(0);
   expect(fake.turns).toHaveLength(1);
   expect(errors).toEqual([]);
@@ -218,20 +220,24 @@ test('pending transcription locks message editing and discard ignores a late tra
 });
 
 
-test('changing Learn mode stops a recording and clears the temporary AI session', async ({ page }) => {
-  await fakeMicrophone(page);
-  const fake = await fakePractice(page, { transcriptionAvailable: true });
-  const practice = await openPractice(page);
-  await practice.getByRole('button', { name: 'Start AI conversation', exact: true }).click();
-  await practice.getByRole('textbox', { name: 'Your French message', exact: true }).fill('Unsent private draft');
-  await practice.getByTestId('practice-recording').getByRole('button', { name: 'Record French', exact: true }).click();
-  await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
-  await expect(page.getByTestId('french-practice')).toHaveCount(0);
-  await expect.poll(fake.stops).toBe(1);
-  await expect.poll(() => page.evaluate(() => (window as unknown as { practiceMicrophoneMetrics: { stopped: number } }).practiceMicrophoneMetrics.stopped)).toBe(1);
-  await page.getByRole('button', { name: 'Speaking', exact: true }).click();
-  await expect(practice.getByRole('button', { name: 'Start AI conversation', exact: true })).toBeVisible();
-  await expect(practice.getByRole('textbox', { name: 'Your French message', exact: true })).toHaveCount(0);
-  expect(fake.turns).toHaveLength(0);
-  expect(fake.transcriptions).toHaveLength(0);
-});
+for (const action of ['change mode', 'collapse AI'] as const) {
+  test(`${action} stops a recording and clears the temporary AI session`, async ({ page }) => {
+    await fakeMicrophone(page);
+    const fake = await fakePractice(page, { transcriptionAvailable: true });
+    const practice = await openPractice(page);
+    await practice.getByRole('button', { name: 'Start AI conversation', exact: true }).click();
+    await practice.getByRole('textbox', { name: 'Your French message', exact: true }).fill('Unsent private draft');
+    await practice.getByTestId('practice-recording').getByRole('button', { name: 'Record French', exact: true }).click();
+    if (action === 'change mode') await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
+    else await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
+    await expect(page.getByTestId('french-practice')).toHaveCount(0);
+    await expect.poll(fake.stops).toBe(1);
+    await expect.poll(() => page.evaluate(() => (window as unknown as { practiceMicrophoneMetrics: { stopped: number } }).practiceMicrophoneMetrics.stopped)).toBe(1);
+    await page.getByRole('button', { name: 'Speaking', exact: true }).click();
+    await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
+    await expect(practice.getByRole('button', { name: 'Start AI conversation', exact: true })).toBeVisible();
+    await expect(practice.getByRole('textbox', { name: 'Your French message', exact: true })).toHaveCount(0);
+    expect(fake.turns).toHaveLength(0);
+    expect(fake.transcriptions).toHaveLength(0);
+  });
+}

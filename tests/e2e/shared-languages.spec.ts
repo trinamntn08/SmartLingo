@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons, lessons } from '@smartlingo/content';
 import { type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence } from './learner-journeys';
+import { buildAcceptedSentence, openTopic, openProfileSection } from './learner-journeys';
 
 // Exercise the real first-run homepage; older regressions explicitly select French in config.
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -15,7 +15,7 @@ async function choose(page: Page, name: string) {
   await expect(button(page, 'Learn')).toBeVisible();
 }
 async function open(page: Page, lesson: Lesson) {
-  await button(page, `Topic ${lesson.topic}`).click();
+  await openTopic(page, lesson.topic);
   await button(page, `Open ${lesson.subtitle}`).click();
 }
 
@@ -70,11 +70,12 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   }
   await page.reload();
-  await expect(page.getByRole('heading', { name: /Make yourself/ })).toBeVisible();
-  await expect(page.getByText('Japanese', { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'One small step today.', exact: true })).toBeVisible();
+  await expect(button(page, 'Change language')).toContainText('Japanese');
   await page.getByRole('button', { name: /Revisit your lesson/ }).click();
   await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download');
   await button(page, 'Download learning backup').click();
   const saved = await download; const path = info.outputPath('both-languages.json'); await saved.saveAs(path);
@@ -87,6 +88,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await fresh.route('**/127.0.0.1:3001/**', route => route.abort());
     const restored = await fresh.newPage(); await restored.goto(baseURL!); await choose(restored, 'Japanese');
     await button(restored, 'Profile').click();
+    await openProfileSection(restored, 'Offline & backups');
     await restored.getByLabel('Choose a learning backup', { exact: true }).setInputFiles(path);
     await restored.getByRole('checkbox').check(); await button(restored, 'Restore backup').click();
     await expect(restored.getByText('Backup merged successfully', { exact: true })).toBeVisible();

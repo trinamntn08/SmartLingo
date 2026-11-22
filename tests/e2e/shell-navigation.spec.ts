@@ -1,3 +1,4 @@
+import { openTopic } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
@@ -18,7 +19,7 @@ test('hash navigation cancels hidden learner speech and preserves the mounted le
   });
   await page.goto('/');
   const lesson = japaneseLessons[0]!;
-  await page.getByRole('button', { name: `Topic ${lesson.topic}`, exact: true }).click();
+  await openTopic(page, lesson.topic);
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
   const word = lesson.vocabulary[0]!;
   await page.getByTestId(`vocabulary-${word.id}`).getByRole('button', { name: `Listen to ${word.target}`, exact: true }).click();

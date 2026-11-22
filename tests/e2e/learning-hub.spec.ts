@@ -91,7 +91,11 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     await expect(speaking.getByRole('heading', { name: 'Speaking practice', exact: true })).toBeVisible();
     await expect(page.getByTestId('listening-resources')).toHaveCount(0);
     await expect(page.getByRole('heading', { name: 'Listening comprehension', exact: true })).toHaveCount(0);
-    await expect(page.getByTestId('french-practice')).toHaveCount(language === 'fr-FR' ? 1 : 0);
+    await expect(page.getByTestId('french-practice')).toHaveCount(0);
+    if (language === 'fr-FR') {
+      await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();
+      await expect(page.getByTestId('french-practice')).toHaveCount(1);
+    } else await expect(page.getByRole('button', { name: 'Optional AI conversation', exact: true })).toHaveCount(0);
     await speaking.getByRole('combobox', { name: 'Speaking lesson', exact: true }).selectOption(lesson.id);
     await expect(speaking.getByTestId('speaking-line')).toContainText(lesson.dialogue[0]!.meaning);
     await expect(speaking.getByTestId('speaking-target')).toHaveCount(0);

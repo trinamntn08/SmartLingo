@@ -1,3 +1,4 @@
+import { openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import type { NotebookEntry } from '@smartlingo/domain';
@@ -50,6 +51,7 @@ test('personal word works without API, survives edits/reload, enters review and 
   await page.screenshot({ path: info.outputPath('personal-notebook.png') });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
   const downloaded = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download learning backup', exact: true }).click();
   const file = info.outputPath('personal-backup.json');

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
+import { openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] }, timezoneId: 'Europe/Paris' });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -33,7 +34,7 @@ test('downloaded report cold-starts, switches saved language histories and retri
   // Build genuine saved activity through the ordinary lesson journey in both languages.
   for (const [language, lesson] of [['French', lessons[0]], ['Japanese', japaneseLessons[0]]] as const) {
     await choose(page, language);
-    await button(page, `Topic ${lesson.topic}`).click();
+    await openTopic(page, lesson.topic);
     await button(page, `Open ${lesson.subtitle}`).click();
     await button(page, `Save ${lesson.vocabulary[0].target}`).click();
     await expect(button(page, `Save ${lesson.vocabulary[0].target}`)).toBeDisabled();
@@ -42,6 +43,7 @@ test('downloaded report cold-starts, switches saved language histories and retri
     await report(page, language);
   }
   await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
   await button(page, 'Download for offline use').click();
   await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
   const remote: string[] = [];

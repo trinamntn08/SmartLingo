@@ -18,7 +18,7 @@ The owner's subsequent minimum of 30 entries for every Japanese topic is impleme
 
 Owner visual/report direction, 2026-11-21: use the supplied friendly dashboard reference for shared French/Japanese Today and an in-app learning report. [Plan 0034](docs/plans/0034-friendly-learning-report.md) and [ADR 0027](docs/decisions/0027-read-only-learning-report.md) define the real saved-activity metrics and responsive cream/burgundy/gold widgets. Reference fixture names, points, child age bands and levels are not learner facts.
 
-The shared learner now uses Today, Learn, Review, Report and Profile. [Plan 0036](docs/plans/0036-unified-learning-hub.md) combines vocabulary, listening/videos and guided speaking; Japanese starts with 20 basic hiragana/katakana row lessons and independent saved continuation. The owner's 2026-11-22 request for gentler initial pacing, pronunciation display and reorganized widgets is an outstanding UI improvement, not a result of this documentation refresh.
+The shared learner uses Today, Learn, Review, Report and Profile. [Plan 0036](docs/plans/0036-unified-learning-hub.md) combines vocabulary, listening/videos and guided speaking; Japanese starts with 20 basic hiragana/katakana row lessons and independent saved continuation. The owner's 2026-11-22 simplification is implemented in [plan 0039](docs/plans/0039-calm-learner-redesign.md): one Today recommendation, topics in Learn, metrics in Report, grouped settings and focused study steps. Broader pronunciation content and owner/device acceptance remain open.
 
 | Area | Decision | Basis |
 | --- | --- | --- |
@@ -140,7 +140,7 @@ Create original lessons and examples using reputable public references for resea
 
 Use coherent topic banks, normally 30–50 distinct words/phrases across short 6–10-item lessons. The 24-expression greetings opening is an intentional compact exception. Foundation and A2-only banks are valid when the task demands justify them. The [content guide](docs/CONTENT_GUIDE.md) owns authoring rules; the [catalogue](docs/COURSE_CATALOGUE.md) lists bundled content and the [review pack](docs/curriculum/README.md) holds unpublished refinements, recycling and B1/B2 extension goals. Word counts and lesson completion do not establish complete CEFR coverage.
 
-Provide direct topic switching from the desktop sidebar or narrow-screen topic list. Clicking SmartLingo returns home. Show searchable word grids before optional practice, with the full lesson vocabulary together and visible English support. Disclose synthetic speech in Profile rather than repeating labels beside every speaker. [ADR 0010](docs/decisions/0010-visual-word-overviews.md) records this design.
+Provide topic discovery and switching in Learn, with search and a clear All topics return. Clicking SmartLingo returns home. Keep the searchable word grid and full lesson vocabulary with visible English support; short-lesson entry is placed above the topic grid. Disclose synthetic speech in Profile rather than repeating labels beside every speaker. [ADR 0010](docs/decisions/0010-visual-word-overviews.md) records the word-grid baseline; [ADR 0032](docs/decisions/0032-calm-learner-interface.md) supersedes the global sidebar layout under the owner's redesign request.
 
 Use simple illustrations for objects/actions when clear. Use realistic photographs selectively for menus, places, and practical contexts when permission allows. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
 
@@ -152,7 +152,7 @@ Content lifecycle: draft -> owner review -> published -> revised/archived. AI dr
 
 Current learner navigation: homepage language choice, then Today, Learn, Review, Report and Profile. Notebook is accessible from Review and vocabulary save actions. The French editor is a separate local route. The list below distinguishes implemented destinations from planned controls.
 
-- Today: next activity, Japanese alphabet recommendation, daily course, review/listening/speaking links and saved activity summaries.
+- Today: one next activity, Japanese alphabet recommendation or recent word-lesson resume, compact daily course and secondary review/listening/speaking links.
 - Learn: Japanese letters when relevant, Vocabulary & lessons with topic cards/filters/search, Listening & videos and Speaking.
 - Topic: useful outcomes, lesson list, progress, download status.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
@@ -160,7 +160,7 @@ Current learner navigation: homepage language choice, then Today, Learn, Review,
 - Speaking within Learn: scripted role selection, model/partner playback and visible meanings/readings in either language; optional French AI conversation/recording remains separate.
 - Review: language-scoped notebook, saved words, due recognition queue and manual supported/independent ratings. A dedicated mistakes collection remains planned.
 - Report: read-only current-revision lesson/word/topic totals and weekly saved activity. No proficiency, points or inferred study-time metric.
-- Profile: implemented backup/restore, offline download, language-specific audio and French workshop/publication controls. Goals, broader learner controls and typography preferences remain planned.
+- Profile: expandable audio, offline/backups, French curriculum tools and information groups. Goals, broader learner controls and typography preferences remain planned.
 - Editor: implemented French draft fields, saved-revision preview and explicit publication; full curriculum-tree/media management remains planned.
 
 Match references closely: warm cream base, white rounded cards, dark text, yellow primary accents, green secondary accents, subtle raised borders/shadows, generous spacing. Preserve intent rather than reproducing desktop screenshots at phone scale. English replaces Vietnamese interface copy. Build semantic theme tokens for later dark mode and additional scripts.

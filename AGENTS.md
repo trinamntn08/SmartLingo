@@ -15,6 +15,7 @@
 - English-speaking adults; practical metropolitan French for newcomers to France, plus Japanese with English explanations and readings. Both use the shared learner. French covers draft foundations/A1–A2; Japanese includes basic kana and selected draft tasks through estimated B1, without full CEFR/JLPT coverage claims.
 - Web beta first. English remains a future target language. Android APK testing exists on a separate branch; integration with the Japanese hub, full native adapters and iOS remain later work.
 - Follow `references/1.jpg` through `references/7.jpg` closely in visual character. Use English interface text.
+- For new website photos, illustrations and icons, follow `sll-create-visuals` and use the French and Japanese homepage photos as the shared visual reference.
 - Prioritise pictures, vocabulary, sentence building, contextual speaking, and calm review.
 - Display lesson meanings, examples, translations and explanations directly. Keep recall reveals and hints for practice. Support guided learning and free exploration.
 - Let users save/edit personal vocabulary. Curriculum edits require preview and publication.
@@ -62,6 +63,7 @@
 Repository skills are in `.agents/skills/`:
 - `sll-deliver-feature`: implement a complete product slice.
 - `sll-author-french`: draft/review original French lessons.
+- `sll-create-visuals`: create SmartLingo photos, illustrations and icons in the homepage visual style.
 - `french-curriculum-researcher`: research topic progression, vocabulary coherence and coverage gaps; its seeds and schema are planning resources requiring runtime conversion and owner review.
 - `sll-review-change`: check correctness, learning behaviour, privacy, and regression risks.
 Read the selected skill before following it. These are project workflows, not globally installed personal skills.

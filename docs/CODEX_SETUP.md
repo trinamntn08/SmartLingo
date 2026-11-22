@@ -19,8 +19,8 @@ For application work, first consult [repository and branch state](REPOSITORY_STA
 | AGENTS.md | Durable repository instructions and delegation rules |
 | references/AGENTS.md | Preserve design inputs and their unverified rights |
 | .codex/config.toml | At most three concurrent subagents; inherit other settings |
-| .codex/agents/*.toml | UI, API, curriculum, and independent review roles |
-| .agents/skills/*/SKILL.md | Reusable project feature/content/review workflows |
+| .codex/agents/*.toml | UI, API, curriculum, visual media and independent review roles |
+| .agents/skills/*/SKILL.md | Reusable project feature, content, visual media and review workflows |
 | .codex/hooks.json | Session-start context and advisory stop checks |
 | scripts/codex-hook.cjs | Hook implementation; Node built-ins only |
 | .githooks/pre-commit | Check repository and staged files before committing |
@@ -58,6 +58,7 @@ Install Git hooks with `npm run setup` in every fresh clone; Git does not copy l
 | ui-builder | Responsive learner UI and visual/accessibility work | apps/learner, packages/ui |
 | api-builder | API, persistence, provider adapters | apps/api, assigned packages/domain |
 | curriculum-author | Original A1-A2 content and feedback | assigned packages/content files |
+| visual-asset-maker | Photos, illustrations and icons that follow the homepage visual style | assigned asset files |
 | change-reviewer | Independent evidence-based review | instructionally read-only |
 
 Primary agent owns integration, shared contracts, dependency/lockfile coordination, and final checks. Do not run all roles for every small task. Custom agents inherit parent permissions; read-only instructions are not an enforced read-only sandbox.
@@ -70,6 +71,7 @@ If named roles are unavailable, the primary may spawn a built-in agent and suppl
 
 - `Use $sll-deliver-feature to build the first restaurant lesson. Delegate independent UI and API work after agreeing the content contract.`
 - `Use $sll-author-french to draft a beginner café lesson for owner review.`
+- `Use $sll-create-visuals to make a French market lesson cover that matches the homepage photos.`
 - `Use $french-curriculum-researcher to audit topic coherence and propose A1/A2 coverage gaps against existing lessons.`
 - `Use $sll-review-change to review the current diff without editing it.`
 

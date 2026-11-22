@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22: SmartLingo visual asset skill and agent
+
+- The owner requested a reusable image, photo and icon workflow based on the two homepage photos they like.
+- Started at 15:03 CET (Europe/Paris) in clean `D:/dev/projects/SmartLingo`. After `git fetch origin --prune`, local, tracking and live `feat/full-frontend-rework` matched at `66d03cc85814e1835d37c0e8594d9d63c5dad590`, ahead/behind `0/0`. Created `chore/visual-assets-skill` from that baseline after confirming its ref was absent on origin.
+- Inspected both homepage JPEGs and checked their component crops, provenance and existing icon family. Installed the `sll-create-visuals` skill and `visual-asset-maker` role with the repository installer. [Visual direction decision](decisions/0036-homepage-visual-direction.md)
+- `npm.cmd run check`, all 274 tests, `git diff --check`, and both skill validator runs passed. The installer dry run confirmed all 19 source and installed files match. The local Codex app server returned the enabled skill and display metadata from the project path.
+- The agent role passed structural validation. Live subagent execution and fresh image generation were outside the verification scope. The commit containing this entry is the checkpoint. The branch upload is verified at handoff.
+
 ## 2026-11-22: full frontend rework
 
 - Request: rework the whole interface after owner rejection of the visual pilot. Retain the photo-rich references and larger, readable study text.

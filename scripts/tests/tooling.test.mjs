@@ -85,11 +85,11 @@ test('documentation checks exclude ignored Markdown and tracked learner data', t
   git(dir, ['add', '-f', 'exports/private.md']);
   assert.deepEqual(markdownSources(dir), ['README.md']);
 });
-test('installer dry run lists all fifteen target files without creating them', t => {
+test('installer dry run lists all nineteen target files without creating them', t => {
   const dir = temporaryRepo(t);
   fs.cpSync(path.join(root, 'tooling'), path.join(dir, 'tooling'), { recursive: true });
   const plan = installationPlan(dir);
-  assert.equal(plan.length, 15);
+  assert.equal(plan.length, 19);
   assert.equal(fs.existsSync(path.join(dir, '.codex')), false);
   assert.ok(plan.every(item => item.to.startsWith(dir + path.sep)));
 });
@@ -104,7 +104,7 @@ test('installer refuses differing existing configuration before copying', t => {
 test('installer copies prepared files and is idempotent in an isolated repository', t => {
   const dir = temporaryRepo(t);
   fs.cpSync(path.join(root, 'tooling'), path.join(dir, 'tooling'), { recursive: true });
-  assert.equal(installPrepared(dir).length, 15);
+  assert.equal(installPrepared(dir).length, 19);
   const plan = installationPlan(dir);
   assert.ok(plan.every(item => item.exists));
   for (const item of plan) assert.ok(fs.readFileSync(item.from).equals(fs.readFileSync(item.to)), item.to);

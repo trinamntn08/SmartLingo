@@ -1,17 +1,11 @@
 # Session checkpoint
 
-Updated 2026-11-22 at 14:41 CET (Europe/Paris). Task: rework the complete SmartLingo web frontend. Branch `feat/full-frontend-rework`. Implemented, reviewed and validated.
+Updated 2026-11-22 at 15:06 CET (Europe/Paris). The visual asset skill and agent are implemented and validated on `chore/visual-assets-skill`.
 
-## Source and synchronization
+The clean frontend branch and live origin matched at `66d03cc85814e1835d37c0e8594d9d63c5dad590` after fetch, ahead/behind `0/0`. The new branch starts from that verified head. Its live ref was absent. [Work log](WORK_LOG.md#2026-11-22-smartlingo-visual-asset-skill-and-agent)
 
-The clean pilot branch and live origin matched at `51890c4f9f503fd9687885fa6d5fac7ede5f0531`, ahead/behind `0/0` after fetch. The rework branch starts from that verified source, and did not exist on origin. [Work log](WORK_LOG.md#2026-11-22-full-frontend-rework)
+Both homepage JPEGs, the responsive crops and the icon family informed [`sll-create-visuals`](../.agents/skills/sll-create-visuals/SKILL.md) and [`visual-asset-maker`](../.codex/agents/visual-asset-maker.toml). `npm.cmd run setup:codex` installed the copies. The setup dry run, both skill validations, `npm.cmd run check`, all 274 tests and `git diff --check` passed. The local Codex app server discovered the enabled skill and its display metadata. The custom role was validated structurally. No image generation or role execution was used for this change.
 
-## Outcome and verification
+The commit containing this note is the checkpoint. Finish staged checks, push the topic branch and read back the live head. The workflow is ready for a future asset request.
 
-The revised shell, all learner destinations, editor workspace, original scenes and bundled Inter are implemented. The prior pilot is retained in Git history. Reviewed the integrated product and isolated desktop and mobile captures. [Rework and checks](plans/0042-full-frontend-rework.md) · [Media sources](MEDIA_SOURCES.md#bundled-presentation-scenes-and-type)
-
-Passed repository/TypeScript, 274 tooling/application cases, final export (133 files, 11,461,010 bytes), and 18 screen states at 320, 390 and 1,440px. Full browser and offline runs passed 143 and 23 before the final course width fix. The browser suite retains one existing skip. All remaining cases passed in the final affected-scope runs (18 browser and six offline course tests). The offline suite used isolated `8182` fixtures to preserve the existing preview. The commit containing this note is the task checkpoint. The local SHA and live origin readback are reported at handoff.
-
-## Next action
-
-Use the local preview for owner visual review. Physical microphone/audio checks, Safari, screen-reader and actual browser zoom verification remain open. Account usage reporting is unavailable in this client. No automatic-resume schedule is configured.
+Account usage reporting is unavailable in this client. No automatic-resume schedule is configured.

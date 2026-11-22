@@ -1,0 +1,4 @@
+interface:
+  display_name: "SmartLingo Visuals"
+  short_description: "Create cohesive SmartLingo photos and icons"
+  default_prompt: "Use $sll-create-visuals to create a lesson cover that matches the French and Japanese homepage photos."

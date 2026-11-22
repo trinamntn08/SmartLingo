@@ -2,6 +2,17 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Focus the Listening & videos experience
+
+- Request. Redesign the entire listening screen around the act of listening. Remove the session sidebar and lesson combobox, and redesign the Japanese listening library and its placement.
+- Start. At 17:03 CET, Europe/Paris, the clean `D:/dev/projects/SmartLingo` checkout matched local, tracking and live `feat/french-daily-opening` at `3d63e1931bfdfc13d6bbe8fd4e2263a8ffd300fa`, ahead/behind `0/0` after fetch.
+- Acceptance. Open directly on a centered listening player with the current lesson, one compact lesson-switch action and no library below. Give the library its own view with concise resource rows and optional notes. Preserve the current sentence when browsing, stop audio on leaving practice, and verify both languages, keyboard, narrow layouts and cold offline use.
+- Plan. [Focused listening and library](plans/0044-focused-listening.md).
+- Outcome. Both languages open on the centered player. Lesson search is on demand. The library has a separate view with short resource rows and optional listening notes. It lists only the levels and formats available for the current language, and puts filters behind a button on phones. Browsing stops the current clip and returning restores the sentence and answer.
+- Review. Two UI builders worked on separate source files and an independent reviewer traced the integrated navigation, cancellation and network boundaries. All agents used the inherited model and reasoning effort. The reviewer reported no actionable findings and passed 10 focused unit cases. Desktop and phone walkthroughs cover chooser focus, playback controls with speech doubles, answer state, transcript fallback and library links.
+- Verified. `npm.cmd run check`, `git diff --check` and all 277 tooling/application tests passed. The final exported build passed 16 Chromium and two cold-offline cases. The existing `http://localhost:8082` server matched build `beceb1ff465c` and passed direct Japanese practice, chooser and library walkthroughs at 320, 390 and 1,440 px. The checks use simulated or intentionally unavailable speech. Actual device and external audio quality remain for owner review.
+- Handoff. Refresh the existing preview, choose Japanese or French, and open Learn → Listening & videos. The commit containing this entry is the task checkpoint.
+
 ## 2026-11-22 Make lesson grammar easier to scan
 
 - Request. Replace the dense grammar paragraph in the conversation stage with a card learners can understand at a glance.

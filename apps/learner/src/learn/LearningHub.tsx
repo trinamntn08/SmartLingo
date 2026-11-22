@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { type Lesson, type LessonTopic, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
@@ -43,15 +43,37 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
     {activeMode === 'Japanese letters' && language === 'ja-JP' ? <JapaneseAlphabet model={model} />
       : activeMode === 'Vocabulary & lessons' ? <TopicCatalogue key={language} language={language} lessons={lessons} topics={topics} model={model}
         onOpen={onOpen} selectedTopic={selectedTopic} onSelectTopic={onSelectTopic} search={catalogueSearch} disabled={disabled} />
-      : activeMode === 'Listening & videos' ? <>
-        <ListeningComprehension key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons}
-          onBrowse={Platform.OS === 'web' ? () => document.getElementById('learning-listening-library')?.scrollIntoView({ block: 'start' }) : undefined} />
-        <View nativeID="learning-listening-library"><ListeningResources key={language} language={language} /></View>
-      </> : <>
+      : activeMode === 'Listening & videos' ? <ListeningSection key={`${language}:${selectedTopic ?? 'all'}`}
+        lessons={studyLessons} language={language} active={active} /> : <>
         <GuidedSpeaking key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons} />
         {active && language === 'fr-FR' && <Disclosure title="Optional AI conversation" description="Try a temporary French exchange with English feedback." keepMounted={false}>
           <FrenchPractice lessons={studyLessons} model={model} active={active} />
         </Disclosure>}
       </>}
   </View>;
+}
+
+function ListeningSection({ lessons, language, active }: { lessons: Lesson[]; language: TargetLanguage; active: boolean }) {
+  const [browsing, setBrowsing] = useState(false);
+  const previousView = useRef(browsing);
+  const practiceHeading = useId();
+  const libraryHeading = useId();
+
+  useLayoutEffect(() => {
+    if (previousView.current === browsing) return;
+    previousView.current = browsing;
+    if (Platform.OS !== 'web') return;
+    const heading = document.getElementById(browsing ? libraryHeading : practiceHeading);
+    if (!heading) return;
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ block: 'nearest' });
+  }, [browsing, libraryHeading, practiceHeading]);
+
+  return <>
+    <View style={browsing ? { display: 'none' } : undefined}>
+      <ListeningComprehension lessons={lessons} active={active && !browsing} headingId={practiceHeading} onBrowse={() => setBrowsing(true)} />
+    </View>
+    {browsing && <ListeningResources language={language} headingId={libraryHeading} onClose={() => setBrowsing(false)} />}
+  </>;
 }

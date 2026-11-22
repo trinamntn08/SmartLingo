@@ -1,17 +1,22 @@
 import { expect, test, type Page } from '@playwright/test';
 import { restaurantLesson, japaneseLessons } from '@smartlingo/content';
 import { getListeningResources } from '../../apps/learner/src/listening/resources';
+import { openListeningFilters, selectListeningLesson } from './learner-journeys';
 
 async function mockSpeech(page: Page) {
   await page.addInitScript(() => {
     const voices = ['en-GB', 'fr-FR', 'ja-JP'].map(lang => ({ voiceURI: `test.${lang}`, name: `Test ${lang}`, lang, localService: true, default: lang === 'en-GB' }));
+    let held = false;
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(public text: string) {} } });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
-      getVoices: () => voices, cancel() {}, addEventListener() {}, removeEventListener() {},
+      getVoices: () => voices,
+      cancel() { if (held) sessionStorage.setItem('hub-speech-cancelled', '1'); held = false; },
+      addEventListener() {}, removeEventListener() {},
       speak(utterance: SpeechSynthesisUtterance) {
         const played = JSON.parse(sessionStorage.getItem('hub-speech') ?? '[]');
         played.push({ text: utterance.text, language: utterance.lang });
         sessionStorage.setItem('hub-speech', JSON.stringify(played));
+        if (sessionStorage.getItem('hub-speech-hold')) { held = true; return; }
         setTimeout(() => sessionStorage.getItem('hub-speech-fail') ? utterance.onerror?.({} as SpeechSynthesisErrorEvent) : utterance.onend?.({} as SpeechSynthesisEvent), 10);
       },
     } });
@@ -45,24 +50,25 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
     await expect(page.getByTestId('listening-resources')).toHaveCount(0);
     await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'Listening comprehension', exact: true })).toBeVisible();
+    const practiceHeading = page.getByRole('heading', { name: 'Listening', exact: true });
+    await expect(practiceHeading).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toHaveCount(0);
     const library = page.getByTestId('listening-resources');
-    await expect(library.getByRole('heading', { name: `${name} listening library`, exact: true })).toBeAttached();
-    await expect(library.getByRole('link')).toHaveCount(getListeningResources(language).length);
-    for (const resource of getListeningResources(language)) {
-      const link = library.getByTestId(`listening-resource-${resource.id}`).getByRole('link');
-      await expect(link).toHaveAttribute('href', resource.url);
-      await expect(link).toHaveAttribute('target', '_blank');
-      await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-    }
-    await expect(library.locator('iframe, video, audio, img')).toHaveCount(0);
+    await expect(library).toHaveCount(0);
     const lesson = language === 'fr-FR' ? restaurantLesson : japaneseLessons[0]!;
     const listening = page.getByTestId('listening-comprehension');
+    await expect(listening.getByRole('combobox')).toHaveCount(0);
+    await expect(listening.getByRole('textbox')).toHaveCount(0);
     const transcript = listening.getByTestId('listening-transcript');
     const showTranscript = listening.getByRole('button', { name: 'Show transcript', exact: true });
     const hideTranscript = listening.getByRole('button', { name: 'Hide transcript', exact: true });
-    await listening.getByRole('combobox', { name: 'Listening lesson', exact: true }).selectOption(lesson.id);
+    const changeLesson = listening.getByRole('button', { name: 'Change lesson', exact: true });
+    await changeLesson.click();
+    await listening.getByRole('textbox', { name: 'Search listening lessons', exact: true }).fill('no-matching-listening-lesson');
+    await expect(listening.getByText('No matching lessons.', { exact: true })).toBeVisible();
+    await changeLesson.click();
+    await selectListeningLesson(listening, lesson);
+    await page.screenshot({ path: info.outputPath(`${language}-listening.png`) });
     await expect(transcript).toHaveCount(0);
     await expect(listening.getByRole('button', { name: 'Check answer', exact: true })).toBeDisabled();
     await listening.getByRole('button', { name: 'Play sentence', exact: true }).click();
@@ -91,6 +97,34 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     await expect(transcript).toContainText(sentence.example);
     await hideTranscript.click();
     await expect(transcript).toHaveCount(0);
+    await page.evaluate(() => sessionStorage.setItem('hub-speech-hold', '1'));
+    await listening.getByRole('button', { name: 'Replay sentence', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('hub-speech') ?? '[]').length)).toBe(3);
+    await listening.getByRole('button', { name: 'Browse videos & audio', exact: true }).press('Enter');
+    await expect(listening).toBeHidden();
+    await expect(library.getByRole('heading', { name: `${name} listening library`, exact: true })).toBeFocused();
+    await expect.poll(() => page.evaluate(() => sessionStorage.getItem('hub-speech-cancelled'))).toBe('1');
+    await expect(library.getByRole('link')).toHaveCount(getListeningResources(language).length);
+    await page.screenshot({ path: info.outputPath(`${language}-listening-library.png`) });
+    if (language === 'ja-JP') {
+      await openListeningFilters(library);
+      await expect(library.getByRole('button', { name: 'Listening level A1', exact: true })).toBeVisible();
+      await expect(library.getByRole('button', { name: 'Listening level B1', exact: true })).toHaveCount(0);
+      await expect(library.getByRole('button', { name: 'Listening format YouTube', exact: true })).toHaveCount(0);
+    }
+    for (const resource of getListeningResources(language)) {
+      const link = library.getByTestId(`listening-resource-${resource.id}`).getByRole('link');
+      await expect(link).toHaveAttribute('href', resource.url);
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    }
+    await library.getByRole('button', { name: 'Back to practice', exact: true }).press('Enter');
+    await expect(practiceHeading).toBeFocused();
+    await expect(library).toHaveCount(0);
+    await expect(listening.getByTestId('listening-feedback')).toContainText(sentence.exampleMeaning);
+    await expect(transcript).toHaveCount(0);
+    await expect(listening.getByRole('button', { name: 'Replay sentence', exact: true })).toBeVisible();
+    await page.evaluate(() => sessionStorage.removeItem('hub-speech-hold'));
     await listening.getByRole('button', { name: 'Next sentence', exact: true }).click();
     await expect(showTranscript).toHaveAttribute('aria-expanded', 'false');
     await page.evaluate(() => sessionStorage.setItem('hub-speech-fail', '1'));
@@ -100,11 +134,13 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     await hideTranscript.click();
     await expect(transcript).toHaveCount(0);
     await page.evaluate(() => sessionStorage.removeItem('hub-speech-fail'));
+    await listening.getByRole('button', { name: 'Skip sentence', exact: true }).click();
+    await expect(listening.getByRole('button', { name: 'Play sentence', exact: true })).toBeFocused();
     await page.getByRole('button', { name: 'Speaking', exact: true }).click();
     const speaking = page.getByTestId('guided-speaking');
     await expect(speaking.getByRole('heading', { name: 'Speaking practice', exact: true })).toBeVisible();
     await expect(page.getByTestId('listening-resources')).toHaveCount(0);
-    await expect(page.getByRole('heading', { name: 'Listening comprehension', exact: true })).toHaveCount(0);
+    await expect(practiceHeading).toHaveCount(0);
     await expect(page.getByTestId('french-practice')).toHaveCount(0);
     if (language === 'fr-FR') {
       await page.getByRole('button', { name: 'Optional AI conversation', exact: true }).click();

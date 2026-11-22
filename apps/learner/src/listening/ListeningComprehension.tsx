@@ -1,53 +1,104 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { Lesson, TargetLanguage } from '@smartlingo/domain';
-import { Platform, Pressable, Text, View, useWindowDimensions } from 'react-native';
+import { useEffect, useId, useMemo, useRef, useState, type ComponentRef, type RefObject } from 'react';
+import { matchesLesson, type Lesson, type TargetLanguage } from '@smartlingo/domain';
+import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { audio } from '../audio';
 import { Button } from '../ui/controls';
-import { colors, designTokens, styles as s } from '../ui/theme';
-import { buildListeningQuestions, type ListeningQuestion } from './comprehension';
-import { ScreenHeader } from '../ui/ScreenHeader';
 import { Icon } from '../ui/Icon';
-import { toolsStyles as t } from '../ui/learnerToolsStyles';
+import { colors, designTokens as tokens, styles as s } from '../ui/theme';
+import { buildListeningQuestions, type ListeningQuestion } from './comprehension';
 
-export function ListeningComprehension({ lessons, onBrowse }: { lessons: Lesson[]; onBrowse?: () => void }) {
-  const compact = useWindowDimensions().width < 900;
+type PlayRef = RefObject<ComponentRef<typeof Pressable> | null>;
+
+export function ListeningComprehension({ lessons, onBrowse, active = true, headingId }: {
+  lessons: Lesson[];
+  onBrowse?: () => void;
+  active?: boolean;
+  headingId?: string;
+}) {
+  const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
   const questions = useMemo(() => buildListeningQuestions(lessons), [lessons]);
-  const available = lessons.filter(lesson => questions.some(question => question.lessonId === lesson.id));
+  const lessonIds = useMemo(() => new Set(questions.map(question => question.lessonId)), [questions]);
+  const available = lessons.filter(lesson => lessonIds.has(lesson.id));
   const [lessonId, setLessonId] = useState('');
+  const [choosing, setChoosing] = useState(false);
   const lesson = available.find(item => item.id === lessonId) ?? available[0];
-  const selectId = useId();
-  return <View testID="listening-comprehension" style={t.page}>
-    <ScreenHeader title="Listening comprehension" subtitle="Listen, choose the English meaning, and check."
-      action={onBrowse && <Button quiet compact icon="headphones" onPress={onBrowse}>Browse videos & audio</Button>} />
-    {!lesson ? <View style={t.panel}><Text style={s.body}>No sentence questions are available yet. This activity needs three distinct sentence meanings in the same language. You can still study the lessons and their translations.</Text></View> : <View style={t.board}>
-      <View style={[t.side, compact ? { gap: 8 } : t.panel]}>
-      {!compact && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.skyTint }]}><Icon name="headphones" size={24} /></View><Text accessibilityRole="header" style={t.sectionTitle}>Your listening session</Text></View>}
-      {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 15, display: 'grid', gap: 8, minWidth: 0 }}>Listening lesson
-        <select id={selectId} value={lesson.id} onChange={event => setLessonId(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: 16 }}>
-          {available.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
-        </select>
-      </label> : <View style={s.row}>{available.map(item => <Button key={item.id} selected={item.id === lesson.id} onPress={() => setLessonId(item.id)}>{item.title}</Button>)}</View>}
-      {!compact && <><Text style={s.body}>{lesson.outcome}</Text>
-      <View style={s.divider} />
-      <Text style={t.detail}>Replay whenever you like. The transcript is always available for supported text practice.</Text>
-      <Text style={t.detail}>Temporary practice only. Answers are not saved or used to assess proficiency.</Text>
-      </>}
+  const pickerId = useId();
+  const playRef = useRef<ComponentRef<typeof Pressable>>(null);
+  const restorePlayFocus = useRef(false);
+
+  useEffect(() => {
+    if (!choosing && active && restorePlayFocus.current) {
+      restorePlayFocus.current = false;
+      playRef.current?.focus();
+    }
+  }, [active, choosing]);
+
+  function choose(id: string) {
+    restorePlayFocus.current = true;
+    setLessonId(id);
+    setChoosing(false);
+  }
+
+  return <View testID="listening-comprehension" style={layout.page}>
+    <View style={layout.pageHeader}>
+      <Text nativeID={headingId} accessibilityRole="header" style={[s.title, layout.destinationHeading, compact && s.compactTitle]}>
+        Listening
+      </Text>
+      {onBrowse && <Button compact quiet label="Browse videos & audio" icon={compact ? undefined : 'headphones'} onPress={() => { setChoosing(false); onBrowse(); }}>
+        {compact ? 'Videos & audio' : 'Browse videos & audio'}
+      </Button>}
+    </View>
+    {lesson ? <>
+      <View style={layout.lessonRow}>
+        <Text style={[s.heading, layout.lessonTitle]}>{lesson.title}</Text>
+        {available.length > 1 && <Button compact quiet label="Change lesson" trailingIcon="chevron-down" expanded={choosing}
+          controls={choosing ? pickerId : undefined} onPress={() => setChoosing(open => !open)}>{compact ? 'Change' : 'Change lesson'}</Button>}
       </View>
-      <View style={[t.main, t.panel, compact && { padding: 18 }]}><SentenceSession key={`${lesson.id}:${lesson.revision}`} questions={questions.filter(question => question.lessonId === lesson.id)} /></View>
+      {choosing && <LessonPicker id={pickerId} lessons={available} selected={lesson.id} onChoose={choose} compact={compact} />}
+      <View style={choosing && { display: 'none' }}>
+        <SentenceSession key={`${lesson.id}:${lesson.revision}`} questions={questions.filter(question => question.lessonId === lesson.id)}
+          active={active && !choosing} playRef={playRef} compact={compact} />
+      </View>
+    </> : <View style={s.notice}>
+      <Text style={s.body}>There are no listening questions for these lessons yet.</Text>
     </View>}
-    {compact && <Text style={t.detail}>Replay or use the transcript whenever you need it. Temporary practice only: answers are not saved or used to assess proficiency.</Text>}
   </View>;
 }
 
-function SentenceSession({ questions }: { questions: ListeningQuestion[] }) {
-  const [index, setIndex] = useState(0);
-  const position = index % questions.length;
-  return <SentenceQuestion key={`${questions[position]!.id}:${index}`} question={questions[position]!} position={position + 1} total={questions.length}
-    onNext={() => setIndex(value => value + 1)} />;
+function LessonPicker({ id, lessons, selected, onChoose, compact }: {
+  id: string; lessons: Lesson[]; selected: string; onChoose: (id: string) => void; compact: boolean;
+}) {
+  const [query, setQuery] = useState('');
+  const visibleLessons = lessons.filter(lesson => matchesLesson(lesson, query));
+
+  return <View nativeID={id} style={[s.card, layout.picker]}>
+    <TextInput accessibilityLabel="Search listening lessons" autoFocus={!compact} autoCapitalize="none" autoCorrect={false}
+      value={query} onChangeText={setQuery} placeholder="Search by lesson or topic" placeholderTextColor={colors.muted} style={s.input} />
+    {visibleLessons.length ? <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled" style={{ maxHeight: 310 }}
+      contentContainerStyle={layout.pickerRows}>
+      {visibleLessons.map(lesson => <ChoiceRow key={lesson.id} label={lesson.title} detail={lesson.topic === lesson.title ? undefined : lesson.topic}
+        selected={lesson.id === selected} leading="none" onPress={() => onChoose(lesson.id)} />)}
+    </ScrollView> : <Text accessibilityLiveRegion="polite" style={s.muted}>No matching lessons.</Text>}
+  </View>;
 }
 
-function SentenceQuestion({ question, position, total, onNext }: { question: ListeningQuestion; position: number; total: number; onNext: () => void }) {
-  const compact = useWindowDimensions().width < 900;
+function SentenceSession({ questions, active, playRef, compact }: {
+  questions: ListeningQuestion[]; active: boolean; playRef: PlayRef; compact: boolean;
+}) {
+  const [index, setIndex] = useState(0);
+  const position = index % questions.length;
+
+  useEffect(() => {
+    if (index > 0) playRef.current?.focus();
+  }, [index, playRef]);
+
+  return <SentenceQuestion key={`${questions[position]!.id}:${index}`} question={questions[position]!} position={position + 1}
+    total={questions.length} active={active} playRef={playRef} compact={compact} onNext={() => setIndex(value => value + 1)} />;
+}
+
+function SentenceQuestion({ question, position, total, active, playRef, compact, onNext }: {
+  question: ListeningQuestion; position: number; total: number; active: boolean; playRef: PlayRef; compact: boolean; onNext: () => void;
+}) {
   const [selected, setSelected] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
   const [transcriptOverride, setTranscriptOverride] = useState<boolean | null>(null);
@@ -56,54 +107,183 @@ function SentenceQuestion({ question, position, total, onNext }: { question: Lis
   const [played, setPlayed] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [playFocused, setPlayFocused] = useState(false);
+  const [transcriptFocused, setTranscriptFocused] = useState(false);
   const [error, setError] = useState('');
-  const request = useRef(0);
-  useEffect(() => () => { request.current++; audio.stop(); }, []);
-  function stop() { request.current++; audio.stop(); setPlaying(false); }
+  const request = useRef<symbol | null>(null);
+  const transcriptId = useId();
+  const feedbackId = useId();
+
+  useEffect(() => {
+    if (!active) setPlaying(false);
+    return () => {
+      if (!request.current) return;
+      request.current = null;
+      audio.stop();
+    };
+  }, [active]);
+
+  useEffect(() => {
+    if (!checked || Platform.OS !== 'web') return;
+    const feedback = document.getElementById(feedbackId);
+    if (feedback) {
+      feedback.tabIndex = -1;
+      feedback.focus();
+    }
+  }, [checked, feedbackId]);
+
+  function stop() {
+    if (!request.current) return;
+    request.current = null;
+    audio.stop();
+    setPlaying(false);
+  }
+
   async function play() {
-    if (playing) { stop(); return; }
-    const current = ++request.current;
-    setError(''); setPlaying(true); setPlayed(true);
+    if (!active) return;
+    if (request.current) { stop(); return; }
+    const current = Symbol();
+    request.current = current;
+    setError('');
+    setPlaying(true);
+    setPlayed(true);
     try { await audio.speak(question.sentence, question.language as TargetLanguage); }
     catch {
+      if (current !== request.current) return;
+      setError('Audio could not play. Try again or use the transcript.');
+      setTranscriptOverride(true);
+      if (!checked) setUsedTranscript(true);
+    }
+    finally {
       if (current === request.current) {
-        setError('Audio could not play. Try again or use the transcript for text practice.');
-        setTranscriptOverride(true);
-        if (!checked) setUsedTranscript(true);
+        request.current = null;
+        setPlaying(false);
       }
     }
-    finally { if (current === request.current) setPlaying(false); }
   }
-  return <View style={{ gap: 22, minWidth: 0 }}>
-    <View style={t.panelHeader}><Text style={s.eyebrow}>Sentence {position} of {total}</Text>{!compact && <Text style={t.label}>Listen → choose → check</Text>}</View>
-    <View style={[t.stage, { alignItems: 'center', gap: 8, paddingVertical: compact ? 16 : 24 }]}>
-      <Pressable accessibilityRole="button" accessibilityLabel={playing ? 'Stop audio' : played ? 'Replay sentence' : 'Play sentence'}
-        onPress={() => void play()} onFocus={() => setPlayFocused(true)} onBlur={() => setPlayFocused(false)}
-        style={({ pressed }) => [t.icon, { width: 68, height: 68, borderRadius: 22, backgroundColor: colors.primary,
-          opacity: pressed ? designTokens.opacity.pressed : 1 },
-        playFocused && { outlineColor: colors.focusRing, outlineWidth: designTokens.focus.outlineWidth,
-          outlineStyle: 'solid', outlineOffset: designTokens.focus.outlineOffset }]}>
-        <Icon name={playing ? 'stop' : 'speaker'} size={36} color={colors.onPrimary} />
-      </Pressable>
-      <Button compact={compact} quiet expanded={transcriptVisible} onPress={() => {
-        setTranscriptOverride(!transcriptVisible);
-        if (!transcriptVisible && !checked) setUsedTranscript(true);
-      }}>{transcriptVisible ? 'Hide transcript' : 'Show transcript'}</Button>
+
+  const playLabel = playing ? 'Stop audio' : played ? 'Replay sentence' : 'Play sentence';
+  const isCorrect = selected === question.correctIndex;
+  const languageProps = Platform.OS === 'web' ? { lang: question.language } : { accessibilityLanguage: question.language };
+
+  return <View style={[s.card, layout.exercise]}>
+    <View style={[layout.player, compact && layout.playerCompact]}>
+      <View style={layout.progress}>
+        <Text style={[s.eyebrow, layout.progressText]} accessibilityLiveRegion="polite">Sentence {position} of {total}</Text>
+        <View aria-hidden style={layout.progressTrack}><View style={[layout.progressFill, { width: `${position / total * 100}%` }]} /></View>
+      </View>
+      <View style={layout.playerActions}>
+        <Pressable ref={playRef} accessibilityRole="button" accessibilityLabel={playLabel}
+          onPress={() => void play()} onFocus={() => setPlayFocused(true)} onBlur={() => setPlayFocused(false)}
+          style={({ pressed }) => [layout.play, playFocused && layout.focus, playFocused && layout.inverseFocus, pressed && layout.pressed]}>
+          <Icon name={playing ? 'stop' : 'speaker'} size={29} />
+          <Text style={[s.buttonText, layout.playText]}>{playLabel}</Text>
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityState={{ expanded: transcriptVisible }} aria-expanded={transcriptVisible}
+          aria-controls={transcriptVisible ? transcriptId : undefined} onPress={() => {
+            setTranscriptOverride(!transcriptVisible);
+            if (!transcriptVisible && !checked) setUsedTranscript(true);
+          }} onFocus={() => setTranscriptFocused(true)} onBlur={() => setTranscriptFocused(false)}
+          style={({ pressed }) => [layout.transcriptAction, transcriptFocused && layout.focus,
+            transcriptFocused && layout.inverseFocus, pressed && layout.pressed]}>
+          <Text style={[s.buttonText, layout.transcriptActionText]}>{transcriptVisible ? 'Hide transcript' : 'Show transcript'}</Text>
+        </Pressable>
+      </View>
     </View>
-    {playing && <Text accessibilityLiveRegion="polite" style={s.muted}>Preparing or playing sentence…</Text>}
-    {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}
-    {transcriptVisible && <View testID="listening-transcript" style={s.notice}>
-      <Text style={s.eyebrow}>Transcript</Text><Text style={[s.heading, { fontWeight: '500' }]}>{question.sentence}</Text>
-      {!!question.reading && <Text style={s.muted}>{question.reading}</Text>}
-    </View>}
-    <Text accessibilityRole="header" style={t.sectionTitle}>What does the sentence mean?</Text>
-    <View style={{ gap: 10 }}>{question.choices.map((choice, index) => <Button key={index} selected={selected === index} disabled={checked} onPress={() => setSelected(index)}>{choice}</Button>)}</View>
-    {!checked ? <View style={s.row}><Button primary disabled={selected === null} onPress={() => { stop(); setChecked(true); }}>Check answer</Button></View>
-      : <View accessibilityLiveRegion="polite" testID="listening-feedback" style={[s.notice, { backgroundColor: selected === question.correctIndex ? colors.green : colors.sand }]}>
-        <Text style={s.heading}>{selected === question.correctIndex ? 'That’s the meaning.' : 'Here’s the meaning.'}</Text>
-        <Text style={s.body}>{question.meaning}</Text>
-        <Text style={s.muted}>{usedTranscript ? 'You used transcript support for this sentence.' : played ? 'Replay and compare the sentence with its meaning.' : 'You answered without playing audio. Try listening on the next sentence.'}</Text>
+    <View style={[layout.answers, compact && layout.answersCompact]}>
+      {!!error && <Text accessibilityRole="alert" style={[s.muted, layout.error]}>{error}</Text>}
+      {transcriptVisible && <View nativeID={transcriptId} testID="listening-transcript" style={layout.transcript}>
+        <Text style={s.eyebrow}>Transcript</Text>
+        <Text {...languageProps} style={[s.body, layout.transcriptSentence]}>{question.sentence}</Text>
+        {!!question.reading && <Text {...languageProps} style={s.muted}>{question.reading}</Text>}
       </View>}
-    <View style={[s.row, { justifyContent: 'flex-end' }]}><Button quiet icon="arrow-right" onPress={() => { stop(); onNext(); }}>Next sentence</Button></View>
+      <View style={layout.question}>
+        <Text accessibilityRole="header" style={[s.heading, layout.questionTitle]}>What does the sentence mean?</Text>
+        <View style={layout.choices}>{question.choices.map((choice, index) => <ChoiceRow key={choice} label={choice} selected={selected === index}
+          disabled={checked} correct={checked && index === question.correctIndex} onPress={() => setSelected(index)} />)}</View>
+      </View>
+      {checked && <View accessibilityLiveRegion="polite" testID="listening-feedback" style={[layout.feedback, isCorrect ? layout.feedbackCorrect : layout.feedbackOther]}>
+        <Text nativeID={feedbackId} accessibilityRole="header" style={[s.heading, layout.feedbackTitle]}>
+          {isCorrect ? 'That’s the meaning.' : 'Here’s the meaning.'}
+        </Text>
+        <Text style={s.body}>{question.meaning}</Text>
+        <Text style={s.muted}>{usedTranscript ? 'You used transcript support for this sentence.' : played
+          ? 'Replay and compare the sentence with its meaning.' : 'Try listening before answering the next sentence.'}</Text>
+      </View>}
+      <View style={[layout.footer, checked && layout.footerChecked]}>
+        {!checked && <Button compact={compact} quiet label="Skip sentence" onPress={() => { stop(); onNext(); }}>{compact ? 'Skip' : 'Skip sentence'}</Button>}
+        {checked
+          ? <Button compact={compact} primary trailingIcon="arrow-right" onPress={() => { stop(); onNext(); }}>Next sentence</Button>
+          : <Button compact={compact} primary disabled={selected === null} onPress={() => { stop(); setChecked(true); }}>Check answer</Button>}
+      </View>
+    </View>
   </View>;
 }
+
+function ChoiceRow({ label, detail, selected, correct = false, disabled = false, leading = 'indicator', onPress }: {
+  label: string; detail?: string; selected: boolean; correct?: boolean; disabled?: boolean; leading?: 'indicator' | 'none'; onPress: () => void;
+}) {
+  const [focused, setFocused] = useState(false);
+  return <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected, disabled }}
+    aria-pressed={selected} disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+    style={({ pressed }) => [layout.choice, selected && layout.choiceSelected, correct && layout.choiceSelected,
+      disabled && selected && !correct && layout.choiceOther, !disabled && pressed && layout.pressed, focused && layout.focus]}>
+    {leading === 'indicator' && <View aria-hidden style={[layout.indicator, (selected || correct) && layout.indicatorSelected]}>
+      {correct ? <Icon name="check" size={14} color={colors.onPrimary} /> : selected && <View style={layout.indicatorDot} />}
+    </View>}
+    <View style={layout.choiceCopy}>
+      <Text style={[s.body, layout.choiceText]}>{label}</Text>
+      {!!detail && <Text style={s.muted}>{detail}</Text>}
+    </View>
+    {leading === 'none' && <Icon name={selected ? 'check' : 'chevron'} size={18} color={colors.primary} />}
+  </Pressable>;
+}
+
+const layout = StyleSheet.create({
+  page: { alignSelf: 'center', width: '100%', maxWidth: 760, minWidth: 0, gap: 12 },
+  pageHeader: { ...s.row, justifyContent: 'space-between', columnGap: 16, rowGap: 0 },
+  destinationHeading: { outlineWidth: 0 },
+  lessonRow: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 0 },
+  lessonTitle: { flex: 1, minWidth: 0, fontSize: 20, lineHeight: 26, letterSpacing: -0.3 },
+  exercise: { padding: 0, gap: 0, minWidth: 0 },
+  player: { backgroundColor: colors.dark, borderRadius: 17, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, padding: 20, gap: 18 },
+  playerCompact: { padding: 16, gap: 14 },
+  progress: { alignSelf: 'stretch', flexDirection: 'row', alignItems: 'center', gap: 12 },
+  progressText: { color: colors.sageTint, textTransform: 'none', letterSpacing: 0, fontSize: 14 },
+  progressTrack: { height: 3, flex: 1, backgroundColor: '#3F6259', borderRadius: 3 },
+  progressFill: { height: '100%', backgroundColor: colors.yellow, borderRadius: 3 },
+  playerActions: { alignItems: 'center', gap: 2 },
+  play: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center',
+    minHeight: 64, minWidth: 178, paddingHorizontal: 18, paddingVertical: 12, gap: 10, borderRadius: 34, backgroundColor: colors.yellow },
+  playText: { fontWeight: '700' },
+  transcriptAction: { minHeight: tokens.control.minimumTarget, justifyContent: 'center', paddingHorizontal: 12, borderRadius: 10 },
+  transcriptActionText: { color: colors.onPrimary, fontSize: 14, textDecorationLine: 'underline' },
+  answers: { padding: 22, gap: 16, minWidth: 0 },
+  answersCompact: { padding: 14, gap: 14 },
+  error: { color: colors.danger },
+  transcript: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: tokens.radius.md, backgroundColor: colors.sageTint, gap: 3 },
+  transcriptSentence: { fontWeight: '600', fontSize: 20, lineHeight: 29 },
+  question: { gap: 10 },
+  questionTitle: { fontSize: 21, lineHeight: 27 },
+  choices: { gap: 7 },
+  choice: { minHeight: 49, borderRadius: tokens.radius.input, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card,
+    flexDirection: 'row', alignItems: 'center', paddingVertical: 9, paddingHorizontal: 11, gap: 11, minWidth: 0 },
+  choiceCopy: { flex: 1, minWidth: 0 },
+  choiceText: { fontSize: 16, lineHeight: 23, fontWeight: '500' },
+  choiceSelected: { borderColor: colors.primary, backgroundColor: colors.sageTint },
+  choiceOther: { borderColor: colors.yellow, backgroundColor: colors.goldTint },
+  indicator: { width: 20, height: 20, borderRadius: 10, borderWidth: 1, borderColor: colors.inputBorder,
+    justifyContent: 'center', alignItems: 'center', flexShrink: 0 },
+  indicatorSelected: { borderColor: colors.primary, backgroundColor: colors.primary },
+  indicatorDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.onPrimary },
+  feedback: { padding: 14, gap: 3, borderRadius: tokens.radius.md },
+  feedbackCorrect: { backgroundColor: colors.sageTint },
+  feedbackOther: { backgroundColor: colors.goldTint },
+  feedbackTitle: { fontSize: 20, lineHeight: 27 },
+  footer: { ...s.row, justifyContent: 'space-between', gap: 5 },
+  footerChecked: { justifyContent: 'flex-end' },
+  picker: { padding: 12, gap: 9 },
+  pickerRows: { padding: 4, gap: 6 },
+  focus: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 2 },
+  inverseFocus: { outlineColor: colors.onPrimary },
+  pressed: { opacity: tokens.opacity.pressed },
+});

@@ -17,3 +17,7 @@ External video/audio recommendations use one language-aware resource widget. Exi
 ## Consequences
 
 Same navigation and activity widgets for French and Japanese. No new storage, migration, paid playback, recording requirement or curriculum publication. Lesson exercises and notebook review remain the existing durable practice paths. Voice availability and external media access are separate capabilities; transcripts remain available when speech cannot play. Native-speaker review and actual external-media listening are distinct from browser flow verification.
+
+## Listening navigation refinement
+
+Listening & videos opens on practice in both languages. Browse videos & audio switches to the separate resource library. Returning retains the exercise in memory, and switching to the library stops playback. Resource links and notes remain available in the library. [Focused listening and library](../plans/0044-focused-listening.md)

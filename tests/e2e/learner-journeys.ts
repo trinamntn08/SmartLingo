@@ -22,6 +22,23 @@ export async function openRestaurant(page: Page) {
   await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
 }
 
+export async function selectListeningLesson(listening: Locator, lesson: Pick<Lesson, 'title'>) {
+  const chooser = listening.getByRole('button', { name: 'Change lesson', exact: true });
+  await chooser.click();
+  await listening.getByRole('textbox', { name: 'Search listening lessons', exact: true }).fill(lesson.title);
+  await listening.getByRole('button', { name: lesson.title, exact: true }).click();
+  await expect(chooser).toHaveAttribute('aria-expanded', 'false');
+}
+
+export async function openListeningFilters(library: Locator) {
+  const filters = library.getByRole('button', { name: 'Filters', exact: true });
+  if (await filters.isVisible()) {
+    await expect(filters).toHaveAttribute('aria-expanded', 'false');
+    await filters.click();
+    await expect(filters).toHaveAttribute('aria-expanded', 'true');
+  }
+}
+
 export async function expectFrenchTranscripts(scope: Locator, lines: readonly { target: string; meaning: string }[]) {
   const french = scope.getByTestId('dialogue-french-transcript');
   const english = scope.getByTestId('dialogue-english-transcript');

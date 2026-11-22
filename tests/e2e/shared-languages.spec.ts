@@ -131,6 +131,7 @@ test('Japanese personal vocabulary, kana search, provider isolation and recovera
   await expect(page.getByTestId('french-practice')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'Speaking practice', exact: true })).toBeVisible();
   await button(page, 'Listening & videos').click();
+  await button(page, 'Browse videos & audio').click();
   await expect(page.getByRole('heading', { name: 'Japanese listening library', exact: true })).toBeVisible();
   await choose(page, 'French'); await button(page, 'Review').click();
   await expect(page.getByTestId('notebook-entries')).toHaveCount(0);

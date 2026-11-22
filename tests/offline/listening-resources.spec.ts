@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
-import { openProfileSection } from '../e2e/learner-journeys';
+import { openListeningFilters, openProfileSection, selectListeningLesson } from '../e2e/learner-journeys';
 
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 
@@ -24,7 +24,7 @@ test('downloaded listening guidance and filters cold-start offline without provi
   await cold.getByRole('button', { name: 'Learn', exact: true }).click();
   await cold.getByRole('button', { name: 'Listening & videos', exact: true }).click();
   const comprehension = cold.getByTestId('listening-comprehension');
-  await comprehension.getByRole('combobox', { name: 'Listening lesson', exact: true }).selectOption(restaurantLesson.id);
+  await selectListeningLesson(comprehension, restaurantLesson);
   await comprehension.getByRole('button', { name: 'Play sentence', exact: true }).click();
   await expect(comprehension.getByRole('alert')).toContainText('Audio could not play');
   const transcript = await comprehension.getByTestId('listening-transcript').innerText();
@@ -33,12 +33,18 @@ test('downloaded listening guidance and filters cold-start offline without provi
   await comprehension.getByRole('button', { name: sentence.exampleMeaning, exact: true }).click();
   await comprehension.getByRole('button', { name: 'Check answer', exact: true }).click();
   await expect(comprehension.getByTestId('listening-feedback')).toContainText(sentence.exampleMeaning);
+  await comprehension.getByRole('button', { name: 'Browse videos & audio', exact: true }).click();
   const library = cold.getByTestId('listening-resources');
-  await expect(library.getByText(/Online only: playback opens on an external provider/)).toBeVisible();
+  await expect(library.getByText('Playback opens on an external provider and requires internet.', { exact: true })).toBeVisible();
+  await openListeningFilters(library);
   await library.getByRole('button', { name: 'Listening level B1', exact: true }).click();
   await library.getByRole('button', { name: 'Listening format YouTube', exact: true }).click();
   await expect(library.getByRole('link')).toHaveCount(2);
   await expect(library.getByRole('heading', { name: 'Street interviews: French as people speak it', exact: true })).toBeAttached();
-  await expect(library.getByTestId('listening-resource-innerfrench-youtube').getByText(/Watch two minutes/)).toBeAttached();
+  const resource = library.getByTestId('listening-resource-innerfrench-youtube');
+  await resource.getByRole('button', { name: 'Listening notes', exact: true }).click();
+  await expect(resource.getByText(/Watch two minutes/)).toBeVisible();
+  await library.getByRole('button', { name: 'Back to practice', exact: true }).click();
+  await expect(comprehension.getByTestId('listening-feedback')).toContainText(sentence.exampleMeaning);
   expect(providerRequests).toEqual([]);
 });

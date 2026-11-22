@@ -62,6 +62,10 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.reload();
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
+  const next = lessons.find(lesson => lesson.id === 'fr.greetings.politeness')!;
+  await button(cold, `Next lesson: ${next.subtitle}`).click();
+  await expect(cold.getByRole('heading', { name: next.subtitle, exact: true })).toBeVisible();
+  await expect(cold.getByText('Lesson 2 of 3', { exact: true })).toBeVisible();
   await button(cold, 'Review').click();
   await expect(cold.getByText('bonsoir', { exact: true }).first()).toBeVisible();
   const [events, notebook] = await learningSnapshot(cold);

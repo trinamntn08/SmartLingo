@@ -7,6 +7,7 @@ import { colors, designTokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { VocabularyCard } from './VocabularyCard';
 import { TopicCover } from './TopicCover';
+import { TopicLessonCards } from './TopicLessonCards';
 import { routeHref, topicRouteKey } from '../app/routes';
 
 export type CatalogueSearch = {
@@ -40,8 +41,7 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
       <View style={{ flexDirection: phone ? 'column' : 'row', alignItems: 'stretch', gap: 16 }}>
         <View style={{ flex: 1, minWidth: 0, gap: 6, justifyContent: 'center' }}>
           <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>{selected.name}</Text>
-          <Text style={s.body}>{selected.lessons[0]?.outcome}</Text>
-          <Text style={s.muted}>{selected.vocabulary.length} words · {selected.lessons.length} short lessons</Text>
+          <Text style={s.muted}>{selected.vocabulary.length} words · {selected.lessons.length} short {selected.lessons.length === 1 ? 'lesson' : 'lessons'}</Text>
         </View>
         <View style={{ width: phone ? '100%' : 250, maxHeight: phone ? 104 : 136, minWidth: 0, borderRadius: 14, overflow: 'hidden', justifyContent: 'center' }}><TopicCover key={selected.name} topic={selected} hero /></View>
       </View>
@@ -84,42 +84,17 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
         </View>;
       })}</View>
     </> : <>
-      {!!topicLessons.length && <ShortLessons lessons={topicLessons} model={model} onOpen={onOpen} disabled={disabled} />}
-      <Text accessibilityRole="header" style={s.heading}>Vocabulary · {words.length}</Text>
-      {!topicLessons.length ? <EmptyResults onClear={() => { setQuery(''); setLevel('All'); }} />
-        : !words.length && <Text style={s.muted}>No word matches this search. The lesson matches its title or situation.</Text>}
-      <View style={[s.split, { gap: 16 }]}>{words.map(entry =>
-        <View key={`${selected.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: phone ? '100%' : 350, minWidth: 0 }}>
-          <VocabularyCard entry={entry} model={model} language={language} />
-        </View>)}</View>
+      <TopicLessonCards language={language} lessons={selected.lessons} visibleLessons={topicLessons}
+        events={model.events} progressAvailable={!model.loadError} compact={phone} onOpen={onOpen} disabled={disabled} />
+      {topicLessons.length ? <>
+        <Text accessibilityRole="header" style={s.heading}>Vocabulary · {words.length}</Text>
+        {!words.length && <Text style={s.muted}>No word matches this search. The lesson matches its title or situation.</Text>}
+        <View style={[s.split, { gap: 16 }]}>{words.map(entry =>
+          <View key={`${selected.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: phone ? '100%' : 350, minWidth: 0 }}>
+            <VocabularyCard entry={entry} model={model} language={language} />
+          </View>)}</View>
+      </> : <EmptyResults onClear={() => { setQuery(''); setLevel('All'); }} />}
     </>}
-  </View>;
-}
-
-function ShortLessons({ lessons, model, onOpen, disabled }: { lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; disabled: boolean }) {
-  return <View style={{ gap: 12 }}>
-    <Text accessibilityRole="header" style={s.heading}>Short lessons</Text>
-    <View style={{ borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.card, overflow: 'hidden' }}>
-      {lessons.map((lesson, index) => {
-        const progress = lessonProgress(lesson, model.events);
-        return <View key={lesson.id} style={{ padding: 16, gap: 8, borderTopWidth: index ? 1 : 0, borderColor: colors.line }}>
-          <View style={[s.row, { justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }]}>
-            <View style={{ minWidth: 32, minHeight: 32, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: progress.completed ? colors.sageTint : colors.goldTint }}><Text style={[s.body, designTokens.typography.button]}>{progress.completed ? '✓' : String(index + 1).padStart(2, '0')}</Text></View>
-            <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 200, minWidth: 0, gap: 4 }}>
-              <Text style={[s.body, { fontWeight: '700' }]}>{lesson.subtitle}</Text>
-              <Text style={s.muted}>{lesson.outcome}</Text>
-              <Text style={s.muted}>{lesson.vocabulary.length} words · {lesson.durationMinutes} min · {lesson.level} · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
-            </View>
-            <Button compact label={`Open ${lesson.subtitle}`} disabled={disabled} onPress={() => onOpen(lesson)}
-              href={routeHref({ kind: 'lesson', language: lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: lesson.id })}>
-              {progress.completed ? 'Revisit →' : progress.viewedIds.size ? 'Continue →' : 'Start lesson →'}
-            </Button>
-          </View>
-          {(progress.completed || !!progress.viewedIds.size) && <Text style={s.muted}>
-            {progress.completed ? 'Session saved' : `${progress.viewedIds.size} words explored`}</Text>}
-        </View>;
-      })}
-    </View>
   </View>;
 }
 

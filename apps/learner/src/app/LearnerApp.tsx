@@ -107,8 +107,13 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       const day = link?.courseId === course.id ? course.days.find(item => item.id === link.dayId) : undefined;
       const studyDay = link && day?.blocks.some(block => block.id === link.sectionId)
         ? { kind: 'course', language: targetLanguage, ...link } as const : undefined;
+      const topicLessons = studyDay ? undefined : topics.find(topic => topic.name === lesson.topic)?.lessons;
+      const index = topicLessons?.findIndex(item => item.id === lesson.id) ?? -1;
+      const sequence = topicLessons && index >= 0 ? {
+        position: index + 1, total: topicLessons.length, previous: topicLessons[index - 1], next: topicLessons[index + 1], open: openLesson,
+      } : undefined;
       return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model}
-        studyDayHref={studyDay && routeHref(studyDay)} onExit={() => exitLesson(studyDay)} routed />;
+        studyDayHref={studyDay && routeHref(studyDay)} sequence={sequence} onExit={() => exitLesson(studyDay)} routed />;
     }
     if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}
       recommendedDay={recommendation.day} learning={courseLearning} model={model} lessons={lessons} />;

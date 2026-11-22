@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Present topics as a sequence of lesson cards
+
+- Request. Replace the short-lesson rows with distinct cards that show how lessons fit into a topic and make consecutive study easy.
+- Start. At 22:29 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `75f2fd1ce4f1fa35c12bfe182f2d93d3ba7e0783`, ahead/behind `0/0`.
+- Acceptance. Present a responsive, ordered card grid with lesson progress and direct access. Show the position in the lesson reader and offer the next lesson after completion. Keep topic return, filtered views, direct links, daily-course practice return, and browser progress. [Execution plan](plans/0049-topic-lesson-cards.md)
+- Outcome. Numbered topic cards show the lesson goal, level, duration and saved status. The first unfinished lesson is highlighted. Filters preserve the authored sequence. The reader shows its position and offers a previous lesson and a direct next lesson after completion. Related daily-course practice returns to its own study section.
+- Review. The card builder and read-only reviewer used the inherited model and effort. New readers focus their title for keyboard navigation. The focus guard respects the scroll position restored by browser Back. Independent Chromium verification confirmed a related French practice lesson returned to the original study-day section.
+- Validation. Repository and TypeScript checks, 286 tooling/application tests, 49 Chromium cases and four final cold-offline cases passed. One duplicate-publication browser case was intentionally skipped. The targeted browser case checked filtered numbering, saved completion, keyboard continuation, previous lesson and restored history. Verified the served export `dee751880a5c` at 1,440, 780 and 320 px, with completed and upcoming cards and direct continuation.
+- Handoff. The commit containing this entry is the checkpoint. Next is owner review at `http://localhost:8082`.
+
 ## 2026-11-22 Synchronize Today, Daily course and Learn
 
 - Request. Review the competing learner paths and make guided sessions and the Learn library work together.

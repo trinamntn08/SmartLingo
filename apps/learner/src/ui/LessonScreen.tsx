@@ -15,10 +15,18 @@ function resumeStage(wordsStudied: boolean, progress: ReturnType<typeof lessonPr
   return progress.pictureDone ? 'sentence' : 'dialogue';
 }
 
-export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = false }: {
-  lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; routed?: boolean;
+interface LessonSequence {
+  position: number;
+  total: number;
+  previous?: Lesson;
+  next?: Lesson;
+  open: (lesson: Lesson) => void;
+}
+
+export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false }: {
+  lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; sequence?: LessonSequence; routed?: boolean;
 }) {
-  const { route, navigate } = useNavigation();
+  const { route, navigate, read } = useNavigation();
   const progress = lessonProgress(lesson, model.events);
   const wordsStudied = lesson.vocabulary.every(entry => progress.viewedIds.has(entry.id));
   const resume = resumeStage(wordsStudied, progress);
@@ -26,8 +34,10 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = fal
   const [returnAfterCompletion, setReturnAfterCompletion] = useState(false);
   const lessonRoute = routed && route.kind === 'lesson' && route.lessonId === lesson.id && route.language === lesson.language ? route : undefined;
   const stage = lessonRoute ? lessonRoute.stage ?? resume : localStage;
+  const titleId = useId();
   const headingId = useId();
   const previousStage = useRef(stage);
+  const restoringScroll = useRef(Number(read('learner.scroll') ?? 0) > 0);
   const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
   const meaningMatch = lesson.pictureActivity.mode === 'meaning';
   const { heading } = stageLabels(stage, meaningMatch);
@@ -56,6 +66,14 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = fal
     headingElement.scrollIntoView({ block: 'start' });
   }, [headingId, stage]);
 
+  useLayoutEffect(() => {
+    if (!routed || Platform.OS !== 'web' || restoringScroll.current) return;
+    const title = document.getElementById(titleId);
+    if (!title) return;
+    title.tabIndex = -1;
+    title.focus({ preventScroll: true });
+  }, [routed, titleId]);
+
   function setStage(next: LessonStage, afterSave = false) {
     if (lessonRoute) navigate({ ...lessonRoute, stage: next }, { afterSave });
     else setLocalStage(next);
@@ -65,6 +83,15 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = fal
   const topicHref = lessonRoute ? routeHref({ kind: 'topics', language: lessonRoute.language, topic: topicRouteKey(lesson.topic) }) : undefined;
   const exitHref = studyDayHref ?? topicHref;
   const returnLabel = studyDayHref ? 'Back to study day' : undefined;
+
+  function lessonLink(target: Lesson | undefined) {
+    if (!sequence || !target) return undefined;
+    const href = routeHref({ kind: 'lesson', language: target.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: target.id });
+    return { title: target.subtitle, href, onOpen: () => sequence.open(target) };
+  }
+
+  const previousLesson = lessonLink(sequence?.previous);
+  const nextLesson = progress.completed ? lessonLink(sequence?.next) : undefined;
 
   function entry(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number): LearningEvent {
     return { id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints,
@@ -94,7 +121,12 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = fal
       <Text style={[s.muted, layout.meta]}>{lesson.level} · {lesson.topic} · {lesson.status === 'draft' ? 'Draft' : 'Published'}</Text>
     </View>
     <View style={layout.intro}>
-      <Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text>
+      {sequence && <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
+        <Text style={s.eyebrow}>Lesson {sequence.position} of {sequence.total}</Text>
+        {previousLesson && <Button compact quiet icon="arrow-left" label={`Previous lesson: ${previousLesson.title}`}
+          href={previousLesson.href} onPress={previousLesson.onOpen} disabled={exitBlocked}>Previous lesson</Button>}
+      </View>}
+      <Text nativeID={titleId} accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text>
       <Text style={[s.body, layout.outcome]}>{lesson.outcome}</Text>
     </View>
     <LessonProgress stage={stage} compact={compact} meaningMatch={meaningMatch} />
@@ -116,7 +148,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, routed = fal
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
       {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
         done={progress.sentenceDone || progress.completed} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
-        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel}
+        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson}
         onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
         reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
     </View>

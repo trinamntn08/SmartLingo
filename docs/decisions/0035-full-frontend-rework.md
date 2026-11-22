@@ -14,6 +14,8 @@ Keep the daily course outline on the left of the lesson on wide screens. The out
 
 For French daily-course Quick practice, use short prompts with lettered answer cards directly below. Keep all questions available in the same section and use the same letters to identify English meanings in the optional hint.
 
+Show the lessons within a library topic as separate numbered cards. Keep their positions when search or level filters hide some lessons. Highlight the first unfinished lesson and let learners choose any card. The reader shows its position in the topic and offers a direct next lesson after completion. Related daily-course practice returns to its study day.
+
 Bundle original contextual scenes and the font with the offline export. Context photos are presentation media. Literal word-photo associations and exercise answers remain bound to the existing content. The editor preserves its explicit save, saved-revision preview and publication, including stale revision and unsaved edit protections. [Asset provenance](../MEDIA_SOURCES.md#bundled-presentation-scenes-and-type)
 
 ## Consequences

@@ -158,7 +158,7 @@ Owner direction, 2026-11-22. Browser Back and Forward now cover learner screens 
 
 - French Today recommends a guided study day. Learn opens the same day and saved section and lets learners explore vocabulary, lessons, listening and speaking. Japanese retains its kana-first recommendation. At the end of a French day, relevant existing library lessons offer optional practice with a return to that study section. Review opens saved words.
 - Learn: Japanese letters when relevant, Vocabulary & lessons with topic cards/filters/search, Listening & videos and Speaking.
-- Topic: useful outcomes, lesson list, progress, download status.
+- Topic: numbered lesson cards with useful outcomes and saved progress, plus direct continuation from the completed lesson.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
 - Vocabulary: article + word, visible meaning, example/translation, explanation, image, audio, notebook action.
 - Speaking within Learn: scripted role selection, model/partner playback and visible meanings/readings in either language; optional French AI conversation/recording remains separate.

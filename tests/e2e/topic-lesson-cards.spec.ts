@@ -1,0 +1,60 @@
+import { expect, test } from '@playwright/test';
+import { lessons } from '@smartlingo/content';
+import { buildAcceptedSentence, openTopic } from './learner-journeys';
+
+const [first, second, third] = lessons.filter(lesson => lesson.id.startsWith('fr.greetings.'));
+
+test('topic cards preserve order and continue to the next lesson after completion', async ({ page, context }) => {
+  await context.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/today/fr');
+  await openTopic(page, first.topic);
+  const cards = page.getByTestId('topic-lesson-cards');
+  const firstCard = page.getByTestId(`topic-lesson-${first.id}`);
+  const secondCard = page.getByTestId(`topic-lesson-${second.id}`);
+  const thirdCard = page.getByTestId(`topic-lesson-${third.id}`);
+  const button = (name: string) => page.getByRole('button', { name, exact: true });
+  await expect(page.getByRole('heading', { name: 'Lessons in this topic', exact: true })).toBeVisible();
+  await expect(cards.getByRole('button', { name: /^Open / })).toHaveCount(3);
+  await expect(firstCard.getByText('Lesson 1', { exact: true })).toBeVisible();
+  await expect(firstCard.getByText('Up next', { exact: true })).toBeVisible();
+  const axis = page.viewportSize()!.width >= 1280 ? 'x' : 'y';
+  await expect.poll(async () => {
+    const [a, b, c] = await Promise.all([firstCard, secondCard, thirdCard].map(card => card.boundingBox()));
+    return !!(a && b && c && a[axis] < b[axis] && b[axis] < c[axis]);
+  }).toBe(true);
+  const search = page.getByRole('textbox', { name: 'Search lessons' });
+  await search.fill(second.subtitle);
+  await expect(cards.getByRole('button', { name: /^Open / })).toHaveCount(1);
+  await expect(secondCard.getByText('Lesson 2', { exact: true })).toBeVisible();
+  await search.clear();
+
+  await button(`Open ${first.subtitle}`).press('Enter');
+  await expect(page.getByText('Lesson 1 of 3', { exact: true })).toBeVisible();
+  const next = button(`Next lesson: ${second.subtitle}`);
+  await expect(next).toHaveCount(0);
+  await button('Continue to dialogue').click();
+  await button('Try meaning practice').click();
+  const match = first.vocabulary.find(entry => entry.id === first.pictureActivity.entryId)!;
+  await button(match.target).click();
+  await button('Build a sentence').click();
+  await buildAcceptedSentence(page, first);
+  await expect(page.getByRole('heading', { name: 'Lesson complete', exact: true })).toBeVisible();
+  const completed = page.url();
+  await next.scrollIntoViewIfNeeded();
+  const scroll = () => page.getByTestId('learner-content').evaluate(element => element.scrollTop);
+  const before = await scroll();
+  await next.press('Enter');
+  await expect(page.getByRole('heading', { name: second.subtitle, exact: true })).toBeFocused();
+  await expect(page.getByText('Lesson 2 of 3', { exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(completed);
+  await expect.poll(async () => Math.abs(await scroll() - before)).toBeLessThanOrEqual(2);
+  if (before > 0) await expect(page.getByRole('heading', { name: first.subtitle, exact: true })).not.toBeFocused();
+  await next.click();
+  await button(`Previous lesson: ${first.subtitle}`).click();
+  await expect(page.getByRole('heading', { name: 'Lesson complete', exact: true })).toBeVisible();
+  await button('All lessons').click();
+  await expect(firstCard.getByText('Completed', { exact: true })).toBeVisible();
+  await expect(secondCard.getByText('Up next', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

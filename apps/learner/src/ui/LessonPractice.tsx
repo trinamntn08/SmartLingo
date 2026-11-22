@@ -71,10 +71,11 @@ function MatchChoice({ name, correct, disabled, onPress }: { name: string; corre
 interface SentenceProps extends ActivityProps {
   completed: boolean; canComplete: boolean; onComplete: () => void; onReview: () => void; reviewLabel: string;
   returnLabel?: string;
+  nextLesson?: { title: string; href: string; onOpen: () => void };
 }
 
 export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext,
-  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons' }: SentenceProps) {
+  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons', nextLesson }: SentenceProps) {
   const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
   const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
   const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
@@ -112,8 +113,11 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         </View>
         <View style={layout.actions}>
           <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly} disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
-          {(completed || canComplete || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly}
+          {(completed || canComplete || browseOnly) && <Button primary={!nextLesson} quiet={!!nextLesson}
+            trailingIcon={nextLesson ? undefined : 'arrow-right'} href={nextHref} disabled={disabled && !browseOnly}
             onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>}
+          {nextLesson && <Button primary trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
+            href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>Next lesson · {nextLesson.title}</Button>}
         </View>
       </> : <>
         <View style={layout.pieces}>

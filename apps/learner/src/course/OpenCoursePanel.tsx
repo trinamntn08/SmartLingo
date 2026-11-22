@@ -23,16 +23,20 @@ export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: Ope
   const open = !!courseRoute;
   const today = { kind: 'today', language: course.language } as const;
   const courseStart = { kind: 'course', language: course.language, courseId: course.id } as const;
+  const outlineId = useId();
+  const [outlineOpen, setOutlineOpen] = useState(false);
   const [writeBlocked, setWriteBlocked] = useState(false);
   const reportWrite = useCallback((blocked: boolean) => { setWriteBlocked(blocked); onWriteBlocked?.(blocked); }, [onWriteBlocked]);
+  useEffect(() => { if (!open) setOutlineOpen(false); }, [open]);
+
   function toggle() {
     if (open) backTo(today, previous => previous.kind === 'today' && previous.language === course.language, true);
     else navigate(courseStart);
   }
 
   return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: compact ? 14 : 16, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
-    <View style={[s.row, { alignItems: 'center', justifyContent: 'space-between', gap: compact ? 10 : 16 }]}>
-      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 260, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+    <View style={[s.row, { justifyContent: 'space-between', gap: compact ? 10 : 16 }]}>
+      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact && open ? '100%' : 260, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View style={{ width: 44, height: 44, borderRadius: 10, backgroundColor: colors.goldTint, alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="calendar" size={22} color={colors.primary} />
         </View>
@@ -41,21 +45,30 @@ export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: Ope
           <Text style={s.muted}>{course.days.length} guided study {course.days.length === 1 ? 'day' : 'days'} · Draft preview</Text>
         </View>
       </View>
-      <Button expanded={open} primary={!open} href={routeHref(open ? today : courseStart)} disabled={writeBlocked || model.busy || !!model.saveError} onPress={toggle}>{open ? 'Close daily course' : 'Open daily course'}</Button>
+      <View style={[s.row, { gap: 8, maxWidth: '100%' }, compact && open && { width: '100%', justifyContent: 'space-between' }]}>
+        {open && <Button compact expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
+          trailingIcon={outlineOpen ? 'chevron-down' : 'chevron'} onPress={() => setOutlineOpen(value => !value)}>Course outline</Button>}
+        <Button expanded={open} primary={!open} compact={open} quiet={open} href={routeHref(open ? today : courseStart)}
+          label={open ? 'Close daily course' : undefined} disabled={writeBlocked || model.busy || !!model.saveError} onPress={toggle}>
+          {open ? (compact ? 'Close' : 'Close daily course') : 'Open daily course'}
+        </Button>
+      </View>
     </View>
-    {courseRoute && <CourseJourney course={course} route={courseRoute} model={model} onWriteBlocked={reportWrite} />}
+    {courseRoute && <CourseJourney course={course} route={courseRoute} model={model} onWriteBlocked={reportWrite}
+      outlineId={outlineOpen ? outlineId : undefined} onCloseOutline={() => setOutlineOpen(false)} />}
   </View>;
 }
 
-function CourseJourney({ course, route, model, onWriteBlocked }: { course: OpenCourse; route: CourseRoute; model: LearningModel; onWriteBlocked: (blocked: boolean) => void }) {
+function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onCloseOutline }: {
+  course: OpenCourse; route: CourseRoute; model: LearningModel; onWriteBlocked: (blocked: boolean) => void;
+  outlineId?: string; onCloseOutline: () => void;
+}) {
   const { navigate, backTo } = useNavigation();
   const compact = useWindowDimensions().width < 600;
   const learning = useCourseLearning();
   useLayoutEffect(() => { onWriteBlocked(learning.busy || !!learning.saveError); }, [learning.busy, learning.saveError, onWriteBlocked]);
   useLayoutEffect(() => () => onWriteBlocked(false), [onWriteBlocked]);
   const [level, setLevel] = useState<CourseDay['level'] | 'All'>('All');
-  const [choosingDay, setChoosingDay] = useState(false);
-  const [choosingSection, setChoosingSection] = useState(false);
   const clock = useRef(0);
   const requestedDay = course.days.find(item => item.id === route.dayId);
   const invalidDay = !!route.dayId && !requestedDay;
@@ -89,6 +102,10 @@ function CourseJourney({ course, route, model, onWriteBlocked }: { course: OpenC
   const navigationBlocked = learning.loading || learning.busy || !!learning.saveError;
   const nextDay = nextCourseDay(course, learning.events);
 
+  function openSelection(destination: CourseRoute, afterSave = false) {
+    onCloseOutline();
+    navigate(destination, { afterSave });
+  }
   function event(kind: CourseEvent['kind'], blockId = block.id, targetDay = day): CourseEvent {
     const latest = learning.events.reduce((value, saved) => Math.max(value, Date.parse(saved.occurredAt)), 0);
     clock.current = Math.max(Date.now(), clock.current + 1, latest + 1);
@@ -101,15 +118,15 @@ function CourseJourney({ course, route, model, onWriteBlocked }: { course: OpenC
     const targetSection = target.blocks.find(item => item.id === targetBlock);
     const targetStep = targetSection && compactCourseSteps(target)?.find(step => step.kind === compactCourseStepKind(targetSection));
     const destination = { ...route, dayId: target.id, sectionId: targetStep?.anchor.id ?? targetBlock };
-    if (browseOnly) { navigate(destination); return; }
-    learning.save([event('navigation', targetBlock, target)], () => navigate(destination, { afterSave: true }));
+    if (browseOnly) { openSelection(destination); return; }
+    learning.save([event('navigation', targetBlock, target)], () => openSelection(destination, true));
   }
   function selectSection(id: string, studyBlockId?: string) {
     if (navigationBlocked || id === block.id) return;
     const destination = { ...route, dayId, sectionId: id };
-    if (browseOnly) { navigate(destination); return; }
+    if (browseOnly) { openSelection(destination); return; }
     const events = studyBlockId ? [event('study', studyBlockId)] : [];
-    learning.save([...events, event('navigation', id)], () => navigate(destination, { afterSave: true }));
+    learning.save([...events, event('navigation', id)], () => openSelection(destination, true));
   }
   function saveStep() {
     learning.save([event(block.kind === 'reflection' ? 'reflection' : 'study')]);
@@ -156,33 +173,34 @@ function CourseJourney({ course, route, model, onWriteBlocked }: { course: OpenC
       <Button disabled={learning.busy} onPress={learning.discard}>Discard unsaved course action</Button>
     </View>}
     {learning.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving course progress…</Text>}
+    {outlineId && <View nativeID={outlineId} testID="course-outline" style={[s.notice, { gap: 18 }]}>
+      <View style={{ gap: 10 }}>
+        <Text accessibilityRole="header" style={s.heading}>Sections in Day {day.dayNumber}</Text>
+        <View style={[s.row, { alignItems: 'stretch', gap: 8 }]}>
+          {sections.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
+            flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 270 }}>
+            <Button compact label={`Section ${position + 1}: ${item.title}`} selected={item.id === block.id}
+              disabled={navigationBlocked} onPress={() => selectSection(item.id)}>
+              {item.title}{!currentStep && progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
+            </Button>
+          </View>)}
+        </View>
+      </View>
+      <View style={s.divider} />
+      <CourseDayChooser course={course} currentDay={day} events={learning.events} level={level}
+        onLevelChange={setLevel} onSelectDay={selectDay} compact={compact} loading={learning.loading}
+        browseOnly={browseOnly} navigationBlocked={navigationBlocked} />
+    </View>}
     <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
       {currentUnit && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
       <View style={s.row}><Badge>DAY {String(day.dayNumber).padStart(2, '0')}</Badge><Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level} · Guided study</Text></View>
       <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Day {day.dayNumber}: {day.title}</Text>
       <Text style={s.body}>{day.outcome}</Text>
-      <View style={[s.row, { justifyContent: 'space-between' }]}><Text accessibilityLiveRegion="polite" style={s.muted}>
+      <Text accessibilityLiveRegion="polite" style={s.muted}>
         {currentStep ? `Step ${index + 1} of ${sections.length}` : `${progress.completedBlockIds.size} of ${sections.length} sections saved`}
       </Text>
-        <View style={[s.row, { maxWidth: '100%', flexShrink: 1 }, compact && { width: '100%' }]}>
-          <Button compact expanded={choosingDay} disabled={navigationBlocked} onPress={() => setChoosingDay(value => !value)}>{choosingDay ? 'Hide study days' : 'Choose a study day'}</Button>
-          <Button compact expanded={choosingSection} disabled={navigationBlocked} onPress={() => setChoosingSection(value => !value)}>{choosingSection ? 'Hide sections' : 'Browse sections'}</Button>
-        </View>
-      </View>
       <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * (currentStep ? index + 1 : progress.completedBlockIds.size) / sections.length}%` }]} /></View>
     </View>
-    {choosingDay && <CourseDayChooser course={course} currentDay={day} events={learning.events} level={level}
-      onLevelChange={setLevel} onSelectDay={selectDay} compact={compact} loading={learning.loading}
-      browseOnly={browseOnly} navigationBlocked={navigationBlocked} />}
-    {choosingSection && <View style={[s.row, { alignItems: 'stretch', gap: 8 }]} accessibilityLabel="Study day sections">
-      {sections.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
-        flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 270 }}>
-        <Button compact label={`Section ${position + 1}: ${item.title}`} selected={item.id === block.id}
-          disabled={navigationBlocked} onPress={() => selectSection(item.id)}>
-          {position + 1}. {item.title}{!currentStep && progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
-        </Button>
-      </View>)}
-    </View>}
     <View testID={`course-block-${block.id}`} style={{ gap: 24, minWidth: 0, padding: compact ? 0 : 22, paddingVertical: 22 }}>
       {currentStep ? <>
         <View style={[s.row, { justifyContent: 'space-between', gap: 10 }]}>

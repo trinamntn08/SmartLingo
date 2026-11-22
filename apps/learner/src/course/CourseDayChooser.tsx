@@ -40,9 +40,8 @@ export function CourseDayChooser({ course, currentDay, events, level, onLevelCha
     </View>;
   }
 
-  return <View testID="course-day-chooser" style={[s.notice, { gap: 12 }]}>
-    <Text accessibilityRole="header" style={s.heading}>Choose a study day</Text>
-    <Text style={s.muted}>Every day is open. Return whenever you like.</Text>
+  return <View testID="course-day-chooser" style={{ gap: 12 }}>
+    <Text accessibilityRole="header" style={s.heading}>Study days</Text>
     {course.units?.length ? course.units.map((unit, index) =>
       <View key={unit.id} testID={`course-unit-${unit.id}`} style={{ gap: 10, minWidth: 0 }}>
         <Text accessibilityRole="header" style={[s.heading, { fontSize: 19, lineHeight: 26 }]}>Unit {index + 1}: {unit.title}</Text>

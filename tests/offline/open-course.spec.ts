@@ -67,7 +67,7 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   await cold.goto(baseURL!);
   await button(cold, 'Open daily course').click();
   const spelling = openCoursePilot.days[2];
-  await button(cold, 'Choose a study day').click();
+  await button(cold, 'Course outline').click();
   await button(cold, `Choose day 3: ${spelling.title}`).click();
   await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Dialogue')).toBeVisible();

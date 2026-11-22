@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Move day and section navigation into the course outline
+
+- Request. Move Browse sections out of the French study-day summary and combine it with Choose a study day.
+- Start. At 21:16 CET, Europe/Paris, the primary `D:/dev/projects/SmartLingo` worktree and index were clean. Fetched the owner-selected origin. Local, tracking and live `feat/french-daily-opening` matched at `1d7c6bc57946d4b4497e3d7a47aa018efa60b617`, ahead/behind `0/0`. No synchronization changes were needed.
+- Acceptance. Make one course-header outline available from each open study day. Show current-day sections and all study days in it, keep the day summary focused on study, and preserve saved progress, links and the shared Japanese course. Verify wide, narrow and offline use, then rebuild the review preview at port 8082.
+- Outcome. Course outline opens below the course title, puts current-day sections above the study day chooser and closes on successful selection. The selected section receives focus. Both languages share the outline and keep their existing course progress and routes. The compact header uses a shorter visible Close label to fit both actions on one row.
+- Validation. `npm.cmd run check`, `git diff --check`, 18 tooling tests, 268 application tests and 28 targeted Chromium cases passed. After the compact layout refinement, repository and TypeScript checks and all six targeted cold-offline cases passed. Checked the final Day 2 layout and navigation on the actual port 8082 preview at 918 and 320 px. Served and local manifests matched at build `8f923d18daf8`.
+- Handoff. The commit containing this entry is the checkpoint. The next action is owner review at `http://localhost:8082`.
+
 ## 2026-11-22 Resume two interrupted Codex chats
 
 - Request. Recover both interrupted SmartLingo chats and continue their original work.

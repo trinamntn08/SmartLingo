@@ -118,6 +118,21 @@ test('French course section history is read-only and refresh keeps the same sect
   await page.goto(`/course/fr/${openCoursePilot.id}`);
   await expect(page).toHaveURL(`${location}/${dialogue.id}`);
   const panel = page.getByTestId('open-course-panel');
+  const outlineButton = panel.getByRole('button', { name: 'Course outline', exact: true });
+  const outline = panel.getByTestId('course-outline');
+  await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
+  await outlineButton.press('Enter');
+  await expect(outlineButton).toHaveAttribute('aria-expanded', 'true');
+  await expect(outline).toHaveAttribute('id', (await outlineButton.getAttribute('aria-controls'))!);
+  await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('aria-selected', 'true');
+  await expect(outline.getByRole('button', { name: /^Choose day 1:/ })).toHaveAttribute('aria-selected', 'true');
+  const dayHeading = panel.getByRole('heading', { name: `Day 1: ${day.title}`, exact: true });
+  expect((await outlineButton.boundingBox())!.y).toBeLessThan((await dayHeading.boundingBox())!.y);
+  await expect(panel.getByRole('button', { name: /^(Browse sections|Choose a study day)$/ })).toHaveCount(0);
+  expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
+  await outlineButton.press('Enter');
+  await expect(outline).toHaveCount(0);
+
   await panel.getByRole('button', { name: 'Next section', exact: true }).click();
   await expect(page).toHaveURL(`${location}/${practice.id}`);
   const initialEvents = await storedEvents<CourseEvent>(page, 'courseEvents');
@@ -131,6 +146,13 @@ test('French course section history is read-only and refresh keeps the same sect
   await expect(page).toHaveURL(`${location}/${practice.id}`);
   await expect(panel.getByRole('heading', { name: 'Quick practice', exact: true })).toBeVisible();
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual(initialEvents);
+
+  await outlineButton.press('Enter');
+  await outline.getByRole('button', { name: 'Section 1: Dialogue' }).press('Enter');
+  await expect(page).toHaveURL(`${location}/${dialogue.id}`);
+  await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
+  await expect(panel.getByRole('heading', { name: 'Dialogue', exact: true })).toBeFocused();
+  expect((await storedEvents<CourseEvent>(page, 'courseEvents')).filter(event => event.kind === 'study')).toHaveLength(1);
 });
 
 test('Japanese course deep links and Previous browse an unsaved day without writing progress', async ({ page }) => {

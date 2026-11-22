@@ -1,0 +1,118 @@
+import { useLayoutEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { courseDayProgress, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
+import { routeHref, type AppRoute } from '../app/routes';
+import { Button } from '../ui/controls';
+import { colors, styles as s } from '../ui/theme';
+
+type CourseRoute = Extract<AppRoute, { kind: 'course' }>;
+type CourseLevel = CourseDay['level'] | 'All';
+export type CourseSidebar = 'wide' | 'medium';
+
+interface CourseOutlineProps {
+  id: string;
+  sidebar?: CourseSidebar;
+  course: OpenCourse;
+  route: CourseRoute;
+  day: CourseDay;
+  sections: readonly { id: string; title: string }[];
+  sectionId: string;
+  completedSections?: ReadonlySet<string>;
+  events: readonly CourseEvent[];
+  level: CourseLevel;
+  onLevelChange: (level: CourseLevel) => void;
+  blocked: boolean;
+  onDay: (day: CourseDay) => void;
+  onSection: (id: string) => void;
+}
+
+const neighborCount = 10;
+const levels = ['All', 'foundation', 'A1', 'A2', 'B1'] as const;
+
+export function CourseOutline({ id, sidebar, course, route, day, sectionId, sections, completedSections, events,
+  level, onLevelChange, blocked, onDay, onSection }: CourseOutlineProps) {
+  const [showAll, setShowAll] = useState(false);
+  const scroll = useRef<HTMLDivElement>(null);
+  const activeDayId = `${id}-active-day`;
+  const index = course.days.findIndex(candidate => candidate.id === day.id);
+  const nearbyDays = course.days.slice(Math.max(0, index - neighborCount), index + neighborCount + 1);
+  const visibleDays = level !== 'All' ? course.days.filter(candidate => candidate.level === level)
+    : showAll ? course.days : nearbyDays;
+  const unitGroups = course.units?.map((unit, position) => ({
+    unit, position, days: visibleDays.filter(candidate => unit.dayIds.includes(candidate.id)),
+  })).filter(group => group.days.length);
+
+  useLayoutEffect(() => {
+    const panel = scroll.current;
+    if (!panel) return;
+    const active = document.getElementById(activeDayId);
+    if (!active) return;
+    const frame = panel.getBoundingClientRect();
+    const row = active.getBoundingClientRect();
+    if (row.bottom > frame.bottom - 8) panel.scrollTop += row.bottom - frame.bottom + 8;
+    else if (row.top < frame.top + 8) panel.scrollTop += row.top - frame.top - 8;
+  }, [activeDayId, day.id, level, showAll, sidebar]);
+
+  function renderDays(days: readonly CourseDay[]) {
+    return days.map(item => {
+      const active = item.id === day.id;
+      const completed = courseDayProgress(course, item, events).completed;
+      return <View key={item.id} nativeID={active ? activeDayId : undefined} testID={`course-day-${item.id}`}>
+        <Button compact marker={String(item.dayNumber)} trailingIcon={completed ? 'check' : undefined}
+          label={`Choose day ${item.dayNumber}: ${item.title}${completed ? ', completed' : ''}`}
+          href={routeHref({ ...route, dayId: item.id, sectionId: undefined })}
+          selected={active} disabled={blocked} onPress={() => onDay(item)}>{item.title}</Button>
+      </View>;
+    });
+  }
+
+  const outline = <View nativeID={id} testID="course-outline" accessibilityRole="navigation" accessibilityLabel="Course outline"
+    style={t.outline}>
+    {sidebar && <Text accessibilityRole="header" style={[s.heading, t.title]}>Course outline</Text>}
+    <View style={t.group}>
+      <Text accessibilityRole="header" style={t.label}>Sections in Day {day.dayNumber}</Text>
+      {sections.map((item, index) => <Button key={item.id} compact marker={String(index + 1)}
+        label={`Section ${index + 1}: ${item.title}`} href={routeHref({ ...route, dayId: day.id, sectionId: item.id })}
+        selected={item.id === sectionId} disabled={blocked} onPress={() => onSection(item.id)}>
+        {item.title}{completedSections?.has(item.id) ? ' ✓' : ''}
+      </Button>)}
+    </View>
+    <View style={s.divider} />
+    <View testID="course-day-chooser" style={t.group}>
+      <Text accessibilityRole="header" style={t.label}>Study days</Text>
+      {level === 'All' && nearbyDays.length < course.days.length && <View style={{ alignItems: 'flex-start' }}>
+        <Button compact quiet onPress={() => setShowAll(value => !value)}>{showAll ? 'Show nearby days' : 'Show all days'}</Button>
+      </View>}
+      {!course.units?.length && <View style={[s.row, t.filters]}>
+        {levels.filter(value => value === 'All' || course.days.some(item => item.level === value)).map(value =>
+          <Button compact key={value} disabled={blocked} selected={level === value} onPress={() => onLevelChange(value)}
+            label={value === 'All' ? 'All course levels' : undefined}>
+            {value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations' : value}
+          </Button>)}
+      </View>}
+      {unitGroups ? unitGroups.map(({ unit, position, days }) =>
+        <View key={unit.id} testID={`course-unit-${unit.id}`} style={t.group}>
+          <Text accessibilityRole="header" style={[s.muted, t.unit]}>Unit {position + 1}: {unit.title}</Text>
+          {renderDays(days)}
+        </View>) : renderDays(visibleDays)}
+    </View>
+  </View>;
+
+  if (!sidebar) return outline;
+
+  // The learner shell already scrolls the lesson. Give a long outline its own scroll area.
+  return <div ref={scroll} style={{ position: 'sticky', top: 12, flexShrink: 0, alignSelf: 'flex-start',
+    width: sidebar === 'wide' ? 250 : 220, maxHeight: sidebar === 'wide' ? 'calc(100dvh - 96px)' : 'calc(100dvh - 160px)',
+    overflowY: 'auto', padding: 4, margin: -4 }}>
+    {outline}
+  </div>;
+}
+
+const t = StyleSheet.create({
+  outline: { backgroundColor: colors.sand, borderRadius: 14, padding: 12, gap: 12, minWidth: 0 },
+  title: { fontSize: 21, lineHeight: 29 },
+  group: { gap: 5, minWidth: 0 },
+  label: { ...s.eyebrow, fontSize: 13, letterSpacing: 0.6 },
+  unit: { fontSize: 14, lineHeight: 20, fontWeight: '600', paddingBottom: 4 },
+  filters: { gap: 5, marginBottom: 4 },
+});

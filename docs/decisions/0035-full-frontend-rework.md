@@ -10,7 +10,7 @@ The owner rejected the visual pilot and asked to rework the whole interface. The
 
 Use warm neutral surfaces, pine primary actions, gold highlights and bundled variable Inter with a Japanese system fallback. Put teaching content and contextual photos early in the layout. Give the catalogue, course, structured practice, review, report, settings and editor their own task-specific layouts. Present the study step and its saved progress separately. In focused recall, keep the notebook mounted and hidden so in-progress note edits survive.
 
-Put the daily course outline beside the course title. The outline shows the current day's sections first, followed by all study days. It starts collapsed and closes after successful navigation to a selection so learners can begin reading at the destination.
+Keep the daily course outline on the left of the lesson on wide screens. The outline shows the current day's sections and up to ten study days before and after it. Offer the full list when some days are outside that range. On narrow screens, open the same outline from the course header and collapse it after navigation so the chosen section is immediately readable.
 
 For French daily-course Quick practice, use short prompts with lettered answer cards directly below. Keep all questions available in the same section and use the same letters to identify English meanings in the optional hint.
 

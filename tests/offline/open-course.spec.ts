@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
-import { expectDialoguePhoto, expectFrenchTranscripts, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
@@ -67,7 +67,7 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   await cold.goto(baseURL!);
   await button(cold, 'Open daily course').click();
   const spelling = openCoursePilot.days[2];
-  await button(cold, 'Course outline').click();
+  await openCourseOutline(panel(cold));
   await button(cold, `Choose day 3: ${spelling.title}`).click();
   await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Dialogue')).toBeVisible();

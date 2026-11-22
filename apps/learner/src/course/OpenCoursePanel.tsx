@@ -7,7 +7,7 @@ import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
 import { CourseBlockView } from './CourseBlockView';
-import { CourseDayChooser } from './CourseDayChooser';
+import { CourseOutline, type CourseSidebar } from './CourseOutline';
 import { CompactCourseContent } from './CompactCourseContent';
 import { compactCourseStepKind, compactCourseSteps } from './compactCourseSteps';
 import { useCourseLearning } from './useCourseLearning';
@@ -17,7 +17,10 @@ import { routeHref, type AppRoute } from '../app/routes';
 type CourseRoute = Extract<AppRoute, { kind: 'course' }>;
 
 export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked?: (blocked: boolean) => void }) {
-  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
+  const { width } = useWindowDimensions();
+  const compact = width < designTokens.layout.compactBreakpoint;
+  const sidebar: CourseSidebar | undefined = Platform.OS === 'web' && width >= 900
+    ? (width >= designTokens.layout.desktopNavBreakpoint ? 'wide' : 'medium') : undefined;
   const { route, navigate, backTo } = useNavigation();
   const courseRoute = route.kind === 'course' && route.courseId === course.id && route.language === course.language ? route : undefined;
   const open = !!courseRoute;
@@ -46,7 +49,7 @@ export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: Ope
         </View>
       </View>
       <View style={[s.row, { gap: 8, maxWidth: '100%' }, compact && open && { width: '100%', justifyContent: 'space-between' }]}>
-        {open && <Button compact expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
+        {open && !sidebar && <Button compact expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
           trailingIcon={outlineOpen ? 'chevron-down' : 'chevron'} onPress={() => setOutlineOpen(value => !value)}>Course outline</Button>}
         <Button expanded={open} primary={!open} compact={open} quiet={open} href={routeHref(open ? today : courseStart)}
           label={open ? 'Close daily course' : undefined} disabled={writeBlocked || model.busy || !!model.saveError} onPress={toggle}>
@@ -55,13 +58,13 @@ export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: Ope
       </View>
     </View>
     {courseRoute && <CourseJourney course={course} route={courseRoute} model={model} onWriteBlocked={reportWrite}
-      outlineId={outlineOpen ? outlineId : undefined} onCloseOutline={() => setOutlineOpen(false)} />}
+      sidebar={sidebar} outlineId={sidebar || outlineOpen ? outlineId : undefined} onCloseOutline={() => setOutlineOpen(false)} />}
   </View>;
 }
 
-function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onCloseOutline }: {
+function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onCloseOutline, sidebar }: {
   course: OpenCourse; route: CourseRoute; model: LearningModel; onWriteBlocked: (blocked: boolean) => void;
-  outlineId?: string; onCloseOutline: () => void;
+  outlineId?: string; onCloseOutline: () => void; sidebar?: CourseSidebar;
 }) {
   const { navigate, backTo } = useNavigation();
   const compact = useWindowDimensions().width < 600;
@@ -154,8 +157,11 @@ function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onClos
   }
   const nextButton = index < sections.length - 1 && <Button primary
     disabled={navigationBlocked || (!currentStep && !done && !browseOnly)} onPress={next}>Next section</Button>;
+  const outline = outlineId && <CourseOutline id={outlineId} sidebar={sidebar} course={course} route={route} day={day}
+    sections={sections} sectionId={block.id} completedSections={currentStep ? undefined : progress.completedBlockIds} events={learning.events}
+    level={level} onLevelChange={setLevel} blocked={navigationBlocked} onDay={selectDay} onSection={selectSection} />;
 
-  return <View testID="course-journey" style={{ gap: 18, minWidth: 0 }}>
+  const lesson = <View style={{ flex: sidebar ? 1 : undefined, gap: 18, minWidth: 0 }}>
     {learning.loading && <Text accessibilityLiveRegion="polite" style={s.muted}>Loading saved course progress… You can read this section while it loads.</Text>}
     {!learning.loading && (invalidDay || invalidSection) && <View style={s.notice}>
       <Text accessibilityRole="alert" style={s.body}>{invalidDay ? 'That study day is unavailable. Your available study day is shown here.' : 'That section is unavailable. Your available section is shown here.'}</Text>
@@ -173,24 +179,7 @@ function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onClos
       <Button disabled={learning.busy} onPress={learning.discard}>Discard unsaved course action</Button>
     </View>}
     {learning.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving course progress…</Text>}
-    {outlineId && <View nativeID={outlineId} testID="course-outline" style={[s.notice, { gap: 18 }]}>
-      <View style={{ gap: 10 }}>
-        <Text accessibilityRole="header" style={s.heading}>Sections in Day {day.dayNumber}</Text>
-        <View style={[s.row, { alignItems: 'stretch', gap: 8 }]}>
-          {sections.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
-            flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 270 }}>
-            <Button compact label={`Section ${position + 1}: ${item.title}`} selected={item.id === block.id}
-              disabled={navigationBlocked} onPress={() => selectSection(item.id)}>
-              {item.title}{!currentStep && progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
-            </Button>
-          </View>)}
-        </View>
-      </View>
-      <View style={s.divider} />
-      <CourseDayChooser course={course} currentDay={day} events={learning.events} level={level}
-        onLevelChange={setLevel} onSelectDay={selectDay} compact={compact} loading={learning.loading}
-        browseOnly={browseOnly} navigationBlocked={navigationBlocked} />
-    </View>}
+    {!sidebar && outline}
     <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
       {currentUnit && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
       <View style={s.row}><Badge>DAY {String(day.dayNumber).padStart(2, '0')}</Badge><Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level} · Guided study</Text></View>
@@ -201,7 +190,7 @@ function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onClos
       </Text>
       <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * (currentStep ? index + 1 : progress.completedBlockIds.size) / sections.length}%` }]} /></View>
     </View>
-    <View testID={`course-block-${block.id}`} style={{ gap: 24, minWidth: 0, padding: compact ? 0 : 22, paddingVertical: 22 }}>
+    <View testID={`course-block-${block.id}`} style={{ gap: 24, minWidth: 0, paddingHorizontal: compact || sidebar ? 0 : 22, paddingVertical: 22 }}>
       {currentStep ? <>
         <View style={[s.row, { justifyContent: 'space-between', gap: 10 }]}>
           <CourseStepHeading stepId={block.id} title={currentStep.title} narrow={compact} compactCourse />
@@ -242,6 +231,11 @@ function CourseJourney({ course, route, model, onWriteBlocked, outlineId, onClos
       {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to day {nextDay.dayNumber}: {nextDay.title}</Button>}
     </View>}
     <CourseCredits course={course} />
+  </View>;
+
+  return <View testID="course-journey" style={sidebar && { flexDirection: 'row', alignItems: 'flex-start', gap: 20 }}>
+    {sidebar && outline}
+    {lesson}
   </View>;
 }
 

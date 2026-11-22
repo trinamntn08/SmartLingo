@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Move the course outline to a left sidebar
+
+- Request. Make the course outline accessible on the left and show nearby days for direct selection.
+- Start. At 21:48 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` worktree. Local, tracking and live `feat/french-daily-opening` matched at `68b5f99856f11d05a4f643db3c20abe35b60f9d6`, ahead/behind `0/0`.
+- Acceptance. Keep the outline visible alongside the study content on wide screens. Show the current day's sections and up to ten authored days before and after the current day, with access to the entire course. Keep a compact disclosure when two columns cannot fit. Verify selection, saved resume, route history, offline use and the shared preview.
+- Outcome. The independently scrollable left outline highlights the current day and section and marks completed days. Day links resume the saved section, and section links target the chosen step. The first and last days bound the nearby range. The five French days all fit the range, and longer lists offer Show all days. Japanese level filters stay available. On narrow screens the same outline opens from the header and closes after selection.
+- Validation. `npm.cmd run check`, `git diff --check`, 286 tooling/application tests, 28 targeted Chromium cases, and six cold-offline cases passed. Verified the nearby window at each end of the Japanese course, completed-day status, direct links, keyboard use and history. Walked through Day 2 at 1,440, 918 and 320 px against the shared preview and verified the wide outline stays visible as the lesson scrolls. The served and local manifests matched at `b9290d825d3f`.
+- Handoff. The commit containing this entry is the checkpoint. Next is owner review at `http://localhost:8082`.
+
 ## 2026-11-22 Make French Quick practice easier to scan
 
 - Request. Simplify Quick practice with less text and immediately recognisable A/B/C answers.

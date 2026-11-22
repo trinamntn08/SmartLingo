@@ -6,6 +6,12 @@ export async function openProfileSection(page: Page, name: string) {
   if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
 }
 
+export async function openCourseOutline(panel: Locator) {
+  const disclosure = panel.getByRole('button', { name: 'Course outline', exact: true, expanded: false });
+  if (await disclosure.isVisible()) await disclosure.click();
+  await expect(panel.getByTestId('course-outline')).toBeVisible();
+}
+
 /** Browse a topic through Learn, including the Japanese letters-first entry. */
 export async function openTopic(page: Page, name: string) {
   await page.getByRole('button', { name: 'Learn', exact: true }).click();

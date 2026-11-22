@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import type { CourseDay, CourseEvent, NotebookEntry } from '@smartlingo/domain';
+import { openCourseOutline } from './learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
@@ -21,8 +22,7 @@ async function stored<T>(page: Page, storeName: string) {
 }
 
 async function section(page: Page, day: CourseDay, index: number) {
-  const toggle = panel(page).getByRole('button', { name: 'Course outline', exact: true, expanded: false });
-  if (await toggle.isVisible()) await toggle.click();
+  await openCourseOutline(panel(page));
   await button(page, `Section ${index + 1}: ${day.blocks[index].title}`).click();
   await expect(panel(page).getByRole('heading', { name: day.blocks[index].title, exact: true })).toBeVisible();
 }
@@ -46,9 +46,15 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(panel(page).getByText(`Author: ${japaneseCourse.provenance!.author}`, { exact: true })).toBeVisible();
   await expect(panel(page).getByText(`Rights: ${japaneseCourse.provenance!.rights}`, { exact: true })).toBeVisible();
   await expect(panel(page).getByRole('button', { name: /Creative Commons/ })).toHaveCount(0);
-  await button(page, 'Course outline').click();
+  await openCourseOutline(panel(page));
+  const days = panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose day / });
+  await expect(days).toHaveCount(11);
+  await button(page, 'Show all days').click();
+  await expect(days).toHaveCount(japaneseCourse.days.length);
+  await button(page, 'Show nearby days').click();
+  await expect(days).toHaveCount(11);
   await button(page, 'B1').click();
-  await expect(panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose day / })).toHaveCount(4);
+  await expect(days).toHaveCount(4);
   await button(page, `Choose day ${day.dayNumber}: ${day.title}`).click();
   await expect(panel(page).getByRole('heading', { name: `Day ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
   const study = day.blocks.find(block => block.kind === 'study')!;
@@ -170,10 +176,14 @@ test('Japanese days remain readable without browser storage', async ({ page }) =
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await button(page, 'Open daily course').click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
-  await button(page, 'Course outline').click();
+  await openCourseOutline(panel(page));
   await button(page, 'B1').click();
   const day = japaneseCourse.days.at(-1)!;
   await button(page, `Choose day ${day.dayNumber}: ${day.title}`).click();
+  await openCourseOutline(panel(page));
+  await button(page, 'All course levels').click();
+  await expect(panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose day / }).first())
+    .toHaveAccessibleName(/^Choose day 3:/);
   await section(page, day, day.blocks.findIndex(block => block.kind === 'vocabulary'));
   const word = day.vocabulary[0];
   await expect(panel(page).getByText(word.reading!, { exact: true })).toBeVisible();

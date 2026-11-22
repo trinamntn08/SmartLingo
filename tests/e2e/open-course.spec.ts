@@ -1,4 +1,4 @@
-import { expectDialoguePhoto, expectFrenchTranscripts, openProfileSection } from './learner-journeys';
+import { expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
@@ -7,7 +7,7 @@ const [firstDay, secondDay, thirdDay] = openCoursePilot.days;
 const coursePanel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => coursePanel(page).getByRole('button', { name, exact: true });
 const step = (page: Page, name: string) => coursePanel(page).getByRole('heading', { name, exact: true });
-const chooseDay = (page: Page, day: CourseDay) => button(page, `Choose day ${day.dayNumber}: ${day.title}`);
+const chooseDay = (page: Page, day: CourseDay) => coursePanel(page).getByTestId(`course-day-${day.id}`).getByRole('button');
 const dayHeading = (page: Page, day: CourseDay) => step(page, `Day ${day.dayNumber}: ${day.title}`);
 
 async function storedEvents(page: Page, store: 'courseEvents' | 'events' = 'courseEvents') {
@@ -45,11 +45,6 @@ async function seedEvents(page: Page, events: CourseEvent[]) {
   }, events);
 }
 
-async function openOutline(page: Page) {
-  const toggle = coursePanel(page).getByRole('button', { name: 'Course outline', exact: true, expanded: false });
-  if (await toggle.isVisible()) await toggle.click();
-}
-
 function courseEvent(day: CourseDay, blockId: string, kind: CourseEvent['kind'], index: number): CourseEvent {
   return { id: crypto.randomUUID(), courseId: openCoursePilot.id,
     courseRevision: courseDayProgressRevision(openCoursePilot, day), dayId: day.id,
@@ -65,12 +60,12 @@ test('all five opening lessons offer a full French transcript, full translation 
   await expect(step(page, openCoursePilot.title)).toBeVisible();
   await button(page, 'Open daily course').focus();
   await page.keyboard.press('Enter');
-  await openOutline(page);
+  await openCourseOutline(coursePanel(page));
   await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
   await expect(coursePanel(page).getByText('5 guided study days · Draft preview', { exact: true })).toBeVisible();
 
   for (const day of openCoursePilot.days) {
-    await openOutline(page);
+    await openCourseOutline(coursePanel(page));
     await chooseDay(page, day).click();
     await expect(dayHeading(page, day)).toBeVisible();
     await expect(step(page, 'Dialogue')).toBeVisible();
@@ -235,10 +230,11 @@ test('legacy day completion and vocabulary or practice cursor survive the new la
   await page.goto(`/course/fr/${openCoursePilot.id}`);
   await expect(dayHeading(page, thirdDay)).toBeVisible();
   await expect(step(page, 'Quick practice')).toBeVisible();
-  await openOutline(page);
+  await openCourseOutline(coursePanel(page));
   await chooseDay(page, secondDay).click();
   await expect(step(page, 'Dialogue')).toBeVisible();
-  await openOutline(page);
+  await openCourseOutline(coursePanel(page));
+  await expect(chooseDay(page, firstDay)).toHaveAccessibleName(/completed$/);
   await chooseDay(page, firstDay).click();
   await expect(step(page, 'Study day saved')).toBeVisible();
 });

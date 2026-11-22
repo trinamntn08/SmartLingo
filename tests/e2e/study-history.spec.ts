@@ -119,22 +119,33 @@ test('French course section history is read-only and refresh keeps the same sect
   await expect(page).toHaveURL(`${location}/${dialogue.id}`);
   const panel = page.getByTestId('open-course-panel');
   const outlineButton = panel.getByRole('button', { name: 'Course outline', exact: true });
-  const outline = panel.getByTestId('course-outline');
-  await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
-  await outlineButton.press('Enter');
-  await expect(outlineButton).toHaveAttribute('aria-expanded', 'true');
-  await expect(outline).toHaveAttribute('id', (await outlineButton.getAttribute('aria-controls'))!);
+  const outline = panel.getByRole('navigation', { name: 'Course outline' });
+  const wide = page.viewportSize()!.width >= 900;
+  if (wide) {
+    await expect(outlineButton).toHaveCount(0);
+    await expect(outline).toBeVisible();
+    const bounds = (await outline.boundingBox())!;
+    const lesson = (await panel.getByRole('heading', { name: `Day 1: ${day.title}`, exact: true }).boundingBox())!;
+    expect(bounds.x + bounds.width).toBeLessThan(lesson.x);
+  } else {
+    await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
+    await outlineButton.press('Enter');
+    await expect(outlineButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(outline).toHaveAttribute('id', (await outlineButton.getAttribute('aria-controls'))!);
+  }
   await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('aria-selected', 'true');
   await expect(outline.getByRole('button', { name: /^Choose day 1:/ })).toHaveAttribute('aria-selected', 'true');
-  const dayHeading = panel.getByRole('heading', { name: `Day 1: ${day.title}`, exact: true });
-  expect((await outlineButton.boundingBox())!.y).toBeLessThan((await dayHeading.boundingBox())!.y);
-  await expect(panel.getByRole('button', { name: /^(Browse sections|Choose a study day)$/ })).toHaveCount(0);
+  await expect(outline.getByRole('button', { name: /^Choose day / })).toHaveCount(5);
+  await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('href', `${location}/${dialogue.id}`);
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
-  await outlineButton.press('Enter');
-  await expect(outline).toHaveCount(0);
+  if (!wide) {
+    await outlineButton.press('Enter');
+    await expect(outline).toHaveCount(0);
+  }
 
   await panel.getByRole('button', { name: 'Next section', exact: true }).click();
   await expect(page).toHaveURL(`${location}/${practice.id}`);
+  if (wide) await expect(outline.getByRole('heading', { name: 'Course outline' })).toBeInViewport();
   const initialEvents = await storedEvents<CourseEvent>(page, 'courseEvents');
   expect(initialEvents.map(event => event.kind).sort()).toEqual(['navigation', 'study']);
 
@@ -147,10 +158,10 @@ test('French course section history is read-only and refresh keeps the same sect
   await expect(panel.getByRole('heading', { name: 'Quick practice', exact: true })).toBeVisible();
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual(initialEvents);
 
-  await outlineButton.press('Enter');
+  if (!wide) await outlineButton.press('Enter');
   await outline.getByRole('button', { name: 'Section 1: Dialogue' }).press('Enter');
   await expect(page).toHaveURL(`${location}/${dialogue.id}`);
-  await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
+  if (!wide) await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
   await expect(panel.getByRole('heading', { name: 'Dialogue', exact: true })).toBeFocused();
   expect((await storedEvents<CourseEvent>(page, 'courseEvents')).filter(event => event.kind === 'study')).toHaveLength(1);
 });

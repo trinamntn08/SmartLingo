@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 French course copyright question
+
+- The owner asked whether the proposed use of *Le Nouveau Taxi !* as a teaching reference would violate copyright. Scope is the proposed opening week and the applicable copyright distinction.
+- At 15:15 CET (Europe/Paris), the clean `D:/dev/projects/SmartLingo` checkout matched its tracking and live `docs/french-course-design-direction` ref at `09dd94a250c1262e825bceee4332d59f5e4b897c`, ahead/behind `0/0`, after `git fetch origin --prune`. The live course planning ref also matched `2fc5f51da367209dc179c90569fcd4f469c147bd`.
+- Reviewed the outline and prior source decision. General teaching methods and ordinary topics can inform independent authoring. French law generally requires permission to reproduce or adapt protected expression. An original selection and arrangement can also receive protection. Use a SmartLingo sequence, freshly written dialogues and exercises, and original or appropriately licensed media. Giving credit alone supplies no licence. [WIPO](https://www.wipo.int/en/web/business/copyright) · [Article L122-4](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006278911/2026-05-07) · [Article L112-3](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006278879/2026-07-04)
+- The outline can proceed as an independently authored course. This assessment covers the outline. Final lesson and media provenance can be checked during authoring and owner review under the existing course source decision. [Course source decision](decisions/0022-open-course-planning.md)
+- Reviewed the documentation diff. `npm.cmd run check` and `git diff --check` passed for this documentation checkpoint.
+
 ## 2026-11-22 French course materials readiness
 
 - The owner asked whether the book or additional materials are needed to start implementing the first week. This was a readiness check.

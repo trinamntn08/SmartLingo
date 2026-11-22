@@ -29,6 +29,8 @@ Owner instruction, recorded 2026-11-22: every work request, including asking for
 
 Owner instruction, recorded 2026-11-22. Use the existing `http://localhost:8082` for every new version handed to the owner for local review. Rebuild the intended checkout in place, verify the served build, and hand back the same address. Keep any isolated development or test servers out of the owner handoff. Follow the [local preview update steps](LOCAL_OPERATIONS.md#test-the-offline-ready-preview).
 
+The primary learner checkout is the source of that preview. Validate task worktrees on isolated ports. Integrate approved, compatible changes into the primary learner source before rebuilding, so one task's build cannot replace features from another. The shared listener serves the primary checkout's export in place.
+
 ## Automatic checkpoint commits
 
 Owner instruction, recorded 2026-11-14: automatically commit after each completed step so there is a recoverable Git checkpoint. This is standing authorisation for the primary agent to make local commits during authorised work without repeated confirmation. A step is a small, coherent, reviewable outcome with acceptance criteria; it is not each individual edit, command, or subagent response.

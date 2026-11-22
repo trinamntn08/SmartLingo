@@ -4,6 +4,7 @@ import { normalizeSearch, notebookEntrySchema, languageNames, notebookLanguage, 
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { Button } from './controls';
 import { Speak } from '../audio/Speak';
+import { JapaneseWordReading } from './JapaneseWordReading';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';
@@ -74,5 +75,24 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
     <Text style={s.body}>Example or personal note</Text><TextInput accessibilityLabel="Example or personal note" value={example} onChangeText={setExample} maxLength={1000} editable={!model.busy && !model.saveError} multiline style={[s.input, { minHeight: 90 }]} />
     {japanese && <><Text style={s.body}>Example kana reading (optional)</Text><TextInput accessibilityLabel="Example kana reading" value={exampleReading} onChangeText={setExampleReading} maxLength={1000} editable={!model.busy && !model.saveError} multiline style={s.input} /></>}
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}<View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save changes</Button><Button disabled={model.busy || !!model.saveError} onPress={() => setEditing(false)}>Cancel</Button></View>
-  </> : <><View style={t.panelHeader}><View style={[t.stack, { flexGrow: 1, flexShrink: 1 }]}><View style={s.row}><Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text><Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} /></View>{!!entry.reading && <Text style={t.detail}>{entry.reading}</Text>}<Text style={s.body}>{entry.meaning}</Text></View><Button quiet compact icon="edit" disabled={model.blocked} onPress={edit}>Edit note</Button></View>{!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}{!!entry.example && <View style={[t.inset, { padding: 16 }]}><Text style={t.label}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text>{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}</View>}{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</>}</View>;
+  </> : <>
+    <View style={t.panelHeader}>
+      <View style={[t.stack, { flexGrow: 1, flexShrink: 1 }]}>
+        <View style={s.row}>
+          <Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text>
+          {japanese && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
+          <Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} />
+        </View>
+        {!japanese && !!entry.reading && <Text style={t.detail}>{entry.reading}</Text>}
+        <Text style={s.body}>{entry.meaning}</Text>
+      </View>
+      <Button quiet compact icon="edit" disabled={model.blocked} onPress={edit}>Edit note</Button>
+    </View>
+    {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
+    {!!entry.example && <View style={[t.inset, { padding: 16 }]}>
+      <Text style={t.label}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text>
+      {!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}
+    </View>}
+    {saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}
+  </>}</View>;
 }

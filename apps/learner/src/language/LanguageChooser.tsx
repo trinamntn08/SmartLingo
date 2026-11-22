@@ -14,7 +14,7 @@ export function LanguageChooser({ onChoose }: { onChoose: (language: TargetLangu
   const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   return <View testID="language-chooser" style={{ gap: compact ? 20 : 30, minWidth: 0, paddingTop: compact ? 4 : 16 }}>
     <View style={{ gap: 8 }}>
-      <Text accessibilityRole="header" style={[s.hero, compact && { fontSize: 36, lineHeight: 43, letterSpacing: -1.2 }]}>Choose a language</Text>
+      <Text accessibilityRole="header" style={[s.hero, compact && { ...designTokens.typography.target, letterSpacing: -1.2 }]}>Choose a language</Text>
       <Text style={[s.body, { maxWidth: 680 }]}>Learn through everyday situations, with pictures and English explanations.</Text>
     </View>
     <View style={[s.split, { gap: compact ? 16 : 24 }]}>
@@ -24,7 +24,7 @@ export function LanguageChooser({ onChoose }: { onChoose: (language: TargetLangu
           <ContextImage photo={getContextPhoto(language)} style={{ aspectRatio: compact ? 2.35 : 1.9 }} />
           <View style={{ gap: compact ? 12 : 16, padding: compact ? 17 : 24, flexGrow: 1 }}>
             <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
-              <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 26 : 30, lineHeight: 36 }]}>{languageNames[language]}</Text>
+              <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 28 : 32, lineHeight: 40 }]}>{languageNames[language]}</Text>
               <View style={{ borderRadius: 8, backgroundColor: item.tint, paddingVertical: 4, paddingHorizontal: 10 }}>
                 <Text style={[s.body, { fontWeight: '600' }]} accessibilityLabel={`${item.greeting} means hello`}>{item.greeting}</Text>
               </View>

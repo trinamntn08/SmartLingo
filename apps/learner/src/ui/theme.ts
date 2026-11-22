@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
   buttonAccent: { backgroundColor: colors.yellow, borderColor: colors.yellow },
   buttonSelected: { backgroundColor: colors.green, borderColor: '#B7D3C3' },
   buttonText: { ...tokens.typography.button, color: colors.ink },
-  input: { backgroundColor: colors.card, borderColor: colors.inputBorder, borderWidth: 1, borderRadius: tokens.radius.input, padding: 14, fontFamily: tokens.typography.body.fontFamily, fontSize: tokens.typography.body.fontSize, color: colors.ink, minHeight: tokens.control.inputHeight },
+  input: { backgroundColor: colors.card, borderColor: colors.inputBorder, borderWidth: 1, borderRadius: tokens.radius.input, padding: 14, ...tokens.typography.body, color: colors.ink, minHeight: tokens.control.inputHeight },
   notice: { borderRadius: 16, padding: 18, backgroundColor: colors.sand, gap: 10 },
   error: { borderRadius: tokens.radius.md, padding: 18, backgroundColor: colors.softDanger, borderWidth: 1, borderColor: colors.errorBorder, gap: tokens.space.md },
   progressTrack: { height: 8, backgroundColor: colors.sand, borderRadius: 10, overflow: 'hidden' },

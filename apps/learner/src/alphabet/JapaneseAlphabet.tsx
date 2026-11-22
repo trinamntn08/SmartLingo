@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-na
 import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
+import { AudioIconButton } from '../audio/AudioIconButton';
 import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
@@ -40,7 +41,7 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   return <View testID="japanese-alphabet" style={{ gap: 24, minWidth: 0 }}>
     <View style={{ gap: 12 }}>
       <View style={[s.row, { justifyContent: 'space-between' }]}>
-        <View style={{ gap: 8, flexShrink: 1 }}><Text style={s.eyebrow}>Kana studio · Read, listen, recognise</Text><Text accessibilityRole="header" style={[s.title, compact && { fontSize: 32, lineHeight: 40 }]}>Japanese alphabet</Text>
+        <View style={{ gap: 8, flexShrink: 1 }}><Text style={s.eyebrow}>Kana studio · Read, listen, recognise</Text><Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>Japanese alphabet</Text>
           <Text style={s.muted}>{model.loading ? 'Loading saved alphabet progress…' : model.loadError ? 'Saved progress is unavailable. You can still study and practise.' : `${progress.completed} of ${progress.total} rows studied`}</Text></View>
         <Button expanded={choosingRow} onPress={() => setChoosingRow(value => !value)}>{choosingRow ? 'Close row chooser' : 'Choose another row'}</Button>
       </View>
@@ -104,7 +105,7 @@ function KanaRowCard({ row, number, selected, studied, statusUnavailable, sugges
       opacity: pressed ? 0.8 : 1, ...(focused ? { outlineColor: colors.ink, outlineWidth: 3, outlineStyle: 'solid', outlineOffset: 2 } : {}) })}>
     <Text style={[s.eyebrow, { letterSpacing: 0.5, color: colors.ink }]}>{number.toString().padStart(2, '0')} · {positionStatus}</Text>
     <Text style={[s.target, { fontSize: 28, lineHeight: 40 }]}>{row.characters.map(character => character.kana).join('')}</Text>
-    <Text style={[s.body, { fontSize: 17, lineHeight: 24, fontWeight: '700' }]}>{row.title}</Text>
+    <Text style={[s.body, { fontWeight: '700' }]}>{row.title}</Text>
     <Text style={s.muted}>{studyStatus}</Text>
   </Pressable>;
 }
@@ -157,7 +158,7 @@ function AlphabetRow({ lesson, model, completed, onSave, onNext }: {
   const compact = useWindowDimensions().width < 600;
   return <View style={[s.card, { padding: compact ? 18 : 32, gap: 22, minWidth: 0, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
     <View style={s.row}><Text style={s.eyebrow}>{lesson.script === 'hiragana' ? 'Hiragana' : 'Katakana'} · Row {rowNumber} of {rows.length} · Step {practice ? '2' : '1'} of 2</Text>{completed && <Badge>Row studied</Badge>}</View>
-    <View style={{ gap: 12 }}><Text accessibilityRole="header" style={[s.title, { fontWeight: '500' }, compact && { fontSize: 30, lineHeight: 40 }]}>{lesson.title}</Text>
+    <View style={{ gap: 12 }}><Text accessibilityRole="header" style={[s.title, { fontWeight: '500' }, compact && s.compactTitle]}>{lesson.title}</Text>
     <Text style={[s.body, { maxWidth: 760 }]}>{lesson.summary}</Text></View>
     <View style={s.row}><Button selected={!practice} onPress={() => switchMode(false)}>Study characters</Button><Button selected={practice} onPress={() => switchMode(true)}>Recognition practice</Button></View>
     {!practice ? <>
@@ -186,8 +187,10 @@ function KanaCharacterCard({ character, playing, onPlay, compact = false }: { ch
   return <View style={{ width: compact ? 210 : undefined, flexGrow: compact ? 0 : 1, flexBasis: compact ? undefined : 150,
     minWidth: 0, maxWidth: '100%', backgroundColor: colors.paper, borderRadius: 16, padding: 18, gap: 14, borderWidth: 1, borderColor: colors.line }}>
     <Text style={[s.target, { fontSize: 82, lineHeight: 108, textAlign: 'center', fontWeight: '400' }]}>{character.kana}</Text>
-    <View style={{ alignItems: 'center', gap: 6 }}><Text style={s.eyebrow}>Reading</Text><Text style={[s.heading, { fontSize: 28, lineHeight: 38 }]}>{character.romaji}</Text></View>
-    <Button label={playing ? `Stop audio for ${character.kana}` : `Listen to ${character.kana}`} onPress={onPlay}>{playing ? 'Stop audio' : 'Listen'}</Button>
+    <View style={[s.row, { justifyContent: 'center' }]}>
+      <Text style={s.heading}>{character.romaji}</Text>
+      <AudioIconButton playing={playing} label={`Listen to ${character.kana}`} stopLabel={`Stop audio for ${character.kana}`} onPress={onPlay} />
+    </View>
     {!!character.note && <Text style={s.muted}>{character.note}</Text>}
   </View>;
 }
@@ -223,7 +226,8 @@ function RecognitionRound({ lesson, round, characterId, stateKey, playback, onAt
     {!!answer && <View accessibilityLiveRegion="polite" style={s.notice}>
       <Text style={s.body}>{answer === character.id ? 'Yes.' : 'Keep practising.'} {character.kana} is read “{character.romaji}”.</Text>
       {!!character.note && <Text style={s.body}>{character.note}</Text>}
-      <Button label={playback.playing === character.id ? `Stop audio for ${character.kana}` : `Listen to ${character.kana}`} onPress={() => void playback.play(character)}>{playback.playing === character.id ? 'Stop audio' : 'Listen to the model'}</Button>
+      <AudioIconButton playing={playback.playing === character.id} label={`Listen to ${character.kana}`}
+        stopLabel={`Stop audio for ${character.kana}`} onPress={() => void playback.play(character)} />
       {last ? <Text style={s.body}>You can save the row after trying every character.</Text> : <Button primary onPress={() => onNext(lesson.characters[index + 1])}>Next character</Button>}
     </View>}
     <Button onPress={onRepeat}>Repeat this row</Button>

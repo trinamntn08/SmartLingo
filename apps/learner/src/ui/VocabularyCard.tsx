@@ -6,6 +6,7 @@ import { Speak } from '../audio/Speak';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { WordIllustration } from './WordIllustration';
+import { JapaneseWordReading } from './JapaneseWordReading';
 import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
 
 export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustration = true, study = false }: {
@@ -37,11 +38,13 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
     study && { borderTopWidth: 3, borderTopColor: colors.green }]}>
     <View style={{ minWidth: 0, gap: study ? 0 : 6 }}>
         <View style={[s.row, { gap: 8 }]}>
-          <Text accessibilityRole="header" style={[s.target, { flexShrink: 1, minWidth: 0, fontSize: 32, lineHeight: 41 }, compact && { fontSize: 30, lineHeight: 39 }]}>{entry.target}</Text>
+          <Text accessibilityRole="header" style={[s.target, { flexShrink: 1, minWidth: 0 }, compact && { fontSize: 32, lineHeight: 42 }]}>{entry.target}</Text>
+          {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
           {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
           <Speak language={language} text={entry.target} onError={setVoiceError} />
         </View>
-        {!!entry.reading && <Text style={s.body}>{entry.reading}</Text>}<Text style={[s.body, { fontWeight: '600' }]}>{entry.meaning}</Text>
+        {language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}
+        <Text style={[s.body, { fontWeight: '600' }]}>{entry.meaning}</Text>
     </View>
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
     {study ? <View style={[s.row, { alignItems: 'center', gap: 12, minWidth: 0 }]}>{illustration}{example}</View> : <>{illustration}{example}</>}

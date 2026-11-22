@@ -6,6 +6,22 @@ Provider/platform research checked 2026-11-15; the implemented-code description 
 
 Owner preference: natural, calm French with no gender preference. The current implementation provides an explicit Azure audition/save flow for Denise/Henri with gentle neutral pacing, not a declared voice-quality winner. It caches verified clips for offline replay and keeps ordinary playback free of generation calls. [Setup and privacy boundaries](../README.md#optional-saved-neural-french-audio), [decision](decisions/0018-explicit-cached-neural-speech.md). Actual provider quality remains unverified without the owner's listening test.
 
+## Shortlist for French audio independent of browser voices
+
+Checked 2026-11-22. These models can generate French audio locally without a synthesis subscription. Prefer **Kyutai Pocket TTS with Estelle** for the first audition on Windows. Use the same French text for each engine so a listener can compare pronunciation and pacing directly.
+
+| Candidate | Fit for SmartLingo | Source and licence |
+| --- | --- | --- |
+| **Pocket TTS, Estelle** | Built-in French voice and native Windows CPU CLI. Compare the compact `french` and larger `french_24l` models. The publisher offers public weights for built-in voices without an account. | [Public CC BY 4.0 model](https://huggingface.co/kyutai/pocket-tts-without-voice-cloning), [demo](https://kyutai.org/pocket-tts/), [releases](https://github.com/kyutai-labs/pocket-tts/releases). Kyutai identifies Estelle's reference as its own CC0 recording. [Voice source and terms](https://huggingface.co/kyutai/tts-voices#unmute-prod-website) |
+| **Kokoro-82M, `ff_siwis`** | Compact comparison voice with a single stock French speaker. The publisher gives it a B− grade, so hear it on real lesson lines. | [Apache-2.0 model](https://huggingface.co/hexgrad/Kokoro-82M), [voice card and SIWIS credit](https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md#french), [demo](https://huggingface.co/spaces/hexgrad/Kokoro-TTS) |
+| **Qwen3-TTS 1.7B VoiceDesign** | Heavier candidate for generating dialogue voices ahead of time. It supports French and can design a voice from a description of accent, tone and pace. Upstream's local example uses CUDA. | [Apache-2.0 model](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign), [supported workflow](https://github.com/QwenLM/Qwen3-TTS#voice-design), [demo](https://huggingface.co/spaces/Qwen/Qwen3-TTS) |
+
+Mistral Voxtral TTS is an optional benchmark for listening. Its downloadable weights carry a noncommercial licence. The original Piper `fr_FR-siwis-medium` card credits SIWIS but names a Lessac-derived base. Piper flags that base's licence as restricting commercial use of the synthesis. [Mistral release](https://mistral.ai/news/voxtral-tts/) · [Piper voice card](https://huggingface.co/rhasspy/piper-voices/blob/main/fr/fr_FR/siwis/medium/MODEL_CARD) · [Piper licensing](https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/LICENSING.md#the-lessac-base-voice)
+
+The official Windows CLI generated a 5.08-second sample on CPU using the compact model and Estelle. The audio decoded successfully as 24 kHz mono WAV. The trial verifies feasibility on this machine. A French listener still needs to compare pronunciation and naturalness on the same lesson text.
+
+For the website, generate the five A1 opening dialogues on the project machine, review the clips with a native speaker, and ship the accepted audio with the offline-ready lesson assets. Use stable text/voice/revision hashes and list synthetic audio credits. Evaluate liaison, numbers, spelling aloud, and whether each clip matches its transcript. Ordinary playback would then play the shipped file on computers and phones. A separate local service can be evaluated later for dynamic text if needed.
+
 ## Improvement available now
 
 Profile's French audio panel lists the French voices that this browser exposes, allows an explicit voice choice, offers Slow (0.7×), Gentle (0.85×) and Normal (1×), and plays a French sample with its English meaning displayed only on Preview. Existing lesson, notebook and AI reply speaker buttons use the same setting. Preview can be stopped; changing settings stops current speech. Browser speech errors retain visible lesson text.

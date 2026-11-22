@@ -79,6 +79,41 @@ test('playback rereads voices and preferences, uses the selected locale, and rec
   player.stop();
 });
 
+test('the first speaker click waits for a French voice and stopping cancels pending discovery', async () => {
+  const france = voice('France', 'fr-FR');
+  let voices: SpeechSynthesisVoice[] = [];
+  const spoken: SpeechSynthesisUtterance[] = [];
+  const synthesis = Object.assign(new EventTarget(), {
+    getVoices: () => voices,
+    speak: (utterance: SpeechSynthesisUtterance) => { spoken.push(utterance); },
+    cancel: () => {},
+  });
+  const player = new DeviceSpeechPlayer({
+    synthesis: () => synthesis,
+    utterance: text => ({ text, onend: null, onerror: null }) as SpeechSynthesisUtterance,
+  });
+
+  const cancelled = player.speak('Bonjour');
+  player.stop();
+  await cancelled;
+  voices = [france];
+  synthesis.dispatchEvent(new Event('voiceschanged'));
+  assert.equal(spoken.length, 0);
+
+  voices = [];
+  const playing = player.speak('Merci');
+  voices = [voice('English', 'en-US')];
+  synthesis.dispatchEvent(new Event('voiceschanged'));
+  assert.equal(spoken.length, 0);
+  voices = [france];
+  synthesis.dispatchEvent(new Event('voiceschanged'));
+  assert.equal(spoken.length, 1);
+  assert.equal(spoken[0]?.text, 'Merci');
+  assert.equal(spoken[0]?.voice, france);
+  player.stop();
+  await playing;
+});
+
 test('voice discovery subscribes and removes its own listener without overwriting other listeners', () => {
   const original = Object.getOwnPropertyDescriptor(globalThis, 'speechSynthesis');
   const events = new EventTarget();

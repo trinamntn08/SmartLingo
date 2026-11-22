@@ -1,13 +1,13 @@
 import { Text, TextInput, View } from 'react-native';
 import type { Lesson, Vocabulary } from '@smartlingo/domain';
-import { colors, styles as s } from '../ui/theme';
+import { colors, designTokens, styles as s } from '../ui/theme';
 import { Button } from '../ui/controls';
 import { vocabularyPresentation } from '../content/vocabularyPresentation';
 
 function Field({ label, value, onChange, disabled, multiline = true, maxLength = 2000, inputMode }: {
   label: string; value: string; onChange: (value: string) => void; disabled: boolean; multiline?: boolean; maxLength?: number; inputMode?: 'numeric';
 }) {
-  return <View style={{ gap: 8, minWidth: 0 }}><Text style={[s.body, { fontSize: 16, lineHeight: 24, fontWeight: '600' }]}>{label}</Text>
+  return <View style={{ gap: 8, minWidth: 0 }}><Text style={[s.body, { ...designTokens.typography.button, textAlign: 'left' }]}>{label}</Text>
     <TextInput accessibilityLabel={label} editable={!disabled} value={value} onChangeText={onChange} maxLength={maxLength}
       multiline={multiline} inputMode={inputMode} style={[s.input, { backgroundColor: colors.paper }, multiline && { minHeight: 92, textAlignVertical: 'top' }]} />
   </View>;
@@ -43,7 +43,7 @@ export function DraftFields({ draft, onChange, disabled, durationText, onDuratio
     </View>
     <View style={s.notice}><Text style={s.body}>Edit lesson details, vocabulary support, dialogue text and grammar help. Vocabulary target words, pictures, exercise answers and the order of dialogue lines stay fixed in this editor.</Text></View>
     <View style={{ gap: 8 }}><Text style={s.eyebrow}>02 · Vocabulary support</Text><Text accessibilityRole="header" style={s.heading}>Words in context</Text><Text style={s.muted}>{draft.vocabulary.length} entries · English meanings, examples and useful notes</Text></View>
-    {draft.vocabulary.map((word, index) => <View key={word.id} style={[s.card, { borderLeftWidth: 4, borderLeftColor: colors.yellow }]}><Text style={s.eyebrow}>Vocabulary {index + 1} · {word.id}</Text><Text accessibilityRole="header" style={[s.heading, { fontSize: 28, lineHeight: 36 }]}>{word.target}</Text>
+    {draft.vocabulary.map((word, index) => <View key={word.id} style={[s.card, { borderLeftWidth: 4, borderLeftColor: colors.yellow }]}><Text style={s.eyebrow}>Vocabulary {index + 1} · {word.id}</Text><Text accessibilityRole="header" style={[s.heading, { fontSize: 30, lineHeight: 40 }]}>{word.target}</Text>
       <View style={s.row}>{([
         [undefined, 'No gender'], ['masculine', 'm.'], ['feminine', 'f.'], ['both', 'm./f.'],
       ] as const).map(([gender, label]) => <Button key={label} selected={vocabularyPresentation(word).gender === gender} disabled={disabled}

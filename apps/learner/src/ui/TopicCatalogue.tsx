@@ -73,7 +73,7 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
           <View style={{ padding: 18, gap: 8, flexGrow: 1, backgroundColor: [colors.card, colors.skyTint, colors.sageTint][index % 3] }}>
             <View style={[s.row, { justifyContent: 'space-between', gap: 6 }]}><Text style={s.eyebrow}>{levels}</Text><Text style={s.muted}>{topic.lessons.every(lesson => lesson.status === 'published') ? 'Published' : topic.lessons.some(lesson => lesson.status === 'published') ? 'Includes drafts' : 'Draft'}</Text></View>
             <Text accessibilityRole="header" style={s.heading}>{topic.name}</Text>
-            <Text style={[s.body, { fontSize: 17, lineHeight: 25 }]}>{topic.lessons[0]?.outcome}</Text>
+            <Text style={s.body}>{topic.lessons[0]?.outcome}</Text>
             <Text style={s.muted}>{topic.vocabulary.length} words · {topic.lessons.length} short lessons</Text>
             <View style={{ marginTop: 'auto', paddingTop: 8, gap: 8 }}>
               {!!completed && <Text style={s.muted}>{completed} sessions saved</Text>}
@@ -94,7 +94,7 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
         </View>)}</View>
     </>}
     {Platform.OS === 'web' && language === 'fr-FR' && <a href="/vocabulary-photos/credits.html"
-      target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 16, minHeight: 34, display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start' }}>
+      target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, fontFamily: designTokens.typography.button.fontFamily, fontSize: designTokens.typography.button.fontSize, lineHeight: `${designTokens.typography.button.lineHeight}px`, minHeight: 34, display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start' }}>
       Photo credits and licences
     </a>}
   </View>;
@@ -108,7 +108,7 @@ function ShortLessons({ lessons, model, onOpen, disabled }: { lessons: Lesson[];
         const progress = lessonProgress(lesson, model.events);
         return <View key={lesson.id} style={{ padding: 16, gap: 8, borderTopWidth: index ? 1 : 0, borderColor: colors.line }}>
           <View style={[s.row, { justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }]}>
-            <View style={{ minWidth: 32, minHeight: 32, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: progress.completed ? colors.sageTint : colors.goldTint }}><Text style={[s.body, { fontSize: 16 }]}>{progress.completed ? '✓' : String(index + 1).padStart(2, '0')}</Text></View>
+            <View style={{ minWidth: 32, minHeight: 32, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: progress.completed ? colors.sageTint : colors.goldTint }}><Text style={[s.body, designTokens.typography.button]}>{progress.completed ? '✓' : String(index + 1).padStart(2, '0')}</Text></View>
             <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 200, minWidth: 0, gap: 4 }}>
               <Text style={[s.body, { fontWeight: '700' }]}>{lesson.subtitle}</Text>
               <Text style={s.muted}>{lesson.outcome}</Text>

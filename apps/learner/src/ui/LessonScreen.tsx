@@ -11,6 +11,7 @@ import { getContextPhoto } from './contextPhotos';
 import { ContextImage } from './ContextImage';
 import { BilingualDialogue } from './BilingualDialogue';
 import { getLessonDialoguePhoto } from './dialoguePhotos';
+import { GrammarNote } from './GrammarNote';
 
 type Stage = 'vocabulary' | 'dialogue' | 'picture' | 'sentence' | 'finish';
 const stageOrder: Stage[] = ['vocabulary', 'dialogue', 'picture', 'sentence', 'finish'];
@@ -87,7 +88,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
         <Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
         {lesson.dialogue.map((line, index) => <DialogueLine key={index} line={line} highlighted={line.role === lesson.role} language="ja-JP" />)}
       </>}
-      <View style={s.notice}><Text style={s.eyebrow}>Grammar</Text><Text style={s.heading}>{lesson.grammar.title}</Text><Text style={s.body}>{lesson.grammar.explanation}</Text></View>
+      <GrammarNote lessonId={lesson.id} note={lesson.grammar} />
       <Button primary onPress={() => setStage('picture')}>{lesson.pictureActivity.mode === 'meaning' ? 'Try meaning practice →' : 'Try picture practice →'}</Button>
     </View>}
     {stage === 'picture' && <PictureActivity lesson={lesson} disabled={model.blocked} done={progress.pictureDone} record={record} onNext={() => setStage('sentence')} />}

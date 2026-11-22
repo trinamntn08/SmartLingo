@@ -30,7 +30,7 @@ test('fresh Today starts greetings with readable arrival and departure support, 
   await expect(page.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await expect(page.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
-  await expect(page.getByText(opening.grammar.explanation, { exact: true })).toBeVisible();
+  await expect(page.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
   await page.reload();
   await page.getByRole('button', { name: /Continue your lesson/ }).click();
   await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();

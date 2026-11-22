@@ -37,7 +37,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await context.setOffline(true);
   await page.close();
   const cold = await context.newPage();
-  await cold.goto('http://localhost:8082/');
+  await cold.goto('/');
   await expect(cold.getByText(opening.subtitle, { exact: true })).toBeVisible();
   await button(cold, /Start greetings practice/).click();
   for (const target of ['bonsoir', 'bonne soirée']) {
@@ -51,7 +51,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await button(cold, 'Save bonsoir').click();
   await expect(cold.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
   await button(cold, /Continue to dialogue/).click();
-  await expect(cold.getByText(opening.grammar.explanation, { exact: true })).toBeVisible();
+  await expect(cold.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
   await cold.reload();
   await button(cold, /Continue your lesson/).click();
   await expect(cold.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();

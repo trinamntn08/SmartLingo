@@ -51,7 +51,7 @@ async function expectPicturesLoaded(page: import('@playwright/test').Page) {
     && images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
 }
 
-test('new foundations and A2 experience lessons expose translated study material without API', async ({ page }) => {
+test('foundations and A2 experience lessons expose translated study material and grammar without API', async ({ page }, info) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   for (const [slug, level] of [['essentials', 'foundation'], ['past', 'A2']] as const) {
@@ -64,7 +64,20 @@ test('new foundations and A2 experience lessons expose translated study material
     await expect(page.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
     await page.getByRole('button', { name: /Continue to dialogue/ }).click();
     await expect(page.getByText(lesson.dialogue[0].meaning, { exact: true })).toBeVisible();
-    await expect(page.getByText(lesson.grammar.explanation, { exact: true })).toBeVisible();
+    const grammar = page.getByTestId('grammar-note');
+    await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
+    if (slug === 'essentials') {
+      await expect(grammar.getByText('Vous pouvez répéter ?', { exact: true })).toBeVisible();
+      await expect(grammar.getByText('Can you repeat that?', { exact: true })).toBeVisible();
+      await expect(grammar.getByText('Vous pouvez + a verb', { exact: true })).toBeVisible();
+      await expect(grammar.getByText('Use the dictionary form of the verb.', { exact: true })).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await grammar.screenshot({ path: info.outputPath('grammar-card.png') });
+      await page.getByRole('button', { name: /Try meaning practice/ }).click();
+      await expect(page.getByText(lesson.pictureActivity.prompt, { exact: true })).toBeVisible();
+    } else {
+      await expect(grammar.getByTestId('grammar-explanation')).toHaveText(lesson.grammar.explanation, { useInnerText: true });
+    }
   }
 });
 

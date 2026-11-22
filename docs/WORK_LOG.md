@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Make lesson grammar easier to scan
+
+- Request. Replace the dense grammar paragraph in the conversation stage with a card learners can understand at a glance.
+- Start. At 16:51 CET, Europe/Paris, the clean `D:/dev/projects/SmartLingo` checkout matched local, tracking and live `feat/french-daily-opening` at `17abc79e1a6d7dace633afeed0c81af52ab96335`, ahead/behind `0/0` after fetch.
+- Acceptance. Make the French example, English meaning and reusable pattern easy to find in Ask someone to repeat. Give the other grammar notes the same visual hierarchy, keep their authored explanations visible, and check desktop, narrow screens and the existing review preview.
+- Outcome. The conversation stage has a grammar card with a highlighted example and separate pattern in Ask someone to repeat. The two panels stack on narrow screens. Other notes display their original wording in short blocks, including in the editor preview. The specialized card is tied to the original note so a later edited version displays its own wording.
+- Verified. `npm.cmd run check`, `git diff --check` and all 277 tooling/application tests passed. Sixteen focused Chromium tests and two cold-offline greetings tests passed. Reviewed the card visually at 320, 390 and 1,440 px and confirmed the example, pattern and practice transition on the existing port 8082 preview at 320 and 900 px. The served manifest matched build `921211521699`.
+- Handoff. Review at `http://localhost:8082` under Learn → Essential conversation tools → Ask someone to repeat → Conversation. The commit containing this note is the task checkpoint.
+
 ## 2026-11-22 Reuse one local review preview
 
 - Request. Document that each new learner version refreshes the existing local review preview at the same address.

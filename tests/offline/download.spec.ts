@@ -38,6 +38,8 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const cold = await context.newPage();
   await cold.goto('http://localhost:8082/');
   await expect(cold.getByText(opening.subtitle, { exact: true })).toBeVisible();
+  const artwork = cold.getByTestId('today-hero-art').locator('img[src*="lyon-bakery"]');
+  await expect.poll(() => artwork.evaluate(img => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await button(cold, /Start greetings practice/).click();
   for (const target of ['bonsoir', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;

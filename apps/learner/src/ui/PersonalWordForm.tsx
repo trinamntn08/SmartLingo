@@ -29,7 +29,7 @@ export function PersonalWordForm({ model }: { model: LearningModel }) {
   return <View style={s.card} testID="personal-word-form">
     <Text accessibilityRole="header" style={s.heading}>Your own vocabulary</Text>
     <Text style={s.body}>Keep a word or phrase from everyday life, with your own meaning and example.</Text>
-    {!open ? <Button disabled={model.blocked} onPress={() => { setSaved(''); setOpen(true); }}>Add personal word</Button> : <>
+    {!open ? <View style={s.row}><Button disabled={model.blocked} onPress={() => { setSaved(''); setOpen(true); }}>Add personal word</Button></View> : <>
       <Text style={s.body}>French word or phrase</Text>
       <TextInput accessibilityLabel="New French word or phrase" value={target} onChangeText={setTarget} maxLength={300} editable={!locked} style={s.input} />
       <Text style={s.body}>English meaning</Text>

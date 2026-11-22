@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { lessonSchema, matchesLesson, type Lesson, type LessonPreview } from '@smartlingo/domain';
 import { localContentApi } from '../content/api';
 import { audio } from '../audio';
@@ -178,7 +178,10 @@ function SavedPreview({ preview, onClose }: { preview: LessonPreview; onClose: (
   const model = usePreviewLearning();
   const lesson = preview.lesson;
   const pictureAnswer = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
-  return <View style={{ gap: 20 }}><View style={[s.notice, { backgroundColor: colors.yellow }]}><Text style={s.heading}>Saved revision {lesson.revision} · temporary practice</Text><Text style={s.body}>This is the real lesson interface. Attempts, word saves, and completion here exist only in this preview and do not touch your learner notebook or progress.</Text></View><LessonScreen lesson={lesson} model={model} onExit={onClose} />
+  function focusStage() {
+    if (Platform.OS === 'web') document.querySelector<HTMLElement>('#editor-lesson-preview [data-testid="lesson-stage-heading"]')?.focus();
+  }
+  return <View nativeID="editor-lesson-preview" style={{ gap: 20 }}><View style={[s.notice, { backgroundColor: colors.yellow }]}><Text style={s.heading}>Saved revision {lesson.revision} · temporary practice</Text><Text style={s.body}>This is the real lesson interface. Attempts, word saves, and completion here exist only in this preview and do not touch your learner notebook or progress.</Text></View><LessonScreen lesson={lesson} model={model} onExit={onClose} onStageChange={focusStage} />
     <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Author review details</Text><Text style={s.muted}>Answer keys are shown here for curriculum review. These details are separate from learner practice.</Text>
       <Text style={s.body}>Level: {lesson.level} · Target language: {lesson.language} · Explanation language: {lesson.explanationLanguage}</Text>
       <Text style={s.body}>Estimated duration: {lesson.durationMinutes} minutes</Text>

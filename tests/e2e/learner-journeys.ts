@@ -1,11 +1,18 @@
 import type { Page } from '@playwright/test';
 import { normalizeAnswer, type Lesson } from '@smartlingo/domain';
 
-/** Select the Restaurant journey explicitly, independent of the fresh Today suggestion. */
-export async function openRestaurant(page: Page) {
-  const topic = page.getByRole('button', { name: 'Topic Restaurant', exact: true });
+export async function openCourseTopic(page: Page, name: string) {
+  await page.getByRole('navigation', { name: 'Learner navigation', exact: true }).waitFor();
+  const topicToggle = page.getByRole('button', { name: 'Browse course topics', exact: true });
+  if (await topicToggle.isVisible() && await topicToggle.getAttribute('aria-expanded') === 'false') await topicToggle.click();
+  const topic = page.getByRole('button', { name: `Topic ${name}`, exact: true });
   await topic.scrollIntoViewIfNeeded();
   await topic.click();
+}
+
+/** Select the Restaurant journey explicitly, independent of the fresh Today suggestion. */
+export async function openRestaurant(page: Page) {
+  await openCourseTopic(page, 'Restaurant');
   await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
 }
 

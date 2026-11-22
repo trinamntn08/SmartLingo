@@ -10,11 +10,11 @@ export function Button({ children, onPress, primary, selected, disabled, label }
   children: ReactNode; onPress: () => void; primary?: boolean; selected?: boolean; disabled?: boolean; label?: string;
 }) {
   const [focused, setFocused] = useState(false);
-  return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-selected={!!selected} aria-disabled={!!disabled} accessibilityState={{ disabled: !!disabled, selected: !!selected }}
+  return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-pressed={selected} accessibilityState={{ disabled: !!disabled }}
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }, primary && s.buttonPrimary, selected && s.buttonSelected,
       // A wider focus border can wrap the button between pointer-down and pointer-up.
-      focused && { borderColor: '#246944', outlineColor: '#246944', outlineWidth: 2, outlineOffset: 2, outlineStyle: 'solid' }, { opacity: disabled ? 0.5 : pressed ? 0.75 : 1 }]}>
+      focused && [s.focus, { borderColor: colors.focus }], { opacity: disabled ? 0.5 : pressed ? 0.75 : 1 }]}>
     <Text style={[s.buttonText, { maxWidth: '100%', flexShrink: 1 }, selected && { color: colors.card }]}>{children}</Text>
   </Pressable>;
 }
@@ -61,7 +61,7 @@ export function Speak({ text, onError }: { text: string; onError?: (message: str
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}><Pressable accessibilityRole="button" accessibilityLabel={state === 'playing' ? 'Stop audio' : `Listen to ${text}`}
       onPress={() => void play()} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
       style={({ pressed }) => ({ minWidth: 44, minHeight: 44, alignSelf: 'flex-start', alignItems: 'center', justifyContent: 'center',
-        borderRadius: 22, borderWidth: 2, borderColor: focused ? '#246944' : 'transparent', backgroundColor: pressed ? colors.sand : 'transparent' })}>
+        borderRadius: 22, borderWidth: 2, borderColor: focused ? '#246944' : 'transparent', backgroundColor: pressed ? colors.green : colors.greenSoft })}>
       <Image accessible={false} source={{ uri: icon }} style={{ width: 22, height: 22 }} />
     </Pressable>
     {neuralEnabled && <Pressable accessibilityRole="button" accessibilityLabel={`Audio options for ${text}`} aria-expanded={options} onPress={() => setOptions(value => !value)}

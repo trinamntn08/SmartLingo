@@ -40,9 +40,8 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
   function stop() { recording.current?.clear(); recordingGuard.current = false; setRecordingActive(false); practice.clear(); setText(''); setEnglishHelp(false); audio.stop(); }
 
   return <View testID="french-practice" style={s.card}>
-    <View style={s.row}><Badge>Optional AI practice</Badge><Badge>Text, recording + device replay</Badge></View>
-    <Text accessibilityRole="header" style={s.heading}>French conversation</Text>
-    <Text style={s.body}>Try a short everyday conversation. French replies, English meanings and helpful feedback stay visible.</Text>
+    <View style={[s.row, { justifyContent: 'space-between' }]}><Text accessibilityRole="header" style={s.heading}>French conversation</Text><Badge>Optional AI practice</Badge></View>
+    <Text style={s.body}>Type or record a message and get a French reply with an English translation and feedback.</Text>
     <View style={s.notice}>
       <Text style={s.body}>Send message or Retry message sends your text, selected context and conversation to OpenAI through the local server. Transcribe recording or Retry transcription separately sends your local microphone clip to OpenAI. These explicit actions may use paid API credits.</Text>
       <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Practice or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under your API account settings. Avoid private information.</Text>

@@ -32,7 +32,7 @@ test('French voice and speed choices survive reload and apply to lesson playback
   await page.reload();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await expect(voice).toHaveValue(JSON.stringify(['test.fr.alternative', 'French alternative sample', 'fr-FR']));
-  await expect(page.getByRole('button', { name: 'Speaking speed: Slow', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('button', { name: 'Speaking speed: Slow', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Today', exact: true }).click();
   await openRestaurant(page);
   await page.getByRole('button', { name: 'Listen to un café', exact: true }).click();

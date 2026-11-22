@@ -59,6 +59,7 @@ for (const width of [1280, 320]) {
   test(`greetings lead the topic navigation at ${width}px and Foundations stay separate from A1`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto('/');
+    if (width === 320) await page.getByRole('button', { name: 'Browse course topics' }).click();
     const nav = page.getByTestId('topic-navigation');
     expect(await nav.getByRole('button').evaluateAll(buttons => buttons.slice(1, 5).map(button => button.getAttribute('aria-label'))))
       .toEqual([greetingTopic, 'Essential conversation tools', 'Numbers and quantities', 'People and introductions'].map(topic => `Topic ${topic}`));
@@ -116,8 +117,11 @@ test('a cached published greeting override retains its content and first topic p
   await page.unroute('**/127.0.0.1:3001/published-lessons');
   await page.reload();
   await expect(page.getByText(published.subtitle, { exact: true })).toBeVisible();
+  const topicToggle = page.getByRole('button', { name: 'Browse course topics' });
+  if (await topicToggle.isVisible()) await topicToggle.click();
   const nav = page.getByTestId('topic-navigation');
   await expect(nav.getByRole('button').nth(1)).toHaveAttribute('aria-label', `Topic ${greetingTopic}`);
+  if (await topicToggle.isVisible()) await topicToggle.press('Escape');
   await page.getByRole('button', { name: /Start greetings practice/ }).click();
   await expect(page.getByText('Published', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: published.subtitle, exact: true })).toBeVisible();

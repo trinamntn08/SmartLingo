@@ -98,7 +98,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Review').click();
   await expect(page.getByText('My morning greeting')).toBeVisible();
   await button(page, 'Today').click();
-  await expect(page.getByText('✓ Session completed and saved', { exact: false })).toBeVisible();
+  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
   await button(page, /Revisit your lesson/).click();
   await button(page, 'Revisit the words').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();

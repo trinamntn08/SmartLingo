@@ -47,14 +47,14 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('textbox', { name: 'Learner role', exact: true }).fill('Guest');
   await page.getByRole('textbox', { name: 'Estimated duration in minutes', exact: true }).fill('12');
   await page.getByRole('button', { name: 'Lesson level A2', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Lesson level A2', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('button', { name: 'Lesson level A2', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('textbox', { name: 'bonjour — English meaning', exact: true }).fill('A greeting reviewed in this isolated test');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — Speaker role', exact: true }).fill('Host');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — French text', exact: true }).fill('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — English translation', exact: true }).fill('Hello! Would you prefer a table inside or outside?');
   await page.getByRole('textbox', { name: 'un café — Word note', exact: true }).fill('');
   await page.getByRole('button', { name: 'un café — No gender', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'un café — No gender', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('button', { name: 'un café — No gender', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('button', { name: 'Preview saved revision', exact: true })).toBeDisabled();
   await page.getByRole('button', { name: 'Save draft revision', exact: true }).click();
   await expect(page.getByText(`Draft revision ${restaurantLesson.revision + 1} saved locally.`, { exact: false })).toBeVisible();

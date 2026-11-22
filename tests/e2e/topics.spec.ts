@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
+import { openCourseTopic } from './learner-journeys';
 
 const topics = groupLessonTopics(lessons);
 const groceryCount = topics.find(topic => topic.name === 'Groceries')!.vocabulary.length;
@@ -15,9 +16,7 @@ test('new foundations and A2 experience lessons expose translated study material
   await page.goto('/');
   for (const [slug, level] of [['essentials', 'foundation'], ['past', 'A2']] as const) {
     const lesson = lessons.find(item => item.id.startsWith(`fr.${slug}.`) && item.level === level)!;
-    const topicButton = page.getByRole('button', { name: `Topic ${lesson.topic}`, exact: true });
-    await topicButton.scrollIntoViewIfNeeded();
-    await topicButton.click();
+    await openCourseTopic(page, lesson.topic);
     await page.getByRole('button', { name: level === 'foundation' ? 'Foundations level' : 'A2 level', exact: true }).click();
     await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
     const entry = lesson.vocabulary[0];
@@ -139,7 +138,7 @@ test('desktop topic pane stays to the left and switches an open lesson directly 
   await expect(page.getByRole('button', { name: /Start greetings practice/ })).toBeVisible();
 });
 
-test('320px horizontal topic strip reaches topics and topic changes clear stale search and level filters', async ({ page }) => {
+test('320px topic menu reaches topics and topic changes clear stale search and level filters', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
@@ -147,11 +146,17 @@ test('320px horizontal topic strip reaches topics and topic changes clear stale 
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('bakery');
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
+  const toggle = page.getByRole('button', { name: 'Browse course topics', exact: true });
   const nav = page.getByTestId('topic-navigation');
+  await expect(nav).toHaveCount(0);
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   const groceries = nav.getByRole('button', { name: 'Topic Groceries', exact: true });
   await groceries.scrollIntoViewIfNeeded();
   await expect(groceries).toBeInViewport();
   await groceries.click();
+  await expect(nav).toHaveCount(0);
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);

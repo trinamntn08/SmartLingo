@@ -11,9 +11,12 @@ export function Notebook({ model, onExplore }: { model: LearningModel; onExplore
   const [query, setQuery] = useState('');
   const normalized = normalizeSearch(query);
   const matches = new Set(model.notebook.filter(entry => normalizeSearch(`${entry.target} ${entry.meaning} ${entry.example}`).includes(normalized)).map(entry => entry.id));
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Review at your pace</Text><Text accessibilityRole="header" style={s.title}>Your French, kept close.</Text><Text style={s.body}>Practise your recall, then browse your saved words and meanings below. Make the notes your own.</Text>
+  return <View style={{ gap: 20 }}>
+    <View style={{ gap: 6 }}><Text accessibilityRole="header" style={s.title}>Review & notebook</Text>
+      <Text style={s.muted}>Practise recall and keep the French you want to use again.</Text></View>
+    <ReviewPanel notebook={model.notebook} onExplore={onExplore} />
+    <Text accessibilityRole="header" style={s.heading}>Notebook</Text>
     <PersonalWordForm model={model} />
-    <ReviewPanel notebook={model.notebook} />
     {!!model.notebook.length && <View style={s.card}>
       <Text accessibilityRole="header" style={s.heading}>Find a saved word</Text>
       <TextInput accessibilityLabel="Search notebook" placeholder="French, English or a personal note" value={query} onChangeText={setQuery} style={s.input} />
@@ -21,8 +24,7 @@ export function Notebook({ model, onExplore }: { model: LearningModel; onExplore
       {!!query && <Button onPress={() => setQuery('')}>Clear notebook search</Button>}
       {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
     </View>}
-    {!model.notebook.length ? <View style={s.card}><Text style={s.heading}>A fresh page.</Text><Text style={s.body}>Your saved words will appear here. Add a personal word above, or save something useful from a lesson.</Text><Button primary onPress={onExplore}>Find a lesson →</Button></View>
-      : <View testID="notebook-entries" style={{ gap: 24 }}>{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>}
+    {!!model.notebook.length && <View testID="notebook-entries" style={{ gap: 24 }}>{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>}
   </View>;
 }
 

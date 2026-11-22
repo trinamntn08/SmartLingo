@@ -3,7 +3,10 @@ import { Text, TextInput, View } from 'react-native';
 import { gradeCourseChoice, type CourseBlock, type CourseChoice, type CourseDay, type CourseEvent, type Vocabulary } from '@smartlingo/domain';
 import { Speak } from '../audio/Speak';
 import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
+import { BilingualDialogue } from '../ui/BilingualDialogue';
 import { Button } from '../ui/controls';
+import { getDailyDialoguePhoto } from '../ui/dialoguePhotos';
+import type { ContextPhoto } from '../ui/contextPhotos';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 
@@ -28,7 +31,8 @@ export function CompactCourseContent({ step, day, model, events, blocked, reveal
 
   if (step === 'dialogue') {
     const dialogue = day.blocks.find(block => block.kind === 'dialogue');
-    return dialogue && <CompactDialogue dialogue={dialogue} vocabulary={day.vocabulary} tip={copy.tip} model={model} />;
+    return dialogue && <CompactDialogue dialogue={dialogue} vocabulary={day.vocabulary} tip={copy.tip}
+      photo={getDailyDialoguePhoto(day.id)} model={model} />;
   }
 
   if (step === 'practice') {
@@ -46,25 +50,14 @@ export function CompactCourseContent({ step, day, model, events, blocked, reveal
     revealBlocked={revealBlocked} onSupport={() => onSupport(reflection.id)} />;
 }
 
-function CompactDialogue({ dialogue, vocabulary, tip, model }: { dialogue: DialogueBlock; vocabulary: Vocabulary[]; tip: string; model: LearningModel }) {
+function CompactDialogue({ dialogue, vocabulary, tip, photo, model }: {
+  dialogue: DialogueBlock; vocabulary: Vocabulary[]; tip: string; photo?: ContextPhoto; model: LearningModel;
+}) {
   const [wordsOpen, setWordsOpen] = useState(false);
   const wordsId = useId();
 
   return <View style={{ gap: 12, minWidth: 0 }}>
-    <View style={{ gap: 6 }}>
-      {dialogue.lines.map((line, index) => <View key={index} testID={`course-dialogue-line-${index}`} style={[s.notice, {
-        backgroundColor: index % 2 ? colors.sageTint : colors.paper, padding: 12, gap: 3,
-      }]}>
-        <Text style={s.eyebrow}>{line.role}</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 16, rowGap: 1 }}>
-          <View style={{ flexGrow: 1, flexBasis: 210, minWidth: 0 }}>
-            <Text accessibilityLanguage="fr-FR" style={[s.body, { fontWeight: '700' }]}>{line.target}</Text>
-            {!!line.reading && <Text style={s.muted}>{line.reading}</Text>}
-          </View>
-          <Text accessibilityLanguage="en" style={[s.muted, { flexGrow: 1, flexBasis: 210, minWidth: 0 }]}>{line.meaning}</Text>
-        </View>
-      </View>)}
-    </View>
+    <BilingualDialogue turns={dialogue.lines} photo={photo} />
     <Text style={s.muted}>{tip}</Text>
     <View style={{ alignItems: 'flex-start' }}>
       <Button compact expanded={wordsOpen} controls={wordsId} onPress={() => setWordsOpen(value => !value)}>Useful words</Button>

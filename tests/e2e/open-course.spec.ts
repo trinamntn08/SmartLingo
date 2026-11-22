@@ -1,4 +1,4 @@
-import { openProfileSection } from './learner-journeys';
+import { expectDialoguePhoto, expectFrenchTranscripts, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
@@ -60,7 +60,7 @@ test.beforeEach(async ({ context }) => {
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
 });
 
-test('all five opening lessons pair French and English before any practice', async ({ page }) => {
+test('all five opening lessons offer a full French transcript, full translation and a context photo', async ({ page }) => {
   await page.goto('/');
   await expect(step(page, openCoursePilot.title)).toBeVisible();
   await button(page, 'Open daily course').focus();
@@ -76,16 +76,13 @@ test('all five opening lessons pair French and English before any practice', asy
     await expect(step(page, 'Dialogue')).toBeVisible();
     const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
     if (dialogue.kind !== 'dialogue') throw new Error('Missing dialogue');
-    const line = coursePanel(page).getByTestId('course-dialogue-line-0');
-    const french = line.getByText(dialogue.lines[0].target, { exact: true });
-    const english = line.getByText(dialogue.lines[0].meaning, { exact: true });
-    await expect(french).toBeVisible();
-    await expect(english).toBeVisible();
+    const { french, english } = await expectFrenchTranscripts(coursePanel(page), dialogue.lines);
+    await expectDialoguePhoto(coursePanel(page), day === firstDay ? 'french-neighbour-dialogue.jpg' : 'french-workshop-dialogue.jpg');
     if (day === firstDay) {
       const frenchBox = (await french.boundingBox())!;
       const englishBox = (await english.boundingBox())!;
       if (page.viewportSize()!.width >= 600) expect(englishBox.x).toBeGreaterThan(frenchBox.x);
-      else expect(englishBox.y).toBeGreaterThan(frenchBox.y);
+      else expect(englishBox.y).toBeGreaterThanOrEqual(frenchBox.y + frenchBox.height);
       await button(page, 'Source credits and licence').click();
       await expect(coursePanel(page).getByText(openCoursePilot.sources[0].copyrightNotice, { exact: true })).toBeVisible();
       await button(page, 'Hide source credits').click();
@@ -138,7 +135,7 @@ test('notebook, progress and the resume step survive backup and restore', async 
   await page.goto('/');
   await button(page, 'Open daily course').click();
   await button(page, 'Useful words').click();
-  await expect(coursePanel(page).getByRole('img')).toHaveCount(0);
+  await expect(coursePanel(page).getByTestId('vocabulary-fr.bonjour').getByRole('img')).toHaveCount(0);
   await button(page, 'Save bonjour').click();
   await expect(button(page, 'bonjour saved to notebook')).toBeDisabled();
   await button(page, 'Next section').click();

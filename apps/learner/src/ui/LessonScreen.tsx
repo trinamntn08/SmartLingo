@@ -9,6 +9,8 @@ import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { getContextPhoto } from './contextPhotos';
 import { ContextImage } from './ContextImage';
+import { BilingualDialogue } from './BilingualDialogue';
+import { getLessonDialoguePhoto } from './dialoguePhotos';
 
 type Stage = 'vocabulary' | 'dialogue' | 'picture' | 'sentence' | 'finish';
 const stageOrder: Stage[] = ['vocabulary', 'dialogue', 'picture', 'sentence', 'finish'];
@@ -30,6 +32,8 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
   const previousStage = useRef(stage);
   const compact = canvasWidth > 0 && canvasWidth < 600;
   const step = stageOrder.indexOf(stage) + 1;
+  const french = lesson.language !== 'ja-JP';
+  const dialoguePhoto = french && stage === 'dialogue' ? getLessonDialoguePhoto(lesson.id) : undefined;
   const stepTitle = stage === 'vocabulary' ? `Study ${lesson.vocabulary.length} words together`
     : stage === 'dialogue' ? 'Read a conversation' : stage === 'picture' ? lesson.pictureActivity.mode === 'meaning' ? 'Match the meaning' : 'Match a picture'
       : stage === 'sentence' ? 'Build a sentence' : 'Save your session';
@@ -59,7 +63,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
     <View style={[s.row, { gap: 8 }]}><Button compact quiet disabled={exitBlocked} onPress={onExit}>← All lessons</Button><Text style={s.muted}>{lesson.level} · {lesson.topic} · {lesson.status === 'draft' ? 'Draft' : 'Published'}</Text></View>
     <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center', minWidth: 0 }}>
       <View style={{ gap: 6, flex: 1, minWidth: 0 }}><Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text><Text style={s.body}>{lesson.outcome}</Text><Text style={s.muted}>{lesson.vocabulary.length} words · {lesson.durationMinutes} min · Read, listen, then practise</Text></View>
-      {!compact && canvasWidth > 0 && <ContextImage photo={getContextPhoto(lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lesson.topic)} style={{ width: 190, height: 112, borderRadius: 14 }} />}
+      {!compact && canvasWidth > 0 && !dialoguePhoto && <ContextImage photo={getContextPhoto(french ? 'fr-FR' : 'ja-JP', lesson.topic)} style={{ width: 190, height: 112, borderRadius: 14 }} />}
     </View>
     <LessonOutline id={outlineId} lesson={lesson} stage={stage} progress={progress} compact={compact} />
     <View testID="lesson-stage" style={[s.card, { minWidth: 0, padding: compact ? 14 : 24, gap: 18, boxShadow: 'none', borderRadius: 18 }]}>
@@ -78,8 +82,11 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
       <Text style={s.muted}>Continue when you have reviewed these words.</Text>
       <View style={s.row}><Button primary disabled={model.blocked} label="Continue after studying" onPress={reviewVocabulary}>Continue to conversation →</Button></View>
     </View>}
-    {stage === 'dialogue' && <View style={{ gap: 20, minWidth: 0 }}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text><Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
-      {lesson.dialogue.map((line, index) => <DialogueLine key={index} line={line} highlighted={line.role === lesson.role} language={lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR'} />)}
+    {stage === 'dialogue' && <View style={{ gap: 20, minWidth: 0 }}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text>
+      {french ? <BilingualDialogue turns={lesson.dialogue} photo={dialoguePhoto} highlightedRole={lesson.role} /> : <>
+        <Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
+        {lesson.dialogue.map((line, index) => <DialogueLine key={index} line={line} highlighted={line.role === lesson.role} language="ja-JP" />)}
+      </>}
       <View style={s.notice}><Text style={s.eyebrow}>Grammar</Text><Text style={s.heading}>{lesson.grammar.title}</Text><Text style={s.body}>{lesson.grammar.explanation}</Text></View>
       <Button primary onPress={() => setStage('picture')}>{lesson.pictureActivity.mode === 'meaning' ? 'Try meaning practice →' : 'Try picture practice →'}</Button>
     </View>}

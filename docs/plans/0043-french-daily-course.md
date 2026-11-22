@@ -63,11 +63,13 @@ Owner scope, 2026-11-22. Stop the opening preview at D005. The existing D001 and
 
 ### Shorter lesson flow after owner review
 
-The five French drafts use three screens: **Dialogue**, **Quick practice** and **Try it**. Start with the exchange and show English alongside each line on wide screens and just beneath it on narrow screens. Put one short teaching tip on the dialogue and place canonical words and notebook controls in an optional disclosure. Keep source acknowledgement in the lesson's credit panel. Group the original three practice questions on one screen, use shorter instructions and feedback, and keep a single speaking or writing prompt with an optional model on the final screen.
+The five French drafts use three screens: **Dialogue**, **Quick practice** and **Try it**. Start with the full French transcript and its full English translation. Put one short teaching tip on the dialogue and place canonical words and notebook controls in an optional disclosure. Keep source acknowledgement in the lesson's credit panel. Group the original three practice questions on one screen, use shorter instructions and feedback, and keep a single speaking or writing prompt with an optional model on the final screen.
 
 **Next section** advances and records dialogue study in the same action. Practice responses are optional and retain their own feedback and saved results. **Finish lesson** records study after the dialogue is studied. Free navigation remains available. Consolidate older study, word and dialogue locations into the new dialogue step, and map practice attempts to the grouped practice step. Existing block IDs, answer keys, event scopes and finished days remain usable.
 
 Acceptance for this revision covers all five French dialogues, responsive translations, direct progression, stored practice and resume, original credits, prior progress and the offline preview. The Japanese daily course continues to use its existing activity renderer.
+
+French dialogue design after owner review. The library lesson and daily-course views share a reader that gives both languages a complete transcript. Put French on the left and English on the right when there is space. Stack the complete French transcript before the complete translation on narrow screens. A locally bundled model-generated photo can set the scene. Keep the photo separate from the lesson text and preserve speaker labels, French playback and all practice actions.
 
 | Phase | Deliverable | Acceptance before continuing |
 | --- | --- | --- |

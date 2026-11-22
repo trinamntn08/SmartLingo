@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { normalizeAnswer, type Lesson } from '@smartlingo/domain';
 
 export async function openProfileSection(page: Page, name: string) {
@@ -20,6 +20,27 @@ export async function openTopic(page: Page, name: string) {
 export async function openRestaurant(page: Page) {
   await openTopic(page, 'Restaurant');
   await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
+}
+
+export async function expectFrenchTranscripts(scope: Locator, lines: readonly { target: string; meaning: string }[]) {
+  const french = scope.getByTestId('dialogue-french-transcript');
+  const english = scope.getByTestId('dialogue-english-transcript');
+  await expect(french).toBeVisible();
+  await expect(english).toBeVisible();
+  await expect(french.locator('[lang="fr-FR"]')).toHaveText(lines.map(line => line.target));
+  await expect(english.locator('[lang="en"]')).toHaveText(lines.map(line => line.meaning));
+  const order = await scope.locator('[data-testid="dialogue-french-transcript"], [data-testid="dialogue-english-transcript"]')
+    .evaluateAll(elements => elements.map(element => element.getAttribute('data-testid')));
+  expect(order).toEqual(['dialogue-french-transcript', 'dialogue-english-transcript']);
+  return { french, english };
+}
+
+export async function expectDialoguePhoto(scope: Locator, filename: string) {
+  const photo = scope.getByTestId('dialogue-context-photo');
+  await expect(photo).toBeVisible();
+  await expect.poll(() => photo.locator('img').evaluateAll((images, name) => images.some(image =>
+    image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.src.endsWith(`/learning-scenes/${name}`),
+  ), filename)).toBe(true);
 }
 
 export async function buildAcceptedSentence(page: Page, lesson: Lesson) {

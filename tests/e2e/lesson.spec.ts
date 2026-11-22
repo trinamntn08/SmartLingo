@@ -1,6 +1,6 @@
-import { openRestaurant } from './learner-journeys';
+import { expectDialoguePhoto, expectFrenchTranscripts, openRestaurant, openTopic } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
-import { restaurantLesson } from '@smartlingo/content';
+import { lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -11,6 +11,22 @@ async function expectPictureLoaded(page: Page) {
 async function expectNoHorizontalOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 }
+
+test('the food-needs dialogue keeps the complete French and English transcripts separate', async ({ page }) => {
+  await page.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/');
+  await openTopic(page, 'Restaurant');
+  await button(page, 'Open Explain food needs').click();
+  await button(page, /Continue to dialogue/).click();
+  const stage = page.getByTestId('lesson-stage');
+  const lesson = lessons.find(item => item.id === 'fr.restaurant.explain-food-needs')!;
+  const { french } = await expectFrenchTranscripts(stage, lesson.dialogue);
+  await expectDialoguePhoto(stage, 'french-bistro-dialogue.jpg');
+  await expect(french.getByRole('button', { name: `Listen to ${lesson.dialogue[0].target}`, exact: true })).toBeVisible();
+  await expect(stage.getByText('Naming an allergy', { exact: true })).toBeVisible();
+  await expect(button(page, /Try meaning practice/)).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
 
 async function storedRows(page: Page, store: 'events' | 'notebook') {
   return page.evaluate(async storeName => {

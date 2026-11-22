@@ -23,6 +23,42 @@ Optional speech has separate provenance and operating boundaries: [Japanese audi
 
 Curriculum rework, 2026-11-15: the 125 existing bindings are retained, with 122 used by the current banks. Three bindings (`fr.bakery.chouquette`, `fr.administration.telephone`, `fr.administration.enveloppe`) remain explicitly historical so older notebook captures and lesson revisions keep their original pictures. New topics add no images. Abstract/unillustrated entries use visible meanings and meaning matching; the expanded course does not claim full picture coverage.
 
+## French dialogue scenes
+
+Generated with the built-in OpenAI ImageGen tool on 2026-11-22 for SmartLingo. The only reference inputs were the previously generated [French homepage photo](../apps/learner/public/learning-scenes/french-street.jpg) and [Japanese homepage photo](../apps/learner/public/learning-scenes/japanese-street.jpg). The scenes show fictional adults in everyday places. The learner presents all dialogue, translation and practice as text. The [OpenAI Europe Terms of Use, Content section](https://openai.com/policies/eu-terms-of-use/) was reviewed on 2026-11-22 for output terms. The files are ready for local owner review.
+
+The original PNGs were resized to 1,200 × 800 and encoded as JPEGs at quality 83. The reader displays a centred 2:1 frame up to 420 px wide. Compared the centre crops with the original frames, with both speakers and the setting legible. The files are bundled in the web and offline export. The [bindings](../apps/learner/src/ui/dialoguePhotos.ts) specify their exact destinations and alternative text.
+
+| Asset | Dialogue | Bytes | SHA-256 |
+| --- | --- | ---: | --- |
+| [Bistro](../apps/learner/public/learning-scenes/french-bistro-dialogue.jpg) | Restaurant lessons, including Explain food needs | 165,078 | `c9a65b11bccd7fe06a35ec532973d55672304a42112e8f5bc3e477c3ecb557d1` |
+| [Apartment entrance](../apps/learner/public/learning-scenes/french-neighbour-dialogue.jpg) | Daily course Day 1 | 191,147 | `66aa5eb210a9e30aea2ef3895eca1d8d18ba427c5681441de3697e785c99aed3` |
+| [Workshop reception](../apps/learner/public/learning-scenes/french-workshop-dialogue.jpg) | Daily course Days 2–5 | 180,895 | `a2b1c8057602382eaa5a6af923a896e11c3b414ab1497a2db254d9abb0f451a0` |
+
+Each ImageGen request used the common prompt followed by the corresponding scene prompt.
+
+```text
+Use case: photorealistic-natural. Asset: 3:2 landscape context photograph for a SmartLingo French transcript. The two supplied SmartLingo-generated homepage photos guide colour, candid editorial realism and daylight only. Use a new location and fictional people. Warm cream, muted teal, natural timber and soft natural daylight. Eye-level horizontal framing, two main participants close to the center with faces and key action at the vertical midpoint within the central 40 percent of the image so a 2.7:1 crop retains them. Authentic everyday postures and materials. No logos, watermarks, legible writing, graphic overlays or tourist landmarks.
+```
+
+**Bistro**
+
+```text
+Scene: inside a modest neighbourhood bistro in metropolitan France. A seated adult customer and a standing server in a plain muted teal apron speak calmly across a small timber table, looking at one another. Both faces remain within the central height of the scene. A folded, text-free menu and a water glass suggest a restaurant conversation. No served food, medical equipment or indication that any food or ingredients are safe.
+```
+
+**Apartment entrance**
+
+```text
+Scene: a warmly lit shared entrance hall of a small residential apartment building in metropolitan France. Two adult neighbours in ordinary clothes greet one another near the pale stone doorway at a natural conversational distance. A simple low row of unlabelled mailboxes, a dark teal painted door and warm stone establish the setting. Neither subject poses for the camera. The expressions suggest a brief hello on the way in.
+```
+
+**Workshop reception**
+
+```text
+Scene: a modest neighbourhood community room in metropolitan France. A workshop host and an adult visitor pause beside a compact wooden check-in table to speak. Other chairs and a simple shared worktable are softly visible in the background. A closed notebook and an unmarked clipboard indicate welcome and orientation. Both are engaged naturally, with open, relaxed posture.
+```
+
 ## Original bundled drawings
 The ten initial illustrations live in apps/learner/src/ui/Illustration.tsx. New reusable vector drawings and word associations live in packages/content/src/visuals.ts and render through WordIllustration.tsx. All new SVG geometry and compositions were written originally for SmartLingo with AI assistance. No stock photo, Facebook image, textbook artwork, emoji font, icon library or third-party image was copied or fetched. No third-party attribution or licence grant is claimed. The owner must still review clarity, sense, accessibility descriptions and suitability before wider publication.
 

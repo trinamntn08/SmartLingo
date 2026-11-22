@@ -4,7 +4,9 @@ Inspected: 2026-11-22 (Europe/Paris), after `git fetch origin` and live `git ls-
 
 ## Current working source
 
-`D:/dev/projects/SmartLingo` is now on `docs/current-codebase-sync`, based on `origin/feat/unified-learning-hub` at `d8274ee`. It contains the Japanese-enabled shared learner. The same hub source also has a separate worktree at `D:/dev/projects/SmartLingo-sessions/shared-language-learning`; changing branches here does not update that worktree's files or rebuild its served export.
+`D:/dev/projects/SmartLingo` now continues on `refactor/maintainable-foundation`, from documentation checkpoint `f0637e7` on `docs/current-codebase-sync`, based on `origin/feat/unified-learning-hub` at `d8274ee`. It contains the Japanese-enabled shared learner. The same hub source also has a separate worktree at `D:/dev/projects/SmartLingo-sessions/shared-language-learning`; changing branches here does not update that worktree's files or rebuild its served export.
+
+The documentation checkpoint was pushed and its full origin SHA verified. Subsequent structural cleanup and its own actual checks/upload belong to [the current checkpoint](SESSION_CHECKPOINT.md) and [maintenance review](CODEBASE_REVIEW.md); this map's feature heads remain dated observations, not branch merges.
 
 The main folder previously selected `feat/android-test-apk`, a French-only sibling branch. Reading its documentation correctly described that older checkout, but missed Japanese implemented elsewhere. Always inspect `git status --short --branch`, the worktree list and fetched branch history before deciding a feature is absent from the repository.
 
@@ -28,6 +30,8 @@ The inspected local hub, Japanese feature branches and Android branch matched th
 The current `package.json` provides `dev`, `dev:api`, `setup:japanese-voice`, `dev:japanese-voice`, web build/preview, tests and backup tooling. See [README](../README.md), [local operations](LOCAL_OPERATIONS.md) and [Japanese audio](JAPANESE_AUDIO.md).
 
 `android:doctor`, `build:apk`, `android:install` and `test:android-contract` belong to `feat/android-test-apk`. Its tracked instructions are `docs/ANDROID_TESTING.md` on that branch. The previously verified APK is a French-preview artifact, not proof of Japanese Android support. Native SQLite/audio adapters, physical-phone acceptance and integration with the current hub remain open.
+
+Residual Android build/cache files left after the branch switch were moved and hash-verified outside this source tree at `D:/dev/projects/SmartLingo-sessions/android-build-preserved-2026-11-22/apps-android`, with a local sibling manifest. This clears untracked generated-file noise while preserving the build; it does not move or remove the Android source branch. See [cleanup evidence](CODEBASE_REVIEW.md).
 
 Hosted build/test commands from the Cloud branch likewise do not exist automatically here. To deploy the current French/Japanese app, first reconcile the old hosting capability gates with the current learner and validate the combined result in a separately authorized implementation step. [Cloud guidance](CLOUD_WORKFLOW.md) and the [historical deployment brief](CLOUD_DEPLOY_PROMPT.md) describe that distinction. No live website is established by Git synchronization.
 

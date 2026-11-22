@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import { mkdtempSync, readdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { test } from 'node:test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
 import { createApp } from '../src/app';
@@ -57,4 +60,18 @@ test('server configuration defaults to loopback and refuses unsafe or malformed 
   for (const PORT of ['', '0', '-1', '65536', '1.5', ' 3001', '3e3', 'abc', '9007199254740993']) {
     assert.throws(() => readServerConfig({ PORT }), /PORT/);
   }
+});
+
+test('invalid Japanese service options reject before opening a speech database', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'smartlingo-app-startup-'));
+  const repository = new SqliteLessonRepository(':memory:');
+  try {
+    for (const japaneseSpeech of [{ timeoutMs: 0 }, { timeoutMs: 25_001 }, { statusTimeoutMs: 0 }]) {
+      assert.throws(() => createApp(repository, {
+        speech: { databasePath: join(directory, 'speech.sqlite') }, japaneseSpeech,
+      }), /Invalid Japanese speech timeout/);
+      assert.deepEqual(readdirSync(directory), [], 'Invalid options must not create speech database files');
+      assert.deepEqual(repository.listLessons(), [], 'Failed construction leaves repository cleanup with its caller');
+    }
+  } finally { repository.close(); rmSync(directory, { recursive: true }); }
 });

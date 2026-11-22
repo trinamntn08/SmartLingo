@@ -90,6 +90,7 @@ Detailed commands, fixtures and verification limits belong in [Testing](docs/TES
 - [Repository and branch state](docs/REPOSITORY_STATE.md): locate the Japanese learner, separate Android/hosting work and safe synchronization steps.
 - [Current status](docs/STATUS.md) and [session checkpoint](docs/SESSION_CHECKPOINT.md): capabilities, gaps and latest handoff.
 - [Product plan](PROJECT_PLAN.md) and [architecture](docs/ARCHITECTURE.md): target requirements and implementation boundaries.
+- [Codebase review](docs/CODEBASE_REVIEW.md) and [design system](docs/DESIGN_SYSTEM.md): current module map, cleanup findings, shared tokens and component extension guidance.
 - [Development workflow](CONTRIBUTING.md), [Codex setup](docs/CODEX_SETUP.md) and [cloud workflow](docs/CLOUD_WORKFLOW.md).
 - [Content guide](docs/CONTENT_GUIDE.md), [course catalogue](docs/COURSE_CATALOGUE.md) and [unpublished curriculum review pack](docs/curriculum/README.md).
 - [Free website design/status](docs/plans/0025-free-web-testing.md) and [Cloud continuation prompt](docs/CLOUD_DEPLOY_PROMPT.md): hosted code exists on a separate branch; actual publication remains blocked, with no live URL recorded.

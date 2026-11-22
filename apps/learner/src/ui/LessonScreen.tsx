@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Text, View } from 'react-native';
 import { checkAnswer, lessonProgress, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
-import { Badge, Button, Speak } from './controls';
+import { Badge, Button } from './controls';
+import { Speak } from '../audio/Speak';
 import { Illustration } from './Illustration';
 import { VocabularyCard } from './VocabularyCard';
 import { colors, styles as s } from './theme';

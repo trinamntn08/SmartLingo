@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { practiceSessionRequestSchema, practiceSessionIdSchema, practiceTurnRequestSchema, practiceTranscriptionRequestSchema } from '@smartlingo/domain';
 import { PracticeService } from './service';
+import { withRequestCancellation } from '../request-cancellation';
 
 export function registerPracticeRoutes(app: FastifyInstance, service: PracticeService): void {
   app.get('/ai/practice/status', async (_request, reply) => { reply.header('Cache-Control', 'no-store'); return service.status(); });
@@ -13,11 +14,7 @@ export function registerPracticeRoutes(app: FastifyInstance, service: PracticeSe
     reply.header('Cache-Control', 'no-store');
     const parsed = practiceTurnRequestSchema.safeParse(request.body);
     if (!parsed.success) return reply.code(400).send({ error: 'Invalid practice turn' });
-    const controller = new AbortController();
-    const disconnect = () => { if (!reply.raw.writableEnded) controller.abort(); };
-    reply.raw.once('close', disconnect);
-    try { return await service.turn(parsed.data, controller.signal); }
-    finally { reply.raw.removeListener('close', disconnect); }
+    return withRequestCancellation(reply.raw, signal => service.turn(parsed.data, signal));
   });
   app.post('/ai/practice/stop', async (request, reply) => {
     const parsed = practiceSessionIdSchema.safeParse(request.body);
@@ -28,10 +25,6 @@ export function registerPracticeRoutes(app: FastifyInstance, service: PracticeSe
   app.post('/ai/practice/transcribe', { bodyLimit: 2_900_000 }, async (request, reply) => {
     const parsed = practiceTranscriptionRequestSchema.safeParse(request.body);
     if (!parsed.success) return reply.code(400).send({ error: 'Invalid audio transcription request' });
-    const controller = new AbortController();
-    const disconnect = () => { if (!reply.raw.writableEnded) controller.abort(); };
-    reply.raw.once('close', disconnect);
-    try { return await service.transcribe(parsed.data, controller.signal); }
-    finally { reply.raw.removeListener('close', disconnect); }
+    return withRequestCancellation(reply.raw, signal => service.transcribe(parsed.data, signal));
   });
 }

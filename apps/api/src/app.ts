@@ -24,9 +24,10 @@ export function createApp(repository: LessonRepository, options: { now?: () => n
   });
 
   const receipts = new PreviewReceipts(options.now);
+  // Validate resource-free services before opening the speech database.
   const practice = new PracticeService({ now: options.now, ...options.practice });
-  const speech = new SpeechService({ now: options.now, ...options.speech });
   const japaneseSpeech = new JapaneseSpeechService(options.japaneseSpeech);
+  const speech = new SpeechService({ now: options.now, ...options.speech });
   registerLocalAccess(app);
   app.addHook('preClose', async () => { practice.close(); speech.close(); japaneseSpeech.close(); });
   app.addHook('onClose', async () => { receipts.clear(); repository.close(); });

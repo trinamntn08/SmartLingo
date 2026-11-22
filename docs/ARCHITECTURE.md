@@ -13,6 +13,23 @@ Reviewed: 2026-11-22 against the Japanese-enabled shared learner. French/Japanes
 
 `packages/ui` is deferred until actual cross-feature reuse warrants a separate package. The learner's theme/components currently live with its UI. See [ADR 0004](decisions/0004-local-preview-foundation.md) for the first storage/content boundaries and limitations.
 
+## Current code organization
+
+The [maintenance review](CODEBASE_REVIEW.md) records the 2026-11-22 cleanup and remaining opportunities; [ADR 0031](decisions/0031-modular-learner-foundation.md) explains the separation. These are concrete responsibilities, not a general routing/widget framework:
+
+| Module | Owns |
+| --- | --- |
+| `apps/learner/App.tsx` | Learner/editor mounting and hash routing; preserves mounted workspaces and stops speech on route changes. |
+| `apps/learner/src/app/LearnerApp.tsx` | Scoped learning/catalogue/report composition and destination rendering. |
+| `apps/learner/src/app/useLearnerNavigation.ts` | In-session destination/chooser state, guarded transitions, scroll reset and speech cancellation. Does not store learning progress. |
+| `apps/learner/src/profile/ProfileScreen.tsx` | Language-specific settings UI composed from existing feature panels. |
+| `apps/learner/src/ui/designTokens.ts`, `theme.ts`, `controls.tsx` | Shared visual values/styles and Button/Badge primitives, independent of provider/audio/storage modules. See [design system](DESIGN_SYSTEM.md). |
+| `apps/learner/src/audio/Speak.tsx` | Speaker/stop/options UI over existing audio adapters; composes base controls. |
+| `packages/content/src/topics/preview-lessons.ts` | Unchanged original restaurant/bakery seed lesson payloads; the content index assembles/exports the catalogue. |
+| `apps/api/src/request-cancellation.ts` | Disconnect signal and response-listener cleanup shared by feature routes; services retain timeouts/admission/error rules. |
+
+Dependency direction remains application composition → feature components/services → small domain/adapter contracts. The domain has no React/Fastify/database dependency. Base UI does not import audio features; audio UI may compose base controls. Refactoring changes neither learning/backup schemas nor content identity/revisions.
+
 ## Boundaries
 
 - Client -> local API -> provider. Permanent credentials stay on the API.

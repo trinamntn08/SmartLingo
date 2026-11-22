@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Text, View, useWindowDimensions } from 'react-native';
 import type { Vocabulary, TargetLanguage } from '@smartlingo/domain';
-import { Button, Speak } from './controls';
+import { Button } from './controls';
+import { Speak } from '../audio/Speak';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { WordIllustration } from './WordIllustration';

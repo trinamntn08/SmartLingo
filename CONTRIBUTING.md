@@ -10,6 +10,8 @@ Read [repository and branch state](docs/REPOSITORY_STATE.md) before selecting a 
 
 For parallel work, assign exclusive files and agree shared schemas first. One owner controls manifests/lockfiles; the primary integrates and verifies. Do not move other sessions' unfinished work or stop their servers. Commands from an unmerged task branch are not installed features of this checkout.
 
+Keep branch-specific native builds in dedicated worktrees when practical. Switching a build directory to a branch without its native ignore rules can expose old generated assets/caches as untracked files. Inspect before cleanup; preserve valuable artifacts outside the source tree with verified paths/hashes instead of deleting broadly or hiding unknown source behind a directory-wide ignore. The [maintenance review](docs/CODEBASE_REVIEW.md) records the resolved Android example.
+
 ## Validation and checkpoints
 
 Follow [architecture standards](docs/ARCHITECTURE.md#implementation-standards) and the [testing guide](docs/TESTING.md). Run `npm run check`, `npm test` and meaningful checks for the changed journey; record actual results and unrun suites. Documentation-only edits do not require paid calls, browser rebuilds or real owner data merely to claim verification.

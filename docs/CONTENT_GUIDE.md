@@ -8,6 +8,8 @@ The French guidance below remains for practical metropolitan French. For Japanes
 
 Japanese vocabulary needs target script, a kana reading, specific English meaning, an original example with kana reading and English translation, and a usage/register note. Dialogue lines retain kana readings. Use meaning matching when no literal picture exists. Sentence assembly discloses spaces as teaching chunks; ordinary Japanese generally has no word spaces. Preserve kana dakuten and distinctions that change meaning when searching or comparing answers. French articles/gender rules do not transfer to Japanese. Foundation/A1/A2/B1 labels in Japanese are editorial task estimates, without JLPT equivalence or a complete-course claim. Qualified Japanese review remains necessary.
 
+Original restaurant/bakery seed lessons now live in [topics/preview-lessons.ts](../packages/content/src/topics/preview-lessons.ts); the content entry point assembles the catalogue. This is an exact payload extraction, not a curriculum revision or publication. Keep new authored payloads in cohesive content modules rather than growing the package export file.
+
 The 20 basic-kana row lessons use their own typed content and explicit row-study progress; they are not word lessons and must not be padded into vocabulary totals. The unchanged 13-day Japanese course, original 13 shared lesson views and appended 52 lessons have separate stable identities/progress. Content expansion must preserve existing canonical payloads and history; a new topic lesson does not complete an old course day or vice versa.
 
 ## French authoring scope

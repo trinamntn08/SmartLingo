@@ -2,7 +2,7 @@
 
 Reviewed: 2026-11-22 (Europe/Paris), against this checkout's source. This is the current capability summary; [PROJECT_PLAN](../PROJECT_PLAN.md) describes target requirements, [local operations](LOCAL_OPERATIONS.md) owns run/setup instructions, and [the session checkpoint](SESSION_CHECKPOINT.md) records the latest task and actual checks. A documented localhost address does not establish that a service is currently running.
 
-Source baseline: the current `docs/current-codebase-sync` branch descends from fetched unified-hub head `d8274ee`, containing Japanese and French. Android APK work (`0d21d67`) and the older hosted learner (`c88bc41`) are separate branches, not absent work and not integrated features here. [Repository and branch state](REPOSITORY_STATE.md) records the inspected heads and safe continuation procedure.
+Source baseline: `refactor/maintainable-foundation` continues documentation checkpoint `f0637e7`, descended from unified-hub head `d8274ee`, containing Japanese and French. Android APK work (`0d21d67`) and the older hosted learner (`c88bc41`) are separate branches, not absent work and not integrated features here. [Repository and branch state](REPOSITORY_STATE.md) records the inspected heads and safe continuation procedure.
 
 ## Implemented
 
@@ -27,6 +27,7 @@ Source baseline: the current `docs/current-codebase-sync` branch descends from f
 | Speech | Shared optional language-specific device voice/speed settings. Japanese speaker buttons now fall back to free local VOICEVOX Shikoku Metan when no Japanese device voice is installed, with Profile source/preview/speed, bounded saved clips/offline replay and isolated removal. Compact Windows CPU setup and actual synthesis are verified; pronunciation/naturalness still need owner audition. French explicit Azure generation/saved replay remain separate. [Research, setup and credits](JAPANESE_AUDIO.md). |
 | Optional AI | Explicit text conversation and temporary recorded-input transcription, visible French/English help/feedback, editable transcript and separate Send. Explicit notebook capture is durable; raw clips and unsaved conversations remain temporary. Server-only credentials and bounded fake-tested provider adapters. |
 | Tooling | TypeScript workspaces, repository/secret checks, application/browser/offline suites and GitHub CI configuration. Installed/prepared Codex files are validated copies, not proof of client loading/trust. |
+| Maintainable structure | App mounting, guarded learner navigation and Profile have dedicated modules. Shared design tokens/base controls stay independent of audio; Speak belongs to the audio feature. Seed content is separate from catalogue assembly. API routes share disconnect cleanup; invalid Japanese options reject before speech database acquisition. Direct editor hash navigation stops hidden learner audio. Content payloads/storage formats stay unchanged. [Review and remaining work](CODEBASE_REVIEW.md), [design guidance](DESIGN_SYSTEM.md). |
 
 ## Research and deployment boundaries
 

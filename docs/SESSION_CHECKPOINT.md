@@ -1,36 +1,29 @@
 # Session checkpoint
 
-Updated: 2026-11-22 (Europe/Paris). Documentation reconciliation is complete and independently reviewed. The commit containing this note is the checkpoint; actual SHA/upload results are reported at handoff after final staged checks and verified push.
+Updated: 2026-11-22 (Europe/Paris). Task: review the codebase, resolve untracked clutter, refactor clear responsibility boundaries and update documentation. Branch refactor/maintainable-foundation, base f0637e7. Implementation, independent code/documentation review and all validation are complete. The commit containing this note is the source checkpoint; actual SHA and verified origin upload are reported at handoff after final staged checks.
 
-## Result and source
+## Completed work
 
-The owner corrected the initial French-only reading: Japanese already exists on another branch. Fetched origin, inspected worktree/history/live refs, then switched the main workspace from feat/android-test-apk (0d21d67) to docs/current-codebase-sync, based on origin/feat/unified-learning-hub (d8274ee). Existing hub and Android heads each matched origin. No branches merged, application source/manifests changed or main update.
+Startup had no modified tracked source. The 153 untracked Git paths were residual Android build/cache outputs after the previous branch switch. Verified no tracked Android source or reparse points; native PowerShell moved the 924 files/55,015,483bytes to D:/dev/projects/SmartLingo-sessions/android-build-preserved-2026-11-22/apps-android. A sibling manifest stores relative paths, sizes and SHA-256. All 924 hashes/counts matched after the move; no deletion or blanket ignore. Git was clean before deliberate refactoring.
 
-[Repository state](REPOSITORY_STATE.md) identifies the Japanese hub, earlier Japanese/topic/audio/report branches, separate Android APK and older hosting work. Root instructions/README/product plan, status, architecture, operations, testing, environment, catalogue, content/media/research guides, index and Cloud guidance agree with source. Historical plans/decisions/audits remain dated. The [previous hub checkpoint](history/unified-learning-hub-2026-11-22.md) preserves earlier checks/process observations, not currently running services. [Plan 0037](plans/0037-current-codebase-documentation.md) records scope and ownership.
+App now owns mounting/hash routing; app/LearnerApp composes language-scoped models/destinations; app/useLearnerNavigation owns guarded session navigation; profile/ProfileScreen composes settings. Generic Button/Badge and shared designTokens stay independent of audio; audio/Speak owns playback/options UI. Content index composes unchanged restaurant/bakery seeds from topics/preview-lessons. API routes share response-disconnect cleanup; resource-free validation precedes speech database acquisition. Fixed direct editor hash entry leaving hidden learner speech running, and invalid Japanese options opening a speech DB before throwing.
 
-Source inventory: French 25 banks/123 lessons/765 appearances/722 IDs/713 forms; Japanese 13 banks/65 lessons/390 appearances/380 IDs/forms; daily courses 2 French/13 Japanese days; kana 20 rows/46 basic forms per script. Japanese words/examples have kana readings; alphabet characters have romaji/sound notes. French has audio/selected notes, not complete written pronunciation. No qualified teaching approval, full CEFR/JLPT coverage or proficiency claim.
+[Codebase review](CODEBASE_REVIEW.md), [design system](DESIGN_SYSTEM.md), [architecture](ARCHITECTURE.md), [ADR 0031](decisions/0031-modular-learner-foundation.md) and [plan 0038](plans/0038-maintainable-foundation.md) describe coverage, module contracts and remaining opportunities. No domain/storage format, migration, dependency, canonical payload/revision, publication or branch merge changed. All five runtime-content fingerprints match before/after: French/Japanese lessons, French/Japanese daily courses and kana. Independent reviewer separately confirmed exact seed equality.
 
-## Validation actually performed
+## Actual validation
 
-- npm.cmd run check: PASS repository structure, Markdown links, whitespace and TypeScript. Final documentation additions receive repository/staged rechecks before commit.
-- npm.cmd test: PASS 18 tooling and 251 application tests with deterministic fakes/temporary data; no paid calls or owner data.
-- python -X utf8 -m unittest discover -s scripts/japanese_voice -p test_server.py: PASS 3 model-free protocol tests; no model download/live synthesis.
-- Curriculum helper ran existing review-pack self-test: PASS including 8 negative fixtures and 6 bridge/5 refinement candidates. Read-only inventory/photo/drawing/resource checks confirm language scopes/counts.
-- Independent read-only reviewer confirmed counts, pronunciation controls, backup v4/legacy imports, media, commands and branch topology. Fixed stale website-priority wording that could point to the old French artifact; STATUS now requires current-hub reconciliation and both-language validation. Final review found no remaining actionable inaccuracies.
-- git diff --check: PASS. Final staged secret/whitespace checks, commit and push follow; actual Git results are reported at handoff.
+- npm.cmd run check: PASS repository/Markdown/whitespace and TypeScript after correcting an extra blank EOF in extracted controls. The initial whitespace failure also caused the tooling hook assertion to fail; no assertion/check was weakened.
+- npm.cmd test: final PASS 18 tooling / 256 application (274 total). API helper separately ran 52 focused tests, reviewer 8; all fakes/temporary data and no paid calls.
+- Independent read-only review: no actionable findings in combined code diff. Covered mounting/navigation/write guards, scoping, speech lifecycle, token values, exact content extraction and API cancellation/startup.
+- Full npm.cmd run test:e2e -- --workers=2: PASS 137 tests / 1 pre-existing intentional duplicate-publication skip (6.1 minutes), isolated ports 8081/3002. Includes direct-hash speech cancellation and mounted-lesson regression at desktop/narrow.
+- Fresh npm.cmd run build:web: PASS 126 files / 10,229,278 bytes; build 726a95ec88e5519caa6d51230cb6954264cdd02bce7a216e09ac6a1996eacf62. Full isolated exported offline suite: PASS 24/24 desktop/320px (2.5 minutes), run with npx.cmd playwright test --config .cache/maintenance.offline.config.ts. Ignored copied fixtures differ only by port 8082 to 8086; shared helper is byte-identical. Initial temporary-harness cwd/CJS/import-path setup failures were corrected without changing application code, assertions or limits. Owner preview process 13668 on 8082 stayed running. Primary inspected 320px offline-ready and Japanese Report screenshots.
 
-No fresh browser/offline export, microphone/audio hardware, live engine, APK, physical phone, hosted release, provider availability or qualified teaching review performed for this docs step. Existing services were not stopped/restarted or claimed current. Git sync does not transfer browser IndexedDB data or rebuild another worktree's export.
+## Git handoff and remaining work
 
-## Preserved work and Git handoff
+All implementation checks are complete. Run final documentation/staged checks, deliberately stage task files, create the focused checkpoint and push only refactor/maintainable-foundation. Compare live remote full SHA with HEAD. No main change, force push, merge, deployment or curriculum publication. No secrets, databases, build artifacts/caches or preserved Android files enter Git.
 
-Original tests/e2e/backup.spec.ts was flagged modified but its Git hash matched the Android HEAD blob. Before switching, copied exact bytes to D:/dev/projects/SmartLingo-sessions/documentation-sync-preserved/backup.spec.ts.original; both SHA-256 values matched db947ab1fa6ef77a6be61cdff9f64a1f2965d7255d2a6e1d9b75612841d9bd77. Restoring identical tracked content allowed the safe switch. The newer test content comes from the hub baseline, not this task.
+Whole-codebase review follow-ups remain documented: default-only learner API endpoint versus configurable server, justified JSON response budgets, historical catalogue allocation, report/catalogue refresh work and dirty-edit/navigation feedback. No unmeasured speed or security guarantee claimed. Original slower hiragana/pronunciation/widget journey remains separate outstanding UI work; structural cleanup is not a claim it was implemented.
 
-Untracked apps/android generated build/assets remain preserved locally, excluded from this commit. Other worktrees/branches untouched. Stage deliberate task Markdown only, run staged checks, commit, inspect live docs/current-codebase-sync origin ref, push normally and verify remote SHA equals HEAD. No merge, force push, main update, deployment or curriculum publication.
+## Delegation and limits
 
-## Next authorized UI work
-
-Original request remains outstanding after this docs prerequisite: review the whole interface for a new learner, slow initial hiragana/word introduction, improve pronunciation display and reorganize widgets. Continue from this Japanese-enabled source, inspect the seven references and first-time flow, then implement a complete beginner journey with relevant UI checks. Do not assume Japanese is unimplemented or claim UI changes were delivered by documentation.
-
-## Delegation and usage
-
-Operations/curriculum helpers owned exclusive docs; independent reviewer stayed read-only. Exposed gpt-6.1-sol medium for helpers/high for review selected under routing; primary owned integration, root guides, branch map, checkpoint and Git. No automatic role/hook loading claimed. Account allowance reporting unavailable on 2026-11-22; none inferred; no automatic-resume scheduler configured. No credentials, recordings or paid services accessed.
+UI builder exclusively owned shell/profile plus browser regression; API builder owned cancellation/startup/tests; primary owned artifacts/design/content/docs/integration/Git; independent reviewer stayed read-only. Exposed gpt-6.1-sol high used for these bounded tasks per routing. No automatic role/hook loading claimed. Account usage reporting unavailable on 2026-11-22; none inferred; no automatic-resume schedule configured. Existing owner services/data preserved; no provider keys, raw recordings or paid calls. Physical-phone/Safari/screen-reader/real audio and qualified teaching acceptance remain unverified.

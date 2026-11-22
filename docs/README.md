@@ -13,6 +13,8 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 | [Product plan](../PROJECT_PLAN.md) | Target requirements and product constraints, including future scope. |
 | [Local operations](LOCAL_OPERATIONS.md) | Learner/editor use, backups, offline study and optional speech/AI setup. |
 | [Architecture](ARCHITECTURE.md) | Module responsibilities, boundaries and implementation/review standards. |
+| [Codebase review](CODEBASE_REVIEW.md) | Generated-file cleanup, completed modular refactors, confirmed fixes and remaining architecture opportunities. |
+| [Design system](DESIGN_SYSTEM.md) | Shared tokens, base controls, feature composition, accessibility and extension guidance. |
 | [Testing](TESTING.md) | Commands, test isolation, coverage and unverified areas. |
 | [Environment](ENVIRONMENT.md) | Pinned runtime, dependency installation and packaging boundaries. |
 | [Contributing](../CONTRIBUTING.md) | Development entry point; [session workflow](SESSION_WORKFLOW.md) owns checkpoint/usage/recovery policy. |

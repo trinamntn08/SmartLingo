@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 import { normalizeSearch, notebookEntrySchema, languageNames, notebookLanguage, type TargetLanguage, type NotebookEntry } from '@smartlingo/domain';
-import { Button, Speak } from './controls';
+import { Button } from './controls';
+import { Speak } from '../audio/Speak';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';

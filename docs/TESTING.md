@@ -39,6 +39,8 @@ The unified Learn coverage includes same-language sentence-question construction
 
 Alphabet coverage checks the 92-form inventory and readings, known-ID/revision row progress, Hiragana-first continuation, wrong-answer study versus mastery, save retry identity and backup preservation. Visual-path browser cases check card selection, no dropdown, current/studied accessible names, keyboard Tab/Enter and 320px overflow. A cold-offline case resumes saved Hiragana and freely browses/practises Katakana with visible readings and no API request. These checks do not establish handwriting or native-speaker pronunciation quality.
 
+Maintenance coverage includes the API-local disconnect helper (pending/completed/already-disconnected responses and listener release after errors), invalid service options rejecting before speech database acquisition, and direct editor hash navigation cancelling learner speech while preserving the mounted lesson/activity. These use fakes or temporary storage. Content extraction is also checked against unchanged runtime payload fingerprints; see [maintenance review](CODEBASE_REVIEW.md). Shared design-token extraction preserves existing values rather than adding tests that merely restate token constants.
+
 ## Optional Japanese voice protocol checks
 
 The compact Python service has model-free protocol tests, separate from `npm test`:

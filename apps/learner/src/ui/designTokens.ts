@@ -1,38 +1,41 @@
 /** Shared visual values. Feature-specific layouts stay with their components. */
+import { Platform } from 'react-native';
+
 export const colors = {
-  paper: '#FAF7EF', card: '#FFFFFF', ink: '#35212F', muted: '#655964',
-  yellow: '#F6CA56', green: '#E8EFE3', line: '#E8DED3', sand: '#F3EDE3',
-  goldTint: '#FFF0C8', sageTint: '#E5EFE2', skyTint: '#E4EDF6', lilacTint: '#F0E8F5',
-  danger: '#9E3026', softDanger: '#FDEDE5',
-  inputBorder: '#8B8D7E', errorBorder: '#E3A99C', focusRing: '#246944',
-  audioIcon: '#19201D', modalScrim: 'rgba(25,32,29,0.35)',
+  paper: '#F5F4ED', card: '#FFFFFF', ink: '#182D27', muted: '#50605A',
+  primary: '#145448', onPrimary: '#FFFFFF', dark: '#103B32',
+  yellow: '#F2C45C', green: '#DBEBE0', line: '#DEE2D8', sand: '#EFEEE5',
+  goldTint: '#FFF0CD', sageTint: '#E6F0E4', skyTint: '#E5EFF7', lilacTint: '#ECEAF7',
+  danger: '#9B2F23', softDanger: '#FFF0EB',
+  inputBorder: '#87978E', errorBorder: '#DFA99B', focusRing: '#336FA0',
+  audioIcon: '#145448', modalScrim: 'rgba(16,59,50,0.35)',
 } as const;
 
-const fontFamily = 'system-ui, "Segoe UI", "Yu Gothic", Meiryo, sans-serif';
+const fontFamily = Platform.select({ web: 'Inter, system-ui, "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif' });
 
 export const designTokens = {
   colors,
   space: { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 },
-  radius: { sm: 8, md: 16, input: 12, lg: 16, card: 22, pill: 14 },
+  radius: { sm: 8, md: 12, input: 11, lg: 16, card: 18, pill: 11 },
   layout: {
-    compactBreakpoint: 600, desktopNavBreakpoint: 900, sidebarBreakpoint: 1050,
-    shellMaxWidth: 1440, contentMaxWidth: 1080, libraryMaxWidth: 1320, sidebarWidth: 240,
+    compactBreakpoint: 600, desktopNavBreakpoint: 1000, sidebarBreakpoint: 1050,
+    shellMaxWidth: 1536, contentMaxWidth: 1240, libraryMaxWidth: 1320, sidebarWidth: 250,
   },
   control: { minimumTarget: 44, buttonHeight: 46, inputHeight: 48, audioIconSize: 22 },
   focus: { outlineWidth: 3, outlineOffset: 3 },
   opacity: { disabled: 0.5, pressed: 0.75 },
-  shadow: { card: '0 2px 5px rgba(53,33,47,0.05)' },
+  shadow: { card: '0 3px 10px rgba(16,59,50,0.045)' },
   typography: {
-    brand: { fontFamily, fontSize: 24, fontWeight: '800', letterSpacing: -0.8 },
-    title: { fontFamily, fontSize: 42, lineHeight: 49, fontWeight: '800', letterSpacing: -1.2 },
-    compactTitle: { fontSize: 34, lineHeight: 40, letterSpacing: -0.7 },
-    hero: { fontFamily, fontSize: 48, lineHeight: 55, fontWeight: '800', letterSpacing: -1.5 },
-    heading: { fontFamily, fontSize: 24, lineHeight: 31, fontWeight: '700', letterSpacing: -0.3 },
-    target: { fontFamily, fontSize: 36, lineHeight: 44, fontWeight: '800' },
-    body: { fontFamily, fontSize: 19, lineHeight: 29 },
-    muted: { fontFamily, fontSize: 16, lineHeight: 24 },
-    eyebrow: { fontFamily, fontSize: 13, letterSpacing: 0.9, fontWeight: '700', textTransform: 'uppercase' },
-    label: { fontFamily, fontSize: 14, lineHeight: 20, fontWeight: '700' },
-    button: { fontFamily, fontSize: 16, lineHeight: 22, fontWeight: '700', textAlign: 'center' },
+    brand: { fontFamily, fontSize: 24, lineHeight: 30, fontWeight: '700', letterSpacing: -0.95 },
+    title: { fontFamily, fontSize: 39, lineHeight: 47, fontWeight: '700', letterSpacing: -1.35 },
+    compactTitle: { fontSize: 32, lineHeight: 39, letterSpacing: -0.8 },
+    hero: { fontFamily, fontSize: 54, lineHeight: 60, fontWeight: '700', letterSpacing: -2.2 },
+    heading: { fontFamily, fontSize: 24, lineHeight: 31, fontWeight: '700', letterSpacing: -0.55 },
+    target: { fontFamily, fontSize: 36, lineHeight: 46, fontWeight: '700', letterSpacing: -0.7 },
+    body: { fontFamily, fontSize: 18, lineHeight: 28 },
+    muted: { fontFamily, fontSize: 15, lineHeight: 23 },
+    eyebrow: { fontFamily, fontSize: 13, lineHeight: 19, letterSpacing: 0.8, fontWeight: '700', textTransform: 'uppercase' },
+    label: { fontFamily, fontSize: 14, lineHeight: 20, fontWeight: '600' },
+    button: { fontFamily, fontSize: 16, lineHeight: 22, fontWeight: '600', textAlign: 'center' },
   },
 } as const;

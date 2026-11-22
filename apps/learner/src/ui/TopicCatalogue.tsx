@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Platform, Text, TextInput, View, useWindowDimensions } from 'react-native';
+import { Platform, ScrollView, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { groupLessonTopics, languageNames, lessonProgress, matchesLesson, matchesVocabulary, normalizeSearch,
   type CatalogueLevel, type Lesson, type LessonTopic, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from './controls';
@@ -21,9 +21,8 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
   const { query, level, onQueryChange: setQuery, onLevelChange: setLevel } = search;
   const { width } = useWindowDimensions();
   const phone = width < designTokens.layout.compactBreakpoint;
-  const wide = width >= designTokens.layout.sidebarBreakpoint;
   const [gridWidth, setGridWidth] = useState(0);
-  const columns = gridWidth >= 1100 ? 3 : !phone && gridWidth >= 600 ? 2 : 1;
+  const columns = gridWidth >= 960 ? 3 : !phone && gridWidth >= 570 ? 2 : 1;
   const selected = topics.find(topic => topic.name === selectedTopic);
   const visibleTopics = topics.filter(topic => topic.lessons.some(lesson => matchesLesson(lesson, query, level)));
   const topicLessons = selected?.lessons.filter(lesson => matchesLesson(lesson, query, level)) ?? [];
@@ -31,50 +30,53 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
   const words = groupLessonTopics(topicLessons).flatMap(topic => topic.vocabulary)
     .filter(entry => topicQuery || matchesVocabulary(entry, query));
 
-  return <View style={{ gap: 20, minWidth: 0 }}>
+  return <View style={{ gap: 16, minWidth: 0 }}>
     {selected ? <>
-      <View style={s.row}>
-        <Button label="All topics" disabled={disabled} onPress={() => onSelectTopic(null)}>← All topics</Button>
-        <Text style={s.muted}>{languageNames[language]} / Learn</Text>
+      <View style={[s.row, { gap: 8 }]}>
+        <Button compact quiet label="All topics" disabled={disabled} onPress={() => onSelectTopic(null)}>← All topics</Button>
+        <Text style={s.muted}>{languageNames[language]} / Library</Text>
       </View>
-      <View style={[s.card, { flexDirection: phone ? 'column' : 'row', alignItems: 'stretch', padding: 0, overflow: 'hidden', gap: 0 }]}>
-        <View style={{ flex: 1, minWidth: 0, padding: phone ? 18 : 28, gap: 10, justifyContent: 'center' }}>
+      <View style={{ flexDirection: phone ? 'column' : 'row', alignItems: 'stretch', gap: 16 }}>
+        <View style={{ flex: 1, minWidth: 0, gap: 6, justifyContent: 'center' }}>
           <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>{selected.name}</Text>
           <Text style={s.body}>{selected.lessons[0]?.outcome}</Text>
           <Text style={s.muted}>{selected.vocabulary.length} words · {selected.lessons.length} short lessons</Text>
         </View>
-        <View style={{ flex: phone ? undefined : 1, minWidth: 0 }}><TopicCover key={selected.name} topic={selected} hero /></View>
+        <View style={{ width: phone ? '100%' : 250, maxHeight: phone ? 104 : 136, minWidth: 0, borderRadius: 14, overflow: 'hidden', justifyContent: 'center' }}><TopicCover key={selected.name} topic={selected} hero /></View>
       </View>
-    </> : <View style={{ gap: 8 }}>
-      <Text style={s.eyebrow}>{languageNames[language]} / Learn</Text>
+    </> : <View style={{ gap: 4 }}>
+      <Text style={s.eyebrow}>{languageNames[language]} / Library</Text>
       <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>Explore topics</Text>
       <Text style={s.muted}>{topics.length} everyday topics · {[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}</Text>
     </View>}
-    <View style={[s.row, !wide && { flexDirection: 'column', alignItems: 'stretch' }]}>
+    <View style={{ gap: 10 }}>
       <TextInput accessibilityLabel="Search lessons" placeholder={phone ? 'Search topics and words' : 'Search topics, words, readings or English meanings'}
-        value={query} onChangeText={setQuery} style={[s.input, wide && { flex: 1, minWidth: 270 }]} clearButtonMode="while-editing" />
-      <View style={s.row}>{(['All', 'foundation', 'A1', 'A2', 'B1'] as const).filter(value => value === 'All' || lessons.some(lesson => lesson.level === value)).map(value => <Button key={value} selected={level === value}
-        label={value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations level' : `${value} level`} onPress={() => setLevel(value)}>{value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations' : value}</Button>)}</View>
+        value={query} onChangeText={setQuery} style={[s.input, { width: '100%' }]} clearButtonMode="while-editing" />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', gap: 6, paddingVertical: 3 }}>
+        {(['All', 'foundation', 'A1', 'A2', 'B1'] as const).filter(value => value === 'All' || lessons.some(lesson => lesson.level === value)).map(value => <View key={value} style={{ flexShrink: 0 }}><Button compact quiet selected={level === value}
+          label={value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations level' : `${value} level`} onPress={() => setLevel(value)}>{value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations' : value}</Button></View>)}
+        {!!query.trim() && <Button compact quiet onPress={() => setQuery('')}>Clear search</Button>}
+      </ScrollView>
     </View>
     {!selected ? <>
       {!topics.length ? <View style={s.card}><Text style={s.heading}>No topics available.</Text>
         <Text style={s.body}>Your lesson catalogue is empty. Try loading the published catalogue from Profile.</Text></View>
         : !visibleTopics.length && <EmptyResults onClear={() => { setQuery(''); setLevel('All'); }} />}
       {!!visibleTopics.length && (query.trim() || level !== 'All') && <Text accessibilityLiveRegion="polite" style={s.muted}>{visibleTopics.length} {visibleTopics.length === 1 ? 'topic' : 'topics'} to explore</Text>}
-      <View onLayout={event => setGridWidth(event.nativeEvent.layout.width)} style={[s.split, { gap: 24 }]}>{visibleTopics.map(topic => {
+      <View onLayout={event => setGridWidth(event.nativeEvent.layout.width)} style={[s.split, { gap: 16 }]}>{visibleTopics.map((topic, index) => {
         const completed = topic.lessons.filter(lesson => lessonProgress(lesson, model.events).completed).length;
         const levels = [...new Set(topic.lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' · ');
-        return <View key={topic.name} style={[s.card, { gap: 0, padding: 0, overflow: 'hidden', minWidth: 0,
-          width: columns === 1 ? '100%' : (gridWidth - 24 * (columns - 1)) / columns, flexShrink: 1 }]}>
+        return <View key={topic.name} style={[s.card, { gap: 0, padding: 0, overflow: 'hidden', minWidth: 0, boxShadow: 'none',
+          width: columns === 1 ? '100%' : (gridWidth - 16 * (columns - 1)) / columns, flexShrink: 1 }]}>
           <TopicCover topic={topic} />
-          <View style={{ padding: phone ? 18 : 24, gap: 12, flexGrow: 1 }}>
-            <Text style={s.eyebrow}>{levels}</Text>
+          <View style={{ padding: 18, gap: 8, flexGrow: 1, backgroundColor: [colors.card, colors.skyTint, colors.sageTint][index % 3] }}>
+            <View style={[s.row, { justifyContent: 'space-between', gap: 6 }]}><Text style={s.eyebrow}>{levels}</Text><Text style={s.muted}>{topic.lessons.every(lesson => lesson.status === 'published') ? 'Published' : topic.lessons.some(lesson => lesson.status === 'published') ? 'Includes drafts' : 'Draft'}</Text></View>
             <Text accessibilityRole="header" style={s.heading}>{topic.name}</Text>
-            <Text style={s.body}>{topic.lessons[0]?.outcome}</Text>
+            <Text style={[s.body, { fontSize: 17, lineHeight: 25 }]}>{topic.lessons[0]?.outcome}</Text>
             <Text style={s.muted}>{topic.vocabulary.length} words · {topic.lessons.length} short lessons</Text>
-            <View style={{ marginTop: 'auto', paddingTop: 8, gap: 12 }}>
-              <Text style={s.muted}>{completed ? `${completed} sessions saved · ` : ''}{topic.lessons.every(lesson => lesson.status === 'published') ? 'Published' : topic.lessons.some(lesson => lesson.status === 'published') ? 'Includes drafts' : 'Draft'}</Text>
-              <Button label={`Topic ${topic.name}`} disabled={disabled} onPress={() => onSelectTopic(topic.name)}>Explore topic →</Button>
+            <View style={{ marginTop: 'auto', paddingTop: 8, gap: 8 }}>
+              {!!completed && <Text style={s.muted}>{completed} sessions saved</Text>}
+              <Button compact label={`Topic ${topic.name}`} disabled={disabled} onPress={() => onSelectTopic(topic.name)}>Explore topic →</Button>
             </View>
           </View>
         </View>;
@@ -84,13 +86,13 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
       <Text accessibilityRole="header" style={s.heading}>Vocabulary · {words.length}</Text>
       {!topicLessons.length ? <EmptyResults onClear={() => { setQuery(''); setLevel('All'); }} />
         : !words.length && <Text style={s.muted}>No word matches this search. The lesson matches its title or situation.</Text>}
-      <View style={[s.split, { gap: 18 }]}>{words.map(entry =>
-        <View key={`${selected.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: phone ? '100%' : 330, minWidth: 0 }}>
+      <View style={[s.split, { gap: 16 }]}>{words.map(entry =>
+        <View key={`${selected.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: phone ? '100%' : 350, minWidth: 0 }}>
           <VocabularyCard entry={entry} model={model} language={language} />
         </View>)}</View>
     </>}
     {Platform.OS === 'web' && language === 'fr-FR' && <a href="/vocabulary-photos/credits.html"
-      target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 16, minHeight: 44, display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start' }}>
+      target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: 16, minHeight: 34, display: 'inline-flex', alignItems: 'center', alignSelf: 'flex-start' }}>
       Photo credits and licences
     </a>}
   </View>;
@@ -102,14 +104,15 @@ function ShortLessons({ lessons, model, onOpen, disabled }: { lessons: Lesson[];
     <View style={{ borderWidth: 1, borderColor: colors.line, borderRadius: 16, backgroundColor: colors.card, overflow: 'hidden' }}>
       {lessons.map((lesson, index) => {
         const progress = lessonProgress(lesson, model.events);
-        return <View key={lesson.id} style={{ padding: 20, gap: 10, borderTopWidth: index ? 1 : 0, borderColor: colors.line }}>
-          <View style={[s.row, { justifyContent: 'space-between' }]}>
-            <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 240, minWidth: 0, gap: 4 }}>
+        return <View key={lesson.id} style={{ padding: 16, gap: 8, borderTopWidth: index ? 1 : 0, borderColor: colors.line }}>
+          <View style={[s.row, { justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }]}>
+            <View style={{ minWidth: 32, minHeight: 32, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: progress.completed ? colors.sageTint : colors.goldTint }}><Text style={[s.body, { fontSize: 16 }]}>{progress.completed ? '✓' : String(index + 1).padStart(2, '0')}</Text></View>
+            <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 200, minWidth: 0, gap: 4 }}>
               <Text style={[s.body, { fontWeight: '700' }]}>{lesson.subtitle}</Text>
               <Text style={s.muted}>{lesson.outcome}</Text>
               <Text style={s.muted}>{lesson.vocabulary.length} words · {lesson.durationMinutes} min · {lesson.level} · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
             </View>
-            <Button label={`Open ${lesson.subtitle}`} disabled={disabled} onPress={() => onOpen(lesson)}>
+            <Button compact label={`Open ${lesson.subtitle}`} disabled={disabled} onPress={() => onOpen(lesson)}>
               {progress.completed ? 'Revisit →' : progress.viewedIds.size ? 'Continue →' : 'Start lesson →'}
             </Button>
           </View>

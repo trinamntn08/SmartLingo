@@ -28,15 +28,15 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   const studyLessons = selectedTopic ? lessons.filter(lesson => lesson.topic === selectedTopic) : lessons;
   const visibleModes = learnModes.filter(choice => language === 'ja-JP' || choice !== 'Japanese letters');
   const activeMode = visibleModes.includes(mode) ? mode : 'Vocabulary & lessons';
-  return <View style={{ gap: 20, minWidth: 0 }}>
-    <View style={{ gap: 12, paddingBottom: 12, borderBottomWidth: 1, borderColor: colors.line }}>
-      {compact ? <ScrollView horizontal accessibilityLabel="Learning sections" showsHorizontalScrollIndicator contentContainerStyle={{ gap: 8, paddingVertical: 4 }} style={{ maxWidth: '100%' }}>
-        {visibleModes.map(choice => <View key={choice} style={{ flexShrink: 0 }}><Button selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)}>{choice}</Button></View>)}
+  return <View style={{ gap: 16, minWidth: 0 }}>
+    <View style={{ gap: 10, paddingBottom: 12, borderBottomWidth: 1, borderColor: colors.line }}>
+      {compact ? <ScrollView horizontal accessibilityLabel="Learning sections" showsHorizontalScrollIndicator contentContainerStyle={{ gap: 6, paddingVertical: 3 }} style={{ maxWidth: '100%' }}>
+        {visibleModes.map(choice => <View key={choice} style={{ flexShrink: 0 }}><Button compact quiet selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)}>{choice}</Button></View>)}
       </ScrollView> : <View accessibilityLabel="Learning sections" style={s.row}>
-        {visibleModes.map(choice => <Button key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)}>{choice}</Button>)}
+        {visibleModes.map(choice => <Button compact quiet key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)}>{choice}</Button>)}
       </View>}
       {!!selectedTopic && activeMode !== 'Vocabulary & lessons' && activeMode !== 'Japanese letters' && <View style={s.row}>
-        <Text style={s.muted}>{selectedTopic}</Text><Button disabled={disabled} onPress={() => onSelectTopic(null)}>All topics</Button>
+        <Text style={s.muted}>{selectedTopic}</Text><Button compact quiet disabled={disabled} onPress={() => onSelectTopic(null)}>All topics</Button>
       </View>}
     </View>
     {topicNavigation}
@@ -44,10 +44,8 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
       : activeMode === 'Vocabulary & lessons' ? <TopicCatalogue key={language} language={language} lessons={lessons} topics={topics} model={model}
         onOpen={onOpen} selectedTopic={selectedTopic} onSelectTopic={onSelectTopic} search={catalogueSearch} disabled={disabled} />
       : activeMode === 'Listening & videos' ? <>
-        <View style={s.row}>
-          {Platform.OS === 'web' && <Button onPress={() => globalThis.document?.getElementById('learning-listening-library')?.scrollIntoView({ block: 'start' })}>Browse videos & audio</Button>}
-        </View>
-        <ListeningComprehension key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons} />
+        <ListeningComprehension key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons}
+          onBrowse={Platform.OS === 'web' ? () => document.getElementById('learning-listening-library')?.scrollIntoView({ block: 'start' }) : undefined} />
         <View nativeID="learning-listening-library"><ListeningResources key={language} language={language} /></View>
       </> : <>
         <GuidedSpeaking key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons} />

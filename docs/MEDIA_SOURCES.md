@@ -1,4 +1,4 @@
-# Vocabulary illustration sources and rights
+# Visual media sources and rights
 
 Created 2026-11-14 for the visual topic browser. Current binding counts checked against [visuals.ts](../packages/content/src/visuals.ts) and the bundled catalogue on 2026-11-22: 125 French bindings, 122 used by current French lessons. The render/contact-sheet review described below remains historical evidence from the original batch. For photographs and their separate rights, use [photo sources](PHOTO_SOURCES.md) and [current coverage](PHOTO_COVERAGE.md).
 
@@ -17,7 +17,47 @@ The ten initial illustrations live in apps/learner/src/ui/Illustration.tsx. New 
 
 The new visual catalogue is separate from lesson revisions. Associations use stable vocabulary IDs and exact current target text; changed targets do not receive an outdated new illustration. Existing concrete curriculum pictures remain the fallback. SVGs bundle with ordinary web assets, have no scripts or remote image dependencies, and require no AI/API request during use. The explicit offline web download now saves those bundled assets for cold reloads; see [ADR 0012](decisions/0012-offline-web-assets.md).
 
-The offline web manifest uses an original code-drawn geometric star/circle icon in `apps/learner/public/icon.svg`, using the existing app palette. It contains no external image, font, script or resource. Browser/device icon suitability remains subject to owner review; no third-party licence or final branding approval is claimed.
+The offline web manifest and app header use an original code-drawn open book in [icon.svg](../apps/learner/public/icon.svg). It contains no external resource. Browser and device icon suitability remains subject to owner review.
+
+## Bundled presentation scenes and type
+
+The 2026-11-22 frontend rework uses four original photorealistic contextual scenes generated with the built-in ImageGen tool from the written prompts below. No outside image or supplied interface artwork was an input. The scenes depict illustrative places and fictional people. The workspace JPEGs were resized and recompressed from the generated PNGs, keeping the composition intact. They travel in the web/offline asset pack and load locally. Spot-checks cover scene clarity and cropping. Owner review of presentation suitability remains open. The existing word-photo licence inventory and answer bindings apply independently. [Photo sources](PHOTO_SOURCES.md)
+
+| Asset | Use | SHA-256 |
+| --- | --- | --- |
+| [French café and bakery](../apps/learner/public/learning-scenes/french-street.jpg) | Language chooser, French Today and contextual cover fallback | `620c5a45f0c101c86e8e361f4519d89def088c937765566adbf33c65cfb57c08` |
+| [Japanese neighbourhood](../apps/learner/public/learning-scenes/japanese-street.jpg) | Language chooser, Japanese Today and general contextual cover | `e4a0ab9f261f822c65aba705f37252ab59e393bd94805f8d3a73e453a6653c11` |
+| [Japanese produce counter](../apps/learner/public/learning-scenes/japanese-market.jpg) | Japanese shopping topic and related lesson context | `ad09ddfe5cdc83003673899e34b903cf79f87fc71a9e863b6ff00d3543b8e6a5` |
+| [Japanese station](../apps/learner/public/learning-scenes/japanese-station.jpg) | Japanese station and time topic and related lesson context | `18e4c409743a1571b5c843ffe2ca4522a8a0f6c228e23ebf2fad2eea68a3e72c` |
+
+The browser uses the unchanged Inter variable WOFF2 from the Inter 4.1 release. The public font directory includes the upstream SIL Open Font License 1.1 and copyright notice. Japanese characters use the system fallback stack. [Inter 4.1 release](https://github.com/rsms/inter/releases/tag/v4.1) · [Bundled font](../apps/learner/public/fonts/InterVariable.woff2) · [Bundled license](../apps/learner/public/fonts/Inter-LICENSE.txt)
+
+## Image generation prompts
+
+### french-street
+
+```text
+Use case: photorealistic-natural. Asset: original contextual hero photo for an adult French language learning website. Wide 3:2 horizontal editorial photograph of a real-feeling everyday neighbourhood street in Lyon, France, seen close to one corner bakery and café. Cream limestone façades, deep teal awning and dark green door, warm bread and simple ceramic cups visible through the window, one small coral accent, two adult neighbors naturally passing in the midground. Soft clear late morning daylight, candid street photography, realistic textures, inviting and contemporary. Frame the shop entrance and two outdoor tables within the central 65% so they remain recognizable when sides crop on mobile. No lettering, signage text, logos, watermark, Paris monuments or graphic overlays. The scene is illustrative, not a portrait of a specific real place.
+```
+
+### japanese-street
+
+```text
+Use case: photorealistic-natural. Asset: original contextual hero photo for an adult Japanese language learning website. Wide 3:2 horizontal editorial photograph of an everyday small Japanese neighborhood street near a Tokyo community shopping lane, sunlit muted teal shopfront, cream plaster and natural timber, small red cloth curtain without characters, parked city bicycle and two adults in casual clothes walking at a natural distance. Fresh pale sky and soft midday sunlight, composed like contemporary travel reportage, photographic depth and believable details. Put the bicycle and entrance in the central 65% for cropping. No legible signage, lettering, logo, watermark, identifiable real locations, tourist monuments, or graphic overlays.
+```
+
+### japanese-market
+
+```text
+Use case: photorealistic-natural. Asset: original contextual course topic cover for an adult language-learning website. Wide horizontal 3:2 editorial photo of a small everyday Japanese produce counter. A shopkeeper in a simple slate apron placing a paper bag by a fresh display of mandarins, daikon, greens and baskets. Wood, ceramic, cream walls, a muted jade accent, bright natural daylight, authentic unposed human posture, central close composition that survives a wide banner crop. No visible text, graphic overlay, stickers, logos, watermarks, or specifically identifiable person or shop.
+```
+
+### japanese-station
+
+```text
+Use case: photorealistic-natural. Asset: original contextual course topic cover for an adult language-learning website. Wide horizontal 3:2 editorial photo of an everyday Japanese suburban rail station platform in soft afternoon light. A cream and teal commuter train stopped beside tactile yellow paving, a simple analog clock, a few adults waiting in the midground. Calm realistic composition with recognizable train carriage and platform in the central 65% suitable for crop. Natural photography, pale sky, warm cream and deep teal, no readable signage, numbers, lettering, logos, overlays or watermarks.
+```
+
 
 ## Meaning and accessibility
 Draw recognizable concrete objects where possible, with descriptive English alt text. A scene must describe its context honestly; an abstract word does not need a decorative object masquerading as its literal meaning. Word targets, English senses, original examples/translations and explanations remain directly visible with or without an illustration. Picture practice keeps its explicitly authored answer key; new meaning practice continues to use written meanings.

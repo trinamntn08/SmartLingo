@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, useWindowDimensions, View } from 'react-native';
 import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, resumeCourseDay, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
-import { Button } from '../ui/controls';
+import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
@@ -12,19 +12,20 @@ export function OpenCoursePanel({ course, model, onWriteBlocked }: { course: Ope
   const [open, setOpen] = useState(false);
   const [writeBlocked, setWriteBlocked] = useState(false);
   const reportWrite = useCallback((blocked: boolean) => { setWriteBlocked(blocked); onWriteBlocked?.(blocked); }, [onWriteBlocked]);
-  return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: 18 }]}>
+  return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: 20, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
     <View style={[s.row, { alignItems: 'center', justifyContent: 'space-between', gap: 16 }]}>
       <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 240, minWidth: 0, gap: 5 }}>
         <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>Your daily course</Text>
         <Text style={s.muted}>{course.days.length} study {course.days.length === 1 ? 'day' : 'days'} available · Draft preview</Text>
       </View>
-      <Button disabled={writeBlocked || model.busy || !!model.saveError} onPress={() => setOpen(value => !value)}>{open ? 'Close daily course' : 'Open daily course'}</Button>
+      <Button expanded={open} primary={!open} disabled={writeBlocked || model.busy || !!model.saveError} onPress={() => setOpen(value => !value)}>{open ? 'Close daily course' : 'Open daily course'}</Button>
     </View>
     {open && <CourseJourney course={course} model={model} onWriteBlocked={reportWrite} />}
   </View>;
 }
 
 function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; model: LearningModel; onWriteBlocked: (blocked: boolean) => void }) {
+  const compact = useWindowDimensions().width < 600;
   const learning = useCourseLearning();
   useEffect(() => { onWriteBlocked(learning.busy || !!learning.saveError); }, [learning.busy, learning.saveError, onWriteBlocked]);
   // Keep a selected day stable while its completion event changes nextCourseDay.
@@ -92,36 +93,49 @@ function CourseJourney({ course, model, onWriteBlocked }: { course: OpenCourse; 
       <Button disabled={learning.busy} onPress={learning.discard}>Discard unsaved course action</Button>
     </View>}
     {learning.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving course progress…</Text>}
-    <View style={s.row}>
-      <Button disabled={navigationBlocked} onPress={() => setChoosingDay(value => !value)}>{choosingDay ? 'Hide study days' : 'Choose a study day'}</Button>
-      <Button disabled={navigationBlocked} onPress={() => setChoosingSection(value => !value)}>{choosingSection ? 'Hide sections' : 'Browse sections'}</Button>
+    <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
+      <View style={s.row}><Badge>DAY {String(day.dayNumber).padStart(2, '0')}</Badge><Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level} · Guided study</Text></View>
+      <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Day {day.dayNumber}: {day.title}</Text>
+      <Text style={s.body}>{day.outcome}</Text>
+      <View style={[s.row, { justifyContent: 'space-between' }]}><Text accessibilityLiveRegion="polite" style={s.muted}>{progress.completedBlockIds.size} of {day.blocks.length} sections saved</Text>
+        <View style={[s.row, { maxWidth: '100%', flexShrink: 1 }, compact && { width: '100%' }]}>
+          <Button compact expanded={choosingDay} disabled={navigationBlocked} onPress={() => setChoosingDay(value => !value)}>{choosingDay ? 'Hide study days' : 'Choose a study day'}</Button>
+          <Button compact expanded={choosingSection} disabled={navigationBlocked} onPress={() => setChoosingSection(value => !value)}>{choosingSection ? 'Hide sections' : 'Browse sections'}</Button>
+        </View>
+      </View>
+      <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * progress.completedBlockIds.size / day.blocks.length}%` }]} /></View>
     </View>
     {choosingDay && <View testID="course-day-chooser" style={[s.notice, { gap: 12 }]}>
       <Text accessibilityRole="header" style={s.heading}>Choose a study day</Text>
       <Text style={s.muted}>Every day is open. Return whenever you like.</Text>
       <View style={s.row}>{(['All', 'foundation', 'A1', 'A2', 'B1'] as const).filter(value => value === 'All' || course.days.some(item => item.level === value)).map(value => <Button key={value} disabled={navigationBlocked} selected={level === value} onPress={() => setLevel(value)}>{value === 'All' ? 'All course levels' : value === 'foundation' ? 'Foundations' : value}</Button>)}</View>
+      <View style={[s.row, { alignItems: 'stretch' }]} accessibilityLabel="Available study days">
       {course.days.filter(item => level === 'All' || item.level === level).map(item => {
         const saved = courseDayProgress(course, item, learning.events);
         const status = learning.loading ? 'Loading saved progress…' : browseOnly ? 'Browsing only · progress unavailable'
           : saved.completed ? 'Study day saved' : saved.completedBlockIds.size ? `${saved.completedBlockIds.size} of ${item.blocks.length} sections saved` : 'Not started';
-        return <View key={item.id} testID={`course-day-${item.id}`} style={{ gap: 6, minWidth: 0 }}>
+        return <View key={item.id} testID={`course-day-${item.id}`} style={{ gap: 10, flexBasis: compact ? '100%' : 230,
+          flexGrow: 1, flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 320, padding: 14, borderRadius: 14,
+          backgroundColor: item.id === day.id ? colors.goldTint : colors.card, borderWidth: 1, borderColor: colors.line }}>
+          <Text style={s.eyebrow}>Day {String(item.dayNumber).padStart(2, '0')} · {item.level === 'foundation' ? 'Foundations' : item.level}</Text>
           <Button label={`Choose day ${item.dayNumber}: ${item.title}`} selected={item.id === day.id}
             disabled={navigationBlocked} onPress={() => selectDay(item)}>Day {item.dayNumber}: {item.title}</Button>
           <Text style={s.muted}>{status}</Text>
         </View>;
-      })}
+      })}</View>
     </View>}
-    <Text accessibilityRole="header" style={s.heading}>Day {day.dayNumber}: {day.title}</Text>
-    <Text style={s.body}>{day.outcome}</Text>
-    <Text accessibilityLiveRegion="polite" style={s.muted}>{progress.completedBlockIds.size} of {day.blocks.length} sections saved</Text>
-    <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * progress.completedBlockIds.size / day.blocks.length}%` }]} /></View>
-    {choosingSection && <View style={s.row}>{day.blocks.map((item, position) => <Button key={item.id} label={`Section ${position + 1}: ${item.title}`}
-      selected={item.id === block.id} disabled={learning.loading || learning.busy || !!learning.saveError} onPress={() => navigate(item.id)}>
-      {position + 1}. {item.title}{progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
-    </Button>)}</View>}
-    <View testID={`course-block-${block.id}`} style={{ gap: 16, minWidth: 0 }}>
-      <Text style={s.eyebrow}>Section {index + 1} of {day.blocks.length}</Text>
-      <Text accessibilityRole="header" style={s.heading}>{block.title}</Text>
+    {choosingSection && <View style={[s.row, { alignItems: 'stretch', gap: 8 }]} accessibilityLabel="Study day sections">
+      {day.blocks.map((item, position) => <View key={item.id} style={{ flexBasis: compact ? '46%' : 192, flexGrow: 1,
+        flexShrink: 1, minWidth: 0, maxWidth: compact ? '100%' : 270 }}>
+        <Button compact label={`Section ${position + 1}: ${item.title}`} selected={item.id === block.id}
+          disabled={navigationBlocked} onPress={() => navigate(item.id)}>
+          {position + 1}. {item.title}{progress.completedBlockIds.has(item.id) ? ' ✓' : ''}
+        </Button>
+      </View>)}
+    </View>}
+    <View testID={`course-block-${block.id}`} style={{ gap: 24, minWidth: 0, padding: compact ? 0 : 22, paddingVertical: 22 }}>
+      <View style={{ gap: 10 }}><Text style={s.eyebrow}>Section {index + 1} of {day.blocks.length} · {block.kind === 'choice' ? 'Practice' : block.kind === 'reflection' ? 'Self-review' : 'Study'}</Text>
+      <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 27 : 36, lineHeight: compact ? 35 : 44, fontWeight: '500' }]}>{block.title}</Text></View>
       <CourseBlockView key={block.id} language={course.language} block={block} day={day} model={model} events={scopedEvents}
         blocked={learning.blocked} revealBlocked={learning.loading || learning.busy || !!learning.saveError} onChoice={choose} onSupport={support} />
       {done && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: '#246944' }]}>Section saved.</Text>}

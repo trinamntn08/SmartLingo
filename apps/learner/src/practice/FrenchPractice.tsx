@@ -8,6 +8,9 @@ import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { Conversation, type ConversationState } from './conversation';
 import { RecordInput, type RecordInputHandle } from './RecordInput';
+import { Disclosure } from '../ui/Disclosure';
+import { Icon } from '../ui/Icon';
+import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 export function FrenchPractice({ lessons, model, active = true }: { lessons: Lesson[]; model: LearningModel; active?: boolean }) {
   const [state, setState] = useState<ConversationState>({ busy: false, error: '', notice: '', exchanges: [] });
@@ -40,16 +43,14 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
   useEffect(() => { if (state.exchanges.length) setText(''); }, [state.exchanges.length]);
   function stop() { recording.current?.clear(); recordingGuard.current = false; setRecordingActive(false); practice.clear(); setText(''); setEnglishHelp(false); audio.stop(); }
 
-  return <View testID="french-practice" style={s.card}>
+  return <View testID="french-practice" style={[t.page, { padding: 8 }]}>
     <View style={s.row}><Badge>Optional AI practice</Badge><Badge>Text, recording + device replay</Badge></View>
-    <Text accessibilityRole="header" style={s.heading}>French conversation</Text>
-    <Text style={s.body}>Try a short everyday conversation. French replies, English meanings and helpful feedback stay visible.</Text>
-    <View style={s.notice}>
-      <Text style={s.body}>Send message or Retry message sends your text, selected context and conversation to OpenAI through the local server. Transcribe recording or Retry transcription separately sends your local microphone clip to OpenAI. These explicit actions may use paid API credits.</Text>
-      <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Speaking or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under your API account settings. Avoid private information.</Text>
-      <Text style={s.muted}>Starting, checking availability and recording locally use no AI credits. Local clips are cleared after successful transcription or when you discard, stop, leave or reload. A failed transcription keeps the clip temporarily for an explicit retry. Replay uses your device voice.</Text>
+    <View style={t.stack}><Text accessibilityRole="header" style={s.heading}>French conversation</Text><Text style={s.body}>Try a short everyday conversation. French replies, English meanings and helpful feedback stay visible.</Text></View>
+    <View style={[t.inset, { backgroundColor: colors.goldTint }]}>
+      <Text style={t.detail}>Sending a message or transcribing a recording shares it with OpenAI and may use paid API credits. Your conversation clears when you stop or leave. Only phrases you save stay in your notebook.</Text>
     </View>
-    {!state.session && <>
+    {!state.session && <View style={t.board}>
+      <View style={t.main}>
       <Text style={s.eyebrow}>Choose a situation</Text>
       <TextInput accessibilityLabel="Search conversation lessons" placeholder="Search lesson, topic or role" value={query} onChangeText={value => { setQuery(value); setPage(0); }} editable={!state.busy} style={s.input} />
       {!filtered.length ? <Text style={s.body}>No lessons match. Try a broader search.</Text> : <>
@@ -61,32 +62,34 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
         </ScrollView>
         {pages > 1 && <View style={s.row}><Button disabled={state.busy || visiblePage === 0} onPress={() => setPage(visiblePage - 1)}>Previous situations</Button><Text style={s.muted}>{visiblePage + 1} / {pages}</Text><Button disabled={state.busy || visiblePage === pages - 1} onPress={() => setPage(visiblePage + 1)}>More situations</Button></View>}
       </>}
-      {selected && <View style={s.notice}><Text style={s.body}>Topic: {selected.topic}</Text><Text style={s.body}>Your role: {selected.role}</Text><Text style={s.muted}>Selected lesson: {selected.title}</Text></View>}
+      </View>
+      <View style={[t.side, t.inset, { backgroundColor: colors.skyTint }]}>
+      <View style={s.row}><Icon name="mic" size={23} /><Text style={t.sectionTitle}>Your situation</Text></View>
+      {selected && <View style={t.stack}><Text style={s.body}>Topic: {selected.topic}</Text><Text style={s.body}>Your role: {selected.role}</Text><Text style={s.muted}>Selected lesson: {selected.title}</Text></View>}
       <Text style={s.eyebrow}>Conversation level</Text>
       <View style={s.row}>{(['foundation', 'A1', 'A2'] as const).map(choice => <Button key={choice} selected={(level ?? selected?.level) === choice} disabled={state.busy} onPress={() => setLevel(choice)}>{choice === 'foundation' ? 'Foundations' : choice}</Button>)}</View>
       {!lessons.length && <Text style={s.body}>Choose a conversation after lessons finish loading. Ordinary downloaded lessons remain available.</Text>}
-      {state.status?.available === false && <View style={s.notice}><Text style={s.body}>AI practice is not configured. Configure the OpenAI API key and practice model on the local API server, restart it, then check again. Keep credentials out of the browser.</Text></View>}
+      {state.status?.available === false && <View style={s.notice}><Text style={s.body}>AI practice is not configured. You can keep using scripted speaking and ordinary lessons. Check availability again when your local AI service is ready.</Text></View>}
       <View style={s.row}><Button primary disabled={!active || state.busy || !selected || state.status?.available !== true || atLimit}
         onPress={() => { if (selected && selected.language === 'fr-FR' && selected.level !== 'B1') void practice.start({ topic: selected.topic, role: selected.role, level: level ?? selected.level }); }}>Start AI conversation</Button>
         <Button disabled={!active || state.busy} onPress={() => void practice.check()}>Check AI availability</Button></View>
-    </>}
+      </View>
+    </View>}
     {state.session && <>
-      <View style={s.row}><Badge>{usedTurns} / {limit} turns</Badge><Button onPress={stop}>Stop conversation</Button></View>
+      <View style={t.panelHeader}><View style={s.row}><Icon name="mic" size={22} /><Badge>{usedTurns} / {limit} turns</Badge></View><Button compact onPress={stop}>Stop conversation</Button></View>
       {!state.exchanges.length && <View style={[s.notice, { backgroundColor: colors.green }]}><Text style={s.body}>Ready when you are. Write a greeting or a sentence for your situation, then send it. You can ask for English help.</Text></View>}
       {state.exchanges.map(exchange => <View key={exchange.request.requestId} style={{ gap: 14 }}>
-        <View style={s.notice}><Text style={s.eyebrow}>You{exchange.request.englishHelp ? ' · English help requested' : ''}</Text><Text style={s.body}>{exchange.request.text}</Text></View>
-        <View style={[s.notice, { backgroundColor: colors.green }]}>
-          <Text style={s.eyebrow}>AI conversation partner</Text><Text style={s.heading}>{exchange.response.reply.french}</Text><Speak text={exchange.response.reply.french} />
+        <View style={[t.inset, { alignSelf: 'flex-end', width: '92%', backgroundColor: colors.sand }]}><Text style={s.eyebrow}>You{exchange.request.englishHelp ? ' · English help requested' : ''}</Text><Text style={s.body}>{exchange.request.text}</Text></View>
+        <View style={[t.inset, { alignSelf: 'flex-start', width: '100%', backgroundColor: colors.sageTint }]}>
+          <Text style={s.eyebrow}>AI conversation partner</Text><View style={s.row}><Text style={[s.heading, { flexGrow: 1, flexShrink: 1, fontWeight: '500' }]}>{exchange.response.reply.french}</Text><Speak text={exchange.response.reply.french} /></View>
           <Text style={s.body}>{exchange.response.reply.english}</Text>
           {!!exchange.response.reply.feedback && <Text style={s.body}>{exchange.response.reply.feedback}</Text>}
           {exchange.response.reply.phrase && <SuggestedPhrase phrase={exchange.response.reply.phrase} id={`ai.${exchange.request.sessionId}.${exchange.request.requestId}`} model={model} />}
         </View>
       </View>)}
       {atLimit && <Text accessibilityLiveRegion="polite" style={s.body}>You have reached a practice limit. Your replies remain here until you stop or leave. Ordinary lessons are still available.</Text>}
-      <Text accessibilityRole="header" style={s.eyebrow}>Your next message</Text>
-      <RecordInput ref={recording} sessionId={state.session.sessionId} available={state.status?.transcriptionAvailable === true} disabled={state.busy || atLimit}
-        onBusy={busy => { recordingGuard.current = busy; setRecordingActive(busy); }}
-        onTranscribed={result => { setText(result.text); practice.reportUsage(result.usage); }} />
+      <View style={t.panel}>
+      <Text accessibilityRole="header" style={t.sectionTitle}>Your next message</Text>
       <TextInput accessibilityLabel="Your French message" placeholder="Bonjour !" value={text} onChangeText={value => { if (!recordingGuard.current) setText(value); }} maxLength={1000} multiline editable={!state.busy && !recordingActive && !atLimit} style={[s.input, { minHeight: 100, textAlignVertical: 'top' }]} />
       {recordingActive && <Text accessibilityLiveRegion="polite" style={s.muted}>Message editing and sending are paused during recording or transcription. Stop recording or discard to return to typing; transcription fills this editable message when ready.</Text>}
       <Text style={s.muted}>{text.length} / 1000 characters. English is welcome when you need help.</Text>
@@ -95,11 +98,20 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
         {retryMatches && <Button primary disabled={state.busy || recordingActive} onPress={() => { if (!recordingGuard.current) void practice.retry(); }}>Retry message</Button>}
       </View>
       {!!state.failed && <Text style={s.muted}>Retry keeps the same request ID to avoid duplicate processing. Editing the text or help setting creates a new request only when you press Send message.</Text>}
+      <RecordInput ref={recording} sessionId={state.session.sessionId} available={state.status?.transcriptionAvailable === true} disabled={state.busy || atLimit}
+        onBusy={busy => { recordingGuard.current = busy; setRecordingActive(busy); }}
+        onTranscribed={result => { setText(result.text); practice.reportUsage(result.usage); }} />
+      </View>
     </>}
     {state.busy && <View style={s.row}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>{state.session ? 'Waiting for the AI reply…' : 'Connecting to local practice…'}</Text>{!state.session && <Button onPress={stop}>Cancel connection</Button>}</View>}
     {!!state.error && <View style={s.error}><Text accessibilityRole="alert" style={s.body}>{state.error}</Text></View>}
     {!!state.notice && <Text accessibilityLiveRegion="polite" style={s.muted}>{state.notice}</Text>}
     {state.usage && <Text style={s.muted}>Local daily attempts: {state.usage.usedToday} / {state.usage.dailyLimit}. Reported conversation tokens: {state.usage.inputTokens} input, {state.usage.outputTokens} output. Transcription tokens are not included. Failed attempts can count; this is not a billing total. The local daily allowance resets when the server restarts.</Text>}
+    <Disclosure title="Conversation privacy & recording">
+      <Text style={s.muted}>Send message or Retry message sends your text, selected situation and conversation context through the local server to OpenAI. Transcribe recording or Retry transcription separately sends your local microphone clip. These explicit actions may use paid API credits.</Text>
+      <Text style={s.muted}>SmartLingo keeps this conversation in memory only and clears it when you stop, leave Speaking or reload. Only phrases you explicitly save stay in your notebook. OpenAI processes sent text under your API account settings. Avoid private information.</Text>
+      <Text style={s.muted}>Starting, checking availability and recording locally use no AI credits. Local clips are cleared after successful transcription or when you discard, stop, leave or reload. A failed transcription keeps the clip temporarily for an explicit retry. Replay uses your device voice.</Text>
+    </Disclosure>
     <Text style={s.muted}>AI suggestions can be mistaken. This is supported practice, not a proficiency assessment.</Text>
   </View>;
 }

@@ -3,7 +3,7 @@ import { Text, TextInput, View } from 'react-native';
 import { gradeCourseChoice, type CourseBlock, type CourseDay, type CourseEvent } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { VocabularyCard } from '../ui/VocabularyCard';
-import { styles as s } from '../ui/theme';
+import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 
 export function CourseBlockView({ block, day, language = 'fr-FR', model, events, blocked, revealBlocked, onChoice, onSupport }: {
@@ -20,11 +20,12 @@ export function CourseBlockView({ block, day, language = 'fr-FR', model, events,
 
   if (block.kind === 'study') return <View style={{ gap: 16 }}>
     <Text style={s.body}>{block.explanation}</Text>
-    {block.examples.map((example, index) => <View key={index} style={s.notice}>
-      <Text style={s.body}>{example.target}</Text>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>{block.examples.map((example, index) => <View key={index} style={[s.notice, { flexGrow: 1, flexShrink: 1, flexBasis: 280, minWidth: 0, maxWidth: '100%', backgroundColor: index % 2 ? colors.skyTint : colors.goldTint, padding: 24, gap: 16 }]}>
+      <Text style={s.eyebrow}>Example {String(index + 1).padStart(2, '0')}</Text>
+      <Text style={[s.body, { fontSize: 26, lineHeight: 38 }]}>{example.target}</Text>
       {!!example.reading && <Text style={s.muted}>Reading: {example.reading}</Text>}
-      <Text style={s.muted}>{example.meaning}</Text>
-    </View>)}
+      <Text style={s.body}>{example.meaning}</Text>
+    </View>)}</View>
   </View>;
   if (block.kind === 'vocabulary') return <View style={{ gap: 16 }}>
     <Text style={s.body}>{language === 'ja-JP' ? 'Read the words, kana readings and examples. Save any useful words to your notebook.' : 'Read the words and examples. Save any useful words to your notebook; listening is optional.'}</Text>
@@ -38,17 +39,17 @@ export function CourseBlockView({ block, day, language = 'fr-FR', model, events,
   </View>;
   if (block.kind === 'dialogue') return <View style={{ gap: 16 }}>
     <Text style={s.body}>{block.explanation}</Text>
-    {block.lines.map((line, index) => <View key={index} style={s.notice}>
-      <Text style={s.eyebrow}>{line.role}</Text><Text style={s.body}>{line.target}</Text>
+    {block.lines.map((line, index) => <View key={index} style={[s.notice, { backgroundColor: index % 2 ? colors.skyTint : colors.paper, borderLeftWidth: 3, borderLeftColor: index % 2 ? colors.ink : colors.yellow, padding: 22, gap: 12 }]}>
+      <Text style={s.eyebrow}>{line.role}</Text><Text style={[s.body, { fontSize: 25, lineHeight: 37 }]}>{line.target}</Text>
       {!!line.reading && <Text style={s.muted}>Reading: {line.reading}</Text>}
-      <Text style={s.muted}>{line.meaning}</Text>
+      <Text style={s.body}>{line.meaning}</Text>
     </View>)}
   </View>;
   if (block.kind === 'choice') {
     const validAnswer = latest && block.choices.some(choice => choice.id === latest.choiceId)
       && gradeCourseChoice(block, latest.choiceId) === latest.result;
     return <View style={{ gap: 16 }}>
-    <Text style={s.body}>{block.prompt}</Text>
+    <Text style={[s.body, { fontSize: 25, lineHeight: 37 }]}>{block.prompt}</Text>
     {block.choices.map(choice => <Button key={choice.id} disabled={blocked} selected={latest?.choiceId === choice.id}
       onPress={() => onChoice(choice.id, revealed || supported)}>{choice.target}</Button>)}
     {!revealed && <Button disabled={revealBlocked} onPress={reveal}>Show practice hint</Button>}

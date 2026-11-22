@@ -7,25 +7,38 @@ import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';
 import { PersonalWordForm } from './PersonalWordForm';
+import { ScreenHeader } from './ScreenHeader';
+import { Icon } from './Icon';
+import { toolsStyles as t } from './learnerToolsStyles';
 
 export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked }: { model: LearningModel; onExplore: () => void; language?: TargetLanguage; onWriteBlocked?: (blocked: boolean) => void }) {
   const [query, setQuery] = useState('');
+  const [focusRecall, setFocusRecall] = useState(false);
   const name = languageNames[language];
   const normalized = normalizeSearch(query);
   const matches = new Set(model.notebook.filter(entry => normalizeSearch(`${entry.target} ${entry.reading ?? ''} ${entry.meaning} ${entry.example} ${entry.exampleReading ?? ''}`).includes(normalized)).map(entry => entry.id));
-  return <View style={{ gap: 24 }}>
-    <View style={{ gap: 8 }}><Text style={s.eyebrow}>{name} · Your notebook</Text><Text accessibilityRole="header" style={s.title}>Review saved words</Text><Text style={s.body}>A little recall practice, then your own words and notes.</Text></View>
-    <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />
-    <PersonalWordForm model={model} language={language} />
-    {!!model.notebook.length && <View style={s.card}>
-      <Text accessibilityRole="header" style={s.heading}>Find a saved word</Text>
-      <TextInput accessibilityLabel="Search notebook" placeholder={`${name}, reading, English or a personal note`} value={query} onChangeText={setQuery} style={s.input} />
-      <Text accessibilityLiveRegion="polite" style={s.muted}>{matches.size} of {model.notebook.length} saved entries</Text>
-      {!!query && <Button onPress={() => setQuery('')}>Clear notebook search</Button>}
-      {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
-    </View>}
-    {!model.notebook.length ? <View style={s.card}><Text style={s.heading}>A fresh page.</Text><Text style={s.body}>Your saved words will appear here. Add a personal word above, or save something useful from a lesson.</Text><Button primary onPress={onExplore}>Find a lesson →</Button></View>
-      : <View testID="notebook-entries" style={{ gap: 24 }}>{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>}
+  return <View style={t.page}>
+    <ScreenHeader eyebrow={name} title="Review saved words" subtitle="Recall due words, or search and edit your notes."
+      action={model.notebook.length ? <Button compact icon={focusRecall ? 'bookmark' : 'layers'} selected={focusRecall}
+        onPress={() => setFocusRecall(value => !value)}>{focusRecall ? 'Show notebook' : 'Focus review'}</Button> : null} />
+    <View style={t.board}>
+      <View style={[t.side, { flexBasis: 380 }, focusRecall && { flexBasis: '100%', maxWidth: 700 }]}>
+        <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />
+      </View>
+      <View style={[t.main, focusRecall && { display: 'none' }]}>
+        <View style={t.panel}>
+          <View style={t.panelHeader}><View style={[s.row, { flexShrink: 1, minWidth: 0, maxWidth: '100%' }]}><View style={t.icon}><Icon name="bookmark" size={22} /></View><View style={[t.stack, { flexShrink: 1 }]}><Text accessibilityRole="header" style={t.sectionTitle}>Your word collection</Text><Text style={t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'entry' : 'entries'} · {name}</Text></View></View><PersonalWordForm embedded model={model} language={language} /></View>
+          {!!model.notebook.length && <View style={t.stack}>
+            <Text style={t.label}>Find a saved word</Text>
+            <TextInput accessibilityLabel="Search notebook" placeholder={`${name}, reading, English or a note`} value={query} onChangeText={setQuery} style={s.input} />
+            <View style={t.panelHeader}><Text accessibilityLiveRegion="polite" style={t.detail}>{matches.size} of {model.notebook.length} saved entries</Text>{!!query && <Button quiet compact onPress={() => setQuery('')}>Clear notebook search</Button>}</View>
+            {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
+          </View>}
+          {!model.notebook.length ? <View style={[t.inset, { backgroundColor: colors.goldTint }]}><Text style={s.heading}>A fresh page.</Text><Text style={s.body}>Add a personal word, or save something useful from a lesson. Its meaning and your notes will be here when you need them.</Text><View style={s.row}><Button primary onPress={onExplore}>Find a lesson →</Button></View></View>
+            : <View testID="notebook-entries">{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>}
+        </View>
+      </View>
+    </View>
   </View>;
 }
 
@@ -48,12 +61,12 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
     setError(''); model.saveEntry(result.data, () => { setEditing(false); setSaved(true); });
   }
   // Keep filtered cards mounted so a search never discards an unsaved edit.
-  return <View style={[s.card, !visible && { display: 'none' }]}>{editing ? <>
+  return <View style={[t.listRow, !visible && { display: 'none' }]}>{editing ? <>
     <Text style={s.heading}>Edit your note</Text><Text style={s.body}>{japanese ? 'Japanese word or phrase' : 'French word or phrase'}</Text><TextInput accessibilityLabel={japanese ? 'Japanese word or phrase' : 'French word or phrase'} value={target} onChangeText={setTarget} maxLength={300} editable={!model.busy && !model.saveError} style={s.input} />
     {japanese && <><Text style={s.body}>Kana reading (optional)</Text><TextInput accessibilityLabel="Kana reading" value={reading} onChangeText={setReading} maxLength={300} editable={!model.busy && !model.saveError} style={s.input} /></>}
     <Text style={s.body}>English meaning</Text><TextInput accessibilityLabel="English meaning" value={meaning} onChangeText={setMeaning} maxLength={500} editable={!model.busy && !model.saveError} style={s.input} />
     <Text style={s.body}>Example or personal note</Text><TextInput accessibilityLabel="Example or personal note" value={example} onChangeText={setExample} maxLength={1000} editable={!model.busy && !model.saveError} multiline style={[s.input, { minHeight: 90 }]} />
     {japanese && <><Text style={s.body}>Example kana reading (optional)</Text><TextInput accessibilityLabel="Example kana reading" value={exampleReading} onChangeText={setExampleReading} maxLength={1000} editable={!model.busy && !model.saveError} multiline style={s.input} /></>}
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}<View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save changes</Button><Button disabled={model.busy || !!model.saveError} onPress={() => setEditing(false)}>Cancel</Button></View>
-  </> : <><View style={s.row}><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text><Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} /></View>{japanese && <Text style={s.eyebrow}>Japanese</Text>}{!!entry.reading && <Text style={s.body}>{entry.reading}</Text>}<Text style={s.body}>{entry.meaning}</Text>{!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}{!!entry.example && <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text>{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}</View>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
+  </> : <><View style={t.panelHeader}><View style={[t.stack, { flexGrow: 1, flexShrink: 1 }]}><View style={s.row}><Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text><Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} /></View>{!!entry.reading && <Text style={t.detail}>{entry.reading}</Text>}<Text style={s.body}>{entry.meaning}</Text></View><Button quiet compact icon="edit" disabled={model.blocked} onPress={edit}>Edit note</Button></View>{!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}{!!entry.example && <View style={[t.inset, { padding: 16 }]}><Text style={t.label}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text>{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}</View>}{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</>}</View>;
 }

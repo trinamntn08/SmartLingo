@@ -49,7 +49,7 @@ test('bundled coffee photograph loads and has a local photo-credits route', asyn
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
   const card = page.getByTestId('vocabulary-fr.cafe');
-  const photo = card.locator('img').first();
+  const photo = card.locator('img[src^="/vocabulary-photos/"]');
   await expect(photo).toHaveAttribute('src', /\/vocabulary-photos\//);
   await expect.poll(() => photo.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await card.scrollIntoViewIfNeeded();
@@ -65,6 +65,6 @@ test('bundled coffee photograph loads and has a local photo-credits route', asyn
   await page.reload();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
-  await expect(card.locator('img').first()).toHaveAttribute('src', /^data:image\/svg/);
+  await expect(card.locator('img[alt]:not([alt=""])')).toHaveAttribute('src', /^data:image\/svg/);
   await expect(card.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
 });

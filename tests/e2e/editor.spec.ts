@@ -93,7 +93,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.reload();
   await expect(page.getByText('A coffee with confidence', { exact: true })).toBeVisible();
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
-  await expect(page.getByText('12 min · 6 useful words · English meanings included', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('today-next-step').getByText('12 min · 6 words', { exact: true })).toBeVisible();
   await openTopic(page, 'Café visits');
   await expect(page.getByRole('heading', { name: 'Vocabulary · 6', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Foundations level', exact: true }).click();

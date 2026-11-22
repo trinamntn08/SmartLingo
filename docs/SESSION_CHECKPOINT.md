@@ -1,17 +1,17 @@
 # Session checkpoint
 
-Updated: 2026-11-22 at 13:00 CET (Europe/Paris). Task: start implementing the visual frontend redesign. Branch `feat/visual-frontend-pilot`. Pilot implemented, reviewed and validated.
+Updated 2026-11-22 at 14:41 CET (Europe/Paris). Task: rework the complete SmartLingo web frontend. Branch `feat/full-frontend-rework`. Implemented, reviewed and validated.
 
 ## Source and synchronization
 
-The clean starting `docs/ui-redesign-plan` local and live origin heads matched at `9ebe354116b34dfc0066aae70104460e88b592ec`, ahead/behind `0/0` after fetch. The baseline includes learner ancestor `132144fcca3a8cf6142bbbd2c08690b357131175`, also verified on origin. Created the pilot branch from the synchronized plan in `D:/dev/projects/SmartLingo`. [Work log](WORK_LOG.md#2026-11-22-visual-frontend-pilot) records the request and source checks.
+The clean pilot branch and live origin matched at `51890c4f9f503fd9687885fa6d5fac7ede5f0531`, ahead/behind `0/0` after fetch. The rework branch starts from that verified source, and did not exist on origin. [Work log](WORK_LOG.md#2026-11-22-full-frontend-rework)
 
-## Outcome and validation
+## Outcome and verification
 
-The library and lesson pilot in [plan 0041](plans/0041-visual-frontend-pilot.md) delivers larger shared text, bundled photos with illustrated fallback, responsive topic navigation, browse-state return, a focused lesson stage and larger kana. The editor's existing saved-revision preview shares the lesson stage. [ADR 0034](decisions/0034-visual-frontend-pilot.md) records the design and media choices.
+The revised shell, all learner destinations, editor workspace, original scenes and bundled Inter are implemented. The prior pilot is retained in Git history. Reviewed the integrated product and isolated desktop and mobile captures. [Rework and checks](plans/0042-full-frontend-rework.md) · [Media sources](MEDIA_SOURCES.md#bundled-presentation-scenes-and-type)
 
-PASS `npm.cmd run check`, `npm.cmd test` (274 cases), final complete browser suite (145 passed, one existing skip), complete offline suite (24 passed), and export (126 files, 10,241,303 bytes). The offline fixtures temporarily used `8182` and separate trace output to leave the existing preview on `8082` available. The primary agent inspected desktop and phone previews and reviewed the diff. Independent review found no actionable issues. The commit containing this note is the pilot checkpoint. Handoff reports its actual SHA and live origin status.
+Passed repository/TypeScript, 274 tooling/application cases, final export (133 files, 11,461,010 bytes), and 18 screen states at 320, 390 and 1,440px. Full browser and offline runs passed 143 and 23 before the final course width fix. The browser suite retains one existing skip. All remaining cases passed in the final affected-scope runs (18 browser and six offline course tests). The offline suite used isolated `8182` fixtures to preserve the existing preview. The commit containing this note is the task checkpoint. The local SHA and live origin readback are reported at handoff.
 
 ## Next action
 
-Use the working pilot for visual review before expanding the learner layouts and media coverage. The French editor workspace, actual browser zoom, screen reader and physical device testing remain open. Account usage reporting unavailable in this client. No automatic-resume schedule is configured.
+Use the local preview for owner visual review. Physical microphone/audio checks, Safari, screen-reader and actual browser zoom verification remain open. Account usage reporting is unavailable in this client. No automatic-resume schedule is configured.

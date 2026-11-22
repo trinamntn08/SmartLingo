@@ -4,6 +4,8 @@ import type { PracticeTranscriptionResponse } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import { RecordedInput, recordingBusy, type RecordedInputState } from './recorded-input';
+import { Icon } from '../ui/Icon';
+import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 export type RecordInputHandle = { clear(): void };
 export const RecordInput = forwardRef<RecordInputHandle, {
@@ -29,12 +31,12 @@ export const RecordInput = forwardRef<RecordInputHandle, {
   }, [recorder, sessionId]);
   const phase = state.recording.phase;
   const hasClip = phase === 'ready';
-  return <View testID="practice-recording" style={s.notice}>
-    <Text accessibilityRole="header" style={s.heading}>Record a French message</Text>
-    <Text style={s.muted}>Record up to 30 seconds (2 MiB). The clip stays in memory on this page. Only Transcribe recording or Retry transcription sends it to OpenAI and may use API credits. Review the returned text before a separate Send message.</Text>
-    {!available && <Text style={s.body}>Transcription is not configured on the local API server. You can type your message instead. Configure the server transcription model and restart, then stop and check availability again.</Text>}
+  return <View testID="practice-recording" style={[t.inset, { backgroundColor: colors.skyTint }]}>
+    <View style={t.panelHeader}><View style={[s.row, { flexShrink: 1, minWidth: 0, maxWidth: '100%' }]}><Icon name="mic" size={22} /><Text accessibilityRole="header" style={[t.sectionTitle, { flexShrink: 1 }]}>Record a French message</Text></View><Text style={t.label}>Optional · up to 30 seconds</Text></View>
+    <Text style={t.detail}>Or use your voice. The clip stays on this page (up to 2 MiB). Only Transcribe recording or Retry transcription sends it to OpenAI and may use API credits. Review the text before a separate Send message.</Text>
+    {!available && <Text style={t.detail}>Transcription is not configured. You can type your message instead. Stop the conversation and check availability again when your local AI service is ready.</Text>}
     <View style={s.row}>
-      <Button disabled={!available || disabled || phase !== 'idle' || state.transcribing} onPress={() => void recorder.record()}>Record French</Button>
+      <Button compact icon="mic" disabled={!available || disabled || phase !== 'idle' || state.transcribing} onPress={() => void recorder.record()}>Record French</Button>
       {phase === 'recording' && <Button primary onPress={() => recorder.stop()}>Stop recording</Button>}
       {hasClip && !state.canRetry && <Button primary disabled={disabled || state.transcribing || !available} onPress={() => void recorder.transcribe(sessionId)}>Transcribe recording</Button>}
       {state.canRetry && <Button primary disabled={disabled || state.transcribing} onPress={() => void recorder.retry()}>Retry transcription</Button>}

@@ -35,9 +35,9 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   return <View testID="japanese-alphabet" style={{ gap: 24, minWidth: 0 }}>
     <View style={{ gap: 12 }}>
       <View style={[s.row, { justifyContent: 'space-between' }]}>
-        <View style={{ gap: 8, flexShrink: 1 }}><Text accessibilityRole="header" style={[s.title, compact && { fontSize: 34, lineHeight: 42 }]}>Japanese alphabet</Text>
+        <View style={{ gap: 8, flexShrink: 1 }}><Text style={s.eyebrow}>Kana studio · Read, listen, recognise</Text><Text accessibilityRole="header" style={[s.title, compact && { fontSize: 32, lineHeight: 40 }]}>Japanese alphabet</Text>
           <Text style={s.muted}>{model.loading ? 'Loading saved alphabet progress…' : model.loadError ? 'Saved progress is unavailable. You can still study and practise.' : `${progress.completed} of ${progress.total} rows studied`}</Text></View>
-        <Button onPress={() => setChoosingRow(value => !value)}>{choosingRow ? 'Close row chooser' : 'Choose another row'}</Button>
+        <Button expanded={choosingRow} onPress={() => setChoosingRow(value => !value)}>{choosingRow ? 'Close row chooser' : 'Choose another row'}</Button>
       </View>
       {choosingRow && <View style={[s.notice, { gap: 16 }]}>
       <View style={s.row}>{(['hiragana', 'katakana'] as const).map(script => <Button key={script} selected={lesson.script === script} onPress={() => {
@@ -74,7 +74,7 @@ function KanaRowPath({ rows, current, completedIds, suggested, loading, onSelect
       {rows.map((row, rowIndex) => <KanaRowCard key={row.id} row={row} number={rowIndex + 1} selected={row.id === current.id}
         studied={!loading && completedIds.has(row.id)} statusUnavailable={loading} suggested={row.id === suggested?.id} onPress={() => select(row.id)} />)}
     </ScrollView>
-    <View style={s.row}>
+    <View style={[s.row, { justifyContent: 'space-between' }]}>
       <Button disabled={index <= 0} onPress={() => { const row = rows[index - 1]; if (row) select(row.id); }}>Previous group</Button>
       <Button disabled={index >= rows.length - 1} onPress={() => { const row = rows[index + 1]; if (row) select(row.id); }}>Next group</Button>
     </View>
@@ -93,8 +93,8 @@ function KanaRowCard({ row, number, selected, studied, statusUnavailable, sugges
   const studyStatus = statusUnavailable ? 'Status unavailable' : studied ? 'Studied' : 'Not studied';
   return <Pressable testID={`kana-row-${row.id}`} accessibilityRole="button" accessibilityLabel={`Study ${row.title}, ${positionStatus}, ${studyStatus}`}
     aria-selected={selected} accessibilityState={{ selected }} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-    style={({ pressed }) => ({ width: 176, minHeight: 150, padding: 14, gap: 6, borderRadius: 20, borderWidth: 2,
-      borderColor: selected ? colors.ink : colors.line, backgroundColor: selected ? colors.yellow : colors.paper,
+    style={({ pressed }) => ({ width: 176, minHeight: 150, padding: 14, gap: 6, borderRadius: 14, borderWidth: 2,
+      borderColor: selected ? colors.ink : colors.line, backgroundColor: selected ? colors.goldTint : colors.card,
       opacity: pressed ? 0.8 : 1, ...(focused ? { outlineColor: colors.ink, outlineWidth: 3, outlineStyle: 'solid', outlineOffset: 2 } : {}) })}>
     <Text style={[s.eyebrow, { letterSpacing: 0.5, color: colors.ink }]}>{number.toString().padStart(2, '0')} · {positionStatus}</Text>
     <Text style={[s.target, { fontSize: 28, lineHeight: 40 }]}>{row.characters.map(character => character.kana).join('')}</Text>
@@ -133,21 +133,18 @@ function AlphabetRow({ lesson, model, completed, onSave, onNext }: {
   const rowNumber = rows.findIndex(row => row.id === lesson.id) + 1;
   function switchMode(value: boolean) { playback.stop(); setPractice(value); }
   const compact = useWindowDimensions().width < 600;
-  return <View style={[s.card, { padding: compact ? 16 : 28, gap: 24, minWidth: 0 }]}>
+  return <View style={[s.card, { padding: compact ? 18 : 32, gap: 22, minWidth: 0, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
     <View style={s.row}><Text style={s.eyebrow}>{lesson.script === 'hiragana' ? 'Hiragana' : 'Katakana'} · Row {rowNumber} of {rows.length} · Step {practice ? '2' : '1'} of 2</Text>{completed && <Badge>Row studied</Badge>}</View>
-    <Text accessibilityRole="header" style={[s.title, compact && { fontSize: 32, lineHeight: 42 }]}>{lesson.title}</Text>
-    <Text style={s.body}>{lesson.summary}</Text>
+    <View style={{ gap: 12 }}><Text accessibilityRole="header" style={[s.title, { fontWeight: '500' }, compact && { fontSize: 30, lineHeight: 40 }]}>{lesson.title}</Text>
+    <Text style={[s.body, { maxWidth: 760 }]}>{lesson.summary}</Text></View>
     <View style={s.row}><Button selected={!practice} onPress={() => switchMode(false)}>Study characters</Button><Button selected={practice} onPress={() => switchMode(true)}>Recognition practice</Button></View>
     {!practice ? <>
-      <Text style={s.muted}>Read each character and its romaji (Latin-letter reading). Listen whenever you like.</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-        {lesson.characters.map(character => <View key={character.id} style={{ flexGrow: 1, flexBasis: 170, minWidth: 0, maxWidth: '100%', backgroundColor: colors.paper, borderRadius: 22, padding: 20, gap: 12, borderWidth: 1, borderColor: colors.line }}>
-          <View style={{ backgroundColor: colors.goldTint, borderRadius: 18, paddingVertical: 12 }}><Text style={[s.target, { fontSize: 72, lineHeight: 96, textAlign: 'center' }]}>{character.kana}</Text></View>
-          <Text style={[s.heading, { textAlign: 'center', fontSize: 28, lineHeight: 38 }]}>{character.romaji}</Text>
-          {!!character.note && <Text style={s.muted}>{character.note}</Text>}
-          <Button label={playback.playing === character.id ? `Stop audio for ${character.kana}` : `Listen to ${character.kana}`} onPress={() => void playback.play(character)}>{playback.playing === character.id ? 'Stop audio' : 'Listen'}</Button>
-        </View>)}
-      </View>
+      <Text style={s.muted}>Read each character and its romaji (Latin-letter reading). Listen whenever you like.{compact ? ' Swipe across to explore this row.' : ''}</Text>
+      {compact ? <ScrollView horizontal showsHorizontalScrollIndicator accessibilityLabel="Characters and sounds in this row" style={{ maxWidth: '100%' }} contentContainerStyle={{ gap: 14, padding: 4, paddingBottom: 16 }}>
+        {lesson.characters.map(character => <KanaCharacterCard key={character.id} character={character} compact playing={playback.playing === character.id} onPlay={() => void playback.play(character)} />)}
+      </ScrollView> : <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
+        {lesson.characters.map(character => <KanaCharacterCard key={character.id} character={character} playing={playback.playing === character.id} onPlay={() => void playback.play(character)} />)}
+      </View>}
       <Button primary={!completed} onPress={() => switchMode(true)}>Try recognising this row</Button>
     </> : <RecognitionRound key={round} lesson={lesson} round={round} playback={playback} onAttempt={id => setTried(current => new Set([...current, id]))} onRepeat={() => { playback.stop(); setRound(value => value + 1); }} />}
     {!!playback.error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{playback.error}</Text>}
@@ -158,6 +155,16 @@ function AlphabetRow({ lesson, model, completed, onSave, onNext }: {
       {onNext && completed && <Button primary onPress={() => { playback.stop(); onNext(); }}>Next row</Button>}
     </View>
     {completed && !onNext && <Text style={s.body}>You have reached the last row. Choose another row whenever you want to practise again.</Text>}
+  </View>;
+}
+
+function KanaCharacterCard({ character, playing, onPlay, compact = false }: { character: Character; playing: boolean; onPlay: () => void; compact?: boolean }) {
+  return <View style={{ width: compact ? 210 : undefined, flexGrow: compact ? 0 : 1, flexBasis: compact ? undefined : 150,
+    minWidth: 0, maxWidth: '100%', backgroundColor: colors.paper, borderRadius: 16, padding: 18, gap: 14, borderWidth: 1, borderColor: colors.line }}>
+    <Text style={[s.target, { fontSize: 82, lineHeight: 108, textAlign: 'center', fontWeight: '400' }]}>{character.kana}</Text>
+    <View style={{ alignItems: 'center', gap: 6 }}><Text style={s.eyebrow}>Reading</Text><Text style={[s.heading, { fontSize: 28, lineHeight: 38 }]}>{character.romaji}</Text></View>
+    <Button label={playing ? `Stop audio for ${character.kana}` : `Listen to ${character.kana}`} onPress={onPlay}>{playing ? 'Stop audio' : 'Listen'}</Button>
+    {!!character.note && <Text style={s.muted}>{character.note}</Text>}
   </View>;
 }
 

@@ -2,6 +2,8 @@ import { ActivityIndicator, Text, View, useWindowDimensions } from 'react-native
 import type { LearningReport } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
+import { Icon } from '../ui/Icon';
+import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 export type ReportState = {
   report: LearningReport | null; loading: boolean; error: string; refresh: () => Promise<void>;
@@ -23,40 +25,37 @@ export function ReportStatus({ state }: { state: ReportState }) {
 export function ReportMetrics({ report }: { report: LearningReport }) {
   const compact = useWindowDimensions().width < 600;
   const metrics = [
-    { id: 'lessons', icon: '▤', color: '#FCE5CC', value: `${report.completedLessons} / ${report.totalLessons}`, title: 'Lessons completed', detail: 'Saved lesson sessions' },
-    { id: 'explored', icon: 'Aa', color: '#E9E2F8', value: `${report.exploredWords} / ${report.totalWords}`, title: 'Words explored', detail: 'Studied, not a mastery score' },
-    { id: 'saved', icon: '♡', color: '#FCE1E4', value: `${report.savedWords}`, title: 'Words saved', detail: 'In your personal notebook' },
-    { id: 'days', icon: '▦', color: '#E1EEDB', value: `${report.completedStudyDays} / ${report.totalStudyDays}`, title: 'Course days completed', detail: 'At your own pace' },
-  ];
+    { id: 'lessons', icon: 'book', color: colors.skyTint, value: report.completedLessons, total: report.totalLessons, title: 'Lessons completed', detail: 'Saved lesson sessions' },
+    { id: 'explored', icon: 'globe', color: colors.sageTint, value: report.exploredWords, total: report.totalWords, title: 'Words explored', detail: 'Studied, not a mastery score' },
+    { id: 'saved', icon: 'bookmark', color: colors.goldTint, value: report.savedWords, total: null, title: 'Words saved', detail: 'In your personal notebook' },
+    { id: 'days', icon: 'calendar', color: colors.lilacTint, value: report.completedStudyDays, total: report.totalStudyDays, title: 'Course days completed', detail: 'At your own pace' },
+  ] as const;
   return <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
-    {metrics.map(metric => <View key={metric.id} testID={`report-${metric.id}`} style={[s.card, {
-      flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 180, minWidth: 0, padding: 20, gap: 10,
+    {metrics.map(metric => <View key={metric.id} testID={`report-${metric.id}`} style={[t.panel, {
+      flexGrow: 1, flexShrink: 1, flexBasis: compact ? '45%' : 190, minWidth: 0, padding: compact ? 16 : 22, gap: compact ? 10 : 16,
     }]}>
-      <View style={{ width: 44, height: 44, backgroundColor: metric.color, borderRadius: 16, alignItems: 'center', justifyContent: 'center' }}>
-        <Text accessible={false} style={{ fontSize: 25, color: colors.ink }}>{metric.icon}</Text>
-      </View>
-      <Text style={{ fontSize: 30, fontWeight: '900', color: colors.ink, letterSpacing: -1 }}>{metric.value}</Text>
-      <Text style={[s.body, { fontSize: 15, fontWeight: '800', lineHeight: 21 }]}>{metric.title}</Text>
-      <Text style={[s.muted, { fontSize: 13, lineHeight: 19 }]}>{metric.detail}</Text>
+      <View style={[t.icon, { backgroundColor: metric.color }, compact && { width: 34, height: 34, borderRadius: 10 }]}><Icon name={metric.icon} size={compact ? 20 : 23} /></View>
+      <Text style={[t.number, compact && { fontSize: 30, lineHeight: 38 }]}>{metric.value}{metric.total !== null && <Text style={{ fontSize: compact ? 14 : 19, color: colors.muted, fontWeight: '400', letterSpacing: 0 }}> / {metric.total}</Text>}</Text>
+      <View style={t.stack}><Text style={[s.body, { fontSize: compact ? 14 : 16, fontWeight: '600', lineHeight: compact ? 21 : 23 }]}>{metric.title}</Text>{!compact && <Text style={t.detail}>{metric.detail}</Text>}</View>
     </View>)}
   </View>;
 }
 
 export function WeeklyActivity({ report }: { report: LearningReport }) {
   const maximum = Math.max(1, ...report.week.map(day => day.actions));
-  return <View testID="report-week" style={[s.card, { flex: 1, minWidth: 0, gap: 14 }]}>
+  return <View testID="report-week" style={[t.panel, { minWidth: 0, gap: 18 }]}>
     <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
       <Text accessibilityRole="header" style={s.heading}>Your week in small steps</Text>
-      <Text style={s.muted}>Mon – Sun</Text>
+      <Text style={t.label}>Mon – Sun</Text>
     </View>
-    <Text style={s.body}>{report.actionsThisWeek} saved practice actions · {report.activeDaysThisWeek} active {report.activeDaysThisWeek === 1 ? 'day' : 'days'}</Text>
-    <View style={{ flexDirection: 'row', gap: 7, alignItems: 'flex-end', minHeight: 170 }}>
+    <View style={[s.row, { gap: 28 }]}><View style={t.stack}><Text style={t.number}>{report.actionsThisWeek}</Text><Text style={t.detail}>saved practice actions</Text></View><View style={t.stack}><Text style={t.number}>{report.activeDaysThisWeek}</Text><Text style={t.detail}>active {report.activeDaysThisWeek === 1 ? 'day' : 'days'}</Text></View></View>
+    <View style={{ flexDirection: 'row', gap: 7, alignItems: 'flex-end', minHeight: 210, paddingTop: 8, borderBottomWidth: 1, borderColor: colors.line, paddingBottom: 14 }}>
       {report.week.map(day => <View key={day.date} accessible accessibilityLabel={`${day.label}, ${day.date}: ${day.actions} actions${day.future ? ', upcoming' : ''}${day.today ? ', today' : ''}`}
         style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 8 }}>
-        <Text style={[s.muted, { fontSize: 12 }]}>{day.future ? '–' : day.actions}</Text>
-        <View style={{ height: 106, width: '100%', maxWidth: 34, borderRadius: 10, backgroundColor: colors.paper, justifyContent: 'flex-end', overflow: 'hidden' }}>
-          <View style={{ height: day.actions ? Math.max(8, day.actions / maximum * 106) : 3, borderRadius: 10,
-            backgroundColor: day.future ? colors.line : day.today ? colors.ink : day.actions ? colors.yellow : colors.line }} />
+        <Text style={[t.detail, { fontSize: 12 }]}>{day.future ? '–' : day.actions}</Text>
+        <View style={{ height: 142, width: '100%', maxWidth: 48, borderRadius: 8, backgroundColor: colors.paper, justifyContent: 'flex-end', overflow: 'hidden' }}>
+          <View style={{ height: day.actions ? Math.max(8, day.actions / maximum * 142) : 3, borderRadius: 8,
+            backgroundColor: day.future ? colors.line : day.today ? '#145448' : day.actions ? colors.yellow : colors.line }} />
         </View>
         <Text style={[s.muted, { fontSize: 12, fontWeight: day.today ? '800' : '400', color: day.today ? colors.ink : colors.muted }]}>{day.label.slice(0, 3)}</Text>
       </View>)}

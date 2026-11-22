@@ -4,8 +4,10 @@ import { notebookEntrySchema, languageNames, type TargetLanguage } from '@smartl
 import { Button } from './controls';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
+import { Icon } from './Icon';
+import { toolsStyles as t } from './learnerToolsStyles';
 
-export function PersonalWordForm({ model, language = 'fr-FR' }: { model: LearningModel; language?: TargetLanguage }) {
+export function PersonalWordForm({ model, language = 'fr-FR', embedded = false }: { model: LearningModel; language?: TargetLanguage; embedded?: boolean }) {
   const [open, setOpen] = useState(false);
   const [reading, setReading] = useState('');
   const [exampleReading, setExampleReading] = useState('');
@@ -28,10 +30,12 @@ export function PersonalWordForm({ model, language = 'fr-FR' }: { model: Learnin
     model.saveEntry(parsed.data, () => { writing.current = false; setSaved(parsed.data.target); clear(); });
   }
 
-  return <View style={s.card} testID="personal-word-form">
-    <Text accessibilityRole="header" style={s.heading}>Your own vocabulary</Text>
+  return <View style={[embedded ? t.stack : t.panel, { maxWidth: '100%', flexShrink: 1 }, embedded && open && { width: '100%' }]} testID="personal-word-form">
+    <View style={t.panelHeader}>{!embedded && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.sageTint }]}><Icon name="edit" size={22} /></View><View style={t.stack}><Text accessibilityRole="header" style={t.sectionTitle}>Your own vocabulary</Text><Text style={t.detail}>Words you meet along the way.</Text></View></View>}
+    {!open && <Button compact disabled={model.blocked} onPress={() => { setSaved(''); setOpen(true); }}>Add personal word</Button>}</View>
+    {embedded && open && <Text accessibilityRole="header" style={t.sectionTitle}>Add a personal word</Text>}
     {open && <Text style={s.body}>Add a word with its English meaning and an optional example.</Text>}
-    {!open ? <Button disabled={model.blocked} onPress={() => { setSaved(''); setOpen(true); }}>Add personal word</Button> : <>
+    {open && <>
       <Text style={s.body}>{languageNames[language]} word or phrase</Text>
       <TextInput accessibilityLabel={`New ${languageNames[language]} word or phrase`} value={target} onChangeText={setTarget} maxLength={300} editable={!locked} style={s.input} />
       {language === 'ja-JP' && <><Text style={s.body}>Kana reading (optional)</Text><TextInput accessibilityLabel="New kana reading" value={reading} onChangeText={setReading} maxLength={300} editable={!locked} style={s.input} /></>}

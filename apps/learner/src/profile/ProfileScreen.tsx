@@ -9,6 +9,9 @@ import { Button } from '../ui/controls';
 import { Disclosure } from '../ui/Disclosure';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
+import { ScreenHeader } from '../ui/ScreenHeader';
+import { Icon } from '../ui/Icon';
+import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 interface ProfileScreenProps {
   language: TargetLanguage;
@@ -18,12 +21,11 @@ interface ProfileScreenProps {
 }
 
 export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScreenProps) {
-  return <View style={{ gap: 24 }}>
-    <View style={{ gap: 9 }}>
-      <Text style={s.eyebrow}>{languageNames[language]} · ENGLISH EXPLANATIONS</Text>
-      <Text accessibilityRole="header" style={s.title}>Your preferences</Text>
-      <Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Keep a private backup before clearing browser data.</Text>
-    </View>
+  return <View style={t.page}>
+    <ScreenHeader eyebrow="Your learning space" title="Your preferences" subtitle="Set a comfortable pace, take lessons offline, and keep your learning safe." />
+    <View style={t.board}>
+      <View style={[t.main, { flexBasis: 600 }]}>
+      <Text style={s.eyebrow}>Set things up your way</Text>
 
     <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description="Choose a voice, adjust the pace and manage saved audio.">
       <AudioPreferencesPanel language={language} />
@@ -37,12 +39,12 @@ export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScre
     </Disclosure>
 
     {language === 'fr-FR' && <Disclosure title="Curriculum tools" description="Load published lessons or open the local draft workshop.">
-      <View style={s.card}>
+      <View style={t.inset}>
         <Text style={s.heading}>Local curriculum workshop</Text>
         <Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text>
         <Button onPress={onOpenEditor}>Open curriculum editor</Button>
       </View>
-      <View style={s.card}>
+      <View style={t.inset}>
         <Text style={s.heading}>Published lessons</Text>
         <Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text>
         <Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>
@@ -52,7 +54,7 @@ export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScre
     </Disclosure>}
 
     <Disclosure title="About SmartLingo" description="Study support, draft content and photo credits.">
-      <View style={[s.card, { borderWidth: 0, boxShadow: 'none' }]}>
+      <View style={[t.stack, { padding: 8, gap: 16 }]}>
         {language === 'ja-JP' && <>
           <Text accessibilityRole="header" style={s.heading}>Japanese study support</Text>
           <Text style={s.body}>Japanese lessons, kana readings, listening and guided speaking work without AI. Optional AI conversation, Azure neural audio and the curriculum workshop currently support French only.</Text>
@@ -63,5 +65,20 @@ export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScre
         {Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}
       </View>
     </Disclosure>
+      </View>
+      <View style={t.side}>
+        <View style={[t.panel, { backgroundColor: colors.sageTint }]}>
+          <View style={[t.icon, { backgroundColor: colors.card }]}><Icon name="settings" size={24} /></View>
+          <View style={t.stack}><Text style={s.eyebrow}>Studying now</Text><Text style={s.heading}>{languageNames[language]}</Text><Text style={s.body}>English explanations</Text></View>
+          <View style={s.divider} />
+          <Text style={t.detail}>Your progress and notebook stay in this browser on this device. There is no account or sync.</Text>
+        </View>
+        <View style={t.panel}>
+          <View style={s.row}><Icon name="offline" size={22} /><Text accessibilityRole="header" style={t.sectionTitle}>Yours to keep</Text></View>
+          <Text style={t.detail}>Download the app for offline study. Export a private learning backup before clearing browser data or changing devices.</Text>
+          <Text style={t.detail}>Audio is optional. A microphone is only requested when you choose to record in French AI practice.</Text>
+        </View>
+      </View>
+    </View>
   </View>;
 }

@@ -23,6 +23,8 @@ test('manual review saves once, retries safely, survives reload and follows loca
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Focus review', exact: true }).click();
+  await expect(page.getByTestId('notebook-entries')).toBeHidden();
   await expect(page.getByRole('button', { name: 'Remembered', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Reveal meaning', exact: true }).click();
   await page.screenshot({ path: info.outputPath('manual-review.png'), fullPage: true });
@@ -32,6 +34,8 @@ test('manual review saves once, retries safely, survives reload and follows loca
   await page.getByRole('button', { name: 'Retry rating save', exact: true }).click();
   await expect(page.getByText('Next review: 2026-03-29.', { exact: false })).toBeVisible();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Show notebook', exact: true }).click();
+  await expect(page.getByTestId('notebook-entries')).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();

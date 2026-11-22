@@ -1,13 +1,13 @@
 {
   "id": "/",
-  "name": "SmartLingo — Everyday French",
+  "name": "SmartLingo · French and Japanese",
   "short_name": "SmartLingo",
-  "description": "Practical French lessons and your personal vocabulary notebook.",
+  "description": "Practical French and Japanese lessons, listening, speaking, and your personal vocabulary notebook.",
   "lang": "en",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "theme_color": "#F5F2E8",
-  "background_color": "#F5F2E8",
+  "theme_color": "#145448",
+  "background_color": "#F5F4ED",
   "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
 }

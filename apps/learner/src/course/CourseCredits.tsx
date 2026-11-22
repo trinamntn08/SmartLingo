@@ -11,8 +11,8 @@ export function CourseCredits({ course }: { course: OpenCourse }) {
     setError('');
     try { await Linking.openURL(url); } catch { setError('The external link could not be opened. All course study material is available here.'); }
   }
-  return <View style={{ gap: 12, minWidth: 0 }}>
-    <Button onPress={() => setOpen(value => !value)}>{open ? 'Hide source credits' : course.sources.length ? 'Source credits and licence' : 'Authorship and review'}</Button>
+  return <View style={{ gap: 12, minWidth: 0, paddingTop: 16, borderTopWidth: 1, borderTopColor: '#DCE3DB' }}>
+    <View style={[s.row, { justifyContent: 'space-between' }]}><Text style={s.muted}>Draft course · Study at your own pace</Text><Button expanded={open} onPress={() => setOpen(value => !value)}>{open ? 'Hide source credits' : course.sources.length ? 'Source credits and licence' : 'Authorship and review'}</Button></View>
     {open && <View testID="course-source-credits" style={s.notice}>
       <Text accessibilityRole="header" style={s.heading}>Source credits</Text>
       {course.sources.length > 0 && <Text style={s.muted}>All study material is included here. These optional links open the original source and licence.</Text>}

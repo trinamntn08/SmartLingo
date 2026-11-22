@@ -23,25 +23,25 @@ export function VocabularyCard({ entry, model, language = 'fr-FR' }: { entry: Vo
     () => setMessage(`Saved ${entry.target} to your notebook.`));
   }
 
-  return <View testID={`vocabulary-${entry.id}`} style={[s.card, { width: '100%', minWidth: 0, flexGrow: 1, padding: compact ? 16 : 22, gap: 18, boxShadow: 'none' }]}>
-    <WordIllustration entry={entry} size={360} />
-    <View style={{ minWidth: 0, gap: 8 }}>
+  return <View testID={`vocabulary-${entry.id}`} style={[s.card, { width: '100%', minWidth: 0, flexGrow: 1, padding: compact ? 16 : 20, gap: 14, boxShadow: 'none', borderRadius: 16 }]}>
+    <View style={{ minWidth: 0, gap: 6 }}>
         <View style={[s.row, { gap: 8 }]}>
-          <Text accessibilityRole="header" style={[s.target, { flexShrink: 1, minWidth: 0 }, compact && { fontSize: 32, lineHeight: 42 }]}>{entry.target}</Text>
+          <Text accessibilityRole="header" style={[s.target, { flexShrink: 1, minWidth: 0, fontSize: 32, lineHeight: 41 }, compact && { fontSize: 30, lineHeight: 39 }]}>{entry.target}</Text>
           {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
           <Speak language={language} text={entry.target} onError={setVoiceError} />
         </View>
         {!!entry.reading && <Text style={s.body}>{entry.reading}</Text>}<Text style={[s.body, { fontWeight: '600' }]}>{entry.meaning}</Text>
     </View>
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
-    <View style={{ gap: 8, paddingTop: 16, borderTopWidth: 1, borderColor: colors.line }}>
+    <WordIllustration entry={entry} size={compact ? 240 : 280} />
+    <View style={{ gap: 6, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line }}>
       <Text style={s.eyebrow}>In a sentence</Text>
       <Text style={s.body}>{entry.example}</Text>{!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}
       <Text style={s.body}>{entry.exampleMeaning}</Text>
     </View>
     {!!presentation.note && <Text style={s.muted}>{presentation.note}</Text>}
     <View style={[s.row, { marginTop: 'auto', gap: 8 }]}>
-      <Button label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
+      <Button compact quiet label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
         {saved ? '✓ In notebook' : '+ Save word'}
       </Button>
     </View>

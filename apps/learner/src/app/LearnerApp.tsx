@@ -108,12 +108,13 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
   }
 
   return <View style={s.app}>
-    <View style={[s.header, compact && { paddingHorizontal: 16 }]}>
+    <View style={[s.header, compact && { paddingHorizontal: 15, paddingVertical: 8 }]}>
       <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
         {language && !choosing && !mobileNav && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} mobile={false} />}
         {language && !choosing && <View style={{ flexShrink: 1, minWidth: 0 }}>
-          <Button label="Change language" disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]} ⌄</Button>
+          <Button compact icon={compact ? undefined : 'globe'} trailingIcon="chevron-down" label="Change language"
+            disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]}</Button>
         </View>}
       </View>
     </View>
@@ -124,7 +125,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
       <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled"
         onScroll={event => { scrollOffset.current = event.nativeEvent.contentOffset.y; }} scrollEventThrottle={16}
         contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 24 }, compact && { padding: 16, paddingTop: 20 }]}>
+        <View style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
           {!language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
             <Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text>
@@ -152,7 +153,7 @@ export function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: Learne
         </View>
       </ScrollView>
     </View>
-    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 6, paddingBottom: 8 }}>
+    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 5, paddingBottom: 7 }}>
       <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} mobile />
     </View>}
   </View>;

@@ -1,33 +1,42 @@
-﻿import { Text, View, useWindowDimensions } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
 import { languageNames, targetLanguages, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
-import { styles as s } from '../ui/theme';
+import { ContextImage } from '../ui/ContextImage';
+import { getContextPhoto } from '../ui/contextPhotos';
+import { colors, designTokens, styles as s } from '../ui/theme';
 
 const introductions = {
-  'fr-FR': { greeting: 'Bonjour !', meaning: 'Hello!', description: 'Feel more at home in everyday life in France.', color: '#E8ECD9' },
-  'ja-JP': { greeting: 'こんにちは', meaning: 'Hello!', description: 'Start with Japanese letters, then everyday words and conversations.', color: '#FFF0BB' },
+  'fr-FR': { greeting: 'Bonjour !', description: 'Get comfortable with everyday conversations in France.', tint: colors.goldTint },
+  'ja-JP': { greeting: 'こんにちは', description: 'Learn Japanese letters, then use them in everyday conversations.', tint: colors.sageTint },
 };
 
 export function LanguageChooser({ onChoose }: { onChoose: (language: TargetLanguage) => void }) {
-  const compact = useWindowDimensions().width < 600;
-  return <View testID="language-chooser" style={{ gap: 28, minWidth: 0, paddingTop: compact ? 8 : 32 }}>
-    <View style={{ gap: 14 }}>
-      <Text style={s.eyebrow}>A little practice. Every day.</Text>
-      <Text accessibilityRole="header" style={[s.hero, compact && { fontSize: 36, lineHeight: 44 }]}>What will you learn today?</Text>
-      <Text style={[s.body, { maxWidth: 640 }]}>Choose a language to begin. Short lessons, clear English explanations, and room to go at your own pace.</Text>
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
+  return <View testID="language-chooser" style={{ gap: compact ? 20 : 30, minWidth: 0, paddingTop: compact ? 4 : 16 }}>
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={[s.hero, compact && { fontSize: 36, lineHeight: 43, letterSpacing: -1.2 }]}>Choose a language</Text>
+      <Text style={[s.body, { maxWidth: 680 }]}>Learn through everyday situations, with pictures and English explanations.</Text>
     </View>
-    <View style={[s.split, { gap: 22 }]}>{targetLanguages.map(language => {
-      const introduction = introductions[language];
-      return <View key={language} style={[s.card, s.column, { flexBasis: 300, minWidth: 0, padding: compact ? 24 : 32, gap: 20 }]}>
-        <View style={{ backgroundColor: introduction.color, borderRadius: 16, padding: 24, gap: 6 }}>
-          <Text style={[s.heading, { fontSize: 32, lineHeight: 42 }]}>{introduction.greeting}</Text>
-          <Text style={s.muted}>{introduction.meaning}</Text>
-        </View>
-        <Text accessibilityRole="header" style={s.title}>{languageNames[language]}</Text>
-        <Text style={s.body}>{introduction.description}</Text>
-        <Button primary onPress={() => onChoose(language)}>Learn {languageNames[language]}</Button>
-      </View>;
-    })}</View>
-    <Text style={s.muted}>No account needed. Switch languages any time; your progress stays in this browser. Lessons are draft previews.</Text>
+    <View style={[s.split, { gap: compact ? 16 : 24 }]}>
+      {targetLanguages.map(language => {
+        const item = introductions[language];
+        return <View key={language} style={[s.card, s.column, { flexBasis: compact ? '100%' : '45%', padding: 0, gap: 0, overflow: 'hidden' }]}>
+          <ContextImage photo={getContextPhoto(language)} style={{ aspectRatio: compact ? 2.35 : 1.9 }} />
+          <View style={{ gap: compact ? 12 : 16, padding: compact ? 17 : 24, flexGrow: 1 }}>
+            <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
+              <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 26 : 30, lineHeight: 36 }]}>{languageNames[language]}</Text>
+              <View style={{ borderRadius: 8, backgroundColor: item.tint, paddingVertical: 4, paddingHorizontal: 10 }}>
+                <Text style={[s.body, { fontWeight: '600' }]} accessibilityLabel={`${item.greeting} means hello`}>{item.greeting}</Text>
+              </View>
+            </View>
+            <Text style={[s.body, { flexGrow: 1 }]}>{item.description}</Text>
+            <View style={s.row}>
+              <Button primary trailingIcon="arrow-right" onPress={() => onChoose(language)}>Learn {languageNames[language]}</Button>
+            </View>
+          </View>
+        </View>;
+      })}
+    </View>
+    <Text style={s.muted}>Progress is saved in this browser. You can switch languages any time.</Text>
   </View>;
 }

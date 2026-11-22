@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22: full frontend rework
+
+- Request: rework the whole interface after owner rejection of the visual pilot. Retain the photo-rich references and larger, readable study text.
+- Started 13:05 CET (Europe/Paris). Clean `D:/dev/projects/SmartLingo` `feat/visual-frontend-pilot` and live origin matched at `51890c4f9f503fd9687885fa6d5fac7ede5f0531`, ahead/behind `0/0` after `git fetch origin --prune`. Created `feat/full-frontend-rework` from that source. The new task ref was absent on origin.
+- Scope: language chooser, Today, Learn and topic detail, standard lessons, kana, daily course, listening and speaking, Review, Report, Profile and the French curriculum editor. Preserve existing content, learning, offline and publication contracts.
+- Integrated the new layouts from [plan 0042](plans/0042-full-frontend-rework.md). Three UI builders and one independent reviewer used `gpt-6.1-sol` at high effort. The primary owns the shared shell, generated scenes, typography, integration and validation. [Media and font sources](MEDIA_SOURCES.md#bundled-presentation-scenes-and-type)
+- Validation: `npm.cmd run check`, `npm.cmd test` (274 passed), export (133 files, 11,461,010 bytes), and 18 rendered states at each of 320, 390 and 1,440px. After correcting stale presentation assertions and the resource panel icon, the full browser suite passed 143, skipped one existing case, and found two course overflows. The full offline suite passed 23 with one matching overflow. Fixed nested course controls and example width. Final targeted reruns passed 18 browser course and six offline course cases, covering all remaining failures. Offline fixtures used `8182` with separate trace output because the existing preview uses `8082`.
+- Outcome: complete learner and local French editor rework is implemented. The commit containing this entry is the checkpoint. The verified local and origin SHAs are reported at handoff after final staged checks.
+- Next: owner visual review using the local preview and screenshots. Safari, physical audio, screen-reader and actual zoom verification remain open.
+
 ## 2026-11-22: visual frontend pilot
 
 - Request: begin implementing the frontend redesign from [plan 0040](plans/0040-visual-frontend-redesign.md).

@@ -8,7 +8,7 @@ const coursePanel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => coursePanel(page).getByRole('button', { name, exact: true });
 const step = (page: Page, name: string) => coursePanel(page).getByRole('heading', { name, exact: true });
 const chooseDay = (page: Page, day: CourseDay) => coursePanel(page).getByTestId(`course-day-${day.id}`).getByRole('button');
-const dayHeading = (page: Page, day: CourseDay) => step(page, `Day ${day.dayNumber}: ${day.title}`);
+const dayHeading = (page: Page, day: CourseDay) => step(page, `Lesson ${day.dayNumber}: ${day.title}`);
 
 async function storedEvents(page: Page, store: 'courseEvents' | 'events' = 'courseEvents') {
   return page.evaluate(async storeName => {
@@ -62,7 +62,7 @@ test('all five opening lessons offer a full French transcript, full translation 
   await page.keyboard.press('Enter');
   await openCourseOutline(coursePanel(page));
   await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
-  await expect(coursePanel(page).getByText('5 guided study days · Draft preview', { exact: true })).toBeVisible();
+  await expect(coursePanel(page).getByText('5 guided lessons · Draft preview', { exact: true })).toBeVisible();
 
   for (const day of openCoursePilot.days) {
     await openCourseOutline(coursePanel(page));
@@ -78,9 +78,9 @@ test('all five opening lessons offer a full French transcript, full translation 
       const englishBox = (await english.boundingBox())!;
       if (page.viewportSize()!.width >= 600) expect(englishBox.x).toBeGreaterThan(frenchBox.x);
       else expect(englishBox.y).toBeGreaterThanOrEqual(frenchBox.y + frenchBox.height);
-      await button(page, 'Source credits and licence').click();
-      await expect(coursePanel(page).getByText(openCoursePilot.sources[0].copyrightNotice, { exact: true })).toBeVisible();
-      await button(page, 'Hide source credits').click();
+      await expect(coursePanel(page).getByText(firstDay.compact!.tip, { exact: true })).toBeVisible();
+      await expect(button(page, 'Source credits and licence')).toHaveCount(0);
+      await expect(button(page, 'Authorship and review')).toHaveCount(0);
     }
     await expect(button(page, 'Save study section')).toHaveCount(0);
     await expect(button(page, 'Next section')).toBeEnabled();
@@ -118,15 +118,15 @@ test('Next saves dialogue and resumes practice without requiring answers before 
   await button(page, 'Next section').click();
   await expect(step(page, 'Try it')).toBeVisible();
   await button(page, 'Finish lesson').click();
-  await expect(step(page, 'Study day saved')).toBeVisible();
+  await expect(step(page, 'Lesson saved')).toBeVisible();
   const events = await storedEvents(page);
   expect(events.filter(event => event.kind === 'study')).toHaveLength(1);
   expect(events.filter(event => event.kind === 'completion')).toHaveLength(1);
   expect(events.filter(event => event.kind === 'choice' && event.result === 'correct')).toHaveLength(1);
   expect(events.some(event => event.kind === 'choice' && event.supported)).toBe(true);
-  expect(events.every(event => event.courseRevision === 1)).toBe(true);
+  expect([...new Set(events.map(event => event.courseRevision))]).toEqual([courseDayProgressRevision(openCoursePilot, firstDay)]);
   expect(await storedEvents(page, 'events')).toEqual([]);
-  await button(page, `Continue to day 2: ${secondDay.title}`).click();
+  await button(page, `Continue to Lesson 2: ${secondDay.title}`).click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
   await expect(step(page, 'Dialogue')).toBeVisible();
 });
@@ -214,7 +214,7 @@ test('all compact steps can be browsed at 320 px when progress storage is unavai
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('legacy day completion and vocabulary or practice cursor survive the new layout', async ({ page }) => {
+test('the rewritten lesson has fresh progress and preserves historical events and other lesson cursors', async ({ page }) => {
   await page.goto('/');
   await button(page, 'Open daily course').click();
   await expect(button(page, 'Next section')).toBeEnabled();
@@ -225,7 +225,9 @@ test('legacy day completion and vocabulary or practice cursor survive the new la
   });
   const oldSecondCursor = secondDay.blocks.find(block => block.kind === 'vocabulary')!;
   const laterPractice = thirdDay.blocks.filter(block => block.kind === 'choice').at(-1)!;
-  await seedEvents(page, [...firstHistory, courseEvent(firstDay, firstDay.blocks.at(-1)!.id, 'completion', 10),
+  const olderOpening = [...firstHistory, courseEvent(firstDay, firstDay.blocks.at(-1)!.id, 'completion', 10)]
+    .map(event => ({ ...event, courseRevision: 1 }));
+  await seedEvents(page, [...olderOpening,
     courseEvent(secondDay, oldSecondCursor.id, 'navigation', 11), courseEvent(thirdDay, laterPractice.id, 'navigation', 12)]);
   await page.goto(`/course/fr/${openCoursePilot.id}`);
   await expect(dayHeading(page, thirdDay)).toBeVisible();
@@ -234,9 +236,12 @@ test('legacy day completion and vocabulary or practice cursor survive the new la
   await chooseDay(page, secondDay).click();
   await expect(step(page, 'Dialogue')).toBeVisible();
   await openCourseOutline(coursePanel(page));
-  await expect(chooseDay(page, firstDay)).toHaveAccessibleName(/completed$/);
+  await expect(chooseDay(page, firstDay)).toHaveAccessibleName('Choose lesson 1: Meet a neighbour');
   await chooseDay(page, firstDay).click();
-  await expect(step(page, 'Study day saved')).toBeVisible();
+  await expect(dayHeading(page, firstDay)).toBeVisible();
+  await expect(step(page, 'Dialogue')).toBeVisible();
+  await expect(step(page, 'Lesson saved')).toHaveCount(0);
+  expect(await storedEvents(page)).toEqual(expect.arrayContaining(olderOpening));
 });
 
 test('a restored inconsistent choice never shows correct feedback', async ({ page }) => {

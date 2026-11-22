@@ -82,7 +82,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const stageHref = (next: LessonStage) => lessonRoute ? routeHref({ ...lessonRoute, stage: next }) : undefined;
   const topicHref = lessonRoute ? routeHref({ kind: 'topics', language: lessonRoute.language, topic: topicRouteKey(lesson.topic) }) : undefined;
   const exitHref = studyDayHref ?? topicHref;
-  const returnLabel = studyDayHref ? 'Back to study day' : undefined;
+  const returnLabel = studyDayHref ? 'Back to guided lesson' : undefined;
 
   function lessonLink(target: Lesson | undefined) {
     if (!sequence || !target) return undefined;

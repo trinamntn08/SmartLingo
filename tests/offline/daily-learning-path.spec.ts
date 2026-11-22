@@ -25,7 +25,7 @@ test('a downloaded course opens related practice and returns to the exact study 
   await related.getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
   await expect(cold).toHaveURL(/\/vocabulary\?course=/);
   await cold.reload();
-  await button('Back to study day').click();
+  await button('Back to guided lesson').click();
   await expect(cold).toHaveURL(reflectionUrl);
   await expect(cold.getByRole('heading', { name: 'Try it', exact: true })).toBeVisible();
 });

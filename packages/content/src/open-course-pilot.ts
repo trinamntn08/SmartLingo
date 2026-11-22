@@ -9,7 +9,7 @@ const vocabularyIds = [
   'fr.greetings.ca-va-bien', 'fr.greetings.et-vous',
 ] as const;
 
-/** First five owner-review draft days, including the original two pilot days. */
+/** First five French guided lessons, drafted for owner review. */
 export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[]): OpenCourse {
   const vocabulary = vocabularyIds.map(id => {
     const entry = canonicalVocabulary.find(word => word.id === id);
@@ -19,53 +19,34 @@ export function buildOpenCoursePilot(canonicalVocabulary: readonly Vocabulary[])
   const firstDayId = 'fr.open-course-pilot.day-1';
   const followingDays = [buildOpenCourseDayTwo(canonicalVocabulary), ...buildOpenCourseOpeningDays(canonicalVocabulary)];
   return openCourseSchema.parse({
-    id: 'fr.open-course-pilot', revision: 4, status: 'draft',
+    id: 'fr.open-course-pilot', revision: 5, status: 'draft',
     language: 'fr-FR', explanationLanguage: 'en',
     title: 'French A1: First steps in France',
-    description: 'Five draft study days for your first conversations in France.',
+    description: 'Five draft lessons for your first conversations in France.',
     provenance: {
       author: 'SmartLingo, with AI-assisted lesson drafting.',
-      rights: 'Day 1 includes a small greeting-text adaptation credited below. Days 2–5 use original dialogue and practice with existing SmartLingo vocabulary support.',
+      rights: 'Original SmartLingo lesson text, dialogues and practice, with existing SmartLingo vocabulary support.',
       review: 'Draft for owner and French-language review.',
     },
-    sources: [{
-      id: 'fr.open-course-pilot.source-basic-greetings',
-      title: 'Basic greetings — Le Français Interactif – An Activity Companion Site',
-      creator: 'Mirabelle Tinio; BCcampus',
-      sourceUrl: 'https://opentextbc.ca/francaisinteractif/chapter/00-basic-greetings/',
-      license: 'CC-BY-4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
-      copyrightNotice: '© 2023 Mirabelle Tinio. Le Français Interactif – An Activity Companion Site, CC BY 4.0, except where otherwise noted. No author or publisher endorsement of SmartLingo is implied.',
-      retrievedOn: '2026-11-17',
-      changes: 'Selected and reordered visible greeting text; expanded English meanings and register guidance; omitted the name question. SmartLingo added the polite check-in, original bilingual dialogue, situational choices, feedback and reflection. CC BY 4.0 applies to the identified source material; original SmartLingo additions and existing canonical vocabulary support are separately identified, without a new licence grant over them.',
-      scope: 'Only a small visible HTML greeting resource is adapted in the study block. Not the whole book, UT textbook, embedded H5P or source recordings. Eight exact existing canonical SmartLingo vocabulary payloads are reused, not attributed to this source. Full record: docs/curriculum/open-course-pilot-sources.md.',
-      excludedAssets: [
-        'Tyler Nix / Unsplash chapter photograph and all other source images.',
-        'Audio player, recordings, pronunciation activity and microphone instructions.',
-        'Embedded H5P activities, scripts, grading logic and answer keys.',
-        'External UT Salutations and Présentations pages and their media.',
-        'Name question, other chapters, cover, navigation and tracking scripts.',
-      ],
-    }],
+    sources: [],
     units: [{
       id: 'fr.open-course-pilot.unit-1', title: 'Your first conversations in France',
       outcome: 'Greet someone, introduce yourself, spell a name, ask for repetition and confirm a time.',
       dayIds: [firstDayId, ...followingDays.map(day => day.id)],
     }],
     days: ([{
-      id: firstDayId, dayNumber: 1, progressRevision: 1,
+      id: firstDayId, dayNumber: 1, progressRevision: 5,
       title: 'Meet a neighbour', level: 'foundation',
       outcome: 'Greet an adult neighbour in your building, ask how they are, give a short answer and leave politely.',
       vocabulary,
       blocks: [
         {
-          id: 'fr.open-course-pilot.day-1.study', kind: 'study', title: 'Arrive, check in and leave',
-          explanation: 'Draft study material. Adapted greeting text from Mirabelle Tinio’s Basic greetings (© 2023, CC BY 4.0); expanded English and register guidance by SmartLingo. Bonjour is a daytime arrival greeting, including the afternoon. Bonsoir is an evening arrival greeting; there is no fixed universal switch time. Salut is familiar: use it with people you already greet informally. Comment ça va ? is conversational and often familiar. For an adult neighbour you do not know well, start with comment allez-vous ? and return the question with et vous ? (and you?). Au revoir works when leaving. Bonne journée means have a good day: it is a departing wish. La journée is feminine. Learn the short formulas together; their full grammar is optional.',
+          id: 'fr.open-course-pilot.day-1.study', kind: 'study', title: 'A few words in the hallway',
+          explanation: 'You meet a neighbour by the mailboxes. Open with bonjour. If you have time to stop, add comment allez-vous ? A short reply is enough: ça va bien, merci. Add et vous ? to ask the same question back. When you head upstairs, close with au revoir or wish your neighbour a good day with bonne journée.',
           examples: [
-            { target: 'Bonjour !', meaning: 'Hello! / Good morning! / Good afternoon!' },
-            { target: 'Salut !', meaning: 'Hi! / Bye! (familiar)' },
-            { target: 'Bonsoir !', meaning: 'Good evening! (on arrival)' },
-            { target: 'Comment ça va ?', meaning: 'How are you? / How’s it going? (conversational)' },
-            { target: 'Au revoir !', meaning: 'Goodbye!' },
+            { target: 'Bonjour, madame. Comment allez-vous ?', meaning: 'Hello, ma’am. How are you?' },
+            { target: 'Très bien, merci. Et vous ?', meaning: 'Very well, thank you. And you?' },
+            { target: 'Merci, bonne journée à vous aussi !', meaning: 'Thanks, have a good day too!' },
           ],
         },
         { id: 'fr.open-course-pilot.day-1.vocabulary', kind: 'vocabulary', title: 'Eight useful phrases' },

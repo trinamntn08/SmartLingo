@@ -1,7 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
 import { courseDayProgress, courseDayProgressRevision, gradeCourseChoice, nextCourseDay, type CourseChoice, type CourseDay, type CourseEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
-import { Badge, Button } from '../ui/controls';
+import { Button } from '../ui/controls';
 import { Icon } from '../ui/Icon';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
@@ -50,7 +50,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
         </View>
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
           <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.title}</Text>
-          <Text style={s.muted}>{course.days.length} guided study {course.days.length === 1 ? 'day' : 'days'} · Draft preview</Text>
+          <Text style={s.muted}>{course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview</Text>
         </View>
       </View>
       <View style={[s.row, { gap: 8, maxWidth: '100%' }, compact && { width: '100%', justifyContent: 'space-between' }]}>
@@ -93,7 +93,7 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
     if (route.dayId !== dayId || route.sectionId !== sectionId) navigate({ ...route, dayId, sectionId }, { replace: true });
   }, [dayId, invalidDay, invalidSection, learning.loading, navigate, route, sectionId]);
 
-  if (!resolvedDay || !progress || !resolvedBlock) return <View style={s.notice}><Text style={s.body}>No study days are available in this draft yet.</Text><CourseCredits course={course} /></View>;
+  if (!resolvedDay || !progress || !resolvedBlock) return <View style={s.notice}><Text style={s.body}>This draft has no lessons yet.</Text><CourseCredits course={course} /></View>;
   const day = resolvedDay;
   const block = resolvedBlock;
   const currentUnit = course.units?.find(unit => unit.dayIds.includes(day.id));
@@ -165,7 +165,7 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
   const lesson = <View style={{ flex: sidebar ? 1 : undefined, gap: 18, minWidth: 0 }}>
     {learning.loading && <Text accessibilityLiveRegion="polite" style={s.muted}>Loading saved course progress… You can read this section while it loads.</Text>}
     {!learning.loading && (invalidDay || invalidSection) && <View style={s.notice}>
-      <Text accessibilityRole="alert" style={s.body}>{invalidDay ? 'That study day is unavailable. Your available study day is shown here.' : 'That section is unavailable. Your available section is shown here.'}</Text>
+      <Text accessibilityRole="alert" style={s.body}>{invalidDay ? 'That lesson is unavailable. Your current lesson is shown here.' : 'That section is unavailable. Your available section is shown here.'}</Text>
       <Button disabled={navigationBlocked} onPress={() => navigate({ ...route, dayId, sectionId }, { replace: true })}>Open this section</Button>
     </View>}
     {!!learning.loadError && <View style={s.error}>
@@ -177,8 +177,8 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
     {!sidebar && outline}
     <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
       {currentUnit && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
-      <View style={s.row}><Badge>DAY {String(day.dayNumber).padStart(2, '0')}</Badge><Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level} · Guided study</Text></View>
-      <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Day {day.dayNumber}: {day.title}</Text>
+      <Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level}</Text>
+      <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Lesson {day.dayNumber}: {day.title}</Text>
       <Text style={s.body}>{day.outcome}</Text>
       <Text accessibilityLiveRegion="polite" style={s.muted}>
         {currentStep ? `Step ${index + 1} of ${sections.length}` : `${progress.completedBlockIds.size} of ${sections.length} sections saved`}
@@ -214,16 +214,13 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
       </View>
     </View>
     {!currentStep && !progress.completed && <View style={s.notice}>
-      <Text style={s.body}>{progress.canComplete ? 'Every section is saved. You can now finish this study day.' : 'Keep going at your own pace. Complete every section to save the day.'}</Text>
-      <Button primary={progress.canComplete} disabled={learning.blocked || !progress.canComplete} onPress={finish}>Complete study day</Button>
+      <Text style={s.body}>{progress.canComplete ? 'Every section is saved.' : 'Complete every section to finish this lesson.'}</Text>
+      <Button primary={progress.canComplete} disabled={learning.blocked || !progress.canComplete} onPress={finish}>Complete lesson</Button>
     </View>}
     {progress.completed && <View style={[s.notice, { backgroundColor: colors.green }]}>
-      <Text accessibilityRole="header" style={s.heading}>Study day saved</Text>
-      {!currentStep && <>
-        <Text style={s.body}>{nextDay ? 'This day is saved. Continue with another study day whenever you are ready, or revisit any section.' : 'You have finished all available draft days. Revisit a study day or explore another topic whenever you like.'}</Text>
-        <Text style={s.muted}>This records your study activity, not a proficiency level. These draft days await owner review; a complete course is not yet available.</Text>
-      </>}
-      {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to day {nextDay.dayNumber}: {nextDay.title}</Button>}
+      <Text accessibilityRole="header" style={s.heading}>Lesson saved</Text>
+      {!currentStep && !nextDay && <Text style={s.body}>You have finished all available draft lessons.</Text>}
+      {nextDay && <Button primary disabled={navigationBlocked} onPress={() => selectDay(nextDay)}>Continue to Lesson {nextDay.dayNumber}: {nextDay.title}</Button>}
     </View>}
     {(currentStep?.kind === 'reflection' || progress.completed) && <RelatedCoursePractice
       section={{ ...route, dayId: day.id, sectionId: block.id }} lessons={lessons}

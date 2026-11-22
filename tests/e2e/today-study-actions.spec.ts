@@ -30,7 +30,7 @@ for (const locale of ['fr', 'ja'] as const) {
 
     await course.click();
     await expect(page).toHaveURL(new RegExp(`/course/${locale}/`));
-    await expect(page.getByRole('heading', { name: /^Day 1:/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /^Lesson 1:/ })).toBeVisible();
     await expect(button('Learn')).toHaveAttribute('aria-selected', 'true');
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`/today/${locale}$`));

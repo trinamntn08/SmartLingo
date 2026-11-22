@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Rewrite the French opening and label guided lessons
+
+- Request. Replace the adapted French Lesson 1 text with original material and call numbered course items Lesson rather than Day.
+- Start. At 22:54 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `278f2bf2ba7d11a876bd8fb294956f3ded9cc419`, ahead/behind `0/0`.
+- Acceptance. Replace the greeting adaptation and refresh the compact teaching tip. Retire the active French source disclosure with the adaptation. Present numbered lessons throughout shared guided navigation. Preserve deep links, historical records and other lesson progress. Validate both language routes and the shared offline-ready preview. [Execution plan](plans/0050-original-french-opening.md)
+- Implementation. Revision 5 replaces the adapted study block with an original hallway exchange and updates the tip beside the dialogue. It starts Lesson 1's progress scope at 5. Later lessons retain scopes 2, 3, 3 and 3. Existing route and block IDs are preserved. The current French course has no source-credit panel. Historical attribution and the Japanese authorship disclosure are retained.
+- Review. The curriculum, UI and test roles used inherited settings. The primary completed their file scopes. The independent read-only reviewer confirmed the source and progress boundaries and identified additional Japanese lesson references. The primary updated those labels and verified the affected Japanese fixture hashes without changing exercise answers or progress revisions.
+- Verification. `npm.cmd run check` and `git diff --check` passed. All 18 tooling and 268 application tests passed after updating the Japanese payload fixtures. The Chromium run passed 46 cases. Two cases were rerun successfully on desktop and small screens after correcting a stale expectation for Lesson 1's event revision. Ten cold-offline cases passed, followed by two focused French opening cases on the final export. Chromium verified the served export at 1,440, 918 and 320 px, including the stable Lesson 1 route, the original tip, outline navigation and the report label. The served bundle hash matches export `12d4ae0f7311`. The retired source and credit are absent.
+- Outcome. Ready for owner review in the existing preview at `http://localhost:8082`. The checkpoint commit contains this entry and the original draft. French-language editorial review remains pending.
+
 ## 2026-11-22 Check the daily course source credits
 
 - Request. Confirm whether the course credits are still needed and identify material written for SmartLingo.

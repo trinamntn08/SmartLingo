@@ -134,7 +134,7 @@ Audio controls: obvious recording state, stop/cancel, replay, retry, text fallba
 
 ## 7. Audio, pictures, and content production
 
-Owner planning direction, 2026-11-17: develop a plan for an A1–B1 daily course usable directly inside the website, using eligible open materials and original authoring. The final source constraint excludes proprietary Taxi reproduction and seeking publisher permission. [Plan 0027](docs/plans/0027-open-course-integration.md) and [ADR 0022](docs/decisions/0022-open-course-planning.md) define the source/licence checks, integration stages and unresolved coverage. French currently has five draft days in its A1 opening unit. Japanese has 13 original draft days and shared lessons through selected estimated B1 tasks.
+Owner planning direction, 2026-11-17: develop a plan for an A1–B1 daily course usable directly inside the website, using eligible open materials and original authoring. The final source constraint excludes proprietary Taxi reproduction and seeking publisher permission. [Plan 0027](docs/plans/0027-open-course-integration.md) and [ADR 0022](docs/decisions/0022-open-course-planning.md) define the source/licence checks, integration stages and unresolved coverage. French currently has five original draft lessons in its A1 opening unit. Japanese has 13 original draft guided lessons and library lessons through selected estimated B1 tasks.
 
 Owner direction, 2026-11-22. Use the [French daily-course plan](docs/plans/0043-french-daily-course.md) for the proposed A1–B1 route. Each course has eight seven-lesson units. Today recommends one lesson per study day, with resume and free exploration. Use SmartLingo-approved generated photography throughout the learner and editor, including the full French daily-course image path. [Imagery decision](docs/decisions/0037-model-generated-imagery.md)
 
@@ -156,7 +156,7 @@ Current learner navigation: homepage language choice, then Today, Learn, Review,
 
 Owner direction, 2026-11-22. Browser Back and Forward now cover learner screens and activity steps in the local web preview, with direct URLs for lessons and sections. [Browser navigation and validation plan](docs/plans/0045-web-navigation-and-lesson-links.md)
 
-- French Today recommends a guided study day. Learn opens the same day and saved section and lets learners explore vocabulary, lessons, listening and speaking. Japanese retains its kana-first recommendation. At the end of a French day, relevant existing library lessons offer optional practice with a return to that study section. Review opens saved words.
+- French Today recommends a guided lesson. Learn opens the same lesson and saved section and lets learners explore vocabulary, lessons, listening and speaking. Japanese retains its kana-first recommendation. At the end of a French guided lesson, relevant library lessons offer optional practice with a return to that study section. Review opens saved words.
 - Learn: Japanese letters when relevant, Vocabulary & lessons with topic cards/filters/search, Listening & videos and Speaking.
 - Topic: numbered lesson cards with useful outcomes and saved progress, plus direct continuation from the completed lesson.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.

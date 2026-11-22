@@ -27,7 +27,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await openCourseOutline(panel);
   await panel.getByRole('button', { name: 'B1', exact: true }).click();
   const day = japaneseCourse.days.at(-1)!;
-  await panel.getByRole('button', { name: `Choose day ${day.dayNumber}: ${day.title}`, exact: true }).click();
+  await panel.getByRole('button', { name: `Choose lesson ${day.dayNumber}: ${day.title}`, exact: true }).click();
   const index = day.blocks.findIndex(block => block.kind === 'vocabulary');
   await openCourseOutline(panel);
   await panel.getByRole('button', { name: `Section ${index + 1}: ${day.blocks[index].title}`, exact: true }).click();

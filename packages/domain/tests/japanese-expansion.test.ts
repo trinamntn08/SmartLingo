@@ -8,10 +8,11 @@ const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(valu
 const targetKey = (target: string) => normalizeSearch(target.normalize('NFKC')).replace(/[\s。、.!?！？]/g, '');
 const coreLessons = () => japaneseLessons.filter(lesson => /^ja\.lesson\.day-\d+$/.test(lesson.id));
 
-test('expanding Japanese banks preserves French and every original Japanese course/lesson payload', () => {
+test('the French library and the Japanese course and core lessons keep their reviewed payloads', () => {
   assert.equal(hash(lessons), '0354161d5f3fadeefbab8f58ed6bc95c6145afd38b51bb185643fe8e53abb49e');
-  assert.equal(hash(coreLessons()), '5ded03ad21e217ba0283f596874c00cad1b25f9f16a034f2a0f02b8cd6831a84');
-  assert.equal(hash(japaneseCourse), '137303f73234a0ffa43e7647dd3057294b3263cacf9197ace7822f3953f9422c');
+  // Rebaselined for the learner-facing Lesson names, including shared vocabulary notes.
+  assert.equal(hash(coreLessons()), '6fe97b934f5c8a411f54858187e9e83fab2cb19d523830149f4d2a1a16d8cdff');
+  assert.equal(hash(japaneseCourse), '7bc08c1af962ad5861a623fd261bdff19b9705fe70dd645176587d654ff1b586');
 });
 
 function canBuild(exercise: Lesson['sentenceActivity'], chosen: string[] = [], remaining = exercise.tokens): boolean {

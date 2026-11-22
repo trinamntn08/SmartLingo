@@ -25,7 +25,7 @@ for (const language of ['French', 'Japanese'] as const) {
     await next.getByRole('button').click();
     if (language === 'French') {
       const opening = openCoursePilot.days[0];
-      await expect(page.getByRole('heading', { name: `Day 1: ${opening.title}`, exact: true })).toBeVisible();
+      await expect(page.getByRole('heading', { name: `Lesson 1: ${opening.title}`, exact: true })).toBeVisible();
       await expect(page.getByText('Step 1 of 3', { exact: true })).toBeVisible();
       await expect(page.getByTestId('dialogue-english-transcript')).toBeVisible();
       await button(page, 'Next section').click();

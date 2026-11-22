@@ -59,7 +59,7 @@ export function CourseOutline({ id, sidebar, course, route, day, sectionId, sect
       const completed = courseDayProgress(course, item, events).completed;
       return <View key={item.id} nativeID={active ? activeDayId : undefined} testID={`course-day-${item.id}`}>
         <Button compact marker={String(item.dayNumber)} trailingIcon={completed ? 'check' : undefined}
-          label={`Choose day ${item.dayNumber}: ${item.title}${completed ? ', completed' : ''}`}
+          label={`Choose lesson ${item.dayNumber}: ${item.title}${completed ? ', completed' : ''}`}
           href={routeHref({ ...route, dayId: item.id, sectionId: undefined })}
           selected={active} disabled={blocked} onPress={() => onDay(item)}>{item.title}</Button>
       </View>;
@@ -70,7 +70,7 @@ export function CourseOutline({ id, sidebar, course, route, day, sectionId, sect
     style={t.outline}>
     {sidebar && <Text accessibilityRole="header" style={[s.heading, t.title]}>Course outline</Text>}
     <View style={t.group}>
-      <Text accessibilityRole="header" style={t.label}>Sections in Day {day.dayNumber}</Text>
+      <Text accessibilityRole="header" style={t.label}>Sections in Lesson {day.dayNumber}</Text>
       {sections.map((item, index) => <Button key={item.id} compact marker={String(index + 1)}
         label={`Section ${index + 1}: ${item.title}`} href={routeHref({ ...route, dayId: day.id, sectionId: item.id })}
         selected={item.id === sectionId} disabled={blocked} onPress={() => onSection(item.id)}>
@@ -79,9 +79,9 @@ export function CourseOutline({ id, sidebar, course, route, day, sectionId, sect
     </View>
     <View style={s.divider} />
     <View testID="course-day-chooser" style={t.group}>
-      <Text accessibilityRole="header" style={t.label}>Study days</Text>
+      <Text accessibilityRole="header" style={t.label}>Lessons</Text>
       {level === 'All' && nearbyDays.length < course.days.length && <View style={{ alignItems: 'flex-start' }}>
-        <Button compact quiet onPress={() => setShowAll(value => !value)}>{showAll ? 'Show nearby days' : 'Show all days'}</Button>
+        <Button compact quiet onPress={() => setShowAll(value => !value)}>{showAll ? 'Show nearby lessons' : 'Show all lessons'}</Button>
       </View>}
       {!course.units?.length && <View style={[s.row, t.filters]}>
         {levels.filter(value => value === 'All' || course.days.some(item => item.level === value)).map(value =>

@@ -19,7 +19,7 @@ test.beforeEach(async ({ request, context }) => {
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
 });
 
-test('the French dialogue, credits, notebook and saved cursor cold-start offline', async ({ page, context, baseURL }) => {
+test('the original French opening, notebook and saved cursor cold-start offline', async ({ page, context, baseURL }) => {
   const sourceRequests: string[] = [];
   context.on('request', request => { if (/opentextbc|utexas|creativecommons/.test(request.url())) sourceRequests.push(request.url()); });
   await downloadApp(page);
@@ -29,14 +29,15 @@ test('the French dialogue, credits, notebook and saved cursor cold-start offline
   await cold.goto(baseURL!);
   await button(cold, 'Open daily course').click();
   await expect(step(cold, 'Dialogue')).toBeVisible();
-  const dialogue = openCoursePilot.days[0].blocks.find(block => block.kind === 'dialogue')!;
+  const [opening] = openCoursePilot.days;
+  await expect(step(cold, `Lesson 1: ${opening.title}`)).toBeVisible();
+  const dialogue = opening.blocks.find(block => block.kind === 'dialogue')!;
   if (dialogue.kind !== 'dialogue') throw new Error('Missing dialogue');
   await expectFrenchTranscripts(panel(cold), dialogue.lines);
   await expectDialoguePhoto(panel(cold), 'french-neighbour-dialogue.jpg');
-  await button(cold, 'Source credits and licence').click();
-  await expect(panel(cold).getByText(openCoursePilot.sources[0].copyrightNotice, { exact: true })).toBeVisible();
-  await expect(button(cold, 'Creative Commons Attribution 4.0 (CC BY 4.0)')).toBeVisible();
-  await button(cold, 'Hide source credits').click();
+  await expect(panel(cold).getByText(opening.compact!.tip, { exact: true })).toBeVisible();
+  await expect(button(cold, 'Source credits and licence')).toHaveCount(0);
+  await expect(button(cold, 'Authorship and review')).toHaveCount(0);
   await button(cold, 'Useful words').click();
   await expect(panel(cold).getByTestId('vocabulary-fr.greetings.bonsoir').getByRole('img')).toHaveCount(0);
   await button(cold, 'Save bonsoir').click();
@@ -68,8 +69,8 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   await button(cold, 'Open daily course').click();
   const spelling = openCoursePilot.days[2];
   await openCourseOutline(panel(cold));
-  await button(cold, `Choose day 3: ${spelling.title}`).click();
-  await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
+  await button(cold, `Choose lesson 3: ${spelling.title}`).click();
+  await expect(step(cold, `Lesson 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Dialogue')).toBeVisible();
   await expectDialoguePhoto(panel(cold), 'french-workshop-dialogue.jpg');
   await button(cold, 'Next section').click();
@@ -87,10 +88,10 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   if (reflection.kind !== 'reflection') throw new Error('Missing reflection');
   await expect(panel(cold).getByText(reflection.modelMeaning, { exact: true })).toBeVisible();
   await button(cold, 'Finish lesson').click();
-  await expect(step(cold, 'Study day saved')).toBeVisible();
+  await expect(step(cold, 'Lesson saved')).toBeVisible();
   await cold.reload();
-  await expect(step(cold, `Day 3: ${spelling.title}`)).toBeVisible();
-  await expect(step(cold, 'Study day saved')).toBeVisible();
+  await expect(step(cold, `Lesson 3: ${spelling.title}`)).toBeVisible();
+  await expect(step(cold, 'Lesson saved')).toBeVisible();
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const overflowing = await panel(cold).evaluate(root => [root, ...root.querySelectorAll('*')].filter(element => {

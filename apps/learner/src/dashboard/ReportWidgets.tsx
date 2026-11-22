@@ -28,7 +28,7 @@ export function ReportMetrics({ report }: { report: LearningReport }) {
     { id: 'lessons', icon: 'book', color: colors.skyTint, value: report.completedLessons, total: report.totalLessons, title: 'Lessons completed', detail: 'Saved lesson sessions' },
     { id: 'explored', icon: 'globe', color: colors.sageTint, value: report.exploredWords, total: report.totalWords, title: 'Words explored', detail: 'Studied, not a mastery score' },
     { id: 'saved', icon: 'bookmark', color: colors.goldTint, value: report.savedWords, total: null, title: 'Words saved', detail: 'In your personal notebook' },
-    { id: 'days', icon: 'calendar', color: colors.lilacTint, value: report.completedStudyDays, total: report.totalStudyDays, title: 'Course days completed', detail: 'At your own pace' },
+    { id: 'days', icon: 'calendar', color: colors.lilacTint, value: report.completedStudyDays, total: report.totalStudyDays, title: 'Course lessons completed', detail: 'At your own pace' },
   ] as const;
   return <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
     {metrics.map(metric => <View key={metric.id} testID={`report-${metric.id}`} style={[t.panel, {

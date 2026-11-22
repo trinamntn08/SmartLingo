@@ -19,8 +19,8 @@ export interface CourseLaunchProps {
 const progressMessages: Record<CourseLaunchProps['status'], string | undefined> = {
   start: undefined,
   resume: 'Resume your saved section.',
-  next: 'Your next study day is ready.',
-  complete: 'All study days complete. Revisit any day.',
+  next: 'Your next lesson is ready.',
+  complete: 'All lessons complete. Revisit any lesson.',
   unavailable: 'Saved course progress is unavailable. You can still study.',
 };
 
@@ -43,12 +43,12 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
       {!loading && <>
         <Text accessibilityRole="header" style={[featured ? s.title : s.heading, { color: textColor },
           featured ? { fontSize: compact ? 28 : 36, lineHeight: compact ? 34 : 43 } : { fontSize: 22, lineHeight: 29 }]}>
-          Day {day.dayNumber}: {day.title}
+          Lesson {day.dayNumber}: {day.title}
         </Text>
         <Text style={[s.body, { color: textColor, fontSize: featured && !compact ? 18 : 16, lineHeight: 25 }]}>{day.outcome}</Text>
       </>}
       <Text style={[s.muted, { color: noteColor, fontSize: 14, lineHeight: 20 }]}>
-        {course.days.length} guided study {course.days.length === 1 ? 'day' : 'days'} · Draft preview
+        {course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview
       </Text>
       {message && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: noteColor, fontSize: 14, lineHeight: 20 }]}>{message}</Text>}
       <View style={[s.row, { marginTop: 4 }]}>

@@ -11,7 +11,7 @@ const time = 'fr.open-course-pilot.day-5';
 /** Original draft copy for owner review. The underlying lessons keep their dialogue and answer IDs. */
 const compactCopyByDayId: Partial<Record<string, CompactCopy>> = {
   [neighbour]: {
-    tip: 'Start with bonjour during the day. Use vous with a neighbour you’ve just met, and say bonne journée as you leave.',
+    tip: 'Passing a neighbour? Bonjour is enough. If you stop to chat, ask Comment allez-vous ? Say Bonne journée as you leave.',
     practice: [
       {
         blockId: `${neighbour}.arrival`,

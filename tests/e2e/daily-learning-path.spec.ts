@@ -34,16 +34,16 @@ test('Today and Learn share the guided day, resume point and next session', asyn
 
   const copied = await context.newPage();
   await copied.goto(page.url());
-  await button(copied, 'Back to study day').click();
+  await button(copied, 'Back to guided lesson').click();
   await expect(copied).toHaveURL(reflectionUrl);
   await copied.close();
 
-  await button(page, 'Back to study day').click();
+  await button(page, 'Back to guided lesson').click();
   await expect(page).toHaveURL(reflectionUrl);
   await expect(reflection).toBeVisible();
-  await expect(panel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toHaveCount(0);
+  await expect(panel(page).getByRole('heading', { name: 'Lesson saved', exact: true })).toHaveCount(0);
   await button(page, 'Finish lesson').click();
-  await expect(panel(page).getByRole('heading', { name: 'Study day saved', exact: true })).toBeVisible();
+  await expect(panel(page).getByRole('heading', { name: 'Lesson saved', exact: true })).toBeVisible();
 
   await button(page, 'Close daily course').click();
   await expect(page).toHaveURL('/today/fr');
@@ -51,7 +51,7 @@ test('Today and Learn share the guided day, resume point and next session', asyn
   await button(page, 'Learn').click();
   await expect(launch(page)).toHaveAttribute('href', path(second.id));
   await launch(page).click();
-  await expect(panel(page).getByRole('heading', { name: `Day 2: ${second.title}`, exact: true })).toBeVisible();
+  await expect(panel(page).getByRole('heading', { name: `Lesson 2: ${second.title}`, exact: true })).toBeVisible();
   await button(page, 'Close daily course').click();
   await expect(page).toHaveURL('/learn/fr');
 });

@@ -125,7 +125,7 @@ test('French course section history is read-only and refresh keeps the same sect
     await expect(outlineButton).toHaveCount(0);
     await expect(outline).toBeVisible();
     const bounds = (await outline.boundingBox())!;
-    const lesson = (await panel.getByRole('heading', { name: `Day 1: ${day.title}`, exact: true }).boundingBox())!;
+    const lesson = (await panel.getByRole('heading', { name: `Lesson 1: ${day.title}`, exact: true }).boundingBox())!;
     expect(bounds.x + bounds.width).toBeLessThan(lesson.x);
   } else {
     await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
@@ -134,8 +134,8 @@ test('French course section history is read-only and refresh keeps the same sect
     await expect(outline).toHaveAttribute('id', (await outlineButton.getAttribute('aria-controls'))!);
   }
   await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('aria-selected', 'true');
-  await expect(outline.getByRole('button', { name: /^Choose day 1:/ })).toHaveAttribute('aria-selected', 'true');
-  await expect(outline.getByRole('button', { name: /^Choose day / })).toHaveCount(5);
+  await expect(outline.getByRole('button', { name: /^Choose lesson 1:/ })).toHaveAttribute('aria-selected', 'true');
+  await expect(outline.getByRole('button', { name: /^Choose lesson / })).toHaveCount(5);
   await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('href', `${location}/${dialogue.id}`);
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
   if (!wide) {
@@ -173,7 +173,7 @@ test('Japanese course deep links and Previous browse an unsaved day without writ
   await page.goto(`${location}/${second.id}`);
   const panel = page.getByTestId('open-course-panel');
   await expect(panel.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
-  await expect(panel.getByRole('button', { name: 'Complete study day', exact: true })).toBeDisabled();
+  await expect(panel.getByRole('button', { name: 'Complete lesson', exact: true })).toBeDisabled();
   await panel.getByRole('button', { name: 'Previous section', exact: true }).click();
   await expect(page).toHaveURL(`${location}/${first.id}`);
   await expect(panel.getByRole('heading', { name: first.title, exact: true })).toBeVisible();

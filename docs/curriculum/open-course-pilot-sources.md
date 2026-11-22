@@ -1,5 +1,7 @@
 # Open-course Day 1: source and adaptation record
 
+Historical record for French course revisions 1–4. Revision 5 superseded the adaptation with [original Lesson 1 material](french-course-lesson-one.md). The record below documents the attribution that accompanies earlier exports containing the adaptation.
+
 Prepared and inspected: **2026-11-17**. **Draft for owner review**; this is one beginner day, not an imported book or complete A1–B1 course. Language level is an editorial foundation estimate. No native-speaker review, certified CEFR coverage, pronunciation assessment or learning-effectiveness validation is claimed.
 
 ## Selected source and rights evidence

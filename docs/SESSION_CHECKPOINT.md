@@ -1,5 +1,7 @@
 # Session checkpoint
 
+Completed on 2026-11-22 at 16:38 CET, Europe/Paris. The shared listening question now has a large speaker button and a reversible transcript toggle on `feat/french-daily-opening`, which started at matching local and live heads `a6a560c33526efb049d9992dd9c1f92bf3bcbb82`. Repository checks, four isolated browser cases, two cold-offline cases, and focused mobile and keyboard checks passed. The commit containing this note is the checkpoint. The owner can review Learn → Listening & videos. Separate dialogue work remains in this checkout. Account usage reporting is unavailable and no automatic resume is configured. [Work log](WORK_LOG.md#2026-11-22-listening-playback-and-transcript-toggle)
+
 Updated 2026-11-22 at 16:15 CET, Europe/Paris. All five French daily lessons are simplified and ready for manual review on `feat/french-daily-opening`. After fetch, the clean starting checkout matched live origin at `bc7999ef03d255342df0f724f0cd16ec6a2073c3`, ahead/behind `0/0`. [Work log](WORK_LOG.md#2026-11-22-simplify-the-french-daily-lessons)
 
 The local preview runs at `http://localhost:8082` from export `8d74e199621d`. Each day opens with paired French and English dialogue, a short tip and an optional word list. Next advances directly and saves dialogue progress. Quick practice can be skipped. Try it offers a short prompt and explicit finish. Earlier course progress and Day 1 credits carry forward.

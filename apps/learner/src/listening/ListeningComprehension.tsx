@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { Lesson, TargetLanguage } from '@smartlingo/domain';
-import { Platform, Text, View, useWindowDimensions } from 'react-native';
+import { Platform, Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { audio } from '../audio';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
@@ -50,9 +50,12 @@ function SentenceQuestion({ question, position, total, onNext }: { question: Lis
   const compact = useWindowDimensions().width < 900;
   const [selected, setSelected] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
-  const [transcript, setTranscript] = useState(false);
+  const [transcriptOverride, setTranscriptOverride] = useState<boolean | null>(null);
+  const transcriptVisible = transcriptOverride ?? checked;
+  const [usedTranscript, setUsedTranscript] = useState(false);
   const [played, setPlayed] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [playFocused, setPlayFocused] = useState(false);
   const [error, setError] = useState('');
   const request = useRef(0);
   useEffect(() => () => { request.current++; audio.stop(); }, []);
@@ -62,24 +65,36 @@ function SentenceQuestion({ question, position, total, onNext }: { question: Lis
     const current = ++request.current;
     setError(''); setPlaying(true); setPlayed(true);
     try { await audio.speak(question.sentence, question.language as TargetLanguage); }
-    catch { if (current === request.current) { setError('Audio could not play. Retry playback or use the visible transcript for text practice.'); setTranscript(true); } }
+    catch {
+      if (current === request.current) {
+        setError('Audio could not play. Try again or use the transcript for text practice.');
+        setTranscriptOverride(true);
+        if (!checked) setUsedTranscript(true);
+      }
+    }
     finally { if (current === request.current) setPlaying(false); }
   }
   return <View style={{ gap: 22, minWidth: 0 }}>
     <View style={t.panelHeader}><Text style={s.eyebrow}>Sentence {position} of {total}</Text>{!compact && <Text style={t.label}>Listen → choose → check</Text>}</View>
-    <View style={[t.stage, { alignItems: 'center', paddingVertical: compact ? 16 : 30, paddingHorizontal: compact ? 12 : 24 }]}>
-      {!compact && <><View style={[t.icon, { width: 64, height: 64, borderRadius: 22, backgroundColor: colors.card }]}><Icon name="headphones" size={32} /></View><Text style={t.sectionTitle}>Listen for the meaning</Text></>}
-      <View style={[s.row, { justifyContent: 'center' }, compact && { flexWrap: 'nowrap', width: '100%', gap: 8 }]}>
-        <Button compact={compact} primary icon="play" onPress={() => void play()}>{playing ? 'Stop audio' : played ? 'Replay sentence' : 'Play sentence'}</Button>
-        {!transcript && !checked && <Button compact={compact} quiet onPress={() => setTranscript(true)}>Show transcript</Button>}
-      </View>
+    <View style={[t.stage, { alignItems: 'center', gap: 8, paddingVertical: compact ? 16 : 24 }]}>
+      <Pressable accessibilityRole="button" accessibilityLabel={playing ? 'Stop audio' : played ? 'Replay sentence' : 'Play sentence'}
+        onPress={() => void play()} onFocus={() => setPlayFocused(true)} onBlur={() => setPlayFocused(false)}
+        style={({ pressed }) => [t.icon, { width: 68, height: 68, borderRadius: 22, backgroundColor: colors.primary,
+          opacity: pressed ? designTokens.opacity.pressed : 1 },
+        playFocused && { outlineColor: colors.focusRing, outlineWidth: designTokens.focus.outlineWidth,
+          outlineStyle: 'solid', outlineOffset: designTokens.focus.outlineOffset }]}>
+        <Icon name={playing ? 'stop' : 'speaker'} size={36} color={colors.onPrimary} />
+      </Pressable>
+      <Button compact={compact} quiet expanded={transcriptVisible} onPress={() => {
+        setTranscriptOverride(!transcriptVisible);
+        if (!transcriptVisible && !checked) setUsedTranscript(true);
+      }}>{transcriptVisible ? 'Hide transcript' : 'Show transcript'}</Button>
     </View>
     {playing && <Text accessibilityLiveRegion="polite" style={s.muted}>Preparing or playing sentence…</Text>}
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}
-    {(transcript || checked) && <View testID="listening-transcript" style={s.notice}>
+    {transcriptVisible && <View testID="listening-transcript" style={s.notice}>
       <Text style={s.eyebrow}>Transcript</Text><Text style={[s.heading, { fontWeight: '500' }]}>{question.sentence}</Text>
       {!!question.reading && <Text style={s.muted}>{question.reading}</Text>}
-      {transcript && !checked && <Text style={s.muted}>Text-supported practice: the transcript is visible.</Text>}
     </View>}
     <Text accessibilityRole="header" style={t.sectionTitle}>What does the sentence mean?</Text>
     <View style={{ gap: 10 }}>{question.choices.map((choice, index) => <Button key={index} selected={selected === index} disabled={checked} onPress={() => setSelected(index)}>{choice}</Button>)}</View>
@@ -87,7 +102,7 @@ function SentenceQuestion({ question, position, total, onNext }: { question: Lis
       : <View accessibilityLiveRegion="polite" testID="listening-feedback" style={[s.notice, { backgroundColor: selected === question.correctIndex ? colors.green : colors.sand }]}>
         <Text style={s.heading}>{selected === question.correctIndex ? 'That’s the meaning.' : 'Here’s the meaning.'}</Text>
         <Text style={s.body}>{question.meaning}</Text>
-        <Text style={s.muted}>{transcript ? 'You used transcript support for this sentence.' : played ? 'Replay and compare the sentence with its meaning.' : 'You answered without playing audio. Try listening on the next sentence.'}</Text>
+        <Text style={s.muted}>{usedTranscript ? 'You used transcript support for this sentence.' : played ? 'Replay and compare the sentence with its meaning.' : 'You answered without playing audio. Try listening on the next sentence.'}</Text>
       </View>}
     <View style={[s.row, { justifyContent: 'flex-end' }]}><Button quiet icon="arrow-right" onPress={() => { stop(); onNext(); }}>Next sentence</Button></View>
   </View>;

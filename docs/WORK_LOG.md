@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-22 Listening playback and transcript toggle
+
+- Request. Replace the decorative headphones in the listening question with a large speaker button and let learners show or hide the transcript.
+- Start. At 16:32 CET, Europe/Paris, `git fetch origin --prune` succeeded in `D:/dev/projects/SmartLingo`. Local, tracking and live `feat/french-daily-opening` matched at `a6a560c33526efb049d9992dd9c1f92bf3bcbb82`, ahead/behind `0/0`. Existing dialogue work was uncommitted and the index was empty.
+- Acceptance. The speaker plays, stops and replays the current sentence. The transcript toggle works before and after grading and after playback failure in both languages. Explicitly hiding the transcript keeps it hidden through grading.
+- Outcome. The listening question has a 68 px speaker button and one persistent Show transcript / Hide transcript control. Playback failure opens the transcript, and learners can hide it again. Grading still reveals the transcript by default when the learner has made no visibility choice.
+- Verified. `npm.cmd run check` passed. All four French and Japanese Learn hub cases passed in isolated Chromium at desktop and mobile widths on port 49263. Both cold-offline listening cases passed from the exported build on port 49264. A 390 px preview check confirmed the layout and toggle, and an isolated Chromium check confirmed keyboard playback and stop. A separate run against the shared 8082 preview passed the two desktop cases before the server stopped responding. Audio tests used browser speech doubles or intentionally unavailable speech.
+- Handoff. Review the updated question in Learn → Listening & videos. The commit containing this note is the task checkpoint.
+
 ## 2026-11-22 Simplify the French daily lessons
 
 - Request. Let learners advance directly with Next. Replace three overlapping study sections and long instructions with a compact bilingual dialogue in all five draft lessons.

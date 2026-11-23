@@ -1,6 +1,6 @@
 # Course catalogue - review drafts
 
-Source inventory checked 2026-11-23 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Vocabulary & lessons opens topic study. Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
+Source inventory checked 2026-11-23 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Lessons opens topic study. Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
 
 | Language | Topic banks | Short lessons | Vocabulary appearances | Canonical IDs | Exact written forms |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -21,7 +21,7 @@ All Japanese text remains original AI-assisted material for owner and qualified 
 
 ## French catalogue
 
-French editorial snapshot: 2026-11-16; inventory rechecked 2026-11-22. Original editorial material requiring owner review. The app now uses this explicit topic order for fresh starts, Learn > Vocabulary & lessons and the topic sidebar. Returning learners resume their previously studied lesson; free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
+The French editorial snapshot is dated 2026-11-16 and the inventory was rechecked on 2026-11-22. The app uses the explicit topic order in Learn → Lessons and the topic sidebar. Returning learners can resume their previously studied lesson. Free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules. The original drafts require owner review.
 
 The [latest curriculum review pack](curriculum/README.md) owns the full-payload ledger, proposed two-pass progression, six bridge drafts and five support-correction candidates. Those candidates are unregistered and unpublished; they are not included in the inventory below.
 

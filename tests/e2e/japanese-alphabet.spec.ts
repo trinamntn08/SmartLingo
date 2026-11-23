@@ -1,4 +1,4 @@
-import { openTopic, openProfileSection } from './learner-journeys';
+import { openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
@@ -76,14 +76,15 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await alphabet.getByRole('button', { name: `Listen to ${first.characters[0]!.kana}`, exact: true }).click();
   await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}'))).toEqual({ text: first.characters[0]!.audioText, language: 'ja-JP' });
   // Vocabulary remains available before any character practice or saved row.
-  await button(page, 'Vocabulary & lessons').click();
+  await button(page, 'Lessons').click();
   const oldLesson = japaneseLessons[0]!;
   await openTopic(page, oldLesson.topic);
   await button(page, `Open ${oldLesson.subtitle}`).click();
+  await openKeyPhrases(page);
   await button(page, `Save ${oldLesson.vocabulary[0]!.target}`).click();
   await expect(button(page, `Save ${oldLesson.vocabulary[0]!.target}`)).toBeDisabled();
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+  await button(page, 'Try meaning practice').click();
+  await expect(page.getByTestId('lesson-step-picture')).toHaveAttribute('aria-current', 'step');
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
   await button(page, 'Today').click();
@@ -193,7 +194,7 @@ test('failed alphabet saving keeps the current row and retries the same event on
   await expect(page.getByText('Simulated alphabet save failure', { exact: true })).toBeVisible();
   await revealRows(page);
   await expect(page.getByTestId(`kana-row-${first.id}`)).toHaveAttribute('aria-selected', 'true');
-  await expect(button(page, 'Vocabulary & lessons')).toBeDisabled(); expect(await events(page)).toHaveLength(0);
+  await expect(button(page, 'Lessons')).toBeDisabled(); expect(await events(page)).toHaveLength(0);
   await button(page, 'Retry save').click();
   await revealRows(page);
   await expect(page.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
-import { expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
@@ -27,7 +27,7 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   await page.close();
   const cold = await context.newPage();
   await cold.goto(baseURL!);
-  await button(cold, 'Open daily course').click();
+  await guidedLessonButton(cold).click();
   await expect(step(cold, 'Dialogue')).toBeVisible();
   const [opening] = openCoursePilot.days;
   await expect(step(cold, `Lesson 1: ${opening.title}`)).toBeVisible();
@@ -51,7 +51,6 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   await expect(button(cold, 'bonsoir saved to notebook')).toBeDisabled();
   await openTopic(cold, 'Restaurant');
   await cold.getByRole('button', { name: 'Open Explain food needs', exact: true }).click();
-  await cold.getByRole('button', { name: /Continue to dialogue/ }).click();
   await expectDialoguePhoto(cold.getByTestId('lesson-stage'), 'french-bistro-dialogue.jpg');
   expect(sourceRequests).toEqual([]);
 });
@@ -66,7 +65,7 @@ test('the spelling lesson is browsable and finishable offline in three steps', a
   await page.close();
   const cold = await context.newPage();
   await cold.goto(baseURL!);
-  await button(cold, 'Open daily course').click();
+  await guidedLessonButton(cold).click();
   const spelling = openCoursePilot.days[2];
   await openCourseOutline(panel(cold));
   await button(cold, `Choose lesson 3: ${spelling.title}`).click();

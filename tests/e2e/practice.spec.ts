@@ -109,7 +109,7 @@ test('unconfigured AI makes no conversation calls and leaves ordinary practice a
   await expect(practice.getByRole('button', { name: 'Start AI conversation', exact: true })).toBeDisabled();
   expect(fake.starts()).toBe(0);
   expect(fake.turns).toHaveLength(0);
-  await page.getByRole('button', { name: 'Vocabulary & lessons', exact: true }).click();
+  await page.getByRole('button', { name: 'Lessons', exact: true }).click();
   await expect(page.getByRole('textbox', { name: /Search/i }).first()).toBeVisible();
 });
 

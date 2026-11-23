@@ -27,16 +27,19 @@ test.beforeEach(async ({ context }) => {
 test('lesson Back restores its stage and Forward restores the previous hint in the matching activity', async ({ page }) => {
   const location = `/lesson/fr/${restaurantLesson.id}`;
   await page.goto(location);
-  await expect(page).toHaveURL(`${location}/vocabulary`);
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await expect(page).toHaveURL(`${location}/dialogue`);
+  await page.getByRole('button', { name: 'Continue to key phrases', exact: true }).click();
+  await expect(page).toHaveURL(`${location}/vocabulary`);
   await page.getByRole('button', { name: /Try picture practice/ }).click();
   await expect(page).toHaveURL(`${location}/picture`);
   await page.getByRole('button', { name: 'Show a hint', exact: true }).click();
 
   await page.goBack();
-  await expect(page).toHaveURL(`${location}/dialogue`);
+  await expect(page).toHaveURL(`${location}/vocabulary`);
+  await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
+  await page.goBack();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+  await page.goForward();
   await page.goForward();
   await expect(page.getByRole('button', { name: 'Hide hint', exact: true })).toBeVisible();
   await page.reload();
@@ -52,7 +55,6 @@ test('the final answer completes the lesson in place and retries both records to
   const location = '/lesson/fr/' + restaurantLesson.id;
   await page.goto(location + '/vocabulary');
   await expect(page.locator('[data-testid^="lesson-step-"]')).toHaveCount(4);
-  await page.getByRole('button', { name: 'Continue to dialogue', exact: true }).click();
   await page.getByRole('button', { name: /Try picture practice/ }).click();
   const match = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: match.target, exact: true }).click();

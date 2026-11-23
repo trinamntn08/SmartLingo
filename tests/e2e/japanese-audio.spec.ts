@@ -1,4 +1,4 @@
-import { openTopic, openProfileSection } from './learner-journeys';
+import { openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
@@ -81,6 +81,7 @@ test('voice-less Japanese playback uses free local audio, replays offline, and r
   const lesson = japaneseLessons[0];
   await openTopic(page, lesson.topic);
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
+  await openKeyPhrases(page);
   await page.getByRole('button', { name: `Listen to ${lesson.vocabulary[0].target}`, exact: true }).click();
   await expect.poll(() => page.evaluate(() => sessionStorage.getItem('japanese-clips-played'))).toBe('3');
   expect(synthesis.at(-1)).toEqual({ text: lesson.vocabulary[0].target, rate: 0.7 });

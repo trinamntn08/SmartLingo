@@ -55,7 +55,7 @@ test('listening level and format filters combine and reset without affecting ord
   await expect(conversation.getByRole('textbox', { name: 'Search conversation lessons', exact: true })).toBeAttached();
   await expect(conversation.getByRole('button', { name: 'Start AI conversation', exact: true })).toBeDisabled();
   await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
-  await page.getByRole('button', { name: 'Vocabulary & lessons', exact: true }).click();
+  await page.getByRole('button', { name: 'Lessons', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
   await expect(page.getByTestId('listening-resources')).toHaveCount(0);
   await page.getByRole('button', { name: 'Speaking', exact: true }).click();

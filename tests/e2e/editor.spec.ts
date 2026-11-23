@@ -1,4 +1,4 @@
-import { buildAcceptedSentence, openRestaurant, openTopic, openProfileSection } from './learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openRestaurant, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -33,7 +33,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  await page.getByRole('button', { name: 'Try picture practice', exact: true }).click();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Curriculum tools');
   const originalEvents = await learningRows(page, 'events');
@@ -63,13 +63,13 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: 'Preview saved revision', exact: true }).click();
   await expect(page.getByText(`Saved revision ${restaurantLesson.revision + 1} · temporary practice`, { exact: true })).toBeVisible();
   await expect(page.getByText('Estimated duration: 12 minutes', { exact: true })).toBeVisible();
-  await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
-  // Preview practice and word capture never touch the real notebook/history.
-  await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();
+  await openKeyPhrases(page);
+  await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
+  // Preview practice and word capture never touch the real notebook/history.
+  await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await page.getByRole('button', { name: 'Try picture practice' }).click();
   const pictureWord = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: pictureWord.target, exact: true }).click();
@@ -101,7 +101,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await openTopic(page, 'Café visits');
   await expect(page.getByText('A coffee with confidence', { exact: true })).toBeVisible();
   await expect(page.getByText('UNPUBLISHED later changes', { exact: true })).toHaveCount(0);
-  await expect(page.getByText('6 words · 12 min · A2 · Published', { exact: true })).toBeVisible();
+  await expect(page.getByText('12 min · A2 · Published', { exact: true })).toBeVisible();
+  await openTopicVocabulary(page);
   await expect(page.getByRole('heading', { name: 'Vocabulary · 6', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Foundations level', exact: true }).click();
   await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
@@ -115,12 +116,13 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await openTopic(page, 'Café visits');
   await page.getByRole('button', { name: 'Open A coffee with confidence', exact: true }).click();
   await expect(page.getByText('A2 \u00b7 Caf\u00e9 visits \u00b7 Published', { exact: true })).toBeVisible();
+  await openKeyPhrases(page);
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   await expect(page.getByText('In France, un café usually means an espresso.', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toContainText('In notebook');
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  await page.getByRole('button', { name: 'Read conversation', exact: true }).click();
   await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();
@@ -136,7 +138,7 @@ test('editor unavailable state preserves the independent learner flow', async ({
   expect(await page.evaluate(() => [...document.querySelectorAll('*')].every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('editor-unavailable.png'), fullPage: true });
   await page.getByRole('button', { name: /Return to learning/ }).click();
-  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
+  await expect(guidedLessonButton(page)).toBeVisible();
 });
 
 test('narrow editor keeps unsaved text when returning to the learner', async ({ page }, info) => {
@@ -158,7 +160,7 @@ test('narrow editor keeps unsaved text when returning to the learner', async ({ 
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
+  await expect(guidedLessonButton(page)).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Curriculum tools');
   await page.getByRole('button', { name: 'Open curriculum editor', exact: true }).click();

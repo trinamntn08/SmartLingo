@@ -20,7 +20,7 @@ export function learnRoute(mode: LearnMode, language: TargetLanguage, topic?: st
     case 'Japanese letters': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
     case 'Listening & videos': return { kind: 'listening', language, topic };
     case 'Speaking': return { kind: 'speaking', language, topic };
-    case 'Vocabulary & lessons': return { kind: 'topics', language, topic };
+    case 'Lessons': return { kind: 'topics', language, topic };
   }
 }
 
@@ -45,7 +45,7 @@ export function useLearnerNavigation({ preferred, active, blocked, onChooseLangu
   const tab: LearnerTab = route.kind === 'review' ? 'Review' : route.kind === 'profile' ? 'Profile' : route.kind === 'report' ? 'Report'
     : route.kind === 'today' || route.kind === 'home' ? 'Today' : 'Learn';
   const learnMode: LearnMode = route.kind === 'letters' ? 'Japanese letters' : route.kind === 'listening' ? 'Listening & videos'
-    : route.kind === 'speaking' ? 'Speaking' : 'Vocabulary & lessons';
+    : route.kind === 'speaking' ? 'Speaking' : 'Lessons';
 
   useEffect(() => {
     if (active && current.kind === 'home' && !blocked) navigate(language ? { kind: 'today', language } : { kind: 'languages' }, { replace: true });

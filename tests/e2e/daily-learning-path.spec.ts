@@ -1,9 +1,10 @@
+import { guidedLessonButton } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
 const panel = (page: Page) => page.getByTestId('open-course-panel');
-const launch = (page: Page) => panel(page).getByRole('button', { name: 'Open daily course', exact: true });
+const launch = (page: Page) => guidedLessonButton(panel(page));
 const [first, second] = openCoursePilot.days;
 const path = (dayId: string) => `/course/fr/${openCoursePilot.id}/${dayId}`;
 
@@ -14,7 +15,7 @@ test('Today and Learn share the guided day, resume point and next session', asyn
   await expect(launch(page)).toHaveAttribute('href', path(first.id));
   await button(page, 'Learn').click();
   await expect(launch(page)).toHaveAttribute('href', path(first.id));
-  await expect(button(page, 'Vocabulary & lessons')).toBeVisible();
+  await expect(button(page, 'Lessons')).toBeVisible();
   await launch(page).click();
   await expect(button(page, 'Learn')).toHaveAttribute('aria-selected', 'true');
   await button(page, 'Next section').click();
@@ -30,7 +31,7 @@ test('Today and Learn share the guided day, resume point and next session', asyn
   await expect(reflection).toBeVisible();
   const reflectionUrl = page.url();
   await page.getByTestId('daily-related-practice').getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
-  await expect(page).toHaveURL(/\/lesson\/fr\/fr\.greetings\.hello-goodbye\/vocabulary\?course=/);
+  await expect(page).toHaveURL(/\/lesson\/fr\/fr\.greetings\.hello-goodbye\/dialogue\?course=/);
 
   const copied = await context.newPage();
   await copied.goto(page.url());

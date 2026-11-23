@@ -118,13 +118,13 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}
       recommendedDay={recommendation.day} learning={courseLearning} model={model} lessons={lessons} />;
     if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch}
-      alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Vocabulary & lessons')}
+      alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
       onAlphabet={() => openLearnMode('Japanese letters')}
     />;
     if (tab === 'Report') return <LearningReportScreen
       language={targetLanguage} state={reportState} onTopic={selectTopic}
-      onExplore={() => openLearnMode('Vocabulary & lessons')} onReview={() => navigate('Review')}
+      onExplore={() => openLearnMode('Lessons')} onReview={() => navigate('Review')}
     />;
     if (tab === 'Learn') return <LearningHub
       language={targetLanguage} lessons={lessons} model={model} mode={learnMode} courseLaunch={courseLaunch}
@@ -134,7 +134,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     />;
     if (tab === 'Review') return <Notebook
       key={targetLanguage} language={targetLanguage} onWriteBlocked={setChildWriteBlocked}
-      model={model} onExplore={() => openLearnMode('Vocabulary & lessons')}
+      model={model} onExplore={() => openLearnMode('Lessons')}
     />;
     return <ProfileScreen language={targetLanguage} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />;
   }

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
-import { buildAcceptedSentence, openProfileSection, openTopic } from './learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openProfileSection, openTopic } from './learner-journeys';
 
 const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
 const greetingTopic = 'Everyday greetings and politeness';
@@ -17,6 +17,9 @@ test('Learn opens greetings with readable arrival and departure support, saved w
   const start = page.getByRole('button', { name: `Open ${opening.subtitle}`, exact: true });
   await start.focus();
   await page.keyboard.press('Enter');
+  await expect(page.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
+  await expect(page.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
+  await openKeyPhrases(page);
   for (const target of ['bonjour', 'bonsoir', 'bonne journée', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;
     const card = page.getByTestId(`vocabulary-${entry.id}`);
@@ -28,12 +31,8 @@ test('Learn opens greetings with readable arrival and departure support, saved w
   await expect(page.getByRole('button', { name: /Show meaning|Show example translation|Show word note/ })).toHaveCount(0);
   await page.getByRole('button', { name: 'Save bonsoir', exact: true }).click();
   await expect(page.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(page.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
-  await expect(page.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
-  await page.reload();
-  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Try meaning practice/ }).click();
+  await page.reload();
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: target.target, exact: true }).click();
@@ -63,10 +62,10 @@ for (const width of [1280, 320]) {
     await first.scrollIntoViewIfNeeded();
     await first.focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByText('24 words · 3 short lessons', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('topic-lesson-cards')).toBeVisible();
     await page.getByRole('button', { name: 'Foundations level', exact: true }).click();
     await expect(page.getByRole('button', { name: /^Open / })).toHaveCount(3);
-    await expect(page.getByRole('button', { name: /^Open / })).toHaveText(['Start lesson \u2192', 'Start lesson \u2192', 'Start lesson \u2192']);
+    await expect(page.getByRole('button', { name: /^Open / })).toHaveText(['Start lesson', 'Start lesson', 'Start lesson']);
     expect(await page.getByRole('button', { name: /^Open / }).evaluateAll(buttons => buttons.map(button => button.getAttribute('aria-label'))))
       .toEqual(lessons.filter(lesson => lesson.id.startsWith('fr.greetings.')).map(lesson => `Open ${lesson.subtitle}`));
     await page.getByRole('button', { name: 'A1 level', exact: true }).click();
@@ -80,7 +79,7 @@ for (const width of [1280, 320]) {
 
 test('a pre-existing Restaurant attempt still resumes its dialogue after the greetings-first update', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeEnabled();
+  await expect(guidedLessonButton(page)).toBeEnabled();
   const oldEvent = { id: '3cf282d5-af5d-416f-bdaa-7a7ebf4c934c', lessonId: restaurantLesson.id, revision: restaurantLesson.revision,
     itemId: restaurantLesson.id, activity: 'vocabulary', result: 'viewed', hints: 0, occurredAt: '2026-11-14T10:00:00.000Z' };
   await page.evaluate(async event => {
@@ -119,7 +118,7 @@ test('a cached published greeting override retains its content and first topic p
   await expect(page.getByRole('button', { name: /^Topic / }).first()).toHaveAttribute('aria-label', `Topic ${greetingTopic}`);
   await page.getByRole('button', { name: `Topic ${greetingTopic}`, exact: true }).click();
   await expect(page.getByText(published.subtitle, { exact: true })).toBeVisible();
+  await expect(page.getByTestId(`topic-lesson-${published.id}`).getByText(/Published$/)).toBeVisible();
   await page.getByRole('button', { name: `Open ${published.subtitle}`, exact: true }).click();
-  await expect(page.getByText(`${opening.level} \u00b7 ${greetingTopic} \u00b7 Published`, { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: published.subtitle, exact: true })).toBeVisible();
 });

@@ -19,6 +19,7 @@ for (const language of ['French', 'Japanese'] as const) {
     await button(page, `Learn ${language}`).click();
     const next = page.getByTestId('today-next-step');
     await expect(next.getByRole('button')).toHaveCount(1);
+    await expect(next.getByRole('button')).toBeInViewport();
     for (const id of ['lessons', 'explored', 'saved', 'days', 'week']) await expect(page.getByTestId(`report-${id}`)).toHaveCount(0);
     await expect(page.getByRole('button', { name: /^Topic / })).toHaveCount(0);
     await expectContained(page);
@@ -27,6 +28,7 @@ for (const language of ['French', 'Japanese'] as const) {
       const opening = openCoursePilot.days[0];
       await expect(page.getByRole('heading', { name: `Lesson 1: ${opening.title}`, exact: true })).toBeVisible();
       await expect(page.getByText('Step 1 of 3', { exact: true })).toBeVisible();
+      await expect(page.getByTestId('dialogue-french-transcript').locator('[lang="fr-FR"]').first()).toBeInViewport();
       await expect(page.getByTestId('dialogue-english-transcript')).toBeVisible();
       await button(page, 'Next section').click();
       await expect(page.getByText('Step 2 of 3', { exact: true })).toBeVisible();
@@ -48,7 +50,7 @@ for (const language of ['French', 'Japanese'] as const) {
       await expectContained(page);
     }
     await button(page, 'Learn').click();
-    if (language === 'Japanese') await button(page, 'Vocabulary & lessons').click();
+    if (language === 'Japanese') await button(page, 'Lessons').click();
     await expect(page.getByRole('button', { name: /^Topic / }).first()).toBeVisible();
     await expectContained(page);
     await openTopic(page, language === 'French' ? 'Restaurant' : japaneseLessons[0]!.topic);

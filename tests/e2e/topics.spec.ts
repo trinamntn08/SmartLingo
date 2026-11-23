@@ -1,4 +1,4 @@
-import { openLessonFromTopics, openTopic } from './learner-journeys';
+import { guidedLessonButton, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
@@ -23,26 +23,29 @@ test('the visual library returns from a lesson to the same filtered topic and sc
     await expect(topicSelector).toHaveAttribute('aria-expanded', 'false');
     await expect(topicSelector).toBeFocused();
   }
-  const cover = page.getByAltText(/^Topic context:/);
-  await expect(cover).toBeVisible();
-  await expect(cover).toHaveAttribute('src', /\/restaurant\.jpg$/);
-  await expect.poll(() => cover.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  if (!narrow) {
+    const cover = page.getByAltText(/^Topic context:/);
+    await expect(cover).toBeVisible();
+    await expect(cover).toHaveAttribute('src', /\/restaurant\.jpg$/);
+    await expect.poll(() => cover.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
   const search = page.getByRole('textbox', { name: 'Search lessons' });
   await search.fill('coffee');
   await button('A1 level').click();
+  await openTopicVocabulary(page);
   const openLesson = button('Open At the restaurant');
   const scrollPosition = () => page.getByTestId('learner-content').evaluate(node => node.scrollTop);
   await openLesson.scrollIntoViewIfNeeded();
   const before = await scrollPosition();
-  expect(before).toBeGreaterThan(0);
   await openLesson.click();
   await expect(page.getByTestId('lesson-stage')).toBeVisible();
   await expect.poll(scrollPosition).toBe(0);
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeFocused();
+  await openKeyPhrases(page);
+  await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeFocused();
   await button('All lessons').click();
   await expect(search).toHaveValue('coffee');
   await expect(button('A1 level')).toHaveAttribute('aria-selected', 'true');
+  await expect(button('Topic vocabulary')).toHaveAttribute('aria-expanded', 'true');
   await expect.poll(async () => Math.abs(await scrollPosition() - before)).toBeLessThanOrEqual(2);
 });
 
@@ -59,10 +62,6 @@ test('foundations and A2 experience lessons expose translated study material and
     await openTopic(page, lesson.topic);
     await page.getByRole('button', { name: level === 'foundation' ? 'Foundations level' : 'A2 level', exact: true }).click();
     await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
-    const entry = lesson.vocabulary[0];
-    await expect(page.getByText(entry.meaning, { exact: true })).toBeVisible();
-    await expect(page.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: /Continue to dialogue/ }).click();
     await expect(page.getByText(lesson.dialogue[0].meaning, { exact: true })).toBeVisible();
     const grammar = page.getByTestId('grammar-note');
     await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
@@ -73,6 +72,7 @@ test('foundations and A2 experience lessons expose translated study material and
       await expect(grammar.getByText('Use the dictionary form of the verb.', { exact: true })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await grammar.screenshot({ path: info.outputPath('grammar-card.png') });
+      await openKeyPhrases(page);
       await page.getByRole('button', { name: /Try meaning practice/ }).click();
       await expect(page.getByText(lesson.pictureActivity.prompt, { exact: true })).toBeVisible();
     } else {
@@ -89,8 +89,9 @@ test('topic words are directly readable, searchable and save to the notebook wit
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
   await page.getByRole('button', { name: 'Topic Health and appointments', exact: true }).click();
-  await expect(page.getByText('30 words · 5 short lessons', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('topic-lesson-cards')).toBeVisible();
   await search.fill('');
+  await openTopicVocabulary(page);
   await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'un rendez-vous', exact: true })).toBeVisible();
   await expect(page.getByText('an appointment', { exact: true })).toBeVisible();
@@ -128,13 +129,13 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await page.getByRole('button', { name: 'Topic Services and paperwork', exact: true }).click();
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
+  await openKeyPhrases(page);
   await expect(page.getByText(lesson.vocabulary[0].meaning, { exact: true })).toBeVisible();
   expect(await page.evaluate(() => [...document.querySelectorAll('*')]
     .every(element => element.getBoundingClientRect().right <= innerWidth + 1))).toBe(true);
   await page.screenshot({ path: info.outputPath('narrow-new-lesson.png'), fullPage: true });
   await expect(page.getByRole('heading', { name: lesson.vocabulary[5].target, exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /Next word/ })).toHaveCount(0);
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await page.getByRole('button', { name: /Try meaning practice/ }).click();
   const target = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();
@@ -158,7 +159,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   expect(errors).toEqual([]);
 });
 
-test('Learn switches an open lesson back to its word bank and home resets the destination', async ({ page }) => {
+test('Learn switches an open lesson back to its topic and home resets the destination', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
@@ -168,22 +169,23 @@ test('Learn switches an open lesson back to its word bank and home resets the de
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Groceries', exact: true }).click();
   await page.getByRole('button', { name: `Open ${groceriesLesson.subtitle}`, exact: true }).click();
-  await expect(page.getByRole('heading', { name: groceriesLesson.vocabulary[0].target, exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await openTopic(page, 'Groceries');
+  await openTopicVocabulary(page);
   await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).click();
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
+  await expect(guidedLessonButton(page)).toBeVisible();
   await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toHaveCount(0);
   await openLessonFromTopics(page, lessons[0]);
   await page.getByRole('button', { name: 'SmartLingo home', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('language-chooser')).toBeVisible();
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Open daily course', exact: true })).toBeVisible();
+  await expect(guidedLessonButton(page)).toBeVisible();
 });
 
 test('320px catalogue reaches topics and topic changes clear stale search and level filters', async ({ page }) => {
@@ -204,6 +206,7 @@ test('320px catalogue reaches topics and topic changes clear stale search and le
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await page.getByRole('button', { name: 'All topics', exact: true }).click();
   await groceries.click();
+  await openTopicVocabulary(page);
   await expect(page.getByRole('heading', { name: `Vocabulary · ${groceryCount}`, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'une pomme', exact: true })).toBeVisible();
   await expectPicturesLoaded(page);

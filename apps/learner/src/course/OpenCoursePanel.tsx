@@ -42,15 +42,15 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       && ['today', 'topics', 'letters', 'listening', 'speaking'].includes(previous.kind), true);
   }
 
-  return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: compact ? 14 : 16, gap: 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
-    <View style={[s.row, { justifyContent: 'space-between', gap: compact ? 10 : 16 }]}>
+  return <View testID="open-course-panel" style={[s.card, { minWidth: 0, padding: compact ? 12 : 16, gap: compact ? 12 : 24, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
+    <View style={[s.row, { justifyContent: 'space-between', gap: compact ? 6 : 16 }]}>
       <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 260, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 10, backgroundColor: colors.goldTint, alignItems: 'center', justifyContent: 'center' }}>
+        {!compact && <View style={{ width: 44, height: 44, borderRadius: 10, backgroundColor: colors.goldTint, alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="calendar" size={22} color={colors.primary} />
-        </View>
+        </View>}
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
-          <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.title}</Text>
-          <Text style={s.muted}>{course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview</Text>
+          <Text accessibilityRole="header" style={[s.heading, compact ? designTokens.typography.label : { fontSize: 21 }]}>{course.title}</Text>
+          <Text style={[s.muted, compact && designTokens.typography.caption]}>{course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview</Text>
         </View>
       </View>
       <View style={[s.row, { gap: 8, maxWidth: '100%' }, compact && { width: '100%', justifyContent: 'space-between' }]}>
@@ -71,7 +71,7 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
   outlineId?: string; onCloseOutline: () => void; sidebar?: CourseSidebar;
 }) {
   const { navigate, backTo } = useNavigation();
-  const compact = useWindowDimensions().width < 600;
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const [level, setLevel] = useState<CourseDay['level'] | 'All'>('All');
   const clock = useRef(0);
   const requestedDay = course.days.find(item => item.id === route.dayId);
@@ -162,7 +162,7 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
     sections={sections} sectionId={block.id} completedSections={currentStep ? undefined : progress.completedBlockIds} events={learning.events}
     level={level} onLevelChange={setLevel} blocked={navigationBlocked} onDay={selectDay} onSection={selectSection} />;
 
-  const lesson = <View style={{ flex: sidebar ? 1 : undefined, gap: 18, minWidth: 0 }}>
+  const lesson = <View style={{ flex: sidebar ? 1 : undefined, gap: compact ? 12 : 18, minWidth: 0 }}>
     {learning.loading && <Text accessibilityLiveRegion="polite" style={s.muted}>Loading saved course progress… You can read this section while it loads.</Text>}
     {!learning.loading && (invalidDay || invalidSection) && <View style={s.notice}>
       <Text accessibilityRole="alert" style={s.body}>{invalidDay ? 'That lesson is unavailable. Your current lesson is shown here.' : 'That section is unavailable. Your available section is shown here.'}</Text>
@@ -175,17 +175,19 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
     </View>}
     <CourseWriteStatus learning={learning} />
     {!sidebar && outline}
-    <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }]}>
-      {currentUnit && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
-      <Text style={s.eyebrow}>{day.level === 'foundation' ? 'Foundations' : day.level}</Text>
+    <View style={[s.notice, { backgroundColor: colors.paper, gap: 16 }, compact && { padding: 11, gap: 7 }]}>
+      {currentUnit && !compact && <Text style={[s.muted, { color: colors.primary, fontWeight: '600' }]}>{currentUnit.title}</Text>}
       <Text accessibilityRole="header" style={[s.heading, { fontSize: compact ? 25 : 32, lineHeight: compact ? 33 : 40 }]}>Lesson {day.dayNumber}: {day.title}</Text>
-      <Text style={s.body}>{day.outcome}</Text>
-      <Text accessibilityLiveRegion="polite" style={s.muted}>
-        {currentStep ? `Step ${index + 1} of ${sections.length}` : `${progress.completedBlockIds.size} of ${sections.length} sections saved`}
-      </Text>
+      <Text style={compact ? s.muted : s.body}>{day.outcome}</Text>
+      <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
+        <Text style={[s.eyebrow, compact && { fontSize: 13 }]}>{day.level === 'foundation' ? 'Foundations' : day.level}</Text>
+        <Text accessibilityLiveRegion="polite" style={[s.muted, compact && designTokens.typography.caption]}>
+          {currentStep ? `Step ${index + 1} of ${sections.length}` : `${progress.completedBlockIds.size} of ${sections.length} sections saved`}
+        </Text>
+      </View>
       <View style={s.progressTrack}><View style={[s.progressFill, { width: `${100 * (currentStep ? index + 1 : progress.completedBlockIds.size) / sections.length}%` }]} /></View>
     </View>
-    <View testID={`course-block-${block.id}`} style={{ gap: 24, minWidth: 0, paddingHorizontal: compact || sidebar ? 0 : 22, paddingVertical: 22 }}>
+    <View testID={`course-block-${block.id}`} style={{ gap: compact ? 12 : 24, minWidth: 0, paddingHorizontal: compact || sidebar ? 0 : 22, paddingVertical: compact ? 4 : 22 }}>
       {currentStep ? <>
         <View style={[s.row, { justifyContent: 'space-between', gap: 10 }]}>
           <CourseStepHeading stepId={block.id} title={currentStep.title} narrow={compact} compactCourse />

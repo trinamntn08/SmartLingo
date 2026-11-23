@@ -1,6 +1,19 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { normalizeAnswer, type Lesson } from '@smartlingo/domain';
 
+export function guidedLessonButton(scope: Locator | Page) {
+  return scope.getByRole('button', { name: /^(?:Start lesson|Continue lesson|Revisit lesson|Open daily course)$/ });
+}
+
+export async function openKeyPhrases(page: Page) {
+  await page.getByRole('button', { name: /^(?:Continue to|Review) key phrases$/ }).click();
+}
+
+export async function openTopicVocabulary(page: Page) {
+  const toggle = page.getByRole('button', { name: 'Topic vocabulary', exact: true });
+  if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
+}
+
 export async function openProfileSection(page: Page, name: string) {
   const toggle = page.getByRole('button', { name, exact: true });
   if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
@@ -15,9 +28,9 @@ export async function openCourseOutline(panel: Locator) {
 /** Browse a topic through Learn, including the Japanese letters-first entry. */
 export async function openTopic(page: Page, name: string) {
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  const vocabulary = page.getByRole('button', { name: 'Vocabulary & lessons', exact: true });
-  await vocabulary.click();
-  await expect(vocabulary).toHaveAttribute('aria-selected', 'true');
+  const lessons = page.getByRole('button', { name: 'Lessons', exact: true });
+  await lessons.click();
+  await expect(lessons).toHaveAttribute('aria-selected', 'true');
   const allTopics = page.getByRole('button', { name: 'All topics', exact: true });
   if (await allTopics.isVisible()) await allTopics.click();
   await page.getByRole('button', { name: `Topic ${name}`, exact: true }).click();
@@ -32,6 +45,7 @@ export async function openLessonFromTopics(page: Page, lesson: Pick<Lesson, 'top
 export async function openRestaurant(page: Page) {
   await openTopic(page, 'Restaurant');
   await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
+  await openKeyPhrases(page);
 }
 
 export async function selectListeningLesson(listening: Locator, lesson: Pick<Lesson, 'title'>) {

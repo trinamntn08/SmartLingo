@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons, lessons } from '@smartlingo/content';
 import { type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence, openTopic, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
 
 // Exercise the real first-run homepage; older regressions explicitly select French in config.
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -35,6 +35,8 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await choose(page, name);
     for (const tab of ['Today', 'Learn', 'Review', 'Report', 'Profile']) await expect(button(page, tab)).toBeVisible();
     await open(page, lesson);
+    await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+    await openKeyPhrases(page);
     const word = lesson.vocabulary[0];
     const card = page.getByTestId(`vocabulary-${word.id}`);
     await expect(card.getByRole('heading', { name: word.target, exact: true })).toBeVisible();
@@ -47,8 +49,6 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await card.scrollIntoViewIfNeeded();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`${name.toLowerCase()}-shared-words.png`), fullPage: true });
-    await page.getByRole('button', { name: /Continue to dialogue/ }).click();
-    await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
     await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
     const correct = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
     await button(page, correct.target).click();
@@ -145,6 +145,7 @@ test('both languages remain browsable when browser persistence is unavailable', 
   await page.goto('/');
   for (const [name, lesson] of [['Japanese', japaneseLessons[0]], ['French', lessons[0]]] as const) {
     await choose(page, name); await open(page, lesson);
+    await openKeyPhrases(page);
     await expect(page.getByText(/Your language choice is kept for this visit/)).toBeVisible();
     await expect(page.getByTestId(`vocabulary-${lesson.vocabulary[0].id}`)).toBeVisible();
     await expect(button(page, `Save ${lesson.vocabulary[0].target}`)).toBeDisabled();

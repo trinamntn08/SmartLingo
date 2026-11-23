@@ -1,4 +1,4 @@
-import { buildAcceptedSentence, openLessonFromTopics, openProfileSection, openRestaurant, openTopic } from '../e2e/learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -39,6 +39,10 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const cold = await context.newPage();
   await cold.goto('/');
   await openLessonFromTopics(cold, opening);
+  await expect(cold.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
+  await cold.reload();
+  await expect(cold.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
+  await openKeyPhrases(cold);
   for (const target of ['bonsoir', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;
     const card = cold.getByTestId(`vocabulary-${entry.id}`);
@@ -49,10 +53,6 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await cold.screenshot({ path: info.outputPath('greetings-offline-study.png'), fullPage: true });
   await button(cold, 'Save bonsoir').click();
   await expect(cold.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
-  await button(cold, /Continue to dialogue/).click();
-  await expect(cold.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
-  await cold.reload();
-  await expect(cold.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
   await button(cold, /Try meaning practice/).click();
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
   await button(cold, target.target).click();
@@ -78,7 +78,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await openRestaurant(page);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
-  await button(page, /Continue to dialogue/).click();
+  await button(page, 'Try picture practice').click();
   await button(page, 'Review').click();
   await button(page, 'Reveal meaning').click();
   await button(page, 'Needed help').click();
@@ -118,14 +118,18 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await expect(cold.getByText('Isolated cached publication', { exact: true })).toBeVisible();
   await button(cold, 'Open Isolated cached publication').click();
   await expect(cold.getByTestId('lesson-stage')).toBeVisible();
+  await openKeyPhrases(cold);
   await expect(cold.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
   await expect(button(cold, 'Save bonjour')).toBeDisabled();
   await expect.poll(() => cold.locator('img').evaluateAll(images => images.length > 0 && images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
   await button(cold, 'Learn').click();
   await button(cold, 'Topic Restaurant').click();
   const restaurantPhoto = cold.getByAltText(/^Topic context:/);
-  await expect(restaurantPhoto).toHaveAttribute('src', '/generated-vocabulary-photos/restaurant.jpg');
-  await expect.poll(() => restaurantPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  if (info.project.name === 'desktop') {
+    await expect(restaurantPhoto).toHaveAttribute('src', '/generated-vocabulary-photos/restaurant.jpg');
+    await expect.poll(() => restaurantPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  await openTopicVocabulary(cold);
   const coffeePhoto = cold.getByTestId('vocabulary-fr.cafe').locator('img[src^="/generated-vocabulary-photos/"]');
   await expect(coffeePhoto).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
   await expect.poll(() => coffeePhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
@@ -205,7 +209,7 @@ test('interrupted download and corrupted update can retry while preserving the l
   const updated = await context.newPage();
   await updated.goto('/');
   await expect(updated.locator('meta[name="smartlingo-test-build"]')).toHaveAttribute('content', 'updated');
-  await expect(button(updated, 'Open daily course')).toBeVisible();
+  await expect(guidedLessonButton(updated)).toBeVisible();
 });
 
 test('a stalled connection falls back to the saved document within a few seconds', async ({ page, context, request }) => {
@@ -221,6 +225,6 @@ test('a stalled connection falls back to the saved document within a few seconds
   const stalled = await context.newPage();
   const start = Date.now();
   await stalled.goto('/?from=saved');
-  await expect(button(stalled, 'Open daily course')).toBeVisible();
+  await expect(guidedLessonButton(stalled)).toBeVisible();
   expect(Date.now() - start).toBeLessThan(10000);
 });

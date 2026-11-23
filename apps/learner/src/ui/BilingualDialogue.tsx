@@ -21,13 +21,13 @@ export function BilingualDialogue({ turns, photo, highlightedRole = turns[0]?.ro
   study?: boolean;
 }) {
   return <View style={t.dialogue}>
-    {photo && <View testID="dialogue-context-photo" style={t.photoFrame}>
-      <ContextImage photo={photo} style={[t.photo, study && t.studyPhoto]} />
-    </View>}
     <View style={t.transcripts}>
       <Transcript turns={turns} language={language} highlightedRole={highlightedRole} study={study} />
       <Transcript turns={turns} language="en" highlightedRole={highlightedRole} study={study} />
     </View>
+    {photo && <View testID="dialogue-context-photo" style={t.photoFrame}>
+      <ContextImage photo={photo} style={[t.photo, study && t.studyPhoto]} />
+    </View>}
   </View>;
 }
 

@@ -1,4 +1,4 @@
-import { expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection } from './learner-journeys';
+import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
@@ -58,7 +58,7 @@ test.beforeEach(async ({ context }) => {
 test('all five opening lessons offer a full French transcript, full translation and a context photo', async ({ page }) => {
   await page.goto('/');
   await expect(step(page, openCoursePilot.title)).toBeVisible();
-  await button(page, 'Open daily course').focus();
+  await guidedLessonButton(page).focus();
   await page.keyboard.press('Enter');
   await openCourseOutline(coursePanel(page));
   await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
@@ -90,7 +90,7 @@ test('all five opening lessons offer a full French transcript, full translation 
 
 test('Next saves dialogue and resumes practice without requiring answers before finishing', async ({ page }) => {
   await page.goto('/');
-  await button(page, 'Open daily course').click();
+  await guidedLessonButton(page).click();
   await button(page, 'Next section').click();
   await expect(step(page, 'Quick practice')).toBeVisible();
   const practice = firstDay.blocks.find(block => block.kind === 'choice')!;
@@ -133,7 +133,7 @@ test('Next saves dialogue and resumes practice without requiring answers before 
 
 test('notebook, progress and the resume step survive backup and restore', async ({ page, browser }, info) => {
   await page.goto('/');
-  await button(page, 'Open daily course').click();
+  await guidedLessonButton(page).click();
   await button(page, 'Useful words').click();
   await expect(coursePanel(page).getByTestId('vocabulary-fr.bonjour').getByRole('img')).toHaveCount(0);
   await button(page, 'Save bonjour').click();
@@ -162,7 +162,7 @@ test('notebook, progress and the resume step survive backup and restore', async 
     await restored.getByRole('button', { name: 'Reload learning', exact: true }).click();
     await expect(restored).toHaveURL(/\/profile\/fr$/);
     await restored.getByRole('button', { name: 'Today', exact: true }).click();
-    await button(restored, 'Open daily course').click();
+    await guidedLessonButton(restored).click();
     await expect(step(restored, 'Quick practice')).toBeVisible();
     await button(restored, 'Previous section').click();
     await expect(step(restored, 'Dialogue')).toBeVisible();
@@ -173,7 +173,7 @@ test('notebook, progress and the resume step survive backup and restore', async 
 
 test('Next retries a failed cursor write without duplicating dialogue study', async ({ page }) => {
   await page.goto('/');
-  await button(page, 'Open daily course').click();
+  await guidedLessonButton(page).click();
   await expect(button(page, 'Next section')).toBeEnabled();
   await page.evaluate(() => {
     const original = IDBObjectStore.prototype.add;
@@ -204,7 +204,7 @@ test('all compact steps can be browsed at 320 px when progress storage is unavai
   await page.setViewportSize({ width: 320, height: 800 });
   await page.addInitScript(() => { Object.defineProperty(globalThis, 'indexedDB', { configurable: true, value: undefined }); });
   await page.goto('/');
-  await button(page, 'Open daily course').click();
+  await guidedLessonButton(page).click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
   await button(page, 'Next section').click();
   await expect(step(page, 'Quick practice')).toBeVisible();
@@ -216,7 +216,7 @@ test('all compact steps can be browsed at 320 px when progress storage is unavai
 
 test('the rewritten lesson has fresh progress and preserves historical events and other lesson cursors', async ({ page }) => {
   await page.goto('/');
-  await button(page, 'Open daily course').click();
+  await guidedLessonButton(page).click();
   await expect(button(page, 'Next section')).toBeEnabled();
   const firstHistory = firstDay.blocks.map((block, index): CourseEvent => {
     if (block.kind === 'choice') return { ...courseEvent(firstDay, block.id, 'choice', index), kind: 'choice',
@@ -246,7 +246,7 @@ test('the rewritten lesson has fresh progress and preserves historical events an
 
 test('a restored inconsistent choice never shows correct feedback', async ({ page }) => {
   await page.goto('/');
-  await button(page, 'Open daily course').click();
+  await guidedLessonButton(page).click();
   await expect(button(page, 'Next section')).toBeEnabled();
   const block = firstDay.blocks.find(item => item.kind === 'choice')!;
   if (block.kind !== 'choice') throw new Error('Missing practice');

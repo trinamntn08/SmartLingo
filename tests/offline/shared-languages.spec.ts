@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons, lessons } from '@smartlingo/content';
-import { buildAcceptedSentence, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -39,6 +39,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   await openLessonFromTopics(page, lessons[0]);
+  await openKeyPhrases(page);
   const french = lessons[0].vocabulary[0];
   await page.getByRole('button', { name: `Save ${french.target}`, exact: true }).click();
   await expect(page.getByRole('button', { name: `Save ${french.target}`, exact: true })).toBeDisabled();
@@ -54,14 +55,14 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   const lesson = japaneseLessons[0]; const japanese = lesson.vocabulary[0];
   await openTopic(cold, lesson.topic);
   await cold.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
+  await expect(cold.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+  await cold.reload();
+  await expect(cold.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+  await openKeyPhrases(cold);
   const card = cold.getByTestId(`vocabulary-${japanese.id}`);
   await expect(card.getByText(japanese.exampleMeaning, { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true }).click();
   await expect(cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true })).toBeDisabled();
-  await cold.getByRole('button', { name: /Continue to dialogue/ }).click();
-  await expect(cold.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
-  await cold.reload();
-  await expect(cold.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await cold.getByRole('button', { name: /Try meaning practice/ }).click();
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
   await cold.getByRole('button', { name: /Build a sentence/ }).click();

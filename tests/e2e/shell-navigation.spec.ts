@@ -1,4 +1,4 @@
-import { openTopic } from './learner-journeys';
+import { openKeyPhrases, openTopic } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
@@ -58,6 +58,7 @@ test('Back and Forward restore shell screens and a bookmarked lesson keeps its l
 test('browser Back keeps a failed learning save on screen for dismissal or retry', async ({ page }) => {
   await page.goto('/learn/fr/topics/Restaurant');
   await page.getByRole('button', { name: 'Open At the restaurant', exact: true }).click();
+  await openKeyPhrases(page);
   await page.evaluate(() => {
     const add = IDBObjectStore.prototype.add;
     IDBObjectStore.prototype.add = function (...args: Parameters<typeof add>) {
@@ -65,7 +66,7 @@ test('browser Back keeps a failed learning save on screen for dismissal or retry
       return add.apply(this, args);
     };
   });
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  await page.getByRole('button', { name: 'Try picture practice', exact: true }).click();
   const dismiss = page.getByRole('button', { name: 'Dismiss and continue', exact: true });
   await expect(dismiss).toBeVisible();
   const failedPlace = page.url();
@@ -76,6 +77,8 @@ test('browser Back keeps a failed learning save on screen for dismissal or retry
   await expect(page).toHaveURL(failedPlace);
   await expect(dismiss).toBeVisible();
   await dismiss.click();
+  await page.goBack();
+  await expect(page).toHaveURL(/\/dialogue$/);
   await page.goBack();
   await expect(page).toHaveURL(/\/learn\/fr\/topics\/Restaurant$/);
 });
@@ -99,6 +102,7 @@ test('hash navigation cancels hidden learner speech and preserves the mounted le
   const lesson = japaneseLessons[0]!;
   await openTopic(page, lesson.topic);
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
+  await openKeyPhrases(page);
   const word = lesson.vocabulary[0]!;
   await page.getByTestId(`vocabulary-${word.id}`).getByRole('button', { name: `Listen to ${word.target}`, exact: true }).click();
   await expect.poll(() => page.evaluate(() => sessionStorage.getItem('shell-playing'))).toBe(word.target);
@@ -109,7 +113,6 @@ test('hash navigation cancels hidden learner speech and preserves the mounted le
   await page.getByRole('button', { name: /Return to learning/ }).click();
   await expect(page.getByRole('heading', { name: lesson.subtitle, exact: true })).toBeVisible();
 
-  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
   await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
   // This unsaved activity is distinct from the persisted dialogue resume point.
   const activity = page.getByRole('heading', { name: lesson.pictureActivity.prompt, exact: true });

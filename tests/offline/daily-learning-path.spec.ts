@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openProfileSection } from '../e2e/learner-journeys';
+import { guidedLessonButton, openProfileSection } from '../e2e/learner-journeys';
 
 test('a downloaded course opens related practice and returns to the exact study section offline', async ({ request, page, context, baseURL }) => {
   await request.post('/__test__/mode');
@@ -16,14 +16,14 @@ test('a downloaded course opens related practice and returns to the exact study 
   await cold.goto(baseURL!);
   const button = (name: string) => cold.getByRole('button', { name, exact: true });
   await button('Learn').click();
-  await button('Open daily course').click();
+  await guidedLessonButton(cold).click();
   await button('Next section').click();
   await button('Skip practice').click();
   const related = cold.getByTestId('daily-related-practice');
   await expect(related).toBeVisible();
   const reflectionUrl = cold.url();
   await related.getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
-  await expect(cold).toHaveURL(/\/vocabulary\?course=/);
+  await expect(cold).toHaveURL(/\/dialogue\?course=/);
   await cold.reload();
   await button('Back to guided lesson').click();
   await expect(cold).toHaveURL(reflectionUrl);

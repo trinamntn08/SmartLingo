@@ -86,14 +86,14 @@ Historical starting scope, retained to explain the milestone design. The current
 
 ## 4. Learning flow
 
-Implemented entry: choose French or Japanese, then use Today or Learn with independent language-scoped history. Japanese recommends basic kana first; vocabulary browsing remains free. Planned fuller onboarding: choose beginner/A1/A2 self-assessment, reason for learning, interests, and a proposed 10-minute daily goal. All choices should remain editable and skippable. Do not treat self-assessment or app activity as a certified level.
+Choose French or Japanese, then start the recommended lesson from the top of Today. A returning learner can continue from Today in one action. Japanese recommends basic kana first, with a guided course and short topic lessons also available. Planned onboarding includes editable, optional self-assessment, study goals and interests. Activity records describe practice.
 
 Today: continue a lesson, review due items, or start a suggested short session. Do not punish missed days.
 
 Lesson sequence:
 1. State a concrete outcome: e.g. order a drink politely.
-2. Introduce 6–10 useful items with meaning, picture where appropriate, and audio.
-3. Show these in a short sentence/dialogue. Display meanings, translations and grammar explanations directly in study views (owner preference updated 2026-11-14).
+2. Start with a short, bilingual dialogue. Display translations and grammar explanations directly in study views.
+3. Study 6–10 key phrases in context with visible meanings, pictures where appropriate and audio.
 4. Practise matching and sentence building with helpful hints.
 5. Attempt recall with reduced support.
 6. Offer a contextual speaking role-play.
@@ -142,7 +142,7 @@ Create original lessons and examples using reputable public references for resea
 
 Use coherent topic banks, normally 30–50 distinct words/phrases across short 6–10-item lessons. The 24-expression greetings opening is an intentional compact exception. Foundation and A2-only banks are valid when the task demands justify them. The [content guide](docs/CONTENT_GUIDE.md) owns authoring rules; the [catalogue](docs/COURSE_CATALOGUE.md) lists bundled content and the [review pack](docs/curriculum/README.md) holds unpublished refinements, recycling and B1/B2 extension goals. Word counts and lesson completion do not establish complete CEFR coverage.
 
-Provide topic discovery and switching in Learn, with search and a clear All topics return. Clicking SmartLingo returns home. Keep the searchable word grid and full lesson vocabulary with visible English support. Topic pages place vocabulary above the lesson list and offer a direct jump to the lessons. Disclose synthetic speech in Profile rather than repeating labels beside every speaker. [Word-grid baseline](docs/decisions/0010-visual-word-overviews.md) · [Cloud learner updates](docs/decisions/0040-integrated-cloud-learner-updates.md)
+Provide topic discovery and switching in Learn, with search and a clear All topics return. Clicking SmartLingo returns home. Topic pages show the lesson list first, with an optional searchable vocabulary section below. Keep English support visible within both. Disclose synthetic speech in Profile. [Lesson-first navigation](docs/decisions/0041-lesson-first-navigation.md)
 
 Use simple illustrations for objects/actions when clear. Use SmartLingo-generated photographs selectively for places and practical contexts. Abstract words need not have artificial pictures. Include meaningful alt text and avoid ambiguous exercise images.
 
@@ -157,7 +157,7 @@ Current learner navigation: homepage language choice, then Today, Learn, Review,
 Owner direction, 2026-11-22. Browser Back and Forward now cover learner screens and activity steps in the local web preview, with direct URLs for lessons and sections. [Browser navigation and validation plan](docs/plans/0045-web-navigation-and-lesson-links.md)
 
 - French Today recommends a guided lesson. Learn opens the same lesson and saved section and lets learners explore vocabulary, lessons, listening and speaking. Japanese retains its kana-first recommendation. At the end of a French guided lesson, relevant library lessons offer optional practice with a return to that study section. Review opens saved words.
-- Learn: Japanese letters when relevant, Vocabulary & lessons with topic cards/filters/search, Listening & videos and Speaking.
+- Learn: Japanese letters when relevant, Lessons with topic cards and filters, Listening & videos and Speaking.
 - Topic: numbered lesson cards with useful outcomes and saved progress, plus direct continuation from the completed lesson.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
 - Vocabulary: article + word, visible meaning, example/translation, explanation, image, audio, notebook action.

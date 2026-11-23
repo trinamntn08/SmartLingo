@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
-import { buildAcceptedSentence, openTopic } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openTopic, openTopicVocabulary } from './learner-journeys';
 
 const [first, second, third] = lessons.filter(lesson => lesson.id.startsWith('fr.greetings.'));
 
-test('topic cards preserve order and continue to the next lesson after completion', async ({ page, context }) => {
+test('topic cards preserve order and continue to the next lesson after completion', async ({ page, context }, info) => {
+  if (info.project.name === 'small-screen') await page.setViewportSize({ width: 320, height: 740 });
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/today/fr');
   await openTopic(page, first.topic);
@@ -16,7 +17,12 @@ test('topic cards preserve order and continue to the next lesson after completio
   const lessonList = page.getByRole('heading', { name: 'Lessons in this topic', exact: true });
   const wordBank = page.getByRole('heading', { name: /^Vocabulary ·/ });
   await expect(lessonList).toBeVisible();
-  expect((await wordBank.boundingBox())!.y).toBeLessThan((await lessonList.boundingBox())!.y);
+  await expect(wordBank).toHaveCount(0);
+  await expect(button('Jump to lessons')).toHaveCount(0);
+  await expect(firstCard.getByRole('button')).toBeInViewport({ ratio: 1 });
+  await openTopicVocabulary(page);
+  expect((await lessonList.boundingBox())!.y).toBeLessThan((await wordBank.boundingBox())!.y);
+  await button('Topic vocabulary').click();
   await expect(cards.getByRole('button', { name: /^Open / })).toHaveCount(3);
   await expect(firstCard.getByText('Lesson 1', { exact: true })).toBeVisible();
   await expect(firstCard.getByText('Up next', { exact: true })).toBeVisible();
@@ -30,17 +36,13 @@ test('topic cards preserve order and continue to the next lesson after completio
   await expect(cards.getByRole('button', { name: /^Open / })).toHaveCount(1);
   await expect(secondCard.getByText('Lesson 2', { exact: true })).toBeVisible();
   await search.clear();
-  const topicUrl = page.url();
-  await button('Jump to lessons').press('Enter');
-  await expect(lessonList).toBeFocused();
-  await expect(lessonList).toBeInViewport();
-  await expect(page).toHaveURL(topicUrl);
 
   await button(`Open ${first.subtitle}`).press('Enter');
   await expect(page.getByText('Lesson 1 of 3', { exact: true })).toBeVisible();
   const next = button(`Next lesson: ${second.subtitle}`);
   await expect(next).toHaveCount(0);
-  await button('Continue to dialogue').click();
+  await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+  await openKeyPhrases(page);
   await expect(page.getByTestId('lesson-stage-heading')).toBeFocused();
   await button('Try meaning practice').click();
   const match = first.vocabulary.find(entry => entry.id === first.pictureActivity.entryId)!;

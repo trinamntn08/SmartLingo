@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { guidedLessonButton } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
@@ -6,22 +7,24 @@ for (const locale of ['fr', 'ja'] as const) {
   test(`${locale} Today prioritises study and keeps saved words in Review`, async ({ page }, info) => {
     if (info.project.name === 'small-screen') await page.setViewportSize({ width: 320, height: 740 });
     await page.route('**/127.0.0.1:3001/**', route => route.abort());
-    await page.goto(`/today/${locale}`);
+    await page.goto('/');
 
     const button = (name: string) => page.getByRole('button', { name, exact: true });
     const recommendation = page.getByTestId('today-next-step').getByRole('button');
-    const course = button('Open daily course');
-    const vocabulary = button('Vocabulary & lessons');
+    await button(locale === 'fr' ? 'Learn French' : 'Learn Japanese').click();
+    const course = guidedLessonButton(page);
+    const vocabulary = button('Browse lessons');
     await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
     await expect(page.getByText('Open your notebook', { exact: true })).toHaveCount(0);
     await expect(recommendation).toHaveCount(1);
+    await expect(recommendation).toBeInViewport();
     await expect(course).toHaveCount(1);
     if (locale === 'ja') {
       await recommendation.focus();
       await page.keyboard.press('Tab');
       await expect(course).toBeFocused();
     } else {
-      await expect(recommendation).toHaveAccessibleName('Open daily course');
+      await expect(recommendation).toHaveAccessibleName('Start lesson');
       await course.focus();
     }
     await page.keyboard.press('Tab');

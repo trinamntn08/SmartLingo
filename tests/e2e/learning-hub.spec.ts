@@ -46,7 +46,7 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     for (const tab of ['Today', 'Learn', 'Review', 'Report', 'Profile']) await expect(page.getByRole('button', { name: tab, exact: true })).toBeVisible();
     for (const tab of ['Explore', 'Practice']) await expect(page.getByRole('button', { name: tab, exact: true })).toHaveCount(0);
     await page.getByRole('button', { name: 'Learn', exact: true }).click();
-    if (language === 'ja-JP') await page.getByRole('button', { name: 'Vocabulary & lessons', exact: true }).click();
+    if (language === 'ja-JP') await page.getByRole('button', { name: 'Lessons', exact: true }).click();
     await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
     await expect(page.getByTestId('listening-resources')).toHaveCount(0);
     await page.getByRole('button', { name: 'Listening & videos', exact: true }).click();
@@ -159,7 +159,7 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     await expect(speaking.getByRole('button', { name: 'Listen to partner', exact: true })).toBeVisible();
     await speaking.getByRole('button', { name: 'Next line', exact: true }).click();
     await expect(speaking.getByTestId('speaking-line')).toContainText(lesson.dialogue[1]!.meaning);
-    await page.getByRole('button', { name: 'Vocabulary & lessons', exact: true }).click();
+    await page.getByRole('button', { name: 'Lessons', exact: true }).click();
     await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(remoteRequests).toEqual([]);

@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Put lessons first in the learner
+
+- Request. Let learners start directly from the homepage in one or two actions and make vocabulary a secondary destination.
+- Start. At 21:43 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `af5c4ff9b2503ad05e89fd7c0e0c15a5e994af99`, ahead/behind `0/0`. The new `work` ref at `1c6e943` shares the older scaffold head.
+- Implementation. Today leads with a direct start or resume action for the recommended activity. Topic pages lead with ordered lesson cards and offer vocabulary in a disclosure below. Fresh short lessons start with the bilingual dialogue and then guide learners through key phrases and practice. On phones, topic study navigation follows the lesson list so a long title leaves room for the first lesson action. [Execution plan](plans/0052-lesson-first-learner.md)
+- Review. Three UI builders and an independent read-only reviewer used inherited settings. The reviewer verified keyboard flow, the fully visible first French dialogue line on a narrow phone viewport, the vocabulary review retry after a simulated storage failure, and restoration of expanded vocabulary on Back.
+- Browser verification. Repository and TypeScript checks, 18 tooling tests, 269 application tests and Git whitespace checks passed. The broad Chromium run passed 182 cases with one existing skip. Focused runs covered the other seven after correcting stale assertions and fitting the full Start lesson action for a long topic title at 320 px. The matching preview manifest and learner bundle confirmed build `58daf5a5e2e1` on `http://localhost:8082`, with French homepage-to-lesson and topic walkthroughs at 320, 958 and 1,440 px and a Japanese homepage-to-Hiragana walkthrough at 320 px.
+- Offline verification. The broad run passed 27 of 30 cases. Both related-practice failures came from referencing a closed test page and the report test hit a shared artifact directory race. The corresponding fixes and isolated artifact output yielded 14 passing cases on the final export, including all three reruns. Every distinct tested offline case passed across the runs.
+- Outcome. The commit containing this entry is the lesson-first checkpoint. Next is owner review at the stable preview address. Physical devices and screen readers remain unverified.
+
 ## 2026-11-23 Integrate both Cloud learner updates
 
 - Request. Bring Cloud UI redesign `563fdaa` and French/Japanese curriculum update `47eebaf` into the established local preview.

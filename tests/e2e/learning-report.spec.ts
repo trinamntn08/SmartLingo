@@ -1,4 +1,4 @@
-import { openLessonFromTopics, openTopic } from './learner-journeys';
+import { openKeyPhrases, openLessonFromTopics, openTopic } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
@@ -184,6 +184,7 @@ test('unavailable storage offers report retry without fabricated zeroes while le
     await expect(button(page, 'Retry report')).toBeVisible();
     await openTopic(page, lesson.topic);
     await button(page, `Open ${lesson.subtitle}`).click();
+    await openKeyPhrases(page);
     await expect(page.getByTestId(`vocabulary-${lesson.vocabulary[0].id}`)).toBeVisible();
   }
 });

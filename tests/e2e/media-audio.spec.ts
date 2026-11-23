@@ -1,4 +1,4 @@
-import { openRestaurant, openProfileSection } from './learner-journeys';
+import { openTopicVocabulary, openRestaurant, openProfileSection } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 
 test('French voice and speed choices survive reload and apply to lesson playback without AI', async ({ page }, info) => {
@@ -48,6 +48,7 @@ test('generated coffee photograph loads locally and falls back to an illustratio
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
+  await openTopicVocabulary(page);
   const card = page.getByTestId('vocabulary-fr.cafe');
   const photo = card.locator('img[src^="/generated-vocabulary-photos/"]');
   await expect(photo).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
@@ -63,6 +64,7 @@ test('generated coffee photograph loads locally and falls back to an illustratio
   await page.reload();
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
+  await openTopicVocabulary(page);
   await expect(card.locator('img[alt]:not([alt=""])')).toHaveAttribute('src', /^data:image\/svg/);
   await expect(card.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
 });

@@ -9,6 +9,7 @@ import type { LearningModel } from './useLearning';
 import { VocabularyCard } from './VocabularyCard';
 import { TopicCover } from './TopicCover';
 import { TopicLessonCards } from './TopicLessonCards';
+import { useVisitState } from '../app/WebNavigation';
 import { routeHref, topicRouteKey } from '../app/routes';
 import { routePress } from './routePress';
 
@@ -32,48 +33,40 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
   search: CatalogueSearch; disabled: boolean;
 }) {
   const { query, level, onQueryChange: setQuery, onLevelChange: setLevel } = search;
-  const phone = useWindowDimensions().width < tokens.layout.compactBreakpoint;
+  const { width } = useWindowDimensions();
+  const phone = width < tokens.layout.compactBreakpoint;
+  const compactLibrary = width < tokens.layout.desktopNavBreakpoint;
   const lessonHeadingId = useId();
   const selected = topics.find(topic => topic.name === selectedTopic);
+  const count = selected?.lessons.length ?? 0;
+  const lessonCount = `${count} short ${count === 1 ? 'lesson' : 'lessons'}`;
   const visibleTopics = topics.filter(topic => topic.lessons.some(lesson => matchesLesson(lesson, query, level)));
   const topicLessons = selected?.lessons.filter(lesson => matchesLesson(lesson, query, level)) ?? [];
-  const topicQuery = selected && normalizeSearch(selected.name).includes(normalizeSearch(query));
-  const words = groupLessonTopics(topicLessons).flatMap(topic => topic.vocabulary)
-    .filter(entry => topicQuery || matchesVocabulary(entry, query));
 
   function clearFilters() {
     setQuery('');
     setLevel('All');
   }
 
-  function jumpToLessons() {
-    if (Platform.OS !== 'web') return;
-    const heading = document.getElementById(lessonHeadingId);
-    if (!heading) return;
-    heading.tabIndex = -1;
-    heading.focus({ preventScroll: true });
-    heading.scrollIntoView({ block: 'start', inline: 'nearest' });
-  }
-
-  return <View style={{ gap: 16, minWidth: 0 }}>
+  return <View style={[layout.catalogue, selected && phone && layout.mobileTopic]}>
     {selected ? <>
-      <View style={[s.row, { gap: 8 }]}>
-        <Button compact quiet label="All topics" disabled={disabled} onPress={() => onSelectTopic(null)}>← All topics</Button>
-        <Text style={s.muted}>{languageNames[language]} / Library</Text>
-      </View>
-      <View style={{ flexDirection: phone ? 'column' : 'row', alignItems: 'stretch', gap: 16 }}>
-        <View style={{ flex: 1, minWidth: 0, gap: 6, justifyContent: 'center' }}>
-          <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>{selected.name}</Text>
-          <Text style={s.muted}>{selected.vocabulary.length} words · {selected.lessons.length} short {selected.lessons.length === 1 ? 'lesson' : 'lessons'}</Text>
+      <View style={layout.topicHeader}>
+        <View style={layout.topicIntro}>
+          <View style={[s.row, layout.breadcrumb]}>
+            <Button compact quiet label="All topics" disabled={disabled} icon="arrow-left" onPress={() => onSelectTopic(null)}>All topics</Button>
+            <Text style={layout.topicDetail}>{phone ? lessonCount : languageNames[language]}</Text>
+          </View>
+          <Text accessibilityRole="header" aria-level={1} style={[s.title, phone && layout.mobileTitle]}>{selected.name}</Text>
+          {!phone && <Text style={layout.topicDetail}>{lessonCount}</Text>}
         </View>
-        <View style={{ width: phone ? '100%' : 250, maxHeight: phone ? 104 : 136, minWidth: 0, borderRadius: 14, overflow: 'hidden', justifyContent: 'center' }}><TopicCover key={selected.name} topic={selected} hero /></View>
+        {!phone && <View style={layout.topicCover}><TopicCover key={selected.name} topic={selected} hero /></View>}
       </View>
     </> : <View style={{ gap: 4 }}>
       <Text style={s.eyebrow}>{languageNames[language]} / Library</Text>
       <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>Explore topics</Text>
       <Text style={s.muted}>{topics.length} everyday topics · {[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}</Text>
     </View>}
-    <CatalogueFilters search={search} lessons={lessons} compact={phone} />
+    {(!selected || !compactLibrary) && <CatalogueFilters search={search} lessons={lessons} compact={phone} />}
     {!selected ? <>
       {!topics.length ? <View style={s.card}><Text style={s.heading}>No topics available.</Text>
         <Text style={s.body}>Your lesson catalogue is empty. Try loading the published catalogue from Profile.</Text></View>
@@ -81,22 +74,41 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
       {!!visibleTopics.length && (query.trim() || level !== 'All') && <Text accessibilityLiveRegion="polite" style={s.muted}>{visibleTopics.length} {visibleTopics.length === 1 ? 'topic' : 'topics'} to explore</Text>}
       {!!visibleTopics.length && <TopicGrid topics={visibleTopics} model={model} language={language} onSelect={onSelectTopic} disabled={disabled} />}
     </> : <>
-      {topicLessons.length ? <>
-        <View style={[s.row, layout.sectionHeading]}>
-          <Text accessibilityRole="header" style={s.heading}>Vocabulary · {words.length}</Text>
-          {Platform.OS === 'web' && <Button compact trailingIcon="chevron-down"
-            label="Jump to lessons" onPress={jumpToLessons}>Jump to lessons</Button>}
-        </View>
-        {!words.length && <Text style={s.muted}>No word matches this search. The lesson matches its title or situation.</Text>}
+      <TopicLessonCards language={language} lessons={selected.lessons} visibleLessons={topicLessons}
+        headingId={lessonHeadingId} events={model.events} progressAvailable={!model.loadError} compact={phone}
+        afterFirst={compactLibrary ? <CatalogueFilters search={search} lessons={lessons} compact={phone} /> : undefined}
+        onOpen={onOpen} disabled={disabled} />
+      {!topicLessons.length && <EmptyResults onClear={clearFilters} />}
+      <TopicVocabulary topic={selected} filteredLessons={topicLessons} query={query} compact={phone} model={model} language={language} />
+    </>}
+  </View>;
+}
+
+function TopicVocabulary({ topic, filteredLessons, query, compact, model, language }: {
+  topic: LessonTopic; filteredLessons: Lesson[]; query: string; compact: boolean; model: LearningModel; language: TargetLanguage;
+}) {
+  const contentId = useId();
+  const [expanded, setExpanded] = useVisitState('topic-vocabulary-expanded', false);
+  const matchesTopic = normalizeSearch(topic.name).includes(normalizeSearch(query));
+  const words = expanded ? groupLessonTopics(filteredLessons).flatMap(group => group.vocabulary)
+    .filter(entry => matchesTopic || matchesVocabulary(entry, query)) : [];
+
+  return <View style={layout.vocabulary}>
+    <View style={[s.row, layout.vocabularyHeader]}>
+      <Button compact quiet label="Topic vocabulary" icon="book" expanded={expanded} controls={contentId}
+        onPress={() => setExpanded(value => !value)}>Topic vocabulary <Text aria-hidden>{expanded ? '−' : '+'}</Text></Button>
+      <Text style={layout.topicDetail}>{topic.vocabulary.length} words and phrases</Text>
+    </View>
+    <View nativeID={contentId} style={expanded ? layout.wordBank : { display: 'none' }}>
+      {expanded && <>
+        <Text accessibilityRole="header" aria-level={2} style={s.heading}>Vocabulary · {words.length}</Text>
+        {!words.length && <Text style={s.muted}>No vocabulary matches these filters.</Text>}
         <View style={[s.split, { gap: 16 }]}>{words.map(entry =>
-          <View key={`${selected.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: phone ? '100%' : 350, minWidth: 0 }}>
+          <View key={`${topic.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 350, minWidth: 0 }}>
             <VocabularyCard entry={entry} model={model} language={language} />
           </View>)}</View>
-        <TopicLessonCards language={language} lessons={selected.lessons} visibleLessons={topicLessons}
-          headingId={lessonHeadingId} events={model.events} progressAvailable={!model.loadError} compact={phone}
-          onOpen={onOpen} disabled={disabled} />
-      </> : <EmptyResults onClear={clearFilters} />}
-    </>}
+      </>}
+    </View>
   </View>;
 }
 
@@ -181,6 +193,17 @@ function EmptyResults({ onClear }: { onClear: () => void }) {
 }
 
 const layout = StyleSheet.create({
+  catalogue: { gap: tokens.space.lg, minWidth: 0 },
+  mobileTopic: { gap: tokens.space.md },
+  topicHeader: { minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: tokens.space.lg },
+  topicIntro: { flex: 1, minWidth: 0, gap: tokens.space.xs },
+  breadcrumb: { gap: tokens.space.xs },
+  topicDetail: { ...tokens.typography.caption, color: colors.muted },
+  mobileTitle: { fontSize: 29, lineHeight: 34, letterSpacing: -0.6 },
+  topicCover: { width: 184, borderRadius: tokens.radius.md, overflow: 'hidden' },
+  vocabulary: { minWidth: 0, borderTopColor: colors.line, borderTopWidth: 1, paddingTop: tokens.space.sm, gap: tokens.space.md },
+  vocabularyHeader: { justifyContent: 'space-between', gap: tokens.space.xs },
+  wordBank: { minWidth: 0, gap: tokens.space.md },
   filters: { gap: tokens.space.sm },
   search: { minHeight: tokens.control.inputHeight, minWidth: 0, flexDirection: 'row', alignItems: 'center',
     gap: tokens.space.sm, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.inputBorder,
@@ -189,7 +212,6 @@ const layout = StyleSheet.create({
     flex: 1, paddingVertical: 8, paddingRight: 7, outlineWidth: 0 },
   levels: { gap: tokens.space.xs, paddingVertical: 3 },
   focus: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineOffset: 2, outlineStyle: 'solid' },
-  sectionHeading: { justifyContent: 'space-between', rowGap: tokens.space.sm, marginTop: tokens.space.sm },
   tile: { minWidth: 0, flexShrink: 1, gap: 0, padding: 0, borderBottomWidth: 3, boxShadow: 'none' },
   tileHover: { borderColor: colors.primary, backgroundColor: colors.sageTint },
   tileArt: { borderTopLeftRadius: tokens.radius.card - 1, borderTopRightRadius: tokens.radius.card - 1, overflow: 'hidden' },

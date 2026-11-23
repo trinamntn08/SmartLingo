@@ -61,3 +61,21 @@ test('device speech uses French and settles playback, replacement, cancellation,
     else Reflect.deleteProperty(globalThis, 'SpeechSynthesisUtterance');
   }
 });
+
+test('Japanese device speech requires a Japanese voice and settles cancellation', async () => {
+  const { DeviceSpeechPlayer } = await import('../src/audio/index');
+  let voices = [{ lang: 'fr-FR' }] as SpeechSynthesisVoice[];
+  let current: SpeechSynthesisUtterance | undefined;
+  const player = new DeviceSpeechPlayer({
+    synthesis: () => ({ getVoices: () => voices, speak: utterance => { current = utterance; }, cancel: () => {} }),
+    utterance: text => ({ text } as SpeechSynthesisUtterance),
+  }, undefined, 'ja-JP');
+  assert.equal(player.available(), false);
+  await assert.rejects(player.speak('こんにちは'), /No Japanese device voice/);
+  voices = [{ lang: 'ja-JP' }] as SpeechSynthesisVoice[];
+  assert.equal(player.available(), true);
+  const playing = player.speak('こんにちは');
+  assert.equal(current?.lang, 'ja-JP');
+  player.stop();
+  await playing;
+});

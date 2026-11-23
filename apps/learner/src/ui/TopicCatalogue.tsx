@@ -5,9 +5,10 @@ import { groupLessonTopics, lessonProgress, matchesLesson, matchesVocabulary, no
 import { Badge, Button } from './controls';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
+import type { Course } from './course';
 import { VocabularyCard } from './VocabularyCard';
 
-export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic, onSelectTopic }: {
+export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic, onSelectTopic, course = 'French' }: { course?: Course;
   lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; practice: boolean;
   selectedTopic: string | null; onSelectTopic: (name: string | null) => void;
 }) {
@@ -27,16 +28,16 @@ export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic
     <View style={{ gap: 6 }}>
       <Text accessibilityRole="header" style={s.title}>{selected?.name ?? (practice ? 'Choose your practice.' : 'Explore topics')}</Text>
       <Text style={s.muted}>{selected ? `${selected.vocabulary.length} words · ${selected.lessons.length} short lessons`
-        : `${topics.length} everyday topics · ${lessons.some(lesson => lesson.level === 'foundation') ? 'Foundations, A1–A2' : 'A1–A2'}`}</Text>
+        : `${topics.length} everyday topics · ${course === 'Japanese' ? 'Beginner foundations' : lessons.some(lesson => lesson.level === 'foundation') ? 'Foundations, A1–A2' : 'A1–A2'}`}</Text>
     </View>
-    <TextInput accessibilityLabel="Search lessons" placeholder="Search topics or words in French or English"
+    <TextInput accessibilityLabel="Search lessons" placeholder={`Search topics or words in ${course} or English`}
       value={query} onChangeText={setQuery} style={s.input} clearButtonMode="while-editing" />
     <View style={s.row}>{(['All', 'foundation', 'A1', 'A2'] as const).map(value => <Button key={value} selected={level === value}
       label={value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations level' : `${value} level`} onPress={() => setLevel(value)}>{value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations' : value}</Button>)}</View>
     {!selected ? <>
       {!topics.length ? <View style={s.card}><Text style={s.heading}>No topics available.</Text>
         <Text style={s.body}>Your lesson catalogue is empty. Try loading the published catalogue from Profile.</Text></View>
-        : !visibleTopics.length && <EmptyResults onClear={() => { setQuery(''); setLevel('All'); }} />}
+        : !visibleTopics.length && <EmptyResults course={course} onClear={() => { setQuery(''); setLevel('All'); }} />}
       <View style={s.split}>{visibleTopics.map(topic => {
         const completed = topic.lessons.filter(lesson => lessonProgress(lesson, model.events).completed).length;
         return <View key={topic.name} style={[s.card, s.column, { gap: 14, flexBasis: 270, padding: 20 }]}>
@@ -50,7 +51,7 @@ export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic
       })}</View>
     </> : <>
       <Text accessibilityRole="header" style={s.heading}>Vocabulary · {words.length}</Text>
-      {!topicLessons.length ? <EmptyResults onClear={() => { setQuery(''); setLevel('All'); }} />
+      {!topicLessons.length ? <EmptyResults course={course} onClear={() => { setQuery(''); setLevel('All'); }} />
         : !words.length && <Text style={s.muted}>No word matches this search. The lesson matches its title or situation.</Text>}
       <View style={[s.split, { gap: 18 }]}>{words.map(entry =>
         <View key={`${selected.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: 300, minWidth: 0 }}>
@@ -81,6 +82,6 @@ export function TopicCatalogue({ lessons, model, onOpen, practice, selectedTopic
   </View>;
 }
 
-function EmptyResults({ onClear }: { onClear: () => void }) {
-  return <View style={s.card}><Text style={s.heading}>No matches.</Text><Text style={s.body}>Try a topic, French word or English meaning.</Text><Button onPress={onClear}>Clear search and filters</Button></View>;
+function EmptyResults({ onClear, course }: { course: Course; onClear: () => void }) {
+  return <View style={s.card}><Text style={s.heading}>No matches.</Text><Text style={s.body}>Try a topic, {course} word or English meaning.</Text><Button onPress={onClear}>Clear search and filters</Button></View>;
 }

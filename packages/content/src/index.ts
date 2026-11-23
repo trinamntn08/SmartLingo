@@ -10,11 +10,14 @@ import { communicationTopics } from './topics/communication';
 import { foodTravelTopics } from './topics/food-travel';
 import { studyWorkTopics } from './topics/study-work';
 import { experienceTopics } from './topics/experiences';
+import { cyclingTopic } from './topics/cycling';
+import { householdWasteTopic } from './topics/household-waste';
 
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
 export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
 export { courseSequence, orderCourseLessons } from './course-sequence';
+export { japaneseLessons } from './topics/japanese';
 
 // Original preview curriculum. Publication requires owner review.
 const drafts = [
@@ -310,6 +313,8 @@ const existingLessons: Lesson[] = reuseSharedVocabulary([
   ...studyWorkTopics.flatMap(buildTopic),
   ...communicationTopics.flatMap(buildTopic),
   ...experienceTopics.flatMap(buildTopic),
+  ...buildTopic(cyclingTopic),
+  ...buildTopic(householdWasteTopic),
 ]);
 export const lessons: Lesson[] = orderCourseLessons([
   ...buildGreetingsLessons(existingLessons.flatMap(lesson => lesson.vocabulary)),

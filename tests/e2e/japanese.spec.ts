@@ -1,0 +1,67 @@
+import { expect, test } from '@playwright/test';
+import { japaneseLessons } from '@smartlingo/content';
+import { normalizeAnswer } from '@smartlingo/domain';
+
+const opening = japaneseLessons[0];
+
+test('Japanese shares the lesson journey and keeps notebook, review and progress separate from French', async ({ page, context, isMobile }) => {
+  if (isMobile) await page.setViewportSize({ width: 320, height: 844 });
+  await context.route(/127\.0\.0\.1:300[12]\//, route => route.abort());
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/');
+  const selector = page.getByRole('button', { name: 'Learn Japanese', exact: true });
+  await selector.focus();
+  await page.keyboard.press('Enter');
+  await expect(selector).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText(opening.subtitle, { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Start lesson →', exact: true }).click();
+  const entry = opening.vocabulary[0];
+  const card = page.getByTestId(`vocabulary-${entry.id}`);
+  await expect(card.getByText(entry.meaning, { exact: true })).toBeVisible();
+  const withReading = opening.vocabulary.find(word => word.reading && word.reading !== word.target)!;
+  await expect(page.getByTestId(`vocabulary-${withReading.id}`).getByLabel(`Reading ${withReading.reading}`, { exact: true })).toBeVisible();
+  await expect(card.getByRole('button', { name: `Listen to ${entry.target}`, exact: true })).toBeVisible();
+  await card.getByRole('button', { name: `Save ${entry.target}`, exact: true }).click();
+  await expect(card.getByText(`Saved ${entry.target} to your notebook.`, { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Continue to dialogue/ }).click();
+  await expect(page.getByText(opening.grammar.explanation, { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(selector).toHaveAttribute('aria-selected', 'true');
+  await page.getByRole('button', { name: /Continue your lesson/ }).click();
+  await expect(page.getByRole('heading', { name: 'A small conversation', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Try meaning practice/ }).click();
+  const target = opening.vocabulary.find(word => word.id === opening.pictureActivity.entryId)!;
+  await page.getByRole('button', { name: target.target, exact: true }).click();
+  await page.getByRole('button', { name: /Build a sentence/ }).click();
+  const remaining = [...opening.sentenceActivity.tokens];
+  let answer = normalizeAnswer(opening.sentenceActivity.answers[0]);
+  while (remaining.length) {
+    const index = remaining.findIndex(token => answer.startsWith(normalizeAnswer(token)));
+    if (index < 0) throw new Error(`Cannot build Japanese answer ${answer}`);
+    const token = remaining.splice(index, 1)[0];
+    await page.getByRole('button', { name: token, exact: true }).click();
+    answer = answer.slice(normalizeAnswer(token).length);
+  }
+  await page.getByRole('button', { name: 'Check sentence', exact: true }).click();
+  await expect(page.getByText('That works. Your sentence is saved.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue →', exact: true }).click();
+  await page.getByRole('button', { name: 'Finish and save session', exact: true }).click();
+  await expect(page.getByText('Session saved', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Recognise your saved Japanese', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Reveal meaning', exact: true }).click();
+  await page.getByRole('button', { name: 'Remembered', exact: true }).click();
+  await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Learn French', exact: true }).click();
+  await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'A fresh page.', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
+  await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await expect(page.getByTestId('notebook-entries').getByRole('heading', { name: entry.target, exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Open curriculum editor', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Load published lessons', exact: true })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+});

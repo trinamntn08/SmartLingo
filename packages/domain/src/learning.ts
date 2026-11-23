@@ -32,7 +32,11 @@ export interface LearningRepository {
 }
 
 export function normalizeAnswer(answer: string): string {
-  return answer.normalize('NFC').toLocaleLowerCase('fr-FR').replace(/[’‘]/g, "'")
+  const normalized = answer.normalize('NFC');
+  if (/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(normalized)) {
+    return normalized.replace(/\s+/g, '').replace(/[。！？.!?]+$/, '');
+  }
+  return normalized.toLocaleLowerCase('fr-FR').replace(/[’‘]/g, "'")
     .replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '').trim();
 }
 export function checkAnswer(answer: string, exercise: Lesson['sentenceActivity']): 'correct' | 'almost' | 'incorrect' {

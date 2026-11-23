@@ -29,8 +29,9 @@ export function VocabularyCard({ entry, model }: { entry: Vocabulary; model: Lea
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text accessibilityRole="header" style={[s.heading, { flexShrink: 1, minWidth: 0 }]}>{entry.target}</Text>
           {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
-          <Speak text={entry.target} onError={setVoiceError} />
+          <Speak language={entry.id.startsWith('ja.') ? 'ja-JP' : 'fr-FR'} text={entry.target} onError={setVoiceError} />
         </View>
+        {!!entry.reading && entry.reading !== entry.target && <Text accessibilityLabel={`Reading ${entry.reading}`} style={s.muted}>{entry.reading}</Text>}
         <Text style={s.body}>{entry.meaning}</Text>
       </View>
     </View>

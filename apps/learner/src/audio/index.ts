@@ -23,9 +23,12 @@ const browserSpeech: SpeechEnvironment = {
 
 export class DeviceSpeechPlayer implements AudioPlayer {
   private cancelPending?: () => void;
-  constructor(private readonly environment: SpeechEnvironment = browserSpeech, private readonly preferences: AudioPreferenceStore = audioPreferences) {}
+  constructor(private readonly environment: SpeechEnvironment = browserSpeech, private readonly preferences: AudioPreferenceStore = audioPreferences, private readonly language: 'fr-FR' | 'ja-JP' = 'fr-FR') {}
+  private selectVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
+    return this.language === 'ja-JP' ? voices.find(voice => /^ja(?:-|$)/i.test(voice.lang)) : selectFrenchVoice(voices, this.preferences.get().voiceId);
+  }
   available(): boolean {
-    try { return !!this.environment.utterance('') && !!selectFrenchVoice(this.environment.synthesis()?.getVoices() ?? [], this.preferences.get().voiceId); }
+    try { return !!this.environment.utterance('') && !!this.selectVoice(this.environment.synthesis()?.getVoices() ?? []); }
     catch { return false; }
   }
   speak(text: string): Promise<void> {
@@ -36,15 +39,15 @@ export class DeviceSpeechPlayer implements AudioPlayer {
     const preferences = this.preferences.get();
     try {
       utterance = this.environment.utterance(text);
-      voice = selectFrenchVoice(synthesis?.getVoices() ?? [], preferences.voiceId);
+      voice = this.selectVoice(synthesis?.getVoices() ?? []);
     } catch { /* Unsupported speech falls back to visible text. */ }
     if (!voice || !utterance || !synthesis) {
-      return Promise.reject(new Error('No French device voice is available. You can continue using the text.'));
+      return Promise.reject(new Error(`No ${this.language === 'ja-JP' ? 'Japanese' : 'French'} device voice is available. You can continue using the text.`));
     }
     return new Promise((resolve, reject) => {
       utterance.voice = voice;
       utterance.lang = voice.lang;
-      utterance.rate = preferences.rate;
+      utterance.rate = this.language === 'ja-JP' ? 0.85 : preferences.rate;
       let settled = false;
       const finish = (error?: Error) => {
         if (settled) return;
@@ -76,3 +79,5 @@ export class DeviceSpeechPlayer implements AudioPlayer {
 
 export const deviceAudio: AudioPlayer = new DeviceSpeechPlayer();
 export const audio: AudioPlayer = new HybridSpeechPlayer(deviceAudio, generatedAudioStore, savedClipPlayer, generatedPreferences, reportAudioNotice);
+
+export const japaneseAudio: AudioPlayer = new DeviceSpeechPlayer(browserSpeech, audioPreferences, 'ja-JP');

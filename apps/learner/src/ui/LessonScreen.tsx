@@ -44,7 +44,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
       <View style={s.row}><Button primary disabled={model.blocked} onPress={reviewVocabulary}>Continue to dialogue →</Button></View>
     </View>}
     {stage === 'dialogue' && <View style={s.card}><Text accessibilityRole="header" style={s.heading}>A small conversation</Text><Text style={s.muted}>Read both roles. Try saying your lines aloud.</Text>
-      {lesson.dialogue.map((line, index) => <DialogueLine key={index} line={line} highlighted={line.role === lesson.role} />)}
+      {lesson.dialogue.map((line, index) => <DialogueLine key={index} language={lesson.language} line={line} highlighted={line.role === lesson.role} />)}
       <View style={s.notice}><Text style={s.eyebrow}>Grammar</Text><Text style={s.heading}>{lesson.grammar.title}</Text><Text style={s.body}>{lesson.grammar.explanation}</Text></View>
       <Button primary onPress={() => setStage('picture')}>{lesson.pictureActivity.mode === 'meaning' ? 'Try meaning practice →' : 'Try picture practice →'}</Button>
     </View>}
@@ -52,7 +52,7 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
     {stage === 'sentence' && <SentenceActivity lesson={lesson} disabled={model.blocked} done={progress.sentenceDone} record={record} onNext={() => setStage('finish')} />}
     {stage === 'finish' && <View style={[s.card, { backgroundColor: '#E6EEDB' }]}>
       <Text style={s.eyebrow}>{progress.completed ? 'Session saved' : 'One final step'}</Text><Text accessibilityRole="header" style={s.title}>{progress.completed ? 'A little more ready for everyday life.' : 'You’ve put the pieces together.'}</Text>
-      <Text style={s.body}>{lesson.outcome}</Text><Text style={s.muted}>Completing this session records your practice. Confidence grows with revisiting and using French in real life.</Text>
+      <Text style={s.body}>{lesson.outcome}</Text><Text style={s.muted}>Completing this session records your practice. Confidence grows with revisiting and using {lesson.language === 'ja-JP' ? 'Japanese' : 'French'} in real life.</Text>
       {!progress.completed && <Button primary disabled={model.blocked || !readyToFinish} onPress={() => record('completion', lesson.id, 'completed')}>Finish and save session</Button>}
       {!readyToFinish && <Text style={s.muted}>Study every word and solve both activities before finishing.</Text>}
       <View style={s.row}><Button onPress={() => setStage('vocabulary')}>Revisit the words</Button><Button primary={progress.completed} onPress={onExit}>Back to lessons →</Button></View>
@@ -62,11 +62,11 @@ export function LessonScreen({ lesson, model, onExit }: { lesson: Lesson; model:
 
 type ActivityProps = { lesson: Lesson; disabled: boolean; done: boolean; record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints?: number, after?: () => void) => void; onNext: () => void };
 
-function DialogueLine({ line, highlighted }: { line: Lesson['dialogue'][number]; highlighted: boolean }) {
+function DialogueLine({ line, highlighted, language }: { language: Lesson['language']; line: Lesson['dialogue'][number]; highlighted: boolean }) {
   const [voiceError, setVoiceError] = useState('');
   return <View style={[s.notice, highlighted && { backgroundColor: '#E5EEDC', marginLeft: 16 }]}>
     <Text style={s.eyebrow}>{line.role}</Text><View style={s.row}>
-      <Text style={[s.heading, { flex: 1, minWidth: 0 }]}>{line.target}</Text><Speak text={line.target} onError={setVoiceError} />
+      <Text style={[s.heading, { flex: 1, minWidth: 0 }]}>{line.target}</Text><Speak language={language === 'ja-JP' ? 'ja-JP' : 'fr-FR'} text={line.target} onError={setVoiceError} />
     </View><Text style={s.body}>{line.meaning}</Text>
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
   </View>;
@@ -82,7 +82,7 @@ function PictureActivity({ lesson, disabled, done, record, onNext }: ActivityPro
     const correct = id === target.id;
     record('picture', target.id, correct ? 'correct' : 'incorrect', Number(hintUsed), () => setFeedback(correct
       ? meaningMode ? 'That’s it. You matched the meaning.' : 'That’s it. You matched the picture.'
-      : meaningMode ? 'Try again. Match the meaning with the French phrase.' : 'Take another look. Compare the object in the picture with the words. You can try again.'));
+      : meaningMode ? 'Try again. Match the meaning with the phrase.' : 'Take another look. Compare the object in the picture with the words. You can try again.'));
   }
   return <View style={s.card}><Text style={s.eyebrow}>{meaningMode ? 'Meaning practice' : 'Picture practice'}</Text><Text accessibilityRole="header" style={s.heading}>{lesson.pictureActivity.prompt}</Text>
     {meaningMode ? <View style={[s.notice, { backgroundColor: '#E7ECD9' }]}><Text accessibilityRole="header" style={s.heading}>{target.meaning}</Text></View>
@@ -100,7 +100,7 @@ function SentenceActivity({ lesson, disabled, done, record, onNext }: ActivityPr
   const [hintUsed, setHintUsed] = useState(false);
   const [feedback, setFeedback] = useState('');
   const exercise = lesson.sentenceActivity;
-  const answer = selected.map(index => exercise.tokens[index]).join(' ');
+  const answer = selected.map(index => exercise.tokens[index]).join(lesson.language === 'ja-JP' ? '' : ' ');
   function check() {
     const result = checkAnswer(answer, exercise);
     record('sentence', exercise.id, result, Number(hintUsed), () => setFeedback(result === 'correct' ? 'That works. Your sentence is saved.' : result === 'almost' ? 'Very close. Check the accents, then try again.' : 'Try a different order. Tap a chosen piece to return it, or use the hint.'));

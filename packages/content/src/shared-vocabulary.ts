@@ -9,6 +9,8 @@ const aliases: Readonly<Record<string, string>> = {
   'fr.health.allergie': 'fr.restaurant.allergy',
   'fr.health.demain': 'fr.bakery.tomorrow',
   'fr.leisure.velo': 'fr.transport.bicycle',
+  'fr.cycling.bike': 'fr.transport.bicycle',
+  'fr.household-waste.lid': 'fr.cooking.lid',
   'fr.essentials.please': 'fr.silvousplait',
   'fr.social.bring': 'fr.restaurant.bring',
   'fr.calendar.tomorrow': 'fr.bakery.tomorrow',

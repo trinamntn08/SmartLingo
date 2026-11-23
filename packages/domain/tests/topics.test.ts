@@ -1,21 +1,18 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lessons, restaurantLesson, courseSequence, orderCourseLessons, previousSeedFingerprints } from '@smartlingo/content';
+import { lessons, japaneseLessons, restaurantLesson, courseSequence, orderCourseLessons, previousSeedFingerprints } from '@smartlingo/content';
 import { checkAnswer, groupLessonTopics, matchesLesson, matchesVocabulary, mergeLessonCatalogue, normalizeAnswer, normalizeSearch, type Lesson, type Vocabulary } from '../src/index';
 
 function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: string[] = [], remaining = exercise.tokens): boolean {
   const prefix = normalizeAnswer(chosen.join(' '));
   if (!remaining.length) return checkAnswer(prefix, exercise) === 'correct';
-  if (prefix && !exercise.answers.some(answer => {
-    const valid = normalizeAnswer(answer);
-    return valid === prefix || valid.startsWith(`${prefix} `);
-  })) return false;
+  if (prefix && !exercise.answers.some(answer => normalizeAnswer(answer).startsWith(prefix))) return false;
   return remaining.some((token, index) => canBuildAcceptedSentence(exercise, [...chosen, token], remaining.filter((_, at) => at !== index)));
 }
 
 test('beginner banks and the compact greeting opening have distinct targets and solvable short lessons', () => {
   const topics = groupLessonTopics(lessons);
-  assert.equal(topics.length, 25);
+  assert.equal(topics.length, 27);
   assert.equal(new Set(lessons.map(lesson => lesson.id)).size, lessons.length);
   const sharedEntries = new Map<string, Vocabulary>();
   for (const topic of topics) {
@@ -54,16 +51,36 @@ test('catalogue search matches English/French words, accents, levels and lesson 
   assert.equal(matchesVocabulary(restaurantLesson.vocabulary[0], 'coffee'), false);
 });
 
+test('Japanese search recognises kana readings, and practice keeps kana voicing and word order', () => {
+  assert.equal(groupLessonTopics(japaneseLessons).length, 3);
+  assert.equal(japaneseLessons.length, 4);
+  const cafe = japaneseLessons.find(lesson => lesson.id === 'ja.cafe.drinks')!;
+  assert.equal(matchesLesson(cafe, 'みず'), true);
+  assert.equal(matchesLesson(cafe, '水'), true);
+  assert.equal(matchesLesson(cafe, 'みす'), false);
+  assert.equal(matchesLesson(cafe, 'みす\u3099'), true);
+  for (const lesson of japaneseLessons) {
+    assert.equal(lesson.language, 'ja-JP');
+    assert.equal(lesson.status, 'draft');
+    assert.ok(lesson.vocabulary.every(entry => entry.id.startsWith('ja.') && entry.reading));
+    const activity = lesson.sentenceActivity;
+    assert.ok(canBuildAcceptedSentence(activity));
+    assert.equal(checkAnswer(`${activity.answers[0]}。`, activity), 'correct');
+  }
+  assert.equal(checkAnswer(' コーヒーを 一つ ください！ ', cafe.sentenceActivity), 'correct');
+  assert.equal(checkAnswer('コーヒーをください一つ', cafe.sentenceActivity), 'incorrect');
+});
+
 test('suggested progression covers every bank once with earlier prerequisites and immutable draft revisions', () => {
   const slugs = courseSequence.map(topic => topic.slug);
-  assert.equal(new Set(slugs).size, 25);
+  assert.equal(new Set(slugs).size, 27);
   assert.deepEqual(new Set(lessons.map(lesson => lesson.id.split('.')[1])), new Set(slugs));
   const seen = new Set<string>();
   for (const topic of courseSequence) {
     for (const prerequisite of topic.prerequisites) assert.ok(seen.has(prerequisite), `${topic.slug}: prior ${prerequisite}`);
     seen.add(topic.slug);
   }
-  assert.equal(lessons.length, 123);
+  assert.equal(lessons.length, 133);
   assert.equal(lessons[0].id, 'fr.greetings.hello-goodbye');
   assert.deepEqual([...new Set(lessons.map(lesson => lesson.id.split('.')[1]))], slugs);
   for (const lesson of lessons) {

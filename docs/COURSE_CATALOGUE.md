@@ -1,10 +1,10 @@
 # French course catalogue — review draft
 
-Snapshot: 2026-11-16. Original editorial material requiring owner review. The app now uses this explicit topic order for fresh starts, Explore and the topic sidebar. Returning learners resume their previously studied lesson; free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
+Snapshot: 2026-11-23. Original editorial material requiring owner review. The app now uses this explicit topic order for fresh starts, Explore and the topic sidebar. Returning learners resume their previously studied lesson; free exploration and owner publication overrides remain available. Complete bilingual examples, dialogues and grammar are in the app and linked source modules.
 
 The [word-by-word topic audit](CURRICULUM_TOPIC_AUDIT.md) describes the historical 120-lesson inventory. Its greeting-first opening has now been converted into three runtime drafts. Broader gap lists and the 30-area teaching map remain proposals. [Implementation decision](decisions/0019-greetings-first-drafts.md).
 
-25 banks · 123 lessons · 765 vocabulary appearances · 722 canonical senses · 713 distinct written forms. Recycled senses are included in bank counts, not counted again as new. The compact opening bank has 24 expressions across three lessons; the other banks retain 30–35 expressions across five lessons. Supported practice is not proficiency certification.
+27 banks · 133 lessons · 825 vocabulary appearances · 780 canonical senses · 771 distinct written forms. Recycled senses are included in bank counts, not counted again as new. The compact opening bank has 24 expressions across three lessons; the other banks retain 30–35 expressions across five lessons. Supported practice is not proficiency certification.
 
 ## Everyday greetings and politeness
 
@@ -304,8 +304,32 @@ Suggested prior topics: Clothes and shopping, Leisure and weather, Talking about
 | Explain what matters in a choice (A2) | Describe useful qualities when choosing a place or service. | pratique · confortable · bruyant · calme · cher · économique |
 | Give a reason and weigh two options (A2) | Give a short reason, show a drawback and explain an undecided choice. | parce que · donc · mais · pourtant · ça dépend · hésiter |
 
+## Getting around by bike
+
+Suggested prior topics include Finding your way on foot and Transport. 30 expressions, including the existing bicycle sense. [Source](../packages/content/src/topics/cycling.ts).
+
+| Lesson | Estimated level |
+| --- | --- |
+| Rent a bike for the day | A1 |
+| Find a route for cycling | A1 |
+| Find a place to lock your bike | A1 |
+| Explain a flat tyre | A2 |
+| Arrange a bike service | A2 |
+
+## Sorting and disposing of household waste
+
+Suggested prior topics include Home and housing and Dates and availability. 30 expressions, including the existing lid sense. Collection instructions in the dialogues are local examples. [Source](../packages/content/src/topics/household-waste.ts).
+
+| Lesson | Estimated level |
+| --- | --- |
+| Ask where to put packaging | A1 |
+| Find the glass collection point | A1 |
+| Check the bin collection day | A1 |
+| Ask how to use a shared compost bin | A2 |
+| Arrange disposal of a bulky item | A2 |
+
 ## Sense distinctions and review
 
 Identical written forms can have different senses: une place (square/available spot), jusqu’à (distance/time), manquer (be missing/miss a service), après (preposition/adverb), une expérience (work experience/an event), ouvrir (physical/digital opening), ça me va (clothing fit/a suitable plan), un guichet (ticket/service counter), un horaire (transport/work schedule). These keep explicit separate IDs. Other same-sense reuse shares a canonical ID.
 
-Five reviewed lessons are now revision 4; fifty-five earlier lessons remain revision 3 and sixty earlier additions and three new greeting lessons remain revision 1. The latest [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated slots with new useful senses while preserving the older canonical entries elsewhere. See [research and limits](CURRICULUM_RESEARCH.md) and the three linked audits. Owner review should judge usefulness, naturalness, translations, difficulty, register and answer alternatives before explicit publication. No external word-frequency ranking or human classroom validation is claimed.
+Five reviewed lessons are now revision 4; fifty-five earlier lessons remain revision 3 and the other seventy-three lessons are revision 1. The latest [redundancy audit](CURRICULUM_REDUNDANCY_AUDIT.md) replaces 16 repeated slots with new useful senses while preserving the older canonical entries elsewhere. See [research and limits](CURRICULUM_RESEARCH.md) and the three linked audits. Owner review should judge usefulness, naturalness, translations, difficulty, register and answer alternatives before explicit publication. No external word-frequency ranking or human classroom validation is claimed.

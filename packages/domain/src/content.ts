@@ -4,6 +4,7 @@ const id = z.string().regex(/^[a-z0-9][a-z0-9.-]+$/).max(120);
 const text = z.string().trim().min(1).max(2000);
 export const vocabularySchema = z.object({
   id, target: text.max(300), meaning: text.max(500), example: text.max(1000), exampleMeaning: text,
+  reading: text.max(300).optional(),
   gender: z.enum(['masculine', 'feminine', 'both']).optional(),
   note: z.string().trim().max(2000), picture: z.enum(['cup', 'water', 'menu', 'bill', 'greeting', 'please', 'bread', 'croissant', 'bag', 'thanks', 'context']),
   pictureAlt: text,

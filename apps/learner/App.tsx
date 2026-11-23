@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, Platform, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { groupLessonTopics, lessonProgress, type Lesson } from '@smartlingo/domain';
+import { japaneseLessons } from '@smartlingo/content';
 import { audio } from './src/audio';
+import { courseLearningModel, initialCourse, saveCourse, type Course } from './src/ui/course';
 import { AudioPreferencesPanel } from './src/audio/AudioPreferencesPanel';
 import { GeneratedSpeechPanel } from './src/audio/generated/GeneratedSpeechPanel';
 import { Badge, Button } from './src/ui/controls';
@@ -50,7 +52,9 @@ export default function App() {
 }
 
 function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boolean; onOpenEditor: () => void; homeRequest: number; onHome: () => void }) {
-  const model = useLearning();
+  const learning = useLearning();
+  const [course, setCourse] = useState<Course>(initialCourse);
+  const model = courseLearningModel(learning, course);
   const catalogue = useCatalogue();
   const [tab, setTab] = useState<Tab>('Today');
   const [lesson, setLesson] = useState<Lesson | null>(null);
@@ -58,7 +62,9 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const wide = width >= 1050;
-  const topics = groupLessonTopics(catalogue.lessons);
+  const lessons = course === 'Japanese' ? japaneseLessons : catalogue.lessons.filter(item => item.language === 'fr-FR');
+  const topics = groupLessonTopics(lessons);
+  function selectCourse(next: Course) { if (next === course) return; saveCourse(next); setCourse(next); navigate('Today'); }
   function navigate(next: Tab) { audio.stop(); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function selectTopic(name: string | null) { audio.stop(); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function openLesson(next: Lesson) { audio.stop(); setSelectedTopic(next.topic); setLesson(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
@@ -66,7 +72,8 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={[s.row, { maxWidth: '100%' }]}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={[s.row, { maxWidth: '100%' }]} accessibilityLabel="Learning course"><Text style={s.eyebrow}>Course</Text>{(['French', 'Japanese'] as const).map(name => <Button key={name} label={`Learn ${name}`} selected={course === name} disabled={learning.busy || !!learning.saveError} onPress={() => selectCourse(name)}>{name}</Button>)}</View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
     {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
@@ -78,24 +85,24 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {!!model.saveError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>This change hasn’t been confirmed as saved.</Text><Text style={s.body}>{model.saveError}</Text><Text style={s.muted}>Retry keeps the same event, so your practice won’t be counted twice.</Text><View style={s.row}><Button primary disabled={model.busy} onPress={model.retry}>Retry save</Button><Button disabled={model.busy} onPress={model.cancelWrite}>Dismiss and continue</Button></View></View>}
         {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
-          : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
-            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <FrenchPractice lessons={catalogue.lessons} model={model} />}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
-              : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
+          : tab === 'Today' ? <Today course={course} lessons={lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
+            : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && course === 'French' && <FrenchPractice lessons={lessons} model={model} />}<TopicCatalogue key={course} course={course} lessons={lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
+              : tab === 'Review' ? <Notebook key={course} course={course} model={model} onExplore={() => navigate('Explore')} /> : <Profile course={course} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
     </View>
   </View>;
 }
 
-function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; onExplore: () => void }) {
+function Today({ course, lessons, model, onOpen, onExplore }: { course: Course; lessons: Lesson[]; model: LearningModel; onOpen: (lesson: Lesson) => void; onExplore: () => void }) {
   const latest = [...model.events].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).find(event => lessons.some(lesson => lesson.id === event.lessonId));
   const suggested = lessons.find(lesson => lesson.id === latest?.lessonId) ?? lessons[0];
   const progress = lessonProgress(suggested, model.events);
   const started = model.events.some(event => event.lessonId === suggested.id && event.revision === suggested.revision);
   return <View style={{ gap: 32 }}><View style={s.split}>
     <View style={[s.column, { justifyContent: 'center', paddingVertical: 18 }]}><Text style={s.eyebrow}>Small steps. Real conversations.</Text>
-      <Text accessibilityRole="header" style={[s.hero, { fontSize: 52, lineHeight: 57 }]}>A little French.{ '\n' }A little more{ '\n' }at home.</Text>
-      <Text style={[s.body, { maxWidth: 430 }]}>Explore {groupLessonTopics(lessons).length} everyday topics, with short A1–A2 lessons and useful vocabulary.</Text>
+      <Text accessibilityRole="header" style={[s.hero, { fontSize: 52, lineHeight: 57 }]}>A little {course}.{ '\n' }A little more{ '\n' }at home.</Text>
+      <Text style={[s.body, { maxWidth: 430 }]}>Explore {groupLessonTopics(lessons).length} everyday topics, with short {course === 'Japanese' ? 'beginner' : 'A1–A2'} lessons and useful vocabulary.</Text>
       <View style={s.row}><Button primary onPress={() => onOpen(suggested)}>{progress.completed ? 'Revisit your lesson →' : started ? 'Continue your lesson →' : suggested.id.startsWith('fr.greetings.') ? 'Start greetings practice →' : suggested.id === 'fr.restaurant.customer' ? 'Start restaurant practice →' : 'Start lesson →'}</Button><Button onPress={onExplore}>Explore lessons</Button></View>
     </View>
     <View style={[s.card, s.column, { backgroundColor: '#E8ECD9', padding: 28 }]}><View style={s.row}><Badge>YOUR NEXT EVERYDAY MOMENT</Badge><Badge>{suggested.level}</Badge></View>
@@ -107,15 +114,16 @@ function Today({ lessons, model, onOpen, onExplore }: { lessons: Lesson[]; model
   </View>;
 }
 
-function Profile({ model, catalogue, onOpenEditor }: { model: LearningModel; catalogue: ReturnType<typeof useCatalogue>; onOpenEditor: () => void }) {
+function Profile({ course, model, catalogue, onOpenEditor }: { course: Course; model: LearningModel; catalogue: ReturnType<typeof useCatalogue>; onOpenEditor: () => void }) {
   const completed = model.events.filter(event => event.activity === 'completion' && event.result === 'completed').length;
-  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning French · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
-    <View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
+  return <View style={{ gap: 24 }}><Text style={s.eyebrow}>Your learning space</Text><Text accessibilityRole="header" style={s.title}>At your own pace.</Text><View style={s.card}><Text style={s.heading}>A local learner profile</Text><Text style={s.body}>Learning {course} · English explanations · Beginner foundations</Text><View style={s.row}><Badge>{completed} sessions completed</Badge><Badge>{model.notebook.length} notebook entries</Badge></View><Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text></View>
+    {course === 'French' && <><View style={s.card}><Text style={s.heading}>Local curriculum workshop</Text><Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text><Button onPress={onOpenEditor}>Open curriculum editor</Button></View>
     <View style={s.card}><Text style={s.heading}>Published lessons</Text><Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text><Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>{!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}{!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}</View>
+    </>}
+    {course === 'Japanese' && <View style={s.card}><Text style={s.heading}>Japanese beginner preview</Text><Text style={s.body}>AI conversation and curriculum editing are available in the French course.</Text></View>}
     <OfflinePanel />
-    <AudioPreferencesPanel />
-    <GeneratedSpeechPanel />
+    {course === 'French' && <><AudioPreferencesPanel /><GeneratedSpeechPanel /></>}
     <BackupPanel />
-    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. Listening uses a synthetic device voice when a French voice is available. You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
+    <View style={s.card}><Text style={s.heading}>About this preview</Text><Text style={s.body}>Your progress and notebook stay in this browser on this device. There is no account or sync. Clearing browser data removes these notes.</Text><Text style={s.body}>Bundled lessons don’t need the local API or an AI key. {course === 'French' ? 'Listening uses a synthetic device voice when a French voice is available.' : 'Japanese listening uses a synthetic device voice when available. Kana readings support text study.'} You can always read and practise from the text.</Text><Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>{Platform.OS === 'web' && <a href="/vocabulary-photos/credits.html" target="_blank" rel="noopener noreferrer" style={{ color: colors.ink, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>Photo credits and licences</a>}</View>
   </View>;
 }

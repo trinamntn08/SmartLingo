@@ -4,12 +4,15 @@ export type LessonTopic = { name: string; lessons: Lesson[]; vocabulary: Vocabul
 export type CatalogueLevel = 'All' | Lesson['level'];
 
 export function normalizeSearch(value: string): string {
-  return value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('fr-FR')
+  // Preserve kana voicing marks, which distinguish Japanese syllables.
+  return value.normalize('NFD').replace(/(?![\u3099\u309a])\p{M}/gu, '').normalize('NFC').toLocaleLowerCase('fr-FR')
     .replace(/[’‘]/g, "'").trim();
 }
 
 export function matchesVocabulary(entry: Vocabulary, query: string): boolean {
-  return normalizeSearch(`${entry.target} ${entry.meaning}`).includes(normalizeSearch(query));
+  const search = normalizeSearch(query);
+  return normalizeSearch(`${entry.target} ${entry.meaning}`).includes(search)
+    || Boolean(entry.reading && normalizeSearch(entry.reading).includes(search));
 }
 
 export function matchesLesson(lesson: Lesson, query: string, level: CatalogueLevel = 'All'): boolean {

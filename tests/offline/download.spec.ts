@@ -1,6 +1,6 @@
 import { buildAcceptedSentence, openRestaurant } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
-import { lessons, restaurantLesson } from '@smartlingo/content';
+import { japaneseLessons, lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -71,6 +71,15 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const [events, notebook] = await learningSnapshot(cold);
   expect(events).toHaveLength(4);
   expect(notebook).toEqual([expect.objectContaining({ sourceEntryId: 'fr.greetings.bonsoir', target: 'bonsoir', meaning: 'good evening' })]);
+
+  await button(cold, 'Learn Japanese').click();
+  await cold.reload();
+  await expect(button(cold, 'Learn Japanese')).toHaveAttribute('aria-selected', 'true');
+  await button(cold, 'Start lesson →').click();
+  const japaneseGreeting = japaneseLessons[0].vocabulary[0];
+  await expect(cold.getByTestId(`vocabulary-${japaneseGreeting.id}`).getByText(japaneseGreeting.meaning, { exact: true })).toBeVisible();
+  await button(cold, `Save ${japaneseGreeting.target}`).click();
+  await expect(cold.getByText(`Saved ${japaneseGreeting.target} to your notebook.`, { exact: true })).toBeVisible();
 });
 
 test('explicit download cold-loads offline and asset removal preserves every learner store', async ({ page, context }, info) => {

@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Check the learner UI redesign branch
+
+- Request. Verify whether `feat/learner-ui-redesign` identifies the Cloud UI rework.
+- Start. At 21:02 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `95f5ec29ede07cd426ee582fb3082f6d7488e094`, ahead/behind `0/0`.
+- Finding. `git branch -a` and live `git ls-remote` returned no ref matching `learner-ui-redesign`. An exact `git fetch origin refs/heads/feat/learner-ui-redesign` returned `couldn't find remote ref`. GitHub branch and pull-request searches returned no match. The published `feat/full-frontend-rework` branch is at `66d03cc`, already in the preview lineage.
+- Checks. `npm.cmd run check` and `git diff --check` passed.
+- Next action. Compare the Cloud task's source once its task link, patch or published ref is available. The commit containing this entry records the check.
+
 ## 2026-11-23 Locate the Cloud Codex UI rework
 
 - Request. Identify the Cloud Codex interface rework that appears to be missing from the shared local preview.

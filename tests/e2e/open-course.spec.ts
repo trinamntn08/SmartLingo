@@ -1,13 +1,15 @@
-import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
-import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
+import { courseDayProgressRevision, courseLessonStageId, type CourseDay, type CourseEvent } from '@smartlingo/domain';
+import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
 import { buildCourseListeningQuestion } from '../../apps/learner/src/listening/lessonQuestions';
 
 const [firstDay, secondDay, thirdDay] = openCoursePilot.days;
 const coursePanel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => coursePanel(page).getByRole('button', { name, exact: true });
 const step = (page: Page, name: string) => coursePanel(page).getByRole('heading', { name, exact: true });
+const stepTab = (page: Page, stage: string) => coursePanel(page).getByTestId(`lesson-step-${stage}`);
 const chooseDay = (page: Page, day: CourseDay) => coursePanel(page).getByTestId(`course-day-${day.id}`).getByRole('button');
 const dayHeading = (page: Page, day: CourseDay) => step(page, `Lesson ${day.dayNumber}: ${day.title}`);
 
@@ -56,20 +58,27 @@ test.beforeEach(async ({ context }) => {
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
 });
 
-test('all five opening lessons offer a full French transcript, full translation and a context photo', async ({ page }) => {
+test('all five opening lessons share a five-step reader with full transcripts and photos', async ({ page }) => {
   await page.goto('/');
   await expect(step(page, openCoursePilot.title)).toBeVisible();
   await guidedLessonButton(page).focus();
   await page.keyboard.press('Enter');
   await openCourseOutline(coursePanel(page));
   await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
-  await expect(coursePanel(page).getByText('5 guided lessons · Draft preview', { exact: true })).toBeVisible();
+  if (page.viewportSize()!.width >= 900) {
+    await expect(coursePanel(page).getByText('5 guided lessons · Draft preview', { exact: true })).toBeVisible();
+  }
+  const outline = coursePanel(page).getByTestId('course-outline');
+  await expect(outline.getByRole('button', { name: /^Choose lesson/ })).toHaveCount(5);
+  await expect(outline.getByText(/sections in lesson|quick practice|try it/i)).toHaveCount(0);
 
   for (const day of openCoursePilot.days) {
     await openCourseOutline(coursePanel(page));
     await chooseDay(page, day).click();
     await expect(dayHeading(page, day)).toBeVisible();
-    await expect(step(page, 'Dialogue')).toBeVisible();
+    await expect(step(page, 'Read a conversation')).toBeVisible();
+    await expect(coursePanel(page).getByRole('navigation', { name: 'Lesson steps' }).getByRole('link')).toHaveCount(5);
+    await expect(stepTab(page, 'dialogue')).toHaveAttribute('aria-current', 'step');
     const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
     if (dialogue.kind !== 'dialogue') throw new Error('Missing dialogue');
     const { french, english } = await expectFrenchTranscripts(coursePanel(page), dialogue.lines);
@@ -79,13 +88,11 @@ test('all five opening lessons offer a full French transcript, full translation 
       const englishBox = (await english.boundingBox())!;
       if (page.viewportSize()!.width >= 600) expect(englishBox.x).toBeGreaterThan(frenchBox.x);
       else expect(englishBox.y).toBeGreaterThanOrEqual(frenchBox.y + frenchBox.height);
-      await expect(coursePanel(page).getByText(firstDay.compact!.tip, { exact: true })).toBeVisible();
       await expect(button(page, 'Source credits and licence')).toHaveCount(0);
       await expect(button(page, 'Authorship and review')).toHaveCount(0);
     }
-    await expect(button(page, 'Listening check')).toHaveAttribute('aria-expanded', 'false');
-    await expect(button(page, 'Save study section')).toHaveCount(0);
-    await expect(button(page, 'Next section')).toBeEnabled();
+    await expect(button(page, 'Listening check')).toHaveCount(0);
+    await expect(button(page, 'Continue to key phrases')).toBeEnabled();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
 });
@@ -94,15 +101,13 @@ for (const course of [openCoursePilot, japaneseCourse]) {
   const language = course.language === 'fr-FR' ? 'French' : 'Japanese';
   test(`${language} guided listening offers transcript support without writing progress`, async ({ page }) => {
     const day = course.days[0];
-    const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
     const code = course.language === 'fr-FR' ? 'fr' : 'ja';
-    const path = `/course/${code}/${course.id}/${day.id}/${dialogue.id}`;
+    const path = `/course/${code}/${course.id}/${day.id}/lesson-listening`;
     const question = buildCourseListeningQuestion(day, course.language)!;
     await page.goto(path);
-    const check = coursePanel(page).getByTestId('course-listening-check');
-    const open = button(page, 'Listening check');
-    await expect(open).toHaveAttribute('aria-expanded', 'false');
-    await open.press('Enter');
+    const check = coursePanel(page).getByTestId('listening-question-player');
+    await expect(step(page, 'Listening practice')).toBeVisible();
+    await expect(stepTab(page, 'listening')).toHaveAttribute('aria-current', 'step');
     const transcript = check.getByTestId('listening-transcript');
     const answer = check.getByRole('button', { name: 'Check answer', exact: true });
     await expect(check.getByRole('button', { name: 'Play sentence', exact: true })).toBeVisible();
@@ -121,10 +126,7 @@ for (const course of [openCoursePilot, japaneseCourse]) {
     const feedback = check.getByTestId('listening-feedback');
     await expect(feedback).toContainText(question.meaning);
     await expect(feedback).toContainText(/transcript support/);
-    await open.click();
-    await expect(feedback).toHaveCount(0);
-    await open.click();
-    await expect(feedback).toBeVisible();
+    await expect(button(page, 'Continue to matching')).toBeEnabled();
     await expect(page).toHaveURL(path);
     expect(await storedEvents(page)).toEqual([]);
     expect(await storedEvents(page, 'events')).toEqual([]);
@@ -132,58 +134,67 @@ for (const course of [openCoursePilot, japaneseCourse]) {
   });
 }
 
-test('Next saves dialogue and resumes practice without requiring answers before finishing', async ({ page }) => {
+test('the shared stages save progress, restore matching and unlock the next lesson on completion', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await button(page, 'Next section').click();
-  await expect(step(page, 'Quick practice')).toBeVisible();
-  const practice = firstDay.blocks.find(block => block.kind === 'choice')!;
-  if (practice.kind !== 'choice') throw new Error('Missing practice');
-  const question = coursePanel(page).getByTestId(`course-choice-${practice.id}`);
-  const choices = practice.choices.map((choice, index) => ({
-    ...choice, label: `${'ABC'[index]}. ${choice.target}`,
-  }));
-  await expect(question.getByRole('heading', { name: 'How do you greet a neighbour during the day?' })).toBeVisible();
-  await expect(question.getByRole('button', { name: /^[ABC]\. / })).toHaveCount(3);
-  for (const { label } of choices) await expect(question.getByRole('button', { name: label, exact: true })).toBeVisible();
-  const wrong = choices.find(choice => choice.id !== practice.answerId)!;
-  await question.getByRole('button', { name: wrong.label, exact: true }).press('Enter');
-  await expect(question.getByText(/Try again/)).toBeVisible();
-  await expect(question.getByText(firstDay.compact!.practice[0].feedback, { exact: false })).toHaveCount(0);
-  await question.getByRole('button', { name: /hint/i }).click();
-  await expect(question.getByText(firstDay.compact!.practice[0].hint, { exact: true })).toBeVisible();
-  const correct = choices.find(choice => choice.id === practice.answerId)!;
-  await question.getByRole('button', { name: correct.label, exact: true }).click();
-  await expect(question.getByText(/Correct/)).toBeVisible();
+  await stepTab(page, 'vocabulary').press('Enter');
+  await expect(step(page, 'Key phrases')).toBeVisible();
+  expect((await storedEvents(page)).filter(event => event.kind === 'study')).toEqual([]);
+  await stepTab(page, 'dialogue').press('Enter');
+  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Continue to listening').click();
+  await expect(step(page, 'Listening practice')).toBeVisible();
+  await button(page, 'Skip listening').click();
+  const lesson = buildCourseLesson(openCoursePilot, firstDay);
+  const { entryId, choices, prompt } = lesson.pictureActivity;
+  const correct = lesson.vocabulary.find(entry => entry.id === entryId)!;
+  const wrong = lesson.vocabulary.find(entry => entry.id !== entryId && choices.includes(entry.id))!;
+  const activity = coursePanel(page).getByTestId('lesson-stage');
+  await expect(activity.getByRole('heading', { name: prompt })).toBeVisible();
+  await button(page, wrong.target).press('Enter');
+  await expect(activity.getByText(/^Try again/)).toBeVisible();
+  await button(page, 'Show a hint').click();
+  await expect(activity.getByText(correct.example, { exact: true })).toBeVisible();
+  await button(page, correct.target).click();
+  await expect(activity.getByText('That’s it. You matched the meaning.')).toBeVisible();
 
   await page.reload();
-  await expect(step(page, 'Quick practice')).toBeVisible();
-  await expect(question.getByText(/Correct/)).toBeVisible();
-  await button(page, 'Next section').click();
-  await expect(step(page, 'Try it')).toBeVisible();
-  await button(page, 'Finish lesson').click();
-  await expect(step(page, 'Lesson saved')).toBeVisible();
+  await expect(step(page, 'Match the meaning')).toBeVisible();
+  await expect(activity.getByText('That’s it. You matched the meaning.')).toBeVisible();
+  await button(page, 'Next').click();
+  await expect(step(page, 'Build a sentence')).toBeVisible();
+  await expect(step(page, 'Lesson complete')).toHaveCount(0);
+  await buildAcceptedSentence(page, lesson);
+  await expect(step(page, 'Lesson complete')).toBeVisible();
   const events = await storedEvents(page);
-  expect(events.filter(event => event.kind === 'study')).toHaveLength(1);
-  expect(events.filter(event => event.kind === 'completion')).toHaveLength(1);
-  expect(events.filter(event => event.kind === 'choice' && event.result === 'correct')).toHaveLength(1);
+  expect(events.filter(event => event.kind === 'study').map(event => event.blockId).sort()).toEqual(['lesson-dialogue', 'lesson-vocabulary']);
+  expect(events.filter(event => event.kind === 'completion')).toHaveLength(0);
+  expect(events.filter(event => event.kind === 'choice' && event.result === 'correct').map(event => event.blockId).sort())
+    .toEqual(['lesson-picture', 'lesson-sentence']);
   expect(events.some(event => event.kind === 'choice' && event.supported)).toBe(true);
   expect([...new Set(events.map(event => event.courseRevision))]).toEqual([courseDayProgressRevision(openCoursePilot, firstDay)]);
   expect(await storedEvents(page, 'events')).toEqual([]);
-  await button(page, `Continue to Lesson 2: ${secondDay.title}`).click();
+  await button(page, `Next lesson: Lesson 2: ${secondDay.title}`).click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
-  await expect(step(page, 'Dialogue')).toBeVisible();
+  await expect(step(page, 'Read a conversation')).toBeVisible();
+
+  const firstLessonUrl = `/course/fr/${openCoursePilot.id}/${firstDay.id}`;
+  await page.goto(firstLessonUrl);
+  await stepTab(page, 'vocabulary').press('Enter');
+  await expect(page).toHaveURL(`${firstLessonUrl}/lesson-vocabulary`);
+  await page.goto(firstLessonUrl);
+  await expect(page).toHaveURL(`${firstLessonUrl}/lesson-vocabulary`);
+  await expect(step(page, 'Key phrases')).toBeVisible();
 });
 
 test('notebook, progress and the resume step survive backup and restore', async ({ page, browser }, info) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await button(page, 'Useful words').click();
-  await expect(coursePanel(page).getByTestId('vocabulary-fr.bonjour').getByRole('img')).toHaveCount(0);
+  await button(page, 'Continue to key phrases').click();
   await button(page, 'Save bonjour').click();
-  await expect(button(page, 'bonjour saved to notebook')).toBeDisabled();
-  await button(page, 'Next section').click();
-  await expect(step(page, 'Quick practice')).toBeVisible();
+  await expect(button(page, 'Save bonjour')).toBeDisabled();
+  await button(page, 'Continue to listening').click();
+  await expect(step(page, 'Listening practice')).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download');
@@ -207,18 +218,17 @@ test('notebook, progress and the resume step survive backup and restore', async 
     await expect(restored).toHaveURL(/\/profile\/fr$/);
     await restored.getByRole('button', { name: 'Today', exact: true }).click();
     await guidedLessonButton(restored).click();
-    await expect(step(restored, 'Quick practice')).toBeVisible();
-    await button(restored, 'Previous section').click();
-    await expect(step(restored, 'Dialogue')).toBeVisible();
-    await button(restored, 'Useful words').click();
-    await expect(button(restored, 'bonjour saved to notebook')).toBeDisabled();
+    await expect(step(restored, 'Listening practice')).toBeVisible();
+    await stepTab(restored, 'vocabulary').click();
+    await expect(step(restored, 'Key phrases')).toBeVisible();
+    await expect(button(restored, 'Save bonjour')).toBeDisabled();
   } finally { await restoredContext.close(); }
 });
 
 test('Next retries a failed cursor write without duplicating dialogue study', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await expect(button(page, 'Next section')).toBeEnabled();
+  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
   await page.evaluate(() => {
     const original = IDBObjectStore.prototype.add;
     const attempts: string[] = [];
@@ -232,36 +242,40 @@ test('Next retries a failed cursor write without duplicating dialogue study', as
       return original.call(this, value, key);
     };
   });
-  await button(page, 'Next section').click();
+  await button(page, 'Continue to key phrases').click();
   await expect(coursePanel(page).getByRole('alert')).toContainText('Simulated cursor failure');
-  await expect(step(page, 'Dialogue')).toBeVisible();
-  await expect(button(page, 'Next section')).toBeDisabled();
+  await expect(step(page, 'Read a conversation')).toBeVisible();
+  await expect(button(page, 'Continue to key phrases')).toBeDisabled();
   await button(page, 'Retry course save').click();
-  await expect(step(page, 'Quick practice')).toBeVisible();
+  await expect(step(page, 'Key phrases')).toBeVisible();
   const ids = await page.evaluate(() => (window as unknown as { courseNavigationAttempts: string[] }).courseNavigationAttempts);
   expect(ids).toHaveLength(2);
   expect(ids[0]).toBe(ids[1]);
   expect((await storedEvents(page)).map(value => value.kind).sort()).toEqual(['navigation', 'study']);
 });
 
-test('all compact steps can be browsed at 320 px when progress storage is unavailable', async ({ page }) => {
+test('all five steps can be browsed at 320 px when progress storage is unavailable', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await page.addInitScript(() => { Object.defineProperty(globalThis, 'indexedDB', { configurable: true, value: undefined }); });
   await page.goto('/');
   await guidedLessonButton(page).click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
-  await button(page, 'Next section').click();
-  await expect(step(page, 'Quick practice')).toBeVisible();
-  await button(page, 'Next section').click();
-  await expect(step(page, 'Try it')).toBeVisible();
-  await expect(button(page, 'Finish lesson')).toBeDisabled();
+  await button(page, 'Continue to key phrases').click();
+  await expect(step(page, 'Key phrases')).toBeVisible();
+  await button(page, 'Continue to listening').click();
+  await expect(step(page, 'Listening practice')).toBeVisible();
+  await button(page, 'Skip listening').click();
+  await expect(step(page, 'Match the meaning')).toBeVisible();
+  await button(page, 'Next').click();
+  await expect(step(page, 'Build a sentence')).toBeVisible();
+  await expect(button(page, 'Check sentence')).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
 test('the rewritten lesson has fresh progress and preserves historical events and other lesson cursors', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await expect(button(page, 'Next section')).toBeEnabled();
+  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
   const firstHistory = firstDay.blocks.map((block, index): CourseEvent => {
     if (block.kind === 'choice') return { ...courseEvent(firstDay, block.id, 'choice', index), kind: 'choice',
       choiceId: block.answerId, result: 'correct', supported: false };
@@ -275,31 +289,42 @@ test('the rewritten lesson has fresh progress and preserves historical events an
     courseEvent(secondDay, oldSecondCursor.id, 'navigation', 11), courseEvent(thirdDay, laterPractice.id, 'navigation', 12)]);
   await page.goto(`/course/fr/${openCoursePilot.id}`);
   await expect(dayHeading(page, thirdDay)).toBeVisible();
-  await expect(step(page, 'Quick practice')).toBeVisible();
+  await expect(step(page, 'Match the meaning')).toBeVisible();
+  await expect(page).toHaveURL(/\/lesson-picture$/);
   await openCourseOutline(coursePanel(page));
   await chooseDay(page, secondDay).click();
-  await expect(step(page, 'Dialogue')).toBeVisible();
+  await expect(step(page, 'Key phrases')).toBeVisible();
   await openCourseOutline(coursePanel(page));
   await expect(chooseDay(page, firstDay)).toHaveAccessibleName('Choose lesson 1: Meet a neighbour');
   await chooseDay(page, firstDay).click();
   await expect(dayHeading(page, firstDay)).toBeVisible();
-  await expect(step(page, 'Dialogue')).toBeVisible();
-  await expect(step(page, 'Lesson saved')).toHaveCount(0);
+  await expect(step(page, 'Read a conversation')).toBeVisible();
+  await expect(step(page, 'Lesson complete')).toHaveCount(0);
   expect(await storedEvents(page)).toEqual(expect.arrayContaining(olderOpening));
+  const original = await storedEvents(page);
+  const oldDialogue = firstDay.blocks.find(block => block.kind === 'dialogue')!;
+  await page.goto(`/course/fr/${openCoursePilot.id}/${firstDay.id}/${oldDialogue.id}`);
+  await expect(step(page, 'Read a conversation')).toBeVisible();
+  await expect(page).toHaveURL(/\/lesson-dialogue$/);
+  expect(await storedEvents(page)).toEqual(original);
+
+  const oldReflection = firstDay.blocks.find(block => block.kind === 'reflection')!;
+  await seedEvents(page, [courseEvent(firstDay, oldDialogue.id, 'study', 20),
+    courseEvent(firstDay, oldReflection.id, 'reflection', 21), courseEvent(firstDay, oldReflection.id, 'completion', 22)]);
+  await page.goto(`/course/fr/${openCoursePilot.id}/${firstDay.id}/${oldReflection.id}`);
+  await expect(page).toHaveURL(/\/lesson-sentence$/);
+  await expect(button(page, 'Check sentence')).toBeVisible();
+  await expect(button(page, `Next lesson: Lesson 2: ${secondDay.title}`)).toBeEnabled();
 });
 
 test('a restored inconsistent choice never shows correct feedback', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await expect(button(page, 'Next section')).toBeEnabled();
-  const block = firstDay.blocks.find(item => item.kind === 'choice')!;
-  if (block.kind !== 'choice') throw new Error('Missing practice');
-  const wrong = block.choices.find(choice => choice.id !== block.answerId)!;
-  await seedEvents(page, [{ ...courseEvent(firstDay, block.id, 'choice', 0), kind: 'choice',
-    choiceId: wrong.id, result: 'correct', supported: false }]);
-  await page.goto(`/course/fr/${openCoursePilot.id}`);
-  await expect(step(page, 'Quick practice')).toBeVisible();
-  const question = coursePanel(page).getByTestId(`course-choice-${block.id}`);
-  await expect(question.getByText('Please answer again to update your saved choice.', { exact: true })).toBeVisible();
-  await expect(question.getByText(/^Correct\./)).toHaveCount(0);
+  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await seedEvents(page, [{ ...courseEvent(firstDay, courseLessonStageId('picture'), 'choice', 0), kind: 'choice',
+    choiceId: 'incorrect', result: 'correct', supported: false }]);
+  await page.goto(`/course/fr/${openCoursePilot.id}/${firstDay.id}/lesson-picture`);
+  await expect(step(page, 'Match the meaning')).toBeVisible();
+  await expect(coursePanel(page).getByText('That’s it. You matched the meaning.')).toHaveCount(0);
+  await expect(button(page, 'Next')).toHaveCount(0);
 });

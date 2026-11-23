@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { japaneseCourse, japaneseLessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
-import { buildLearningReport, courseDayProgressRevision, localStudyDate, type CourseEvent, type LearningEvent,
+import { buildLearningReport, courseDayProgressRevision, courseLessonStageId, localStudyDate, type CourseEvent, type LearningEvent,
   type LearningReportInput, type NotebookEntry, type ReviewEvent } from '../src';
 
 const now = '2026-11-21T12:00:00Z';
@@ -83,6 +83,28 @@ test('automatic lesson completion counts the finished lesson and one final answe
   const report = buildLearningReport(input({ events: [answer, completion] }));
   assert.equal(report.completedLessons, 1);
   assert.equal(report.actionsThisWeek, 1);
+});
+
+test('shared course steps count valid saved work and completion without counting navigation or invalid events', () => {
+  const course = openCoursePilot;
+  const [day, second] = course.days;
+  const scope = { courseId: course.id, courseRevision: courseDayProgressRevision(course, day), dayId: day.id, occurredAt: evening };
+  const words: CourseEvent = { ...scope, id: randomUUID(), blockId: courseLessonStageId('vocabulary'), kind: 'study' };
+  const match: CourseEvent = { ...scope, id: randomUUID(), blockId: courseLessonStageId('picture'),
+    kind: 'choice', choiceId: 'correct', result: 'correct', supported: false };
+  const sentence: CourseEvent = { ...match, id: randomUUID(), blockId: courseLessonStageId('sentence') };
+  const profile = buildLearningReport(input({ courseEvents: [words, match, sentence, match,
+    { ...words, id: randomUUID(), blockId: courseLessonStageId('listening'), kind: 'navigation' },
+    { ...match, id: randomUUID(), choiceId: 'incorrect' },
+    { ...match, id: randomUUID(), blockId: courseLessonStageId('listening') },
+    { ...sentence, id: randomUUID(), dayId: second.id },
+    { ...words, id: randomUUID(), kind: 'completion' },
+    { ...words, id: randomUUID(), dayId: 'missing.day' },
+  ] }));
+  assert.equal(profile.actionsThisWeek, 3);
+  assert.equal(profile.completedStudyDays, 1);
+  assert.equal(profile.completedLessons, 0);
+  assert.equal(profile.exploredWords, day.vocabulary.length);
 });
 
 test('viewer-local weeks handle midnight, year boundaries and both Paris DST transitions', () => {

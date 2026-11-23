@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
+import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
 import { openCoursePilot, japaneseCourse } from '@smartlingo/content';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
@@ -105,7 +105,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     if (lesson) {
       const link = route.kind === 'lesson' ? route.studyDay : undefined;
       const day = link?.courseId === course.id ? course.days.find(item => item.id === link.dayId) : undefined;
-      const studyDay = link && day?.blocks.some(block => block.id === link.sectionId)
+      const studyDay = link && day && courseLessonStageForBlock(day, link.sectionId)
         ? { kind: 'course', language: targetLanguage, ...link } as const : undefined;
       const topicLessons = studyDay ? undefined : topics.find(topic => topic.name === lesson.topic)?.lessons;
       const index = topicLessons?.findIndex(item => item.id === lesson.id) ?? -1;

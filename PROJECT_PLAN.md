@@ -86,7 +86,7 @@ Historical starting scope, retained to explain the milestone design. The current
 
 ## 4. Learning flow
 
-Choose French or Japanese, then start the recommended lesson from the top of Today. A returning learner can continue from Today in one action. Japanese recommends basic kana first, with a guided course and short topic lessons also available. Planned onboarding includes editable, optional self-assessment, study goals and interests. Activity records describe practice.
+Choose French or Japanese, then start the recommended lesson from the top of Today. A returning learner can continue from Today in one action. Japanese recommends basic kana first, with a course and short topic lessons also available. Course and topic lessons use the same five-step reader. The course outline lists lessons. Planned onboarding includes editable, optional self-assessment, study goals and interests. Activity records describe practice.
 
 Today: continue a lesson, review due items, or start a suggested short session. Do not punish missed days.
 

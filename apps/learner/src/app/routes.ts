@@ -1,6 +1,6 @@
-import type { TargetLanguage } from '@smartlingo/domain';
+import { courseLessonStages, type TargetLanguage } from '@smartlingo/domain';
 
-export const lessonStages = ['dialogue', 'vocabulary', 'listening', 'picture', 'sentence'] as const;
+export const lessonStages = courseLessonStages;
 export type LessonStage = typeof lessonStages[number];
 export interface StudyDayLink { courseId: string; dayId: string; sectionId: string }
 

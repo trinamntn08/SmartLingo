@@ -15,7 +15,7 @@ export interface CourseLaunchProps {
 
 const progressMessages: Record<CourseLaunchProps['status'], string | undefined> = {
   start: undefined,
-  resume: 'Resume your saved section.',
+  resume: 'Resume your saved step.',
   next: 'Your next lesson is ready.',
   complete: 'All lessons complete. Revisit any lesson.',
   unavailable: 'Saved course progress is unavailable. You can still study.',
@@ -58,7 +58,7 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
     </View>
     <View style={[s.row, !featured && launch.regularAction]}>
       <Button accent={featured} primary={!featured} compact={!featured} href={href} onPress={onOpen}
-        disabled={loading || disabled} trailingIcon="arrow-right">{featured ? featuredActions[status] : 'Open daily course'}</Button>
+        disabled={loading || disabled} trailingIcon="arrow-right">{featured ? featuredActions[status] : 'Open course'}</Button>
     </View>
   </View>;
 }

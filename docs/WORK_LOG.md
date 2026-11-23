@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Unify courses with the five-step lesson reader
+
+- Request. Check for published Cloud course integration first, remove the separate Dialogue, Quick practice and Try it path, and remove Daily course wording from the learner.
+- Start. At 23:39 CET, Europe/Paris, the clean primary `D:/dev/projects/SmartLingo` checkout, fetched tracking ref and live `feat/french-daily-opening` matched at `94523027bcc7ba6625ce9bb1a8c0458a9c9aae15`, ahead/behind `0/0`. The candidate `feat/french-course-rework` at `39c4830` is already an ancestor and predates this interface. Cloud `563fdaa` and `47eebaf` were integrated at `af5c4ff`. The only published pull head, `d7ad551`, concerns Cloud workflow. Recent origin and worktree history showed no published five-step course replacement.
+- Acceptance. Today and Learn open the same five-step reader for course lessons. The outline lists lessons. Bookmarked sections and existing course history remain usable. The learner calls it a course or lesson. [Execution plan](plans/0054-five-step-course.md)
+- Implementation. Projected both courses into the shared lesson reader and kept the existing listening prompts, photos, notebook IDs, related practice and course history. Three project agents handled course progress, content projection and the course shell. A separate reviewer reproduced two navigation issues. The step strip now saves only the resume cursor, and completed lessons reopen at the last saved step. The client delegated with the inherited model. Account usage was unavailable.
+- Verification. Repository and TypeScript checks, 18 tooling and 285 application tests passed. An initial tooling rerun under concurrent browser load timed out in the stop-hook check and passed when rerun. The affected Chromium suite passed all 54 cases, with six final reruns covering both small-screen layout and saved steps. Ten focused cold-offline tests passed using the documented serial runner. A broader parallel run timed out in download integrity. Both download integrity cases passed when run serially on the final export. The shared preview served export `e9e06a957800` and passed direct checks at 320, 958 and 1,440 px. Real-device audio and assistive technology remain unverified.
+- Outcome. The course outline lists lessons, and Today and Learn open the shared steps. The preview is ready for owner review at `http://localhost:8082`. The commit containing this entry records the change. [Reader decision](decisions/0042-shared-course-lesson-reader.md)
+
 ## 2026-11-23 Label the matching advance Next
 
 - Request. Change the matching exercise's advance button from Build a sentence to Next.

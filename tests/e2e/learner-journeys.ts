@@ -2,7 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 import { normalizeAnswer, type Lesson } from '@smartlingo/domain';
 
 export function guidedLessonButton(scope: Locator | Page) {
-  return scope.getByRole('button', { name: /^(?:Start lesson|Continue lesson|Revisit lesson|Open daily course)$/ });
+  return scope.getByRole('button', { name: /^(?:Start lesson|Continue lesson|Revisit lesson|Open course)$/ });
 }
 
 export async function openKeyPhrases(page: Page) {
@@ -89,12 +89,14 @@ export async function expectDialoguePhoto(scope: Locator, filename: string) {
 export async function buildAcceptedSentence(page: Page, lesson: Lesson) {
   const remaining = [...lesson.sentenceActivity.tokens];
   let answer = normalizeAnswer(lesson.sentenceActivity.answers[0]);
+  // Preserve punctuation inside the answer when a tile ends a clause.
+  const prefix = (token: string) => normalizeAnswer(`${token}…`).slice(0, -1);
   while (remaining.length) {
-    const index = remaining.findIndex(token => answer === normalizeAnswer(token) || answer.startsWith(`${normalizeAnswer(token)} `));
+    const index = remaining.findIndex(token => answer === normalizeAnswer(token) || answer.startsWith(`${prefix(token)} `));
     if (index < 0) throw new Error(`Cannot build ${lesson.id}: ${answer}`);
     const token = remaining.splice(index, 1)[0];
     await page.getByRole('button', { name: token, exact: true }).click();
-    answer = answer.slice(normalizeAnswer(token).length).trimStart();
+    answer = answer.slice(prefix(token).length).trimStart();
   }
   await page.getByRole('button', { name: 'Check sentence', exact: true }).click();
 }

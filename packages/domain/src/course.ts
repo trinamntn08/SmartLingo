@@ -27,6 +27,21 @@ export const courseBlockSchema = z.discriminatedUnion('kind', [
 export type CourseBlock = z.infer<typeof courseBlockSchema>;
 export type CourseChoice = Extract<CourseBlock, { kind: 'choice' }>;
 
+export const courseLessonStages = ['dialogue', 'vocabulary', 'listening', 'picture', 'sentence'] as const;
+export type CourseLessonStage = typeof courseLessonStages[number];
+
+export function courseLessonStageId(stage: CourseLessonStage): `lesson-${CourseLessonStage}` {
+  return `lesson-${stage}`;
+}
+
+function canonicalCourseLessonStage(blockId: string | undefined): CourseLessonStage | undefined {
+  return courseLessonStages.find(stage => courseLessonStageId(stage) === blockId);
+}
+
+const previousBlockStages: Record<CourseBlock['kind'], CourseLessonStage> = {
+  study: 'dialogue', vocabulary: 'vocabulary', dialogue: 'dialogue', choice: 'picture', reflection: 'sentence',
+};
+
 const compactDaySchema = z.object({
   tip: text.max(180),
   practice: z.array(z.object({ blockId: id, prompt: text.max(140), feedback: text.max(145), hint: text.max(95) })).min(1).max(6),
@@ -106,11 +121,20 @@ export const openCourseSchema = z.object({
         context.addIssue({ code: 'custom', message: 'Choice answers must reference a unique available option' });
       }
     }
+    if (day.blocks.some(block => canonicalCourseLessonStage(block.id))) {
+      context.addIssue({ code: 'custom', message: 'Authored blocks must not use reserved lesson step IDs' });
+    }
   }
   if (new Set(ids).size !== ids.length) context.addIssue({ code: 'custom', message: 'Duplicate course, source, unit, day or block IDs' });
 });
 export type OpenCourse = z.infer<typeof openCourseSchema>;
 export type CourseDay = OpenCourse['days'][number];
+
+/** Resolve a saved cursor or a legacy course link into the shared lesson reader. */
+export function courseLessonStageForBlock(day: CourseDay, blockId: string | undefined): CourseLessonStage | undefined {
+  const previous = day.blocks.find(block => block.id === blockId);
+  return previous ? previousBlockStages[previous.kind] : canonicalCourseLessonStage(blockId);
+}
 
 /** Only explicitly unchanged days reuse an earlier release's immutable event scope. */
 export function courseDayProgressRevision(course: OpenCourse, day: CourseDay): number {
@@ -129,6 +153,16 @@ export const courseEventSchema = z.discriminatedUnion('kind', [
   z.object({ ...eventFields, kind: z.literal('completion') }),
 ]);
 export type CourseEvent = z.infer<typeof courseEventSchema>;
+
+/** Identify valid new-reader events without changing the saved event contract. */
+export function courseLessonEventStage(event: CourseEvent): CourseLessonStage | undefined {
+  const stage = canonicalCourseLessonStage(event.blockId);
+  if (!stage) return undefined;
+  if (event.kind === 'navigation') return stage;
+  if (event.kind === 'study' && (stage === 'dialogue' || stage === 'vocabulary')) return stage;
+  if (event.kind === 'choice' && (stage === 'picture' || stage === 'sentence') && event.choiceId === event.result) return stage;
+  return undefined;
+}
 
 export function gradeCourseChoice(block: CourseChoice, choiceId: string): 'correct' | 'incorrect' {
   if (!block.choices.some(choice => choice.id === choiceId)) throw new Error('That answer is not an available choice.');
@@ -150,13 +184,24 @@ function orderedEvents(inputs: readonly CourseEvent[]): CourseEvent[] {
 export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: readonly CourseEvent[]) {
   const blocks = new Map(day.blocks.map(block => [block.id, block]));
   const events = orderedEvents(inputs).filter(event => event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day)
-    && event.dayId === day.id && blocks.has(event.blockId));
+    && event.dayId === day.id);
   const completedBlockIds = new Set<string>();
   const supportedBlockIds = new Set<string>();
   let dialogueStudied = false;
   let compactFinished = false;
+  let legacyCompletion = false;
+  let lastBlockId = day.blocks[0].id;
   for (const event of events) {
-    const block = blocks.get(event.blockId)!;
+    const block = blocks.get(event.blockId);
+    if (!block) {
+      if (!courseLessonEventStage(event)) continue;
+      lastBlockId = event.blockId;
+      if (event.kind === 'study' || (event.kind === 'choice' && event.result === 'correct')) completedBlockIds.add(event.blockId);
+      if (event.kind === 'choice' && event.supported) supportedBlockIds.add(event.blockId);
+      continue;
+    }
+    if (event.kind !== 'support' && event.kind !== 'completion') lastBlockId = block.id;
+    if (event.kind === 'completion') legacyCompletion = true;
     if (day.compact && event.kind === 'study' && block.kind === 'dialogue') dialogueStudied = true;
     if (dialogueStudied && event.kind === 'completion' && block.kind === 'reflection') compactFinished = true;
     if (event.kind === 'support' || (event.kind === 'choice' && event.supported)) supportedBlockIds.add(block.id);
@@ -167,11 +212,15 @@ export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: re
       && gradeCourseChoice(block, event.choiceId) === 'correct') completedBlockIds.add(block.id);
   }
   const allBlocksComplete = day.blocks.every(block => completedBlockIds.has(block.id));
-  // Preserve earlier full-lesson records. A compact finish records study, with practice scored separately.
-  const completed = compactFinished || (allBlocksComplete && events.some(event => event.kind === 'completion'));
-  const last = events.filter(event => event.kind !== 'support' && event.kind !== 'completion').at(-1);
-  return { completedBlockIds, supportedBlockIds, canComplete: allBlocksComplete || dialogueStudied, completed,
-    lastBlockId: last?.blockId ?? day.blocks[0].id };
+  const lessonWordsStudied = completedBlockIds.has(courseLessonStageId('vocabulary'))
+    || day.blocks.some(block => block.kind === 'vocabulary' && completedBlockIds.has(block.id));
+  const lessonPictureDone = completedBlockIds.has(courseLessonStageId('picture'));
+  const lessonSentenceDone = completedBlockIds.has(courseLessonStageId('sentence'));
+  const lessonCompleted = lessonWordsStudied && lessonPictureDone && lessonSentenceDone;
+  // Existing compact and full finishes keep their original requirements.
+  const completed = lessonCompleted || compactFinished || (allBlocksComplete && legacyCompletion);
+  return { completedBlockIds, supportedBlockIds, canComplete: lessonCompleted || allBlocksComplete || dialogueStudied,
+    completed, lastBlockId, lessonWordsStudied, lessonPictureDone, lessonSentenceDone };
 }
 
 export function nextCourseDay(course: OpenCourse, events: readonly CourseEvent[]): CourseDay | undefined {
@@ -184,7 +233,7 @@ export function resumeCourseDay(course: OpenCourse, inputs: readonly CourseEvent
   for (const event of orderedEvents(inputs).reverse()) {
     const day = days.get(event.dayId);
     if (day && event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day)
-      && day.blocks.some(block => block.id === event.blockId)) return day;
+      && (day.blocks.some(block => block.id === event.blockId) || courseLessonEventStage(event))) return day;
   }
   return nextCourseDay(course, inputs) ?? course.days.at(-1);
 }

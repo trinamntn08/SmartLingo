@@ -8,6 +8,8 @@ import { LessonConversation, LessonWords } from './LessonStudy';
 import { PictureActivity, SentenceActivity } from './LessonPractice';
 import { ListeningQuestionPlayer } from '../listening/ListeningQuestionPlayer';
 import { buildLessonListeningQuestion } from '../listening/lessonQuestions';
+import type { ListeningQuestion } from '../listening/comprehension';
+import type { ContextPhoto } from './contextPhotos';
 import { routePress } from './routePress';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { lessonStages, routeHref, topicRouteKey, type LessonStage } from '../app/routes';
@@ -26,34 +28,65 @@ interface LessonSequence {
   open: (lesson: Lesson) => void;
 }
 
-export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false }: {
+interface LessonLink {
+  title: string;
+  href: string;
+  onOpen: () => void;
+}
+
+interface CourseLessonSession {
+  stage: LessonStage;
+  progress: { wordsStudied: boolean; pictureDone: boolean; sentenceDone: boolean; completed: boolean };
+  exitHref: string;
+  disabled: boolean;
+  browseOnly: boolean;
+  stageHref: (step: LessonStage) => string;
+  changeStage: (step: LessonStage, snapshot: Record<string, unknown>) => void;
+  studyDialogue: (snapshot: Record<string, unknown>) => void;
+  studyWords: (next: 'listening' | 'picture', snapshot: Record<string, unknown>) => void;
+  record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number, after?: () => void) => void;
+  nextLesson?: LessonLink;
+  dialoguePhoto?: ContextPhoto;
+  listeningQuestion?: ListeningQuestion;
+}
+
+export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession }: {
   lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; sequence?: LessonSequence; routed?: boolean;
+  courseSession?: CourseLessonSession;
 }) {
   const { route, navigate, read } = useNavigation();
   const [focusRoutedStage, setFocusRoutedStage] = useVisitState<LessonStage | null>(focusStageKey, null);
-  const progress = lessonProgress(lesson, model.events);
-  const studiedWords = lesson.vocabulary.filter(entry => progress.viewedIds.has(entry.id)).length;
+  const topicProgress = lessonProgress(lesson, model.events);
+  const progress = courseSession?.progress ?? topicProgress;
+  const studiedWords = courseSession ? (courseSession.progress.wordsStudied ? lesson.vocabulary.length : 0)
+    : lesson.vocabulary.filter(entry => topicProgress.viewedIds.has(entry.id)).length;
   const wordsStudied = studiedWords === lesson.vocabulary.length;
   const recordedItems = studiedWords + Number(progress.pictureDone) + Number(progress.sentenceDone);
-  const resume = resumeStage(wordsStudied, progress);
+  const resume = resumeStage(wordsStudied, topicProgress);
   const [localStage, setLocalStage] = useState(resume);
   const [returnAfterCompletion, setReturnAfterCompletion] = useState(false);
   const lessonRoute = routed && route.kind === 'lesson' && route.lessonId === lesson.id && route.language === lesson.language ? route : undefined;
-  const stage = lessonRoute ? lessonRoute.stage ?? resume : localStage;
+  const stage = courseSession?.stage ?? (lessonRoute ? lessonRoute.stage ?? resume : localStage);
+  const usesVisitState = !!lessonRoute || !!courseSession;
   const titleId = useId();
   const headingId = useId();
   const focusLocalStage = useRef<LessonStage | null>(null);
   const restoringScroll = useRef(Number(read('learner.scroll') ?? 0) > 0);
   const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
+  const compactCourse = compact && !!courseSession;
   const lessonStatus = lesson.status === 'draft' ? 'Draft' : 'Published';
   const lessonMeta = compact ? `${lesson.level} · ${lessonStatus}` : `${lesson.level} · ${lesson.topic} · ${lessonStatus}`;
   const meaningMatch = lesson.pictureActivity.mode === 'meaning';
-  const listeningQuestion = useMemo(() => buildLessonListeningQuestion(lesson), [lesson]);
+  const courseListeningQuestion = courseSession?.listeningQuestion;
+  const listeningQuestion = useMemo(() => courseListeningQuestion ?? buildLessonListeningQuestion(lesson), [lesson, courseListeningQuestion]);
   const { heading } = stageLabels(stage, meaningMatch);
   const practiceLabel = meaningMatch ? 'Try meaning practice' : 'Try picture practice';
   const canComplete = wordsStudied && progress.pictureDone && !progress.completed;
-  const exitBlocked = model.busy || !!model.saveError;
-  const browseOnly = !!model.loadError;
+  const skipStudiedPhrases = wordsStudied && !courseSession;
+  const exitBlocked = model.busy || !!model.saveError || !!courseSession?.disabled;
+  const browseOnly = courseSession?.browseOnly ?? !!model.loadError;
+  const exerciseBlocked = courseSession ? exitBlocked || browseOnly : model.blocked;
+  const returnFocus = routed || !!courseSession;
 
   useEffect(() => {
     if (lessonRoute && !lessonRoute.stage && !model.loading) navigate({ ...lessonRoute, stage }, { replace: true });
@@ -69,7 +102,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     if (Platform.OS !== 'web') return;
     // The parent restores its scroll in a layout effect. Focus only after an
     // explicit step action, without scrolling revisited history entries.
-    if (lessonRoute) {
+    if (usesVisitState) {
       if (focusRoutedStage !== stage) return;
       setFocusRoutedStage(null);
     } else {
@@ -81,29 +114,31 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     headingElement.tabIndex = -1;
     headingElement.focus({ preventScroll: true });
     headingElement.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }, [headingId, stage, lessonRoute, focusRoutedStage, setFocusRoutedStage]);
+  }, [headingId, stage, usesVisitState, focusRoutedStage, setFocusRoutedStage]);
 
   useLayoutEffect(() => {
-    if (!routed || Platform.OS !== 'web' || restoringScroll.current) return;
+    if (!returnFocus || Platform.OS !== 'web' || restoringScroll.current) return;
     const title = document.getElementById(titleId);
     if (!title) return;
     title.tabIndex = -1;
     title.focus({ preventScroll: true });
-  }, [routed, titleId]);
+  }, [returnFocus, titleId]);
 
   function setStage(next: LessonStage, afterSave = false) {
     if (next === stage) return;
-    if (lessonRoute) navigate({ ...lessonRoute, stage: next }, { afterSave, snapshot: { [focusStageKey]: next } });
+    const snapshot = { [focusStageKey]: next };
+    if (courseSession) courseSession.changeStage(next, snapshot);
+    else if (lessonRoute) navigate({ ...lessonRoute, stage: next }, { afterSave, snapshot });
     else {
       focusLocalStage.current = next;
       setLocalStage(next);
     }
   }
 
-  const stageHref = (next: LessonStage) => lessonRoute ? routeHref({ ...lessonRoute, stage: next }) : undefined;
+  const stageHref = (next: LessonStage) => courseSession?.stageHref(next) ?? (lessonRoute ? routeHref({ ...lessonRoute, stage: next }) : undefined);
   const topicHref = lessonRoute ? routeHref({ kind: 'topics', language: lessonRoute.language, topic: topicRouteKey(lesson.topic) }) : undefined;
-  const exitHref = studyDayHref ?? topicHref;
-  const returnLabel = studyDayHref ? 'Back to guided lesson' : undefined;
+  const exitHref = courseSession?.exitHref ?? studyDayHref ?? topicHref;
+  const returnLabel = courseSession ? 'Exit lesson' : studyDayHref ? 'Back to guided lesson' : undefined;
 
   function lessonLink(target: Lesson | undefined) {
     if (!sequence || !target) return undefined;
@@ -112,7 +147,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   }
 
   const previousLesson = lessonLink(sequence?.previous);
-  const nextLesson = progress.completed ? lessonLink(sequence?.next) : undefined;
+  const nextLesson = progress.completed ? courseSession?.nextLesson ?? lessonLink(sequence?.next) : undefined;
 
   function entry(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number): LearningEvent {
     return { id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints,
@@ -120,6 +155,10 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   }
 
   function record(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints = 0, after?: () => void) {
+    if (courseSession) {
+      courseSession.record(activity, itemId, result, hints, after);
+      return;
+    }
     const attempt = entry(activity, itemId, result, hints);
     if (activity === 'sentence' && result === 'correct' && canComplete) {
       model.recordMany([attempt, entry('completion', lesson.id, 'completed', 0)], after);
@@ -130,6 +169,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
 
   function reviewVocabulary(next: 'listening' | 'picture') {
     if (browseOnly || wordsStudied) setStage(next);
+    else if (courseSession) courseSession.studyWords(next, { [focusStageKey]: next });
     else record('vocabulary', lesson.id, 'viewed', 0, () => setStage(next, true));
   }
 
@@ -137,18 +177,20 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const reviewLabel = progress.completed ? 'Revisit the words' : !wordsStudied ? 'Review key phrases' : meaningMatch ? 'Match the meanings' : 'Match the picture';
 
   return <View style={[layout.page, compact && layout.compactPage]}>
-    <View style={[s.row, layout.breadcrumb]}>
+    {!courseSession && <View style={[s.row, layout.breadcrumb]}>
       <Button compact quiet icon="arrow-left" href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
       <Text style={[s.muted, layout.meta]}>{lessonMeta}</Text>
-    </View>
-    <View style={[s.card, layout.intro, compact && layout.compactIntro]}>
+    </View>}
+    <View style={[s.card, layout.intro, compact && layout.compactIntro, compactCourse && layout.compactCourseIntro]}>
       {sequence && <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
         <Text style={s.eyebrow}>Lesson {sequence.position} of {sequence.total}</Text>
         {previousLesson && <Button compact quiet icon="arrow-left" label={`Previous lesson: ${previousLesson.title}`}
           href={previousLesson.href} onPress={previousLesson.onOpen} disabled={exitBlocked}>Previous lesson</Button>}
       </View>}
-      <Text nativeID={titleId} accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text>
-      <Text style={[s.body, layout.outcome, compact && s.muted]}>{lesson.outcome}</Text>
+      {courseSession && !compact && <Text style={s.eyebrow}>{lesson.level === 'foundation' ? 'Foundations' : lesson.level}</Text>}
+      <Text nativeID={titleId} accessibilityRole="header"
+        style={[s.title, compact && s.compactTitle, compactCourse && layout.compactCourseTitle]}>{lesson.subtitle}</Text>
+      <Text style={[s.body, layout.outcome, compact && s.muted, compactCourse && layout.compactCourseOutcome]}>{lesson.outcome}</Text>
       <LessonProgress stage={stage} compact={compact} meaningMatch={meaningMatch}
         recorded={browseOnly ? undefined : recordedItems} total={lesson.vocabulary.length + 2}
         disabled={exitBlocked} hrefForStep={stageHref} onStep={setStage} />
@@ -157,22 +199,23 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
         {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading]}>{heading}</Text>
       {stage === 'dialogue' && <>
-        <LessonConversation lesson={lesson} />
-        <StudyActions>
-          {wordsStudied && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
-          {wordsStudied
+        <LessonConversation lesson={lesson} photo={courseSession?.dialoguePhoto} />
+        <StudyActions sticky={!compactCourse}>
+          {skipStudiedPhrases && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
+          {skipStudiedPhrases
             ? <Button primary trailingIcon="arrow-right" href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
               onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>{listeningQuestion ? 'Start listening' : practiceLabel}</Button>
-            : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Continue to key phrases</Button>}
+            : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked}
+              onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>Continue to key phrases</Button>}
         </StudyActions>
       </>}
       {stage === 'vocabulary' && <>
         <LessonWords lesson={lesson} model={model} compact={compact} />
         <StudyActions>
           <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
-          <Button primary={!listeningQuestion} quiet={!!listeningQuestion} disabled={model.blocked && !browseOnly}
+          <Button primary={!listeningQuestion} quiet={!!listeningQuestion} disabled={exerciseBlocked && !browseOnly}
             onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>
-          {listeningQuestion && <Button primary trailingIcon="arrow-right" disabled={model.blocked && !browseOnly}
+          {listeningQuestion && <Button primary trailingIcon="arrow-right" disabled={exerciseBlocked && !browseOnly}
             onPress={() => reviewVocabulary('listening')}>Continue to listening</Button>}
         </StudyActions>
       </>}
@@ -184,10 +227,10 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
           <Text style={s.body}>Listening practice is unavailable for this lesson.</Text>
           <Button primary href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>Continue to matching</Button>
         </View>)}
-      {stage === 'picture' && <PictureActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
+      {stage === 'picture' && <PictureActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
-      {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
-        done={progress.sentenceDone || progress.completed} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
+      {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
+        done={progress.sentenceDone || (!courseSession && progress.completed)} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
         record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson}
         onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
         reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
@@ -195,9 +238,9 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   </View>;
 }
 
-function StudyActions({ children }: { children: ReactNode }) {
+function StudyActions({ children, sticky = true }: { children: ReactNode; sticky?: boolean }) {
   const row = <View style={[s.row, layout.actions]}>{children}</View>;
-  if (Platform.OS !== 'web') return row;
+  if (Platform.OS !== 'web' || !sticky) return row;
   return <div style={{ position: 'sticky', bottom: 0, zIndex: 1,
     paddingBlock: 8, backgroundColor: colors.paper, borderTop: '1px solid ' + colors.line }}>{row}</div>;
 }
@@ -264,6 +307,9 @@ const layout = StyleSheet.create({
   meta: { flexShrink: 1, minWidth: 0 },
   intro: { gap: 8 },
   compactIntro: { padding: 12, gap: 6 },
+  compactCourseIntro: { padding: 10, gap: 4 },
+  compactCourseTitle: { fontSize: 27, lineHeight: 33 },
+  compactCourseOutcome: { fontSize: 15, lineHeight: 21 },
   outcome: { color: colors.muted, maxWidth: 690 },
   stage: { minWidth: 0, gap: 14 },
   stageHeading: { alignSelf: 'flex-start', outlineColor: colors.focusRing, outlineOffset: 2 },

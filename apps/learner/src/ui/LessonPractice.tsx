@@ -90,6 +90,8 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const accepted = done ? exercise.answers.find(value => normalizeAnswer(value) === normalizeAnswer(answer)) ?? exercise.answers[0] : '';
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
+  const nextLessonButton = nextLesson && <Button primary trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
+    href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>Next lesson · {nextLesson.title}</Button>;
 
   function check() {
     const result = checkAnswer(answer, exercise);
@@ -122,8 +124,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
           {(completed || canComplete || browseOnly) && <Button primary={!nextLesson} quiet={!!nextLesson}
             trailingIcon={nextLesson ? undefined : 'arrow-right'} href={nextHref} disabled={disabled && !browseOnly}
             onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>}
-          {nextLesson && <Button primary trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
-            href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>Next lesson · {nextLesson.title}</Button>}
+          {nextLessonButton}
         </View>
       </> : <>
         <View style={layout.pieces}>
@@ -139,6 +140,9 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
           {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
             : <Button primary disabled={disabled || selected.length !== exercise.tokens.length} onPress={check}>Check sentence</Button>}
         </View>
+        {completed && nextLessonButton && <View style={layout.actions}>
+          <Text style={s.muted}>Lesson already completed</Text>{nextLessonButton}
+        </View>}
       </>}
     </View>
   </View>;

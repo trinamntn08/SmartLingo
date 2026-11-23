@@ -15,22 +15,18 @@ interface CourseOutlineProps {
   course: OpenCourse;
   route: CourseRoute;
   day: CourseDay;
-  sections: readonly { id: string; title: string }[];
-  sectionId: string;
-  completedSections?: ReadonlySet<string>;
   events: readonly CourseEvent[];
   level: CourseLevel;
   onLevelChange: (level: CourseLevel) => void;
   blocked: boolean;
   onDay: (day: CourseDay) => void;
-  onSection: (id: string) => void;
 }
 
 const neighborCount = 10;
 const levels = ['All', 'foundation', 'A1', 'A2', 'B1'] as const;
 
-export function CourseOutline({ id, sidebar, course, route, day, sectionId, sections, completedSections, events,
-  level, onLevelChange, blocked, onDay, onSection }: CourseOutlineProps) {
+export function CourseOutline({ id, sidebar, course, route, day, events,
+  level, onLevelChange, blocked, onDay }: CourseOutlineProps) {
   const [showAll, setShowAll] = useState(false);
   const scroll = useRef<HTMLDivElement>(null);
   const activeDayId = `${id}-active-day`;
@@ -69,15 +65,6 @@ export function CourseOutline({ id, sidebar, course, route, day, sectionId, sect
   const outline = <View nativeID={id} testID="course-outline" accessibilityRole="navigation" accessibilityLabel="Course outline"
     style={t.outline}>
     {sidebar && <Text accessibilityRole="header" style={[s.heading, t.title]}>Course outline</Text>}
-    <View style={t.group}>
-      <Text accessibilityRole="header" style={t.label}>Sections in Lesson {day.dayNumber}</Text>
-      {sections.map((item, index) => <Button key={item.id} compact marker={String(index + 1)}
-        label={`Section ${index + 1}: ${item.title}`} href={routeHref({ ...route, dayId: day.id, sectionId: item.id })}
-        selected={item.id === sectionId} disabled={blocked} onPress={() => onSection(item.id)}>
-        {item.title}{completedSections?.has(item.id) ? ' ✓' : ''}
-      </Button>)}
-    </View>
-    <View style={s.divider} />
     <View testID="course-day-chooser" style={t.group}>
       <Text accessibilityRole="header" style={t.label}>Lessons</Text>
       {level === 'All' && nearbyDays.length < course.days.length && <View style={{ alignItems: 'flex-start' }}>

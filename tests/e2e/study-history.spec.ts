@@ -202,13 +202,11 @@ test('the final answer completes the lesson in place and retries both records to
   expect((await storedEvents<LearningEvent>(page, 'events')).map(event => event.activity).sort()).toEqual(['completion', 'picture', 'sentence', 'vocabulary']);
 });
 
-test('French course section history is read-only and refresh keeps the same section', async ({ page }) => {
+test('French course history uses the five-step strip beside a lessons-only outline', async ({ page }) => {
   const day = openCoursePilot.days[0];
-  const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
-  const practice = day.blocks.find(block => block.kind === 'choice')!;
   const location = `/course/fr/${openCoursePilot.id}/${day.id}`;
   await page.goto(`/course/fr/${openCoursePilot.id}`);
-  await expect(page).toHaveURL(`${location}/${dialogue.id}`);
+  await expect(page).toHaveURL(`${location}/lesson-dialogue`);
   const panel = page.getByTestId('open-course-panel');
   const outlineButton = panel.getByRole('button', { name: 'Course outline', exact: true });
   const outline = panel.getByRole('navigation', { name: 'Course outline' });
@@ -225,51 +223,55 @@ test('French course section history is read-only and refresh keeps the same sect
     await expect(outlineButton).toHaveAttribute('aria-expanded', 'true');
     await expect(outline).toHaveAttribute('id', (await outlineButton.getAttribute('aria-controls'))!);
   }
-  await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('aria-selected', 'true');
+  await expect(outline.getByRole('button', { name: /^Section / })).toHaveCount(0);
   await expect(outline.getByRole('button', { name: /^Choose lesson 1:/ })).toHaveAttribute('aria-selected', 'true');
   await expect(outline.getByRole('button', { name: /^Choose lesson / })).toHaveCount(5);
-  await expect(outline.getByRole('button', { name: 'Section 1: Dialogue' })).toHaveAttribute('href', `${location}/${dialogue.id}`);
+  const steps = panel.getByRole('navigation', { name: 'Lesson steps' });
+  const dialogue = steps.getByRole('link', { name: 'Read dialogue', exact: true });
+  await expect(steps.getByRole('link')).toHaveCount(5);
+  await expect(dialogue).toHaveAttribute('aria-current', 'step');
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
   if (!wide) {
     await outlineButton.press('Enter');
     await expect(outline).toHaveCount(0);
   }
 
-  await panel.getByRole('button', { name: 'Next section', exact: true }).click();
-  await expect(page).toHaveURL(`${location}/${practice.id}`);
+  await panel.getByRole('button', { name: 'Continue to key phrases', exact: true }).click();
+  await expect(page).toHaveURL(`${location}/lesson-vocabulary`);
   if (wide) await expect(outline.getByRole('heading', { name: 'Course outline' })).toBeInViewport();
   const initialEvents = await storedEvents<CourseEvent>(page, 'courseEvents');
   expect(initialEvents.map(event => event.kind).sort()).toEqual(['navigation', 'study']);
 
   await page.goBack();
-  await expect(panel.getByRole('heading', { name: 'Dialogue', exact: true })).toBeVisible();
+  await expect(panel.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.goForward();
-  await expect(panel.getByRole('heading', { name: 'Quick practice', exact: true })).toBeVisible();
+  await expect(panel.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   await page.reload();
-  await expect(page).toHaveURL(`${location}/${practice.id}`);
-  await expect(panel.getByRole('heading', { name: 'Quick practice', exact: true })).toBeVisible();
+  await expect(page).toHaveURL(`${location}/lesson-vocabulary`);
+  await expect(panel.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual(initialEvents);
 
-  if (!wide) await outlineButton.press('Enter');
-  await outline.getByRole('button', { name: 'Section 1: Dialogue' }).press('Enter');
-  await expect(page).toHaveURL(`${location}/${dialogue.id}`);
-  if (!wide) await expect(outlineButton).toHaveAttribute('aria-expanded', 'false');
-  await expect(panel.getByRole('heading', { name: 'Dialogue', exact: true })).toBeFocused();
+  await dialogue.press('Enter');
+  await expect(page).toHaveURL(`${location}/lesson-dialogue`);
+  await expect(panel.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeFocused();
   expect((await storedEvents<CourseEvent>(page, 'courseEvents')).filter(event => event.kind === 'study')).toHaveLength(1);
 });
 
-test('Japanese course deep links and Previous browse an unsaved day without writing progress', async ({ page }) => {
+test('Japanese course maps bookmarked vocabulary and reflection to the shared reader without writing progress', async ({ page }) => {
   const day = japaneseCourse.days[0];
-  const [first, second] = day.blocks;
+  const words = day.blocks.find(block => block.kind === 'vocabulary')!;
+  const reflection = day.blocks.find(block => block.kind === 'reflection')!;
   const location = `/course/ja/${japaneseCourse.id}/${day.id}`;
-  await page.goto(`${location}/${second.id}`);
+  await page.goto(`${location}/${words.id}`);
   const panel = page.getByTestId('open-course-panel');
-  await expect(panel.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
-  await expect(panel.getByRole('button', { name: 'Complete lesson', exact: true })).toBeDisabled();
-  await panel.getByRole('button', { name: 'Previous section', exact: true }).click();
-  await expect(page).toHaveURL(`${location}/${first.id}`);
-  await expect(panel.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
+  await expect(page).toHaveURL(`${location}/lesson-vocabulary`);
+  await expect(panel.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
+  await page.goto(`${location}/${reflection.id}`);
+  await expect(page).toHaveURL(`${location}/lesson-sentence`);
+  await expect(panel.getByRole('heading', { name: 'Build a sentence', exact: true })).toBeVisible();
+  await expect(panel.getByRole('heading', { name: 'Lesson complete', exact: true })).toHaveCount(0);
   await page.goBack();
-  await expect(panel.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
+  await expect(page).toHaveURL(`${location}/lesson-vocabulary`);
+  await expect(panel.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
 });

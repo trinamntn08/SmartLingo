@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { openCoursePilot, lessons } from '@smartlingo/content';
-import { openCourseSchema, courseEventSchema, courseDayProgress, courseDayProgressRevision, nextCourseDay, resumeCourseDay, gradeCourseChoice, type CourseEvent, type CourseDay } from '../src';
+import { openCourseSchema, courseEventSchema, courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock,
+  courseLessonStageId, courseLessonStages, nextCourseDay, resumeCourseDay, gradeCourseChoice, type CourseEvent, type CourseDay } from '../src';
 
 const course = openCoursePilot;
 const day = course.days[0];
@@ -183,4 +184,62 @@ test('resume respects the latest compatible visit and ignores unknown days, bloc
   const completed = completeDay(day);
   // Explicit completion does not silently advance the current view to the next day.
   assert.equal(resumeCourseDay(course, completed)?.id, day.id);
+});
+
+test('course lesson steps have stable compatible navigation IDs alongside authored block links', () => {
+  assert.deepEqual(courseLessonStages.map(stage => courseLessonStageForBlock(day, courseLessonStageId(stage))),
+    ['dialogue', 'vocabulary', 'listening', 'picture', 'sentence']);
+  assert.deepEqual(day.blocks.map(block => courseLessonStageForBlock(day, block.id)),
+    ['dialogue', 'vocabulary', 'dialogue', 'picture', 'picture', 'picture', 'sentence']);
+  assert.equal(courseLessonStageForBlock(day, 'lesson-unknown'), undefined);
+  assert.equal(courseLessonStageForBlock(day, undefined), undefined);
+  const [first, ...rest] = day.blocks;
+  assert.throws(() => openCourseSchema.parse({ ...course, days: [
+    { ...day, blocks: [{ ...first, id: courseLessonStageId('dialogue') }, ...rest] }, ...course.days.slice(1),
+  ] }), /reserved lesson step IDs/);
+});
+
+test('the five-step course reader completes from saved words, matching and sentence work in one lesson scope', () => {
+  const words = event(courseLessonStageId('vocabulary'));
+  const match = event(courseLessonStageId('picture'), { kind: 'choice', choiceId: 'correct', result: 'correct', supported: true });
+  const sentence = event(courseLessonStageId('sentence'), { kind: 'choice', choiceId: 'correct', result: 'correct', supported: false });
+  const visit = event(courseLessonStageId('listening'), { kind: 'navigation', occurredAt: '2026-11-17T09:01:00Z' });
+  const started = courseDayProgress(course, day, [sentence, words, visit]);
+  assert.equal(started.lessonWordsStudied, true);
+  assert.equal(started.lessonPictureDone, false);
+  assert.equal(started.lessonSentenceDone, true);
+  assert.equal(started.completed, false);
+  assert.equal(started.lastBlockId, visit.blockId);
+  assert.equal(started.completedBlockIds.has(visit.blockId), false);
+
+  const completed = courseDayProgress(course, day, [sentence, words, match, visit, match]);
+  assert.equal(completed.completed, true);
+  assert.equal(completed.lessonPictureDone, true);
+  assert.equal(completed.supportedBlockIds.has(match.blockId), true);
+  assert.equal(nextCourseDay(course, [sentence, words, match])?.id, course.days[1].id);
+
+  const wrongMatch = { ...match, choiceId: 'incorrect' };
+  const falseCompletion = event(courseLessonStageId('sentence'), { kind: 'completion', occurredAt: '2026-11-17T09:02:00Z' });
+  for (const unusable of [wrongMatch, { ...match, courseRevision: 1 }, { ...match, dayId: course.days[1].id }]) {
+    const partial = courseDayProgress(course, day, [sentence, words, visit, unusable, falseCompletion]);
+    assert.equal(partial.completed, false);
+    assert.equal(partial.lessonPictureDone, false);
+    assert.equal(partial.lastBlockId, visit.blockId);
+  }
+
+  const legacy = courseDayProgress(course, day, completeDay(day));
+  assert.equal(legacy.completed, true);
+  assert.equal(legacy.lessonWordsStudied, true);
+  assert.equal(legacy.lessonPictureDone, false);
+  assert.equal(legacy.lessonSentenceDone, false);
+});
+
+test('resume selects canonical course visits and ignores newer events with invalid step activity', () => {
+  const second = course.days[1];
+  const visit = event(courseLessonStageId('listening'), {
+    dayId: second.id, courseRevision: courseDayProgressRevision(course, second), kind: 'navigation',
+  });
+  const invalid = event(courseLessonStageId('picture'), { kind: 'study', occurredAt: '2026-11-17T09:01:00Z' });
+  assert.equal(resumeCourseDay(course, [invalid, visit])?.id, second.id);
+  assert.equal(courseDayProgress(course, second, [invalid, visit]).lastBlockId, visit.blockId);
 });

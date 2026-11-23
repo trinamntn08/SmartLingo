@@ -1,4 +1,4 @@
-import { courseDayProgress, courseDayProgressRevision, nextCourseDay, resumeCourseDay,
+import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, nextCourseDay, resumeCourseDay,
   type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 
 export function courseRecommendation(course: OpenCourse, events: readonly CourseEvent[], unavailable: boolean): {
@@ -10,6 +10,6 @@ export function courseRecommendation(course: OpenCourse, events: readonly Course
   if (!day) return { day: last, status: 'complete' };
   const started = events.some(event => event.courseId === course.id && event.dayId === day.id
     && event.courseRevision === courseDayProgressRevision(course, day)
-    && event.kind !== 'support' && day.blocks.some(block => block.id === event.blockId));
+    && event.kind !== 'support' && (courseLessonEventStage(event) || day.blocks.some(block => block.id === event.blockId)));
   return { day, status: started ? 'resume' : day.id === last.id ? 'start' : 'next' };
 }

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { guidedLessonButton, openProfileSection } from '../e2e/learner-journeys';
 
-test('a downloaded course opens related practice and returns to the exact study section offline', async ({ request, page, context, baseURL }) => {
+test('a downloaded course opens related practice and returns to the exact lesson step offline', async ({ request, page, context, baseURL }) => {
   await request.post('/__test__/mode');
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
@@ -18,13 +18,14 @@ test('a downloaded course opens related practice and returns to the exact study 
   const button = (name: string) => cold.getByRole('button', { name, exact: true });
   await button('Learn').click();
   await guidedLessonButton(cold).click();
-  await button('Next section').click();
-  await button('Skip practice').click();
+  await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Build a sentence', exact: true }).click();
+  await expect(cold).toHaveURL(/\/lesson-sentence$/);
   const related = cold.getByTestId('daily-related-practice');
   await expect(related).toBeVisible();
-  const reflectionUrl = cold.url();
+  const courseStepUrl = cold.url();
   await related.getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
   await expect(cold).toHaveURL(/\/dialogue\?course=/);
+  expect(new URL(cold.url()).searchParams.get('section')).toBe('lesson-sentence');
   await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Listen', exact: true }).click();
   await expect(cold).toHaveURL(/\/listening\?course=/);
   await cold.reload();
@@ -35,6 +36,6 @@ test('a downloaded course opens related practice and returns to the exact study 
   await button('Check answer').click();
   await expect(cold.getByTestId('listening-feedback')).toContainText('You used transcript support');
   await button('Back to guided lesson').click();
-  await expect(cold).toHaveURL(reflectionUrl);
-  await expect(cold.getByRole('heading', { name: 'Try it', exact: true })).toBeVisible();
+  await expect(cold).toHaveURL(courseStepUrl);
+  await expect(cold.getByRole('heading', { name: 'Build a sentence', exact: true })).toBeVisible();
 });

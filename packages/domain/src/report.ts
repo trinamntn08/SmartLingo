@@ -1,4 +1,4 @@
-import { courseDayProgress, type CourseEvent, type OpenCourse } from './course';
+import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, type CourseEvent, type OpenCourse } from './course';
 import { lessonProgress, type LearningEvent } from './learning';
 import { notebookLanguage } from './languages';
 import { localStudyDate } from './review-schema';
@@ -39,7 +39,10 @@ function isLessonAction(event: LearningEvent): boolean {
 }
 
 function isCourseAction(event: CourseEvent, course: OpenCourse): boolean {
-  const block = course.days.find(day => day.id === event.dayId)?.blocks.find(block => block.id === event.blockId);
+  const day = course.days.find(day => day.id === event.dayId);
+  if (!day) return false;
+  if (courseLessonEventStage(event)) return event.kind !== 'navigation' && event.courseRevision <= courseDayProgressRevision(course, day);
+  const block = day.blocks.find(block => block.id === event.blockId);
   if (!block) return false;
   if (event.kind === 'study') return ['study', 'vocabulary', 'dialogue'].includes(block.kind);
   if (event.kind === 'choice') return block.kind === 'choice';
@@ -90,8 +93,7 @@ export function buildLearningReport(input: LearningReportInput): LearningReport 
   for (const course of courses) for (const day of course.days) {
     const progress = courseDayProgress(course, day, courseEvents);
     if (progress.completed) completedStudyDays++;
-    const studied = day.blocks.some(block => block.kind === 'vocabulary' && progress.completedBlockIds.has(block.id));
-    for (const entry of day.vocabulary) { vocabulary.add(entry.id); if (studied) explored.add(entry.id); }
+    for (const entry of day.vocabulary) { vocabulary.add(entry.id); if (progress.lessonWordsStudied) explored.add(entry.id); }
   }
   const grouped = new Map<string, Lesson[]>();
   for (const lesson of lessons) grouped.set(lesson.topic, [...(grouped.get(lesson.topic) ?? []), lesson]);

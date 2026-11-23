@@ -35,7 +35,7 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   const lessonsLead = !!selectedTopic && activeMode === 'Lessons' && width < designTokens.layout.compactBreakpoint;
   const showCourseCard = !selectedTopic && (activeMode === 'Lessons' || activeMode === 'Japanese letters');
   const courseShortcut = !showCourseCard && <Button compact icon="calendar" href={courseLaunch.href}
-    disabled={courseLaunch.disabled || courseLaunch.loading} onPress={courseLaunch.onOpen}>Daily course</Button>;
+    disabled={courseLaunch.disabled || courseLaunch.loading} onPress={courseLaunch.onOpen}>Course</Button>;
   const hrefForMode = (choice: LearnMode) => routeHref(learnRoute(choice, language, selectedTopic ? topicRouteKey(selectedTopic) : undefined));
   const sectionNavigation = <View style={{ gap: 10, paddingBottom: 12, borderBottomWidth: 1, borderColor: colors.line }}>
       <View accessibilityLabel="Learning sections" style={s.row}>

@@ -8,7 +8,7 @@ On a fresh homepage, choose **Learn French** or **Learn Japanese**, then use the
 
 Use **Learn → Lessons** or **Browse lessons** on Today to choose a topic. Open a short lesson directly, or expand **Topic vocabulary** below the lesson cards. **All topics** returns to discovery. English explanations stay visible and Japanese adds kana reading support. **Review → Add personal word** saves your own vocabulary, with optional Japanese readings. Voice and speed settings are language-specific. Japanese has a free local VOICEVOX fallback when a matching device voice is unavailable. The optional AI conversation and Azure neural voice features support French. [Japanese audio setup and credits](JAPANESE_AUDIO.md)
 
-In a short lesson, read the bilingual conversation, study its key phrases, listen for the meaning or a key detail, solve the matching exercise and build a sentence. Use the **Listen** step to open the listening check directly. In a guided lesson, open **Listening check** below the dialogue. The eligible correct sentence completes a short lesson and offers the next one. **Back to lessons** returns to the list.
+In a short lesson, read the bilingual conversation, study its key phrases, complete listening and matching, then build a sentence. Use **Listen** to open the listening check directly. In a guided lesson, open **Listening check** below the dialogue. In French, tap the word cards in the order you hear them, then use **Check answer**. Tap a selected card to remove it. **Show transcript** gives text support. The eligible correct sentence in the final step completes a short lesson and offers the next one. **Back to lessons** returns to the list.
 
 ## Listening comprehension, video resources and speaking
 

@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Rebuild French listening with word cards
+
+- Request. In a French lesson, reconstruct the spoken line from French cards such as `Au revoir`, `et` and `bonne journée`.
+- Start. At 23:12 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `be241ac0fa760b366b963c0b1b8a1fe6926d1bab`, ahead/behind `0/0`.
+- Acceptance. French short and guided lessons present shuffled word or phrase cards for the existing audio. Learners can arrange and remove cards, check their order, retry, or use the transcript. Existing listening navigation, fallback and progress stay usable.
+- Implementation. A pure builder groups common expressions and keeps accents, elisions and hyphenation. The player checks the selected order by text so indistinguishable cards can be swapped. It keeps an incorrect attempt editable and reveals the transcript and English meaning after success. A worker owned the card builder and corpus test using the inherited model. [Listening plan](plans/0053-lesson-listening.md#french-word-card-follow-up)
+- Review. An independent reviewer confirmed exact phrase grouping, order checking and compatibility, and found that keyboard focus could fall back to the page after moving a card. The final version moves keyboard focus to the card in its new location and removes stale outlines from disabled buttons.
+- Verification. Repository and TypeScript checks, 18 tooling and 278 application tests passed. All 138 French prompts yielded two to ten shuffled cards and retained the spoken wording. The Chromium suite passed 18 cases and all four cold-offline cases passed. A final rerun passed six browser and two cold-offline cases including keyboard focus, retry, progress and transcript support. The served manifest and bundle matched build `1c3dd5a214f0`. Direct preview walkthroughs verified the greeting and feedback at 320, 958 and 1,440 px.
+- Outcome. The stable preview serves the word cards at `http://localhost:8082/lesson/fr/fr.greetings.hello-goodbye/listening`. The commit containing this entry is the checkpoint. Next is owner review. Physical audio and screen readers remain unverified.
+
 ## 2026-11-23 Add listening to every lesson
 
 - Request. Use the French curriculum researcher skill to design and integrate listening practice into each lesson.

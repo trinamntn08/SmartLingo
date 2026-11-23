@@ -31,6 +31,9 @@ test('a downloaded course opens related practice and returns to the exact study 
   await button('Play sentence').click();
   await expect(cold.getByTestId('listening-question-player').getByRole('alert')).toContainText('Audio could not play');
   await expect(cold.getByTestId('listening-transcript')).toBeVisible();
+  for (const card of ['Au revoir', 'et', 'bonne journée']) await button(card).click();
+  await button('Check answer').click();
+  await expect(cold.getByTestId('listening-feedback')).toContainText('You used transcript support');
   await button('Back to guided lesson').click();
   await expect(cold).toHaveURL(reflectionUrl);
   await expect(cold.getByRole('heading', { name: 'Try it', exact: true })).toBeVisible();

@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState, type ComponentRef, type RefObject } from 'react';
+import { useId, useLayoutEffect, useMemo, useRef, useState, type ComponentRef, type RefObject } from 'react';
 import type { TargetLanguage } from '@smartlingo/domain';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useVisitState } from '../app/WebNavigation';
@@ -7,18 +7,21 @@ import { Button } from '../ui/controls';
 import { Icon } from '../ui/Icon';
 import { colors, designTokens as tokens, styles as s } from '../ui/theme';
 import type { ListeningQuestion } from './comprehension';
+import { buildFrenchListeningCards } from './frenchListeningCards';
+import { ListeningWordCards } from './ListeningWordCards';
 
 type PlayRef = RefObject<ComponentRef<typeof Pressable> | null>;
 
 interface Attempt {
   selected: number | null;
+  selectedCards: readonly number[];
   checked: boolean;
   transcriptOverride: boolean | null;
   usedTranscript: boolean;
   played: boolean;
 }
 
-const emptyAttempt: Attempt = { selected: null, checked: false, transcriptOverride: null, usedTranscript: false, played: false };
+const emptyAttempt: Attempt = { selected: null, selectedCards: [], checked: false, transcriptOverride: null, usedTranscript: false, played: false };
 
 interface QuestionContinuation {
   label: string;
@@ -37,9 +40,17 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
   const attemptKey = JSON.stringify(['listening-attempt', question.id, revision, question.sentence, question.reading,
     question.prompt, question.meaning, question.choices, question.correctIndex]);
   const [attempt, setAttempt] = useVisitState(attemptKey, emptyAttempt);
-  const { selected, checked, transcriptOverride, usedTranscript, played } = attempt;
-  const transcriptVisible = transcriptOverride ?? checked;
+  const { selected, selectedCards, checked, transcriptOverride, usedTranscript, played } = attempt;
   const embedded = position === undefined || total === undefined;
+  const cards = useMemo(() => embedded && question.language === 'fr-FR' ? buildFrenchListeningCards(question.sentence) : [],
+    [embedded, question.language, question.sentence]);
+  const wordCards = cards.length > 1;
+  const orderedCards = useMemo(() => [...cards].sort((left, right) => left.position - right.position), [cards]);
+  const ready = wordCards ? selectedCards.length === cards.length : selected !== null;
+  const isCorrect = wordCards ? ready && selectedCards.every((index, position) => cards[index]?.text === orderedCards[position]?.text)
+    : selected === question.correctIndex;
+  const passed = checked && (!wordCards || isCorrect);
+  const transcriptVisible = transcriptOverride ?? passed;
   const [playing, setPlaying] = useState(false);
   const [playFocused, setPlayFocused] = useState(false);
   const [transcriptFocused, setTranscriptFocused] = useState(false);
@@ -90,7 +101,7 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
     catch {
       if (current !== request.current) return;
       setError('Audio could not play. Try again or use the transcript.');
-      setAttempt(previous => ({ ...previous, transcriptOverride: true, usedTranscript: previous.usedTranscript || !previous.checked }));
+      setAttempt(previous => ({ ...previous, transcriptOverride: true, usedTranscript: previous.usedTranscript || !passed }));
     }
     finally {
       if (current === request.current) {
@@ -103,7 +114,14 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
   function checkAnswer() {
     stop();
     focusFeedback.current = true;
-    setAttempt(previous => ({ ...previous, checked: true, transcriptOverride: embedded ? null : previous.transcriptOverride }));
+    setAttempt(previous => ({
+      ...previous, checked: true, transcriptOverride: embedded && (!wordCards || isCorrect) ? null : previous.transcriptOverride,
+    }));
+  }
+
+  function toggleCard(index: number) {
+    setAttempt(previous => ({ ...previous, checked: false, selectedCards: previous.selectedCards.includes(index)
+      ? previous.selectedCards.filter(card => card !== index) : [...previous.selectedCards, index] }));
   }
 
   function tryAgain() {
@@ -114,11 +132,10 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
   }
 
   const playLabel = playing ? 'Stop audio' : played ? 'Replay sentence' : 'Play sentence';
-  const isCorrect = selected === question.correctIndex;
-  const canRetry = embedded && checked && !isCorrect;
+  const canRetry = embedded && !wordCards && checked && !isCorrect;
   const answer = question.choices[question.correctIndex];
   const matchesTranslation = answer === question.meaning;
-  const feedbackTitle = matchesTranslation
+  const feedbackTitle = wordCards ? isCorrect ? 'That’s what you heard.' : 'Try a different order.' : matchesTranslation
     ? isCorrect ? 'That’s the meaning.' : 'Here’s the meaning.'
     : isCorrect ? 'That’s right.' : 'Here’s the answer.';
   const next: QuestionContinuation | undefined = continuation ?? (onNext ? {
@@ -144,7 +161,7 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
         </Pressable>
         <Pressable accessibilityRole="button" accessibilityState={{ expanded: transcriptVisible }} aria-expanded={transcriptVisible}
           aria-controls={transcriptVisible ? transcriptId : undefined} onPress={() => setAttempt(previous => ({
-            ...previous, transcriptOverride: !transcriptVisible, usedTranscript: previous.usedTranscript || (!transcriptVisible && !previous.checked),
+            ...previous, transcriptOverride: !transcriptVisible, usedTranscript: previous.usedTranscript || (!transcriptVisible && !passed),
           }))} onFocus={() => setTranscriptFocused(true)} onBlur={() => setTranscriptFocused(false)}
           style={({ pressed }) => [layout.transcriptAction, embedded && layout.embeddedTranscriptAction, transcriptFocused && layout.focus,
             transcriptFocused && layout.inverseFocus, pressed && layout.pressed]}>
@@ -159,35 +176,43 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
         <Text {...languageProps} style={[s.body, layout.transcriptSentence]}>{question.sentence}</Text>
         {!!question.reading && <Text {...languageProps} style={s.muted}>{question.reading}</Text>}
       </View>}
-      <View style={layout.question}>
+      {wordCards && !passed && <ListeningWordCards cards={cards} selected={selectedCards} onToggle={toggleCard} />}
+      {!wordCards && <View style={layout.question}>
         <Text accessibilityRole="header" aria-level={embedded ? 3 : undefined} style={[s.heading, layout.questionTitle]}>
           {question.prompt ?? 'What does the sentence mean?'}
         </Text>
         <View style={layout.choices}>{question.choices.map((choice, index) => <ListeningChoiceRow key={choice} label={choice} selected={selected === index}
           disabled={checked} correct={checked && index === question.correctIndex}
           onPress={() => setAttempt(previous => ({ ...previous, selected: index }))} />)}</View>
-      </View>
+      </View>}
       {checked && <View accessibilityLiveRegion="polite" testID="listening-feedback" style={[layout.feedback, isCorrect ? layout.feedbackCorrect : layout.feedbackOther]}>
         <Text nativeID={feedbackId} accessibilityRole="header" aria-level={embedded ? 3 : undefined} style={[s.heading, layout.feedbackTitle]}>
           {feedbackTitle}
         </Text>
-        <Text style={s.body}>{answer}</Text>
-        {!matchesTranslation && <Text style={s.muted}>{question.meaning}</Text>}
-        <Text style={s.muted}>{usedTranscript ? 'You used transcript support for this sentence.' : played
-          ? 'Replay and compare the sentence with its meaning.' : embedded
-            ? 'Replay the sentence and listen for the answer.' : 'Try listening before answering the next sentence.'}</Text>
+        {wordCards ? <>
+          <Text style={s.body}>{isCorrect ? question.meaning : 'Replay the sentence or tap a card to move it back.'}</Text>
+          {isCorrect && usedTranscript && <Text style={s.muted}>You used transcript support for this sentence.</Text>}
+        </> : <>
+          <Text style={s.body}>{answer}</Text>
+          {!matchesTranslation && <Text style={s.muted}>{question.meaning}</Text>}
+          <Text style={s.muted}>{usedTranscript ? 'You used transcript support for this sentence.' : played
+            ? 'Replay and compare the sentence with its meaning.' : embedded
+              ? 'Replay the sentence and listen for the answer.' : 'Try listening before answering the next sentence.'}</Text>
+        </>}
       </View>}
-      {(!checked || next || canRetry) && <View style={[layout.footer, embedded && layout.embeddedFooter]}>
+      {(!passed || next || canRetry) && <View style={[layout.footer, embedded && layout.embeddedFooter]}>
         {onNext && <Button compact={compact} quiet label="Previous sentence" disabled={!onPrevious}
           onPress={() => { stop(); onPrevious?.(); }}>{compact ? 'Previous' : 'Previous sentence'}</Button>}
         <View style={layout.answerActions}>
           {canRetry && <Button compact={compact} quiet onPress={tryAgain}>Try again</Button>}
-          {next && <Button compact={compact} quiet={!checked} primary={checked} label={checked ? undefined : next.skipLabel}
-            trailingIcon={checked ? 'arrow-right' : undefined} href={next.href} disabled={next.disabled}
+          {wordCards && !passed && selectedCards.length > 0 && <Button compact={compact} quiet
+            onPress={() => setAttempt(previous => ({ ...previous, selectedCards: [], checked: false }))}>Clear</Button>}
+          {next && <Button compact={compact} quiet={!passed} primary={passed} label={passed ? undefined : next.skipLabel}
+            trailingIcon={passed ? 'arrow-right' : undefined} href={next.href} disabled={next.disabled}
             onPress={() => { stop(); next.onPress(); }}>
-            {checked ? next.label : compact && !continuation ? 'Skip' : next.skipLabel}
+            {passed ? next.label : compact && !continuation ? 'Skip' : next.skipLabel}
           </Button>}
-          {!checked && <Button compact={compact} primary disabled={selected === null} onPress={checkAnswer}>Check answer</Button>}
+          {!passed && <Button compact={compact} primary disabled={!ready || checked} onPress={checkAnswer}>Check answer</Button>}
         </View>
       </View>}
     </View>

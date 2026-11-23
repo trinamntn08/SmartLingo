@@ -1,7 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { japaneseCourse, openCoursePilot, restaurantLesson } from '@smartlingo/content';
+import { japaneseCourse, lessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
 import type { CourseEvent, LearningEvent } from '@smartlingo/domain';
-import { buildLessonListeningQuestion } from '../../apps/learner/src/listening/lessonQuestions';
 import { buildAcceptedSentence } from './learner-journeys';
 
 async function storedEvents<T>(page: Page, store: 'events' | 'courseEvents'): Promise<T[]> {
@@ -74,7 +73,7 @@ test('lesson Back restores its stage and Forward restores the previous hint in t
   expect(events[0]).toMatchObject({ activity: 'vocabulary', result: 'viewed' });
 });
 
-test('lesson listening uses the target audio, shows feedback and keeps the existing progress records', async ({ page }) => {
+test('French lesson listening assembles phrase cards, checks their order and keeps the existing progress records', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(readonly text: string) {} } });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
@@ -85,28 +84,48 @@ test('lesson listening uses the target audio, shows feedback and keeps the exist
       },
     } });
   });
-  const lessonPath = `/lesson/fr/${restaurantLesson.id}`;
-  const question = buildLessonListeningQuestion(restaurantLesson)!;
+  const lesson = lessons.find(item => item.id === 'fr.greetings.hello-goodbye')!;
+  const lessonPath = `/lesson/fr/${lesson.id}`;
+  const sentence = 'Au revoir et bonne journée !';
   await page.goto(`${lessonPath}/vocabulary`);
   await page.getByRole('button', { name: 'Continue to listening', exact: true }).click();
   await expect(page).toHaveURL(`${lessonPath}/listening`);
   const player = page.getByTestId('listening-question-player');
   const button = (name: string) => player.getByRole('button', { name, exact: true });
   const transcript = player.getByTestId('listening-transcript');
+  const bank = player.getByRole('group', { name: 'Word cards' });
+  const tray = player.getByRole('group', { name: 'Your sentence' });
+  const cards = bank.getByRole('button');
+  await expect(cards).toHaveCount(3);
+  expect(await cards.allTextContents()).not.toEqual(['Au revoir', 'et', 'bonne journée']);
+  await expect(button('Check answer')).toBeDisabled();
   await expect(transcript).toHaveCount(0);
   await button('Play sentence').click();
   await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('short-lesson-audio') ?? '{}')))
-    .toEqual({ text: question.sentence, lang: 'fr-FR' });
+    .toEqual({ text: sentence, lang: 'fr-FR' });
   await expect(button('Replay sentence')).toBeVisible();
-  await button('Show transcript').click();
-  await expect(transcript).toContainText(question.sentence);
-  await button('Hide transcript').click();
-  await button(question.choices[question.correctIndex]!).click();
+  await button('bonne journée').press('Enter');
+  await expect(button('bonne journée')).toBeDisabled();
+  const removePhrase = tray.getByRole('button', { name: 'Remove bonne journée', exact: true });
+  await expect(removePhrase).toBeFocused();
+  await button('Au revoir').click();
+  await expect(button('Check answer')).toBeDisabled();
+  await button('et').click();
   await button('Check answer').click();
   const feedback = player.getByTestId('listening-feedback');
-  await expect(feedback).toContainText(question.meaning);
+  await expect(feedback).toContainText('Try a different order.');
+  await expect(transcript).toHaveCount(0);
+  await expect(feedback.getByRole('heading')).toBeFocused();
+  await button('Show transcript').click();
+  await expect(transcript).toContainText(sentence);
+  await button('Hide transcript').click();
+  await removePhrase.press('Enter');
+  await expect(button('bonne journée')).toBeFocused();
+  await button('bonne journée').click();
+  await button('Check answer').click();
+  await expect(feedback).toContainText('Goodbye and have a good day!');
   await expect(feedback).toContainText('You used transcript support');
-  await expect(transcript).toContainText(question.sentence);
+  await expect(transcript).toContainText(sentence);
   await button('Continue to matching').click();
   await expect(page).toHaveURL(`${lessonPath}/picture`);
   await page.goBack();

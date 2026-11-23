@@ -110,7 +110,13 @@ for (const course of [openCoursePilot, japaneseCourse]) {
     await expect(answer).toBeDisabled();
     await check.getByRole('button', { name: 'Show transcript', exact: true }).click();
     await expect(transcript).toContainText(question.sentence);
-    await check.getByRole('button', { name: question.choices[question.correctIndex], exact: true }).click();
+    if (course.language === 'fr-FR') {
+      const bank = check.getByRole('group', { name: 'Word cards' });
+      await bank.getByRole('button', { name: 'Au revoir', exact: true }).click();
+      await bank.getByRole('button', { name: 'bonne journée', exact: true }).click();
+    } else {
+      await check.getByRole('button', { name: question.choices[question.correctIndex], exact: true }).click();
+    }
     await answer.click();
     const feedback = check.getByTestId('listening-feedback');
     await expect(feedback).toContainText(question.meaning);

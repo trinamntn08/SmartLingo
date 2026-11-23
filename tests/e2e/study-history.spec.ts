@@ -28,6 +28,24 @@ test('lesson Back restores its stage and Forward restores the previous hint in t
   const location = `/lesson/fr/${restaurantLesson.id}`;
   await page.goto(location);
   await expect(page).toHaveURL(`${location}/dialogue`);
+  const steps = page.getByRole('navigation', { name: 'Lesson steps' });
+  const sentence = steps.getByRole('link', { name: 'Build a sentence' });
+  await steps.getByRole('link', { name: 'Match a picture' }).focus();
+  await page.keyboard.press('Tab');
+  await expect(sentence).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(`${location}/sentence`);
+  await expect(sentence).toHaveAttribute('aria-current', 'step');
+  await expect(page.getByTestId('lesson-stage-heading')).toBeFocused();
+  await expect(page.getByRole('heading', { name: 'Lesson complete', exact: true })).toHaveCount(0);
+  await steps.getByRole('link', { name: 'Key phrases' }).click();
+  await expect(page).toHaveURL(`${location}/vocabulary`);
+  await steps.getByRole('link', { name: 'Match a picture' }).click();
+  await expect(page).toHaveURL(`${location}/picture`);
+  await steps.getByRole('link', { name: 'Dialogue' }).click();
+  await expect(page).toHaveURL(`${location}/dialogue`);
+  await expect(storedEvents<LearningEvent>(page, 'events')).resolves.toEqual([]);
+
   await page.getByRole('button', { name: 'Continue to key phrases', exact: true }).click();
   await expect(page).toHaveURL(`${location}/vocabulary`);
   await page.getByRole('button', { name: /Try picture practice/ }).click();
@@ -75,6 +93,7 @@ test('the final answer completes the lesson in place and retries both records to
   await buildAcceptedSentence(page, restaurantLesson);
   const retry = page.getByRole('button', { name: 'Retry save', exact: true });
   await expect(retry).toBeVisible();
+  await expect(page.getByTestId('lesson-step-dialogue')).toBeDisabled();
   expect((await storedEvents<LearningEvent>(page, 'events')).map(event => event.activity).sort()).toEqual(['picture', 'vocabulary']);
   await retry.click();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();

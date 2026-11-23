@@ -1,11 +1,12 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
 import { Button } from './controls';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { LessonConversation, LessonWords } from './LessonStudy';
 import { PictureActivity, SentenceActivity } from './LessonPractice';
+import { routePress } from './routePress';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { routeHref, topicRouteKey, type LessonStage } from '../app/routes';
 
@@ -147,11 +148,12 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       <Text nativeID={titleId} accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>{lesson.subtitle}</Text>
       <Text style={[s.body, layout.outcome, compact && s.muted]}>{lesson.outcome}</Text>
       <LessonProgress stage={stage} compact={compact} meaningMatch={meaningMatch}
-        recorded={browseOnly ? undefined : recordedItems} total={lesson.vocabulary.length + 2} />
+        recorded={browseOnly ? undefined : recordedItems} total={lesson.vocabulary.length + 2}
+        disabled={exitBlocked} hrefForStep={stageHref} onStep={setStage} />
     </View>
     <View testID="lesson-stage" style={layout.stage}>
       <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
-        {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={s.heading}>{heading}</Text>
+        {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading]}>{heading}</Text>
       {stage === 'dialogue' && <>
         <LessonConversation lesson={lesson} />
         <StudyActions>
@@ -189,14 +191,15 @@ function StudyActions({ children }: { children: ReactNode }) {
 function stageLabels(stage: LessonStage, meaningMatch: boolean) {
   switch (stage) {
     case 'vocabulary': return { label: 'Key phrases', short: 'Phrases', heading: 'Key phrases' };
-    case 'dialogue': return { label: 'Conversation', short: 'Read', heading: 'Read a conversation' };
+    case 'dialogue': return { label: 'Dialogue', short: 'Dialogue', heading: 'Read a conversation' };
     case 'picture': return { label: meaningMatch ? 'Match meanings' : 'Match a picture', short: 'Match', heading: meaningMatch ? 'Match the meaning' : 'Match a picture' };
     case 'sentence': return { label: 'Build a sentence', short: 'Build', heading: 'Build a sentence' };
   }
 }
 
-function LessonProgress({ stage, compact, meaningMatch, recorded, total }: {
+function LessonProgress({ stage, compact, meaningMatch, recorded, total, disabled, hrefForStep, onStep }: {
   stage: LessonStage; compact: boolean; meaningMatch: boolean; recorded?: number; total: number;
+  disabled: boolean; hrefForStep: (step: LessonStage) => string | undefined; onStep: (step: LessonStage) => void;
 }) {
   const current = guidedSteps.indexOf(stage);
   return <View style={[layout.progress, compact && layout.compactProgress]}>
@@ -207,21 +210,36 @@ function LessonProgress({ stage, compact, meaningMatch, recorded, total }: {
       </Text>}
     </View>
     {recorded !== undefined && <View accessibilityRole="progressbar" accessibilityLabel="Lesson study progress"
-      aria-valuemin={0} aria-valuemax={total} aria-valuenow={recorded} style={s.progressTrack}>
+      aria-valuemin={0} aria-valuemax={total} aria-valuenow={recorded} style={[s.progressTrack, layout.progressTrack]}>
       <View style={[s.progressFill, { width: `${recorded / total * 100}%` }]} />
     </View>}
-    <View accessibilityLabel="Lesson steps in order" style={layout.steps}>
+    <View role="navigation" accessibilityLabel="Lesson steps" style={layout.steps}>
       {guidedSteps.map((step, index) => {
         const { label, short } = stageLabels(step, meaningMatch);
-        const active = step === stage;
-        return <View key={step} testID={'lesson-step-' + step} aria-current={active ? 'step' : undefined}
-          accessibilityLabel={label + ', step ' + (index + 1) + ' of ' + guidedSteps.length}
-          style={[layout.segment, compact && layout.compactSegment, active && layout.activeSegment]}>
-          <Text style={[s.badgeText, layout.stepLabel, active && layout.activeLabel]}>{compact ? short : label}</Text>
-        </View>;
+        return <LessonStep key={step} step={step} number={index + 1} label={label} text={compact ? short : label}
+          current={step === stage} compact={compact} disabled={disabled} href={hrefForStep(step)} onPress={() => onStep(step)} />;
       })}
     </View>
   </View>;
+}
+
+function LessonStep({ step, number, label, text, current, compact, disabled, href, onPress }: {
+  step: LessonStage; number: number; label: string; text: string; current: boolean;
+  compact: boolean; disabled: boolean; href?: string; onPress: () => void;
+}) {
+  const [focused, setFocused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  return <Pressable testID={'lesson-step-' + step} accessibilityRole={href ? 'link' : 'button'} accessibilityLabel={label}
+    aria-current={current ? 'step' : undefined} disabled={disabled} accessibilityState={{ disabled }}
+    {...routePress(disabled ? undefined : href, onPress)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+    onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
+    style={({ pressed }) => [layout.segment, compact && layout.compactSegment, hovered && !disabled && layout.hoverSegment,
+      current && layout.activeSegment, focused && layout.focusSegment, pressed && layout.pressedSegment, disabled && layout.disabledSegment]}>
+    <View aria-hidden style={[layout.stepNumber, current && layout.activeNumber]}>
+      <Text style={[layout.numberText, current && layout.activeNumberText]}>{number}</Text>
+    </View>
+    <Text style={[layout.stepLabel, compact && layout.compactLabel, current && layout.activeLabel]}>{text}</Text>
+  </Pressable>;
 }
 
 const layout = StyleSheet.create({
@@ -233,17 +251,30 @@ const layout = StyleSheet.create({
   compactIntro: { padding: 12, gap: 6 },
   outcome: { color: colors.muted, maxWidth: 690 },
   stage: { minWidth: 0, gap: 14 },
+  stageHeading: { alignSelf: 'flex-start', outlineColor: colors.focusRing, outlineOffset: 2 },
   actions: { justifyContent: 'flex-end', gap: 8 },
   progress: { gap: 8, marginTop: 4, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
   compactProgress: { gap: 6, marginTop: 2, paddingTop: 8 },
   progressLabels: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: 12, rowGap: 2 },
   stepCount: { ...tokens.typography.smallLabel, color: colors.ink },
   recorded: { ...tokens.typography.caption, color: colors.muted },
-  steps: { flexDirection: 'row', gap: 5, marginTop: 2 },
-  segment: { flex: 1, minWidth: 0, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3, paddingVertical: 9,
-    borderRadius: 8, borderWidth: 1, borderColor: 'transparent', backgroundColor: colors.sand },
-  compactSegment: { paddingVertical: 7 },
+  progressTrack: { height: 4 },
+  steps: { flexDirection: 'row', gap: 4, padding: 4, borderRadius: tokens.radius.md, backgroundColor: colors.paper },
+  segment: { flex: 1, minWidth: 0, minHeight: tokens.control.minimumTarget, flexDirection: 'row', alignItems: 'center',
+    justifyContent: 'center', gap: 8, paddingHorizontal: 6, paddingVertical: 6,
+    borderRadius: tokens.radius.sm, borderWidth: 1, borderColor: 'transparent' },
+  compactSegment: { flexDirection: 'column', gap: 3, paddingHorizontal: 2, paddingVertical: 4 },
+  hoverSegment: { backgroundColor: colors.card, borderColor: colors.line },
   activeSegment: { backgroundColor: colors.goldTint, borderColor: colors.yellow },
-  stepLabel: { textAlign: 'center', color: colors.muted },
+  focusSegment: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 1 },
+  pressedSegment: { opacity: tokens.opacity.pressed },
+  disabledSegment: { opacity: tokens.opacity.disabled },
+  stepNumber: { width: 22, height: 22, flexShrink: 0, alignItems: 'center', justifyContent: 'center',
+    borderRadius: 11, backgroundColor: colors.green },
+  activeNumber: { backgroundColor: colors.primary },
+  numberText: { ...tokens.typography.smallLabel, fontSize: 12, lineHeight: 16, color: colors.primary },
+  activeNumberText: { color: colors.onPrimary },
+  stepLabel: { ...tokens.typography.smallLabel, flexShrink: 1, fontSize: 13, lineHeight: 17, textAlign: 'center', color: colors.muted },
+  compactLabel: { fontSize: 11, lineHeight: 14 },
   activeLabel: { color: colors.ink, fontWeight: '700' },
 });

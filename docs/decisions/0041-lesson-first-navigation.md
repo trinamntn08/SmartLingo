@@ -14,4 +14,4 @@ Topic pages lead with short lessons. Topic vocabulary is a collapsed reference b
 
 ## Consequences
 
-Existing stage routes and activity records keep their identities. Deliberately continuing from key phrases records the existing vocabulary review. Matching and the eligible correct sentence still determine practice and completion. Conversation photos follow the transcripts so the actual study material leads on small screens. The [execution plan](../plans/0052-lesson-first-learner.md) records validation.
+Existing stage routes and activity records keep their identities. The numbered navigation strip can open any stage without writing a learning event. Deliberately continuing from key phrases records the existing vocabulary review. Matching and the eligible correct sentence still determine practice and completion. Conversation photos follow the transcripts so the actual study material leads on small screens. The [execution plan](../plans/0052-lesson-first-learner.md) records validation.

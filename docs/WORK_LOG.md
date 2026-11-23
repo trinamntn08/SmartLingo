@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Redesign and activate the four lesson steps
+
+- Request. Make every short-lesson step clickable and redesign the four controls using frontend design guidance.
+- Start. At 22:14 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout and rechecked after the design request. Local, tracking and live `feat/french-daily-opening` matched at `090345f9f49b5f5d5bb292548840d042b590ad0e`, ahead/behind `0/0`.
+- Acceptance. All four lesson steps open directly by pointer, touch or keyboard. The active step is identifiable, browser history and guided-course return links work, and switching steps writes no practice or completion records. Keep all four visible on a phone.
+- Implementation. Used the seven SmartLingo references and the [Frontend App Builder skill](https://github.com/openai/plugins/tree/main/plugins/build-web-apps/skills/frontend-app-builder) for a compact cream strip with numbered sage markers and a gold current step. Each control opens its existing route or the editor's local preview stage. On phones, short labels sit below their markers. Saved activity stays separate, and the controls follow the existing pending-save guard.
+- Verification. Repository and TypeScript checks, 18 tooling and 269 application tests, 31 distinct Chromium cases and ten cold-offline cases passed across runs, with one existing browser skip. The first editor run found two buttons named Build a sentence in the local preview. The rerun scoped the existing activity action and separately exercised a numbered preview control. Five focused browser cases and four focused offline cases passed with the final label and focus treatment. The embedded browser host was unavailable. Playwright Chromium verified the served manifest and bundle, the 44 px minimum hit areas and the screenshots at 320, 390, 958 and 1,440 px.
+- Outcome. The stable preview serves build `f1e16dcbe81a` on `http://localhost:8082`. The commit containing this entry is the checkpoint. Next is owner review of the four controls. Physical devices and screen readers remain unverified.
+
 ## 2026-11-23 Put lessons first in the learner
 
 - Request. Let learners start directly from the homepage in one or two actions and make vocabulary a secondary destination.

@@ -4,6 +4,7 @@ import { buildJapaneseExpansion } from './japanese-expansion';
 import { foundationsExpansions } from './japanese-vocabulary/foundations';
 import { routinesExpansions } from './japanese-vocabulary/routines';
 import { discussionExpansions } from './japanese-vocabulary/discussion';
+import { buildJapaneseStarter } from './topics/japanese';
 
 type SentenceDraft = Omit<Lesson['sentenceActivity'], 'id' | 'almostAnswers'>;
 
@@ -142,9 +143,11 @@ if (expansions.length !== japaneseCourse.days.length || byDay.size !== expansion
   throw new Error('Each Japanese topic needs one complete vocabulary expansion.');
 }
 
-export const japaneseLessons: Lesson[] = originalJapaneseLessons.flatMap((lesson, index) => {
+const expandedJapaneseLessons = originalJapaneseLessons.flatMap((lesson, index) => {
   const day = japaneseCourse.days[index];
   const expansion = byDay.get(day.dayNumber);
   if (!expansion) throw new Error(`Missing Japanese vocabulary expansion for day ${day.dayNumber}`);
   return [lesson, ...buildJapaneseExpansion(day, expansion)];
 });
+
+export const japaneseLessons: Lesson[] = [...expandedJapaneseLessons, ...buildJapaneseStarter(expandedJapaneseLessons)];

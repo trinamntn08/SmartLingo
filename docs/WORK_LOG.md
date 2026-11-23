@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Integrate both Cloud learner updates
+
+- Request. Bring Cloud UI redesign `563fdaa` and French/Japanese curriculum update `47eebaf` into the established local preview.
+- Start. At 21:11 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `6ab10fd30891f2ade77b991c91a6e51b77c3f1e0`, ahead/behind `0/0`. Live `feat/learner-ui-redesign` was `563fdaa01b8d56cc4c0baf971b9f2664b26212f8`. A second fetch on the owner's follow-up verified live `feat/french-topics-japanese-course` at `47eebafdf5050cad95549ffe49204d94fc053c39`. The Today builder's extracted image was the only working-tree addition during that recheck.
+- Implementation. Both Cloud branches share older merge base `1c5b5d4`. Adapted their scoped changes to the current learner, including the photo-led Today, topic shortcuts, vocabulary-first browsing and explicit step focus. Added ten French cycling and waste lessons and four Japanese starter lessons with stable lesson IDs and canonical vocabulary reuse. [Execution plan](plans/0051-integrate-cloud-learner-updates.md)
+- Review. Three UI builders and an independent read-only reviewer used inherited settings. The reviewer verified the curriculum, image provenance and narrow keyboard flow. Restored the course-title heading found during review and updated the Japanese catalogue expectations to include the starter banks.
+- Verification. Repository and TypeScript checks, 18 tooling and 269 application tests, and Git whitespace checks passed. The first Chromium sweep passed 186 cases with one existing skip. The final four-case rerun covered the three corrected cases and repeated the mobile French case. All 30 cold-offline cases passed. Chromium at 390 and 1,440 px verified Today and the new drafts on the stable preview, with matching local and served manifest, bundle and photo hashes.
+- Outcome. `http://localhost:8082` serves build `ce2c55012fde`. The commit containing this entry is the integration checkpoint. Next is owner review at the same address. Physical devices, screen readers and qualified language review remain open.
+
 ## 2026-11-23 Trace the Cloud learner redesign commit
 
 - Request. Recover Cloud Codex revision `563fdaa` on `feat/learner-ui-redesign` for comparison with the local preview. The owner supplied the Cloud report and its thread link.

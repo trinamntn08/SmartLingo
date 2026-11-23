@@ -1,8 +1,6 @@
-import { Text, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { CourseDay, OpenCourse } from '@smartlingo/domain';
-import { ContextImage } from '../ui/ContextImage';
-import { getContextPhoto } from '../ui/contextPhotos';
-import { getDailyDialoguePhoto } from '../ui/dialoguePhotos';
+import { Icon } from '../ui/Icon';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 
@@ -28,35 +26,49 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
   featured?: boolean;
 }) {
   const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
-  const noteColor = featured ? '#C5DCD3' : colors.muted;
   const message = loading ? 'Loading course progress…' : progressMessages[status];
-  const textColor = featured ? colors.card : colors.ink;
 
-  return <View testID="open-course-panel" style={featured
-    ? { flexDirection: compact ? 'column-reverse' : 'row', backgroundColor: colors.dark, borderRadius: 20, overflow: 'hidden' }
-    : [s.card, { padding: compact ? 16 : 20, borderTopWidth: 3, borderTopColor: colors.yellow }]}>
-    <View style={{ flex: featured && !compact ? 1 : undefined, minWidth: 0, gap: compact ? 6 : 8,
-      padding: featured ? (compact ? 16 : 24) : 0, justifyContent: 'center' }}>
-      <Text accessibilityRole="header" style={[s.muted, { color: featured ? colors.yellow : colors.primary, fontWeight: '700', fontSize: 15 }]}>
+  return <View testID="open-course-panel" style={[
+    s.card,
+    featured ? launch.featured : launch.regular,
+    compact && (featured ? launch.featuredCompact : launch.regularCompact),
+  ]}>
+    {featured && <View style={launch.icon}><Icon name="book" size={22} color={colors.primary} /></View>}
+    <View style={[launch.copy, compact && launch.copyCompact, featured && launch.featuredCopy]}>
+      <Text accessibilityRole="header" aria-level={2} style={launch.courseTitle}>
         {course.title}
       </Text>
       {!loading && <>
-        <Text accessibilityRole="header" style={[featured ? s.title : s.heading, { color: textColor },
-          featured ? { fontSize: compact ? 28 : 36, lineHeight: compact ? 34 : 43 } : { fontSize: 22, lineHeight: 29 }]}>
+        <Text accessibilityRole="header" aria-level={3} style={[s.heading, launch.lessonTitle]}>
           Lesson {day.dayNumber}: {day.title}
         </Text>
-        <Text style={[s.body, { color: textColor, fontSize: featured && !compact ? 18 : 16, lineHeight: 25 }]}>{day.outcome}</Text>
+        <Text style={[s.body, launch.outcome]}>{day.outcome}</Text>
       </>}
-      <Text style={[s.muted, { color: noteColor, fontSize: 14, lineHeight: 20 }]}>
+      <Text style={launch.note}>
         {course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview
       </Text>
-      {message && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: noteColor, fontSize: 14, lineHeight: 20 }]}>{message}</Text>}
-      <View style={[s.row, { marginTop: 4 }]}>
-        <Button accent={featured} primary={!featured} compact={!featured} href={href} onPress={onOpen}
-          disabled={loading || disabled} trailingIcon="chevron">Open daily course</Button>
-      </View>
+      {message && <Text accessibilityLiveRegion="polite" style={launch.note}>{message}</Text>}
     </View>
-    {featured && <ContextImage photo={getDailyDialoguePhoto(day.id) ?? getContextPhoto(course.language, day.title)}
-      style={compact ? { width: '100%', height: 104 } : { flex: 1.15, minHeight: 244 }} />}
+    <View style={[s.row, !featured && launch.regularAction, featured && compact && launch.fullWidth]}>
+      <Button accent={featured} primary={!featured} compact href={href} onPress={onOpen}
+        disabled={loading || disabled} trailingIcon="chevron">Open daily course</Button>
+    </View>
   </View>;
 }
+
+const launch = StyleSheet.create({
+  regular: { padding: 20, borderTopWidth: 3, borderTopColor: colors.yellow, gap: 8 },
+  regularCompact: { padding: 16, gap: 6 },
+  featured: { padding: 16, backgroundColor: colors.goldTint, borderBottomWidth: 3, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  featuredCompact: { padding: 12, flexWrap: 'wrap', alignItems: 'flex-start' },
+  copy: { minWidth: 0, gap: 8, justifyContent: 'center' },
+  copyCompact: { gap: 6 },
+  featuredCopy: { flex: 1, gap: 3 },
+  icon: { borderRadius: 10, backgroundColor: colors.yellow, width: 38, height: 38, alignItems: 'center', justifyContent: 'center' },
+  courseTitle: { ...designTokens.typography.smallLabel, color: colors.primary, fontWeight: '700' },
+  lessonTitle: { fontSize: 22, lineHeight: 29 },
+  outcome: { fontSize: 16, lineHeight: 25 },
+  note: { ...designTokens.typography.caption, color: colors.muted },
+  regularAction: { marginTop: 4 },
+  fullWidth: { flexBasis: '100%' },
+});

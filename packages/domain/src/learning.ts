@@ -44,10 +44,19 @@ export function normalizeAnswer(answer: string): string {
   return answer.normalize('NFC').toLocaleLowerCase('fr-FR').replace(/[’‘]/g, "'")
     .replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '').trim();
 }
-export function checkAnswer(answer: string, exercise: Lesson['sentenceActivity']): 'correct' | 'almost' | 'incorrect' {
+
+function normalizePracticeAnswer(answer: string): string {
   const normalized = normalizeAnswer(answer);
-  if (exercise.answers.some(valid => normalizeAnswer(valid) === normalized)) return 'correct';
-  if (exercise.almostAnswers.some(valid => normalizeAnswer(valid) === normalized)) return 'almost';
+  if (/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(normalized)) {
+    // Japanese token controls add teaching spaces. Kana voicing and internal punctuation still matter.
+    return normalized.replace(/\s+/g, '').replace(/[。！？.!?]+$/, '');
+  }
+  return normalized;
+}
+export function checkAnswer(answer: string, exercise: Lesson['sentenceActivity']): 'correct' | 'almost' | 'incorrect' {
+  const normalized = normalizePracticeAnswer(answer);
+  if (exercise.answers.some(valid => normalizePracticeAnswer(valid) === normalized)) return 'correct';
+  if (exercise.almostAnswers.some(valid => normalizePracticeAnswer(valid) === normalized)) return 'almost';
   return 'incorrect';
 }
 export function lessonProgress(lesson: Lesson, events: LearningEvent[]) {

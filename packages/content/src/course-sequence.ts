@@ -27,6 +27,8 @@ export const courseSequence = [
   { slug: 'jobsearch', prerequisites: ['work', 'education'] },
   { slug: 'past', prerequisites: ['routine', 'social'] },
   { slug: 'opinions', prerequisites: ['shopping', 'leisure', 'past'] },
+  { slug: 'cycling', prerequisites: ['directions', 'transport'] },
+  { slug: 'household-waste', prerequisites: ['housing', 'calendar'] },
 ] as const;
 
 /** Keep each topic's authored lesson order; unknown/custom banks remain reachable at the end. */

@@ -20,12 +20,12 @@ interface ProfileScreenProps {
   onOpenEditor: () => void;
 }
 
-export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScreenProps) {
+export function ProfileScreen({ catalogue, onOpenEditor, language, model }: ProfileScreenProps) {
   return <View style={t.page}>
-    <ScreenHeader eyebrow="Your learning space" title="Your preferences" subtitle="Set a comfortable pace, take lessons offline, and keep your learning safe." />
+    <ScreenHeader title="Profile" subtitle="Manage your audio, offline lessons and learning data." />
     <View style={t.board}>
       <View style={[t.main, { flexBasis: 600 }]}>
-      <Text style={s.eyebrow}>Set things up your way</Text>
+      <Text accessibilityRole="header" style={t.sectionTitle}>Learning settings</Text>
 
     <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description="Choose a voice, adjust the pace and manage saved audio.">
       <AudioPreferencesPanel language={language} />
@@ -68,7 +68,10 @@ export function ProfileScreen({ catalogue, onOpenEditor, language }: ProfileScre
       <View style={t.side}>
         <View style={[t.panel, { backgroundColor: colors.sageTint }]}>
           <View style={[t.icon, { backgroundColor: colors.card }]}><Icon name="settings" size={24} /></View>
-          <View style={t.stack}><Text style={s.eyebrow}>Studying now</Text><Text style={s.heading}>{languageNames[language]}</Text><Text style={s.body}>English explanations</Text></View>
+          <View style={t.stack}>
+            <Text accessibilityRole="header" style={s.heading}>{languageNames[language]} with English explanations</Text>
+            {!model.loadError && <Text style={t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'word' : 'words'}</Text>}
+          </View>
           <View style={s.divider} />
           <Text style={t.detail}>Your progress and notebook stay in this browser on this device. There is no account or sync.</Text>
         </View>

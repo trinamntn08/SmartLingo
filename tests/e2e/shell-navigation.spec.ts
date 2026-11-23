@@ -2,6 +2,26 @@ import { openTopic } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
+test('keyboard users can skip to the main learner and narrow navigation', async ({ page }) => {
+  await page.goto('/today/fr');
+  await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
+  const content = page.getByRole('button', { name: 'Skip to learner content', exact: true });
+  await page.keyboard.press('Tab');
+  await expect(content).toBeFocused();
+  if (page.viewportSize()!.width < 1000) {
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Skip to learning navigation', exact: true })).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('navigation', { name: 'Learning navigation' })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Today', exact: true })).toBeFocused();
+  }
+  await content.press('Enter');
+  await expect(page.getByRole('main')).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Today', exact: true })).toHaveAttribute('aria-current', 'page');
+  await expect(page).toHaveURL(/\/today\/fr$/);
+});
+
 test('Back and Forward restore shell screens and a bookmarked lesson keeps its language', async ({ page, context }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/languages');

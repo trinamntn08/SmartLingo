@@ -7,9 +7,11 @@ import { checkAnswer, groupLessonTopics, lessonSchema, matchesVocabulary, normal
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const targetKey = (target: string) => normalizeSearch(target.normalize('NFKC')).replace(/[\s。、.!?！？]/g, '');
 const coreLessons = () => japaneseLessons.filter(lesson => /^ja\.lesson\.day-\d+$/.test(lesson.id));
+const starterLessons = japaneseLessons.filter(lesson => !lesson.id.startsWith('ja.lesson.day-'));
 
 test('the French library and the Japanese course and core lessons keep their reviewed payloads', () => {
-  assert.equal(hash(lessons), '0354161d5f3fadeefbab8f58ed6bc95c6145afd38b51bb185643fe8e53abb49e');
+  assert.equal(hash(lessons.filter(lesson => !/^fr\.(?:cycling|household-waste)\./.test(lesson.id))),
+    '0354161d5f3fadeefbab8f58ed6bc95c6145afd38b51bb185643fe8e53abb49e');
   // Rebaselined for the learner-facing Lesson names, including shared vocabulary notes.
   assert.equal(hash(coreLessons()), '6fe97b934f5c8a411f54858187e9e83fab2cb19d523830149f4d2a1a16d8cdff');
   assert.equal(hash(japaneseCourse), '7bc08c1af962ad5861a623fd261bdff19b9705fe70dd645176587d654ff1b586');
@@ -23,9 +25,10 @@ function canBuild(exercise: Lesson['sentenceActivity'], chosen: string[] = [], r
 }
 
 test('all 13 Japanese topics offer at least 30 distinct supported words across short solvable lessons', () => {
-  const topics = groupLessonTopics(japaneseLessons);
+  const expandedLessons = japaneseLessons.filter(lesson => lesson.id.startsWith('ja.lesson.day-'));
+  const topics = groupLessonTopics(expandedLessons);
   assert.equal(topics.length, 13);
-  assert.equal(japaneseLessons.length, 65);
+  assert.equal(expandedLessons.length, 65);
   const byId = new Map<string, Vocabulary>();
   for (const topic of topics) {
     const targets = new Set(topic.vocabulary.map(entry => targetKey(entry.target)));
@@ -51,4 +54,24 @@ test('all 13 Japanese topics offer at least 30 distinct supported words across s
       assert.ok(lesson.dialogue.every(line => line.reading && line.target && line.meaning));
     }
   }
+});
+
+test('the four Japanese starter lessons reuse canonical senses and accept the teaching chunks', () => {
+  assert.deepEqual(starterLessons.map(lesson => lesson.id), ['ja.greetings.hello', 'ja.greetings.courtesy', 'ja.introductions.name', 'ja.cafe.drinks']);
+  const previous = new Map(japaneseLessons.filter(lesson => lesson.id.startsWith('ja.lesson.day-'))
+    .flatMap(lesson => lesson.vocabulary.map(entry => [entry.target, entry] as const)));
+  for (const lesson of starterLessons) {
+    assert.deepEqual(lessonSchema.parse(lesson), lesson);
+    assert.equal(lesson.status, 'draft');
+    assert.ok(canBuild(lesson.sentenceActivity), lesson.id);
+    assert.ok(lesson.dialogue.every(line => line.reading && !/\p{Script=Han}/u.test(line.reading)));
+    for (const entry of lesson.vocabulary) {
+      assert.ok(entry.reading && entry.exampleReading, entry.id);
+      if (previous.has(entry.target)) assert.deepEqual(entry, previous.get(entry.target));
+    }
+  }
+  const greeting = starterLessons[0].sentenceActivity;
+  assert.equal(checkAnswer('また 明日。', greeting), 'correct');
+  assert.equal(checkAnswer('また明日？', greeting), 'correct');
+  assert.equal(checkAnswer('まだ 明日。', greeting), 'incorrect');
 });

@@ -5,6 +5,33 @@ import { buildAcceptedSentence, openLessonFromTopics, openProfileSection, openTo
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 
+test('the Cloud photo and the new French and Japanese drafts load from a cold download', async ({ page, context }) => {
+  await context.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/today/fr');
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await openProfileSection(page, 'Offline & backups');
+  await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await context.setOffline(true);
+  await page.close();
+
+  const cold = await context.newPage();
+  await cold.goto('/today/fr');
+  await expect.poll(() => cold.getByTestId('today-next-step').locator('img').evaluateAll(images => images.some(image =>
+    image instanceof HTMLImageElement && image.complete && image.naturalWidth === 1200 && image.src.includes('lyon-bakery'),
+  ))).toBe(true);
+  for (const id of ['fr.cycling.rent', 'fr.household-waste.sorting', 'ja.cafe.drinks']) {
+    const lesson = [...lessons, ...japaneseLessons].find(item => item.id === id)!;
+    await cold.goto(`/lesson/${lesson.language === 'ja-JP' ? 'ja' : 'fr'}/${id}/dialogue`);
+    await expect(cold.getByRole('heading', { name: lesson.title, exact: true })).toBeVisible();
+    await expect(cold.getByText(lesson.dialogue[0].meaning, { exact: true })).toBeVisible();
+  }
+  const japanese = japaneseLessons.find(lesson => lesson.id === 'ja.cafe.drinks')!;
+  await cold.goto('/lesson/ja/ja.cafe.drinks/sentence');
+  await buildAcceptedSentence(cold, japanese);
+  await expect(cold.getByText(japanese.sentenceActivity.explanation, { exact: true })).toBeVisible();
+});
+
 test('the same French and Japanese lesson widgets and notebooks cold-start and switch offline', async ({ page, context, baseURL }, info) => {
   test.setTimeout(90000);
   const remote: string[] = [];

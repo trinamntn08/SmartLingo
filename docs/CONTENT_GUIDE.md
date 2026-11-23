@@ -10,7 +10,7 @@ Japanese vocabulary needs target script, a kana reading, specific English meanin
 
 Original restaurant/bakery seed lessons now live in [topics/preview-lessons.ts](../packages/content/src/topics/preview-lessons.ts); the content entry point assembles the catalogue. This is an exact payload extraction, not a curriculum revision or publication. Keep new authored payloads in cohesive content modules rather than growing the package export file.
 
-The 20 basic-kana row lessons use their own typed content and explicit row-study progress; they are not word lessons and must not be padded into vocabulary totals. The unchanged 13-day Japanese course, original 13 shared lesson views and appended 52 lessons have separate stable identities/progress. Content expansion must preserve existing canonical payloads and history; a new topic lesson does not complete an old course day or vice versa.
+The 20 basic-kana row lessons use their own typed content and explicit row-study progress. The 13-lesson Japanese guided course has its own stable progress scopes. The shared library includes 65 course-related lessons and four [starter lessons](../packages/content/src/topics/japanese.ts) on greetings, courtesy, introductions and ordering at a café. New topic lessons preserve existing canonical vocabulary and its history, and track their own completion.
 
 ## French authoring scope
 

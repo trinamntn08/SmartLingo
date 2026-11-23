@@ -13,7 +13,10 @@ test('topic cards preserve order and continue to the next lesson after completio
   const secondCard = page.getByTestId(`topic-lesson-${second.id}`);
   const thirdCard = page.getByTestId(`topic-lesson-${third.id}`);
   const button = (name: string) => page.getByRole('button', { name, exact: true });
-  await expect(page.getByRole('heading', { name: 'Lessons in this topic', exact: true })).toBeVisible();
+  const lessonList = page.getByRole('heading', { name: 'Lessons in this topic', exact: true });
+  const wordBank = page.getByRole('heading', { name: /^Vocabulary ·/ });
+  await expect(lessonList).toBeVisible();
+  expect((await wordBank.boundingBox())!.y).toBeLessThan((await lessonList.boundingBox())!.y);
   await expect(cards.getByRole('button', { name: /^Open / })).toHaveCount(3);
   await expect(firstCard.getByText('Lesson 1', { exact: true })).toBeVisible();
   await expect(firstCard.getByText('Up next', { exact: true })).toBeVisible();
@@ -27,12 +30,18 @@ test('topic cards preserve order and continue to the next lesson after completio
   await expect(cards.getByRole('button', { name: /^Open / })).toHaveCount(1);
   await expect(secondCard.getByText('Lesson 2', { exact: true })).toBeVisible();
   await search.clear();
+  const topicUrl = page.url();
+  await button('Jump to lessons').press('Enter');
+  await expect(lessonList).toBeFocused();
+  await expect(lessonList).toBeInViewport();
+  await expect(page).toHaveURL(topicUrl);
 
   await button(`Open ${first.subtitle}`).press('Enter');
   await expect(page.getByText('Lesson 1 of 3', { exact: true })).toBeVisible();
   const next = button(`Next lesson: ${second.subtitle}`);
   await expect(next).toHaveCount(0);
   await button('Continue to dialogue').click();
+  await expect(page.getByTestId('lesson-stage-heading')).toBeFocused();
   await button('Try meaning practice').click();
   const match = first.vocabulary.find(entry => entry.id === first.pictureActivity.entryId)!;
   await button(match.target).click();

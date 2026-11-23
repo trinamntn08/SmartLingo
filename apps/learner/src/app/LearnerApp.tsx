@@ -11,7 +11,7 @@ import { CourseWriteStatus } from '../course/CourseWriteStatus';
 import { useCourseLearning } from '../course/useCourseLearning';
 import { TodayDashboard } from '../dashboard/TodayDashboard';
 import { LearningReportScreen } from '../dashboard/LearningReportScreen';
-import { LearnerNavigation } from '../dashboard/LearnerNavigation';
+import { learnerContentId, LearnerNavigation, LearnerSkipLinks } from '../dashboard/LearnerNavigation';
 import { useLearningReport } from '../dashboard/useLearningReport';
 import { useTargetLanguage } from '../language/useTargetLanguage';
 import { LanguageChooser } from '../language/LanguageChooser';
@@ -118,7 +118,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}
       recommendedDay={recommendation.day} learning={courseLearning} model={model} lessons={lessons} />;
     if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch}
-      alphabetEvents={model.events} onExplore={() => openLearnMode('Vocabulary & lessons')}
+      alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Vocabulary & lessons')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
       onAlphabet={() => openLearnMode('Japanese letters')}
     />;
@@ -144,6 +144,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   }
 
   return <View style={s.app}>
+    <LearnerSkipLinks mobileNavigation={!!language && !choosing && mobileNav} />
     <View style={[s.header, compact && { paddingHorizontal: 15, paddingVertical: 8 }]}>
       <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
@@ -161,7 +162,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled"
         onScroll={event => { if (active) write('learner.scroll', event.nativeEvent.contentOffset.y); }} scrollEventThrottle={16}
         contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
+        <View role="main" nativeID={learnerContentId} tabIndex={-1}
+          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
           {!courseVisible && <CourseWriteStatus learning={courseLearning} />}
           {route.kind === 'unavailable' ? unavailable() : !language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />

@@ -1,4 +1,4 @@
-import type { Lesson } from '@smartlingo/domain';
+import type { Lesson, Vocabulary } from '@smartlingo/domain';
 import { sharedEntries } from './shared-entries';
 
 // Explicit, stable aliases for the same sense. Context-specific senses (guichet,
@@ -9,6 +9,8 @@ const aliases: Readonly<Record<string, string>> = {
   'fr.health.allergie': 'fr.restaurant.allergy',
   'fr.health.demain': 'fr.bakery.tomorrow',
   'fr.leisure.velo': 'fr.transport.bicycle',
+  'fr.cycling.bike': 'fr.transport.bicycle',
+  'fr.household-waste.lid': 'fr.cooking.lid',
   'fr.essentials.please': 'fr.silvousplait',
   'fr.social.bring': 'fr.restaurant.bring',
   'fr.calendar.tomorrow': 'fr.bakery.tomorrow',
@@ -56,16 +58,17 @@ const aliases: Readonly<Record<string, string>> = {
   'fr.past.next': 'fr.routine.ensuite',
 };
 
-export function reuseSharedVocabulary(lessons: readonly Lesson[]): Lesson[] {
+export function reuseSharedVocabulary(lessons: readonly Lesson[], canonicalEntries: readonly Vocabulary[] = sharedEntries,
+  senseAliases: Readonly<Record<string, string>> = aliases): Lesson[] {
   // Canonical senses outlive the lesson that first introduced them. Keep exact
   // payloads when redundant introduction slots are replaced in later drafts.
-  const entries = new Map(sharedEntries.map(entry => [entry.id, entry]));
+  const entries = new Map(canonicalEntries.map(entry => [entry.id, entry]));
   for (const entry of lessons.flatMap(lesson => lesson.vocabulary)) {
     const previous = entries.get(entry.id);
     if (previous && JSON.stringify(previous) !== JSON.stringify(entry)) throw new Error(`Conflicting vocabulary: ${entry.id}`);
     entries.set(entry.id, entry);
   }
-  const resolve = (id: string) => aliases[id] ?? id;
+  const resolve = (id: string) => senseAliases[id] ?? id;
   return lessons.map(lesson => ({
     ...lesson,
     vocabulary: lesson.vocabulary.map(entry => {

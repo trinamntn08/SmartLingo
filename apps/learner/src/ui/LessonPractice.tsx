@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { checkAnswer, normalizeAnswer, type LearningEvent, type Lesson } from '@smartlingo/domain';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { checkAnswer, normalizeAnswer, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
 import { useVisitState } from '../app/WebNavigation';
 import { Button } from './controls';
 import { Icon } from './Icon';
@@ -28,6 +28,7 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
   const target = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
   const meaningMode = lesson.pictureActivity.mode === 'meaning';
   const matched = meaningMode ? 'That’s it. You matched the meaning.' : 'That’s it. You matched the picture.';
+  const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
 
   function choose(id: string) {
     const correct = id === target.id;
@@ -43,7 +44,7 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
     </View>
     <View style={layout.body}>
       <View style={layout.choices}>
-        {lesson.pictureActivity.choices.map(id => <MatchChoice key={id} name={lesson.vocabulary.find(entry => entry.id === id)!.target}
+        {lesson.pictureActivity.choices.map(id => <MatchChoice key={id} name={lesson.vocabulary.find(entry => entry.id === id)!.target} language={language}
           correct={done && id === target.id} disabled={disabled || done} onPress={() => choose(id)} />)}
       </View>
       {!!(done || feedback) && <Text accessibilityLiveRegion="polite" style={[s.body, layout.feedback, done && layout.correct]}>{done ? matched : feedback}</Text>}
@@ -56,9 +57,12 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
   </View>;
 }
 
-function MatchChoice({ name, correct, disabled, onPress }: { name: string; correct: boolean; disabled: boolean; onPress: () => void }) {
+function MatchChoice({ name, language, correct, disabled, onPress }: {
+  name: string; language: TargetLanguage; correct: boolean; disabled: boolean; onPress: () => void;
+}) {
   const [focused, setFocused] = useState(false);
-  return <Pressable accessibilityRole="button" accessibilityLabel={name} accessibilityState={{ disabled, selected: correct }}
+  const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
+  return <Pressable {...languageProps} accessibilityRole="button" accessibilityLabel={name} accessibilityState={{ disabled, selected: correct }}
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [layout.choice, correct && layout.choiceCorrect, focused && layout.focus, pressed && layout.pressed]}>
     <View aria-hidden={true} style={[layout.indicator, correct && layout.indicatorCorrect]}>
@@ -84,6 +88,8 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const exercise = lesson.sentenceActivity;
   const answer = selected.map(index => exercise.tokens[index]).join(' ');
   const accepted = done ? exercise.answers.find(value => normalizeAnswer(value) === normalizeAnswer(answer)) ?? exercise.answers[0] : '';
+  const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
+  const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
 
   function check() {
     const result = checkAnswer(answer, exercise);
@@ -95,7 +101,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
     <View style={layout.lead}>
       <Text accessibilityRole="header" style={[s.body, layout.prompt]}>{exercise.prompt}</Text>
       <View style={layout.tray}>
-        {done ? <Text style={[s.heading, layout.clue]}>{accepted}</Text>
+        {done ? <Text {...languageProps} style={[s.heading, layout.clue]}>{accepted}</Text>
           : selected.length ? <View style={layout.pieces}>
             {selected.map(index => <Button compact accent disabled={disabled} key={index} label={`Remove ${exercise.tokens[index]}`}
               onPress={() => setSelected(selected.filter(item => item !== index))}>{exercise.tokens[index]} ×</Button>)}
@@ -140,10 +146,10 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
 
 const layout = StyleSheet.create({
   card: { minWidth: 0, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card },
-  lead: { paddingVertical: 18, paddingHorizontal: 16, gap: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, backgroundColor: colors.dark },
-  prompt: { color: colors.sageTint, fontWeight: '600', fontSize: 16, lineHeight: 23 },
-  clue: { color: colors.onPrimary, fontSize: 27, lineHeight: 35 },
-  illustration: { alignSelf: 'flex-start', backgroundColor: colors.goldTint, borderRadius: 10, maxWidth: '100%' },
+  lead: { paddingVertical: 18, paddingHorizontal: 16, gap: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, backgroundColor: colors.goldTint },
+  prompt: { fontWeight: '600', fontSize: 17, lineHeight: 24 },
+  clue: { color: colors.dark, fontSize: 27, lineHeight: 35 },
+  illustration: { alignSelf: 'flex-start', backgroundColor: colors.card, borderRadius: 10, maxWidth: '100%' },
   body: { padding: 14, gap: 12, minWidth: 0 },
   choices: { gap: 8, minWidth: 0 },
   choice: { minHeight: 49, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 9,
@@ -158,8 +164,8 @@ const layout = StyleSheet.create({
   correct: { color: colors.primary, fontWeight: '600' },
   hint: { padding: 10, backgroundColor: colors.goldTint, borderRadius: 8 },
   actions: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 6 },
-  tray: { minHeight: 61, justifyContent: 'center', padding: 8, borderWidth: 1, borderStyle: 'dashed', borderColor: '#73988B', borderRadius: 10 },
-  trayPlaceholder: { color: colors.sageTint, paddingHorizontal: 3 },
+  tray: { minHeight: 61, justifyContent: 'center', padding: 8, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.inputBorder, borderRadius: 10, backgroundColor: colors.card },
+  trayPlaceholder: { paddingHorizontal: 3 },
   pieces: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, minWidth: 0 },
   secondary: { flexDirection: 'row', flexWrap: 'wrap', gap: 3 },
   result: { backgroundColor: colors.sageTint, padding: 13, borderRadius: 10, gap: 5 },

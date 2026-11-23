@@ -10,15 +10,15 @@ const extension = (day: number) => japaneseLessons.find(lesson => lesson.id === 
 
 test.beforeEach(async ({ context }) => { await context.route('**/127.0.0.1:3001/**', route => route.abort()); });
 
-test('every Japanese topic exposes thirty distinct supported entries and five shared short lessons', async ({ page }, info) => {
+test('every Japanese topic exposes its vocabulary and short lessons', async ({ page }, info) => {
   test.setTimeout(120000);
   await page.goto('/'); await button(page, 'Learn Japanese').click();
   const topics = groupLessonTopics(japaneseLessons);
   for (const topic of topics) {
     await openTopic(page, topic.name);
-    await expect(page.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
-    await expect(page.getByTestId(/^vocabulary-/)).toHaveCount(30);
-    await expect(page.getByRole('button', { name: /^Open / })).toHaveCount(5);
+    await expect(page.getByRole('heading', { name: `Vocabulary · ${topic.vocabulary.length}`, exact: true })).toBeVisible();
+    await expect(page.getByTestId(/^vocabulary-/)).toHaveCount(topic.vocabulary.length);
+    await expect(page.getByTestId('topic-lesson-cards').getByRole('button', { name: /^Open / })).toHaveCount(topic.lessons.length);
     const entry = topic.lessons.at(-1)!.vocabulary.at(-1)!;
     await page.getByRole('textbox', { name: 'Search lessons', exact: true }).fill(entry.reading!);
     const card = page.getByTestId(`vocabulary-${entry.id}`);

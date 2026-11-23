@@ -26,12 +26,9 @@ export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked 
   }
   return <View style={t.page}>
     <ScreenHeader eyebrow={name} title="Review saved words" subtitle="Recall due words, or search and edit your notes."
-      action={focusRecall || model.notebook.length ? <Button compact icon={focusRecall ? 'bookmark' : 'layers'} selected={focusRecall}
+      action={focusRecall || model.notebook.length ? <Button compact icon={focusRecall ? 'bookmark' : 'layers'} primary={!focusRecall} accent={!focusRecall} selected={focusRecall}
         onPress={toggleFocus}>{focusRecall ? 'Show notebook' : 'Focus review'}</Button> : null} />
     <View style={t.board}>
-      <View style={[t.side, { flexBasis: 380 }, focusRecall && { flexBasis: '100%', maxWidth: 700 }]}>
-        <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />
-      </View>
       <View style={[t.main, focusRecall && { display: 'none' }]}>
         <View style={t.panel}>
           <View style={t.panelHeader}><View style={[s.row, { flexShrink: 1, minWidth: 0, maxWidth: '100%' }]}><View style={t.icon}><Icon name="bookmark" size={22} /></View><View style={[t.stack, { flexShrink: 1 }]}><Text accessibilityRole="header" style={t.sectionTitle}>Your word collection</Text><Text style={t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'entry' : 'entries'} · {name}</Text></View></View><PersonalWordForm embedded model={model} language={language} /></View>
@@ -41,10 +38,13 @@ export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked 
             <View style={t.panelHeader}><Text accessibilityLiveRegion="polite" style={t.detail}>{matches.size} of {model.notebook.length} saved entries</Text>{!!query && <Button quiet compact onPress={() => setQuery('')}>Clear notebook search</Button>}</View>
             {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
           </View>}
-          {!model.notebook.length ? <View style={[t.inset, { backgroundColor: colors.goldTint }]}><Text style={s.heading}>A fresh page.</Text><Text style={s.body}>Add a personal word, or save something useful from a lesson. Its meaning and your notes will be here when you need them.</Text><View style={s.row}><Button primary onPress={onExplore}>Find a lesson →</Button></View></View>
+          {!model.notebook.length ? <View style={[t.inset, { backgroundColor: colors.sageTint }]}><Text style={s.heading}>No saved words yet</Text><Text style={s.body}>Add a personal word or save an expression from a lesson to start reviewing.</Text><View style={s.row}><Button primary onPress={onExplore}>Find a lesson →</Button></View></View>
             : <View testID="notebook-entries">{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>}
         </View>
       </View>
+      {(focusRecall || model.notebook.length > 0) && <View style={[t.side, { flexBasis: 380 }, focusRecall && { flexBasis: '100%', maxWidth: 700 }]}>
+        <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />
+      </View>}
     </View>
   </View>;
 }

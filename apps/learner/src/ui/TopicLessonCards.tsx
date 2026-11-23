@@ -6,9 +6,9 @@ import { Button } from './controls';
 import { Icon } from './Icon';
 import { colors, designTokens as tokens, styles as s } from './theme';
 
-export function TopicLessonCards({ language, lessons, visibleLessons, events, progressAvailable, onOpen, compact, disabled }: {
+export function TopicLessonCards({ language, lessons, visibleLessons, headingId, events, progressAvailable, onOpen, compact, disabled }: {
   language: TargetLanguage; lessons: readonly Lesson[]; visibleLessons: readonly Lesson[]; events: LearningEvent[];
-  progressAvailable: boolean; onOpen: (lesson: Lesson) => void; compact: boolean; disabled: boolean;
+  headingId: string; progressAvailable: boolean; onOpen: (lesson: Lesson) => void; compact: boolean; disabled: boolean;
 }) {
   const [gridWidth, setGridWidth] = useState(0);
   const visibleIds = new Set(visibleLessons.map(lesson => lesson.id));
@@ -22,7 +22,7 @@ export function TopicLessonCards({ language, lessons, visibleLessons, events, pr
 
   return <View style={{ gap }}>
     <View style={[s.row, { justifyContent: 'space-between', rowGap: 4 }]}>
-      <Text accessibilityRole="header" style={s.heading}>Lessons in this topic</Text>
+      <Text nativeID={headingId} accessibilityRole="header" style={s.heading}>Lessons in this topic</Text>
       {progressAvailable && <Text style={s.muted}>{completeCount} of {lessons.length} complete</Text>}
     </View>
     {visibleLessons.length > 0 && visibleLessons.length < lessons.length && <Text accessibilityLiveRegion="polite" style={s.muted}>

@@ -147,7 +147,7 @@ test('the final answer completes the lesson in place and retries both records to
   await page.getByRole('button', { name: /Try picture practice/ }).click();
   const match = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: match.target, exact: true }).click();
-  await page.getByRole('button', { name: /Build a sentence/ }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page.getByTestId('lesson-step-sentence')).toHaveAttribute('aria-current', 'step');
   await page.evaluate(() => {
     const add = IDBObjectStore.prototype.add;

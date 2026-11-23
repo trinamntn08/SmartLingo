@@ -73,7 +73,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('button', { name: 'Try picture practice' }).click();
   const pictureWord = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: pictureWord.target, exact: true }).click();
-  await page.getByTestId('lesson-stage').getByRole('button', { name: 'Build a sentence', exact: true }).click();
+  await page.getByTestId('lesson-stage').getByRole('button', { name: 'Next', exact: true }).click();
   await buildAcceptedSentence(page, restaurantLesson);
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   expect(await learningRows(page, 'events')).toEqual(originalEvents);

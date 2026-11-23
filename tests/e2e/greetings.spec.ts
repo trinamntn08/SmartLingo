@@ -37,7 +37,7 @@ test('Learn opens greetings with readable arrival and departure support, saved w
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: target.target, exact: true }).click();
   await expect(page.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /Build a sentence/ }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await buildAcceptedSentence(page, opening);
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await page.reload();

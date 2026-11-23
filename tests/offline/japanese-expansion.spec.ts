@@ -30,7 +30,7 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   await openKeyPhrases(cold);
   await cold.getByRole('button', { name: /Try meaning practice/ }).click();
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
-  await cold.getByRole('button', { name: /Build a sentence/ }).click(); await buildAcceptedSentence(cold, lesson);
+  await cold.getByRole('button', { name: 'Next', exact: true }).click(); await buildAcceptedSentence(cold, lesson);
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.reload();
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();

@@ -87,9 +87,9 @@ test('restaurant details are visible directly and practice/notebook completion s
   await button(page, 'Show a hint').click();
   await button(page, 'Hide hint').click();
   await button(page, 'un café').click();
-  await expect(button(page, /Build a sentence/)).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   await page.reload();
-  await button(page, /Build a sentence/).click();
+  await button(page, 'Next').click();
   for (const token of ['voudrais', 'Je', 'un café', 's’il vous plaît']) await button(page, token).click();
   await button(page, 'Check sentence').click();
   await expect(page.getByText('Try a different order.', { exact: false })).toBeVisible();

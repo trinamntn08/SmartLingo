@@ -141,7 +141,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: target.target, exact: true }).click();
   await expect(page.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /Build a sentence/ }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   // The first accepted answer is guaranteed buildable by the curriculum integrity check.
   const remaining = lesson.sentenceActivity.tokens.map((token, index) => ({ token, index }));
   let answer = normalizeAnswer(lesson.sentenceActivity.answers[0]);

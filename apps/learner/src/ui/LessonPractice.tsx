@@ -51,7 +51,7 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
       {hint && <Text style={[s.body, layout.hint]}>{meaningMode ? target.example : target.meaning}</Text>}
       <View style={layout.actions}>
         <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>
-        {(done || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly} onPress={onNext}>Build a sentence</Button>}
+        {(done || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly} onPress={onNext}>Next</Button>}
       </View>
     </View>
   </View>;

@@ -52,7 +52,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
     const correct = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
     await button(page, correct.target).click();
-    await page.getByRole('button', { name: /Build a sentence/ }).click();
+    await page.getByRole('button', { name: 'Next', exact: true }).click();
     await buildAcceptedSentence(page, lesson);
     await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
     await button(page, 'Review').click();

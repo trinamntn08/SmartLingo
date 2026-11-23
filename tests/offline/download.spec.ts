@@ -57,7 +57,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
   await button(cold, target.target).click();
   await expect(cold.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
-  await button(cold, /Build a sentence/).click();
+  await button(cold, 'Next').click();
   await buildAcceptedSentence(cold, opening);
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.reload();

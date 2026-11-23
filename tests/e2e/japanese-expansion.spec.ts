@@ -37,7 +37,7 @@ async function complete(page: Page, lesson: Lesson) {
   await page.getByRole('button', { name: /Try meaning practice/ }).click();
   const answer = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
   await button(page, answer.target).click();
-  await page.getByRole('button', { name: /Build a sentence/ }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await buildAcceptedSentence(page, lesson);
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
 }

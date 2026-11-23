@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Label the matching advance Next
+
+- Request. Change the matching exercise's advance button from Build a sentence to Next.
+- Start. At 23:23 CET, Europe/Paris, the clean primary `D:/dev/projects/SmartLingo` checkout and the fetched tracking and live refs for `feat/french-daily-opening` matched at `0dce6fe503253548d431c2dd0a03b220ededf382`, ahead/behind `0/0`.
+- Scope. Change the shared matching button label and update affected test locators. It still opens the Build a sentence step after a match.
+- Preview. The served manifest and learner bundle matched export `3b2fc851dc05`. Chromium at 320 and 1,440 px verified that Next appears after matching and opens Build a sentence. Repository and TypeScript checks passed.
+- Outcome. Seven focused browser cases and six cold-offline cases passed, with one existing browser skip. The commit containing this entry records the wording change. The local review preview is ready at the same address.
+
 ## 2026-11-23 Rebuild French listening with word cards
 
 - Request. In a French lesson, reconstruct the spoken line from French cards such as `Au revoir`, `et` and `bonne journée`.

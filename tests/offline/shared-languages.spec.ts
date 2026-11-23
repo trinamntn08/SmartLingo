@@ -65,7 +65,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   await expect(cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true })).toBeDisabled();
   await cold.getByRole('button', { name: /Try meaning practice/ }).click();
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
-  await cold.getByRole('button', { name: /Build a sentence/ }).click();
+  await cold.getByRole('button', { name: 'Next', exact: true }).click();
   await buildAcceptedSentence(cold, lesson);
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: 'Review', exact: true }).click();

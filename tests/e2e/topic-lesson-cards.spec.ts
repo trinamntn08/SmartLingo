@@ -47,7 +47,7 @@ test('topic cards preserve order and continue to the next lesson after completio
   await button('Try meaning practice').click();
   const match = first.vocabulary.find(entry => entry.id === first.pictureActivity.entryId)!;
   await button(match.target).click();
-  await button('Build a sentence').click();
+  await button('Next').click();
   await buildAcceptedSentence(page, first);
   await expect(page.getByRole('heading', { name: 'Lesson complete', exact: true })).toBeVisible();
   const completed = page.url();

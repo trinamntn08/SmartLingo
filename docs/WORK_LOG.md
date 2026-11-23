@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Trace the Cloud learner redesign commit
+
+- Request. Recover Cloud Codex revision `563fdaa` on `feat/learner-ui-redesign` for comparison with the local preview. The owner supplied the Cloud report and its thread link.
+- Start. At 21:05 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `73652c551da815f647afc98a54acf53e370bffb2`, ahead/behind `0/0`. The candidate branch and commit were absent from the fetched refs and local objects.
+- Source lookup. Local Git could not resolve `563fdaa`, and the GitHub commits API returned `No commit found for SHA`. The live candidate branch and new PR refs were still absent on recheck. The Cloud report identifies the work as a commit local to its workspace.
+- Thread lookup. The supplied link identifies a durable thread. `codex cloud status` returned `Invalid task ID`, `codex cloud list` returned no tasks, and the local app-server `thread/read` returned `thread not loaded`. This session has no durable-thread reader. Plugin discovery yielded no relevant connection.
+- Outcome. The redesign source remains in the Cloud handoff pending retrieval. Next, fetch the branch after the original Cloud session pushes it or review a patch exported from `563fdaa`. `npm.cmd run check` and `git diff --check` passed. The commit containing this entry records the investigation.
+
 ## 2026-11-23 Check the learner UI redesign branch
 
 - Request. Verify whether `feat/learner-ui-redesign` identifies the Cloud UI rework.

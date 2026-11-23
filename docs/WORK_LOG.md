@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Launch the local learner preview
+
+- Request. Start the shared learner preview at `http://localhost:8082` and verify it loads.
+- Start. At 20:48 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `0ca994d4d645d9a2ea22a1d430c00e3d302ec170`, ahead/behind `0/0`. Port 8082 had no listener.
+- Result. Reused verified export `12d4ae0f7311` from the source checkpoint and started `npm.cmd run preview:web` on port 8082. Confirmed that the served manifest matches the local export and that the served learner bundle matches its SHA-256. Chromium loaded the home page with both French and Japanese choices. `npm.cmd run check` passed.
+- Remote recheck. At the owner's request, ran `git fetch origin --prune` again after launch. Local, tracking and live `feat/french-daily-opening` still matched the same head, ahead/behind `0/0`. The only working-tree edits were this launch record and its checkpoint.
+- Next action. Review the learner at `http://localhost:8082`. The commit containing this entry records the launch and remote recheck.
+
 ## 2026-11-22 Rewrite the French opening and label guided lessons
 
 - Request. Replace the adapted French Lesson 1 text with original material and call numbered course items Lesson rather than Day.

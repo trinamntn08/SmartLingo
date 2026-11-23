@@ -21,7 +21,7 @@ Accept this setup when the current source is on GitHub without rewriting history
 | Command-level acceptance | Still to record: correct fetched source, runtime versions and successful checks from a new phone-started Cloud task |
 | Default branch | `main` remains the old scaffold; [PR #1](https://github.com/trinamntn08/SmartLingo/pull/1) is open, draft and mergeable, not merged |
 
-No additional hosting, permanent provider key or local-PC connection is needed for ordinary source work. A successful Cloud task that verifies the checkout and runs checks is the final setup confirmation. The first real remote implementation should also deliver a pushed task branch and PR; cloud-side write delivery has not been exercised in this chat. Merging PR #1 is optional for this setup while tasks explicitly use the app branch; later integration would make the default branch current.
+Ordinary source work uses the Cloud checkout and GitHub. The curriculum expansion verified Cloud push access on 2026-11-23. The separate phone setup check verifies the checkout and runtime from a fresh task. [Verified feature branch](https://github.com/trinamntn08/SmartLingo/tree/feat/french-topics-japanese-course)
 
 ## Source baseline
 
@@ -100,7 +100,7 @@ push changes, merge branches or deploy anything for this read-only check.
 
 Reopen the same task to continue its existing work across devices. Start a new task for independent work, using its own branch. For an implementation task, state the requested outcome and task-branch/PR target; reviewed commits and pushes follow the standing policy below. Request a draft PR when a review handoff is wanted. Keep merging and deployment explicit owner decisions. Task history and local learner browser storage are separate; source checkout does not restore notebook entries or local editor publications.
 
-The owner's 2026-11-16 standing instruction makes committing and pushing the assigned task branch automatic after completed, reviewed, validated steps. No repeat push confirmation is needed. Follow [the checkpoint workflow](SESSION_WORKFLOW.md#automatic-checkpoint-commits), inspect live remote history and verify the pushed SHA. This does not merge, deploy, publish curriculum or push unrelated branches.
+For every Cloud task with repository changes, record the outcome, checks and remaining work in `docs/SESSION_CHECKPOINT.md`. Include the handoff docs in the checkpoint commit, push the assigned GitHub branch, read back its SHA and report the verified branch before closing the task. Standing authorisation covers these pushes without a separate request. If a push remains blocked, preserve the local commit and report the exact error and recovery step. [Checkpoint workflow](SESSION_WORKFLOW.md#automatic-checkpoint-commits)
 
 After the acceptance report passes, no further repository setup is required for ordinary Cloud work. Use this task brief for a real change:
 
@@ -108,8 +108,8 @@ After the acceptance report passes, no further repository setup is required for 
 Work in the SmartLingo Cloud environment using the latest
 origin/chore/cloud-workflow as the base. Read AGENTS.md and the checkpoint.
 Create a separate task branch, implement [requested outcome], run relevant
-checks, update the handoff, commit and push that branch, and open a draft PR
-against chore/cloud-workflow. Do not merge, deploy or publish curriculum.
+checks, and follow the checkpoint workflow. If a draft PR is requested,
+target chore/cloud-workflow. Do not merge, deploy or publish curriculum.
 ```
 
 Targeting the app branch keeps a new PR limited to its task while `main` is old. After PR #1 is deliberately merged, refresh this guide and use updated `main` for later task branches. Do not merge the research or local-session tooling branches just to make Cloud work possible.

@@ -11,6 +11,8 @@ The owner requested committing and pushing the architecture guide when complete,
 
 After each completed, reviewed, validated step within authorised work, the primary agent deliberately stages task files, creates a focused commit and pushes the assigned topic branch to the existing owner-selected origin without repeated confirmation. Inspect the live remote head first; verify that the remote SHA matches the task commit afterwards. Apply this to local and Cloud work.
 
+On 2026-11-23 the owner reaffirmed that Cloud tasks with changes must finish by recording the outcome and actual verification in the repository checkpoint, including that record in the commit, and confirming the pushed GitHub SHA before reporting completion.
+
 Keep unrelated work and other branches untouched. A detached/main checkout needs a named task branch. Never force-push or rewrite history. Resolve remote changes safely within the authorised task or report the blocker; a failed push must not be reported as a remote backup. Do not bypass checks or create empty commits to claim a checkpoint.
 
 ## Consequences

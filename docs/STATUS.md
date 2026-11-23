@@ -1,11 +1,12 @@
 # Project status
 
-Updated: 2026-11-16 (Europe/Paris).
+Updated: 2026-11-23 (Europe/Paris).
 
 SmartLingo is a runnable local web preview with first editor fields and explicit local draft preview/publication. Physical-phone and voice checks still prevent claiming the full M1 gate complete.
 
 ## Current Git state
 
+- Cloud write access was verified on 2026-11-23 by pushing and reading back curriculum checkpoint `47eebaf` on its feature branch. The owner reaffirmed that Cloud tasks with repository changes finish with handoff docs, a checkpoint commit and a verified GitHub push. [Feature branch](https://github.com/trinamntn08/SmartLingo/tree/feat/french-topics-japanese-course) · [Workflow](SESSION_WORKFLOW.md#automatic-checkpoint-commits)
 - Current branch: `chore/cloud-workflow`, based on the completed greetings checkpoint `d5a56ed`. Earlier feature branches/checkpoints remain preserved. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
 - Owner-requested all-branch upload on 2026-11-16: all 25 local branch heads verified on GitHub after pushing 23 previously missing branches. Separate curriculum-review and concurrent-session branches remain separate; no merge, force push or deployment. See the session checkpoint for bounded outgoing-history checks and verification.
 - Owner authorised the proposed GitHub upload and Codex Cloud setup on 2026-11-16. Live fetch confirms `main` at `1c6e943` is an ancestor of the current source (27 application/tooling commits ahead before cloud preparation). Upload and draft-PR results are tracked in the session checkpoint. No merge, deployment, curriculum publication or history rewrite is authorised by this setup.
@@ -147,6 +148,6 @@ Recommended follow-up after the saved-speech step:
 4. Complete learner controls and beta readiness: safe cross-tab data reset, onboarding/preferences, per-topic downloads and production/listening practice. Add useful pictures for concrete uncovered vocabulary after reviewing clarity and rights; more lesson volume is lower priority than approval and usability.
 5. Resolve the three moderate build-tool findings with a compatible verified dependency change before distribution. Native adapters/packages, accounts/sync/public hosting and realtime voice follow the tested web beta.
 
-Keep actual curriculum unapproved until owner review/publication. Remote backup is a separate owner-authorised push task; this review performs local commits only. No public launch date is committed.
+Keep actual curriculum unapproved until owner review and explicit publication. Follow the standing checkpoint and GitHub push workflow for completed changes. [Workflow](SESSION_WORKFLOW.md#automatic-checkpoint-commits)
 
 Hook/role files do not prove runtime loading/trust; no account-allowance lookup is exposed and no automatic resume is configured.

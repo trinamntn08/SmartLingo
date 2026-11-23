@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Locate the Cloud Codex UI rework
+
+- Request. Identify the Cloud Codex interface rework that appears to be missing from the shared local preview.
+- Start. At 20:56 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `f231e08a7a76adf9c0d1b2cf0d6290cea222ca1a`, ahead/behind `0/0`.
+- Source comparison. Git shows `66d03cc85814e1835d37c0e8594d9d63c5dad590` (full frontend rework) as an ancestor of the current branch, with 25 later commits on the current branch and zero commits unique to the rework branch. The older hosted branch is separate. Live branch and pull-request refs and the GitHub pull-request search exposed no distinct later UI rework. The only pull-request ref was the earlier Cloud setup at `a3913dd`.
+- Preview verification. Port 8082 served manifest `12d4ae0f7311`, the export verified during launch. The open Chrome preview showed the current French lesson navigation and the four-step lesson reader. The browser tool could not safely identify the URL during the Cloud dashboard attempt, so the separate Cloud task could not be inspected.
+- Checks. `npm.cmd run check` and `git diff --check` passed.
+- Outcome. The full frontend rework is present in the current lineage. A separate Cloud revision remains unverified. Next, obtain the Cloud task link, its branch or its PR and compare that exact source to the learner baseline. The commit containing this entry records the investigation.
+
 ## 2026-11-23 Launch the local learner preview
 
 - Request. Start the shared learner preview at `http://localhost:8082` and verify it loads.

@@ -30,6 +30,7 @@ For the guided French route, use the [daily-course plan and level maps](plans/00
 - Use explicit meaning matching for abstract/unillustrated entries. A contextual notebook is not a literal depiction; do not test an abstract word against it as a picture.
 - Topic banks and lesson overviews show words together. Original bundled drawings in `packages/content/src/visuals.ts` associate stable IDs with exact targets without rewriting lesson revisions; see [media records](MEDIA_SOURCES.md). An abstraction can stay text-supported.
 - Include a short dialogue and sentence-building activity with accepted alternatives.
+- Include a listening check based on a complete line from the lesson. Give the learner a concrete detail or meaning to listen for, with replay, an optional transcript and helpful feedback. [In-lesson listening design](curriculum/in-lesson-listening.md)
 - Show meanings, example translations and explanations directly in study material. Keep deliberate recall reveals within review practice.
 - Keep IDs stable and distinguish shared curriculum from learner-edited notebook entries.
 

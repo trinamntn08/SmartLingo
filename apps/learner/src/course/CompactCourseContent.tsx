@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { gradeCourseChoice, type CourseBlock, type CourseChoice, type CourseDay, type CourseEvent, type Vocabulary } from '@smartlingo/domain';
 import { Speak } from '../audio/Speak';
@@ -23,16 +23,17 @@ interface CompactCourseContentProps {
   revealBlocked: boolean;
   onChoice: (block: CourseChoice, id: string, supported: boolean) => void;
   onSupport: (blockId: string) => void;
+  listeningCheck?: ReactNode;
 }
 
-export function CompactCourseContent({ step, day, model, events, blocked, revealBlocked, onChoice, onSupport }: CompactCourseContentProps) {
+export function CompactCourseContent({ step, day, model, events, blocked, revealBlocked, onChoice, onSupport, listeningCheck }: CompactCourseContentProps) {
   const copy = day.compact;
   if (!copy) return null;
 
   if (step === 'dialogue') {
     const dialogue = day.blocks.find(block => block.kind === 'dialogue');
     return dialogue && <CompactDialogue dialogue={dialogue} vocabulary={day.vocabulary} tip={copy.tip}
-      photo={getDailyDialoguePhoto(day.id)} model={model} />;
+      photo={getDailyDialoguePhoto(day.id)} model={model} listeningCheck={listeningCheck} />;
   }
 
   if (step === 'practice') {
@@ -50,14 +51,15 @@ export function CompactCourseContent({ step, day, model, events, blocked, reveal
     revealBlocked={revealBlocked} onSupport={() => onSupport(reflection.id)} />;
 }
 
-function CompactDialogue({ dialogue, vocabulary, tip, photo, model }: {
-  dialogue: DialogueBlock; vocabulary: Vocabulary[]; tip: string; photo?: ContextPhoto; model: LearningModel;
+function CompactDialogue({ dialogue, vocabulary, tip, photo, model, listeningCheck }: {
+  dialogue: DialogueBlock; vocabulary: Vocabulary[]; tip: string; photo?: ContextPhoto; model: LearningModel; listeningCheck?: ReactNode;
 }) {
   const [wordsOpen, setWordsOpen] = useState(false);
   const wordsId = useId();
 
   return <View style={{ gap: 12, minWidth: 0 }}>
     <BilingualDialogue turns={dialogue.lines} photo={photo} />
+    {listeningCheck}
     <Text style={s.muted}>{tip}</Text>
     <View style={{ alignItems: 'flex-start' }}>
       <Button compact expanded={wordsOpen} controls={wordsId} onPress={() => setWordsOpen(value => !value)}>Useful words</Button>

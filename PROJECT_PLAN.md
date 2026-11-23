@@ -94,10 +94,11 @@ Lesson sequence:
 1. State a concrete outcome: e.g. order a drink politely.
 2. Start with a short, bilingual dialogue. Display translations and grammar explanations directly in study views.
 3. Study 6–10 key phrases in context with visible meanings, pictures where appropriate and audio.
-4. Practise matching and sentence building with helpful hints.
-5. Attempt recall with reduced support.
-6. Offer a contextual speaking role-play.
-7. Show what was practised, useful corrections, and review/save actions.
+4. Listen for a useful detail or meaning. Offer replay and an optional transcript, then show the answer and its meaning.
+5. Practise matching and sentence building with helpful hints.
+6. Attempt recall with reduced support.
+7. Offer a contextual speaking role-play.
+8. Show what was practised, useful corrections, and review/save actions.
 
 Do not force speaking to finish every lesson. A learner must be able to study without a microphone. For conversations, offer employee/customer roles where relevant, sentence suggestions, slower responses, replay, and an English help button.
 

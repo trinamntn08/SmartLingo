@@ -34,7 +34,15 @@ async function tryRow(page: Page, row: JapaneseAlphabetLesson, wrongFirst = fals
   await alphabet.getByRole('button', { name: 'Recognition practice', exact: true }).click();
   const practice = alphabet.getByTestId('kana-recognition');
   for (const [index, character] of row.characters.entries()) {
-    await expect(practice.getByRole('heading')).toContainText(character.romaji);
+    await expect(practice.getByRole('heading')).toHaveText('Which kana matches the sound?');
+    if (index === 0) {
+      await practice.getByRole('button', { name: 'Play sound', exact: true }).click();
+      await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}')))
+        .toEqual({ text: character.audioText, language: 'ja-JP' });
+    } else {
+      await practice.getByRole('button', { name: 'Show reading', exact: true }).click();
+      await expect(practice.getByRole('heading')).toContainText(character.romaji);
+    }
     await expect(alphabet.getByRole('button', { name: 'Mark row studied', exact: true })).toBeDisabled();
     await practice.getByRole('button', { name: `Choose ${wrongFirst && index === 0 ? row.characters[1]!.kana : character.kana}`, exact: true }).click();
     await expect(practice.getByText(wrongFirst && index === 0 ? /Keep practising/ : /^Yes\./)).toBeVisible();

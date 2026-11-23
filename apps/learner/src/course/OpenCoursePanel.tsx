@@ -7,6 +7,7 @@ import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
 import { CourseBlockView } from './CourseBlockView';
+import { CourseListeningCheck } from './CourseListeningCheck';
 import { CourseOutline, type CourseSidebar } from './CourseOutline';
 import { CompactCourseContent } from './CompactCourseContent';
 import { compactCourseStepKind, compactCourseSteps } from './compactCourseSteps';
@@ -96,15 +97,18 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
   if (!resolvedDay || !progress || !resolvedBlock) return <View style={s.notice}><Text style={s.body}>This draft has no lessons yet.</Text><CourseCredits course={course} /></View>;
   const day = resolvedDay;
   const block = resolvedBlock;
+  const revision = courseDayProgressRevision(course, day);
   const currentUnit = course.units?.find(unit => unit.dayIds.includes(day.id));
   const sections = compactSteps?.map(step => ({ id: step.anchor.id, title: step.title })) ?? day.blocks;
   const index = sections.findIndex(item => item.id === block.id);
   const previousSection = index > 0 ? { ...route, dayId, sectionId: sections[index - 1].id } : undefined;
-  const scopedEvents = learning.events.filter(event => event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day) && event.dayId === day.id);
+  const scopedEvents = learning.events.filter(event => event.courseId === course.id && event.courseRevision === revision && event.dayId === day.id);
   const done = progress.completedBlockIds.has(block.id);
   const browseOnly = !!learning.loadError;
   const navigationBlocked = learning.loading || learning.busy || !!learning.saveError;
   const nextDay = nextCourseDay(course, learning.events);
+  const listeningCheck = block === day.blocks.find(item => item.kind === 'dialogue') &&
+    <CourseListeningCheck day={day} language={course.language} revision={revision} compact={compact} />;
 
   function openSelection(destination: CourseRoute, afterSave = false) {
     onCloseOutline();
@@ -194,7 +198,8 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
           {currentStep.kind === 'practice' && <Button compact quiet disabled={navigationBlocked} onPress={next}>Skip practice</Button>}
         </View>
         <CompactCourseContent key={block.id} step={currentStep.kind} day={day} model={model} events={scopedEvents}
-          blocked={learning.blocked} revealBlocked={navigationBlocked} onChoice={choose} onSupport={support} />
+          blocked={learning.blocked} revealBlocked={navigationBlocked} onChoice={choose} onSupport={support}
+          listeningCheck={listeningCheck} />
       </> : <>
         <View style={{ gap: 10 }}><Text style={s.eyebrow}>Section {index + 1} of {sections.length} · {block.kind === 'choice' ? 'Practice' : block.kind === 'reflection' ? 'Self-review' : 'Study'}</Text>
         <CourseStepHeading stepId={block.id} title={block.title} narrow={compact} /></View>
@@ -202,6 +207,7 @@ function CourseJourney({ course, route, model, recommendedDay, learning, lessons
           blocked={learning.blocked} revealBlocked={navigationBlocked} onChoice={(id, supported) => {
             if (block.kind === 'choice') choose(block, id, supported);
           }} onSupport={support} />
+        {listeningCheck}
         {done && <Text accessibilityLiveRegion="polite" style={[s.muted, { color: '#246944' }]}>Section saved.</Text>}
         {block.kind !== 'choice' && <Button primary={!done} disabled={learning.blocked || done} onPress={saveStep}>
           {block.kind === 'reflection' ? 'Save manual self-review' : 'Save study section'}

@@ -203,6 +203,7 @@ function RecognitionRound({ lesson, round, characterId, stateKey, playback, onAt
   const index = Math.max(0, located);
   const character = lesson.characters[index];
   const [answer, setAnswer] = useVisitState(`${stateKey}:${character?.id}:answer`, '');
+  const [showReading, setShowReading] = useVisitState(`${stateKey}:${character?.id}:reading`, false);
   const choices = useMemo(() => {
     if (!character) return [];
     const pool = [...lesson.characters];
@@ -217,17 +218,22 @@ function RecognitionRound({ lesson, round, characterId, stateKey, playback, onAt
   }, [character, lesson, index, round]);
   if (!character) return <Text style={s.body}>No characters are available in this row.</Text>;
   const last = index === lesson.characters.length - 1;
+  const playing = playback.playing === character.id;
+  const readingVisible = showReading || !!playback.error;
   return <View testID="kana-recognition" style={{ gap: 16 }}>
     {characterId && located < 0 && <Text accessibilityLiveRegion="polite" style={s.muted}>That character is unavailable. The first character in this row is shown below.</Text>}
     <Text style={s.eyebrow}>Recognition · {index + 1} of {lesson.characters.length}</Text>
-    <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={s.heading}>Which character is “{character.romaji}”?</Text>
-    <Text style={s.muted}>Choose a kana. Its reading and any notes appear after you answer.</Text>
+    <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={s.heading}>
+      {readingVisible ? `Which character is “${character.romaji}”?` : 'Which kana matches the sound?'}
+    </Text>
+    <View style={s.row}>
+      <Button compact accent icon={playing ? 'stop' : 'speaker'} onPress={() => void playback.play(character)}>{playing ? 'Stop sound' : 'Play sound'}</Button>
+      {!readingVisible && !answer && <Button compact quiet onPress={() => setShowReading(true)}>Show reading</Button>}
+    </View>
     <View style={s.row}>{choices.map(choice => <Button key={choice.id} label={`Choose ${choice.kana}`} selected={answer === choice.id} disabled={!!answer} onPress={() => { setAnswer(choice.id); onAttempt(character.id); }}>{<Text style={{ fontSize: 48, lineHeight: 64 }}>{choice.kana}</Text>}</Button>)}</View>
     {!!answer && <View accessibilityLiveRegion="polite" style={s.notice}>
       <Text style={s.body}>{answer === character.id ? 'Yes.' : 'Keep practising.'} {character.kana} is read “{character.romaji}”.</Text>
       {!!character.note && <Text style={s.body}>{character.note}</Text>}
-      <AudioIconButton playing={playback.playing === character.id} label={`Listen to ${character.kana}`}
-        stopLabel={`Stop audio for ${character.kana}`} onPress={() => void playback.play(character)} />
       {last ? <Text style={s.body}>You can save the row after trying every character.</Text> : <Button primary onPress={() => onNext(lesson.characters[index + 1])}>Next character</Button>}
     </View>}
     <Button onPress={onRepeat}>Repeat this row</Button>

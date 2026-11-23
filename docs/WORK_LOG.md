@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-23 Add listening to every lesson
+
+- Request. Use the French curriculum researcher skill to design and integrate listening practice into each lesson.
+- Start. At 22:28 CET, Europe/Paris, fetched the owner-selected origin in the clean primary `D:/dev/projects/SmartLingo` checkout. Local, tracking and live `feat/french-daily-opening` matched at `f26ece54124ebdba63fc6350c04ac0b566ce9c64`, ahead/behind `0/0`.
+- Acceptance. Short lessons have a direct Listen step. The opening French and Japanese guided lessons offer a listening check beside the study material. Learners can replay, check understanding, and use the transcript when audio is unavailable. Existing lesson routes, progress and completion must remain compatible.
+- Implementation. The player serves short lessons, guided dialogues and the existing standalone listening area. Kana recognition starts with sound and offers text support. All 202 short lessons and 18 guided lessons have checks, and all 20 kana rows have sound recognition. Four specialist agents used inherited settings for the player, curriculum, guided lesson integration and independent review. [Research and coverage](curriculum/in-lesson-listening.md) · [Execution plan](plans/0053-lesson-listening.md)
+- Review. The reviewer exercised both languages at 320 px and found that the running preview loaded the route allowlist only at startup. Restarted the identified listener on the same address and verified HTTP 200 for the new direct link. A short-lesson revision now falls back to a same-lesson question when the authored prompt's revision changes, protecting edits to the speaker or situation even when the dialogue wording stays the same.
+- Verification. Repository and TypeScript checks, 18 tooling tests, 273 initial application tests and the additional speaker-revision regression passed. The initial Chromium suite passed 77 of 78 cases. The desktop backup case timed out and passed in the 12-case final rerun. All 18 cold-offline cases passed, followed by four final export checks covering a cold direct Listen route, automatic transcript fallback, returning to the guided lesson and kana readings. Chromium on port 8082 confirmed matching manifest and bundle, five controls with at least 44 px targets, keyboard and touch interaction, playback-failure feedback and retry at 320, 390, 958 and 1,440 px. Test playback used browser stubs and missing-device-voice paths.
+- Outcome. `http://localhost:8082` serves preview build `6516dac59aa1`. The commit containing this entry is the checkpoint. Next is owner preview and review of the draft activities. Physical playback, screen readers and qualified curriculum review remain open.
+
 ## 2026-11-23 Redesign and activate the four lesson steps
 
 - Request. Make every short-lesson step clickable and redesign the four controls using frontend design guidance.

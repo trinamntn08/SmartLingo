@@ -13,6 +13,8 @@ test('kana Back restores the answered character and Forward opens the next promp
   await page.getByRole('button', { name: `Choose ${first!.kana}`, exact: true }).click();
   await expect(page.getByText(`Yes. ${first!.kana} is read “${first!.romaji}”.`)).toBeVisible();
   await page.getByRole('button', { name: 'Next character', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Which kana matches the sound?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Show reading', exact: true }).click();
   await expect(page.getByRole('heading', { name: `Which character is “${second!.romaji}”?` })).toBeVisible();
   await page.goBack();
   await expect(page.getByText(`Yes. ${first!.kana} is read “${first!.romaji}”.`)).toBeVisible();
@@ -20,7 +22,8 @@ test('kana Back restores the answered character and Forward opens the next promp
   await expect(page.getByRole('heading', { name: `Which character is “${second!.romaji}”?` })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Mark row studied', exact: true })).toBeDisabled();
   await page.reload();
-  await expect(page.getByRole('heading', { name: `Which character is “${second!.romaji}”?` })).toBeVisible();
+  await expect(page).toHaveURL(url => url.pathname.endsWith(`/recognition/${second!.id}`));
+  await expect(page.getByRole('heading', { name: 'Which kana matches the sound?' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Mark row studied', exact: true })).toBeDisabled();
 });
 

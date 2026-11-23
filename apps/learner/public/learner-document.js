@@ -16,7 +16,7 @@ function isLearnerDocumentPath(pathname) {
   switch (area) {
     case 'today': case 'report': case 'profile': return parts.length === 2;
     case 'review': return parts.length === 2 || (parts.length === 3 && ['notebook', 'practice'].includes(section));
-    case 'lesson': return parts.length <= 4 && key(section) && (item === undefined || ['vocabulary', 'dialogue', 'picture', 'sentence', 'finish'].includes(item));
+    case 'lesson': return parts.length <= 4 && key(section) && (item === undefined || ['dialogue', 'vocabulary', 'listening', 'picture', 'sentence', 'finish'].includes(item));
     case 'course': return parts.length <= 5 && key(section) && (item === undefined || key(item)) && (extra === undefined || key(extra));
     case 'learn': break;
     default: return false;

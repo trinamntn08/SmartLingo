@@ -1,7 +1,8 @@
 import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
-import { openCoursePilot } from '@smartlingo/content';
+import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, type CourseDay, type CourseEvent } from '@smartlingo/domain';
+import { buildCourseListeningQuestion } from '../../apps/learner/src/listening/lessonQuestions';
 
 const [firstDay, secondDay, thirdDay] = openCoursePilot.days;
 const coursePanel = (page: Page) => page.getByTestId('open-course-panel');
@@ -82,11 +83,48 @@ test('all five opening lessons offer a full French transcript, full translation 
       await expect(button(page, 'Source credits and licence')).toHaveCount(0);
       await expect(button(page, 'Authorship and review')).toHaveCount(0);
     }
+    await expect(button(page, 'Listening check')).toHaveAttribute('aria-expanded', 'false');
     await expect(button(page, 'Save study section')).toHaveCount(0);
     await expect(button(page, 'Next section')).toBeEnabled();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
 });
+
+for (const course of [openCoursePilot, japaneseCourse]) {
+  const language = course.language === 'fr-FR' ? 'French' : 'Japanese';
+  test(`${language} guided listening offers transcript support without writing progress`, async ({ page }) => {
+    const day = course.days[0];
+    const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
+    const code = course.language === 'fr-FR' ? 'fr' : 'ja';
+    const path = `/course/${code}/${course.id}/${day.id}/${dialogue.id}`;
+    const question = buildCourseListeningQuestion(day, course.language)!;
+    await page.goto(path);
+    const check = coursePanel(page).getByTestId('course-listening-check');
+    const open = button(page, 'Listening check');
+    await expect(open).toHaveAttribute('aria-expanded', 'false');
+    await open.press('Enter');
+    const transcript = check.getByTestId('listening-transcript');
+    const answer = check.getByRole('button', { name: 'Check answer', exact: true });
+    await expect(check.getByRole('button', { name: 'Play sentence', exact: true })).toBeVisible();
+    await expect(transcript).toHaveCount(0);
+    await expect(answer).toBeDisabled();
+    await check.getByRole('button', { name: 'Show transcript', exact: true }).click();
+    await expect(transcript).toContainText(question.sentence);
+    await check.getByRole('button', { name: question.choices[question.correctIndex], exact: true }).click();
+    await answer.click();
+    const feedback = check.getByTestId('listening-feedback');
+    await expect(feedback).toContainText(question.meaning);
+    await expect(feedback).toContainText(/transcript support/);
+    await open.click();
+    await expect(feedback).toHaveCount(0);
+    await open.click();
+    await expect(feedback).toBeVisible();
+    await expect(page).toHaveURL(path);
+    expect(await storedEvents(page)).toEqual([]);
+    expect(await storedEvents(page, 'events')).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
 
 test('Next saves dialogue and resumes practice without requiring answers before finishing', async ({ page }) => {
   await page.goto('/');

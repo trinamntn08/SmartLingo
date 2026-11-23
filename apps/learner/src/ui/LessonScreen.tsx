@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
 import { Button } from './controls';
@@ -6,16 +6,17 @@ import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { LessonConversation, LessonWords } from './LessonStudy';
 import { PictureActivity, SentenceActivity } from './LessonPractice';
+import { ListeningQuestionPlayer } from '../listening/ListeningQuestionPlayer';
+import { buildLessonListeningQuestion } from '../listening/lessonQuestions';
 import { routePress } from './routePress';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
-import { routeHref, topicRouteKey, type LessonStage } from '../app/routes';
+import { lessonStages, routeHref, topicRouteKey, type LessonStage } from '../app/routes';
 
 function resumeStage(wordsStudied: boolean, progress: ReturnType<typeof lessonProgress>): LessonStage {
   return progress.completed || (wordsStudied && progress.pictureDone) ? 'sentence' : 'dialogue';
 }
 
 const focusStageKey = 'lesson.focus-stage';
-const guidedSteps = ['dialogue', 'vocabulary', 'picture', 'sentence'] as const satisfies readonly LessonStage[];
 
 interface LessonSequence {
   position: number;
@@ -47,6 +48,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const lessonStatus = lesson.status === 'draft' ? 'Draft' : 'Published';
   const lessonMeta = compact ? `${lesson.level} · ${lessonStatus}` : `${lesson.level} · ${lesson.topic} · ${lessonStatus}`;
   const meaningMatch = lesson.pictureActivity.mode === 'meaning';
+  const listeningQuestion = useMemo(() => buildLessonListeningQuestion(lesson), [lesson]);
   const { heading } = stageLabels(stage, meaningMatch);
   const practiceLabel = meaningMatch ? 'Try meaning practice' : 'Try picture practice';
   const canComplete = wordsStudied && progress.pictureDone && !progress.completed;
@@ -126,9 +128,9 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     }
   }
 
-  function reviewVocabulary() {
-    if (browseOnly || wordsStudied) setStage('picture');
-    else record('vocabulary', lesson.id, 'viewed', 0, () => setStage('picture', true));
+  function reviewVocabulary(next: 'listening' | 'picture') {
+    if (browseOnly || wordsStudied) setStage(next);
+    else record('vocabulary', lesson.id, 'viewed', 0, () => setStage(next, true));
   }
 
   const reviewStage = progress.completed || !wordsStudied ? 'vocabulary' : 'picture';
@@ -159,7 +161,8 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         <StudyActions>
           {wordsStudied && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
           {wordsStudied
-            ? <Button primary trailingIcon="arrow-right" href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>{practiceLabel}</Button>
+            ? <Button primary trailingIcon="arrow-right" href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
+              onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>{listeningQuestion ? 'Start listening' : practiceLabel}</Button>
             : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Continue to key phrases</Button>}
         </StudyActions>
       </>}
@@ -167,9 +170,20 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         <LessonWords lesson={lesson} model={model} compact={compact} />
         <StudyActions>
           <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
-          <Button primary trailingIcon="arrow-right" disabled={model.blocked && !browseOnly} onPress={reviewVocabulary}>{practiceLabel}</Button>
+          <Button primary={!listeningQuestion} quiet={!!listeningQuestion} disabled={model.blocked && !browseOnly}
+            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>
+          {listeningQuestion && <Button primary trailingIcon="arrow-right" disabled={model.blocked && !browseOnly}
+            onPress={() => reviewVocabulary('listening')}>Continue to listening</Button>}
         </StudyActions>
       </>}
+      {stage === 'listening' && (listeningQuestion
+        ? <ListeningQuestionPlayer question={listeningQuestion} revision={lesson.revision} compact={compact}
+          continuation={{ label: 'Continue to matching', skipLabel: 'Skip listening', href: stageHref('picture'),
+            onPress: () => setStage('picture'), disabled: exitBlocked }} />
+        : <View style={s.notice}>
+          <Text style={s.body}>Listening practice is unavailable for this lesson.</Text>
+          <Button primary href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>Continue to matching</Button>
+        </View>)}
       {stage === 'picture' && <PictureActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
       {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={!!lessonRoute} disabled={model.blocked} browseOnly={browseOnly}
@@ -191,7 +205,8 @@ function StudyActions({ children }: { children: ReactNode }) {
 function stageLabels(stage: LessonStage, meaningMatch: boolean) {
   switch (stage) {
     case 'vocabulary': return { label: 'Key phrases', short: 'Phrases', heading: 'Key phrases' };
-    case 'dialogue': return { label: 'Dialogue', short: 'Dialogue', heading: 'Read a conversation' };
+    case 'dialogue': return { label: 'Read dialogue', short: 'Read', heading: 'Read a conversation' };
+    case 'listening': return { label: 'Listen', short: 'Listen', heading: 'Listening practice' };
     case 'picture': return { label: meaningMatch ? 'Match meanings' : 'Match a picture', short: 'Match', heading: meaningMatch ? 'Match the meaning' : 'Match a picture' };
     case 'sentence': return { label: 'Build a sentence', short: 'Build', heading: 'Build a sentence' };
   }
@@ -201,10 +216,10 @@ function LessonProgress({ stage, compact, meaningMatch, recorded, total, disable
   stage: LessonStage; compact: boolean; meaningMatch: boolean; recorded?: number; total: number;
   disabled: boolean; hrefForStep: (step: LessonStage) => string | undefined; onStep: (step: LessonStage) => void;
 }) {
-  const current = guidedSteps.indexOf(stage);
+  const current = lessonStages.indexOf(stage);
   return <View style={[layout.progress, compact && layout.compactProgress]}>
     <View style={layout.progressLabels}>
-      <Text style={layout.stepCount}>Step {current + 1} of {guidedSteps.length}</Text>
+      <Text style={layout.stepCount}>Step {current + 1} of {lessonStages.length}</Text>
       {recorded !== undefined && <Text style={layout.recorded}>
         {compact ? `${recorded}/${total} items recorded` : `${recorded} of ${total} study items recorded`}
       </Text>}
@@ -214,7 +229,7 @@ function LessonProgress({ stage, compact, meaningMatch, recorded, total, disable
       <View style={[s.progressFill, { width: `${recorded / total * 100}%` }]} />
     </View>}
     <View role="navigation" accessibilityLabel="Lesson steps" style={layout.steps}>
-      {guidedSteps.map((step, index) => {
+      {lessonStages.map((step, index) => {
         const { label, short } = stageLabels(step, meaningMatch);
         return <LessonStep key={step} step={step} number={index + 1} label={label} text={compact ? short : label}
           current={step === stage} compact={compact} disabled={disabled} href={hrefForStep(step)} onPress={() => onStep(step)} />;

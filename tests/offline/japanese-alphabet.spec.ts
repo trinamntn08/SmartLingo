@@ -46,6 +46,8 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   await letters.getByTestId(`kana-row-${japaneseAlphabetLessons[19]!.id}`).click();
   await expect(letters.getByRole('heading', { name: japaneseAlphabetLessons[19]!.title, exact: true })).toBeVisible();
   await letters.getByRole('button', { name: 'Recognition practice', exact: true }).click();
+  await letters.getByRole('button', { name: 'Show reading', exact: true }).click();
+  await expect(letters.getByRole('heading', { name: `Which character is “${japaneseAlphabetLessons[19]!.characters[0]!.romaji}”?` })).toBeVisible();
   await letters.getByRole('button', { name: `Choose ${japaneseAlphabetLessons[19]!.characters[0]!.kana}`, exact: true }).click();
   await expect(letters.getByText(/^Yes\./)).toBeVisible();
   await cold.getByRole('button', { name: 'Lessons', exact: true }).click();

@@ -4,6 +4,7 @@ import { guidedLessonButton, openProfileSection } from '../e2e/learner-journeys'
 test('a downloaded course opens related practice and returns to the exact study section offline', async ({ request, page, context, baseURL }) => {
   await request.post('/__test__/mode');
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
+  await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
   await page.goto('/');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
@@ -24,9 +25,12 @@ test('a downloaded course opens related practice and returns to the exact study 
   const reflectionUrl = cold.url();
   await related.getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
   await expect(cold).toHaveURL(/\/dialogue\?course=/);
-  await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases' }).click();
-  await expect(cold).toHaveURL(/\/vocabulary\?course=/);
+  await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Listen', exact: true }).click();
+  await expect(cold).toHaveURL(/\/listening\?course=/);
   await cold.reload();
+  await button('Play sentence').click();
+  await expect(cold.getByTestId('listening-question-player').getByRole('alert')).toContainText('Audio could not play');
+  await expect(cold.getByTestId('listening-transcript')).toBeVisible();
   await button('Back to guided lesson').click();
   await expect(cold).toHaveURL(reflectionUrl);
   await expect(cold.getByRole('heading', { name: 'Try it', exact: true })).toBeVisible();

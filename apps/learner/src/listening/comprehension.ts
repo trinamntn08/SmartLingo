@@ -7,6 +7,7 @@ export interface ListeningQuestion {
   sentence: string;
   meaning: string;
   reading?: string;
+  prompt?: string;
   choices: string[];
   correctIndex: number;
 }

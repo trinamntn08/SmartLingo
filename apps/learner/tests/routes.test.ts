@@ -5,6 +5,7 @@ import { parseRoute, routeHref, topicRouteKey, type AppRoute } from '../src/app/
 test('web routes retain the explicit destination through a copy or refresh', () => {
   const routes: AppRoute[] = [
     { kind: 'lesson', language: 'fr-FR', lessonId: 'fr.essentials.repair', stage: 'dialogue' },
+    { kind: 'lesson', language: 'ja-JP', lessonId: 'ja.greetings.hello', stage: 'listening' },
     { kind: 'lesson', language: 'fr-FR', lessonId: 'fr.greetings.hello-goodbye', stage: 'sentence',
       studyDay: { courseId: 'fr.open-course-pilot', dayId: 'fr.open-course-pilot.day-1', sectionId: 'fr.open-course-pilot.day-1.reflect' } },
     { kind: 'course', language: 'ja-JP', courseId: 'ja.everyday-course', dayId: 'ja.everyday-course.day-1', sectionId: 'study' },

@@ -9,6 +9,31 @@ Owner preference recorded: 2026-11-14. Use the included Plus allowance efficient
 3. If the client exposes usage limits, check at session start, before substantial work/delegation, and before handoff. Record the observation time, remaining allowance for each available window, and reset times with timezone. Missing data means unavailable, not zero or unlimited. Do not repeatedly retry a failed usage tool in the same session.
 4. Use targeted searches, bounded output, batched independent reads, and concise updates. Reuse verified findings. Delegate only substantial independent tasks with exclusive ownership; extra agents also consume allowance. Run appropriate checks once after a coherent change, repeating only for new changes or unresolved failures.
 5. Update SESSION_CHECKPOINT.md after each meaningful completed step, before risky or long work, before compaction when signalled, and before stopping. Keep it short and replace stale details. Update STATUS.md for milestones and meaningful blockers; record material decisions in decisions/.
+6. After reviewing and validating a completed step, create its checkpoint commit and push the assigned task branch to origin under the standing owner authorisation below. Verify the local commit and remote head; report the hash and upload result. Do not leave completed validated work uncommitted or unpushed by default.
+
+## Automatic checkpoint commits
+
+Owner instruction, recorded 2026-11-14: automatically commit after each completed step so there is a recoverable Git checkpoint. This is standing authorisation for the primary agent to make local commits during authorised work without repeated confirmation. A step is a small, coherent, reviewable outcome with acceptance criteria; it is not each individual edit, command, or subagent response.
+
+Owner extension, recorded 2026-11-16: once work is finished, commit and push to remote automatically. This is standing authorisation to push completed, reviewed, validated checkpoints to the owner-selected origin on the assigned task branch without asking again. It supplies the separate push authorisation mentioned in older skill text; do not treat that wording as a new per-push confirmation requirement. It applies to local and Cloud work; it does not authorise new feature scope, blanket staging, changes to unrelated branches, direct updates to main, merging, deployment or curriculum publication. See [ADR 0021](decisions/0021-automatic-task-branch-pushes.md).
+
+The owner reaffirmed the Cloud handoff on 2026-11-23. Every Cloud task with repository changes includes written verification in the checkpoint, a commit that includes the handoff docs, and a verified GitHub push before the final reply. For a read-only task, report the findings and checks in the reply.
+
+For each completed step:
+
+1. Review the entire proposed change, including new files, for correctness, relevant failure paths, architecture standards, scope, and sensitive data. Resolve applicable findings. Use an independent read-only reviewer for substantial work with separable review scope; keep small sequential edits in the primary agent.
+2. Run the documented checks and relevant application verification. Do not commit a known failing step as though complete, disable hooks, or replace meaningful checks with placeholders.
+3. Update SESSION_CHECKPOINT.md with the completed outcome, actual validation, remaining limitations, and exact next step. Update STATUS.md and decision records when warranted. Include these task-related notes in the same checkpoint commit.
+4. Inspect the index, stage only deliberate task paths, then inspect the complete staged diff. Preserve unrelated or pre-staged owner work; exclude it from the checkpoint commit. Never use blanket staging when unrelated changes may exist.
+5. Run `npm run check:staged` (`npm.cmd run check:staged` on Windows) and `git diff --cached --check` on the final staged content. Create a focused commit with a descriptive subject, then verify `git log -1` and `git status --short`. Report the actual hash and any remaining uncommitted work. Do not create an empty commit when the step changes nothing.
+6. Inspect the live origin head for the assigned task branch, then push that branch normally. Create/use a named topic branch if the checkout is detached or on main. Preserve unrelated remote commits; reconcile changes safely within the task or report the blocker. Never force-push, push all branches by default, or infer permission to merge from permission to push.
+7. Read back the live remote ref with `git ls-remote --exit-code --heads origin refs/heads/<task-branch>` and compare it with `git rev-parse HEAD`. After they match, report the GitHub branch link, verified commit SHA and checks in the final handoff. Include any remaining local or remote mismatch in the handoff.
+
+If a step is interrupted, validation fails, or Git cannot commit/push, preserve the work and record the blocker, actual command result, and exact recovery action in the checkpoint. Fix failures within scope where possible. Do not claim a successful commit until Git confirms it, or a remote backup until its ref is verified. A failed push can leave a valid local checkpoint that still needs uploading.
+
+The agent performs these commits and pushes while actively working. No background auto-commit/push service, file watcher, or Stop-hook commit is configured or required. Hook checks still run normally. The 2026-11-16 extension supplies standing task-branch push authorisation; merging, deployment, curriculum publication, Git identity changes and rewriting existing commits remain separately scoped. Never force-push.
+
+See [ADR 0003](decisions/0003-checkpoint-commits.md) for the decision and tradeoffs.
 
 ## Subagent model routing
 
@@ -36,12 +61,13 @@ Context capacity and account usage limits are different. Compaction does not res
 
 - Current authorised request, scope, and completion/paused/in-progress state.
 - Completed steps, relevant files, and current uncommitted work to preserve.
+- Latest successful checkpoint commit hash, or identify the commit containing the checkpoint when documenting that same commit (a commit cannot contain its own hash). Report the resulting hash after committing.
 - Commands actually run, their results, and verification still pending.
 - Next exact step, acceptance criteria, blockers, and owner decisions needed.
 - Latest usage observation with source/time, or explicitly unavailable.
 - Automatic-resume configuration confirmed by the scheduler, or explicitly not configured.
 
-Never put credentials, raw voice recordings, or private transcripts in the checkpoint. Git commit/push rules still apply; a checkpoint is not a commit or backup of the entire working tree.
+Never put credentials, raw voice recordings, or private transcripts in the checkpoint. The checkpoint note and its local commit are complementary: only deliberately staged task files are captured. A local commit is not an off-device backup of the entire working tree.
 
 ## Resume and automation
 
@@ -49,7 +75,7 @@ The owner authorises resuming an unfinished, already authorised task after allow
 
 Documentation and lifecycle hooks cannot wake an idle agent or detect a reset by themselves. Use a supported project/thread scheduler only when available, and claim automatic resuming only after it confirms creation. A scheduled retry must check actual allowance before starting one bounded step and save a checkpoint afterwards. A timer is not a reset event; do not assume the quota has recovered. Respect the scheduler's local access and runtime requirements. A notification-only task cannot substitute for an agent with repository access.
 
-Current session: usage lookup and the local thread scheduling request both failed on 2026-11-14. Remaining allowance and reset times are unknown; no automatic resume is confirmed. Until scheduling succeeds, a new owner message such as `Continue from docs/SESSION_CHECKPOINT.md` is needed to start another turn. Do not run background shell retry loops as a substitute.
+Earlier session observation on 2026-11-14: usage lookup and a local thread scheduling request failed. Consult the current checkpoint for the latest capability observation; no automatic resume is confirmed. Until scheduling succeeds, a new owner message such as `Continue from docs/SESSION_CHECKPOINT.md` is needed to start another turn. Do not run background shell retry loops as a substitute.
 
 ## Platform references
 

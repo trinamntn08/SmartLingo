@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SmartLingo French research topic draft (not a runtime lesson)",
+  "description": "Optional research brief requiring conversion to lessonSchema. Seed catalogs have a different shape. Agent-generated records remain drafts; this schema grants no publication approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "level", "title_fr", "title_en", "scenario", "can_do", "prerequisites", "subclusters", "lexical_items", "grammar_support", "recycling_from", "micro_dialogue", "practice_tasks", "cultural_notes", "sources", "example_origin", "review_status"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^(a1|a2|b1|b2)-[a-z0-9-]+$"},
+    "level": {"enum": ["A1", "A2", "B1", "B2"]},
+    "title_fr": {"type": "string", "minLength": 1},
+    "title_en": {"type": "string", "minLength": 1},
+    "scenario": {"type": "string", "minLength": 1},
+    "can_do": {"type": "string", "minLength": 1},
+    "prerequisites": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "subclusters": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "lexical_items": {"type": "array", "minItems": 8, "items": {"$ref": "#/$defs/item"}},
+    "grammar_support": {"type": "array", "items": {"type": "string"}},
+    "recycling_from": {"type": "array", "items": {"type": "string"}},
+    "micro_dialogue": {"type": "array", "minItems": 2, "items": {"type": "object", "required": ["speaker", "text_fr", "text_en"], "properties": {"speaker": {"type": "string", "minLength": 1}, "text_fr": {"type": "string", "minLength": 1}, "text_en": {"type": "string", "minLength": 1}}, "additionalProperties": false}},
+    "practice_tasks": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "cultural_notes": {"type": "array", "items": {"type": "string"}},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["title", "url", "type", "note"], "properties": {"title": {"type": "string", "minLength": 1}, "url": {"type": "string", "format": "uri"}, "type": {"enum": ["cefr_descriptor", "inspiration", "usage_validation", "editorial_decision"]}, "accessed_on": {"type": "string", "format": "date"}, "note": {"type": "string", "minLength": 1}}, "additionalProperties": false}},
+    "example_origin": {"const": "editorial_example"},
+    "review_status": {"const": "draft"}
+  },
+  "$defs": {
+    "item": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "lemma_fr", "part_of_speech", "gloss_en", "cluster", "status", "usage_example_fr", "usage_example_en"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "lemma_fr": {"type": "string", "minLength": 1},
+        "part_of_speech": {"enum": ["noun", "verb", "adjective", "adverb", "expression", "other"]},
+        "gloss_en": {"type": "string", "minLength": 1},
+        "cluster": {"type": "string", "minLength": 1},
+        "status": {"enum": ["new", "recycled"]},
+        "usage_example_fr": {"type": "string", "minLength": 1},
+        "usage_example_en": {"type": "string", "minLength": 1},
+        "article": {"type": "string"}, "gender": {"enum": ["masculine", "feminine", "variable", "not_applicable"]},
+        "plural": {"type": "string"}, "register": {"enum": ["neutral", "formal", "informal"]},
+        "pronunciation_note": {"type": "string"}
+      }
+    }
+  }
+}

@@ -41,7 +41,7 @@ export function checkRepository(root, { staged = false } = {}) {
         }
       }
       const skillNames = fs.readdirSync(path.join(root, skillPath));
-      if (skillNames.length !== 3) throw new Error('Expected three repository skills');
+      if (skillNames.length !== 4) throw new Error('Expected four repository skills');
       for (const folder of skillNames) {
         const skill = parseSkill(fs.readFileSync(path.join(root, skillPath, folder, 'SKILL.md'), 'utf8'));
         if (skill.name !== folder) throw new Error('Skill folder/name mismatch: ' + folder);

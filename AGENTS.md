@@ -6,14 +6,14 @@
 - Read `docs/ARCHITECTURE.md` before changing module boundaries or storage.
 - Treat explicit owner instructions as authoritative. Record material decisions in `docs/decisions/`.
 - Inspect the working tree before edits. Preserve unrelated work.
-- This repository currently contains planning and development tooling, not a runnable learner application. Do not claim app functionality exists.
+- This repository contains a local learner preview and curriculum API/editor. Check `docs/STATUS.md` for verified behaviour and remaining milestone work; do not claim planned functionality exists.
 
 ## Product constraints
 - English-speaking adult newcomers to France; practical metropolitan French, A1–A2 and beginner foundations.
 - Web beta first, Android/iOS later. Future target languages: English and Japanese.
 - Follow `references/1.jpg` through `references/7.jpg` closely in visual character. Use English interface text.
 - Prioritise pictures, vocabulary, sentence building, contextual speaking, and calm review.
-- Show translations and grammar on request. Support guided learning and free exploration.
+- Display lesson meanings, examples, translations and explanations directly. Keep recall reveals and hints for practice. Support guided learning and free exploration.
 - Let users save/edit personal vocabulary. Curriculum edits require preview and publication.
 - Keep ordinary downloaded lessons usable without AI. Do not equate lesson completion with proficiency.
 
@@ -23,13 +23,17 @@
 3. Implement within the assigned ownership boundaries. Avoid unrelated refactors.
 4. Run `npm run check`, plus meaningful application checks once those exist.
 5. Update `docs/STATUS.md` for milestone changes and record decisions when needed.
-6. Report behaviour, validation, and remaining limitations accurately.
+6. For every task that changes the repository, including Cloud tasks, record the outcome, checks and remaining work in `docs/SESSION_CHECKPOINT.md`. Update `docs/STATUS.md` for milestones and add or update a decision record when warranted.
+7. Before reporting completion, commit the reviewed changes and handoff docs after checks pass, push the assigned branch to GitHub, and verify its live SHA against the local commit. Report the commit, branch link and checks, or record and report the exact blocker. Follow [the checkpoint workflow](docs/SESSION_WORKFLOW.md#automatic-checkpoint-commits).
 - Implement authorised work without repeated confirmation. Ask only about genuinely blocking choices.
 - Do not invent successful checks or use placeholder test scripts that always succeed.
 - Use `rg` first when installed; otherwise use PowerShell or Git search.
 - On Windows use literal filesystem paths and native operations; do not mix shells for destructive operations.
 
 ## Architecture and secrets
+- Follow the implementation standards in `docs/ARCHITECTURE.md` for every feature and fix: clean, modular, extensible code with explicit responsibilities.
+- Give each function one coherent job. Keep UI, domain rules, persistence, and external services separate; depend on small typed contracts at their boundaries.
+- Prefer simple, readable designs and composition. Add abstractions for concrete variation or reuse; avoid speculative frameworks and unrelated refactors.
 - Planned stack: TypeScript, Expo/React Native, local Node/Fastify API, SQLite, browser IndexedDB.
 - Preserve provider/storage adapters and shared language-independent domain logic.
 - Use stable content IDs, revisions, validated input, idempotent learning events, and versioned migrations.
@@ -55,13 +59,15 @@
 Repository skills are in `.agents/skills/`:
 - `sll-deliver-feature`: implement a complete product slice.
 - `sll-author-french`: draft/review original French lessons.
+- `french-curriculum-researcher`: research topic progression, vocabulary coherence and coverage gaps; its seeds and schema are planning resources requiring runtime conversion and owner review.
 - `sll-review-change`: check correctness, learning behaviour, privacy, and regression risks.
 Read the selected skill before following it. These are project workflows, not globally installed personal skills.
 
 ## Git and completion
 - Use topic branches such as `feat/restaurant-lesson`, `fix/audio-replay`, or `chore/tooling`.
 - Stage deliberate paths. Do not stage secrets, learner databases, recordings, or generated caches.
-- Keep commits focused and describe the result. Commit/push when the task authorises it; never force-push.
+- Standing owner authorisation covers focused commits and normal pushes to GitHub on the assigned task branch after each completed, reviewed, validated step. Apply it to local and Cloud work without repeated confirmation. Keep merges, deployments, curriculum publication, direct changes to main and history rewrites separately authorised.
+- If checks, committing or pushing fail, preserve the work, record the failure and next action in `docs/SESSION_CHECKPOINT.md`, and report the blocker. Distinguish a successful local commit from a successful remote upload. Never bypass checks or create an empty commit to claim a checkpoint. Never force-push.
 - Owner-selected remote: `https://github.com/trinamntn08/SmartLingo.git`. Inspect remote history before integrating; never force-push or create a replacement repository.
 - Run `git diff --check` and the documented checks before handing off.
 - Current tooling commands are in `README.md`; planned commands must be labelled as planned.

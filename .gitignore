@@ -10,6 +10,8 @@ dist/
 build/
 web-build/
 coverage/
+test-results/
+playwright-report/
 *.tsbuildinfo
 # Secrets (keep blank templates)
 .env

@@ -1,0 +1,13 @@
+{
+  "id": "/",
+  "name": "SmartLingo — Everyday French",
+  "short_name": "SmartLingo",
+  "description": "Practical French lessons and your personal vocabulary notebook.",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#F5F2E8",
+  "background_color": "#F5F2E8",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

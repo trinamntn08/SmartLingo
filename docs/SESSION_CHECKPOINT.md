@@ -1,32 +1,13 @@
 # Session checkpoint
 
-Updated: 2026-11-14 (Europe/Paris).
+Updated 2026-11-23, Europe/Paris. The owner reaffirmed that Cloud tasks with repository changes must record the work in the docs and finish with a verified GitHub push.
 
-## Authorised request and state
+## Completed
 
-Continue the authorised documentation commit and sync to https://github.com/trinamntn08/SmartLingo.git. Never force-push or create a replacement repository. App implementation remains separate.
+- Updated `AGENTS.md`, the session and Cloud workflow guides, the project status, and ADR 0021 on `chore/cloud-workflow`, starting at `a3913dd`. The checkpoint records the outcome, checks, and any open work. A focused commit carries the handoff docs. The final reply includes the verified GitHub commit and branch link or the exact delivery blocker.
+- Confirmed Cloud write access by pushing and reading back curriculum checkpoint `47eebafdf5050cad95549ffe49204d94fc053c39` on the separate French/Japanese feature branch. [Feature branch](https://github.com/trinamntn08/SmartLingo/tree/feat/french-topics-japanese-course)
+- Repository and TypeScript checks passed with `npm run check`. `git diff --check` passed. This update is documentation only. No usage data was exposed and no automatic resume was configured.
 
-## Current verified state
+## Handoff
 
-- Local main and cached origin/main both point to `1606501` (`update docs`), following `207cbad`. The requested documentation commit already exists. Cached origin/main does not establish the current GitHub state.
-- The working tree was clean at session start. This verification updates only docs/STATUS.md and docs/SESSION_CHECKPOINT.md.
-- Origin has the owner-selected HTTPS URL for fetch and push.
-- Actual staging verification: `git add -- docs/STATUS.md docs/SESSION_CHECKPOINT.md` failed creating .git/index.lock with Permission denied.
-- Actual fetch verification: `git fetch origin` failed opening .git/FETCH_HEAD with Permission denied.
-- `git ls-remote --symref origin HEAD` and `git push --dry-run origin main` both failed with `getaddrinfo() thread failed to start`. Live remote history and push permission remain unverified. No real push was attempted because remote history could not be inspected.
-- No staging, new commit, fetch, merge, or remote change succeeded in this session.
-
-## Exact next step
-
-1. Continue in a session or normal terminal with Git metadata write access and GitHub connectivity. These checks failed in this session; do not infer host-wide DNS failure or change Git history from them.
-2. Inspect status, run `git fetch origin`, then inspect `git log --oneline --graph --decorate --all -20` and compare main with origin/main before integrating. Preserve existing remote work; never force-push.
-3. Review these two documentation updates, run `npm.cmd run check`, stage deliberate paths, then run `npm.cmd run check:staged` and `git diff --cached --check` before committing under the existing authorisation.
-4. Push normally only after history is understood. Verify live remote refs against local HEAD and record the result. Do not repeat bootstrap setup.
-
-## Validation and usage
-
-`npm.cmd run check` and `git diff --check` passed after these documentation updates. Earlier rename/configuration checks and all 16 tooling tests passed on 2026-11-14; those are historical results, not rerun claims. No learner app exists and runtime hook trust remains unverified.
-
-Usage-limit lookup failed this session; remaining allowance and reset times are unavailable. No subagents were needed for this bounded verification. Automatic resume is not configured or confirmed. Existing authorisation to resume this sync persists.
-
-Repository diagnosis: Windows ACLs grant Authenticated Users Modify access; project configuration inherits sandbox/network policy. No exposed client tool can change that policy. The active session separately protects .git as read-only. No ACL or DNS settings were changed.
+The commit containing this note is the checkpoint for this update. Record the verified GitHub branch and commit in the final reply. The separate fresh phone-started acceptance check stays documented in the Cloud guide. [Workflow](SESSION_WORKFLOW.md#automatic-checkpoint-commits) · [Phone acceptance](CLOUD_WORKFLOW.md#phone-acceptance-task)

@@ -1,0 +1,17 @@
+# 0012 — Explicit offline web assets, separate from learning data
+
+Date: 2026-11-15. Status: accepted.
+
+The next web slice must open ordinary lessons after a cold reload without network/API access. Keep it small: one explicit downloadable copy of the entire exported preview, including 60 draft lessons and original pictures. Published curriculum remains in the existing validated IndexedDB cache; saving app assets neither approves content nor changes learning history. Per-topic packs and downloaded/generated audio remain later work.
+
+The export step fingerprints actual files with SHA256 and decoded file sizes, then emits a reproducible versioned manifest. Profile shows available and completed-copy bytes, download progress, ready/incomplete state, retry/update and confirmed removal. Sizes exclude browser overhead and incomplete staging files. Retain previous complete copies until explicit removal, so old tabs keep their hashed scripts; displayed bytes sum all complete copies. A failed/interrupted attempt cannot replace a working copy, and the next explicit retry cleans incomplete staging caches.
+
+A small service worker owns only `smartlingo-assets-v1-` caches. Downloads independently validate the manifest, HTTP responses, sizes, hashes and bounded response bodies before writing a final completion record. Worker activation downloads nothing. Exact same-origin saved assets can be served from complete caches; root/index navigation tries the network for up to three seconds before falling back to saved HTML. API/editor paths, queries on asset requests, foreign origins and mutation requests bypass caching. Manifest and worker requests always use the network.
+
+Web Locks coordinate download/removal across worker generations, with an additional worker-local queue. The browser adapter requires Web Locks and a secure service-worker context before offering management. The direct worker fallback without Web Locks is not a supported browser-management path. Removal deletes owned caches only: it never opens IndexedDB, deletes a database, removes unrelated caches or changes server content. The installed worker remains network-only when its asset caches are empty.
+
+Use a root-path, loopback static export preview on port 8082. Expo development remains on 8081 and registers no worker automatically. These are different browser origins/stores; private learning backup/restore is the explicit transfer route. API origin access adds only exact localhost/127.0.0.1 port 8082 entries to the existing loopback guards. No LAN/public authentication or hosting is introduced.
+
+A PWA manifest with an original SVG icon enables optional browser installation where supported. Installation does not itself prove the offline copy is ready. Actual phone/Safari installation, SVG icon compatibility and audible offline speech require device checks. Browser storage remains evictable; exported private learning backups remain the durable recovery route.
+
+Official references: [Expo PWA guide](https://docs.expo.dev/guides/progressive-web-apps/), [MDN worker lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers), [MDN CacheStorage](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage), and [Chromium manifest icon guidance](https://web.dev/articles/add-manifest#icons). Checked 2026-11-15. No new runtime dependency, paid service, microphone or credential was added.

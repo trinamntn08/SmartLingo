@@ -18,6 +18,9 @@ Use current official documentation as the compatibility baseline, but distinguis
 - Mandatory CI/provider setup: deferred until an external remote is selected.
 
 ## Consequences
+
+The following records conditions during initial setup, rather than the current repository state. The bootstrap commit and configuration installation subsequently succeeded; consult [status](../STATUS.md) and [the checkpoint](../SESSION_CHECKPOINT.md) for current observations.
+
 The managed editing policy rejected writes to root .codex/.agents during setup. Keep validated installation sources under tooling and provide a conflict-safe local installer. Never use an alternate tool or elevated request to bypass that policy. Root AGENTS.md remains writable.
 Git initialization and initial local configuration succeeded, but later metadata writes (config/index locks) were denied. Existing matching Git hook configuration is handled idempotently. Staging/initial commit requires the local completion command.
 

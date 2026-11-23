@@ -1,0 +1,52 @@
+{
+  "reviewStatus": "draft",
+  "format": "research-only; requires runtime lesson conversion",
+  "exampleOrigin": "editorial_example",
+  "titleEn": "Everyday greetings and politeness",
+  "titleFr": "Salutations et politesse au quotidien",
+  "canDo": "Greet someone, exchange a short check-in, make a polite request and close an everyday exchange.",
+  "estimatedLevel": "foundation",
+  "prerequisites": [],
+  "sourceContext": "See ../CURRICULUM_TOPIC_AUDIT.md for inspected sources and the distinction between source evidence and editorial selection.",
+  "lessons": [
+    {
+      "titleEn": "Say hello and goodbye",
+      "entries": [
+        { "target": "bonjour", "meaning": "hello / good morning / good afternoon", "register": "neutral; daytime greeting", "existingId": "fr.bonjour", "candidateId": null, "exampleFr": "Bonjour, vous allez bien ?", "exampleEn": "Hello, are you well?" },
+        { "target": "bonsoir", "meaning": "good evening", "register": "neutral; evening greeting", "existingId": null, "candidateId": "fr.greetings.bonsoir", "exampleFr": "Bonsoir, entrez !", "exampleEn": "Good evening, come in!" },
+        { "target": "salut", "meaning": "hi / bye", "register": "informal; with people you know well", "existingId": null, "candidateId": "fr.greetings.salut", "exampleFr": "Salut Léa !", "exampleEn": "Hi Léa!" },
+        { "target": "au revoir", "meaning": "goodbye", "register": "neutral; leave-taking", "existingId": "fr.people.au-revoir", "candidateId": null, "exampleFr": "Au revoir, monsieur !", "exampleEn": "Goodbye, sir!" },
+        { "target": "à bientôt", "meaning": "see you soon", "register": "neutral; leave-taking", "existingId": null, "candidateId": "fr.greetings.a-bientot", "exampleFr": "Merci et à bientôt !", "exampleEn": "Thank you and see you soon!" },
+        { "target": "à demain", "meaning": "see you tomorrow", "register": "neutral; leave-taking", "existingId": null, "candidateId": "fr.greetings.a-demain", "exampleFr": "À demain, à neuf heures !", "exampleEn": "See you tomorrow at nine!" },
+        { "target": "bonne journée", "meaning": "have a good day", "register": "neutral; wish when leaving", "existingId": null, "candidateId": "fr.greetings.bonne-journee", "exampleFr": "Au revoir et bonne journée !", "exampleEn": "Goodbye and have a good day!" },
+        { "target": "bonne soirée", "meaning": "have a good evening", "register": "neutral; wish when leaving", "existingId": null, "candidateId": "fr.greetings.bonne-soiree", "exampleFr": "Merci, bonne soirée !", "exampleEn": "Thank you, have a good evening!" }
+      ]
+    },
+    {
+      "titleEn": "Be polite in everyday exchanges",
+      "entries": [
+        { "target": "s’il vous plaît", "meaning": "please", "register": "vous; unfamiliar adult or plural addressees", "existingId": "fr.silvousplait", "candidateId": null, "exampleFr": "Un instant, s’il vous plaît.", "exampleEn": "One moment, please." },
+        { "target": "s’il te plaît", "meaning": "please", "register": "tu; one familiar addressee", "existingId": null, "candidateId": "fr.greetings.sil-te-plait", "exampleFr": "Un instant, s’il te plaît.", "exampleEn": "One moment, please." },
+        { "target": "merci", "meaning": "thank you", "register": "neutral", "existingId": "fr.merci", "candidateId": null, "exampleFr": "Merci pour votre aide.", "exampleEn": "Thank you for your help." },
+        { "target": "merci beaucoup", "meaning": "thank you very much", "register": "neutral; stronger thanks", "existingId": "fr.essentials.thank-you", "candidateId": null, "exampleFr": "Merci beaucoup, c’est gentil.", "exampleEn": "Thank you very much, that's kind." },
+        { "target": "de rien", "meaning": "you’re welcome", "register": "neutral everyday response to thanks", "existingId": "fr.essentials.welcome-response", "candidateId": null, "exampleFr": "De rien, bonne journée !", "exampleEn": "You're welcome, have a good day!" },
+        { "target": "pardon", "meaning": "sorry / pardon?", "register": "neutral; apology or request for repetition by context", "existingId": null, "candidateId": "fr.greetings.pardon", "exampleFr": "Pardon, je n’ai pas entendu.", "exampleEn": "Sorry, I didn't hear." },
+        { "target": "excusez-moi", "meaning": "excuse me", "register": "vous; to get attention politely or apologise", "existingId": "fr.essentials.excuse-me", "candidateId": null, "exampleFr": "Excusez-moi, je peux passer ?", "exampleEn": "Excuse me, may I get past?" },
+        { "target": "excuse-moi", "meaning": "excuse me / sorry", "register": "tu; one familiar addressee", "existingId": null, "candidateId": "fr.greetings.excuse-moi", "exampleFr": "Excuse-moi, je suis en retard.", "exampleEn": "Sorry, I'm late." }
+      ]
+    },
+    {
+      "titleEn": "Ask how someone is",
+      "entries": [
+        { "target": "comment allez-vous ?", "meaning": "how are you?", "register": "vous; polite or plural", "existingId": null, "candidateId": "fr.greetings.comment-allez-vous", "exampleFr": "Bonjour, comment allez-vous ?", "exampleEn": "Hello, how are you?" },
+        { "target": "comment ça va ?", "meaning": "how are you? / how's it going?", "register": "conversational; often familiar", "existingId": null, "candidateId": "fr.greetings.comment-ca-va", "exampleFr": "Salut, comment ça va ?", "exampleEn": "Hi, how's it going?" },
+        { "target": "ça va bien", "meaning": "I’m well / things are going well", "register": "conversational response", "existingId": null, "candidateId": "fr.greetings.ca-va-bien", "exampleFr": "Ça va bien, merci.", "exampleEn": "I'm well, thank you." },
+        { "target": "très bien, merci", "meaning": "very well, thank you", "register": "neutral response", "existingId": null, "candidateId": "fr.greetings.tres-bien-merci", "exampleFr": "Très bien, merci. Et vous ?", "exampleEn": "Very well, thank you. And you?" },
+        { "target": "pas très bien", "meaning": "not very well", "register": "conversational response", "existingId": null, "candidateId": "fr.greetings.pas-tres-bien", "exampleFr": "Pas très bien, je suis fatiguée.", "exampleEn": "Not very well, I'm tired." },
+        { "target": "et vous ?", "meaning": "and you?", "register": "vous; polite or plural", "existingId": null, "candidateId": "fr.greetings.et-vous", "exampleFr": "Ça va bien. Et vous ?", "exampleEn": "I'm well. And you?" },
+        { "target": "et toi ?", "meaning": "and you?", "register": "tu; one familiar addressee", "existingId": null, "candidateId": "fr.greetings.et-toi", "exampleFr": "Ça va bien. Et toi ?", "exampleEn": "I'm well. And you?" },
+        { "target": "à tout à l’heure", "meaning": "see you later today", "register": "neutral; expected later meeting the same day", "existingId": null, "candidateId": "fr.greetings.a-tout-a-lheure", "exampleFr": "À tout à l’heure, à midi !", "exampleEn": "See you later, at noon!" }
+      ]
+    }
+  ]
+}

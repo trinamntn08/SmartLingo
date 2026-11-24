@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-24 Require all-branch checks for Cloud handoffs
+
+- Request. Update the agent and workflow instructions so a local session checks all GitHub branches and catches completed Cloud work before handing back the preview.
+- Start. At 21:36 CET, Europe/Paris, fetched and pruned the owner-selected origin from the clean primary `D:/dev/projects/SmartLingo` worktree. All 61 fetched branch names and SHAs matched live GitHub. Local, tracking and live `feat/french-daily-opening` matched at `5b82a24e1649f6701c647bfe84ed97606d216189`, ahead/behind `0/0`. Cloud `feat/everyday-french-slang` remained separately visible at `1068589290305171539f327c5e7e043e6b992444`; its content and photos matched the integrated preview checkpoint. The live preview manifest identified build `a138bdaed6c4`. PR #1 exposed prior Cloud handoff guidance at `d7ad551`.
+- Acceptance. The root instructions require a verified full branch inventory, targeted Cloud source reconciliation, explicit pending or blocked status, preview verification before handoff and GitHub read-back for outgoing Cloud changes. Keep the existing authorization boundaries for integration.
+- Change. Updated `AGENTS.md`, the session and Cloud workflows, and the repository source guide. Added instructions for searching sibling branch history and recovering known Cloud results from pull requests or a Cloud workspace. The outgoing handoff requires a verified branch link, full SHA, checks and pending local integration. [Decision](decisions/0044-verify-cloud-to-local-handoffs.md)
+- Verification. Re-ran the new explicit wildcard fetch and matched all 61 full live and fetched branch refs. The Slang example exercised cross-branch discovery, a negative ancestry check and exact scoped file comparison. The existing preview served build `a138bdaed6c4` and returned HTTP 200 for `/slang/fr`. Repository and TypeScript checks and Git whitespace checks passed.
+- Outcome. The commit containing this entry records the handoff instructions for the shared preview branch. Future Cloud or local sessions on that lineage follow the inventory and preview checks. The running learner is still available for review at the same address.
+
 ## 2026-11-24 Bring the Cloud slang catalogue into the local preview
 
 - Request. Check why the Cloud-developed slang section is missing from the shared preview and make it available there.

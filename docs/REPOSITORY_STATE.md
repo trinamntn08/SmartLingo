@@ -40,8 +40,8 @@ Hosted build/test commands from the Cloud branch likewise do not exist automatic
 
 ## Safe continuation
 
-1. Before every task or status/progress answer, follow [repository check and synchronization first](SESSION_WORKFLOW.md#repository-check-and-synchronization-first): inspect local work, fetch origin, compare relevant local/live remote heads, safely synchronize and record evidence in [WORK_LOG](WORK_LOG.md). Dirty/divergent or unreachable state must be preserved and reported, not called synchronized.
+1. Before every task or status/progress answer, follow [repository check and synchronization first](SESSION_WORKFLOW.md#repository-check-and-synchronization-first). Inspect local work, fetch all origin branches, compare the full fetched and live branch inventories, check relevant Cloud handoffs, and safely synchronize the intended baseline. Record the evidence and any unresolved difference in [WORK_LOG](WORK_LOG.md).
 2. Start the task from the branch containing the intended implementation. Preserve unrelated changes and generated local files; do not copy an entire older worktree over newer source.
 3. Keep code synchronization separate from browser data transfer. Notebook/progress live in browser IndexedDB, not Git; transfer them only through private explicit learning backups. Backup v4 needs a compatible app and cannot be imported by the older Android source.
-4. Rebuild the export after source changes. Check the actual preview process/worktree and build identity before claiming its UI matches the checked-out commit.
+4. Before preview handoff, refresh the full inventory and [Cloud inclusion check](SESSION_WORKFLOW.md#cloud-to-local-handoff). Rebuild from the reconciled source. Verify the actual preview process/worktree, served build identity and the learner entry point for each Cloud change included in the handoff.
 5. Commit deliberate task paths, push the assigned topic branch normally and verify the live remote SHA. Standing authorization does not include merging, force-pushing, changing main or deployment.

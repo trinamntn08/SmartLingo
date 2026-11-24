@@ -2,7 +2,7 @@
 
 Prepared: 2026-11-16 (Europe/Paris). Environment activation and remote check results are recorded in [the session checkpoint](SESSION_CHECKPOINT.md); this guide alone does not establish that an environment is published.
 
-Source selection refreshed 2026-11-22: use the Japanese-enabled unified-hub lineage for current learner work. Client navigation and external service details retain their original check date below; this documentation refresh did not activate a Cloud environment or revalidate the client UI.
+Source selection refreshed 2026-11-24. Use the current branch in the Japanese-enabled learner lineage after verifying all GitHub branch heads. Client navigation and external service details retain their original check date below.
 
 ## Scope and acceptance
 
@@ -12,13 +12,19 @@ Accept this setup when the current source is on GitHub without rewriting history
 
 ## Source baseline
 
-For the current French/Japanese learner, inspect `origin/feat/unified-learning-hub` and the latest documentation task branch. [Repository state](REPOSITORY_STATE.md) records fetched heads and worktrees. The hub includes language choice, Japanese topic/course/kana lessons, shared Learn/listening/speaking and reports. Older `main` and the separate Android branch are not this learner baseline.
+For current French/Japanese learner work, start source selection with `origin/feat/french-daily-opening`, the shared local preview lineage verified on 2026-11-24. Fetch and compare all GitHub branches, then check any Cloud changes relevant to the requested outcome before selecting the base. The earlier `origin/feat/unified-learning-hub`, the older `main`, the Android branch and the hosted branch remain useful history for their own tasks. [Repository state](REPOSITORY_STATE.md) records source and worktree context.
 
 For an explicitly requested hosted continuation, also inspect `codex/free-learner-cloud-deploy` and the [historical deployment brief](CLOUD_DEPLOY_PROMPT.md). That older branch contains hosting capability gates, not the current Japanese hub; its checkpoint reports account/network-blocked publication and no live URL. A release of the current app needs deliberate reconciliation and validation before deployment. Fetch again before relying on any recorded SHA; Git synchronization alone does not combine the implementations.
 
 The earlier `chore/cloud-workflow` preparation is preserved in Git. Account-specific work and `chore/concurrent-sessions` tooling remain separate branch work, not capabilities established by this checkout. The owner's later automatic task-branch commit/push instruction is reconciled here through [ADR 0021](decisions/0021-automatic-task-branch-pushes.md); it is policy, not installed automation. Do not select a branch simply because its name sounds relevant.
 
-Before a handoff, fetch and inspect live branches and pull requests. Use the source named by the task and verify its ancestry before making a new task branch. Saved environment files do not prove a pushed commit, environment activation or account access. Never force-push, replace this repository or overwrite another task's branch.
+Before starting a task or handing off the shared preview, follow the [full inventory and Cloud-to-local checks](SESSION_WORKFLOW.md#cloud-to-local-handoff). Use the source named by the task and verify its ancestry before making a new task branch. Check the actual GitHub ref and verified SHA for delivery evidence. Never force-push, replace this repository or overwrite another task's branch.
+
+## Hand off Cloud work to local
+
+1. In Cloud, record the requested outcome, changed feature, base SHA, actual checks and pending work in the checkpoint and work log. For a learner change, include where to open it and whether local integration remains pending. Commit the handoff notes with the reviewed change.
+2. Push the assigned task branch to GitHub under the standing checkpoint policy. Read its live ref with `git ls-remote --exit-code --heads origin refs/heads/<task-branch>` and verify the returned SHA against `git rev-parse HEAD`. Include the GitHub branch link, full verified SHA, checks and learner entry point in the final handoff. If the push is blocked, preserve the commit and report the exact failure and how the source can be recovered.
+3. When resuming locally, find the handoff among all fetched branches, compare the Cloud changes with the intended preview branch, and record their disposition. For authorised integration, verify the new build and the feature from the shared preview before calling it available there. [Cloud-to-local procedure](SESSION_WORKFLOW.md#cloud-to-local-handoff)
 
 ## Create the reusable environment
 
@@ -29,8 +35,9 @@ Give the setup conversation this brief:
 ```text
 Prepare a reusable Codex Cloud environment named SmartLingo for
 https://github.com/trinamntn08/SmartLingo.git.
-Fetch origin and inspect feat/unified-learning-hub and the latest
-documentation task branch, not older main or the Android-only source.
+Fetch all GitHub branch heads and compare the full live and fetched inventories.
+Start with the verified shared learner branch, feat/french-daily-opening,
+and inspect relevant Cloud work across branches before selecting the base.
 Read docs/REPOSITORY_STATE.md and confirm the intended source ancestry.
 Do not silently substitute the older hosted implementation for the current app.
 Inspect live history before creating a separate setup task branch.
@@ -48,6 +55,8 @@ credentials, read real .env files, call paid providers, publish lessons,
 merge branches, deploy the app, or change the owner's local computer.
 Record the tested installation commands and instructions to start services
 on demand. Do not leave the learner/API running for every unrelated task.
+For repository changes, commit the handoff, push the assigned task branch,
+and verify its live GitHub SHA as described in docs/SESSION_WORKFLOW.md.
 ```
 
 On a Linux cloud runner use `npm`, not the Windows-only `npm.cmd` spelling found in historical checkpoints. The repository version files and engine checks remain authoritative. `npm run setup:finish` is a one-time bootstrap for repositories without history and must not be rerun here.
@@ -62,11 +71,11 @@ On the phone open **Codex**, select the published SmartLingo environment, and se
 
 ```text
 Verify this SmartLingo cloud setup without changing source files.
-Fetch origin and inspect the working tree and selected source branch.
-Use feat/unified-learning-hub or its reviewed documentation descendant
-only if switching preserves existing work;
-report a blocker rather than overwriting another task. Report
-git branch --show-current, git log -1 --oneline and the fetched source head.
+Fetch all GitHub branch heads and compare the live and fetched inventories.
+Inspect the working tree, the current shared learner lineage and matching
+Cloud handoffs before selecting the source. Preserve other tasks and report
+any source blocker. Report the inventory count, current branch and full SHA,
+the live source SHA and any relevant Cloud work pending integration.
 Confirm the shared Japanese learner is present. Read AGENTS.md,
 docs/REPOSITORY_STATE.md and docs/SESSION_CHECKPOINT.md.
 Run npm run check and npm test. Report the results and any blockers.

@@ -2,6 +2,8 @@
 
 Navigation: [current course catalogue](../COURSE_CATALOGUE.md) · [authoring and publication guide](../CONTENT_GUIDE.md) · [review-pack overview](README.md).
 
+The [2026-11-24 practice and pacing review](french-lesson-pacing.md) covers the later 133-library-lesson baseline and five guided lessons. Its practice tasks now run in the learner. The two-pass route, ledger and bridge candidates below remain an earlier research snapshot.
+
 Prepared 2026-11-16 for English-speaking adult newcomers to France. Original AI-assisted editorial work using the repository French curriculum researcher and French authoring skills. **All proposals remain drafts.** The French runtime still ships 25 banks / 123 lessons; this pack does not publish or register candidates.
 
 Scope checked 2026-11-22: this pack's ledger, fingerprints, counts and proposed progression concern French only. The shared learner also includes Japanese: 13 banks / 65 short lessons, a separate 13-day draft course and 20 basic-kana row lessons. Start with [the current catalogue](../COURSE_CATALOGUE.md), [Japanese course sources](japanese-course-sources.md), [shared lessons](japanese-shared-lessons.md), [topic vocabulary](japanese-topic-vocabulary.md) and [alphabet sources](japanese-alphabet-sources.md). Their selected B1 task labels do not make this French review pack a B1 course or establish CEFR/JLPT completeness.

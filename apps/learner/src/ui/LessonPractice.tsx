@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { checkAnswer, normalizeAnswer, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
 import { useVisitState } from '../app/WebNavigation';
@@ -76,10 +76,11 @@ interface SentenceProps extends ActivityProps {
   completed: boolean; canComplete: boolean; onComplete: () => void; onReview: () => void; reviewLabel: string;
   returnLabel?: string;
   nextLesson?: { title: string; href: string; onOpen: () => void };
+  extraPractice?: ReactNode;
 }
 
 export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext,
-  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons', nextLesson }: SentenceProps) {
+  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons', nextLesson, extraPractice }: SentenceProps) {
   const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
   const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
   const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
@@ -119,6 +120,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
           </View>
           <Text style={s.body}>{exercise.explanation}</Text>
         </View>
+        {extraPractice}
         <View style={layout.actions}>
           <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly} disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
           {(completed || canComplete || browseOnly) && <Button primary={!nextLesson} quiet={!!nextLesson}
@@ -132,6 +134,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         </View>
         {!!feedback && <Text accessibilityLiveRegion="polite" style={[s.body, layout.feedback]}>{feedback}</Text>}
         {hint && <Text style={[s.body, layout.hint]}>{exercise.hint}</Text>}
+        {(browseOnly || completed) && extraPractice}
         <View style={layout.actions}>
           <View style={layout.secondary}>
             <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>

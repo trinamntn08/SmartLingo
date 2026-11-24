@@ -1,6 +1,6 @@
 import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
-import { lessons, restaurantLesson } from '@smartlingo/content';
+import { getFrenchTopicPractice, lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -62,6 +62,11 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
   await cold.reload();
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();
+  const transfer = cold.getByTestId('french-transfer-practice');
+  const task = getFrenchTopicPractice(opening)!;
+  await expect(transfer.getByText(task.prompt, { exact: true })).toBeVisible();
+  await button(cold, 'Show example reply').click();
+  await expect(transfer.getByText(task.modelTarget, { exact: true })).toBeVisible();
   const steps = cold.getByRole('navigation', { name: 'Lesson steps' });
   await steps.getByRole('link', { name: 'Dialogue' }).click();
   await expect(cold.getByRole('heading', { name: 'Read a conversation' })).toBeVisible();

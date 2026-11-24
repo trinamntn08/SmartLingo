@@ -1,8 +1,10 @@
 import { useState, type ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { getFrenchTopicPractice } from '@smartlingo/content';
 import { lessonProgress, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
 import { routeHref } from '../app/routes';
 import { Button } from './controls';
+import { frenchTopicPracticeMinutes } from './FrenchTransferPractice';
 import { Icon } from './Icon';
 import { colors, designTokens as tokens, styles as s } from './theme';
 
@@ -43,7 +45,8 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
           href={routeHref({ kind: 'lesson', language, lessonId: lesson.id })} onPress={() => onOpen(lesson)}>
           {completed ? 'Revisit lesson' : started ? 'Continue lesson' : 'Start lesson'}
         </Button>
-        <Text style={layout.metadata}>{lesson.durationMinutes} min · {lesson.level === 'foundation' ? 'Foundations' : lesson.level} · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
+        <Text style={layout.metadata}>{getFrenchTopicPractice(lesson) ? frenchTopicPracticeMinutes : `${lesson.durationMinutes} min`}
+          {' · '}{lesson.level === 'foundation' ? 'Foundations' : lesson.level} · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
       </View>
     </View>;
   });

@@ -15,6 +15,7 @@ import { CourseCredits } from './CourseCredits';
 import { buildCourseLesson } from './courseLessonContent';
 import { CourseOutline } from './CourseOutline';
 import { CourseWriteStatus } from './CourseWriteStatus';
+import { FrenchCoursePractice, frenchCoursePracticeMinutes } from './FrenchCoursePractice';
 import { RelatedCoursePractice } from './RelatedCoursePractice';
 import type { CourseLearningModel } from './useCourseLearning';
 
@@ -138,7 +139,10 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       ...(sidebar ? { flexDirection: 'row', alignItems: 'flex-start' } : {}) }}>
       {outline}
       <View style={{ gap: 16, minWidth: 0, flex: sidebar ? 1 : undefined }}>
-        <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close} courseSession={{
+        <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
+          extraPractice={course.language === 'fr-FR' ? {
+            estimate: frenchCoursePracticeMinutes, activities: <FrenchCoursePractice day={day} />,
+          } : undefined} courseSession={{
           stage, progress: { wordsStudied: progress.lessonWordsStudied, pictureDone: progress.lessonPictureDone,
             sentenceDone: progress.lessonSentenceDone, completed: progress.completed },
           exitHref: routeHref(learn), disabled, browseOnly, nextLesson, listeningQuestion, dialoguePhoto: getDailyDialoguePhoto(day.id),

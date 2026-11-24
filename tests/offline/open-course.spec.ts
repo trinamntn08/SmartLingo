@@ -105,6 +105,17 @@ test('the spelling lesson uses the shared five steps and saves completion offlin
   await cold.reload();
   await expect(step(cold, `Lesson 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Lesson complete')).toBeVisible();
+  await button(cold, 'Practise the conversation').click();
+  const situation = panel(cold).getByTestId('french-course-situation').first();
+  const choice = spelling.blocks.find(block => block.kind === 'choice')!;
+  const correct = choice.choices.find(option => option.id === choice.answerId)!;
+  await situation.getByRole('button', { name: correct.target, exact: true }).click();
+  const feedback = spelling.compact?.practice.find(item => item.blockId === choice.id)?.feedback ?? choice.feedback;
+  await expect(situation.getByText(feedback, { exact: true })).toBeVisible();
+  await expect(situation.getByText(correct.target, { exact: true })).toHaveCount(1);
+  await button(cold, 'Show example reply').click();
+  const reflection = spelling.blocks.find(block => block.kind === 'reflection')!;
+  await expect(panel(cold).getByTestId('french-transfer-practice').getByText(reflection.modelTarget, { exact: true })).toBeVisible();
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const overflowing = await panel(cold).evaluate(root => [root, ...root.querySelectorAll('*')].filter(element => {

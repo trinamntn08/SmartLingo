@@ -14,7 +14,11 @@ import { experienceTopics } from './topics/experiences';
 import { cyclingTopic } from './topics/cycling';
 import { householdWasteTopic } from './topics/household-waste';
 import { buildOpenCoursePilot } from './open-course-pilot';
+import { everydayPractice } from './french-practice/everyday';
+import { foundationPractice } from './french-practice/foundations';
+import type { FrenchTransferTask } from './french-practice/types';
 
+export type { FrenchTransferTask } from './french-practice/types';
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
 export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
@@ -41,6 +45,18 @@ export const lessons: Lesson[] = orderCourseLessons([
   ...buildGreetingsLessons(existingLessons.flatMap(lesson => lesson.vocabulary)),
   ...existingLessons,
 ]);
+export const frenchTopicPractice: Readonly<Partial<Record<string, FrenchTransferTask>>> = {
+  ...foundationPractice,
+  ...everydayPractice,
+};
+const frenchDraftRevisions = new Map(lessons.map(lesson => [lesson.id, lesson.revision]));
+
+export function getFrenchTopicPractice(lesson: Lesson): FrenchTransferTask | undefined {
+  if (lesson.language === 'fr-FR' && lesson.status === 'draft' && frenchDraftRevisions.get(lesson.id) === lesson.revision) {
+    return frenchTopicPractice[lesson.id];
+  }
+}
+
 export const restaurantLesson = lessons.find(lesson => lesson.id === 'fr.restaurant.customer')!;
 export const openCoursePilot = buildOpenCoursePilot(lessons.flatMap(lesson => lesson.vocabulary));
 export { japaneseCourse } from './japanese-course';

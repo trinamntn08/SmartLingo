@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
-import { openCoursePilot, japaneseCourse } from '@smartlingo/content';
+import { getFrenchTopicPractice, openCoursePilot, japaneseCourse } from '@smartlingo/content';
+import { FrenchTransferPractice, frenchTopicPracticeMinutes } from '../ui/FrenchTransferPractice';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
 import type { CourseLaunchProps } from '../course/CourseLaunchCard';
@@ -114,7 +115,11 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       const sequence = topicLessons && index >= 0 ? {
         position: index + 1, total: topicLessons.length, previous: topicLessons[index - 1], next: topicLessons[index + 1], open: openLesson,
       } : undefined;
+      const transfer = getFrenchTopicPractice(lesson);
       return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model}
+        extraPractice={transfer && {
+          estimate: frenchTopicPracticeMinutes, activities: <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />,
+        }}
         studyDayHref={studyDay && routeHref(studyDay)} sequence={sequence} onExit={() => exitLesson(studyDay)} routed />;
     }
     if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}

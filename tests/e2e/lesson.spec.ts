@@ -1,6 +1,6 @@
 import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openKeyPhrases, openRestaurant, openTopic } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
-import { lessons, restaurantLesson } from '@smartlingo/content';
+import { getFrenchTopicPractice, lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -99,6 +99,17 @@ test('restaurant details are visible directly and practice/notebook completion s
   for (const token of ['Je', 'voudrais', 'un café', 's’il vous plaît']) await button(page, token).click();
   await button(page, 'Check sentence').click();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
+  await expect(page.getByText('10–12 min with practice', { exact: true })).toBeVisible();
+  const task = getFrenchTopicPractice(restaurantLesson)!;
+  const transfer = page.getByTestId('french-transfer-practice');
+  await expect(transfer.getByText(task.prompt, { exact: true })).toBeVisible();
+  await expect(transfer.getByText(task.modelTarget, { exact: true })).toHaveCount(0);
+  const beforeTransfer = await storedRows(page, 'events');
+  await button(page, 'Show example reply').click();
+  await expect(transfer.getByText(task.modelMeaning, { exact: true })).toBeVisible();
+  await expect(transfer.getByText(task.check, { exact: true })).toBeVisible();
+  expect(await storedRows(page, 'events')).toEqual(beforeTransfer);
+  await expectNoHorizontalOverflow(page);
   await page.screenshot({ path: info.outputPath('sentence.png'), fullPage: true });
   await page.reload();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();

@@ -15,6 +15,8 @@ export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
 export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
 export { courseSequence, orderCourseLessons } from './course-sequence';
+export { findSlangExpressions, slangCategories, slangCategoryIds, slangExpressions,
+  type SlangCategory, type SlangExpression, type SlangRegister } from './slang';
 
 // Original preview curriculum. Publication requires owner review.
 const drafts = [

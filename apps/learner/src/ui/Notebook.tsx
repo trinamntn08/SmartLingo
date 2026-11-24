@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
+import { slangExpressions } from '@smartlingo/content';
 import { normalizeSearch, notebookEntrySchema, type NotebookEntry } from '@smartlingo/domain';
 import { Button, Speak } from './controls';
 import { colors, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';
 import { PersonalWordForm } from './PersonalWordForm';
+
+const textAbbreviations = new Map(slangExpressions.filter(expression => expression.textAbbreviation)
+  .map(expression => [expression.sourceEntryId, normalizeSearch(expression.target)]));
 
 export function Notebook({ model, onExplore }: { model: LearningModel; onExplore: () => void }) {
   const [query, setQuery] = useState('');
@@ -34,6 +38,7 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
   const [voiceError, setVoiceError] = useState('');
+  const isTextAbbreviation = textAbbreviations.get(entry.sourceEntryId) === normalizeSearch(entry.target);
   function edit() { setTarget(entry.target); setMeaning(entry.meaning); setExample(entry.example); setEditing(true); setSaved(false); }
   function save() {
     const result = notebookEntrySchema.safeParse({ ...entry, target, meaning, example, updatedAt: new Date().toISOString() });
@@ -46,5 +51,6 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
     <Text style={s.body}>English meaning</Text><TextInput accessibilityLabel="English meaning" value={meaning} onChangeText={setMeaning} maxLength={500} style={s.input} />
     <Text style={s.body}>Example or personal note</Text><TextInput accessibilityLabel="Example or personal note" value={example} onChangeText={setExample} maxLength={1000} multiline style={[s.input, { minHeight: 90 }]} />
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}<View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save changes</Button><Button disabled={model.busy || !!model.saveError} onPress={() => setEditing(false)}>Cancel</Button></View>
-  </> : <><View style={s.row}><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text><Speak text={entry.target} onError={setVoiceError} /></View><Text style={s.body}>{entry.meaning}</Text>{!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}{!!entry.example && <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text></View>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
+  </> : <><View style={s.row}><Text accessibilityRole="header" style={s.heading}>{entry.target}</Text>{isTextAbbreviation
+    ? <Text style={s.muted}>Text shorthand</Text> : <Speak text={entry.target} onError={setVoiceError} />}</View><Text style={s.body}>{entry.meaning}</Text>{!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}{!!entry.example && <View style={{ gap: 6 }}><Text style={s.eyebrow}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text></View>}<View style={s.row}><Button disabled={model.blocked} onPress={edit}>Edit note</Button>{saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}</View></>}</View>;
 }

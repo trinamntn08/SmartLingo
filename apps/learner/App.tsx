@@ -10,6 +10,7 @@ import { LessonScreen } from './src/ui/LessonScreen';
 import { Notebook } from './src/ui/Notebook';
 import { TopicCatalogue } from './src/ui/TopicCatalogue';
 import { TopicSidebar } from './src/ui/TopicSidebar';
+import { SlangCatalogue } from './src/ui/SlangCatalogue';
 import { BrandHome } from './src/ui/BrandHome';
 import { colors, styles as s } from './src/ui/theme';
 import { useLearning, type LearningModel } from './src/ui/useLearning';
@@ -19,7 +20,7 @@ import { BackupPanel } from './src/backup/BackupPanel';
 import { OfflinePanel } from './src/offline/OfflinePanel';
 import { FrenchPractice } from './src/practice/FrenchPractice';
 
-const tabs = ['Today', 'Explore', 'Practice', 'Review', 'Profile'] as const;
+const tabs = ['Today', 'Explore', 'Slang', 'Practice', 'Review', 'Profile'] as const;
 type Tab = typeof tabs[number];
 
 export default function App() {
@@ -58,6 +59,7 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const wide = width >= 1050;
+  const showTopics = tab !== 'Slang';
   const topics = groupLessonTopics(catalogue.lessons);
   function navigate(next: Tab) { audio.stop(); setLesson(null); setSelectedTopic(null); setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); }
   function selectTopic(name: string | null) { audio.stop(); setLesson(null); setSelectedTopic(name); setTab('Explore'); scroll.current?.scrollTo({ y: 0, animated: false }); }
@@ -66,12 +68,12 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
   useEffect(() => { if (homeRequest > 0) navigate('Today'); }, [homeRequest]);
   useEffect(() => { if (model.saveError) scroll.current?.scrollTo({ y: 0, animated: false }); }, [model.saveError]);
   return <View style={s.app}><View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
-    <View style={s.row}><BrandHome onPress={onHome} /><Badge>LOCAL PREVIEW</Badge></View>
+    <View style={[s.row, { maxWidth: '100%' }]}><BrandHome onPress={onHome} /><Badge>{width < 350 ? 'PREVIEW' : 'LOCAL PREVIEW'}</Badge></View>
     <View style={s.nav}>{tabs.map(name => <Button key={name} selected={tab === name} onPress={() => navigate(name)}>{name}</Button>)}</View>
   </View></View>
-    {!wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
+    {showTopics && !wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact />}
     <View style={{ flex: 1, width: '100%', maxWidth: 1440, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
-    {wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />}
+    {showTopics && wide && <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} compact={false} />}
     <ScrollView testID="learner-content" ref={scroll} style={{ flex: 1, minWidth: 0 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}><View style={[s.main, width < 600 && { padding: 16, paddingTop: 24 }]}>
       {model.loading || catalogue.loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Opening your local learning notebook…</Text></View> : <>
         {!!model.loadError && <View style={s.error}><Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text><Text style={s.body}>{model.loadError}</Text><Text style={s.body}>You can browse the bundled lessons. Saving and lesson progress need browser storage.</Text><Button onPress={() => void model.load()}>Retry opening storage</Button></View>}
@@ -80,7 +82,8 @@ function LearnerApp({ active, onOpenEditor, homeRequest, onHome }: { active: boo
         {lesson ? <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={() => selectTopic(lesson.topic)} />
           : tab === 'Today' ? <Today lessons={catalogue.lessons} model={model} onOpen={openLesson} onExplore={() => navigate('Explore')} />
             : tab === 'Explore' || tab === 'Practice' ? <>{tab === 'Practice' && active && <FrenchPractice lessons={catalogue.lessons} model={model} />}<TopicCatalogue lessons={catalogue.lessons} model={model} onOpen={openLesson} practice={tab === 'Practice'} selectedTopic={selectedTopic} onSelectTopic={selectTopic} /></>
-              : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
+              : tab === 'Slang' ? <SlangCatalogue model={model} />
+                : tab === 'Review' ? <Notebook model={model} onExplore={() => navigate('Explore')} /> : <Profile model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />}
       </>}
     </View></ScrollView>
     </View>

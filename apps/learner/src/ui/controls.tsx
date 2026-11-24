@@ -10,7 +10,7 @@ export function Button({ children, onPress, primary, selected, disabled, label }
   children: ReactNode; onPress: () => void; primary?: boolean; selected?: boolean; disabled?: boolean; label?: string;
 }) {
   const [focused, setFocused] = useState(false);
-  return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-selected={!!selected} aria-disabled={!!disabled} accessibilityState={{ disabled: !!disabled, selected: !!selected }}
+  return <Pressable accessibilityRole="button" accessibilityLabel={label} aria-pressed={selected} aria-selected={!!selected} aria-disabled={!!disabled} accessibilityState={{ disabled: !!disabled, selected: !!selected }}
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={({ pressed }) => [s.button, { maxWidth: '100%', minWidth: 0, flexShrink: 1 }, primary && s.buttonPrimary, selected && s.buttonSelected,
       // A wider focus border can wrap the button between pointer-down and pointer-up.

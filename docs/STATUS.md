@@ -1,12 +1,18 @@
 # Project status
 
-Updated: 2026-11-16 (Europe/Paris).
+Updated: 2026-11-24 (Europe/Paris).
 
 SmartLingo is a runnable local web preview with first editor fields and explicit local draft preview/publication. Physical-phone and voice checks still prevent claiming the full M1 gate complete.
 
-## Current Git state
+## Everyday French and slang (2026-11-24)
 
-- Current branch: `chore/cloud-workflow`, based on the completed greetings checkpoint `d5a56ed`. Earlier feature branches/checkpoints remain preserved. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
+The learner navigation now has a **Slang** tab with 287 expressions across 12 situations. Learners can search French targets and examples or English meanings, see the bilingual example and usage note on each card, and save cards to the local notebook. The page includes an original generated café photograph and a generated situation photo for each category. Spoken expressions use the app’s French audio controls. Texting abbreviations carry a text shorthand label, and vulgar expressions have explicit register and usage guidance.
+
+The reference catalogue ships with the app and its offline download. It uses two existing course source IDs when a phrase teaches the same sense. Repository checks, 18 tooling tests, 192 application tests, 83 Chromium browser tests and eight exported offline tests passed. Chromium recorded one intentional duplicate-publication skip. French and image drafts await owner review. [Decision and source notes](decisions/0021-slang-reference.md) · [Feature plan](plans/0025-everyday-french-slang.md)
+
+## Cloud workflow baseline
+
+- The `chore/cloud-workflow` branch is based on the completed greetings checkpoint `d5a56ed`. Earlier feature branches and checkpoints remain preserved. Origin remains `https://github.com/trinamntn08/SmartLingo.git`.
 - Owner-requested all-branch upload on 2026-11-16: all 25 local branch heads verified on GitHub after pushing 23 previously missing branches. Separate curriculum-review and concurrent-session branches remain separate; no merge, force push or deployment. See the session checkpoint for bounded outgoing-history checks and verification.
 - Owner authorised the proposed GitHub upload and Codex Cloud setup on 2026-11-16. Live fetch confirms `main` at `1c6e943` is an ancestor of the current source (27 application/tooling commits ahead before cloud preparation). Upload and draft-PR results are tracked in the session checkpoint. No merge, deployment, curriculum publication or history rewrite is authorised by this setup.
 - Setup review verifies all 25 branch heads still match GitHub at review base `4d6a4a1`. [PR #1](https://github.com/trinamntn08/SmartLingo/pull/1) remains open, draft and mergeable. `main` is still the old scaffold; use latest `origin/chore/cloud-workflow` for app work. Research checkpoint `8ba59ae` and local-session tooling checkpoint `8e36885` are uploaded on separate, unmerged branches; their drafts/tools are not part of this app branch. See the [branch map](CLOUD_WORKFLOW.md#source-baseline).

@@ -71,6 +71,13 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const [events, notebook] = await learningSnapshot(cold);
   expect(events).toHaveLength(4);
   expect(notebook).toEqual([expect.objectContaining({ sourceEntryId: 'fr.greetings.bonsoir', target: 'bonsoir', meaning: 'good evening' })]);
+  await button(cold, 'Slang').click();
+  await expect(cold.getByRole('heading', { name: 'Everyday French & slang' })).toBeVisible();
+  await cold.getByRole('textbox', { name: 'Search slang' }).fill('ca marche');
+  const expression = cold.getByTestId(/^expression-fr\.slang\./).first();
+  await expect(expression.getByRole('heading', { name: /ça marche/i })).toBeVisible();
+  const photos = cold.locator('img[src^="/slang-photos/"]');
+  await expect.poll(() => photos.evaluateAll(images => images.length >= 2 && images.every(img => (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
 });
 
 test('explicit download cold-loads offline and asset removal preserves every learner store', async ({ page, context }, info) => {

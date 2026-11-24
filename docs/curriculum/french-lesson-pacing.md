@@ -9,12 +9,12 @@ Reviewed on 2026-11-24 for English-speaking adult beginners living in France. Th
 | Read the dialogue and language note | 2 min | 2 min | Read for the situation and the speaker’s intention. Read one role aloud if useful. |
 | Study the key phrases | 3 min | 3 min | Work through the examples, identify a reusable phrase and recall it once. |
 | Listen, match and build a sentence | 3–4 min | 3–4 min | Replay a line as needed. Use the transcript for support, then build a useful phrase. |
-| Apply the same goal to a real-life response | 2–3 min | 4–6 min | Respond before revealing the model, compare the reply and try again. Guided lessons add three short choices with feedback. |
-| Total estimate | 10–12 min | 12–15 min | Learners can take longer, repeat a step or move on. |
+| Apply the goal to a new real-life situation | 2–3 min | — | In a topic lesson, respond before revealing the model, compare the reply and try again. |
+| Total estimate | 10–12 min | About 10 min | Learners can take longer, repeat a step or move on. |
 
 These are first-pass planning estimates for working through the activities with a short retry. Actual time will depend on reading fluency, audio access, help used and familiarity with French. The estimates are SmartLingo editorial decisions. At foundation and A1, one clear request, reply or exchange is enough. A2 practice can add a constraint, a reason, a second detail or a predictable follow-up. A simple report of a problem fits the current route. Negotiating a solution or making a sustained complaint belongs in a later course.
 
-The old reader relied on a single listening item, recognition and sentence building. All topic lessons now end with an original production task that changes a detail or context. Models and short success criteria are available after the learner tries. Speaking, silent rehearsal and writing all work. The guided course restores 15 authored situational questions and five role-plays that the shared reader previously omitted. Existing study text and translations remain visible. There are no new target words to memorise for the added tasks.
+The topic reader offers an original production task that changes a detail or context. Models and short success criteria are available after the learner tries. Speaking, silent rehearsal and writing all work. In the guided opening, the sentence exercise and brief feedback finish each lesson. The bilingual dialogue and key phrases supply the study model.
 
 ## Bank-by-bank teaching focus
 
@@ -50,7 +50,7 @@ The task set was checked against each lesson’s outcome, vocabulary, dialogue a
 | Getting around by bike | 5 | Ask about a rental, give a route or parking detail, and explain a predictable bike problem. |
 | Sorting and disposing of household waste | 5 | Identify a container and ask how or where to dispose of something. Keep collection rules specific to the fictional setting or ask the local service. |
 
-The five guided lessons build one chain of interactions: greet a neighbour, exchange names, spell and correct a name, recover a missed detail, then confirm a workshop time. The open tasks give learners a chance to speak without word cards. A future cumulative unit review could combine name, room and time at one reception, following the [A1 course map](french-daily-a1.md). The map retains its proposed coverage. The [earlier bridge drafts](bridge-notes.md) remain candidates for gaps such as compound prices. A longer guided route, varied unheard audio, cross-lesson retrieval, pronunciation and learner timing still need separate review.
+The five guided lessons build one chain of interactions. Learners greet a neighbour, exchange names, spell and correct a name, recover a missed detail, then confirm a workshop time. A future cumulative unit review could combine name, room and time at one reception, following the [A1 course map](french-daily-a1.md). The [earlier bridge drafts](bridge-notes.md) remain candidates for gaps such as compound prices. A longer guided route, varied unheard audio, cross-lesson retrieval, pronunciation and learner timing still need separate review.
 
 ## Teaching references
 

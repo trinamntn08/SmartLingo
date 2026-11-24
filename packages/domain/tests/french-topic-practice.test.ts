@@ -21,7 +21,7 @@ test('French topic drafts each have one original, level-specific production task
   assert.ok(japaneseLessons.every(lesson => !getFrenchTopicPractice(lesson)));
 });
 
-test('each French guided lesson has three contextual questions and a bilingual response model', () => {
+test('French guided lessons retain the authored blocks used by legacy course routes', () => {
   for (const day of openCoursePilot.days) {
     const choices = day.blocks.filter(block => block.kind === 'choice');
     assert.equal(choices.length, 3, day.id);

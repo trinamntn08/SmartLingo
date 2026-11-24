@@ -29,7 +29,7 @@ The [word-by-word topic audit](CURRICULUM_TOPIC_AUDIT.md) describes the historic
 
 27 banks · 133 lessons · 825 vocabulary appearances · 780 canonical senses · 771 distinct written forms. Recycled senses contribute to bank counts. The compact opening bank has 24 expressions across three lessons. Other banks have 30–35 expressions across five lessons. The curriculum remains draft material for owner review.
 
-Each French topic draft includes an optional real-life response with a bilingual model and self-check after sentence building. The five guided lessons add three situational questions and one role-play each. Allow about 10–12 minutes with practice for a topic lesson and 12–15 minutes for a guided lesson. These are editorial estimates. [French pacing and practice review](curriculum/french-lesson-pacing.md)
+Each French topic draft includes an optional real-life response with a bilingual model and self-check after sentence building. The five guided lessons end with the sentence exercise and feedback. Allow about 10–12 minutes with practice for a topic lesson and about 10 minutes for a guided lesson. These are editorial estimates. [French pacing and practice review](curriculum/french-lesson-pacing.md)
 
 ## Everyday greetings and politeness
 

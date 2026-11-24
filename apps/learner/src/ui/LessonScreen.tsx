@@ -50,10 +50,11 @@ interface CourseLessonSession {
   listeningQuestion?: ListeningQuestion;
 }
 
-export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession, extraPractice }: {
+export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession, timeEstimate, extraPractice }: {
   lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; sequence?: LessonSequence; routed?: boolean;
   courseSession?: CourseLessonSession;
-  extraPractice?: { estimate: string; activities: ReactNode };
+  timeEstimate?: string;
+  extraPractice?: ReactNode;
 }) {
   const { route, navigate, read } = useNavigation();
   const [focusRoutedStage, setFocusRoutedStage] = useVisitState<LessonStage | null>(focusStageKey, null);
@@ -192,7 +193,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       <Text nativeID={titleId} accessibilityRole="header"
         style={[s.title, compact && s.compactTitle, compactCourse && layout.compactCourseTitle]}>{lesson.subtitle}</Text>
       <Text style={[s.body, layout.outcome, compact && s.muted, compactCourse && layout.compactCourseOutcome]}>{lesson.outcome}</Text>
-      {extraPractice && <Text style={[s.muted, layout.meta]}>{extraPractice.estimate}</Text>}
+      {timeEstimate && <Text style={[s.muted, layout.meta]}>{timeEstimate}</Text>}
       <LessonProgress stage={stage} compact={compact} meaningMatch={meaningMatch}
         recorded={browseOnly ? undefined : recordedItems} total={lesson.vocabulary.length + 2}
         disabled={exitBlocked} hrefForStep={stageHref} onStep={setStage} />
@@ -233,7 +234,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
       {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
         done={progress.sentenceDone || (!courseSession && progress.completed)} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
-        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson} extraPractice={extraPractice?.activities}
+        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson} extraPractice={extraPractice}
         onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
         reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
     </View>

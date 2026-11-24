@@ -117,9 +117,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       } : undefined;
       const transfer = getFrenchTopicPractice(lesson);
       return <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model}
-        extraPractice={transfer && {
-          estimate: frenchTopicPracticeMinutes, activities: <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />,
-        }}
+        timeEstimate={transfer && frenchTopicPracticeMinutes}
+        extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
         studyDayHref={studyDay && routeHref(studyDay)} sequence={sequence} onExit={() => exitLesson(studyDay)} routed />;
     }
     if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}

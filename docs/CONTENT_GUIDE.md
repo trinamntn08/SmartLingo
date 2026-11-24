@@ -20,7 +20,7 @@ For current lesson inventory, use the [course catalogue](COURSE_CATALOGUE.md). T
 
 For the guided French route, use the [daily-course plan and level maps](plans/0043-french-daily-course.md). They specify the proposed unit goals, one lesson per study day and the review tasks that carry language into later situations.
 
-Design for about 10–12 minutes with practice in topic lessons and 12–15 in guided lessons. Include a short response task that changes a detail from the study material. Supply an idiomatic French example, a faithful English meaning and one or two criteria the learner can check. Use a single clear request or reply at foundation/A1 and add a condition, reason or follow-up where appropriate at A2. Offer a model reveal after the prompt. [Pacing and coverage review](curriculum/french-lesson-pacing.md)
+Design for about 10 minutes in the guided opening lessons, with the sentence exercise and feedback as the final practice. Allow 10–12 minutes for a topic lesson with its optional response task. For that task, change a detail from the study material and supply an idiomatic French model, a faithful English meaning and one or two criteria the learner can check. Use a single clear request or reply at foundation/A1 and add a condition, reason or follow-up where appropriate at A2. Offer the model after the prompt. [Pacing and coverage review](curriculum/french-lesson-pacing.md)
 
 ## Draft a lesson
 - State one useful outcome and approximate level.

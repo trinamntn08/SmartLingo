@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-24 Simplify the French guided lesson ending
+
+- Request. Simplify the three blocks shown after the guided sentence exercise because they practise the same goal.
+- Start. At 22:24 CET, Europe/Paris, the primary SmartLingo worktree was clean. The owner-selected origin had 61 live branch names and full SHAs, all matching the wildcard fetch. Local, tracking and live `feat/french-daily-opening` matched at `5c9931a5e460b52727c5ec10bba184ff5d635f00`, ahead/behind `0/0`. Other worktrees were preserved. Account usage is unavailable.
+- Cloud check. The all-ref course and pacing history led to the prior local checkpoint and the existing five-step reader. Cloud curriculum `47eebafdf5050cad95549ffe49204d94fc053c39` and UI `563fdaa01b8d56cc4c0baf971b9f2664b26212f8` remain integrated through `af5c4ff`. Slang `1068589290305171539f327c5e7e043e6b992444` remains integrated through `5b82a24`. Cycling, waste and Slang payloads still match the scoped Cloud files. No additional guided-ending change was found. Hosted and Android work remain separate targets.
+- Acceptance. The five guided French lessons show the solved sentence and its feedback, then the relevant continuation. Remove both follow-up tasks from that screen, preserve guided progress and previous deep links, and keep the topic library’s distinct-response task. Use the existing ten-minute guided duration as a rounded estimate. Verify the normal flow and cold-offline lesson.
+- Change. Removed both extra activities from the guided final step. The sentence exercise presents its answer, feedback and continuation in one card. Guided lessons display About 10 min. The topic reader still receives its separate scenario through the shared lesson surface. Historical course blocks still resolve older routes and saved events.
+- Checks. Repository and TypeScript checks, 307 tooling and application tests, eight focused Chromium cases and four cold-offline Chromium cases passed. At 22:26 CET, refreshed all 61 GitHub branch heads and verified the same Cloud refs before rebuilding. Port 8082 serves build `1b797decf24d66e6f201dac693f2056d3c8295128365b5055bdc92b38604651a`; the manifest and JS digest match the local export. Verified the single result card at 320 px in the served preview, including its feedback and review action. Slang search, cycling and waste lessons, and Japanese kana remained accessible in the export. Git whitespace checks passed.
+- Outcome. The commit containing this entry is the checkpoint. The guided estimate remains editorial. Next is owner review in the shared preview.
+
 ## 2026-11-24 Review and pace the French lessons
 
 - Request. Review the full French lesson catalogue with the curriculum researcher skill and make individual lessons substantial enough for a realistic study session.

@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-24 Fetch GitHub branches and launch the local preview
+
+- Request. Fetch all branches from GitHub, then build and launch the learner preview.
+- Start. At 20:47 CET, Europe/Paris, fetched and pruned the owner-selected origin from the clean primary `D:/dev/projects/SmartLingo` worktree. All 61 fetched branch refs matched the live heads. Local, tracking and live `feat/french-daily-opening` matched at `2c06f9aa5135c765db26b79709059f66171d83ea`, ahead/behind `0/0`. The fetch added `origin/feat/everyday-french-slang` at `1068589290305171539f327c5e7e043e6b992444`. The preview branch has 56 commits unique to it and the slang branch has five, so the established review source was retained.
+- Acceptance. Build the synchronized primary checkout, serve it at `http://localhost:8082`, verify the manifest and smoke-test the learner in Chromium.
+- Verification. `npm.cmd run check` passed. `npm.cmd run build:web` exported 136 files and prepared build `e9e06a957800`. Started the repository preview server on the standard loopback port. HTTP checks matched the served manifest and the learner bundle SHA-256 to the export. Chromium opened the first French course lesson at 1,440 px, checked both transcripts and advanced to Key phrases. At 320 px it opened the first Japanese Hiragana row and advanced to recognition practice. Reloading both activity URLs restored their steps without page errors.
+- Outcome. The static learner preview is running at `http://localhost:8082` for owner review. The commit containing this entry records the refresh. The optional curriculum API and voice services were outside this launch.
+
 ## 2026-11-23 Unify courses with the five-step lesson reader
 
 - Request. Check for published Cloud course integration first, remove the separate Dialogue, Quick practice and Try it path, and remove Daily course wording from the learner.

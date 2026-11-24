@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-24 Bring the Cloud slang catalogue into the local preview
+
+- Request. Check why the Cloud-developed slang section is missing from the shared preview and make it available there.
+- Start. At 21:00 CET, Europe/Paris, fetched the owner-selected origin from the clean primary worktree at `D:/dev/projects/SmartLingo`. Local, tracking and live `feat/french-daily-opening` matched at `a7c54ed10dad3ce9c16e9f53585460c56c1e7238`, ahead/behind `0/0`. `origin/feat/everyday-french-slang` matched the live Cloud head `1068589290305171539f327c5e7e043e6b992444`, with 57 commits unique to the preview branch and five unique to the Cloud branch.
+- Finding. The illustrated catalogue is in Cloud commit `1068589`. The shared preview export `e9e06a957800` comes from the current learner lineage, which has no Slang route or catalogue.
+- Acceptance. Preserve the Cloud catalogue, expose it in French navigation, verify search, saving and cold offline access, and retain the current French and Japanese lesson flows at the existing preview address. [Execution plan](plans/0055-integrate-cloud-slang.md)
+- Integration. Brought over the four Cloud catalogue source files and 13 photos byte-for-byte. Two UI builders ported the catalogue and routing in parallel with inherited client settings. The independent reviewer confirmed stable notebook capture and identified an active-filter announcement, a media-record digest typo and French header wrapping near the desktop breakpoint. The integration corrects all three. The French-only route shares the existing navigation, audio and offline adapters.
+- Verification. Repository and TypeScript checks, 18 tooling tests, 287 application tests and `git diff --check` passed. Chromium passed 14 development browser cases and four final reruns against the shared preview, including 320 px layout, the 1,050–1,100 px navigation transition and Japanese regression coverage. Four cold-offline cases passed, with both slang cases repeated on the final export. The served manifest, learner bundle and all 13 photographs matched build `a138bdaed6c4`. Direct French access returned HTTP 200, and the Japanese slang URL returned 404.
+- Outcome. Choose French and open Slang, or visit `http://localhost:8082/slang/fr`. The commit containing this entry records the integration. The catalogue and photos await owner review. Physical devices and audible speech quality were outside these checks.
+
 ## 2026-11-24 Fetch GitHub branches and launch the local preview
 
 - Request. Fetch all branches from GitHub, then build and launch the learner preview.

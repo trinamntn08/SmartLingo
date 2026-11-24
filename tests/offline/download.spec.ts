@@ -78,6 +78,33 @@ test('a fresh offline download starts greetings and saves study, practice and no
   expect(notebook).toEqual([expect.objectContaining({ sourceEntryId: 'fr.greetings.bonsoir', target: 'bonsoir', meaning: 'good evening' })]);
 });
 
+test('French slang cold-loads by URL with its photos and can save expressions offline', async ({ page, context }) => {
+  await page.goto('/today/fr');
+  await button(page, 'Profile').click();
+  await openProfileSection(page, 'Offline & backups');
+  await button(page, 'Download for offline use').click();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await expect(button(page, 'Refresh offline status')).toBeEnabled();
+  await context.setOffline(true);
+  await page.close();
+
+  const cold = await context.newPage();
+  await cold.goto('/slang/fr');
+  await expect(cold.getByRole('heading', { name: 'Everyday French & slang' })).toBeVisible();
+  await cold.getByRole('textbox', { name: 'Search slang' }).fill('ca marche');
+  const expression = cold.getByTestId(/^expression-fr\.slang\./).first();
+  const heading = expression.getByRole('heading', { name: /ça marche/i });
+  await expect(heading).toBeVisible();
+  const photos = cold.locator('img[src^="/slang-photos/"]');
+  await expect.poll(() => photos.evaluateAll(images => images.length >= 2 && images.every(img => (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  const target = (await heading.textContent())!;
+  await button(cold, `Save ${target}`).click();
+  await expect(button(cold, '✓ In notebook')).toBeDisabled();
+  const [events, notebook] = await learningSnapshot(cold);
+  expect(events).toEqual([]);
+  expect(notebook).toEqual([expect.objectContaining({ target })]);
+});
+
 test('explicit download cold-loads offline and asset removal preserves every learner store', async ({ page, context, request }, info) => {
   await page.goto('/');
   await openRestaurant(page);

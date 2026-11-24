@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
+import { slangExpressions } from '@smartlingo/content';
 import { normalizeSearch, notebookEntrySchema, languageNames, notebookLanguage, type TargetLanguage, type NotebookEntry } from '@smartlingo/domain';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { Button } from './controls';
@@ -12,6 +13,9 @@ import { PersonalWordForm } from './PersonalWordForm';
 import { ScreenHeader } from './ScreenHeader';
 import { Icon } from './Icon';
 import { toolsStyles as t } from './learnerToolsStyles';
+
+const textAbbreviations = new Map(slangExpressions.filter(expression => expression.textAbbreviation)
+  .map(expression => [expression.sourceEntryId, normalizeSearch(expression.target)]));
 
 export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked }: { model: LearningModel; onExplore: () => void; language?: TargetLanguage; onWriteBlocked?: (blocked: boolean) => void }) {
   const { route, navigate, backTo } = useNavigation();
@@ -60,6 +64,7 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
   const [voiceError, setVoiceError] = useState('');
+  const isTextAbbreviation = !japanese && textAbbreviations.get(entry.sourceEntryId) === normalizeSearch(entry.target);
   function edit() { setTarget(entry.target); setMeaning(entry.meaning); setExample(entry.example); setReading(entry.reading ?? ''); setExampleReading(entry.exampleReading ?? ''); setEditing(true); setSaved(false); }
   function save() {
     const result = notebookEntrySchema.safeParse({ ...entry, target, meaning, example,
@@ -81,14 +86,15 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
         <View style={s.row}>
           <Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text>
           {japanese && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
-          <Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} />
+          {isTextAbbreviation ? <Text style={t.detail}>Text shorthand</Text>
+            : <Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} />}
         </View>
         {!japanese && !!entry.reading && <Text style={t.detail}>{entry.reading}</Text>}
         <Text style={s.body}>{entry.meaning}</Text>
       </View>
       <Button quiet compact icon="edit" disabled={model.blocked} onPress={edit}>Edit note</Button>
     </View>
-    {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
+    {!isTextAbbreviation && !!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
     {!!entry.example && <View style={[t.inset, { padding: 16 }]}>
       <Text style={t.label}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text>
       {!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}

@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import type { TargetLanguage } from '@smartlingo/domain';
 import { Icon, type IconName } from '../ui/Icon';
 import { colors, designTokens } from '../ui/theme';
 import { routePress } from '../ui/routePress';
 
-export const learnerTabs = ['Today', 'Learn', 'Review', 'Report', 'Profile'] as const;
+export const learnerTabs = ['Today', 'Learn', 'Slang', 'Review', 'Report', 'Profile'] as const;
 export type LearnerTab = typeof learnerTabs[number];
-const icons: Record<LearnerTab, IconName> = { Today: 'home', Learn: 'book', Review: 'bookmark', Report: 'chart', Profile: 'person' };
+const japaneseTabs = learnerTabs.filter(tab => tab !== 'Slang');
+const icons: Record<LearnerTab, IconName> = { Today: 'home', Learn: 'book', Slang: 'grid', Review: 'bookmark', Report: 'chart', Profile: 'person' };
 const iconColors: Record<LearnerTab, string> = {
-  Today: colors.goldTint, Learn: colors.sageTint, Review: colors.lilacTint,
+  Today: colors.goldTint, Learn: colors.sageTint, Slang: colors.goldTint, Review: colors.lilacTint,
   Report: colors.skyTint, Profile: colors.sand,
 };
 
@@ -33,12 +35,13 @@ function SkipLink({ target, label }: { target: string; label: string }) {
   </Pressable>;
 }
 
-export function LearnerNavigation({ selected, disabled, onSelect, hrefFor, mobile }: {
-  selected: LearnerTab; disabled: boolean; onSelect: (tab: LearnerTab) => void; hrefFor?: (tab: LearnerTab) => string; mobile: boolean;
+export function LearnerNavigation({ language, selected, disabled, onSelect, hrefFor, mobile }: {
+  language: TargetLanguage; selected: LearnerTab; disabled: boolean; onSelect: (tab: LearnerTab) => void; hrefFor?: (tab: LearnerTab) => string; mobile: boolean;
 }) {
+  const tabs = language === 'fr-FR' ? learnerTabs : japaneseTabs;
   return <View role="navigation" accessibilityLabel="Learning navigation" nativeID={learnerNavigationId} tabIndex={-1}
     style={{ flexDirection: 'row', gap: mobile ? 2 : 6, maxWidth: '100%', minWidth: 0, ...(mobile ? { width: '100%' } : {}) }}>
-    {learnerTabs.map(tab => <NavigationItem key={tab} tab={tab} selected={selected === tab} disabled={disabled} onPress={() => onSelect(tab)} href={hrefFor?.(tab)} mobile={mobile} />)}
+    {tabs.map(tab => <NavigationItem key={tab} tab={tab} selected={selected === tab} disabled={disabled} onPress={() => onSelect(tab)} href={hrefFor?.(tab)} mobile={mobile} />)}
   </View>;
 }
 

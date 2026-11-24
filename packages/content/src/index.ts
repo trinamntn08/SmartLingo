@@ -20,6 +20,8 @@ export { getVocabularyPhoto } from './photos';
 export { previousSeedFingerprints } from './seed-baselines';
 export { courseSequence, orderCourseLessons } from './course-sequence';
 export { frenchCoursePractice } from './daily-course-practice';
+export { findSlangExpressions, slangCategories, slangCategoryIds, slangExpressions,
+  type SlangCategory, type SlangExpression, type SlangRegister } from './slang';
 export { kanaScripts, japaneseAlphabetLessons, japaneseAlphabetNotes,
   type KanaScript, type KanaCharacter, type JapaneseAlphabetLesson } from './japanese-alphabet';
 

@@ -8,6 +8,7 @@ import { topicRouteKey, type AppRoute } from './routes';
 export function tabRoute(tab: LearnerTab, language: TargetLanguage): AppRoute {
   switch (tab) {
     case 'Learn': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
+    case 'Slang': return language === 'fr-FR' ? { kind: 'slang', language } : { kind: 'unavailable' };
     case 'Today': return { kind: 'today', language };
     case 'Review': return { kind: 'review', language };
     case 'Report': return { kind: 'report', language };
@@ -43,7 +44,7 @@ export function useLearnerNavigation({ preferred, active, blocked, onChooseLangu
     return matches.size === 1 ? [...matches][0]! : topicKey;
   }, [lessons, language, topicKey, lesson?.topic]);
   const tab: LearnerTab = route.kind === 'review' ? 'Review' : route.kind === 'profile' ? 'Profile' : route.kind === 'report' ? 'Report'
-    : route.kind === 'today' || route.kind === 'home' ? 'Today' : 'Learn';
+    : route.kind === 'slang' ? 'Slang' : route.kind === 'today' || route.kind === 'home' ? 'Today' : 'Learn';
   const learnMode: LearnMode = route.kind === 'letters' ? 'Japanese letters' : route.kind === 'listening' ? 'Listening & videos'
     : route.kind === 'speaking' ? 'Speaking' : 'Lessons';
 

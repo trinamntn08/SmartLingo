@@ -19,6 +19,28 @@ The drawing inventory below and [photo coverage](PHOTO_COVERAGE.md) apply to Fre
 
 Optional speech has separate provenance and operating boundaries: [Japanese audio](JAPANESE_AUDIO.md) records device voices and the free local VOICEVOX fallback/credits, while [voice options](VOICE_OPTIONS.md) covers the French/provider work. Saved synthetic audio is not a reusable human-recording licence or pronunciation approval. The shared Listening & videos library links to 11 French and 5 Japanese external resources; [its source record](curriculum/listening-resource-sources.md) records access, text support and limits. Those links do not import or relicense provider media, and media does not load before an explicit external link.
 
+## Everyday French and slang photos
+
+The Cloud implementation records 13 SmartLingo-generated photos from 2026-11-24 with no external source. One café terrace photo introduces the catalogue, and 12 reused category photos illustrate situations. The Cloud Git record contains the optimized JPEGs and scene record. The original prompts, model or generation identifiers, reference inputs and export settings are unavailable in that record. [Cloud source decision](https://github.com/trinamntn08/SmartLingo/blob/1068589290305171539f327c5e7e043e6b992444/docs/decisions/0021-slang-reference.md)
+
+The local integration imported the JPEGs byte-for-byte from Cloud commit `1068589` and checked all 13 scenes for visual fit, visible watermarks and recognizable branding. The hero is 960 × 640 and the category images are 360 × 319. All use the [local slang photo directory](../apps/learner/public/slang-photos). They are included in the offline export for owner review. Confirm the missing source details and obtain owner review before wider release.
+
+| Asset | Scene | SHA-256 |
+| --- | --- | --- |
+| `hero.jpg` | Three friends laughing at a café terrace | `cce12b72421d07aa2448db6a7a80186d9584bb9c27002752988e1f6839f321f4` |
+| `conversation.jpg` | Two adults chatting on a sidewalk | `9e64c141f0029766265dbf8fff908a4400497b70e20a2ffc13a6ab5aaf624fde` |
+| `emotions.jpg` | A person resting by an open window | `1c3133163865b3e4ddbe64e8735903e9dcec7f02cda426c1a8d93389d190f12f` |
+| `errands.jpg` | A shopper choosing fruit at a market | `52d984e610e331b7f5afdaeaf9ed770113d1efeb26c89ae407d6afc8e09873b3` |
+| `food.jpg` | Two diners sharing a café meal | `313442f19ccf3f626dd226aff740a76839e718b1d22cd1374289c4069f7501c6` |
+| `friends.jpg` | Three friends laughing together outdoors | `6f13473027e60e33819b6a0cc9e95c0e8955c75a243fe534acb98dd9124c4a91` |
+| `messages.jpg` | A person using a smartphone | `8948fd78e092b267756f4e0f912cdf1a13d8937f35a1eaffacbbcbdf861477a9` |
+| `plans.jpg` | Two people looking at a calendar | `ab7249e1f0a2cd948c3e28be3dac6962f5552433272ce619d3016c994f172541` |
+| `reactions.jpg` | A woman reacting with surprise | `d315cf713f54224b4cfacb9c465011822f2f2bf4c2781d0911cf7a7a4293667b` |
+| `strong.jpg` | A frustrated person beside spilled coffee | `958e2e37d8add63e5a3384f9cc1b31ce4771dcb9e4b4bffad3bbfab14cccb1a2` |
+| `trouble.jpg` | A person looking at a bicycle wheel | `b2efb8e7c343866aa607e833285595ba953dd64c33a84dabe215b85367816195` |
+| `verlan.jpg` | Two adults chatting on a station platform | `b18b3dccb1645ed645580e0e34304c7d261274b64564a4f6b0ee2a14fdcc9a0e` |
+| `work.jpg` | A man working at a laptop | `4821ac8e097772a23bf41365be45762c994450f9117b2c55719328c89cc89e71` |
+
 ## Generated vocabulary photographs
 
 On 2026-11-22 the built-in OpenAI ImageGen tool produced ten original photo sheets for SmartLingo, plus one dedicated wholemeal-bread photo after a visual review. The two SmartLingo homepage photos were the only visual references. The written briefs identify individual French vocabulary objects and useful activity settings. Each approved tile was trimmed at the grid boundary and encoded as a local JPEG. The 120 JPEGs total 3,985,024 bytes and replace all 120 retired stock photos. The exact 397 vocabulary bindings remain, with alternative text rewritten to describe the generated images.

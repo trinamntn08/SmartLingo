@@ -14,6 +14,7 @@ test('web routes retain the explicit destination through a copy or refresh', () 
     { kind: 'listening', language: 'fr-FR', library: true },
     { kind: 'speaking', language: 'fr-FR', lessonId: 'fr.first', revision: 3, line: 2 },
     { kind: 'letters', language: 'ja-JP', rowId: 'ja.alphabet.hiragana.a', mode: 'recognition', characterId: 'ja.kana.hiragana.i' },
+    { kind: 'slang', language: 'fr-FR' },
     { kind: 'review', language: 'ja-JP', view: 'practice' },
     { kind: 'editor', lessonId: 'fr.first', revision: 2 },
   ];
@@ -25,6 +26,7 @@ test('web routes retain the explicit destination through a copy or refresh', () 
     assert.equal(routeHref(reopened), href);
   }
   assert.equal(routeHref({ kind: 'listening', language: 'ja-JP', chooser: true }), '/learn/ja/listening');
+  assert.equal(routeHref({ kind: 'slang', language: 'fr-FR' }), '/slang/fr');
   assert.deepEqual(parseRoute('/', '', '#editor'), { kind: 'editor' });
 });
 
@@ -43,7 +45,8 @@ test('long editor topic names and maximum-length listening IDs produce reopenabl
 
 test('route parsing rejects malformed identifiers and invalid feature paths', () => {
   for (const path of ['/lesson/xx/fr.first/dialogue', '/lesson/fr/%2Fbad/dialogue', '/lesson/fr/%', '/lesson/fr/fr.first/bad',
-    '/learn/fr/letters', '/learn/ja/listening/library/example', '/learn/ja/speaking/ja.first/1', '/editor/fr.first/-1', '/api/lessons']) {
+    '/learn/fr/letters', '/learn/ja/listening/library/example', '/learn/ja/speaking/ja.first/1', '/slang/ja', '/slang/fr/extra',
+    '/editor/fr.first/-1', '/api/lessons']) {
     assert.equal(parseRoute(path).kind, 'unavailable', path);
   }
 });

@@ -20,6 +20,7 @@ import { ProfileScreen } from '../profile/ProfileScreen';
 import { Button } from '../ui/controls';
 import { LessonScreen } from '../ui/LessonScreen';
 import { Notebook } from '../ui/Notebook';
+import { SlangCatalogue } from '../ui/SlangCatalogue';
 import { BrandHome } from '../ui/BrandHome';
 import { TopicSidebar } from '../ui/TopicSidebar';
 import { colors, designTokens, styles as s } from '../ui/theme';
@@ -61,7 +62,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
-  const mobileNav = width < designTokens.layout.desktopNavBreakpoint;
+  const desktopNavBreakpoint = language === 'fr-FR' ? designTokens.layout.desktopFrenchNavBreakpoint : designTokens.layout.desktopNavBreakpoint;
+  const mobileNav = width < desktopNavBreakpoint;
   useLayoutEffect(() => {
     if (active && !catalogue.loading && !model.loading) scroll.current?.scrollTo({ y: Number(read('learner.scroll') ?? 0), animated: false });
   }, [visit, active, catalogue.loading, model.loading]);
@@ -117,6 +119,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     }
     if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}
       recommendedDay={recommendation.day} learning={courseLearning} model={model} lessons={lessons} />;
+    if (route.kind === 'slang') return <SlangCatalogue model={model} />;
     if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch}
       alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
@@ -148,7 +151,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     <View style={[s.header, compact && { paddingHorizontal: 15, paddingVertical: 8 }]}>
       <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
-        {language && !choosing && !mobileNav && <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile={false} />}
+        {language && !choosing && !mobileNav && <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile={false} />}
         {language && !choosing && <View style={{ flexShrink: 1, minWidth: 0 }}>
           <Button compact icon={compact ? undefined : 'globe'} trailingIcon="chevron-down" label="Change language"
             disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]}</Button>
@@ -193,7 +196,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       </ScrollView>
     </View>
     {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 5, paddingBottom: 7 }}>
-      <LearnerNavigation selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile />
+      <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile />
     </View>}
   </View>;
 }

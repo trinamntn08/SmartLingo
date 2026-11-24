@@ -22,7 +22,7 @@ test('French topic drafts each have one original, level-specific production task
 });
 
 test('French guided lessons retain the authored blocks used by legacy course routes', () => {
-  for (const day of openCoursePilot.days) {
+  for (const day of openCoursePilot.days.slice(0, 5)) {
     const choices = day.blocks.filter(block => block.kind === 'choice');
     assert.equal(choices.length, 3, day.id);
     assert.deepEqual(day.compact?.practice.map(item => item.blockId), choices.map(block => block.id));

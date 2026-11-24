@@ -14,7 +14,7 @@ const event = (blockId: string, fields: Record<string, unknown> = {}): CourseEve
 
 test('the original five-lesson opening is a draft with exact canonical support and provenance', () => {
   assert.equal(openCourseSchema.parse(course).status, 'draft');
-  assert.deepEqual(course.days.map(studyDay => studyDay.title), [
+  assert.deepEqual(course.days.slice(0, 5).map(studyDay => studyDay.title), [
     'Meet a neighbour', 'Introduce yourself', 'Spell your name', 'Ask someone to repeat', 'Confirm a time',
   ]);
   for (const studyDay of course.days) {
@@ -42,17 +42,19 @@ test('the original five-lesson opening is a draft with exact canonical support a
 });
 
 test('optional unit metadata groups every authored day once and in order', () => {
-  const [unit] = course.units!;
+  const [unit, neighbourhood] = course.units!;
   assert.equal(unit.title, 'Your first conversations in France');
-  assert.deepEqual(unit.dayIds, course.days.map(studyDay => studyDay.id));
+  assert.equal(neighbourhood.title, 'Get around your neighbourhood');
+  assert.deepEqual(unit.dayIds, course.days.slice(0, 7).map(studyDay => studyDay.id));
+  assert.deepEqual(neighbourhood.dayIds, course.days.slice(7).map(studyDay => studyDay.id));
   assert.equal(openCourseSchema.parse({ ...course, units: undefined }).units, undefined);
   for (const dayIds of [unit.dayIds.slice(1), [...unit.dayIds].reverse(), [unit.dayIds[1], ...unit.dayIds.slice(1)]]) {
-    assert.throws(() => openCourseSchema.parse({ ...course, units: [{ ...unit, dayIds }] }), /cover each day once/);
+    assert.throws(() => openCourseSchema.parse({ ...course, units: [{ ...unit, dayIds }, neighbourhood] }), /cover each day once/);
   }
 });
 
 test('compact copy matches the original choice order and has a single dialogue and reflection', () => {
-  assert.ok(course.days.every(studyDay => studyDay.compact));
+  assert.ok(course.days.slice(0, 5).every(studyDay => studyDay.compact));
   const compact = day.compact!;
   for (const invalidDay of [
     { ...day, compact: { ...compact, practice: [...compact.practice].reverse() } },
@@ -147,8 +149,9 @@ test('rewriting Lesson 1 starts fresh while later lessons keep their earlier eve
   assert.equal(secondRevision, 2);
   assert.equal(createHash('sha256').update(JSON.stringify(originalSecondDay)).digest('hex'),
     '81b0966bd50e30787d8d355e71eadce5e4585cbbab9370cebed9dfffda083d11');
-  assert.equal(course.revision, 5);
-  assert.deepEqual(course.days.map(studyDay => courseDayProgressRevision(course, studyDay)), [5, 2, 3, 3, 3]);
+  assert.equal(course.revision, 6);
+  assert.deepEqual(course.days.slice(0, 5).map(studyDay => courseDayProgressRevision(course, studyDay)), [5, 2, 3, 3, 3]);
+  assert.equal(nextCourseDay(course, course.days.slice(0, 5).flatMap(completeDay))?.id, course.days[5].id);
   const oldHistory = completeDay({ ...day, progressRevision: 1 });
   assert.equal(oldHistory.every(attempt => attempt.courseRevision === 1), true);
   assert.equal(courseDayProgress(course, day, oldHistory).completedBlockIds.size, 0);
@@ -160,10 +163,10 @@ test('rewriting Lesson 1 starts fresh while later lessons keep their earlier eve
 });
 
 test('days default to the current release and explicit progress scopes cannot point into the future', () => {
-  assert.equal(courseDayProgressRevision(course, { ...day, progressRevision: undefined }), 5);
+  assert.equal(courseDayProgressRevision(course, { ...day, progressRevision: undefined }), 6);
   const updatedDay = { ...day, progressRevision: 4 };
   assert.equal(courseDayProgress(course, updatedDay, completeDay(day)).completed, false);
-  for (const progressRevision of [0, -1, 1.5, 6]) {
+  for (const progressRevision of [0, -1, 1.5, 7]) {
     assert.throws(() => openCourseSchema.parse({ ...course, days: [{ ...day, progressRevision }, ...course.days.slice(1)] }));
   }
 });

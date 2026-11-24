@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { japaneseCourse, japaneseLessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
+import { frenchCourses, japaneseCourse, japaneseLessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
 import { buildLearningReport, courseDayProgressRevision, courseLessonStageId, localStudyDate, type CourseEvent, type LearningEvent,
   type LearningReportInput, type NotebookEntry, type ReviewEvent } from '../src';
 
@@ -21,7 +21,7 @@ function review(entry: NotebookEntry, occurredAt = evening): ReviewEvent {
     algorithmVersion: 1, rating: 'helped', occurredAt, timeZone: 'Europe/Paris', studyDate: localStudyDate(occurredAt, 'Europe/Paris') };
 }
 function input(overrides: Partial<LearningReportInput> = {}): LearningReportInput {
-  return { language: 'fr-FR', lessons: [french, japanese], courses: [openCoursePilot, japaneseCourse],
+  return { language: 'fr-FR', lessons: [french, japanese], courses: [...frenchCourses, japaneseCourse],
     events: [], courseEvents: [], notebook: [], reviewEvents: [], now, timeZone: 'Europe/Paris', ...overrides };
 }
 
@@ -31,7 +31,7 @@ test('reports have truthful empty totals, Monday–Sunday labels, and no browsin
     dayId: day.id, blockId: day.blocks[0].id, kind: 'navigation', occurredAt: evening };
   const report = buildLearningReport(input({ notebook: [note()], courseEvents: [navigation, { ...navigation, id: randomUUID(), kind: 'support' }] }));
   assert.equal(report.completedLessons, 0); assert.equal(report.exploredWords, 0); assert.equal(report.savedWords, 1);
-  assert.equal(report.totalLessons, 1); assert.equal(report.totalStudyDays, 5); assert.equal(report.completedStudyDays, 0);
+  assert.equal(report.totalLessons, 1); assert.equal(report.totalStudyDays, 17); assert.equal(report.completedStudyDays, 0);
   assert.equal(report.actionsThisWeek, 0); assert.equal(report.activeDaysThisWeek, 0);
   assert.equal(report.weekStart, '2026-11-16'); assert.equal(report.weekEnd, '2026-11-22');
   assert.deepEqual(report.week.map(day => day.label), ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);

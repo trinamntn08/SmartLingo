@@ -37,7 +37,7 @@ export function DraftFields({ draft, onChange, disabled, durationText, onDuratio
       <View style={[s.column, { flexBasis: 220 }]}><Field label="Learner role" value={draft.role} disabled={disabled} multiline={false} onChange={role => onChange({ ...draft, role })} /></View></View>
       <Text style={s.muted}>Use the same role name in the dialogue for the learner’s lines. Dialogue speaker labels can be edited below.</Text>
       <Text style={s.body}>Estimated lesson level</Text>
-      <View style={s.row}>{(['foundation', 'A1', 'A2'] as const).map(level => <Button key={level} selected={draft.level === level} disabled={disabled}
+      <View style={s.row}>{(['foundation', 'A1', 'A2', 'B1'] as const).map(level => <Button key={level} selected={draft.level === level} disabled={disabled}
         label={`Lesson level ${level === 'foundation' ? 'Foundations' : level}`} onPress={() => onChange({ ...draft, level })}>{level === 'foundation' ? 'Foundations' : level}</Button>)}</View>
       <Text style={s.muted}>Level labels describe lesson content. They do not measure a learner’s proficiency.</Text>
     </View>

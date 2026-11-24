@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'r
 import type { LessonTopic, TargetLanguage } from '@smartlingo/domain';
 import { alphabetProgress, isAlphabetLessonId } from '../alphabet/progress';
 import { routeHref, topicRouteKey } from '../app/routes';
-import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
+import { CourseLaunchCard, OtherFrenchCourses, type CourseLaunchProps } from '../course/CourseLaunchCard';
 import { ContextImage } from '../ui/ContextImage';
 import { getContextPhoto } from '../ui/contextPhotos';
 import { Icon, type IconName } from '../ui/Icon';
@@ -23,6 +23,7 @@ const starterTileStyles = [
 interface TodayDashboardProps {
   language: TargetLanguage;
   courseLaunch: CourseLaunchProps;
+  otherCourses: readonly CourseLaunchProps[];
   alphabetEvents: LearningModel['events'];
   topics: readonly LessonTopic[];
   onTopic: (name: string) => void;
@@ -41,7 +42,7 @@ interface Shortcut {
   href: string;
 }
 
-export function TodayDashboard({ language, courseLaunch, alphabetEvents, topics, onTopic, onExplore, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
+export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetEvents, topics, onTopic, onExplore, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
   const stackedHero = width < 720;
@@ -70,6 +71,7 @@ export function TodayDashboard({ language, courseLaunch, alphabetEvents, topics,
       </View>
     </View>
     {recommendLetters && <CourseLaunchCard {...courseLaunch} />}
+    <OtherFrenchCourses courses={otherCourses} />
 
     <View style={today.section}>
       <View style={[s.row, today.sectionHeader]}>

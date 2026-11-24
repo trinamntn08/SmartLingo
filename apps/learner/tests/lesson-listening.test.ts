@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
+import { frenchCourses, frenchCourseLessonsByDay, japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
 import { buildCourseListeningQuestion, buildLessonListeningQuestion } from '../src/listening/lessonQuestions';
 
 test('every bundled short lesson has a deterministic, contextual listening item', () => {
@@ -21,14 +21,14 @@ test('every bundled short lesson has a deterministic, contextual listening item'
   }
 });
 
-test('every French and Japanese guided day has a tailored intent or detail check', () => {
+test('the original French and Japanese guided days retain their tailored intent or detail checks', () => {
   const frenchAnswers = ['Saying goodbye and wishing you a good day', 'Claire', 'N – O – R – A', 'Repeat more slowly', 'Ten o’clock'];
   const japaneseAnswers = ['Hear it again, more slowly', 'Tokyo', 'They don’t need one', '9 a.m.', 'Seven o’clock', 'Took lots of photos',
     'No eating or drinking', 'One blanket', 'Saturday at noon', 'They found the stop and caught the last bus',
     'Meet at the office on meeting days', 'Thursday at 6 p.m.', 'Everyone can attend'];
 
   for (const [course, answers] of [[openCoursePilot, frenchAnswers], [japaneseCourse, japaneseAnswers]] as const) {
-    assert.deepEqual(course.days.map(day => {
+    assert.deepEqual(course.days.slice(0, answers.length).map(day => {
       const question = buildCourseListeningQuestion(day, course.language);
       assert.ok(question?.prompt, day.id);
       assert.equal(question.language, course.language);
@@ -38,6 +38,18 @@ test('every French and Japanese guided day has a tailored intent or detail check
       if (course.language === 'ja-JP') assert.ok(question.reading, day.id);
       return question.choices[question.correctIndex];
     }), answers);
+  }
+});
+
+test('new French topic and guided listening select the same contextual line', () => {
+  for (const course of frenchCourses) for (const day of course.days) {
+    const lesson = frenchCourseLessonsByDay.get(day.id);
+    if (!lesson) continue;
+    const topicQuestion = buildLessonListeningQuestion(lesson);
+    const courseQuestion = buildCourseListeningQuestion(day, course.language);
+    assert.ok(topicQuestion && courseQuestion, day.id);
+    assert.equal(courseQuestion.sentence, topicQuestion.sentence, day.id);
+    assert.equal(courseQuestion.meaning, topicQuestion.meaning, day.id);
   }
 });
 

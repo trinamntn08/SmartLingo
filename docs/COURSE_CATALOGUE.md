@@ -1,10 +1,10 @@
 # Course catalogue - review drafts
 
-Source inventory checked 2026-11-23 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Lessons opens topic study. Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
+Source inventory checked 2026-11-24 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Lessons opens topic study. Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
 
 | Language | Topic banks | Short lessons | Vocabulary appearances | Canonical IDs | Exact written forms |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| French | 27 | 133 | 825 | 780 | 771 |
+| French | 31 | 145 | 922 | 835 | 826 |
 | Japanese | 16 | 69 | 414 | 385 | 385 |
 
 These counts come from `lessons` and `japaneseLessons` in [the content entry point](../packages/content/src/index.ts). They describe bundled drafts, not published curriculum, acquired words or proficiency. The French and Japanese daily-course views reuse selected vocabulary and are counted separately from these short lessons; Japanese letters are a separate activity.
@@ -13,7 +13,7 @@ These counts come from `lessons` and `japaneseLessons` in [the content entry poi
 
 [Japanese short lessons](../packages/content/src/japanese-lessons.ts) include 13 banks of 30 distinct entries across five six-entry lessons each. Four [starter lessons](../packages/content/src/topics/japanese.ts) cover everyday greetings and courtesy, first introductions, and ordering a drink at a café. They add five new senses and reuse 19 canonical vocabulary entries with their existing IDs. The combined inventory contains 8 foundation, 21 A1, 20 A2 and 20 B1-labelled task drafts. The [topic vocabulary record](curriculum/japanese-topic-vocabulary.md) lists the original 13 banks. Entries provide kana readings, English meanings, examples with readings and translations, and usage notes. Practice uses explicit meaning matching.
 
-The [Japanese daily course](../packages/content/src/japanese-course.ts) has 13 draft lessons with 78 vocabulary appearances, bilingual study/dialogue, two contextual choice activities and manual reflection per lesson. Guided-course progress is independent from the 69 library lessons. [Course sources](curriculum/japanese-course-sources.md) records provenance. The [French A1 opening unit](../packages/content/src/open-course-pilot.ts) has five original draft lessons on greetings, introductions, name spelling, asking for repetition and confirming a time. [Lesson 1](curriculum/french-course-lesson-one.md) has new teaching material and a fresh progress scope. Lessons 2–5 keep their existing progress. The [A1 map](curriculum/french-daily-a1.md) describes the remaining planned lessons.
+The [Japanese daily course](../packages/content/src/japanese-course.ts) has 13 draft lessons with 78 vocabulary appearances, bilingual study/dialogue, two contextual choice activities and manual reflection per lesson. Guided-course progress is independent from the 69 library lessons. [Course sources](curriculum/japanese-course-sources.md) records provenance.
 
 Today recommends Hiragana before Katakana; Learn defaults to Japanese letters while vocabulary/topics remain freely accessible. [The alphabet module](../packages/content/src/japanese-alphabet.ts) contains 20 draft row lessons: 10 per script, 46 basic forms each (92 total). Recognition and explicitly saved row study have their own progress and resume; characters do not increase vocabulary-lesson/report totals. [Alphabet scope and sources](curriculum/japanese-alphabet-sources.md) describes the excluded advanced forms, handwriting and review needs.
 
@@ -27,9 +27,19 @@ The [latest curriculum review pack](curriculum/README.md) owns the full-payload 
 
 The [word-by-word topic audit](CURRICULUM_TOPIC_AUDIT.md) describes the historical 120-lesson inventory. Its greeting-first opening has now been converted into three runtime drafts. Broader gap lists and the 30-area teaching map remain proposals. [Implementation decision](decisions/0019-greetings-first-drafts.md).
 
-27 banks · 133 lessons · 825 vocabulary appearances · 780 canonical senses · 771 distinct written forms. Recycled senses contribute to bank counts. The compact opening bank has 24 expressions across three lessons. Other banks have 30–35 expressions across five lessons. The curriculum remains draft material for owner review.
+31 banks · 145 lessons · 922 vocabulary appearances · 835 canonical senses · 826 distinct written forms. Recycled senses contribute to bank counts. The curriculum remains draft material for owner review.
 
-Each French topic draft includes an optional real-life response with a bilingual model and self-check after sentence building. The five guided lessons end with the sentence exercise and feedback. Allow about 10–12 minutes with practice for a topic lesson and about 10 minutes for a guided lesson. These are editorial estimates. [French pacing and practice review](curriculum/french-lesson-pacing.md)
+Each French topic draft includes an optional real-life response with a bilingual model and self-check after sentence building. The 12 new guided lessons offer the same optional response after the sentence exercise. Allow about 10–12 minutes with practice. [French pacing and practice review](curriculum/french-lesson-pacing.md)
+
+### Guided courses and new topics
+
+| Guided course | Lessons available | Topic additions |
+| --- | ---: | --- |
+| [A1 · First steps in France](curriculum/french-daily-a1.md) | 9 | Workshop check-in (2 lessons, 15 senses) and Neighbourhood wayfinding (2 lessons, 13 senses). |
+| [A2 · Everyday independence](curriculum/french-daily-a2.md) | 4 | Changing appointments (4 lessons, 32 senses). |
+| [B1 · Explain, solve and participate](curriculum/french-daily-b1.md) | 4 | Travel when plans change (4 lessons, 32 senses). |
+
+Choose a course from Today or Learn. Course progress is independent of the topic library. The 12 additions share one authored draft per situation across both paths. The five existing A1 lessons retain their progress scopes. [Expansion and learner tasks](plans/0056-french-course-expansion.md) · [Lesson 1 authorship](curriculum/french-course-lesson-one.md)
 
 ## Everyday greetings and politeness
 

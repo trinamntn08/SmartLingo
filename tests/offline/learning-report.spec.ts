@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
+import { frenchCourses, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
 import { openKeyPhrases, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] }, timezoneId: 'Europe/Paris' });
@@ -14,11 +14,11 @@ async function choose(page: Page, language: string) {
 
 async function report(page: Page, language: 'French' | 'Japanese') {
   const catalogue = language === 'French' ? lessons : japaneseLessons;
-  const course = language === 'French' ? openCoursePilot : japaneseCourse;
-  const words = new Set([...catalogue.flatMap(lesson => lesson.vocabulary), ...course.days.flatMap(day => day.vocabulary)].map(word => word.id)).size;
+  const days = language === 'French' ? frenchCourses.flatMap(course => course.days) : japaneseCourse.days;
+  const words = new Set([...catalogue.flatMap(lesson => lesson.vocabulary), ...days.flatMap(day => day.vocabulary)].map(word => word.id)).size;
   await button(page, 'Report').click();
   await expect(page.getByRole('heading', { name: 'Learning report', exact: true })).toBeVisible();
-  for (const [id, value] of [['lessons', `0 / ${catalogue.length}`], ['explored', `${catalogue[0].vocabulary.length} / ${words}`], ['saved', '1'], ['days', `0 / ${course.days.length}`]]) {
+  for (const [id, value] of [['lessons', `0 / ${catalogue.length}`], ['explored', `${catalogue[0].vocabulary.length} / ${words}`], ['saved', '1'], ['days', `0 / ${days.length}`]]) {
     await expect(page.getByTestId(`report-${id}`).getByText(value, { exact: true })).toBeVisible();
   }
   const chart = page.getByTestId('report-week');

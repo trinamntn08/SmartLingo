@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { lessons, openCoursePilot } from '@smartlingo/content';
+import { frenchCourses, lessons } from '@smartlingo/content';
 import { buildFrenchListeningCards } from '../src/listening/frenchListeningCards';
 import { buildCourseListeningQuestion, buildLessonListeningQuestion } from '../src/listening/lessonQuestions';
 
@@ -37,7 +37,7 @@ test('identical pieces have independent positions and short answers split only w
 test('all bundled French listening prompts reconstruct the words they play', () => {
   const questions = [
     ...lessons.filter(lesson => lesson.language === 'fr-FR').map(buildLessonListeningQuestion),
-    ...openCoursePilot.days.map(day => buildCourseListeningQuestion(day, 'fr-FR')),
+    ...frenchCourses.flatMap(course => course.days.map(day => buildCourseListeningQuestion(day, course.language))),
   ];
   const words = (text: string) => text.normalize('NFC').replace(/[^\p{L}\p{N}’'‐‑-]/gu, ' ').trim().replace(/\s+/gu, ' ');
   for (const question of questions) {

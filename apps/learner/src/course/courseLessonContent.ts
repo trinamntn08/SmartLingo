@@ -1,4 +1,4 @@
-import { japaneseLessons } from '@smartlingo/content';
+import { frenchCourseLessonsByDay, japaneseLessons } from '@smartlingo/content';
 import { courseDayProgressRevision, lessonSchema, type CourseDay, type Lesson, type OpenCourse } from '@smartlingo/domain';
 
 interface FrenchPractice {
@@ -106,6 +106,12 @@ export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
     if (!authored) throw new Error(`Missing shared Japanese lesson material for ${day.id}`);
     return lessonSchema.parse({ ...authored, ...identity });
   }
+
+  const authored = frenchCourseLessonsByDay.get(day.id);
+  if (authored) return lessonSchema.parse({
+    ...authored, ...identity, durationMinutes: 12,
+    sentenceActivity: { ...authored.sentenceActivity, id: `${day.id}.sentence` },
+  });
 
   const study = day.blocks.find(block => block.kind === 'study');
   const dialogue = day.blocks.find(block => block.kind === 'dialogue');

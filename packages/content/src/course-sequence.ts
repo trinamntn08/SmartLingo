@@ -29,6 +29,10 @@ export const courseSequence = [
   { slug: 'opinions', prerequisites: ['shopping', 'leisure', 'past'] },
   { slug: 'cycling', prerequisites: ['directions', 'transport'] },
   { slug: 'household-waste', prerequisites: ['housing', 'calendar'] },
+  { slug: 'workshop-check-in', prerequisites: ['greetings', 'essentials', 'people', 'routine'] },
+  { slug: 'neighbourhood-wayfinding', prerequisites: ['workshop-check-in', 'directions'] },
+  { slug: 'appointment-changes', prerequisites: ['workshop-check-in', 'calendar'] },
+  { slug: 'travel-disruptions', prerequisites: ['appointment-changes', 'transport'] },
 ] as const;
 
 /** Keep each topic's authored lesson order; unknown/custom banks remain reachable at the end. */

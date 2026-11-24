@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
+import { frenchCourseLessonsByDay, getFrenchTopicPractice } from '@smartlingo/content';
 import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId,
   type CourseDay, type CourseEvent, type LearningEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
 import { useNavigation } from '../app/WebNavigation';
@@ -8,6 +9,7 @@ import { tabRoute } from '../app/useLearnerNavigation';
 import { buildCourseListeningQuestion } from '../listening/lessonQuestions';
 import { Button } from '../ui/controls';
 import { getDailyDialoguePhoto } from '../ui/dialoguePhotos';
+import { FrenchTransferPractice } from '../ui/FrenchTransferPractice';
 import { LessonScreen } from '../ui/LessonScreen';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
@@ -49,6 +51,8 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const day = requestedDay ?? recommendedDay;
   const progress = useMemo(() => courseDayProgress(course, day, learning.events), [course, day, learning.events]);
   const lesson = useMemo(() => buildCourseLesson(course, day), [course, day]);
+  const authored = frenchCourseLessonsByDay.get(day.id);
+  const transfer = authored && getFrenchTopicPractice(authored);
   const listeningQuestion = useMemo(() => buildCourseListeningQuestion(day, course.language), [day, course.language]);
   const invalidDay = !!route.dayId && !requestedDay;
   const requestedStage = !invalidDay ? courseLessonStageForBlock(day, route.sectionId) : undefined;
@@ -139,6 +143,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       {outline}
       <View style={{ gap: 16, minWidth: 0, flex: sidebar ? 1 : undefined }}>
         <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
+          extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
           timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{
           stage, progress: { wordsStudied: progress.lessonWordsStudied, pictureDone: progress.lessonPictureDone,
             sentenceDone: progress.lessonSentenceDone, completed: progress.completed },

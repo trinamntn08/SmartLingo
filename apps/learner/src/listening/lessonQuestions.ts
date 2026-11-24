@@ -1,3 +1,4 @@
+import { frenchCourseLessonsByDay } from '@smartlingo/content';
 import type { CourseDay, Lesson, TargetLanguage, Vocabulary } from '@smartlingo/domain';
 import type { ListeningQuestion } from './comprehension';
 
@@ -14,6 +15,28 @@ interface ListeningDraft {
   prompt: string;
   answer: string;
   alternatives: readonly [string, string];
+}
+
+// Select a turn carrying the room, time, route or other detail from the study goal.
+const frenchCourseListeningTurns = new Map<string, number>([
+  ['fr.workshop-check-in.ask-where-to-go', 3],
+  ['fr.workshop-check-in.complete-workshop-check-in', 5],
+  ['fr.neighbourhood-wayfinding.find-local-service', 3],
+  ['fr.neighbourhood-wayfinding.locate-with-landmark', 2],
+  ['fr.appointment-changes.move-appointment', 3],
+  ['fr.appointment-changes.explain-constraint', 5],
+  ['fr.appointment-changes.offer-another-time', 4],
+  ['fr.appointment-changes.check-confirmation', 4],
+  ['fr.travel-disruptions.understand-disruption', 1],
+  ['fr.travel-disruptions.check-alternative', 5],
+  ['fr.travel-disruptions.compare-routes', 2],
+  ['fr.travel-disruptions.notify-delay', 1],
+]);
+
+function frenchCourseListeningTurn(lesson: Lesson | undefined): Lesson['dialogue'][number] | undefined {
+  if (!lesson || lesson.status !== 'draft' || lesson.revision !== 1) return undefined;
+  const index = frenchCourseListeningTurns.get(lesson.id);
+  return index === undefined ? undefined : lesson.dialogue[index];
 }
 
 // Original SmartLingo prompts on existing draft dialogue. A short-lesson
@@ -146,12 +169,13 @@ const listeningDrafts = new Map<string, ListeningDraft>([
 ]);
 
 export function buildLessonListeningQuestion(lesson: Lesson): ListeningQuestion | undefined {
-  return buildQuestion(lesson.id, lesson.language, lesson.dialogue, lesson.vocabulary, lesson.revision);
+  return buildQuestion(lesson.id, lesson.language, lesson.dialogue, lesson.vocabulary, lesson.revision, frenchCourseListeningTurn(lesson));
 }
 
 export function buildCourseListeningQuestion(day: CourseDay, language: TargetLanguage): ListeningQuestion | undefined {
   const dialogue = day.blocks.flatMap(block => block.kind === 'dialogue' ? block.lines : []);
-  return buildQuestion(day.id, language, dialogue, day.vocabulary);
+  return buildQuestion(day.id, language, dialogue, day.vocabulary, undefined,
+    frenchCourseListeningTurn(frenchCourseLessonsByDay.get(day.id)));
 }
 
 function normalize(text: string): string {
@@ -176,7 +200,7 @@ function unambiguousLines(lines: readonly SpokenLine[], language: string): Spoke
 }
 
 function buildQuestion(lessonId: string, language: string, dialogue: readonly SpokenLine[], vocabulary: readonly Vocabulary[],
-  lessonRevision?: number): ListeningQuestion | undefined {
+  lessonRevision?: number, preferred?: SpokenLine): ListeningQuestion | undefined {
   const draft = listeningDrafts.get(lessonId);
   const scripted = draft && draft.lessonRevision === lessonRevision
     ? unambiguousLines(dialogue, language).find(line => line.target === draft.target && line.meaning === draft.meaning)
@@ -187,7 +211,8 @@ function buildQuestion(lessonId: string, language: string, dialogue: readonly Sp
   const lines = unambiguousLines([...dialogue, ...examples], language);
   const dialogueLines = lines.filter(line => dialogue.includes(line));
   const meaningfulLine = dialogueLines.find(line => normalize(line.meaning).length >= 12);
-  const line = meaningfulLine ?? dialogueLines[0] ?? lines[0];
+  const selected = preferred && dialogueLines.find(line => line.target === preferred.target && line.meaning === preferred.meaning);
+  const line = selected ?? meaningfulLine ?? dialogueLines[0] ?? lines[0];
   if (!line) return undefined;
 
   const alternatives = distinctAlternatives(line, lines);

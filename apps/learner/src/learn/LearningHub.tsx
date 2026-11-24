@@ -14,13 +14,14 @@ import { JapaneseAlphabet } from '../alphabet/JapaneseAlphabet';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, topicRouteKey } from '../app/routes';
 import { learnRoute } from '../app/useLearnerNavigation';
-import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
+import { CourseLaunchCard, OtherFrenchCourses, type CourseLaunchProps } from '../course/CourseLaunchCard';
 
 export const learnModes = ['Japanese letters', 'Lessons', 'Listening & videos', 'Speaking'] as const;
 export type LearnMode = typeof learnModes[number];
 
-export function LearningHub({ language, lessons, model, mode, onMode, selectedTopic, onSelectTopic, onOpen, disabled, active, catalogueSearch, topics, topicNavigation, courseLaunch }: {
+export function LearningHub({ language, lessons, model, mode, onMode, selectedTopic, onSelectTopic, onOpen, disabled, active, catalogueSearch, topics, topicNavigation, courseLaunch, otherCourses }: {
   language: TargetLanguage; lessons: Lesson[]; model: LearningModel; mode: LearnMode; courseLaunch: CourseLaunchProps;
+  otherCourses: readonly CourseLaunchProps[];
   onMode: (mode: LearnMode) => void; selectedTopic: string | null;
   onSelectTopic: (topic: string | null) => void; onOpen: (lesson: Lesson) => void;
   disabled: boolean; active: boolean;
@@ -29,6 +30,7 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   topicNavigation: ReactNode;
 }) {
   const studyLessons = selectedTopic ? lessons.filter(lesson => lesson.topic === selectedTopic) : lessons;
+  const conversationLessons = studyLessons.filter(lesson => lesson.language === 'fr-FR' && lesson.level !== 'B1');
   const visibleModes = learnModes.filter(choice => language === 'ja-JP' || choice !== 'Japanese letters');
   const activeMode = visibleModes.includes(mode) ? mode : 'Lessons';
   const { width } = useWindowDimensions();
@@ -47,7 +49,10 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
       </View>}
     </View>;
   return <View style={{ gap: 16, minWidth: 0 }}>
-    {showCourseCard && <CourseLaunchCard {...courseLaunch} />}
+    {showCourseCard && <>
+      <CourseLaunchCard {...courseLaunch} />
+      <OtherFrenchCourses courses={otherCourses} />
+    </>}
     {!lessonsLead && sectionNavigation}
     {topicNavigation}
     {activeMode === 'Japanese letters' && language === 'ja-JP' ? <JapaneseAlphabet model={model} />
@@ -56,8 +61,8 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
       : activeMode === 'Listening & videos' ? <ListeningSection key={`${language}:${selectedTopic ?? 'all'}`}
         lessons={studyLessons} language={language} active={active} /> : <>
         <GuidedSpeaking key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons} />
-        {active && language === 'fr-FR' && <Disclosure title="Optional AI conversation" description="Try a temporary French exchange with English feedback." keepMounted={false}>
-          <FrenchPractice lessons={studyLessons} model={model} active={active} />
+        {active && conversationLessons.length > 0 && <Disclosure title="Optional AI conversation" description="Try a temporary French exchange with English feedback." keepMounted={false}>
+          <FrenchPractice lessons={conversationLessons} model={model} active={active} />
         </Disclosure>}
       </>}
     {lessonsLead && sectionNavigation}

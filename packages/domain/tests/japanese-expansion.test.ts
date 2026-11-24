@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { lessons, japaneseCourse, japaneseLessons } from '@smartlingo/content';
+import { frenchCourseLessonsByDay, lessons, japaneseCourse, japaneseLessons } from '@smartlingo/content';
 import { checkAnswer, groupLessonTopics, lessonSchema, matchesVocabulary, normalizeSearch, type Lesson, type Vocabulary } from '../src';
 
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -10,7 +10,8 @@ const coreLessons = () => japaneseLessons.filter(lesson => /^ja\.lesson\.day-\d+
 const starterLessons = japaneseLessons.filter(lesson => !lesson.id.startsWith('ja.lesson.day-'));
 
 test('the French library and the Japanese course and core lessons keep their reviewed payloads', () => {
-  assert.equal(hash(lessons.filter(lesson => !/^fr\.(?:cycling|household-waste)\./.test(lesson.id))),
+  const newFrenchLessons = new Set([...frenchCourseLessonsByDay.values()].map(lesson => lesson.id));
+  assert.equal(hash(lessons.filter(lesson => !newFrenchLessons.has(lesson.id) && !/^fr\.(?:cycling|household-waste)\./.test(lesson.id))),
     '0354161d5f3fadeefbab8f58ed6bc95c6145afd38b51bb185643fe8e53abb49e');
   // Rebaselined for the learner-facing Lesson names, including shared vocabulary notes.
   assert.equal(hash(coreLessons()), '6fe97b934f5c8a411f54858187e9e83fab2cb19d523830149f4d2a1a16d8cdff');

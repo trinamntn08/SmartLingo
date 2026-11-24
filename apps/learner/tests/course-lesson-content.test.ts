@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
+import { frenchCourses, frenchCourseLessonsByDay, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
 import { checkAnswer, courseDayProgressRevision, lessonSchema } from '@smartlingo/domain';
 import { buildCourseLesson } from '../src/course/courseLessonContent';
 
 test('every bundled course day has a draft lesson view under its existing progress scope', () => {
   const libraryIds = new Set([...lessons, ...japaneseLessons].map(lesson => lesson.id));
-  for (const course of [openCoursePilot, japaneseCourse]) {
+  for (const course of [...frenchCourses, japaneseCourse]) {
     for (const day of course.days) {
       const lesson = buildCourseLesson(course, day);
       const dialogue = day.blocks.find(block => block.kind === 'dialogue');
@@ -29,8 +29,8 @@ test('every bundled course day has a draft lesson view under its existing progre
 });
 
 test('French practice uses nearby meanings and every accepted sentence can be assembled', () => {
-  for (const day of openCoursePilot.days) {
-    const lesson = buildCourseLesson(openCoursePilot, day);
+  for (const course of frenchCourses) for (const day of course.days) {
+    const lesson = buildCourseLesson(course, day);
     const matching = lesson.pictureActivity;
     const meanings = lesson.vocabulary.filter(word => matching.choices.includes(word.id)).map(word => word.meaning);
     assert.equal(matching.mode, 'meaning');
@@ -39,7 +39,12 @@ test('French practice uses nearby meanings and every accepted sentence can be as
     assert.ok(lesson.dialogue.some(turn => turn.role === lesson.role), day.id);
 
     const exercise = lesson.sentenceActivity;
-    assert.ok(exercise.tokens.length >= 2 && exercise.tokens.length <= 5, day.id);
+    assert.ok(exercise.tokens.length >= 2, day.id);
+    const authored = frenchCourseLessonsByDay.get(day.id);
+    if (authored) {
+      assert.deepEqual(exercise.answers, authored.sentenceActivity.answers);
+      assert.deepEqual(lesson.pictureActivity, authored.pictureActivity);
+    }
     assert.equal(checkAnswer(exercise.tokens.join(' '), exercise), 'incorrect', day.id);
     for (const answer of exercise.answers) {
       assert.ok(canAssemble(exercise.tokens, answer), `${day.id}: ${answer}`);

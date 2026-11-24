@@ -15,7 +15,7 @@ function canBuildAcceptedSentence(exercise: Lesson['sentenceActivity'], chosen: 
 
 test('beginner banks and the compact greeting opening have distinct targets and solvable short lessons', () => {
   const topics = groupLessonTopics(lessons);
-  assert.equal(topics.length, 27);
+  assert.equal(topics.length, 31);
   assert.equal(new Set(lessons.map(lesson => lesson.id)).size, lessons.length);
   const sharedEntries = new Map<string, Vocabulary>();
   for (const topic of topics) {
@@ -23,6 +23,8 @@ test('beginner banks and the compact greeting opening have distinct targets and 
     if (topic.name === 'Everyday greetings and politeness') {
       assert.equal(targets.size, 24, 'The opening bank is deliberately compact, without vocabulary padding.');
       assert.equal(topic.lessons.length, 3);
+    } else if (['Workshop check-in', 'Neighbourhood wayfinding', 'Changing appointments', 'Travel when plans change'].includes(topic.name)) {
+      assert.ok(topic.lessons.length >= 2 && targets.size >= 12, `${topic.name}: compact initial batch`);
     } else assert.ok(targets.size >= 30 && targets.size <= 50, `${topic.name}: ${targets.size} distinct targets`);
     assert.equal(targets.size, topic.vocabulary.length, `${topic.name}: no repeated target padding`);
     for (const lesson of topic.lessons) {
@@ -56,14 +58,14 @@ test('catalogue search matches English/French words, accents, levels and lesson 
 
 test('suggested progression covers every bank once with earlier prerequisites and immutable draft revisions', () => {
   const slugs = courseSequence.map(topic => topic.slug);
-  assert.equal(new Set(slugs).size, 27);
+  assert.equal(new Set(slugs).size, 31);
   assert.deepEqual(new Set(lessons.map(lesson => lesson.id.split('.')[1])), new Set(slugs));
   const seen = new Set<string>();
   for (const topic of courseSequence) {
     for (const prerequisite of topic.prerequisites) assert.ok(seen.has(prerequisite), `${topic.slug}: prior ${prerequisite}`);
     seen.add(topic.slug);
   }
-  assert.equal(lessons.length, 133);
+  assert.equal(lessons.length, 145);
   assert.equal(lessons[0].id, 'fr.greetings.hello-goodbye');
   assert.deepEqual([...new Set(lessons.map(lesson => lesson.id.split('.')[1]))], slugs);
   for (const lesson of lessons) {

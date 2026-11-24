@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
-import { getFrenchTopicPractice, openCoursePilot, japaneseCourse } from '@smartlingo/content';
+import { frenchCourses, getFrenchTopicPractice, japaneseCourse } from '@smartlingo/content';
 import { FrenchTransferPractice, frenchTopicPracticeMinutes } from '../ui/FrenchTransferPractice';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
@@ -30,7 +30,6 @@ import { tabRoute, useLearnerNavigation } from './useLearnerNavigation';
 import { useNavigation } from './WebNavigation';
 import { routeHref } from './routes';
 
-const frenchCourses = [openCoursePilot];
 const japaneseCourses = [japaneseCourse];
 
 interface LearnerAppProps {
@@ -72,7 +71,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
   const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
   const wideLibrary = showLibrary && width >= designTokens.layout.sidebarBreakpoint;
-  const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses: language === 'ja-JP' ? japaneseCourses : frenchCourses });
+  const courses = language === 'ja-JP' ? japaneseCourses : frenchCourses;
+  const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses });
   const reportVisible = !!language && !choosing && !lesson && tab === 'Report';
   useEffect(() => {
     if (reportVisible && !childWriteBlocked && !globalModel.busy && !globalModel.loading && !globalModel.loadError) void reportState.refresh();
@@ -81,17 +81,20 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     if (model.saveError || courseLearning.saveError) scroll.current?.scrollTo({ y: 0, animated: false });
   }, [model.saveError, courseLearning.saveError]);
 
-  const course = language === 'ja-JP' ? japaneseCourse : openCoursePilot;
   const courseUnavailable = !!courseLearning.loadError;
-  const recommendation = useMemo(() => courseRecommendation(course, courseLearning.events, courseUnavailable),
-    [course, courseLearning.events, courseUnavailable]);
-  const startRoute = { kind: 'course', language: course.language, courseId: course.id, dayId: recommendation.day.id } as const;
-  const courseLaunch: CourseLaunchProps = {
-    course, ...recommendation, loading: courseLearning.loading, href: routeHref(startRoute),
-    disabled: switchingBlocked, onOpen: () => navigation.navigate(startRoute),
-  };
+  const recommendations = useMemo(() => courses.map(course => ({
+    course, ...courseRecommendation(course, courseLearning.events, courseUnavailable),
+  })), [courses, courseLearning.events, courseUnavailable]);
+  const courseLaunches: CourseLaunchProps[] = recommendations.map(recommendation => {
+    const { course, day } = recommendation;
+    const startRoute = { kind: 'course', language: course.language, courseId: course.id, dayId: day.id } as const;
+    return { ...recommendation, loading: courseLearning.loading, href: routeHref(startRoute),
+      disabled: switchingBlocked, onOpen: () => navigation.navigate(startRoute) };
+  });
+  const [courseLaunch, ...otherCourses] = courseLaunches;
+  const activeCourse = route.kind === 'course' ? recommendations.find(item => item.course.id === route.courseId) : undefined;
   const missingDestination = route.kind === 'unavailable' || (route.kind === 'lesson' && !lesson)
-    || (route.kind === 'course' && route.courseId !== course.id)
+    || (route.kind === 'course' && !activeCourse)
     || (route.kind === 'topics' && !!selectedTopic && !topics.some(topic => topic.name === selectedTopic));
   const courseVisible = route.kind === 'course' && !missingDestination && !model.loading && !catalogue.loading;
 
@@ -107,7 +110,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     if (missingDestination) return unavailable();
     if (lesson) {
       const link = route.kind === 'lesson' ? route.studyDay : undefined;
-      const day = link?.courseId === course.id ? course.days.find(item => item.id === link.dayId) : undefined;
+      const day = link && courses.find(course => course.id === link.courseId)?.days.find(item => item.id === link.dayId);
       const studyDay = link && day && courseLessonStageForBlock(day, link.sectionId)
         ? { kind: 'course', language: targetLanguage, ...link } as const : undefined;
       const topicLessons = studyDay ? undefined : topics.find(topic => topic.name === lesson.topic)?.lessons;
@@ -121,10 +124,10 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
         studyDayHref={studyDay && routeHref(studyDay)} sequence={sequence} onExit={() => exitLesson(studyDay)} routed />;
     }
-    if (route.kind === 'course') return <OpenCoursePanel key={course.id} route={route} course={course}
-      recommendedDay={recommendation.day} learning={courseLearning} model={model} lessons={lessons} />;
+    if (route.kind === 'course' && activeCourse) return <OpenCoursePanel key={activeCourse.course.id} route={route} course={activeCourse.course}
+      recommendedDay={activeCourse.day} learning={courseLearning} model={model} lessons={lessons} />;
     if (route.kind === 'slang') return <SlangCatalogue model={model} />;
-    if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch}
+    if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch} otherCourses={otherCourses}
       alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
       onAlphabet={() => openLearnMode('Japanese letters')}
@@ -134,7 +137,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       onExplore={() => openLearnMode('Lessons')} onReview={() => navigate('Review')}
     />;
     if (tab === 'Learn') return <LearningHub
-      language={targetLanguage} lessons={lessons} model={model} mode={learnMode} courseLaunch={courseLaunch}
+      language={targetLanguage} lessons={lessons} model={model} mode={learnMode} courseLaunch={courseLaunch} otherCourses={otherCourses}
       onMode={selectLearnMode} selectedTopic={selectedTopic} onSelectTopic={selectTopic}
       onOpen={openLesson} disabled={switchingBlocked} active={active} catalogueSearch={catalogueSearch}
       topics={topics} topicNavigation={showLibrary && !wideLibrary && renderTopicNavigation(true)}

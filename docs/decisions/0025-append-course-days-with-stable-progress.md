@@ -17,3 +17,7 @@ The new second day uses original SmartLingo text with unchanged existing canonic
 ## Original French Lesson 1, 2026-11-22
 
 The owner asked for an original opening and numbered lesson labels. French course revision 5 replaces the adapted teaching block and uses progress revision 5 for Lesson 1. Its earlier revision-1 records remain in history and backups. Lessons 2–5 retain their previous scopes. Both languages now display Lesson in the guided course. Existing course and block IDs, routes and event keys stay compatible. [Current authorship](../curriculum/french-course-lesson-one.md) · [Attribution for earlier exports](../curriculum/open-course-pilot-sources.md)
+
+## A1–B1 expansion, 2026-11-24
+
+A1 revision 6 appends four days and keeps the five existing progress scopes. The new A2 and B1 courses start under `fr.course-a2` and `fr.course-b1`. Each course link uses its own saved course events and routes. The 12 additions share authored topic drafts between the guided and library views, with independent completion IDs and canonical notebook senses. A future topic publication can override the library view while the guided course continues to use its bundled snapshot. Any subsequent material change to the bundled guided draft needs a fresh day progress scope. [Expansion](../plans/0056-french-course-expansion.md)

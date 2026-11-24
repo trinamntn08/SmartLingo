@@ -2,6 +2,8 @@
 
 Planned 2026-11-22 for English-speaking adults who are new to France. The product is a guided course that learners can study directly on SmartLingo. Learners get one recommended lesson per study day and can revisit or explore other lessons at any time. The route begins with the two existing pilot lessons. Every added lesson is written independently around a practical task, with an English interface and visible English study support.
 
+The 2026-11-24 draft expansion adds D006–D009, D057–D060 and D113–D116. The complete route below remains the authoring roadmap. [Expansion and review scope](0056-french-course-expansion.md)
+
 ## Courses, units and daily lessons
 
 | Course | Units | Study days | Intended result |

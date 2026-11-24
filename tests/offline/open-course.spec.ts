@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openCoursePilot } from '@smartlingo/content';
+import { frenchCourses, getFrenchTopicPractice, frenchCourseLessonsByDay, openCoursePilot } from '@smartlingo/content';
 import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
 import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline,
   openProfileSection, openTopic } from '../e2e/learner-journeys';
@@ -20,6 +20,37 @@ async function downloadApp(page: Page) {
 test.beforeEach(async ({ request, context }) => {
   await request.post('/__test__/mode');
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
+});
+
+test('the B1 starter course and its connected response are available after cold offline launch', async ({ page, context }) => {
+  const [, , b1] = frenchCourses;
+  const day = b1.days[0];
+  const lesson = buildCourseLesson(b1, day);
+  const task = getFrenchTopicPractice(frenchCourseLessonsByDay.get(day.id)!)!;
+  await downloadApp(page);
+  await context.setOffline(true);
+  await page.close();
+  const cold = await context.newPage();
+  await cold.goto('/today/fr');
+  await cold.getByRole('button', { name: b1.title, exact: true }).click();
+  await expect(step(cold, `Lesson 1: ${day.title}`)).toBeVisible();
+  await button(cold, 'Continue to key phrases').click();
+  await button(cold, 'Continue to listening').click();
+  await expect(step(cold, 'Listening practice')).toBeVisible();
+  await button(cold, 'Skip listening').click();
+  const correct = lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!;
+  await button(cold, correct.target).click();
+  await button(cold, 'Next').click();
+  await buildAcceptedSentence(cold, lesson);
+  await expect(step(cold, 'Lesson complete')).toBeVisible();
+  await expect(panel(cold).getByText(task.prompt, { exact: true })).toBeVisible();
+  await button(cold, 'Show example reply').click();
+  await expect(panel(cold).getByText(task.modelTarget, { exact: true })).toBeVisible();
+  await expect(panel(cold).getByText(task.modelMeaning, { exact: true })).toBeVisible();
+  await cold.reload();
+  await expect(step(cold, 'Lesson complete')).toBeVisible();
+  await expect(button(cold, `Next lesson: Lesson 2: ${b1.days[1].title}`)).toBeVisible();
+  expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
 test('the original French opening, notebook and saved cursor cold-start offline', async ({ page, context, baseURL }) => {

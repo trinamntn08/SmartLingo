@@ -14,9 +14,13 @@ import { experienceTopics } from './topics/experiences';
 import { cyclingTopic } from './topics/cycling';
 import { householdWasteTopic } from './topics/household-waste';
 import { buildOpenCoursePilot } from './open-course-pilot';
+import { buildFrenchCourses } from './french-courses';
 import { everydayPractice } from './french-practice/everyday';
 import { foundationPractice } from './french-practice/foundations';
 import type { FrenchTransferTask } from './french-practice/types';
+import { a1CourseAliases, a1CourseTasks, a1CourseTopics } from './topics/french-course-a1';
+import { a2CourseAliases, a2CourseTasks, a2CourseTopics } from './topics/french-course-a2';
+import { b1CourseAliases, b1CourseTasks, b1CourseTopics } from './topics/french-course-b1';
 
 export type { FrenchTransferTask } from './french-practice/types';
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
@@ -41,13 +45,22 @@ const existingLessons: Lesson[] = reuseSharedVocabulary([
   ...buildTopic(cyclingTopic),
   ...buildTopic(householdWasteTopic),
 ]);
-export const lessons: Lesson[] = orderCourseLessons([
+const openingLessons = [
   ...buildGreetingsLessons(existingLessons.flatMap(lesson => lesson.vocabulary)),
   ...existingLessons,
-]);
+];
+const courseDrafts = {
+  A1: reuseSharedVocabulary(a1CourseTopics.flatMap(buildTopic), openingLessons.flatMap(lesson => lesson.vocabulary), a1CourseAliases),
+  A2: reuseSharedVocabulary(a2CourseTopics.flatMap(buildTopic), openingLessons.flatMap(lesson => lesson.vocabulary), a2CourseAliases),
+  B1: reuseSharedVocabulary(b1CourseTopics.flatMap(buildTopic), openingLessons.flatMap(lesson => lesson.vocabulary), b1CourseAliases),
+};
+export const lessons: Lesson[] = orderCourseLessons([...openingLessons, ...Object.values(courseDrafts).flat()]);
 export const frenchTopicPractice: Readonly<Partial<Record<string, FrenchTransferTask>>> = {
   ...foundationPractice,
   ...everydayPractice,
+  ...a1CourseTasks,
+  ...a2CourseTasks,
+  ...b1CourseTasks,
 };
 const frenchDraftRevisions = new Map(lessons.map(lesson => [lesson.id, lesson.revision]));
 
@@ -58,6 +71,9 @@ export function getFrenchTopicPractice(lesson: Lesson): FrenchTransferTask | und
 }
 
 export const restaurantLesson = lessons.find(lesson => lesson.id === 'fr.restaurant.customer')!;
-export const openCoursePilot = buildOpenCoursePilot(lessons.flatMap(lesson => lesson.vocabulary));
+const french = buildFrenchCourses(buildOpenCoursePilot(openingLessons.flatMap(lesson => lesson.vocabulary)), courseDrafts, frenchTopicPractice);
+export const frenchCourses = french.courses;
+export const [openCoursePilot] = frenchCourses;
+export const frenchCourseLessonsByDay = french.lessonsByDay;
 export { japaneseCourse } from './japanese-course';
 export { japaneseLessons } from './japanese-lessons';

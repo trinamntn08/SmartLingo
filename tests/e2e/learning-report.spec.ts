@@ -1,7 +1,7 @@
 import { openKeyPhrases, openLessonFromTopics, openTopic } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-import { japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
+import { frenchCourses, japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
 import {
   courseDayProgressRevision, courseEventSchema, learningEventSchema, notebookEntrySchema, reviewEventSchema,
   type CourseEvent, type LearningEvent, type Lesson, type NotebookEntry, type ReviewEvent,
@@ -95,8 +95,8 @@ function fixture(): { rows: Rows; frenchActions: number; frenchExplored: number 
 
 function totals(language: 'French' | 'Japanese') {
   const catalogue = language === 'French' ? lessons : japaneseLessons;
-  const course = language === 'French' ? openCoursePilot : japaneseCourse;
-  return { lessons: catalogue.length, words: new Set([...catalogue.flatMap(lesson => lesson.vocabulary), ...course.days.flatMap(day => day.vocabulary)].map(word => word.id)).size, days: course.days.length };
+  const days = language === 'French' ? frenchCourses.flatMap(course => course.days) : japaneseCourse.days;
+  return { lessons: catalogue.length, words: new Set([...catalogue.flatMap(lesson => lesson.vocabulary), ...days.flatMap(day => day.vocabulary)].map(word => word.id)).size, days: days.length };
 }
 
 async function metrics(page: Page, language: 'French' | 'Japanese', completed: number, explored: number, saved: number, days: number) {

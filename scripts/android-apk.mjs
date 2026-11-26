@@ -18,7 +18,13 @@ const receiptName = 'SmartLingo-preview.provenance.json';
 
 export function parseArguments(args) {
   const [command, ...rest] = args;
-  if (!['doctor', 'build', 'install', 'open'].includes(command)) throw new Error('Usage: android-apk.mjs doctor|build|install [--serial DEVICE]|open');
+  if (command === 'check-update') {
+    if (rest.length < 1 || rest.length > 2 || rest.some(file => !/\.apk$/i.test(file))) {
+      throw new Error('Usage: npm run android:check-update -- PREVIOUS.apk [NEW.apk]');
+    }
+    return { command, previous: rest[0], candidate: rest[1] };
+  }
+  if (!['doctor', 'build', 'install', 'open'].includes(command)) throw new Error('Usage: android-apk.mjs doctor|build|check-update PREVIOUS.apk [NEW.apk]|install [--serial DEVICE]|open');
   if (!rest.length) return { command };
   if (command !== 'install' || rest.length !== 2 || rest[0] !== '--serial' || !/^[A-Za-z0-9_.:-]+$/.test(rest[1])) {
     throw new Error('Only install accepts --serial DEVICE; all other arguments are rejected.');
@@ -144,12 +150,29 @@ function gitState(root, execute) {
   };
 }
 
-function verifyApk(file, report, env, execute) {
+function readApkIdentity(file, report, env, execute) {
   const tools = path.join(report.sdk, 'build-tools', requirements.buildTools);
   const java = path.join(report.javaHome, 'bin', executable('java'));
   const certificate = execute(java, ['-jar', path.join(tools, 'lib/apksigner.jar'), 'verify', '--verbose', '--print-certs', file], { env, capture: true });
+  const signers = [...certificate.matchAll(/^Signer #\d+ certificate SHA-256 digest: ([a-f0-9]{64})[ \t]*\r?$/gim)];
+  if (signers.length !== 1) throw new Error('Expected exactly one verified APK signing certificate.');
   const badging = execute(path.join(tools, executable('aapt')), ['dump', 'badging', file], { env, capture: true });
-  if (!badging.includes(`package: name='${applicationId}'`) || !badging.includes("sdkVersion:'24'") || !badging.includes("targetSdkVersion:'36'")) throw new Error('APK identity or SDK requirements did not match the Android preview.');
+  const packageLine = badging.split(/\r?\n/).find(line => line.startsWith('package: ')) ?? '';
+  if (/\bsplit='/.test(packageLine)) throw new Error('Use the base APK for update verification.');
+  const packageId = packageLine.match(/\bname='([^']+)'/)?.[1];
+  const versionCode = Number(packageLine.match(/\bversionCode='(\d+)'/)?.[1]);
+  const versionName = packageLine.match(/\bversionName='([^']+)'/)?.[1];
+  if (!packageId || !Number.isSafeInteger(versionCode) || versionCode < 1 || !versionName) {
+    throw new Error('APK manifest did not report a complete package identity and version.');
+  }
+  return { applicationId: packageId, versionCode, versionName, signerCertificateSha256: signers[0][1].toLowerCase(), badging };
+}
+
+function verifyApk(file, report, env, execute) {
+  const { badging, ...identity } = readApkIdentity(file, report, env, execute);
+  if (identity.applicationId !== applicationId) throw new Error(`APK package ID ${identity.applicationId} does not match ${applicationId}.`);
+  if (!badging.includes("sdkVersion:'24'") || !badging.includes("targetSdkVersion:'36'")) throw new Error('APK SDK requirements did not match the Android preview.');
+  const tools = path.join(report.sdk, 'build-tools', requirements.buildTools);
   const entries = execute(path.join(tools, executable('aapt')), ['list', file], { env, capture: true }).split(/\r?\n/);
   const requiredBundle = [
     /^assets\/public\/index\.html$/,
@@ -161,15 +184,9 @@ function verifyApk(file, report, env, execute) {
   if (!requiredBundle.every(pattern => entries.some(entry => pattern.test(entry)))) {
     throw new Error('APK is missing the bundled learner entry, JavaScript, pictures or fonts.');
   }
-  const signer = certificate.match(/Signer #1 certificate SHA-256 digest: ([a-f0-9]+)/i)?.[1];
-  if (!signer) throw new Error('APK signature verification did not report a signing certificate.');
-  const versionCode = Number(badging.match(/\bversionCode='(\d+)'/)?.[1]);
-  const versionName = badging.match(/\bversionName='([^']+)'/)?.[1];
-  if (!versionCode || !versionName) throw new Error('APK manifest did not report a package version.');
   return {
-    versionCode, versionName, minSdk: 24, targetSdk: 36,
+    ...identity, minSdk: 24, targetSdk: 36,
     permissions: [...badging.matchAll(/^uses-permission(?:-sdk-\d+)?: name='([^']+)'/gm)].map(match => match[1]),
-    signerCertificateSha256: signer,
     bundledFileCount: entries.filter(entry => entry.startsWith('assets/public/') && !entry.endsWith('/')).length,
   };
 }
@@ -228,7 +245,7 @@ export function buildApk({ root = repository, execute = run, inspect = inspectPr
     throw new Error('The source changed during APK assembly. Build again from a stable checkout.');
   }
   const provenance = {
-    schemaVersion: 2, applicationId, origin: 'https://localhost', variant: 'debug',
+    schemaVersion: 2, origin: 'https://localhost', variant: 'debug',
     builtAt: new Date().toISOString(), ...source,
     node: report.node, npm: report.npmVersion, java: report.javaVersion, sdk: requirements.platform,
     buildTools: requirements.buildTools, capacitor: manifest.devDependencies['@capacitor/android'],
@@ -259,17 +276,68 @@ export function selectDevice(output, serial) {
   return devices[0].id;
 }
 
-function installApk(serial) {
+function assertCompatibleUpdate(previous, candidate) {
+  if (previous.applicationId !== applicationId || candidate.applicationId !== applicationId) {
+    throw new Error(`Package ID mismatch. Expected ${applicationId} for both APKs. Got ${previous.applicationId} and ${candidate.applicationId}.`);
+  }
+  if (previous.signerCertificateSha256 !== candidate.signerCertificateSha256) {
+    throw new Error('APK signing certificate mismatch. Use the original signing key. Keep the installed app and export a private learning backup if the key is unavailable.');
+  }
+  if (candidate.versionCode <= previous.versionCode) {
+    throw new Error(`The update version code ${candidate.versionCode} must be higher than ${previous.versionCode}.`);
+  }
+}
+
+function checkUpdateFiles(previous, candidate = path.join(repository, 'dist/android', apkName)) {
   const report = inspectPrerequisites();
   const env = readyEnvironment(report);
-  const target = path.join(repository, 'dist/android', apkName);
-  const receipt = JSON.parse(fs.readFileSync(path.join(repository, 'dist/android', receiptName), 'utf8'));
+  const from = readApkIdentity(path.resolve(previous), report, env, run);
+  const to = readApkIdentity(path.resolve(candidate), report, env, run);
+  assertCompatibleUpdate(from, to);
+  console.log(`Compatible update: ${applicationId} ${from.versionName} (${from.versionCode}) → ${to.versionName} (${to.versionCode}).\nSigning certificate SHA-256: ${to.signerCertificateSha256}`);
+}
+
+function checkInstalledUpdate(adb, device, userId, candidate, report, env, execute) {
+  const deviceArgs = ['-s', device];
+  const packages = execute(adb, [...deviceArgs, 'shell', 'pm', 'list', 'packages', '-u', '--user', userId, applicationId], { env, capture: true })
+    .trim().split(/\r?\n/).filter(Boolean);
+  if (packages.some(line => !/^package:[\w.]+$/.test(line))) {
+    throw new Error('Could not verify installed packages for the current Android user. Installation stopped.');
+  }
+  if (!packages.includes(`package:${applicationId}`)) return false;
+
+  const installedPaths = execute(adb, [...deviceArgs, 'shell', 'pm', 'path', '--user', userId, applicationId], { env, capture: true });
+  const baseApks = [...installedPaths.matchAll(/^package:(\/[^\r\n]+\/base\.apk)\r?$/gm)];
+  if (baseApks.length !== 1) {
+    throw new Error('Could not identify the installed SmartLingo base APK. Switch to the Android user where SmartLingo is installed and try again.');
+  }
+  const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'smartlingo-installed-apk-'));
+  const installed = path.join(temporary, 'base.apk');
+  try {
+    execute(adb, [...deviceArgs, 'pull', baseApks[0][1], installed], { env, capture: true });
+    assertCompatibleUpdate(readApkIdentity(installed, report, env, execute), candidate);
+    return true;
+  } finally {
+    fs.rmSync(installed, { force: true });
+    fs.rmdirSync(temporary);
+  }
+}
+
+export function installApk(serial, { root = repository, inspect = inspectPrerequisites, execute = run } = {}) {
+  const report = inspect({ root });
+  const env = readyEnvironment(report);
+  const target = path.join(root, 'dist/android', apkName);
+  const receipt = JSON.parse(fs.readFileSync(path.join(root, 'dist/android', receiptName), 'utf8'));
   if (receipt.applicationId !== applicationId || hashFile(target) !== receipt.sha256) throw new Error('APK does not match its build receipt. Run npm run build:apk again.');
-  verifyApk(target, report, env, run);
+  const candidate = verifyApk(target, report, env, execute);
   const adb = path.join(report.sdk, 'platform-tools', executable('adb'));
-  const device = selectDevice(run(adb, ['devices'], { env, capture: true }), serial);
-  run(adb, ['-s', device, 'install', '-r', target], { env });
-  console.log('Debug update installed. Existing app data is retained when the signing key matches.');
+  const device = selectDevice(execute(adb, ['devices'], { env, capture: true }), serial);
+  const userId = execute(adb, ['-s', device, 'shell', 'am', 'get-current-user'], { env, capture: true }).trim();
+  if (!/^\d+$/.test(userId)) throw new Error('Could not determine the current Android user. Installation stopped.');
+  const updating = checkInstalledUpdate(adb, device, userId, candidate, report, env, execute);
+  if (hashFile(target) !== receipt.sha256) throw new Error('APK changed during the compatibility check. Rerun the installer.');
+  execute(adb, ['-s', device, 'install', '-r', '--user', userId, target], { env });
+  console.log(updating ? 'Compatible update installed.' : 'SmartLingo installed for the current Android user.');
 }
 
 function main(args) {
@@ -281,6 +349,7 @@ function main(args) {
     console.log('Android build prerequisites are available. First assembly may download Gradle/Maven dependencies and needs accepted SDK licences.');
   } else if (options.command === 'build') buildApk();
   else if (options.command === 'install') installApk(options.serial);
+  else if (options.command === 'check-update') checkUpdateFiles(options.previous, options.candidate);
   else {
     readConfiguration(repository);
     run(process.execPath, [path.join(repository, 'node_modules/@capacitor/cli/bin/capacitor'), 'open', 'android'], { cwd: path.join(repository, 'apps/android') });

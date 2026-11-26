@@ -40,6 +40,7 @@
     "android:doctor": "node scripts/android-apk.mjs doctor",
     "build:apk": "node scripts/android-apk.mjs build",
     "android:install": "node scripts/android-apk.mjs install",
+    "android:check-update": "node scripts/android-apk.mjs check-update",
     "android:open": "node scripts/android-apk.mjs open",
     "test:android-contract": "npm run build:web && playwright test --config playwright.android.config.ts",
     "preview:web": "node scripts/serve-web.mjs",

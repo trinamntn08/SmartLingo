@@ -3,12 +3,28 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { parseArguments, javaMajor, inspectPrerequisites, selectDevice, buildApk } from '../android-apk.mjs';
+import { createHash } from 'node:crypto';
+import { parseArguments, javaMajor, inspectPrerequisites, selectDevice, buildApk, installApk } from '../android-apk.mjs';
+
+const packageId = 'com.smartlingo.preview';
+const signer = 'a1'.repeat(32);
+const bundleEntries = [
+  'index.html', '_expo/index.js', 'generated-vocabulary-photos/apple.jpg',
+  'learning-scenes/greetings.jpg', 'fonts/Inter.woff2',
+];
+
+function apkBadging({ id = packageId, code = 3, split = '' } = {}) {
+  return `package: name='${id}' versionCode='${code}' versionName='test-preview'${split}\nsdkVersion:'24'\ntargetSdkVersion:'36'`;
+}
+
+const apkSignature = (digest = signer) => `Signer #1 certificate SHA-256 digest: ${digest}`;
+const apkList = () => bundleEntries.map(entry => `assets/public/${entry}`).join('\n');
 
 test('Android CLI rejects unsupported options and install serial injection', () => {
   assert.deepEqual(parseArguments(['build']), { command: 'build' });
   assert.deepEqual(parseArguments(['install', '--serial', '192.168.1.2:5555']), { command: 'install', serial: '192.168.1.2:5555' });
-  for (const args of [[], ['build', '--install'], ['build', '--serial', 'phone'], ['install', '--serial', 'a & b'], ['install', '--serial'], ['doctor', '--help']]) assert.throws(() => parseArguments(args));
+  assert.deepEqual(parseArguments(['check-update', 'old build.apk', 'new build.apk']), { command: 'check-update', previous: 'old build.apk', candidate: 'new build.apk' });
+  for (const args of [[], ['build', '--install'], ['build', '--serial', 'phone'], ['install', '--serial', 'a & b'], ['install', '--serial'], ['doctor', '--help'], ['check-update'], ['check-update', 'old.json'], ['check-update', 'a.apk', 'b.apk', 'c.apk']]) assert.throws(() => parseArguments(args));
 });
 
 test('prerequisite checks diagnose missing tools and reject obsolete Java', () => {
@@ -55,6 +71,77 @@ function fixture(t) {
   for (const name of ['SmartLingo-preview.apk', 'SmartLingo-preview.provenance.json']) fs.writeFileSync(path.join(root, 'dist/android', name), 'stale');
   return root;
 }
+
+function installFixture(t, { installed = true, unreadable = false, id, code = 2, digest, secondSigner = false, split, user = '10' } = {}) {
+  const root = fixture(t);
+  const target = path.join(root, 'dist/android/SmartLingo-preview.apk');
+  const sha256 = createHash('sha256').update(fs.readFileSync(target)).digest('hex');
+  fs.writeFileSync(path.join(root, 'dist/android/SmartLingo-preview.provenance.json'), JSON.stringify({ applicationId: packageId, sha256 }));
+  const installedPath = '/data/app/smartlingo/base.apk';
+  const installs = [];
+  let pulled;
+  function execute(command, args) {
+    const file = args.at(-1);
+    if (args.includes('verify')) {
+      const signature = apkSignature(file === target ? signer : digest);
+      return file !== target && secondSigner ? `${signature}\nSigner #2 certificate SHA-256 digest: ${'fa'.repeat(32)}` : signature;
+    }
+    if (args.includes('badging')) return file === target ? apkBadging() : apkBadging({ id, code, split });
+    if (args[0] === 'list') return apkList();
+    if (args[0] === 'devices') return 'List of devices attached\nemulator-5570\tdevice\n';
+    assert.deepEqual(args.slice(0, 2), ['-s', 'emulator-5570']);
+    if (args.includes('get-current-user')) return `${user}\r\n`;
+    if (args.includes('--user')) assert.equal(args[args.indexOf('--user') + 1], user);
+    if (args.includes('packages')) return installed ? `package:${packageId}\r\n` : '';
+    if (args.includes('path')) return unreadable ? '' : `package:${installedPath}\r\npackage:/data/app/smartlingo/split_config.en.apk\r\n`;
+    if (args[2] === 'pull') {
+      assert.equal(args[3], installedPath);
+      pulled = file;
+      fs.writeFileSync(pulled, 'installed APK');
+      return '';
+    }
+    if (args[2] === 'install') { installs.push(args); return ''; }
+    assert.fail(`Unexpected command ${command} ${args.join(' ')}`);
+  }
+  return {
+    installs, target,
+    pullRemoved: () => pulled && !fs.existsSync(path.dirname(pulled)),
+    install: () => installApk('emulator-5570', { root, inspect: () => ({ issues: [], javaHome: '/jdk', sdk: '/sdk' }), execute }),
+  };
+}
+
+test('an installed app is updated only after matching its signature and version', t => {
+  const fixture = installFixture(t);
+  fixture.install();
+  assert.deepEqual(fixture.installs, [['-s', 'emulator-5570', 'install', '-r', '--user', '10', fixture.target]]);
+  assert.ok(fixture.pullRemoved());
+});
+
+test('first install still succeeds when the package has no previous installation', t => {
+  const fixture = installFixture(t, { installed: false });
+  fixture.install();
+  assert.equal(fixture.installs.length, 1);
+  assert.equal(fixture.pullRemoved(), undefined);
+});
+
+test('incompatible or unverifiable installed APKs stop before adb install', t => {
+  const cases = [
+    [{ id: 'com.other.preview' }, /Package ID mismatch/],
+    [{ digest: 'bb'.repeat(32) }, /signing certificate mismatch/],
+    [{ code: 3 }, /version code 3 must be higher than 3/],
+    [{ code: 4 }, /version code 3 must be higher than 4/],
+    [{ unreadable: true }, /Could not identify the installed/],
+    [{ secondSigner: true }, /exactly one verified APK signing certificate/],
+    [{ split: " split='config.en'" }, /Use the base APK/],
+    [{ user: 'Unknown command' }, /Could not determine the current Android user/],
+  ];
+  for (const [options, problem] of cases) {
+    const fixture = installFixture(t, options);
+    assert.throws(fixture.install, problem);
+    assert.deepEqual(fixture.installs, []);
+    if (!options.unreadable && !options.user) assert.ok(fixture.pullRemoved());
+  }
+});
 
 test('failed preflight invalidates a previous published APK and receipt without executing builds', t => {
   const root = fixture(t);
@@ -144,10 +231,6 @@ test('a source commit changed during assembly cannot claim the resulting APK', t
   const root = fixture(t);
   const webExport = path.join(root, 'apps/learner/dist');
   const sourceApk = path.join(root, 'apps/android/android/app/build/outputs/apk/debug/app-debug.apk');
-  const entries = [
-    'index.html', '_expo/index.js', 'generated-vocabulary-photos/apple.jpg',
-    'learning-scenes/greetings.jpg', 'fonts/Inter.woff2',
-  ];
   let commit = 'before-build';
   const execute = (command, args, { cwd } = {}) => {
     if (args[0] === 'rev-parse') return commit;
@@ -160,9 +243,9 @@ test('a source commit changed during assembly cannot claim the resulting APK', t
       fs.writeFileSync(sourceApk, 'signed APK');
       commit = 'after-build';
     }
-    if (args.includes('verify')) return 'Signer #1 certificate SHA-256 digest: bca123';
-    if (args.includes('badging')) return "package: name='com.smartlingo.preview' versionCode='2' versionName='0.2.0-preview'\nsdkVersion:'24'\ntargetSdkVersion:'36'";
-    if (args[0] === 'list') return entries.map(entry => `assets/public/${entry}`).join('\n');
+    if (args.includes('verify')) return apkSignature();
+    if (args.includes('badging')) return apkBadging();
+    if (args[0] === 'list') return apkList();
     if (args[0] === '--extract') {
       const destination = path.join(cwd, 'assets/public');
       fs.mkdirSync(destination, { recursive: true });

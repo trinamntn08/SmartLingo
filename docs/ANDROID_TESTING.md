@@ -65,14 +65,14 @@ if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
 & (Join-Path $env:ANDROID_HOME 'build-tools\35.0.0\aapt.exe') dump permissions $apk.Path
 ```
 
-The application ID is `com.smartlingo.preview`. This preview is version `0.2.0-preview` (version code 2), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
+The application ID is `com.smartlingo.preview`. This preview is version `0.2.1-preview` (version code 3), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
 
 ## 3. Install on your phone
 
 ### Transfer the APK and open it in Files
 
 1. Connect the unlocked phone to the PC and select **File transfer**, or use another private file-transfer method.
-2. Copy `SmartLingo-preview.apk` to the phone. Open the APK in **Files** and choose **Install**.
+2. Copy `SmartLingo-preview.apk` to the phone. Open the APK in **Files** and choose **Update** when SmartLingo is already installed. Choose **Install** for a first installation.
 3. If Android asks, allow **Install unknown apps** for the app opening the APK. You can switch that permission off after installation.
 4. Open **SmartLingo Preview** from the launcher. For a fresh-install offline test, turn on airplane mode before opening it.
 
@@ -91,15 +91,27 @@ When more than one device or emulator is connected, replace `YOUR_DEVICE_SERIAL`
 npm.cmd run android:install -- --serial YOUR_DEVICE_SERIAL
 ```
 
-The helper verifies the local APK and uses `adb install -r` for a data-preserving reinstall or update. [ADB device and install commands](https://developer.android.com/tools/adb)
+The helper verifies the new APK and inspects the installed APK for the selected device's current Android user before running `adb install -r`. It stops if the package ID or signing certificate differs, the version code fails to increase, or the installed package cannot be verified. It copies only the installed base APK into a temporary folder for verification and removes that copy afterward. [ADB device and install commands](https://developer.android.com/tools/adb)
 
 ## 4. Keep learning data during an update
 
-- Export a learning backup from the installed app before an update. Keep the JSON in a private folder separate from the app. It is unencrypted and can contain personal notes.
-- To update in place, use the same application ID and signing key, with a version code Android will accept. Use the same debug key as the older APK when rebuilding. Different Windows accounts or computers can have different debug keys. Keep the original APK available if an update fails.
-- A signature mismatch leaves the existing app installed. Prefer rebuilding with the original signing key. Before considering a reinstall, export a backup and confirm that the saved file exists and opens. Uninstalling or clearing app storage deletes on-device progress and notebook entries.
-- The earlier French-only test APK exports backup version 3. The current learner accepts supported version 3 backups and exports version 4, which preserves French and Japanese learning. Use a version 4-compatible app to restore a current backup. The rewritten French A1 Lesson 1 starts at its new opening. Earlier activity is retained, and compatible saved steps such as French A1 Lesson 2 still resume.
-- On the phone, open **Profile → Offline & backups**. Choose **Download learning backup** and confirm the destination in the Android document picker. To restore, use **Choose a learning backup**, review the counts, confirm you trust the backup, then choose **Restore backup** and **Reload learning**. The restore merges records and keeps existing notes. If Android restarts the app while the picker is open, retry export and confirm that the file was saved.
+Keep the original APK in another folder. From the build worktree, compare it with the new APK before sending the update to the phone. Use the original file that corresponds to the version already installed.
+
+```powershell
+npm.cmd run android:check-update -- 'C:\private-builds\SmartLingo-previous.apk'
+```
+
+The command compares the original APK with `dist/android/SmartLingo-preview.apk` by default. Supply a second file path to compare a different candidate. Both APKs must have the same SmartLingo application ID and signing certificate, and the new version code must be higher. Different Windows accounts or computers can have different debug keys. [Android signing](https://developer.android.com/studio/publish/app-signing#considerations), [Android versioning](https://developer.android.com/studio/publish/versioning)
+
+After choosing **Update** in Files, open SmartLingo Preview. Existing learning and preferences should be available directly, including when the phone is offline. Opening an unchanged lesson resumes its saved step. A rewritten lesson uses its own progress revision and keeps earlier activity in your history.
+
+### Recover with a private backup if the signing key is unavailable
+
+1. Keep the installed app and its data. Rebuild with the original signing key if you can recover it. Uninstalling or clearing app storage removes the on-device data.
+2. In the installed app, open **Profile → Offline & backups**, choose **Download learning backup**, and save the JSON to a private location separate from the app. Check that the file exists before making any changes. The JSON is unencrypted and can contain personal notes.
+3. In a compatible replacement installation, open **Choose a learning backup**, review the counts, confirm you trust the backup, then choose **Restore backup** and **Reload learning**. The restore merges notebook entries, learning and course events, and review history. Reapply app preferences separately if you needed a replacement installation.
+
+The earlier French-only APK exports backup version 3. The current learner accepts supported version 3 backups and exports version 4 for both languages. If Android restarts the app while the document picker is open, retry export and confirm that the file was saved.
 
 ## 5. Run the device smoke tests
 
@@ -128,5 +140,6 @@ The Android app omits the desktop curriculum editor and publication controls, AI
 | Gradle download or build fails | Read the first specific Gradle error. Check internet or the configured proxy for dependency downloads, and SDK components or licences for toolchain errors. Rerun the doctor and build after fixing the cause. |
 | ADB finds no device or reports `unauthorized` | Unlock the phone, enable USB debugging, use a data-capable cable and approve the prompt. Rerun `devices -l`. |
 | ADB lists several devices | Rerun the installer with the intended serial using the command above. |
+| The installer cannot verify the installed app | Switch to the Android user where SmartLingo is installed and retry. You can compare the two original APK files with `android:check-update` before updating in Files. |
 | Update signature or version mismatch | Keep the installed app and export its backup. Use the original debug key and a compatible version code to build the update. |
 | The app is blank or closes | Verify the APK hash and rebuild if it differs. Update Android System WebView or Chrome as applicable, retry, then record the Android API level, WebView version and steps to reproduce. |

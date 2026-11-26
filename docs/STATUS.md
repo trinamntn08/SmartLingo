@@ -58,7 +58,7 @@ Code and documentation have been uploaded on topic branches; that does not mean 
 | M2 — speaking/personal vocabulary | Partial: conversation, capture, recorded input and explicit saved speech exist; real-provider/device quality and broader speaking work remain. |
 | M3 — personal web beta | Partial: review/search/offline/publication/backups exist; owner approval, full editor, learner controls and per-topic packs remain. |
 | M4 — learner observation | Future owner/learner testing and improvement. |
-| M5 — mobile | This topic branch packages the shared French/Japanese learner as a private Android WebView APK. The shell keeps local study and private backup export. Full native storage/audio adapters, physical-phone acceptance, iOS and store release remain open. [Android setup and testing](ANDROID_TESTING.md) |
+| M5 — mobile | This topic branch packages the shared French/Japanese learner as a private Android WebView APK. An Android 15 emulator passed offline study, persistence, private backups, and a same-key update from the earlier APK. Physical-phone testing, full native storage and audio adapters, iOS, and store release remain open. [Android setup and testing](ANDROID_TESTING.md) |
 
 ## Verification and limits
 
@@ -75,6 +75,6 @@ These are opportunities, not blanket authorisation to implement or publish:
 2. If continuing the website task, inspect the separate older hosted implementation against [plan 0025](plans/0025-free-web-testing.md), then reconcile its capability gates with the current Japanese-enabled hub on a dedicated implementation branch. Validate both languages and the combined artifact before resolving account/network access and deploying. Do not publish the older French-only artifact as the current app. No live URL is claimed yet.
 3. Extend the editor one journey at a time: target/exercise/media editing, dialogue structure, create/archive/restore/import/export/unpublish, preserving immutable revisions and explicit preview/publication.
 4. Add reviewed learner controls: safe data reset, onboarding/preferences and per-topic downloads. Extend production/listening practice with appropriate persistence/assessment only after defining what it measures. Expand media only with clear targets and rights records.
-5. Resolve build-tool audit findings compatibly before distribution. Reconcile/test the separate Android shell with this hub before claiming Japanese phone support; physical-device acceptance, full native packages, accounts/sync, hosted API and realtime voice require separate work.
+5. Resolve build-tool audit findings before distribution. Test the private French/Japanese preview on the owner's Android phone. Full native packages, accounts and sync, hosted API and realtime voice require separate work.
 
 No launch date, curriculum approval or proficiency claim is established by this status page.

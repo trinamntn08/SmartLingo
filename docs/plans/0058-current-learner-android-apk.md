@@ -1,6 +1,6 @@
 # Build the shared learner for Android testing
 
-Status: in progress. Owner: primary agent.
+Status: completed for private APK handoff. Owner: primary agent.
 
 ## Outcome
 
@@ -23,4 +23,4 @@ Run repository and app checks, Android bridge and web regression contracts, then
 
 ## Progress and handoff
 
-The isolated build starts from the verified French/Japanese learner source. The two artifact paths and the verified remote checkpoint belong in the final handoff.
+The implementation at `2c4bace2f39f103056afb31135a1579f9b5ef1b3` rebuilt cleanly. The verified APK and its provenance JSON are under `dist/android`. Chromium, web cold-offline tests, and Android 15 emulator tests passed. The emulator verified offline study, persistence, Back, rotation, backup and a same-key legacy update. Physical-phone acceptance remains open. [Work log](../WORK_LOG.md#2026-11-26-build-the-current-french-and-japanese-learner-for-android), [Android guide](../ANDROID_TESTING.md)

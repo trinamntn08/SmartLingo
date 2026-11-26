@@ -111,6 +111,8 @@ The helper verifies the local APK and uses `adb install -r` for a data-preservin
 
 Record whether each test used an emulator or a physical phone, along with the Android API level, WebView version, and reproducible failures. Keep personal notes and backups out of bug reports. Desktop browser contract tests exercise the expected bridge and browser behaviour. See the [session checkpoint](SESSION_CHECKPOINT.md) for validation actually performed.
 
+The reference APK passed the offline study, persistence, Back, rotation, private file backup and same-key update checks on an Android 15 (API 35) emulator with WebView `124.0.6367.219`. The emulator had no speech engine, and the written activities were usable. The physical-phone checklist is ready for testing.
+
 ## What works offline
 
 Ordinary lessons, pictures and kana practice are bundled. Notebook entries and learning progress are stored on the phone. Audio depends on available device voices, and written study support stays visible. Listening and video links open externally and need internet. For transfer between a browser and the APK, use a compatible private learning backup.

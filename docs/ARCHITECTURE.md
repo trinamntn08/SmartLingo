@@ -1,6 +1,6 @@
 # Architecture baseline
 
-Reviewed: 2026-11-22 against the Japanese-enabled shared learner. French/Japanese lesson UI, basic kana, language-scoped notebook/review, read-only reports, listening and guided speaking are implemented. The French editor/publication, optional AI and paid saved speech remain language-specific; Japanese has an optional free local voice adapter. Native adapters and the full editor remain planned. [Repository state](REPOSITORY_STATE.md) distinguishes the separate Android and hosted branches. Actual voice quality still requires owner audition.
+Reviewed on 2026-11-26 for the shared learner and private Android preview. French and Japanese lesson UI, basic kana, language-scoped notebook and review, reports, listening and guided speaking are implemented. The web app offers French curriculum editing, optional AI and saved speech, plus optional Japanese local voice playback. The Android test shell uses the bundled learner and available device voices. Full native adapters and the full editor remain planned. [Repository state](REPOSITORY_STATE.md)
 
 | Location | Responsibility |
 | --- | --- |

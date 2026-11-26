@@ -1,6 +1,6 @@
 # Task: Redesign the Android phone learner
 
-Status: implementation verified. APK handoff checks in progress.
+Status: completed.
 
 Owner: primary agent
 
@@ -34,3 +34,7 @@ The version 3 APK at 360 dp placed a full outcome, a lesson-count badge and a ph
 - **Review, Report, Profile**. Compact notebook and a focused recall route, essential report measures and weekly activity, and short expandable settings. Audio and backups remain available.
 
 [Decision](../decisions/0047-phone-study-and-course-selection.md)
+
+## Handoff
+
+The signed APK, clean build receipt and matched screenshots are in `dist/android`. The exact offline emulator update kept both notebooks and lesson positions. The 320 dp and maximum-text checks included the long Japanese written reading and its neighboring actions. Physical-device verification remains open. [Verification record](../WORK_LOG.md#2026-11-26-redesign-the-android-phone-learner)

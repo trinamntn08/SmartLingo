@@ -14,6 +14,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(LearningBackupPlugin.class);
+        registerPlugin(DeviceSpeechPlugin.class);
         super.onCreate(savedInstanceState);
         // Use the learner's existing browser history for Android system Back.
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

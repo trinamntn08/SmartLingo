@@ -4,6 +4,7 @@ import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLe
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
 import { AudioIconButton } from '../audio/AudioIconButton';
+import { isAndroidApp } from '../platform/runtime';
 import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
@@ -126,7 +127,11 @@ function useKanaAudio() {
     const current = ++request.current;
     setPlaying(character.id); setError('');
     try { await audio.speak(character.audioText, 'ja-JP'); }
-    catch { if (current === request.current) setError('Audio could not play. Retry when a Japanese voice is available, or continue with the visible reading.'); }
+    catch (failure) {
+      if (current === request.current) setError(isAndroidApp() && failure instanceof Error
+        ? failure.message
+        : 'Audio could not play. Retry when a Japanese voice is available, or continue with the visible reading.');
+    }
     finally { if (current === request.current) setPlaying(''); }
   }
   return { playing, error, stop, play };

@@ -5,6 +5,7 @@ import { Button } from '../ui/controls';
 import { isAndroidApp } from '../platform/runtime';
 import { colors, styles as s } from '../ui/theme';
 import { audio, deviceAudio } from './index';
+import { androidSpeechAvailable, getAndroidVoices } from './android';
 import { preferencesForLanguage, audioRates, type AudioPreferences } from './preferences';
 import { getTargetVoices, selectTargetVoice, subscribeVoiceChanges, voiceId } from './voices';
 import { JapaneseAudioPreferencesPanel } from './japanese/JapaneseAudioPreferencesPanel';
@@ -16,28 +17,42 @@ export function AudioPreferencesPanel({ language = 'fr-FR' }: { language?: Targe
 }
 
 function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage }) {
+  const android = isAndroidApp();
   const name = languageNames[language];
   const store = preferencesForLanguage(language);
   const sample = language === 'ja-JP' ? 'こんにちは。コーヒーをください。' : previewText;
   const sampleMeaning = language === 'ja-JP' ? 'Hello. A coffee, please.' : 'Hello! I would like a coffee, please.';
   const selectId = useId();
   const [preferences, setPreferences] = useState(store.get);
-  const [voices, setVoices] = useState(() => getTargetVoices(language));
+  const [voices, setVoices] = useState(() => android ? [] : getTargetVoices(language));
+  const [voiceRefresh, setVoiceRefresh] = useState(0);
   const [discovering, setDiscovering] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const supported = Platform.OS === 'web' && typeof globalThis.SpeechSynthesisUtterance !== 'undefined' && !!globalThis.speechSynthesis;
-  const selectedVoice = selectTargetVoice(voices, language, preferences.voiceId);
-  const missingPreference = !!preferences.voiceId && !voices.some(voice => voiceId(voice) === preferences.voiceId);
+  const supported = android ? androidSpeechAvailable()
+    : Platform.OS === 'web' && typeof globalThis.SpeechSynthesisUtterance !== 'undefined' && !!globalThis.speechSynthesis;
+  const preferredVoice = voices.find(voice => voiceId(voice) === preferences.voiceId);
+  const selectedVoice = android ? preferredVoice ?? voices[0] : selectTargetVoice(voices, language, preferences.voiceId);
+  const missingPreference = !!preferences.voiceId && !preferredVoice;
 
   useEffect(() => {
+    if (android) {
+      let active = true;
+      setDiscovering(true);
+      getAndroidVoices(language).then(found => { if (active) setVoices(found); })
+        .catch(() => { if (active) setVoices([]); })
+        .finally(() => { if (active) setDiscovering(false); });
+      return () => { active = false; };
+    }
     const refresh = () => { setVoices(getTargetVoices(language)); };
     const unsubscribe = subscribeVoiceChanges(refresh);
     refresh();
     const timer = setTimeout(() => { refresh(); setDiscovering(false); }, 1500);
-    return () => { clearTimeout(timer); unsubscribe(); audio.stop(); };
-  }, []);
+    return () => { clearTimeout(timer); unsubscribe(); };
+  }, [android, language, voiceRefresh]);
+
+  useEffect(() => () => audio.stop(), [language]);
 
   function save(next: AudioPreferences) {
     audio.stop(); setPlaying(false); setError('');
@@ -60,7 +75,9 @@ function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage })
     <Text style={s.body}>Choose a synthetic voice offered by your {isAndroidApp() ? 'device' : 'browser'} and listen before deciding. Voice quality varies by device.</Text>
     {!supported ? <Text style={s.body}>Device speech is unavailable here. All lesson text and translations remain available.</Text> : <>
       {discovering && voices.length === 0 && <Text accessibilityLiveRegion="polite" style={s.muted}>Checking for {name} voices…</Text>}
-      {!discovering && voices.length === 0 && <Text style={s.body}>No {name} voice is available yet. Add a {name} speech voice in your device settings, then refresh the voice list.</Text>}
+      {!discovering && voices.length === 0 && <Text style={s.body}>No {name} voice is available yet. {android
+        ? `In Android Settings, find Text-to-speech output, install ${name} voice data, then refresh the voice list.`
+        : `Add a ${name} speech voice in your device settings, then refresh the voice list.`}</Text>}
       <View style={{ gap: 8 }}>
         <label htmlFor={selectId} style={{ color: colors.ink, fontSize: 17, fontWeight: 600 }}>{name} voice</label>
         <select id={selectId} value={preferences.voiceId} onChange={event => save({ ...preferences, voiceId: event.target.value })}
@@ -76,7 +93,10 @@ function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage })
       <View style={s.notice}><Text style={s.body}>{sample}</Text><Text style={s.muted}>{sampleMeaning}</Text></View>
       <View style={s.row}>
         <Button primary disabled={!selectedVoice} onPress={() => void preview()}>{playing ? 'Stop voice preview' : `Preview ${name} voice`}</Button>
-        <Button onPress={() => { setVoices(getTargetVoices(language)); setDiscovering(false); }}>Refresh voice list</Button>
+        <Button onPress={() => {
+          if (android) setVoiceRefresh(value => value + 1);
+          else { setVoices(getTargetVoices(language)); setDiscovering(false); }
+        }}>Refresh voice list</Button>
       </View>
     </>}
     {!!error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{error}</Text>}

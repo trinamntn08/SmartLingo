@@ -65,7 +65,7 @@ if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
 & (Join-Path $env:ANDROID_HOME 'build-tools\35.0.0\aapt.exe') dump permissions $apk.Path
 ```
 
-The application ID is `com.smartlingo.preview`. This preview is version `0.2.2-preview` (version code 4), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
+The application ID is `com.smartlingo.preview`. This preview is version `0.2.3-preview` (version code 5), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
 
 ## 3. Install on your phone
 
@@ -119,7 +119,7 @@ The earlier French-only APK exports backup version 3. The current learner accept
 2. **Check persistence.** Save a word in each language and advance to a specific lesson step in each. Force-stop and reopen SmartLingo Preview. Check each notebook and the resumed lesson position.
 3. **Check navigation and layout.** Use Android Back from a lesson, then reopen it through Learn. Rotate the device, enlarge system text and open the keyboard on a text input. Check that navigation and buttons remain reachable without content overlapping the system bars.
 4. **Check backup and restore.** Cancel an export and verify no success is shown. Retry, confirm the save, and check the JSON exists. Choose an invalid test file and verify it is rejected. Choose a valid test backup, review its contents, explicitly merge it, then reload and verify the notebook and progress. Test with a version 3 backup from the earlier APK if available.
-5. **Check update and audio.** On a test device with saved data, install a compatible same-key build over the previous build and verify that progress and notes remain. Try the speaker controls in both languages, then restore internet access and try an external listening or video link. Record voice availability and how the link opens.
+5. **Check update and audio.** On a test device with saved data, install a compatible same-key build over the previous build and verify that progress and notes remain. Install French (France) and Japanese voice data in Android's **Text-to-speech output** settings. With a device voice selected in **Profile → Audio & pronunciation**, play a French key phrase and a Japanese hiragana character offline. Try Stop during a longer phrase. Restore internet access and try an external listening or video link. Record voice availability and how the link opens.
 
 Record whether each test used an emulator or a physical phone, along with the Android API level, WebView version, and reproducible failures. Keep personal notes and backups out of bug reports. Desktop browser contract tests exercise the expected bridge and browser behaviour. See the [session checkpoint](SESSION_CHECKPOINT.md) for validation actually performed.
 
@@ -127,7 +127,7 @@ The bilingual updates from version code 2 to 3 and from 3 to 4 passed on Android
 
 ## What works offline
 
-Ordinary lessons, pictures and kana practice are bundled. Notebook entries and learning progress are stored on the phone. Audio depends on available device voices, and written study support stays visible. Listening and video links open externally and need internet. For transfer between a browser and the APK, use a compatible private learning backup.
+Ordinary lessons, pictures and kana practice are bundled. Notebook entries and learning progress are stored on the phone. Speaker buttons use Android's text-to-speech engine. With the matching French or Japanese device voice data installed, speech can play offline. Network voices depend on the selected engine and connectivity. Written study support stays visible. Listening and video links open externally and need internet. For transfer between a browser and the APK, use a compatible private learning backup.
 
 The Android app omits the desktop curriculum editor and publication controls, AI conversation and transcription, and server-generated voices. To refresh bundled study material, install a newer APK. This private preview uses the existing web learner in Android WebView. Store distribution and full native Android and iOS adapters remain planned.
 
@@ -142,4 +142,5 @@ The Android app omits the desktop curriculum editor and publication controls, AI
 | ADB lists several devices | Rerun the installer with the intended serial using the command above. |
 | The installer cannot verify the installed app | Switch to the Android user where SmartLingo is installed and retry. You can compare the two original APK files with `android:check-update` before updating in Files. |
 | Update signature or version mismatch | Keep the installed app and export its backup. Use the original debug key and a compatible version code to build the update. |
+| French or Japanese speech is unavailable | In Android Settings, search for **Text-to-speech output**, check the preferred engine, and install voice data for the affected language. In SmartLingo, open **Profile → Audio & pronunciation**, refresh the list, and preview a device voice. |
 | The app is blank or closes | Verify the APK hash and rebuild if it differs. Update Android System WebView or Chrome as applicable, retry, then record the Android API level, WebView version and steps to reproduce. |

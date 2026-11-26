@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-26 Restore Android playback in French and Japanese
+
+- Request. Both languages fail to play speech in the Android redesign on the owner's phone.
+- Start. The clean Cloud checkout and live Android redesign matched at `cd9d0789d3a5050ede678b11799b90b4f7a67efb` (0/0). All 67 fetched branch heads matched the live inventory. The relevant browser audio branches provide server-backed playback and do not contain an Android engine integration. Started `fix/android-native-speech` from the redesign.
+- Scope. Use Android's system speech engine for both languages through the existing shared controls, with clear missing-voice recovery. Verify both bridge paths and an in-place version 4 to 5 update with the original Cloud debug key.
+- Changes. Added the native speech adapter with language-matched voice discovery, local voice preference, per-language settings, playback cancellation and Android pause cleanup. The APK version code increased to 5. Browser playback uses its existing adapters.
+- Verification. Repository and TypeScript checks, 326 tooling and application tests, 10 Android browser contract cases and 12 web audio and kana browser cases passed. Native Java compiled. The candidate and the issued Cloud v4 APK have the same application ID and signing certificate, with version code 4 → 5. Physical-phone playback and data retention still need a device check. The commit containing this entry is the source checkpoint for the clean handoff APK.
+
 ## 2026-11-26 Redesign the Android phone learner
 
 - Request. Review the installed bilingual app, simplify the shared phone interface and provide a signed in-place APK update and matched device screenshots.

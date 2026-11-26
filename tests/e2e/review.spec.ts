@@ -1,4 +1,4 @@
-import { openRestaurant } from './learner-journeys';
+import { openPhoneReview, openRestaurant } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 
 test.use({ timezoneId: 'Europe/Paris' });
@@ -22,8 +22,8 @@ test('manual review saves once, retries safely, survives reload and follows loca
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
-  await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Focus review', exact: true }).click();
+  await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
   await expect(page.getByTestId('notebook-entries')).toBeHidden();
   await expect(page.getByRole('button', { name: 'Remembered', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Reveal meaning', exact: true }).click();
@@ -38,6 +38,7 @@ test('manual review saves once, retries safely, survives reload and follows loca
   await expect(page.getByTestId('notebook-entries')).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await openPhoneReview(page);
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   // Paris advances its clock: this next local study day is only 23 elapsed hours later.
   await page.clock.setFixedTime(new Date('2026-03-29T10:00:00Z'));
@@ -47,10 +48,12 @@ test('manual review saves once, retries safely, survives reload and follows loca
   await page.getByRole('button', { name: 'Needed help', exact: true }).click();
   await expect(page.getByText('Next review: 2026-03-30.', { exact: false })).toBeVisible();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
+  if ((page.viewportSize()?.width ?? 600) < 600) await page.getByRole('button', { name: 'Show notebook', exact: true }).click();
   await page.getByRole('button', { name: 'Edit note', exact: true }).click();
   await page.getByRole('textbox', { name: 'English meaning', exact: true }).fill('A revised greeting');
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
+  await openPhoneReview(page);
   await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Remembered', exact: true })).toHaveCount(0);
 });
@@ -62,6 +65,7 @@ test('returning to a stale review tab refreshes ratings from another tab', async
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await openPhoneReview(page);
   await expect(page.getByText('1 card due', { exact: true })).toBeVisible();
   await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {

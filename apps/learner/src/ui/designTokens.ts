@@ -21,7 +21,7 @@ export const designTokens = {
     compactBreakpoint: 600, desktopNavBreakpoint: 1000, desktopFrenchNavBreakpoint: 1100, sidebarBreakpoint: 1050,
     shellMaxWidth: 1536, contentMaxWidth: 1240, libraryMaxWidth: 1320, sidebarWidth: 250,
   },
-  control: { minimumTarget: 44, buttonHeight: 46, inputHeight: 48, audioIconSize: 22 },
+  control: { minimumTarget: 48, buttonHeight: 48, inputHeight: 48, audioIconSize: 22 },
   focus: { outlineWidth: 3, outlineOffset: 3 },
   opacity: { disabled: 0.5, pressed: 0.75 },
   shadow: { card: '0 3px 10px rgba(16,59,50,0.045)' },

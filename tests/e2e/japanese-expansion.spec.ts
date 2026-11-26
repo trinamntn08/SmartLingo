@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons } from '@smartlingo/content';
 import { groupLessonTopics, type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openPhoneReview, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
@@ -60,6 +60,7 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await notebook.getByRole('button', { name: 'Edit note', exact: true }).click();
   await notebook.getByRole('textbox', { name: 'English meaning', exact: true }).fill('My expanded Japanese note');
   await notebook.getByRole('button', { name: 'Save changes', exact: true }).click();
+  await openPhoneReview(page);
   await button(page, 'Reveal meaning').click(); await button(page, 'Needed help').click();
   await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   await page.reload();

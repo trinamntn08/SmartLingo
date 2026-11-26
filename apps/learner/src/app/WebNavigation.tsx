@@ -11,7 +11,7 @@ interface Navigation {
   route: AppRoute;
   visit: string;
   navigate: (route: AppRoute, options?: MoveOptions) => void;
-  backTo: (fallback: AppRoute, match?: (route: AppRoute) => boolean, search?: boolean) => void;
+  backTo: (fallback: AppRoute, match?: (route: AppRoute) => boolean, search?: boolean, replaceFallback?: boolean) => void;
   registerBlock: (blocked: boolean, owner?: string) => void;
   read: (key: string) => unknown;
   write: (key: string, value: unknown) => void;
@@ -148,7 +148,7 @@ export function WebNavigation({ children }: { children: ReactNode }) {
     display(next);
   }
 
-  function backTo(fallback: AppRoute, match = (route: AppRoute) => routeHref(route) === routeHref(fallback), search = false) {
+  function backTo(fallback: AppRoute, match = (route: AppRoute) => routeHref(route) === routeHref(fallback), search = false, replaceFallback = false) {
     const web = browser();
     if (blockers.current.size || restoration.current || current.current.visit !== entry.visit) return;
     if (web) {
@@ -159,7 +159,7 @@ export function WebNavigation({ children }: { children: ReactNode }) {
         if (!search) break;
       }
     }
-    navigate(fallback);
+    navigate(fallback, { replace: replaceFallback });
   }
 
   function write(key: string, value: unknown) {

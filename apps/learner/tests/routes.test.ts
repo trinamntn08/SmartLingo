@@ -9,6 +9,8 @@ test('web routes retain the explicit destination through a copy or refresh', () 
     { kind: 'lesson', language: 'fr-FR', lessonId: 'fr.greetings.hello-goodbye', stage: 'sentence',
       studyDay: { courseId: 'fr.open-course-pilot', dayId: 'fr.open-course-pilot.day-1', sectionId: 'fr.open-course-pilot.day-1.reflect' } },
     { kind: 'course', language: 'ja-JP', courseId: 'ja.everyday-course', dayId: 'ja.everyday-course.day-1', sectionId: 'study' },
+    { kind: 'courses', language: 'fr-FR' },
+    { kind: 'courses', language: 'fr-FR', courseId: 'fr.course-b1' },
     { kind: 'topics', language: 'fr-FR', topic: 'Food / À table' },
     { kind: 'listening', language: 'ja-JP', topic: 'Food & drink', lessonId: 'ja.first', questionId: 'ja.first:ja.one' },
     { kind: 'listening', language: 'fr-FR', library: true },
@@ -33,7 +35,8 @@ test('web routes retain the explicit destination through a copy or refresh', () 
 test('Android reopens dotted course IDs and preserves query filters in the bundled root document', () => {
   const course: AppRoute = { kind: 'course', language: 'fr-FR', courseId: 'fr.open-course-pilot', dayId: 'fr.open-course-pilot.day-2', sectionId: 'fr.open-course-pilot.day-2.vocabulary' };
   const listening: AppRoute = { kind: 'listening', language: 'ja-JP', topic: 'Food & drink', lessonId: 'ja.first', questionId: 'ja.first:ja.one' };
-  for (const route of [course, listening]) {
+  for (const route of [course, { ...course, outline: true as const }, listening,
+    { kind: 'courses', language: 'fr-FR', courseId: 'fr.course-b1' } as const]) {
     const url = new URL('/#' + routeHref(route), 'https://localhost');
     assert.equal(url.pathname, '/');
     assert.equal(url.search, '');
@@ -60,7 +63,7 @@ test('long editor topic names and maximum-length listening IDs produce reopenabl
 test('route parsing rejects malformed identifiers and invalid feature paths', () => {
   for (const path of ['/lesson/xx/fr.first/dialogue', '/lesson/fr/%2Fbad/dialogue', '/lesson/fr/%', '/lesson/fr/fr.first/bad',
     '/learn/fr/letters', '/learn/ja/listening/library/example', '/learn/ja/speaking/ja.first/1', '/slang/ja', '/slang/fr/extra',
-    '/editor/fr.first/-1', '/api/lessons']) {
+    '/learn/fr/courses/%2Finvalid', '/learn/ja/courses/example/extra', '/editor/fr.first/-1', '/api/lessons']) {
     assert.equal(parseRoute(path).kind, 'unavailable', path);
   }
 });

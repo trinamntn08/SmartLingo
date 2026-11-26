@@ -61,7 +61,7 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
         </View>
         {!phone && <View style={layout.topicCover}><TopicCover key={selected.name} topic={selected} hero /></View>}
       </View>
-    </> : <View style={{ gap: 4 }}>
+    </> : !phone && <View style={{ gap: 4 }}>
       <Text style={s.eyebrow}>{languageNames[language]} / Library</Text>
       <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>Explore topics</Text>
       <Text style={s.muted}>{topics.length} everyday topics · {[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}</Text>
@@ -72,7 +72,7 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
         <Text style={s.body}>Your lesson catalogue is empty. Try loading the published catalogue from Profile.</Text></View>
         : !visibleTopics.length && <EmptyResults onClear={clearFilters} />}
       {!!visibleTopics.length && (query.trim() || level !== 'All') && <Text accessibilityLiveRegion="polite" style={s.muted}>{visibleTopics.length} {visibleTopics.length === 1 ? 'topic' : 'topics'} to explore</Text>}
-      {!!visibleTopics.length && <TopicGrid topics={visibleTopics} model={model} language={language} onSelect={onSelectTopic} disabled={disabled} />}
+      {!!visibleTopics.length && <TopicGrid topics={visibleTopics} model={model} language={language} onSelect={onSelectTopic} disabled={disabled} compact={phone} />}
     </> : <>
       <TopicLessonCards language={language} lessons={selected.lessons} visibleLessons={topicLessons}
         headingId={lessonHeadingId} events={model.events} progressAvailable={!model.loadError} compact={phone}
@@ -117,6 +117,8 @@ function CatalogueFilters({ search, lessons, compact }: {
 }) {
   const input = useRef<ComponentRef<typeof TextInput>>(null);
   const [focused, setFocused] = useState(false);
+  const filtersId = useId();
+  const [filtersOpen, setFiltersOpen] = useVisitState('topic-filters-open', false);
 
   function clearSearch() {
     search.onQueryChange('');
@@ -124,37 +126,43 @@ function CatalogueFilters({ search, lessons, compact }: {
   }
 
   return <View style={layout.filters}>
-    <View style={[layout.search, focused && layout.focus]}>
-      <Icon name="search" color={colors.muted} />
-      <TextInput ref={input} accessibilityLabel="Search lessons" placeholder={compact ? 'Search topics and words' : 'Search topics, words, readings or English meanings'}
-        placeholderTextColor={colors.muted} autoCapitalize="none" autoCorrect={false}
-        value={search.query} onChangeText={search.onQueryChange} style={layout.searchInput}
-        onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
-      {!!search.query && <Button compact quiet label="Clear search" onPress={clearSearch}>{compact ? '×' : 'Clear'}</Button>}
+    <View style={layout.searchRow}>
+      <View style={[layout.search, focused && layout.focus]}>
+        <Icon name="search" color={colors.muted} />
+        <TextInput ref={input} accessibilityLabel="Search lessons" placeholder={compact ? 'Search topics and words' : 'Search topics, words, readings or English meanings'}
+          placeholderTextColor={colors.muted} autoCapitalize="none" autoCorrect={false}
+          value={search.query} onChangeText={search.onQueryChange} style={layout.searchInput}
+          onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+        {!!search.query && <Button compact quiet iconOnly={compact} icon={compact ? 'close' : undefined}
+          label="Clear search" onPress={clearSearch}>Clear</Button>}
+      </View>
+      {compact && <Button compact iconOnly icon="filter" label="Filter lessons" selected={search.level !== 'All'}
+        expanded={filtersOpen} controls={filtersOpen ? filtersId : undefined} onPress={() => setFiltersOpen(value => !value)} />}
     </View>
-    <View role="group" accessibilityLabel="Lesson levels" style={[s.row, layout.levels]}>
+    {(!compact || filtersOpen) && <View nativeID={filtersId} role="group" accessibilityLabel="Lesson levels" style={[s.row, layout.levels]}>
       {levels.filter(item => item.value === 'All' || lessons.some(lesson => lesson.level === item.value)).map(item =>
         <Button key={item.value} compact selected={search.level === item.value} label={item.label}
           onPress={() => search.onLevelChange(item.value)}>{item.name}</Button>)}
-    </View>
+    </View>}
   </View>;
 }
 
-function TopicGrid({ topics, model, language, disabled, onSelect }: {
+function TopicGrid({ topics, model, language, disabled, onSelect, compact }: {
   topics: LessonTopic[]; model: LearningModel; language: TargetLanguage; disabled: boolean; onSelect: (name: string) => void;
+  compact: boolean;
 }) {
   const [gridWidth, setGridWidth] = useState(0);
   const columns = gridWidth >= 740 ? 3 : gridWidth >= 480 ? 2 : 1;
   const width = columns === 1 ? '100%' : (gridWidth - tileGap * (columns - 1)) / columns;
-  return <View onLayout={event => setGridWidth(Math.floor(event.nativeEvent.layout.width))} style={[s.split, { gap: tileGap }]}>
+  return <View onLayout={event => setGridWidth(Math.floor(event.nativeEvent.layout.width))} style={[s.split, { gap: compact ? 8 : tileGap }]}>
     {topics.map(topic => <TopicTile key={topic.name} topic={topic} width={width} events={model.events}
-      language={language} disabled={disabled} onSelect={() => onSelect(topic.name)} />)}
+      language={language} disabled={disabled} compact={compact} onSelect={() => onSelect(topic.name)} />)}
   </View>;
 }
 
-function TopicTile({ topic, width, events, language, disabled, onSelect }: {
+function TopicTile({ topic, width, events, language, disabled, onSelect, compact }: {
   topic: LessonTopic; width: number | '100%'; events: LearningModel['events'];
-  language: TargetLanguage; disabled: boolean; onSelect: () => void;
+  language: TargetLanguage; disabled: boolean; onSelect: () => void; compact: boolean;
 }) {
   const summaryId = useId();
   const [focused, setFocused] = useState(false);
@@ -169,20 +177,20 @@ function TopicTile({ topic, width, events, language, disabled, onSelect }: {
   return <Pressable accessibilityRole="button" accessibilityLabel={`Topic ${topic.name}`} aria-describedby={summaryId}
     accessibilityState={{ disabled }} disabled={disabled} {...routePress(disabled ? undefined : href, onSelect)}
     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
-    style={({ pressed }) => [s.card, layout.tile, { width }, !disabled && hovered && layout.tileHover, focused && layout.focus,
+    style={({ pressed }) => [s.card, layout.tile, { width }, compact && layout.phoneTile, !disabled && hovered && layout.tileHover, focused && layout.focus,
       pressed && { opacity: tokens.opacity.pressed }, disabled && { opacity: tokens.opacity.disabled }]}>
-    <View style={layout.tileArt}><TopicCover topic={topic} hero /></View>
+    <View style={compact ? layout.phoneTileArt : layout.tileArt}><TopicCover topic={topic} hero thumbnail={compact} /></View>
     <View style={layout.tileBody}>
       <View style={layout.tileTitle}>
-        <Text style={[s.heading, layout.tileName]}>{topic.name}</Text>
+        <Text style={[s.heading, layout.tileName, compact && layout.phoneTileName]}>{topic.name}</Text>
         <View style={[layout.tileArrow, hovered && layout.tileArrowHover]}><Icon name="arrow-right" size={18} color={colors.primary} /></View>
       </View>
-      {topic.vocabulary.length > 0 && <Text style={layout.sample} numberOfLines={2} {...languageProps}>
+      {!compact && topic.vocabulary.length > 0 && <Text style={layout.sample} numberOfLines={2} {...languageProps}>
         {topic.vocabulary.slice(0, 2).map(entry => entry.target).join(' · ')}
       </Text>}
-      <View nativeID={summaryId} style={layout.tileSummary}>
-        <Text style={layout.tileCount}>{topic.vocabulary.length} words · {topic.lessons.length} {topic.lessons.length === 1 ? 'lesson' : 'lessons'}</Text>
-        <Text style={layout.sample}>{levelNames} · {status}{completed ? ` · ${completed} sessions saved` : ''}</Text>
+      <View nativeID={summaryId} style={!compact && layout.tileSummary}>
+        <Text style={layout.tileCount}>{!compact && `${topic.vocabulary.length} words · `}{topic.lessons.length} {topic.lessons.length === 1 ? 'lesson' : 'lessons'}</Text>
+        {!compact && <Text style={layout.sample}>{levelNames} · {status}{completed ? ` · ${completed} sessions saved` : ''}</Text>}
       </View>
     </View>
   </Pressable>;
@@ -205,7 +213,8 @@ const layout = StyleSheet.create({
   vocabularyHeader: { justifyContent: 'space-between', gap: tokens.space.xs },
   wordBank: { minWidth: 0, gap: tokens.space.md },
   filters: { gap: tokens.space.sm },
-  search: { minHeight: tokens.control.inputHeight, minWidth: 0, flexDirection: 'row', alignItems: 'center',
+  searchRow: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 0 },
+  search: { flex: 1, minHeight: tokens.control.inputHeight, minWidth: 0, flexDirection: 'row', alignItems: 'center',
     gap: tokens.space.sm, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.inputBorder,
     borderRadius: tokens.radius.input, paddingLeft: 13, paddingRight: 3 },
   searchInput: { ...tokens.typography.muted, color: colors.ink, minWidth: 0, minHeight: tokens.control.inputHeight,
@@ -215,6 +224,9 @@ const layout = StyleSheet.create({
   tile: { minWidth: 0, flexShrink: 1, gap: 0, padding: 0, borderBottomWidth: 3, boxShadow: 'none' },
   tileHover: { borderColor: colors.primary, backgroundColor: colors.sageTint },
   tileArt: { borderTopLeftRadius: tokens.radius.card - 1, borderTopRightRadius: tokens.radius.card - 1, overflow: 'hidden' },
+  phoneTile: { flexDirection: 'row', alignItems: 'center', paddingLeft: 9, borderRadius: 13, borderBottomWidth: 1 },
+  phoneTileArt: { width: 51, height: 49, borderRadius: 8, overflow: 'hidden' },
+  phoneTileName: { fontSize: 17, lineHeight: 23 },
   tileBody: { padding: 13, gap: tokens.space.xs, flex: 1 },
   tileTitle: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: tokens.space.sm },
   tileName: { ...tokens.typography.compactHeading, flexShrink: 1, fontSize: 20, lineHeight: 26 },

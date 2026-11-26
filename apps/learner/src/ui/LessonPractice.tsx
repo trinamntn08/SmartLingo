@@ -8,7 +8,7 @@ import { Illustration } from './Illustration';
 import { colors, designTokens as tokens, styles as s } from './theme';
 
 interface ActivityProps {
-  lesson: Lesson; routed: boolean; browseOnly: boolean; disabled: boolean; done: boolean;
+  lesson: Lesson; routed: boolean; browseOnly: boolean; disabled: boolean; done: boolean; phone?: boolean;
   record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints?: number, after?: () => void) => void;
   nextHref?: string;
   onNext: () => void;
@@ -20,7 +20,7 @@ function useActivityState<T>(routed: boolean, field: string, initial: T) {
   return routed ? visit : local;
 }
 
-export function PictureActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext }: ActivityProps) {
+export function PictureActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext, phone = false }: ActivityProps) {
   const key = `lesson:${lesson.id}:${lesson.revision}:picture`;
   const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
   const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
@@ -37,7 +37,7 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
   }
 
   return <View style={layout.card}>
-    <View style={layout.lead}>
+    <View style={[layout.lead, phone && layout.phoneLead]}>
       <Text accessibilityRole="header" style={[s.body, layout.prompt]}>{lesson.pictureActivity.prompt}</Text>
       {meaningMode ? <Text style={[s.heading, layout.clue]}>{target.meaning}</Text>
         : <View style={layout.illustration}><Illustration picture={target.picture} alt={target.pictureAlt} size={160} /></View>}
@@ -50,8 +50,10 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
       {!!(done || feedback) && <Text accessibilityLiveRegion="polite" style={[s.body, layout.feedback, done && layout.correct]}>{done ? matched : feedback}</Text>}
       {hint && <Text style={[s.body, layout.hint]}>{meaningMode ? target.example : target.meaning}</Text>}
       <View style={layout.actions}>
-        <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>
-        {(done || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref} disabled={disabled && !browseOnly} onPress={onNext}>Next</Button>}
+        <Button quiet label={hint ? 'Hide hint' : 'Show a hint'} expanded={hint}
+          onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : phone ? 'Hint' : 'Show a hint'}</Button>
+        {(done || browseOnly) && <Button primary={!phone} accent={phone} trailingIcon="arrow-right" href={nextHref}
+          disabled={disabled && !browseOnly} onPress={onNext}>Next</Button>}
       </View>
     </View>
   </View>;
@@ -80,7 +82,7 @@ interface SentenceProps extends ActivityProps {
 }
 
 export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext,
-  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons', nextLesson, extraPractice }: SentenceProps) {
+  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons', nextLesson, extraPractice, phone = false }: SentenceProps) {
   const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
   const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
   const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
@@ -91,8 +93,10 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const accepted = done ? exercise.answers.find(value => normalizeAnswer(value) === normalizeAnswer(answer)) ?? exercise.answers[0] : '';
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
-  const nextLessonButton = nextLesson && <Button primary trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
-    href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>Next lesson · {nextLesson.title}</Button>;
+  const nextLessonButton = nextLesson && <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
+    href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>
+    {phone ? 'Next lesson' : `Next lesson · ${nextLesson.title}`}
+  </Button>;
 
   function check() {
     const result = checkAnswer(answer, exercise);
@@ -101,7 +105,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   }
 
   return <View style={layout.card}>
-    <View style={layout.lead}>
+    <View style={[layout.lead, phone && layout.phoneLead]}>
       <Text accessibilityRole="header" style={[s.body, layout.prompt]}>{exercise.prompt}</Text>
       <View style={layout.tray}>
         {done ? <Text {...languageProps} style={[s.heading, layout.clue]}>{accepted}</Text>
@@ -122,8 +126,10 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         </View>
         {extraPractice}
         <View style={layout.actions}>
-          <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly} disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
-          {(completed || canComplete || browseOnly) && <Button primary={!nextLesson} quiet={!!nextLesson}
+          <Button quiet={completed || canComplete} primary={!phone && !completed && !canComplete && !browseOnly}
+            accent={phone && !completed && !canComplete && !browseOnly}
+            disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
+          {(completed || canComplete || browseOnly) && <Button primary={!phone && !nextLesson} accent={phone && !nextLesson} quiet={!!nextLesson}
             trailingIcon={nextLesson ? undefined : 'arrow-right'} href={nextHref} disabled={disabled && !browseOnly}
             onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>}
           {nextLessonButton}
@@ -137,11 +143,13 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         {(browseOnly || completed) && extraPractice}
         <View style={layout.actions}>
           <View style={layout.secondary}>
-            <Button quiet onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : 'Show a hint'}</Button>
+            <Button quiet label={hint ? 'Hide hint' : 'Show a hint'} expanded={hint}
+              onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : phone ? 'Hint' : 'Show a hint'}</Button>
             {!!selected.length && <Button quiet disabled={disabled} onPress={() => { setSelected([]); setFeedback(''); }}>Clear</Button>}
           </View>
-          {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
-            : <Button primary disabled={disabled || selected.length !== exercise.tokens.length} onPress={check}>Check sentence</Button>}
+          {browseOnly ? <Button primary={!phone} accent={phone} trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
+            : <Button primary={!phone} accent={phone} label="Check sentence" disabled={disabled || selected.length !== exercise.tokens.length}
+              onPress={check}>{phone ? 'Check' : 'Check sentence'}</Button>}
         </View>
         {completed && nextLessonButton && <View style={layout.actions}>
           <Text style={s.muted}>Lesson already completed</Text>{nextLessonButton}
@@ -154,6 +162,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
 const layout = StyleSheet.create({
   card: { minWidth: 0, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card },
   lead: { paddingVertical: 18, paddingHorizontal: 16, gap: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, backgroundColor: colors.goldTint },
+  phoneLead: { paddingVertical: 14, paddingHorizontal: 12, gap: 8 },
   prompt: { fontWeight: '600', fontSize: 17, lineHeight: 24 },
   clue: { color: colors.dark, fontSize: 27, lineHeight: 35 },
   illustration: { alignSelf: 'flex-start', backgroundColor: colors.card, borderRadius: 10, maxWidth: '100%' },

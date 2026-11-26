@@ -1,13 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
-import { openKeyPhrases, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { openKeyPhrases, openLanguageChooser, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] }, timezoneId: 'Europe/Paris' });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
 
 async function choose(page: Page, language: string) {
-  if (await button(page, 'Change language').isVisible()) await button(page, 'Change language').click();
+  if (await button(page, 'Profile').isVisible()) await openLanguageChooser(page);
   await button(page, `Learn ${language}`).click();
   await expect(button(page, 'Report')).toBeVisible();
 }

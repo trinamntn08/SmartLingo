@@ -12,6 +12,7 @@ export type CourseSidebar = 'wide' | 'medium';
 interface CourseOutlineProps {
   id: string;
   sidebar?: CourseSidebar;
+  phone?: boolean;
   course: OpenCourse;
   route: CourseRoute;
   day: CourseDay;
@@ -25,7 +26,7 @@ interface CourseOutlineProps {
 const neighborCount = 10;
 const levels = ['All', 'foundation', 'A1', 'A2', 'B1'] as const;
 
-export function CourseOutline({ id, sidebar, course, route, day, events,
+export function CourseOutline({ id, sidebar, phone, course, route, day, events,
   level, onLevelChange, blocked, onDay }: CourseOutlineProps) {
   const [showAll, setShowAll] = useState(false);
   const scroll = useRef<HTMLDivElement>(null);
@@ -66,7 +67,7 @@ export function CourseOutline({ id, sidebar, course, route, day, events,
     style={t.outline}>
     {sidebar && <Text accessibilityRole="header" style={[s.heading, t.title]}>Course outline</Text>}
     <View testID="course-day-chooser" style={t.group}>
-      <Text accessibilityRole="header" style={t.label}>Lessons</Text>
+      <Text accessibilityRole="header" style={phone ? [s.heading, t.title] : t.label}>{phone ? course.title : 'Lessons'}</Text>
       {level === 'All' && nearbyDays.length < course.days.length && <View style={{ alignItems: 'flex-start' }}>
         <Button compact quiet onPress={() => setShowAll(value => !value)}>{showAll ? 'Show nearby lessons' : 'Show all lessons'}</Button>
       </View>}

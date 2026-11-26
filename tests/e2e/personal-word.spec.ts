@@ -1,4 +1,4 @@
-import { openProfileSection } from './learner-journeys';
+import { openPhoneReview, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import type { NotebookEntry } from '@smartlingo/domain';
@@ -45,6 +45,7 @@ test('personal word works without API, survives edits/reload, enters review and 
   await page.getByRole('textbox', { name: 'English meaning', exact: true }).fill('My phrase for meeting again today');
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(page.getByText('Changes saved in this browser.', { exact: true })).toBeVisible();
+  await openPhoneReview(page);
   await page.getByRole('button', { name: 'Reveal meaning', exact: true }).click();
   await page.getByRole('button', { name: 'Needed help', exact: true }).click();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();

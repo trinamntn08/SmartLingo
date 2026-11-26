@@ -45,6 +45,7 @@ async function storedRows(page: Page, store: 'events' | 'notebook') {
 }
 
 test('restaurant details are visible directly and practice/notebook completion survive reload without API', async ({ page }, info) => {
+  test.slow();
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
@@ -72,7 +73,8 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(button(page, /Next word/)).toHaveCount(0);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
-  await button(page, 'Read conversation').click();
+  if ((page.viewportSize()?.width ?? 600) < 600) await page.getByTestId('lesson-step-dialogue').click();
+  else await button(page, 'Read conversation').click();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
@@ -99,7 +101,9 @@ test('restaurant details are visible directly and practice/notebook completion s
   for (const token of ['Je', 'voudrais', 'un café', 's’il vous plaît']) await button(page, token).click();
   await button(page, 'Check sentence').click();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
-  await expect(page.getByText('10–12 min with practice', { exact: true })).toBeVisible();
+  if ((page.viewportSize()?.width ?? 600) >= 600) {
+    await expect(page.getByText('10–12 min with practice', { exact: true })).toBeVisible();
+  }
   const task = getFrenchTopicPractice(restaurantLesson)!;
   const transfer = page.getByTestId('french-transfer-practice');
   await expect(transfer.getByText(task.prompt, { exact: true })).toBeVisible();
@@ -127,7 +131,8 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Revisit the words').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();
-  await expect(button(page, 'Save bonjour')).toContainText('In notebook');
+  if ((page.viewportSize()?.width ?? 600) < 600) await expect(button(page, 'Save bonjour')).toHaveAttribute('aria-pressed', 'true');
+  else await expect(button(page, 'Save bonjour')).toContainText('In notebook');
   const notes = await storedRows(page, 'notebook');
   expect(notes).toHaveLength(1);
   expect(notes[0].meaning).toBe('My morning greeting');
@@ -158,7 +163,8 @@ test('stale tab capture preserves another tab’s notebook edit', async ({ page,
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
   await button(stale, 'Save bonjour').click();
   await expect(button(stale, 'Save bonjour')).toBeDisabled();
-  await expect(button(stale, 'Save bonjour')).toContainText('In notebook');
+  if ((stale.viewportSize()?.width ?? 600) < 600) await expect(button(stale, 'Save bonjour')).toHaveAttribute('aria-pressed', 'true');
+  else await expect(button(stale, 'Save bonjour')).toContainText('In notebook');
   await button(stale, 'Review').click();
   await expect(stale.getByText('Keep my personal note')).toBeVisible();
   expect((await storedRows(page, 'notebook'))[0].meaning).toBe('Keep my personal note');

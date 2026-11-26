@@ -59,17 +59,38 @@ test.beforeEach(async ({ context }) => {
 });
 
 test('French courses open independently and B1 is also available in the topic library', async ({ page }) => {
-  const [, a2, b1] = frenchCourses;
-  const visitCourse = (title: string) => page.getByRole('button', { name: title, exact: true }).click();
+  const [a1, a2, b1] = frenchCourses;
+  const courses = page.getByRole('button', { name: 'Courses', exact: true });
+  const learn = () => page.getByRole('button', { name: 'Learn', exact: true }).click();
+  const visitCourse = async (title: string) => {
+    await courses.click();
+    await page.getByTestId('course-picker').getByRole('button', { name: title }).click();
+    const selection = page.getByTestId('chosen-course');
+    await expect(selection.getByRole('heading', { name: title, exact: true })).toBeVisible();
+    await guidedLessonButton(selection).click();
+  };
   const today = () => page.getByRole('button', { name: 'Today', exact: true }).click();
   await page.goto('/today/fr');
+  for (const course of [a2, b1]) await expect(page.getByText(course.title, { exact: true })).toHaveCount(0);
+  await expect(guidedLessonButton(page)).toHaveAccessibleName('Start lesson');
+  await learn();
+  for (const course of [a2, b1]) await expect(page.getByText(course.title, { exact: true })).toHaveCount(0);
+  await courses.click();
+  const picker = page.getByTestId('course-picker');
+  await expect(picker.getByRole('button', { name: a1.title + ', current course', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await page.goBack();
+  await expect(picker).toHaveCount(0);
+  await expect(courses).toBeFocused();
+  await courses.click();
+  await picker.getByRole('button', { name: 'Close courses' }).click();
+  await expect(picker).toHaveCount(0);
 
   await visitCourse(a2.title);
   await expect(dayHeading(page, a2.days[0])).toBeVisible();
   await button(page, 'Continue to key phrases').click();
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
 
-  await today();
+  await learn();
   await visitCourse(b1.title);
   await expect(dayHeading(page, b1.days[0])).toBeVisible();
   await openCourseOutline(coursePanel(page));
@@ -82,10 +103,13 @@ test('French courses open independently and B1 is also available in the topic li
   await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
 
   await today();
-  await expect(guidedLessonButton(page)).toHaveText(/Start lesson/u);
+  await expect(guidedLessonButton(page)).toHaveAccessibleName('Continue lesson');
+  await guidedLessonButton(page).click();
+  await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
+  await learn();
   await visitCourse(a2.title);
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
-  await page.getByRole('button', { name: 'Learn', exact: true }).click();
+  await learn();
   await visitCourse(b1.title);
   await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
 
@@ -98,7 +122,8 @@ test('French courses open independently and B1 is also available in the topic li
 
 test('all five opening lessons share a five-step reader with full transcripts and photos', async ({ page }) => {
   await page.goto('/');
-  await expect(step(page, openCoursePilot.title)).toBeVisible();
+  await expect(coursePanel(page).getByText((page.viewportSize()?.width ?? 600) < 600
+    ? openCoursePilot.title.split(':', 1)[0]! : openCoursePilot.title, { exact: true })).toBeVisible();
   await guidedLessonButton(page).focus();
   await page.keyboard.press('Enter');
   await openCourseOutline(coursePanel(page));
@@ -212,7 +237,9 @@ test('the shared stages save progress, restore matching and unlock the next less
   expect(events.some(event => event.kind === 'choice' && event.supported)).toBe(true);
   expect([...new Set(events.map(event => event.courseRevision))]).toEqual([courseDayProgressRevision(openCoursePilot, firstDay)]);
   expect(await storedEvents(page, 'events')).toEqual([]);
-  await expect(coursePanel(page).getByText('About 10 min', { exact: true })).toBeVisible();
+  if ((page.viewportSize()?.width ?? 600) >= 600) {
+    await expect(coursePanel(page).getByText('About 10 min', { exact: true })).toBeVisible();
+  }
   await expect(activity.getByText(lesson.sentenceActivity.explanation, { exact: true })).toBeVisible();
   await expect(button(page, 'Practise the conversation')).toHaveCount(0);
   await expect(activity.getByTestId('french-transfer-practice')).toHaveCount(0);

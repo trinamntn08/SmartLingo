@@ -16,7 +16,7 @@ Open PowerShell at the root of the SmartLingo worktree that includes `apps/andro
 For a fresh checkout, clone the Android task branch into a new folder after installing Git.
 
 ```powershell
-git clone --branch feat/android-current-learner-apk https://github.com/trinamntn08/SmartLingo.git SmartLingo-Android
+git clone --branch feat/android-phone-redesign https://github.com/trinamntn08/SmartLingo.git SmartLingo-Android
 Set-Location -LiteralPath '.\SmartLingo-Android'
 ```
 
@@ -65,7 +65,7 @@ if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
 & (Join-Path $env:ANDROID_HOME 'build-tools\35.0.0\aapt.exe') dump permissions $apk.Path
 ```
 
-The application ID is `com.smartlingo.preview`. This preview is version `0.2.1-preview` (version code 3), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
+The application ID is `com.smartlingo.preview`. This preview is version `0.2.2-preview` (version code 4), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
 
 ## 3. Install on your phone
 
@@ -123,7 +123,7 @@ The earlier French-only APK exports backup version 3. The current learner accept
 
 Record whether each test used an emulator or a physical phone, along with the Android API level, WebView version, and reproducible failures. Keep personal notes and backups out of bug reports. Desktop browser contract tests exercise the expected bridge and browser behaviour. See the [session checkpoint](SESSION_CHECKPOINT.md) for validation actually performed.
 
-The bilingual update from version code 2 to 3 passed on Android 15 (API 35) with WebView `124.0.6367.219`. The first offline launch and relaunch retained both edited notes, review and completion history, a studied Hiragana row, both guided lesson positions, and the selected language before any backup restore. The emulator had no speech engine. The physical-phone checklist is ready for testing.
+The bilingual updates from version code 2 to 3 and from 3 to 4 passed on Android 15 (API 35) with WebView `124.0.6367.219`. The version 4 first offline launch and relaunch retained both edited notes, review and completion history, a studied Hiragana row, both guided lesson positions and the prior language preference before any backup restore. Physical-phone testing remains pending.
 
 ## What works offline
 

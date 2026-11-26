@@ -1,4 +1,4 @@
-import { openRestaurant, openProfileSection } from './learner-journeys';
+import { openPhoneReview, openRestaurant, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -28,6 +28,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Try picture practice', exact: true }).click();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await openPhoneReview(page);
   await page.getByRole('button', { name: 'Reveal meaning', exact: true }).click();
   await page.getByRole('button', { name: 'Needed help', exact: true }).click();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
@@ -78,7 +79,9 @@ test('download and explicit restore recover learning in a fresh browser without 
     expect(await eventCount(restored, 'reviewEvents')).toBe(1);
     await restored.getByRole('button', { name: 'Reload learning', exact: true }).click();
     await restored.getByRole('button', { name: 'Review', exact: true }).click();
+    await openPhoneReview(restored);
     await expect(restored.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
+    await restored.getByRole('button', { name: 'Show notebook', exact: true }).click();
     await restored.getByRole('button', { name: 'Edit note', exact: true }).click();
     await restored.getByRole('textbox', { name: 'English meaning', exact: true }).fill('Keep my newer personal note');
     await restored.getByRole('button', { name: 'Save changes', exact: true }).click();

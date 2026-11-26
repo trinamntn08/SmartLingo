@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { lessons, restaurantLesson } from '@smartlingo/content';
-import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openProfileSection, openTopic } from './learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openProfileSection, openTopic, showTopicFilters } from './learner-journeys';
 
 const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
 const greetingTopic = 'Everyday greetings and politeness';
@@ -63,6 +63,7 @@ for (const width of [1280, 320]) {
     await first.focus();
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('topic-lesson-cards')).toBeVisible();
+    await showTopicFilters(page);
     await page.getByRole('button', { name: 'Foundations level', exact: true }).click();
     await expect(page.getByRole('button', { name: /^Open / })).toHaveCount(3);
     await expect(page.getByRole('button', { name: /^Open / })).toHaveText(['Start lesson', 'Start lesson', 'Start lesson']);

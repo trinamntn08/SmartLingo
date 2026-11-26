@@ -17,7 +17,7 @@ test('the Cloud photo and the new French and Japanese drafts load from a cold do
 
   const cold = await context.newPage();
   await cold.goto('/today/fr');
-  await expect.poll(() => cold.getByTestId('today-next-step').locator('img').evaluateAll(images => images.some(image =>
+  await expect.poll(() => cold.getByTestId('today-hero-art').locator('img').evaluateAll(images => images.some(image =>
     image instanceof HTMLImageElement && image.complete && image.naturalWidth === 1200 && image.src.includes('lyon-bakery'),
   ))).toBe(true);
   for (const id of ['fr.cycling.rent', 'fr.household-waste.sorting', 'ja.cafe.drinks']) {

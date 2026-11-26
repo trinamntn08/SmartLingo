@@ -50,7 +50,7 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   await expect(letters.getByRole('heading', { name: `Which character is “${japaneseAlphabetLessons[19]!.characters[0]!.romaji}”?` })).toBeVisible();
   await letters.getByRole('button', { name: `Choose ${japaneseAlphabetLessons[19]!.characters[0]!.kana}`, exact: true }).click();
   await expect(letters.getByText(/^Yes\./)).toBeVisible();
-  await cold.getByRole('button', { name: 'Lessons', exact: true }).click();
+  await cold.getByRole('button', { name: /^(Lessons|Topics)$/ }).click();
   await expect(cold.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(apiRequests).toEqual([]);

@@ -75,7 +75,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const focusLocalStage = useRef<LessonStage | null>(null);
   const restoringScroll = useRef(Number(read('learner.scroll') ?? 0) > 0);
   const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
-  const compactCourse = compact && !!courseSession;
+  const phone = compact && usesVisitState;
   const lessonStatus = lesson.status === 'draft' ? 'Draft' : 'Published';
   const lessonMeta = compact ? `${lesson.level} · ${lessonStatus}` : `${lesson.level} · ${lesson.topic} · ${lessonStatus}`;
   const meaningMatch = lesson.pictureActivity.mode === 'meaning';
@@ -180,46 +180,54 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
 
   return <View style={[layout.page, compact && layout.compactPage]}>
     {!courseSession && <View style={[s.row, layout.breadcrumb]}>
-      <Button compact quiet icon="arrow-left" href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
-      <Text style={[s.muted, layout.meta]}>{lessonMeta}</Text>
+      <Button compact quiet icon="arrow-left" iconOnly={phone} label={returnLabel ?? 'All lessons'}
+        href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
+      {!phone && <Text style={[s.muted, layout.meta]}>{lessonMeta}</Text>}
     </View>}
-    <View style={[s.card, layout.intro, compact && layout.compactIntro, compactCourse && layout.compactCourseIntro]}>
+    <View style={phone ? layout.phoneIntro : [s.card, layout.intro, compact && layout.compactIntro]}>
       {sequence && <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
-        <Text style={s.eyebrow}>Lesson {sequence.position} of {sequence.total}</Text>
+        <Text style={phone ? layout.stepCount : s.eyebrow}>Lesson {sequence.position} of {sequence.total}</Text>
         {previousLesson && <Button compact quiet icon="arrow-left" label={`Previous lesson: ${previousLesson.title}`}
-          href={previousLesson.href} onPress={previousLesson.onOpen} disabled={exitBlocked}>Previous lesson</Button>}
+          href={previousLesson.href} onPress={previousLesson.onOpen} disabled={exitBlocked}>{phone ? 'Previous' : 'Previous lesson'}</Button>}
       </View>}
       {courseSession && !compact && <Text style={s.eyebrow}>{lesson.level === 'foundation' ? 'Foundations' : lesson.level}</Text>}
       <Text nativeID={titleId} accessibilityRole="header"
-        style={[s.title, compact && s.compactTitle, compactCourse && layout.compactCourseTitle]}>{lesson.subtitle}</Text>
-      <Text style={[s.body, layout.outcome, compact && s.muted, compactCourse && layout.compactCourseOutcome]}>{lesson.outcome}</Text>
-      {timeEstimate && <Text style={[s.muted, layout.meta]}>{timeEstimate}</Text>}
-      <LessonProgress stage={stage} compact={compact} meaningMatch={meaningMatch}
-        recorded={browseOnly ? undefined : recordedItems} total={lesson.vocabulary.length + 2}
+        style={[s.title, compact && s.compactTitle, phone && layout.phoneTitle]}>{lesson.subtitle}</Text>
+      {(!phone || stage === 'dialogue') && <Text style={[s.body, layout.outcome, compact && s.muted, phone && layout.phoneOutcome]}>{lesson.outcome}</Text>}
+      {timeEstimate && !phone && <Text style={[s.muted, layout.meta]}>{timeEstimate}</Text>}
+      <LessonProgress stage={stage} compact={compact} phone={phone} meaningMatch={meaningMatch}
+        recorded={browseOnly || phone ? undefined : recordedItems} total={lesson.vocabulary.length + 2}
         disabled={exitBlocked} hrefForStep={stageHref} onStep={setStage} />
     </View>
-    <View testID="lesson-stage" style={layout.stage}>
+    <View testID="lesson-stage" style={[layout.stage, phone && layout.phoneStage]}>
       <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
-        {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading]}>{heading}</Text>
+        {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading, phone && tokens.typography.compactHeading]}>{heading}</Text>
       {stage === 'dialogue' && <>
-        <LessonConversation lesson={lesson} photo={courseSession?.dialoguePhoto} />
-        <StudyActions sticky={!compactCourse}>
+        <LessonConversation lesson={lesson} photo={courseSession?.dialoguePhoto} phone={phone} />
+        <StudyActions phone={phone} primaryAction={skipStudiedPhrases
+          ? <Button primary={!phone} accent={phone} trailingIcon="arrow-right"
+            href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
+            onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>{listeningQuestion ? 'Start listening' : practiceLabel}</Button>
+          : <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label="Continue to key phrases"
+            href={stageHref('vocabulary')} disabled={exitBlocked}
+            onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>
+            {phone ? 'Continue' : 'Continue to key phrases'}
+          </Button>}>
           {skipStudiedPhrases && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
-          {skipStudiedPhrases
-            ? <Button primary trailingIcon="arrow-right" href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
-              onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>{listeningQuestion ? 'Start listening' : practiceLabel}</Button>
-            : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked}
-              onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>Continue to key phrases</Button>}
         </StudyActions>
       </>}
       {stage === 'vocabulary' && <>
-        <LessonWords lesson={lesson} model={model} compact={compact} />
-        <StudyActions>
-          <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
-          <Button primary={!listeningQuestion} quiet={!!listeningQuestion} disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>
-          {listeningQuestion && <Button primary trailingIcon="arrow-right" disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('listening')}>Continue to listening</Button>}
+        <LessonWords lesson={lesson} model={model} compact={compact} phone={phone} />
+        <StudyActions phone={phone} primaryAction={listeningQuestion
+          ? <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label="Continue to listening"
+            disabled={exerciseBlocked && !browseOnly} onPress={() => reviewVocabulary('listening')}>
+            {phone ? 'Continue' : 'Continue to listening'}
+          </Button>
+          : <Button primary={!phone} accent={phone} disabled={exerciseBlocked && !browseOnly}
+            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>}>
+          {!phone && <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>}
+          {listeningQuestion && <Button quiet label={practiceLabel} disabled={exerciseBlocked && !browseOnly}
+            onPress={() => reviewVocabulary('picture')}>{phone ? (meaningMatch ? 'Meaning practice' : 'Picture practice') : practiceLabel}</Button>}
         </StudyActions>
       </>}
       {stage === 'listening' && (listeningQuestion
@@ -230,9 +238,9 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
           <Text style={s.body}>Listening practice is unavailable for this lesson.</Text>
           <Button primary href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>Continue to matching</Button>
         </View>)}
-      {stage === 'picture' && <PictureActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
+      {stage === 'picture' && <PictureActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly} phone={phone}
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
-      {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
+      {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly} phone={phone}
         done={progress.sentenceDone || (!courseSession && progress.completed)} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
         record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson} extraPractice={extraPractice}
         onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
@@ -241,11 +249,15 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   </View>;
 }
 
-function StudyActions({ children, sticky = true }: { children: ReactNode; sticky?: boolean }) {
-  const row = <View style={[s.row, layout.actions]}>{children}</View>;
-  if (Platform.OS !== 'web' || !sticky) return row;
-  return <div style={{ position: 'sticky', bottom: 0, zIndex: 1,
-    paddingBlock: 8, backgroundColor: colors.paper, borderTop: '1px solid ' + colors.line }}>{row}</div>;
+function StudyActions({ children, phone, primaryAction }: { children: ReactNode; phone: boolean; primaryAction: ReactNode }) {
+  if (Platform.OS !== 'web') return <View style={[s.row, layout.actions]}>{children}{primaryAction}</View>;
+  return <>
+    {phone && children && <View style={[s.row, layout.actions]}>{children}</View>}
+    <div style={{ position: 'sticky', bottom: 0, zIndex: 1,
+      paddingBlock: 8, backgroundColor: colors.paper, borderTop: '1px solid ' + colors.line }}>
+      {phone ? <View>{primaryAction}</View> : <View style={[s.row, layout.actions]}>{children}{primaryAction}</View>}
+    </div>
+  </>;
 }
 
 function stageLabels(stage: LessonStage, meaningMatch: boolean) {
@@ -258,12 +270,12 @@ function stageLabels(stage: LessonStage, meaningMatch: boolean) {
   }
 }
 
-function LessonProgress({ stage, compact, meaningMatch, recorded, total, disabled, hrefForStep, onStep }: {
-  stage: LessonStage; compact: boolean; meaningMatch: boolean; recorded?: number; total: number;
+function LessonProgress({ stage, compact, phone, meaningMatch, recorded, total, disabled, hrefForStep, onStep }: {
+  stage: LessonStage; compact: boolean; phone: boolean; meaningMatch: boolean; recorded?: number; total: number;
   disabled: boolean; hrefForStep: (step: LessonStage) => string | undefined; onStep: (step: LessonStage) => void;
 }) {
   const current = lessonStages.indexOf(stage);
-  return <View style={[layout.progress, compact && layout.compactProgress]}>
+  return <View style={[layout.progress, compact && layout.compactProgress, phone && layout.phoneProgress]}>
     <View style={layout.progressLabels}>
       <Text style={layout.stepCount}>Step {current + 1} of {lessonStages.length}</Text>
       {recorded !== undefined && <Text style={layout.recorded}>
@@ -274,19 +286,19 @@ function LessonProgress({ stage, compact, meaningMatch, recorded, total, disable
       aria-valuemin={0} aria-valuemax={total} aria-valuenow={recorded} style={[s.progressTrack, layout.progressTrack]}>
       <View style={[s.progressFill, { width: `${recorded / total * 100}%` }]} />
     </View>}
-    <View role="navigation" accessibilityLabel="Lesson steps" style={layout.steps}>
+    <View role="navigation" accessibilityLabel="Lesson steps" style={[layout.steps, phone && layout.phoneSteps]}>
       {lessonStages.map((step, index) => {
         const { label, short } = stageLabels(step, meaningMatch);
         return <LessonStep key={step} step={step} number={index + 1} label={label} text={compact ? short : label}
-          current={step === stage} compact={compact} disabled={disabled} href={hrefForStep(step)} onPress={() => onStep(step)} />;
+          current={step === stage} compact={compact} phone={phone} disabled={disabled} href={hrefForStep(step)} onPress={() => onStep(step)} />;
       })}
     </View>
   </View>;
 }
 
-function LessonStep({ step, number, label, text, current, compact, disabled, href, onPress }: {
+function LessonStep({ step, number, label, text, current, compact, phone, disabled, href, onPress }: {
   step: LessonStage; number: number; label: string; text: string; current: boolean;
-  compact: boolean; disabled: boolean; href?: string; onPress: () => void;
+  compact: boolean; phone: boolean; disabled: boolean; href?: string; onPress: () => void;
 }) {
   const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -294,12 +306,15 @@ function LessonStep({ step, number, label, text, current, compact, disabled, hre
     aria-current={current ? 'step' : undefined} disabled={disabled} accessibilityState={{ disabled }}
     {...routePress(disabled ? undefined : href, onPress)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
-    style={({ pressed }) => [layout.segment, compact && layout.compactSegment, hovered && !disabled && layout.hoverSegment,
-      current && layout.activeSegment, focused && layout.focusSegment, pressed && layout.pressedSegment, disabled && layout.disabledSegment]}>
-    <View aria-hidden style={[layout.stepNumber, current && layout.activeNumber]}>
-      <Text style={[layout.numberText, current && layout.activeNumberText]}>{number}</Text>
-    </View>
-    <Text style={[layout.stepLabel, compact && layout.compactLabel, current && layout.activeLabel]}>{text}</Text>
+    style={({ pressed }) => [layout.segment, compact && layout.compactSegment, phone && layout.phoneSegment,
+      hovered && !disabled && layout.hoverSegment, current && layout.activeSegment, focused && layout.focusSegment,
+      pressed && layout.pressedSegment, disabled && layout.disabledSegment]}>
+    {phone ? <Text aria-hidden style={[layout.phoneNumber, current && layout.activeLabel]}>{number}</Text> : <>
+      <View aria-hidden style={[layout.stepNumber, current && layout.activeNumber]}>
+        <Text style={[layout.numberText, current && layout.activeNumberText]}>{number}</Text>
+      </View>
+      <Text style={[layout.stepLabel, compact && layout.compactLabel, current && layout.activeLabel]}>{text}</Text>
+    </>}
   </Pressable>;
 }
 
@@ -310,24 +325,29 @@ const layout = StyleSheet.create({
   meta: { flexShrink: 1, minWidth: 0 },
   intro: { gap: 8 },
   compactIntro: { padding: 12, gap: 6 },
-  compactCourseIntro: { padding: 10, gap: 4 },
-  compactCourseTitle: { fontSize: 27, lineHeight: 33 },
-  compactCourseOutcome: { fontSize: 15, lineHeight: 21 },
+  phoneIntro: { minWidth: 0, gap: 8 },
+  phoneTitle: { fontSize: 28, lineHeight: 34, outlineWidth: 0 },
+  phoneOutcome: { fontSize: 16, lineHeight: 23 },
   outcome: { color: colors.muted, maxWidth: 690 },
   stage: { minWidth: 0, gap: 14 },
+  phoneStage: { gap: 10 },
   stageHeading: { alignSelf: 'flex-start', outlineColor: colors.focusRing, outlineOffset: 2 },
   actions: { justifyContent: 'flex-end', gap: 8 },
   progress: { gap: 8, marginTop: 4, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
   compactProgress: { gap: 6, marginTop: 2, paddingTop: 8 },
+  phoneProgress: { marginTop: 0, paddingTop: 4, borderTopWidth: 0 },
   progressLabels: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: 12, rowGap: 2 },
   stepCount: { ...tokens.typography.smallLabel, color: colors.ink },
   recorded: { ...tokens.typography.caption, color: colors.muted },
   progressTrack: { height: 4 },
   steps: { flexDirection: 'row', gap: 4, padding: 4, borderRadius: tokens.radius.md, backgroundColor: colors.paper },
+  phoneSteps: { flexWrap: 'wrap', padding: 0 },
   segment: { flex: 1, minWidth: 0, minHeight: tokens.control.minimumTarget, flexDirection: 'row', alignItems: 'center',
     justifyContent: 'center', gap: 8, paddingHorizontal: 6, paddingVertical: 6,
     borderRadius: tokens.radius.sm, borderWidth: 1, borderColor: 'transparent' },
   compactSegment: { flexDirection: 'column', gap: 3, paddingHorizontal: 2, paddingVertical: 4 },
+  phoneSegment: { minWidth: 48, minHeight: 48, backgroundColor: colors.sand, borderColor: colors.line },
+  phoneNumber: { ...tokens.typography.label, color: colors.primary },
   hoverSegment: { backgroundColor: colors.card, borderColor: colors.line },
   activeSegment: { backgroundColor: colors.goldTint, borderColor: colors.yellow },
   focusSegment: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 1 },

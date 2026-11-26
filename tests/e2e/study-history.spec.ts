@@ -225,14 +225,14 @@ test('French course history uses the five-step strip beside a lessons-only outli
   }
   await expect(outline.getByRole('button', { name: /^Section / })).toHaveCount(0);
   await expect(outline.getByRole('button', { name: /^Choose lesson 1:/ })).toHaveAttribute('aria-selected', 'true');
-  await expect(outline.getByRole('button', { name: /^Choose lesson / })).toHaveCount(5);
+  await expect(outline.getByRole('button', { name: /^Choose lesson / })).toHaveCount(openCoursePilot.days.length);
   const steps = panel.getByRole('navigation', { name: 'Lesson steps' });
   const dialogue = steps.getByRole('link', { name: 'Read dialogue', exact: true });
   await expect(steps.getByRole('link')).toHaveCount(5);
   await expect(dialogue).toHaveAttribute('aria-current', 'step');
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
   if (!wide) {
-    await outlineButton.press('Enter');
+    await page.goBack();
     await expect(outline).toHaveCount(0);
   }
 

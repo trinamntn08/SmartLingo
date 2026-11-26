@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { AudioPreferencesPanel } from '../audio/AudioPreferencesPanel';
 import { GeneratedSpeechPanel } from '../audio/generated/GeneratedSpeechPanel';
@@ -8,7 +8,7 @@ import { OfflinePanel } from '../offline/OfflinePanel';
 import { isAndroidApp } from '../platform/runtime';
 import { Button } from '../ui/controls';
 import { Disclosure } from '../ui/Disclosure';
-import { colors, styles as s } from '../ui/theme';
+import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { ScreenHeader } from '../ui/ScreenHeader';
 import { Icon } from '../ui/Icon';
@@ -19,30 +19,34 @@ interface ProfileScreenProps {
   model: LearningModel;
   catalogue: ReturnType<typeof useCatalogue>;
   onOpenEditor: () => void;
+  onChangeLanguage?: () => void;
+  languageChangeDisabled?: boolean;
 }
 
-export function ProfileScreen({ catalogue, onOpenEditor, language, model }: ProfileScreenProps) {
+export function ProfileScreen({ catalogue, onOpenEditor, language, model, onChangeLanguage, languageChangeDisabled }: ProfileScreenProps) {
   const android = isAndroidApp();
-  return <View style={t.page}>
-    <ScreenHeader title="Profile" subtitle={android ? 'Manage your audio and learning data.' : 'Manage your audio, offline lessons and learning data.'} />
-    <View style={t.board}>
-      <View style={[t.main, { flexBasis: 600 }]}>
-      <Text accessibilityRole="header" style={t.sectionTitle}>Learning settings</Text>
-
-    <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description={android ? 'Choose a device voice and adjust the pace.' : 'Choose a voice, adjust the pace and manage saved audio.'}>
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
+  const settings = <>
+    <Disclosure key={`audio-${language}`} title="Audio & pronunciation" compact={compact} icon={compact ? 'speaker' : undefined}
+      description={compact ? undefined : android ? 'Choose a device voice and adjust the pace.' : 'Choose a voice, adjust the pace and manage saved audio.'}>
       <AudioPreferencesPanel language={language} />
       {!android && language === 'fr-FR' && <GeneratedSpeechPanel />}
     </Disclosure>
 
-    <Disclosure title="Offline & backups" description={android ? 'Study bundled lessons and keep a private copy of your learning.' : 'Download lessons and keep a private copy of your learning.'}>
+    <Disclosure title="Offline & backups" compact={compact} icon={compact ? 'offline' : undefined}
+      description={compact ? undefined : android ? 'Study bundled lessons and keep a private copy of your learning.' : 'Download lessons and keep a private copy of your learning.'}>
       <Text style={[s.muted, { paddingHorizontal: 8 }]}>{android
         ? 'French and Japanese lessons are bundled for offline study. Learning backups include both languages.'
         : 'Offline app downloads and private learning backups include both French and Japanese.'}</Text>
       {!android && <OfflinePanel />}
       <BackupPanel />
+      {compact && <Text style={[s.muted, { paddingHorizontal: 8 }]}>{android
+        ? 'Keep a private backup before uninstalling, clearing app storage or changing phones.'
+        : 'Keep a private backup before clearing browser data or changing devices.'}</Text>}
     </Disclosure>
 
-    {!android && language === 'fr-FR' && <Disclosure title="Curriculum tools" description="Load published lessons or open the local draft workshop.">
+    {!android && language === 'fr-FR' && <Disclosure title="Curriculum tools" compact={compact} icon={compact ? 'book' : undefined}
+      description={compact ? undefined : 'Load published lessons or open the local draft workshop.'}>
       <View style={t.inset}>
         <Text style={s.heading}>Local curriculum workshop</Text>
         <Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text>
@@ -57,7 +61,8 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model }: Prof
       </View>
     </Disclosure>}
 
-    <Disclosure title="About SmartLingo" description="Study support and draft content.">
+    <Disclosure title="About SmartLingo" compact={compact} icon={compact ? 'settings' : undefined}
+      description={compact ? undefined : 'Study support and draft content.'}>
       <View style={[t.stack, { padding: 8, gap: 16 }]}>
         {!android && language === 'ja-JP' && <>
           <Text accessibilityRole="header" style={s.heading}>Japanese study support</Text>
@@ -68,10 +73,28 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model }: Prof
           : language === 'ja-JP' ? 'Japanese listening uses a device voice, saved clip or free local VOICEVOX voice.' : 'French listening uses a device voice or explicitly saved neural audio.'} You can always read and practise from the text.</Text>
         <Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text>
         <Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. {android ? 'Keep private learning backups separately.' : 'Keep private learning backups separately; browser storage may be cleared or evicted.'}</Text>
+        {compact && <Text style={s.muted}>Your progress and notebook stay on this device. There is no account or sync.</Text>}
       </View>
     </Disclosure>
+  </>;
+
+  return <View style={[t.page, compact && { gap: 14 }]}>
+    {compact
+      ? <Text accessibilityRole="header" aria-level={1} style={s.heading}>Profile</Text>
+      : <ScreenHeader title="Profile" subtitle={android ? 'Manage your audio and learning data.' : 'Manage your audio, offline lessons and learning data.'} />}
+    <View style={[t.board, compact && { flexDirection: 'column', alignItems: 'stretch', gap: 14 }]}>
+      <View style={[t.main, compact ? { flexBasis: 'auto', gap: 8 } : { flexBasis: 600 }]}>
+        {compact ? <View style={[s.card, { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: 12, backgroundColor: colors.sageTint }]}>
+          <View style={[s.row, { flexShrink: 1, gap: 8 }]}>
+            <Icon name="globe" color={colors.primary} />
+            <Text style={[s.body, { flexShrink: 1, fontWeight: '600' }]}>{languageNames[language]}</Text>
+          </View>
+          {onChangeLanguage && <Button compact quiet onPress={onChangeLanguage} disabled={languageChangeDisabled}
+            trailingIcon="chevron">Switch language</Button>}
+        </View> : <Text accessibilityRole="header" style={t.sectionTitle}>Learning settings</Text>}
+        {settings}
       </View>
-      <View style={t.side}>
+      {!compact && <View style={t.side}>
         <View style={[t.panel, { backgroundColor: colors.sageTint }]}>
           <View style={[t.icon, { backgroundColor: colors.card }]}><Icon name="settings" size={24} /></View>
           <View style={t.stack}>
@@ -89,7 +112,7 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model }: Prof
             : <><Text style={t.detail}>Download the app for offline study. Export a private learning backup before clearing browser data or changing devices.</Text>
               <Text style={t.detail}>Audio is optional. A microphone is only requested when you choose to record in French AI practice.</Text></>}
         </View>
-      </View>
+      </View>}
     </View>
   </View>;
 }

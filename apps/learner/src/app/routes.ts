@@ -10,7 +10,8 @@ export type AppRoute =
   | { kind: 'slang'; language: 'fr-FR' }
   | { kind: 'topics'; language: TargetLanguage; topic?: string }
   | { kind: 'lesson'; language: TargetLanguage; lessonId: string; stage?: LessonStage; studyDay?: StudyDayLink }
-  | { kind: 'course'; language: TargetLanguage; courseId: string; dayId?: string; sectionId?: string }
+  | { kind: 'course'; language: TargetLanguage; courseId: string; dayId?: string; sectionId?: string; outline?: true }
+  | { kind: 'courses'; language: TargetLanguage; courseId?: string }
   | { kind: 'listening'; language: TargetLanguage; topic?: string; lessonId?: string; questionId?: string; library?: boolean; chooser?: boolean }
   | { kind: 'speaking'; language: TargetLanguage; topic?: string; lessonId?: string; revision?: number; line?: number }
   | { kind: 'letters'; language: 'ja-JP'; rowId?: string; mode?: 'study' | 'recognition'; characterId?: string }
@@ -71,9 +72,13 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
     return { kind: 'lesson', language, lessonId: section, stage, ...(studyDay && { studyDay }) };
   }
   if (area === 'course' && parts.length <= 5 && section && id(section) && (item === undefined || id(item)) && (extra === undefined || id(extra))) {
-    return { kind: 'course', language, courseId: section, dayId: item, sectionId: extra };
+    const outline = new URLSearchParams(search).get('outline') === '1';
+    return { kind: 'course', language, courseId: section, dayId: item, sectionId: extra, ...(outline && { outline: true }) };
   }
   if (area !== 'learn') return unavailable;
+  if (section === 'courses' && parts.length <= 4 && (item === undefined || id(item))) {
+    return { kind: 'courses', language, courseId: item };
+  }
   if (section === undefined || (section === 'topics' && parts.length <= 4 && (item === undefined || topicName(item)))) {
     return { kind: 'topics', language, topic: item };
   }
@@ -118,7 +123,8 @@ export function routeHref(route: AppRoute): string {
       const day = route.studyDay;
       return day ? destination + '?' + new URLSearchParams({ course: day.courseId, day: day.dayId, section: day.sectionId }) : destination;
     }
-    case 'course': return path('course', lang, route.courseId, route.dayId, route.sectionId);
+    case 'course': return path('course', lang, route.courseId, route.dayId, route.sectionId) + (route.outline ? '?outline=1' : '');
+    case 'courses': return path('learn', lang, 'courses', route.courseId);
     case 'letters': return path('learn', lang, 'letters', route.rowId, route.mode, route.characterId);
     case 'listening': return path('learn', lang, 'listening', route.library ? 'library' : route.lessonId, route.library ? undefined : route.questionId)
       + (route.topic ? `?topic=${encodeURIComponent(route.topic)}` : '');

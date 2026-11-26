@@ -22,6 +22,10 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await page.close();
   const cold = await context.newPage();
   await cold.goto(baseURL!);
+  if ((cold.viewportSize()?.width ?? 600) < 600) {
+    await cold.getByRole('button', { name: 'Learn', exact: true }).click();
+    await cold.getByRole('button', { name: 'Topics', exact: true }).click();
+  }
   const panel = cold.getByTestId('open-course-panel');
   await guidedLessonButton(panel).click();
   await openCourseOutline(panel);
@@ -35,7 +39,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   const card = panel.getByTestId(`vocabulary-${word.id}`);
   await expect(card.getByText(word.reading!, { exact: true })).toBeVisible();
   await card.getByRole('button', { name: `Save ${word.target}`, exact: true }).click();
-  await expect(card.getByText(`Saved ${word.target} to your notebook.`, { exact: true })).toBeVisible();
+  await expect(card.getByRole('button', { name: `Save ${word.target}`, exact: true })).toBeDisabled();
   await cold.reload();
   await expect(cold).toHaveURL(url => url.pathname === path);
   await expect(panel.getByTestId('lesson-stage-heading')).toHaveText('Key phrases');

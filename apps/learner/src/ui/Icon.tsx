@@ -15,6 +15,8 @@ const iconPaths = {
   layers: 'm12 3 9 5-9 5-9-5 9-5Zm9 9-9 5-9-5m18 4-9 5-9-5',
   grid: 'M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z',
   search: 'M15.8 15.8 21 21m-3-9a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z',
+  filter: 'M3 5h18l-7 8v5l-4 2v-7z',
+  close: 'm6 6 12 12M18 6 6 18',
   'arrow-right': 'M4 12h15m-6-6 6 6-6 6',
   'arrow-left': 'M20 12H5m6-6-6 6 6 6',
   play: 'm9 5 12 7-12 7z',

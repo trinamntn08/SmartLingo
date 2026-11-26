@@ -2,15 +2,15 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons, lessons } from '@smartlingo/content';
 import { type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence, openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openLanguageChooser, openPhoneReview, openTopic, openProfileSection } from './learner-journeys';
 
 // Exercise the real first-run homepage; older regressions explicitly select French in config.
 test.use({ storageState: { cookies: [], origins: [] } });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
 async function choose(page: Page, name: string) {
   // Reload learning navigates; wait for the next app render before choosing a route.
-  await expect(button(page, 'Change language').or(button(page, `Learn ${name}`))).toBeVisible();
-  if (await button(page, 'Change language').isVisible()) await button(page, 'Change language').click();
+  await expect(button(page, 'Profile').or(button(page, `Learn ${name}`))).toBeVisible();
+  if (await button(page, 'Profile').isVisible()) await openLanguageChooser(page);
   await button(page, `Learn ${name}`).click();
   await expect(button(page, 'Learn')).toBeVisible();
 }
@@ -63,15 +63,17 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await notebook.getByRole('textbox', { name: 'English meaning', exact: true }).fill(`My ${name} note`);
     await notebook.getByRole('button', { name: 'Save changes', exact: true }).click();
     await expect(notebook.getByText(`My ${name} note`, { exact: true })).toBeVisible();
+    await openPhoneReview(page);
     await button(page, 'Reveal meaning').click();
     await button(page, 'Remembered').click();
     await expect(page.getByText(/You’re up to date for today/)).toBeVisible();
   }
+  if ((page.viewportSize()?.width ?? 600) < 600) await button(page, 'Show notebook').click();
   await page.reload();
   await expect(page.getByTestId('notebook-entries')).toBeVisible();
   await button(page, 'Today').click();
   await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
-  await expect(button(page, 'Change language')).toContainText('Japanese');
+  await expect(page).toHaveURL(/\/today\/ja$/u);
   await open(page, japaneseLessons[0]);
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Profile').click();
@@ -96,6 +98,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     for (const name of ['Japanese', 'French']) {
       await choose(restored, name); await button(restored, 'Review').click();
       await expect(restored.getByTestId('notebook-entries').getByText(`My ${name} note`, { exact: true })).toBeVisible();
+      await openPhoneReview(restored);
       await expect(restored.getByText(/You’re up to date for today/)).toBeVisible();
     }
   } finally { await fresh.close(); }
@@ -121,6 +124,7 @@ test('Japanese personal vocabulary, kana search, provider isolation and recovera
       return original.apply(this, args);
     };
   });
+  await openPhoneReview(page);
   await button(page, 'Reveal meaning').click(); await button(page, 'Remembered').click();
   await expect(button(page, 'Retry rating save')).toBeVisible();
   await expect(button(page, 'Change language')).toBeDisabled();

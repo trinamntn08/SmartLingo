@@ -50,7 +50,7 @@ for (const language of ['French', 'Japanese'] as const) {
       await expectContained(page);
     }
     await button(page, 'Learn').click();
-    if (language === 'Japanese') await button(page, 'Lessons').click();
+    if (language === 'Japanese') await page.getByRole('button', { name: /^(Lessons|Topics)$/ }).click();
     await expect(page.getByRole('button', { name: /^Topic / }).first()).toBeVisible();
     await expectContained(page);
     await openTopic(page, language === 'French' ? 'Restaurant' : japaneseLessons[0]!.topic);

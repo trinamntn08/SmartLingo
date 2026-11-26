@@ -16,14 +16,14 @@ test('Today and Learn share the guided lesson, resume point and next lesson', as
   await expect(launch(page)).toHaveAttribute('href', path(first.id));
   await button(page, 'Learn').click();
   await expect(launch(page)).toHaveAttribute('href', path(first.id));
-  await expect(button(page, 'Lessons')).toBeVisible();
+  await expect(button(page, (page.viewportSize()?.width ?? 600) < 600 ? 'Topics' : 'Lessons')).toBeVisible();
   await launch(page).click();
   await expect(button(page, 'Learn')).toHaveAttribute('aria-selected', 'true');
   await button(page, 'Continue to key phrases').click();
   await expect(panel(page).getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   const savedStep = page.url();
   await button(page, 'Today').click();
-  await expect(panel(page).getByText('Resume your saved step.')).toBeVisible();
+  await expect(launch(page)).toHaveAccessibleName('Continue lesson');
   await launch(page).click();
   await expect(page).toHaveURL(savedStep);
   await button(page, 'Continue to listening').click();

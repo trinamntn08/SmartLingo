@@ -132,7 +132,8 @@ test('Android export waits for the picker and merges validated v4 learning expli
   await expect(page.getByText(/0 added, 1 existing notes kept/)).toBeVisible();
   await button(page, 'Reload learning').click();
   await expect(page).toHaveURL('/#/profile/ja');
-  await expect(page.getByText('1 saved word', { exact: true })).toBeVisible();
+  await button(page, 'Review').click();
+  await expect(page.getByTestId('notebook-entries').getByRole('heading', { name: word.target, exact: true })).toBeVisible();
 });
 
 test('a failed save keeps Android Back on the same step even with forward history', async ({ page }) => {

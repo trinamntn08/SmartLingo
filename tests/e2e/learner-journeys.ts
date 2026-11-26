@@ -28,12 +28,31 @@ export async function openCourseOutline(panel: Locator) {
 /** Browse a topic through Learn, including the Japanese letters-first entry. */
 export async function openTopic(page: Page, name: string) {
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  const lessons = page.getByRole('button', { name: 'Lessons', exact: true });
+  const nameOfMode = (page.viewportSize()?.width ?? 600) < 600 ? 'Topics' : 'Lessons';
+  const lessons = page.getByRole('button', { name: nameOfMode, exact: true });
   await lessons.click();
   await expect(lessons).toHaveAttribute('aria-selected', 'true');
   const allTopics = page.getByRole('button', { name: 'All topics', exact: true });
   if (await allTopics.isVisible()) await allTopics.click();
   await page.getByRole('button', { name: `Topic ${name}`, exact: true }).click();
+}
+
+export async function showTopicFilters(page: Page) {
+  const filter = page.getByRole('button', { name: 'Filter lessons', exact: true, expanded: false });
+  if (await filter.isVisible()) await filter.click();
+}
+
+export async function openPhoneReview(page: Page) {
+  if ((page.viewportSize()?.width ?? 600) < 600) {
+    await page.getByRole('button', { name: 'Focus review', exact: true }).click();
+  }
+}
+
+export async function openLanguageChooser(page: Page) {
+  const language = page.getByRole('button', { name: 'Change language', exact: true });
+  const profile = page.getByRole('button', { name: 'Profile', exact: true });
+  if (!await language.isVisible()) await profile.click();
+  await language.click();
 }
 
 export async function openLessonFromTopics(page: Page, lesson: Pick<Lesson, 'topic' | 'subtitle'>) {

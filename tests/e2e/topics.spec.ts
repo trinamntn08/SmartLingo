@@ -1,4 +1,4 @@
-import { guidedLessonButton, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
+import { guidedLessonButton, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary, showTopicFilters } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
@@ -13,16 +13,7 @@ test('the visual library returns from a lesson to the same filtered topic and sc
   await page.goto('/');
   const button = (name: string) => page.getByRole('button', { name, exact: true });
   await button('Learn').click();
-  const topicSelector = button('Topics');
-  if (narrow) {
-    await topicSelector.press('Enter');
-    await expect(topicSelector).toHaveAttribute('aria-expanded', 'true');
-  }
-  await button('Browse topic Restaurant').press('Enter');
-  if (narrow) {
-    await expect(topicSelector).toHaveAttribute('aria-expanded', 'false');
-    await expect(topicSelector).toBeFocused();
-  }
+  await button(narrow ? 'Topic Restaurant' : 'Browse topic Restaurant').press('Enter');
   if (!narrow) {
     const cover = page.getByAltText(/^Topic context:/);
     await expect(cover).toBeVisible();
@@ -31,6 +22,7 @@ test('the visual library returns from a lesson to the same filtered topic and sc
   }
   const search = page.getByRole('textbox', { name: 'Search lessons' });
   await search.fill('coffee');
+  await showTopicFilters(page);
   await button('A1 level').click();
   await openTopicVocabulary(page);
   const openLesson = button('Open At the restaurant');
@@ -60,6 +52,7 @@ test('foundations and A2 experience lessons expose translated study material and
   for (const [slug, level] of [['essentials', 'foundation'], ['past', 'A2']] as const) {
     const lesson = lessons.find(item => item.id.startsWith(`fr.${slug}.`) && item.level === level)!;
     await openTopic(page, lesson.topic);
+    await showTopicFilters(page);
     await page.getByRole('button', { name: level === 'foundation' ? 'Foundations level' : 'A2 level', exact: true }).click();
     await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
     await expect(page.getByText(lesson.dialogue[0].meaning, { exact: true })).toBeVisible();
@@ -85,7 +78,7 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  await expect(page.getByText(`${topics.length} everyday topics · ${[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}`, { exact: true })).toBeVisible();
+  if (info.project.name === 'desktop') await expect(page.getByText(`${topics.length} everyday topics · ${[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}`, { exact: true })).toBeVisible();
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
   await page.getByRole('button', { name: 'Topic Health and appointments', exact: true }).click();
@@ -109,6 +102,7 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await search.fill('no-such-word');
   await expect(page.getByText('No matches.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search and filters', exact: true }).click();
+  await showTopicFilters(page);
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   const a2Lessons = lessons.filter(lesson => lesson.topic === 'Health and appointments' && lesson.level === 'A2');
   await expect(page.getByRole('button', { name: /^Open / })).toHaveCount(a2Lessons.length);
@@ -127,6 +121,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Services and paperwork', exact: true }).click();
+  await showTopicFilters(page);
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
   await openKeyPhrases(page);
@@ -195,6 +190,7 @@ test('320px catalogue reaches topics and topic changes clear stale search and le
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('bakery');
+  await showTopicFilters(page);
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await page.getByRole('button', { name: 'All levels', exact: true }).click();
   await search.fill('');
@@ -203,6 +199,7 @@ test('320px catalogue reaches topics and topic changes clear stale search and le
   await expect(groceries).toBeInViewport();
   await groceries.click();
   await search.fill('bakery');
+  await showTopicFilters(page);
   await page.getByRole('button', { name: 'A2 level', exact: true }).click();
   await page.getByRole('button', { name: 'All topics', exact: true }).click();
   await groceries.click();

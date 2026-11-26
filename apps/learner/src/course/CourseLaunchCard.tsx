@@ -29,11 +29,23 @@ const featuredActions: Record<CourseLaunchProps['status'], string> = {
   unavailable: 'Start lesson',
 };
 
-export function CourseLaunchCard({ course, day, status, loading, href, onOpen, disabled, featured = false }: CourseLaunchProps & {
-  featured?: boolean;
+export function CourseLaunchCard({ course, day, status, loading, href, onOpen, disabled, featured = false, concise = false, showCourseName = true }: CourseLaunchProps & {
+  featured?: boolean; concise?: boolean; showCourseName?: boolean;
 }) {
   const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const message = loading ? 'Loading course progress…' : progressMessages[status];
+  if (concise) {
+    const action = featuredActions[status];
+    return <View testID="open-course-panel" style={[s.card, launch.concise, featured && launch.conciseFeatured]}>
+      {showCourseName && <Text style={launch.courseTitle}>{course.title.split(':', 1)[0]}</Text>}
+      <Text accessibilityRole="header" aria-level={2} style={[s.heading, featured ? launch.featuredTitleCompact : launch.lessonTitle]}>
+        {loading ? 'Loading lesson…' : day.title}
+      </Text>
+      {status === 'unavailable' && <Text style={launch.note}>{message}</Text>}
+      <Button accent={featured} primary={!featured} href={href} onPress={onOpen} label={action}
+        disabled={loading || disabled} trailingIcon="arrow-right">{action.split(' ', 1)[0]}</Button>
+    </View>;
+  }
 
   return <View testID="open-course-panel" style={[
     s.card,
@@ -63,17 +75,9 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
   </View>;
 }
 
-export function OtherFrenchCourses({ courses }: { courses: readonly CourseLaunchProps[] }) {
-  if (!courses.length) return null;
-  return <View style={s.row} accessibilityLabel="More French courses">
-    {courses.map(({ course, href, onOpen, disabled, loading }) =>
-      <Button key={course.id} compact icon="book" href={href} onPress={onOpen} disabled={loading || disabled}>
-        {course.title}
-      </Button>)}
-  </View>;
-}
-
 const launch = StyleSheet.create({
+  concise: { padding: 16, gap: 9, borderTopWidth: 3, borderTopColor: colors.yellow },
+  conciseFeatured: { backgroundColor: colors.goldTint, borderWidth: 1, borderTopWidth: 1, borderTopColor: colors.line, gap: 12 },
   regular: { padding: 20, borderTopWidth: 3, borderTopColor: colors.yellow, gap: 8 },
   regularCompact: { padding: 16, gap: 6 },
   featured: { flexGrow: 1, justifyContent: 'center', padding: 24, backgroundColor: colors.goldTint, borderBottomWidth: 3, gap: 18 },

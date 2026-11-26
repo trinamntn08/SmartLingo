@@ -42,6 +42,6 @@ test('notebook search handles accents, English and examples while preserving a h
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.reload();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
-  await expect(page.getByText('2 of 2 saved entries', { exact: true })).toBeVisible();
+  await expect(page.getByText((page.viewportSize()?.width ?? 600) < 600 ? '2 saved entries' : '2 of 2 saved entries', { exact: true })).toBeVisible();
   await expect(page.getByTestId('notebook-entries').getByText('Keep this unsaved edit', { exact: true })).toBeVisible();
 });

@@ -1,4 +1,4 @@
-import { openKeyPhrases, openLessonFromTopics, openTopic } from './learner-journeys';
+import { openKeyPhrases, openLanguageChooser, openLessonFromTopics, openTopic } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { frenchCourses, japaneseCourse, japaneseLessons, lessons, openCoursePilot } from '@smartlingo/content';
@@ -17,7 +17,7 @@ const stores = ['events', 'notebook', 'reviewEvents', 'courseEvents'] as const;
 type Rows = { events: LearningEvent[]; notebook: NotebookEntry[]; reviewEvents: ReviewEvent[]; courseEvents: CourseEvent[] };
 
 async function choose(page: Page, language: string) {
-  if (await button(page, 'Change language').isVisible()) await button(page, 'Change language').click();
+  if (await button(page, 'Profile').isVisible()) await openLanguageChooser(page);
   await button(page, `Learn ${language}`).click();
   await expect(button(page, 'Report')).toBeVisible();
 }
@@ -128,6 +128,7 @@ test('first-run reports show real catalogue sizes and no invented activity in ei
     await button(page, 'Report').click();
     await expect(page.getByRole('heading', { name: 'Learning report', exact: true })).toBeVisible();
     await metrics(page, language, 0, 0, 0, 0); await week(page, 0);
+    if (info.project.name === 'small-screen') await button(page, 'Topic progress').click();
     await expect(page.getByTestId('report-topic-list')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`${language.toLowerCase()}-empty-report.png`), fullPage: true });
@@ -145,6 +146,7 @@ test('report reads scoped saved history without writing, survives reload and ref
   const before = await snapshot(page);
   await button(page, 'Report').click();
   await metrics(page, 'French', 1, frenchExplored, 2, 1); await week(page, frenchActions);
+  if (info.project.name === 'small-screen') await button(page, 'Topic progress').click();
   const topicLessons = lessons.filter(lesson => lesson.topic === french.topic);
   const topicWords = new Set(topicLessons.flatMap(lesson => lesson.vocabulary.map(word => word.id)));
   const studiedWords = new Set([...french.vocabulary, ...openCoursePilot.days[0].vocabulary].map(word => word.id));

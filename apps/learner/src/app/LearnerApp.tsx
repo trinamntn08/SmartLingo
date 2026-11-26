@@ -1,12 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
+import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type CourseDay, type OpenCourse, type TargetLanguage } from '@smartlingo/domain';
 import { frenchCourses, getFrenchTopicPractice, japaneseCourse } from '@smartlingo/content';
 import { FrenchTransferPractice, frenchTopicPracticeMinutes } from '../ui/FrenchTransferPractice';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
 import type { CourseLaunchProps } from '../course/CourseLaunchCard';
-import { courseRecommendation } from '../course/courseRecommendation';
+import { courseNavigationEvent, courseRecommendation, latestCourseStudy } from '../course/courseRecommendation';
+import { CourseSelection } from '../course/CourseSelection';
 import { OpenCoursePanel } from '../course/OpenCoursePanel';
 import { CourseWriteStatus } from '../course/CourseWriteStatus';
 import { useCourseLearning } from '../course/useCourseLearning';
@@ -62,8 +63,17 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
+  const compactReader = compact && (route.kind === 'course' || !!lesson);
   const desktopNavBreakpoint = language === 'fr-FR' ? designTokens.layout.desktopFrenchNavBreakpoint : designTokens.layout.desktopNavBreakpoint;
   const mobileNav = width < desktopNavBreakpoint;
+  const pickerOpen = route.kind === 'courses' && !route.courseId;
+  const previouslyPicking = useRef(false);
+  useLayoutEffect(() => {
+    if (previouslyPicking.current && !pickerOpen && route.kind !== 'courses' && typeof document !== 'undefined') {
+      document.getElementById('learn-courses-trigger')?.focus({ preventScroll: true });
+    }
+    previouslyPicking.current = pickerOpen;
+  }, [pickerOpen, route.kind]);
   useLayoutEffect(() => {
     if (active && !catalogue.loading && !model.loading) scroll.current?.scrollTo({ y: Number(read('learner.scroll') ?? 0), animated: false });
   }, [visit, active, catalogue.loading, model.loading]);
@@ -85,18 +95,30 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const recommendations = useMemo(() => courses.map(course => ({
     course, ...courseRecommendation(course, courseLearning.events, courseUnavailable),
   })), [courses, courseLearning.events, courseUnavailable]);
+  const latestStudy = useMemo(() => latestCourseStudy(courses, courseLearning.events), [courses, courseLearning.events]);
   const courseLaunches: CourseLaunchProps[] = recommendations.map(recommendation => {
     const { course, day } = recommendation;
     const startRoute = { kind: 'course', language: course.language, courseId: course.id, dayId: day.id } as const;
     return { ...recommendation, loading: courseLearning.loading, href: routeHref(startRoute),
       disabled: switchingBlocked, onOpen: () => navigation.navigate(startRoute) };
   });
-  const [courseLaunch, ...otherCourses] = courseLaunches;
+  const courseLaunch = courseLaunches.find(item => item.course.id === latestStudy?.courseId) ?? courseLaunches[0]!;
+  const selectedCourse = route.kind === 'courses' && route.courseId
+    ? courseLaunches.find(item => item.course.id === route.courseId) : undefined;
   const activeCourse = route.kind === 'course' ? recommendations.find(item => item.course.id === route.courseId) : undefined;
   const missingDestination = route.kind === 'unavailable' || (route.kind === 'lesson' && !lesson)
     || (route.kind === 'course' && !activeCourse)
+    || (route.kind === 'courses' && !!route.courseId && !selectedCourse)
     || (route.kind === 'topics' && !!selectedTopic && !topics.some(topic => topic.name === selectedTopic));
   const courseVisible = route.kind === 'course' && !missingDestination && !model.loading && !catalogue.loading;
+
+  function startChosenCourse(course: OpenCourse, day: CourseDay) {
+    if (switchingBlocked || courseLearning.loading) return;
+    const destination = { kind: 'course', language: course.language, courseId: course.id, dayId: day.id } as const;
+    if (courseUnavailable) { navigation.navigate(destination); return; }
+    const event = courseNavigationEvent(course, day, courseLearning.events);
+    courseLearning.save([event], () => navigation.navigate({ ...destination, sectionId: event.blockId }, { afterSave: true }));
+  }
 
   function unavailable() {
     return <View style={s.card}>
@@ -126,8 +148,16 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     }
     if (route.kind === 'course' && activeCourse) return <OpenCoursePanel key={activeCourse.course.id} route={route} course={activeCourse.course}
       recommendedDay={activeCourse.day} learning={courseLearning} model={model} lessons={lessons} />;
+    if (route.kind === 'courses') {
+      const selected = selectedCourse && { ...selectedCourse, onOpen: () => startChosenCourse(selectedCourse.course, selectedCourse.day) };
+      return <CourseSelection courses={courseLaunches} current={courseLaunch.course.id} selected={selected} events={courseLearning.events}
+        onChoose={courseId => navigation.navigate({ kind: 'courses', language: targetLanguage, courseId }, { replace: !!courseId })}
+        onClose={() => navigation.backTo(tabRoute('Learn', targetLanguage), previous => 'language' in previous && previous.language === targetLanguage
+          && ['courses', 'topics', 'letters', 'listening', 'speaking'].includes(previous.kind), false, true)}
+        onOpenDay={day => { if (selected) startChosenCourse(selected.course, day); }} />;
+    }
     if (route.kind === 'slang') return <SlangCatalogue model={model} />;
-    if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch} otherCourses={otherCourses}
+    if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch} courseStudiedAt={latestStudy?.occurredAt}
       alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
       onAlphabet={() => openLearnMode('Japanese letters')}
@@ -137,16 +167,17 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       onExplore={() => openLearnMode('Lessons')} onReview={() => navigate('Review')}
     />;
     if (tab === 'Learn') return <LearningHub
-      language={targetLanguage} lessons={lessons} model={model} mode={learnMode} courseLaunch={courseLaunch} otherCourses={otherCourses}
+      language={targetLanguage} lessons={lessons} model={model} mode={learnMode} courseLaunch={courseLaunch}
       onMode={selectLearnMode} selectedTopic={selectedTopic} onSelectTopic={selectTopic}
       onOpen={openLesson} disabled={switchingBlocked} active={active} catalogueSearch={catalogueSearch}
-      topics={topics} topicNavigation={showLibrary && !wideLibrary && renderTopicNavigation(true)}
+      topics={topics} topicNavigation={showLibrary && !wideLibrary && !compact && renderTopicNavigation(true)}
     />;
     if (tab === 'Review') return <Notebook
       key={targetLanguage} language={targetLanguage} onWriteBlocked={setChildWriteBlocked}
       model={model} onExplore={() => openLearnMode('Lessons')}
     />;
-    return <ProfileScreen language={targetLanguage} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor} />;
+    return <ProfileScreen language={targetLanguage} model={model} catalogue={catalogue} onOpenEditor={onOpenEditor}
+      onChangeLanguage={changeLanguage} languageChangeDisabled={switchingBlocked} />;
   }
 
   function renderTopicNavigation(compact: boolean) {
@@ -155,16 +186,16 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
 
   return <View style={s.app}>
     <LearnerSkipLinks mobileNavigation={!!language && !choosing && mobileNav} />
-    <View style={[s.header, compact && { paddingHorizontal: 15, paddingVertical: 8 }]}>
+    {!compactReader && <View style={[s.header, compact && { paddingHorizontal: 14, paddingVertical: 3 }]}>
       <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
         {language && !choosing && !mobileNav && <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile={false} />}
         {language && !choosing && <View style={{ flexShrink: 1, minWidth: 0 }}>
-          <Button compact icon={compact ? undefined : 'globe'} trailingIcon="chevron-down" label="Change language"
+          <Button compact quiet={compact} iconOnly={compact} icon="globe" trailingIcon={compact ? undefined : 'chevron-down'} label="Change language"
             disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]}</Button>
         </View>}
       </View>
-    </View>
+    </View>}
     <View style={{ flex: 1, width: '100%', maxWidth: designTokens.layout.shellMaxWidth, alignSelf: 'center', flexDirection: 'row', minHeight: 0 }}>
       {wideLibrary && !model.loading && !catalogue.loading && <View style={{ width: designTokens.layout.sidebarWidth, flexShrink: 0 }}>
         {renderTopicNavigation(false)}
@@ -173,7 +204,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         onScroll={event => { if (active) write('learner.scroll', event.nativeEvent.contentOffset.y); }} scrollEventThrottle={16}
         contentContainerStyle={{ flexGrow: 1 }}>
         <View role="main" nativeID={learnerContentId} tabIndex={-1}
-          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
+          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 },
+            compact && { padding: 14, paddingTop: compactReader ? 8 : 12, paddingBottom: 22, gap: 12 }]}>
           {!courseVisible && <CourseWriteStatus learning={courseLearning} />}
           {route.kind === 'unavailable' ? unavailable() : !language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
@@ -194,15 +226,16 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
                 <Button disabled={model.busy} onPress={model.cancelWrite}>Dismiss and continue</Button>
               </View>
             </View>}
-            {model.busy && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
+            {model.busy && !compact && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
             {!!selection.message && <Text accessibilityLiveRegion="polite" style={s.muted}>{selection.message}</Text>}
-            {switchingBlocked && <Text style={s.muted}>Finish saving or resolve the save message before leaving this screen or changing language.</Text>}
+            {switchingBlocked && !compact && <Text style={s.muted}>Finish saving or resolve the save message before leaving this screen or changing language.</Text>}
             {renderDestination(language)}
           </>}
         </View>
       </ScrollView>
     </View>
-    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 5, paddingBottom: 7 }}>
+    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line,
+      paddingHorizontal: 5, paddingVertical: 3 }}>
       <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile />
     </View>}
   </View>;

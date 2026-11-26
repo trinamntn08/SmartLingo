@@ -1,4 +1,4 @@
-import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openPhoneReview, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { getFrenchTopicPractice, lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -117,6 +117,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
   await button(page, 'Try picture practice').click();
   await button(page, 'Review').click();
+  await openPhoneReview(page);
   await button(page, 'Reveal meaning').click();
   await button(page, 'Needed help').click();
   await expect(page.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
@@ -148,7 +149,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/');
-  const todayPhoto = cold.getByTestId('today-next-step').getByRole('img');
+  const todayPhoto = cold.getByTestId('today-hero-art').getByRole('img');
   await expect.poll(() => todayPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect.poll(() => cold.evaluate(() => Array.from(document.fonts).some(font => font.family === 'Inter' && font.status === 'loaded'))).toBe(true);
   await openTopic(cold, restaurantLesson.topic);
@@ -171,6 +172,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await expect(coffeePhoto).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
   await expect.poll(() => coffeePhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await button(cold, 'Review').click();
+  await openPhoneReview(cold);
   await expect(cold.getByText('You’re up to date for today.', { exact: true })).toBeVisible();
   await button(cold, 'Profile').click();
   await openProfileSection(cold, 'Offline & backups');

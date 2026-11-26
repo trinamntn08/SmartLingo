@@ -70,7 +70,8 @@ test.beforeEach(async ({ page }) => {
 test('Japanese starts with hiragana, saves studied rows and restores them alongside existing vocabulary history', async ({ page, browser, baseURL }, info) => {
   test.setTimeout(90000);
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Start with Japanese letters', exact: true })).toBeVisible();
+  const startingTitle = (page.viewportSize()?.width ?? 600) < 600 ? first.title : 'Start with Japanese letters';
+  await expect(page.getByTestId('today-next-step').getByRole('heading', { name: startingTitle, exact: true })).toBeVisible();
   await button(page, 'Start Hiragana').click();
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
@@ -84,7 +85,6 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await alphabet.getByRole('button', { name: `Listen to ${first.characters[0]!.kana}`, exact: true }).click();
   await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}'))).toEqual({ text: first.characters[0]!.audioText, language: 'ja-JP' });
   // Vocabulary remains available before any character practice or saved row.
-  await button(page, 'Lessons').click();
   const oldLesson = japaneseLessons[0]!;
   await openTopic(page, oldLesson.topic);
   await button(page, `Open ${oldLesson.subtitle}`).click();
@@ -95,8 +95,8 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await expect(page.getByTestId('lesson-step-picture')).toHaveAttribute('aria-current', 'step');
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
-  await button(page, 'Today').click();
-  await button(page, 'Start Hiragana').click();
+  await button(page, 'Learn').click();
+  await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
   await tryRow(page, first, true);
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
   await revealRows(page);
@@ -202,7 +202,7 @@ test('failed alphabet saving keeps the current row and retries the same event on
   await expect(page.getByText('Simulated alphabet save failure', { exact: true })).toBeVisible();
   await revealRows(page);
   await expect(page.getByTestId(`kana-row-${first.id}`)).toHaveAttribute('aria-selected', 'true');
-  await expect(button(page, 'Lessons')).toBeDisabled(); expect(await events(page)).toHaveLength(0);
+  await expect(button(page, 'Topics')).toBeDisabled(); expect(await events(page)).toHaveLength(0);
   await button(page, 'Retry save').click();
   await revealRows(page);
   await expect(page.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');

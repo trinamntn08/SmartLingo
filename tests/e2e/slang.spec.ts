@@ -8,7 +8,8 @@ test('French slang is searchable, keeps its history and saves expressions to the
   if (narrow) await page.setViewportSize({ width: 320, height: 740 });
   await page.goto('/today/fr');
   const navigation = page.getByRole('navigation', { name: 'Learning navigation' });
-  await expect(navigation.getByRole('button')).toHaveText(['Today', 'Learn', 'Slang', 'Review', 'Report', 'Profile']);
+  await expect(navigation.getByRole('button')).toHaveText(narrow
+    ? ['Today', 'Learn', 'Review', 'Report', 'Profile'] : ['Today', 'Learn', 'Slang', 'Review', 'Report', 'Profile']);
   if (narrow) {
     for (const control of await navigation.getByRole('button').all()) {
       const bounds = await control.boundingBox();
@@ -23,9 +24,10 @@ test('French slang is searchable, keeps its history and saves expressions to the
     await expect.poll(async () => Math.abs((await navigation.boundingBox())!.y - (await language.boundingBox())!.y)).toBeLessThan(15);
     await page.setViewportSize({ width: 1440, height: 1000 });
   }
+  if (narrow) await button(page, 'Learn').click();
   await button(page, 'Slang').click();
   await expect(page).toHaveURL(/\/slang\/fr$/);
-  await expect(button(page, 'Slang')).toHaveAttribute('aria-current', 'page');
+  await expect(button(page, narrow ? 'Learn' : 'Slang')).toHaveAttribute('aria-current', 'page');
   const title = page.getByRole('heading', { name: 'Everyday French & slang' });
   await expect(title).toBeVisible();
   const intro = page.getByTestId('slang-intro');

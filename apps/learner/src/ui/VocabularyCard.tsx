@@ -9,8 +9,8 @@ import { WordIllustration } from './WordIllustration';
 import { JapaneseWordReading } from './JapaneseWordReading';
 import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
 
-export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustration = true, study = false }: {
-  entry: Vocabulary; model: LearningModel; language?: TargetLanguage; showIllustration?: boolean; study?: boolean;
+export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustration = true, study = false, phoneStudy = false }: {
+  entry: Vocabulary; model: LearningModel; language?: TargetLanguage; showIllustration?: boolean; study?: boolean; phoneStudy?: boolean;
 }) {
   const [message, setMessage] = useState('');
   const [voiceError, setVoiceError] = useState('');
@@ -27,7 +27,13 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
     () => setMessage(`Saved ${entry.target} to your notebook.`));
   }
 
-  const illustration = showIllustration && <WordIllustration entry={entry} size={study ? (compact ? 148 : 144) : compact ? 240 : 280} />;
+  const illustrationSize = phoneStudy ? 100 : study ? (compact ? 148 : 144) : compact ? 240 : 280;
+  const illustration = showIllustration && <WordIllustration entry={entry} size={illustrationSize} />;
+  const term = <Text {...languageProps} accessibilityRole="header"
+    style={[s.target, layout.target, compact && layout.compactTarget, phoneStudy && layout.phoneTarget]}>{entry.target}</Text>;
+  const japaneseReading = language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />;
+  const genderLabel = gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>;
+  const audio = <Speak language={language} text={entry.target} onError={setVoiceError} />;
   const example = <View style={study ? layout.studyExample : layout.example}>
     {!study && <Text style={s.eyebrow}>In a sentence</Text>}
     <Text {...languageProps} style={[s.body, study && layout.studySentence]}>{entry.example}</Text>
@@ -37,24 +43,31 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
 
   return <View testID={`vocabulary-${entry.id}`} style={[s.card, layout.card, compact && layout.compactCard, study && layout.studyCard]}>
     <View style={layout.definition}>
-      <View style={[s.row, layout.phrase]}>
-        <Text {...languageProps} accessibilityRole="header" style={[s.target, layout.target, compact && layout.compactTarget]}>{entry.target}</Text>
-        {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
-        {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
-        <Speak language={language} text={entry.target} onError={setVoiceError} />
-      </View>
+      {phoneStudy ? <>
+        <View style={[s.row, layout.phonePhrase]}>
+          <View style={layout.phoneTerm}>{term}{genderLabel}</View>
+          <View style={[s.row, layout.phoneActions]}>
+            {audio}
+            <Button compact iconOnly icon={saved ? 'check' : 'bookmark'} toggle selected={saved}
+              label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord} />
+          </View>
+        </View>
+        {japaneseReading}
+      </> : <View style={[s.row, layout.phrase]}>{term}{japaneseReading}{genderLabel}{audio}</View>}
       {language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}
       <Text style={[s.body, layout.meaning]}>{entry.meaning}</Text>
     </View>
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, layout.voiceError]}>{voiceError}</Text>}
-    {study ? <View style={[s.row, layout.studyContent]}>{illustration}{example}</View> : <>{illustration}{example}</>}
+    {study ? <View style={[s.row, layout.studyContent]}>{phoneStudy ? <>{example}{illustration}</> : <>{illustration}{example}</>}</View>
+      : <>{illustration}{example}</>}
     {!!presentation.note && <Text style={s.muted}>{presentation.note}</Text>}
-    <View style={[s.row, layout.actions, study && layout.studyActions]}>
+    {!phoneStudy && <View style={[s.row, layout.actions, study && layout.studyActions]}>
       <Button compact quiet label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
         {saved ? '✓ In notebook' : '+ Save word'}
       </Button>
-    </View>
-    {!!message && <Text accessibilityLiveRegion="polite" style={s.muted}>{message}</Text>}
+    </View>}
+    {(phoneStudy || !!message) && <Text accessibilityLiveRegion="polite"
+      style={[s.muted, phoneStudy && layout.saveAnnouncement]}>{message}</Text>}
   </View>;
 }
 
@@ -64,8 +77,13 @@ const layout = StyleSheet.create({
   studyCard: { gap: 12, borderBottomWidth: 3 },
   definition: { minWidth: 0, gap: 4 },
   phrase: { gap: 8 },
+  phonePhrase: { gap: 8, alignItems: 'flex-start' },
+  phoneTerm: { flexGrow: 1, flexShrink: 1, flexBasis: 145, minWidth: 0 },
+  phoneActions: { gap: 6 },
   target: { flexShrink: 1, minWidth: 0 },
   compactTarget: { fontSize: 32, lineHeight: 42 },
+  phoneTarget: { fontSize: 25, lineHeight: 32 },
+  saveAnnouncement: { position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' },
   meaning: { fontWeight: '600' },
   voiceError: { color: colors.danger },
   studyContent: { minWidth: 0 },

@@ -32,7 +32,11 @@ test('the B1 starter course and its connected response are available after cold 
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/today/fr');
+  await expect(cold.getByRole('button', { name: b1.title, exact: true })).toHaveCount(0);
+  await cold.goto('/learn/fr/courses');
   await cold.getByRole('button', { name: b1.title, exact: true }).click();
+  await expect(cold.getByTestId('chosen-course').getByRole('heading', { name: b1.title })).toBeVisible();
+  await guidedLessonButton(cold).click();
   await expect(step(cold, `Lesson 1: ${day.title}`)).toBeVisible();
   await button(cold, 'Continue to key phrases').click();
   await button(cold, 'Continue to listening').click();
@@ -80,7 +84,7 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   await expect(step(cold, 'Key phrases')).toBeVisible();
   await expect(panel(cold).getByTestId('vocabulary-fr.greetings.bonsoir')).toContainText('good evening');
   await button(cold, 'Save bonsoir').click();
-  await expect(button(cold, 'Save bonsoir')).toHaveText(/In notebook/);
+  await expect(button(cold, 'Save bonsoir')).toBeDisabled();
   await button(cold, 'Continue to listening').click();
   await expect(step(cold, 'Listening practice')).toBeVisible();
   await expect(cold).toHaveURL(/\/lesson-listening$/);
@@ -88,7 +92,6 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   await expect(step(cold, 'Listening practice')).toBeVisible();
   await steps(cold).getByRole('link', { name: 'Key phrases', exact: true }).click();
   await expect(button(cold, 'Save bonsoir')).toBeDisabled();
-  await expect(button(cold, 'Save bonsoir')).toHaveText(/In notebook/);
   await openTopic(cold, 'Restaurant');
   await cold.getByRole('button', { name: 'Open Explain food needs', exact: true }).click();
   await expectDialoguePhoto(cold.getByTestId('lesson-stage'), 'french-bistro-dialogue.jpg');

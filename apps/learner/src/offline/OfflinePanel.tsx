@@ -29,7 +29,7 @@ export function OfflinePanel({ manager = offlineAssets }: { manager?: OfflineAss
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>Learn offline</Text>
     <Text style={s.body}>Save the bundled draft lessons and their pictures so you can open SmartLingo and study without a connection. Published lessons are loaded separately with “Load published lessons” in Profile.</Text>
-    <Text style={s.muted}>App downloads do not include voices. Saved audio is managed separately in audio settings; device voices may need a connection.</Text>
+    <Text style={s.muted}>The download includes bundled Japanese lesson clips. Additional saved audio has separate controls in audio settings. Device voices may need a connection.</Text>
 
     <View style={[s.notice, ready && { backgroundColor: colors.green }]}>
       <Text accessibilityLiveRegion="polite" style={s.body}>{!info ? error && !busy ? 'Offline status is unavailable. Please retry the status check.' : 'Checking offline status…' : ready ? 'Ready for offline use' : saved?.state === 'incomplete' ? 'Download incomplete — offline launch is not ready.' : 'No offline copy saved yet.'}</Text>

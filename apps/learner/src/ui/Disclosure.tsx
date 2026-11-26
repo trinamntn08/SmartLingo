@@ -4,17 +4,20 @@ import { colors, designTokens, styles as s } from './theme';
 import { Icon, type IconName } from './Icon';
 
 /** Mount settings on first use, then retain their state while collapsed. */
-export function Disclosure({ title, description, children, keepMounted = true, compact = false, icon }: {
+export function Disclosure({ title, description, children, keepMounted = true, compact = false, icon, open, onOpenChange }: {
   title: string; description?: string; children: ReactNode; keepMounted?: boolean; compact?: boolean; icon?: IconName;
+  open?: boolean; onOpenChange?: (value: boolean) => void;
 }) {
   const contentId = useId();
-  const [expanded, setExpanded] = useState(false);
+  const [localExpanded, setExpanded] = useState(false);
+  const expanded = open ?? localExpanded;
   const [visited, setVisited] = useState(false);
   const [focused, setFocused] = useState(false);
 
   function toggle() {
     setVisited(true);
-    setExpanded(value => !value);
+    if (open === undefined) setExpanded(!expanded);
+    onOpenChange?.(!expanded);
   }
 
   return <View style={[s.card, { padding: 0, gap: 0, minWidth: 0 }]}>

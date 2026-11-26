@@ -2,6 +2,8 @@
 
 Reviewed: 2026-11-19. Runtime content: `packages/content/src/japanese-course.ts`.
 
+The original course payload remains available to the runtime. For current exercises, checkpoints, audio and progress, see the [Japanese curriculum redesign](japanese-curriculum-redesign.md).
+
 ## Original content and rights
 
 All Japanese teaching text, English support, kana readings, dialogue, practice options, feedback and reflection tasks in this route are original AI-assisted SmartLingo drafts. No third-party course pages, vocabulary files, exercise answers, images or recordings are imported or bundled. Research references below do not grant a licence over SmartLingo content, imply endorsement or establish that another course can be copied. Source-free runtime provenance identifies authorship, original rights and pending review; no Creative Commons licence is claimed for these additions.

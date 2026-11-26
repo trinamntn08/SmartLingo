@@ -24,7 +24,7 @@ for (const locale of ['fr', 'ja'] as const) {
       await expect(recommendation).toHaveAccessibleName(locale === 'fr' ? 'Start lesson' : 'Start Hiragana');
       await recommendation.click();
       if (locale === 'ja') {
-        await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 1 of 2/)).toBeVisible();
+        await expect(page.getByText(/Hiragana.*Row 1 of \d+.*Study/)).toBeVisible();
       } else {
         await expect(page.getByRole('heading', { name: 'Lesson 1: Meet a neighbour', exact: true })).toBeVisible();
       }

@@ -10,7 +10,7 @@ export function courseRecommendation(course: OpenCourse, events: readonly Course
   if (!day) return { day: last, status: 'complete' };
   const started = events.some(event => event.courseId === course.id && event.dayId === day.id
     && event.courseRevision === courseDayProgressRevision(course, day)
-    && event.kind !== 'support' && (courseLessonEventStage(event) || day.blocks.some(block => block.id === event.blockId)));
+    && event.kind !== 'support' && event.kind !== 'practice' && (courseLessonEventStage(event) || day.blocks.some(block => block.id === event.blockId)));
   return { day, status: started ? 'resume' : day.id === last.id ? 'start' : 'next' };
 }
 
@@ -19,7 +19,7 @@ export function latestCourseStudy(courses: readonly OpenCourse[], events: readon
   let latest: CourseEvent | undefined;
   const byId = new Map(courses.map(course => [course.id, course]));
   for (const event of events) {
-    if (event.kind === 'support') continue;
+    if (event.kind === 'support' || event.kind === 'practice') continue;
     const course = byId.get(event.courseId);
     const day = course?.days.find(item => item.id === event.dayId);
     if (!course || !day || courseDayProgressRevision(course, day) !== event.courseRevision) continue;

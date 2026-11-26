@@ -2,6 +2,9 @@
 
 Original AI-assisted draft for owner review, 2026-11-22 (Europe/Paris). No publication, qualified Japanese-teacher review, certified level coverage or pronunciation assessment is claimed.
 
+
+This record documents the original basic rows. See the [curriculum map](japanese-curriculum-redesign.md) for the revised sequence, typing, patterns and checkpoints.
+
 ## Scope and progression
 
 The owner requested Japanese alphabet lessons before vocabulary. The separate alphabet metadata provides ten short hiragana groups followed by ten matching katakana groups: vowels, k, s, t, n, h, m, y, r, then wa / o (wo) / nasal n. Each script covers the standard 46 modern basic characters, 92 forms altogether. The three-character final group intentionally combines the remaining w forms with nasal n. This introductory recognition/listening route uses three or five characters per lesson rather than padding a vocabulary lesson to six items.

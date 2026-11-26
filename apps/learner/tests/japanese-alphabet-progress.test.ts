@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { LearningEvent } from '@smartlingo/domain';
 import { japaneseAlphabetLessons } from '@smartlingo/content';
-import { alphabetProgress, isAlphabetLessonId } from '../src/alphabet/progress';
+import { alphabetLearningPath, alphabetProgress, isAlphabetLessonId } from '../src/alphabet/progress';
 
 const now = Date.parse('2026-11-22T12:00:00Z');
 function completion(index: number, overrides: Partial<LearningEvent> = {}): LearningEvent {
@@ -13,11 +13,11 @@ function completion(index: number, overrides: Partial<LearningEvent> = {}): Lear
 
 test('alphabet starts with Hiragana vowels and advances through Hiragana before Katakana', () => {
   assert.equal(alphabetProgress([], now).next?.id, 'ja.alphabet.hiragana.a');
-  const studied = japaneseAlphabetLessons.filter(lesson => lesson.script === 'hiragana').map((_, index) => completion(index));
+  const studied = japaneseAlphabetLessons.flatMap((lesson, index) => lesson.script === 'hiragana' ? [completion(index)] : []);
   const result = alphabetProgress(studied, now);
-  assert.equal(result.completed, 10);
+  assert.equal(result.completed, alphabetLearningPath.filter(lesson => lesson.script === 'hiragana').length);
   assert.equal(result.next?.id, 'ja.alphabet.katakana.a');
-  assert.equal(result.total, 20);
+  assert.equal(result.total, japaneseAlphabetLessons.length);
 });
 
 test('only valid current alphabet row completions count; history is neither rewritten nor mistaken for word study', () => {
@@ -36,6 +36,28 @@ test('only valid current alphabet row completions count; history is neither rewr
 
 test('all studied rows remain revisitable and do not invent a next lesson', () => {
   const result = alphabetProgress(japaneseAlphabetLessons.map((_, index) => completion(index)), now);
-  assert.equal(result.completed, 20);
+  assert.equal(result.completed, japaneseAlphabetLessons.length);
   assert.equal(result.next, undefined);
+});
+
+
+test('legacy twenty completions stay valid and lead into additive hiragana patterns', () => {
+  const result = alphabetProgress(japaneseAlphabetLessons.slice(0, 20).map((_, index) => completion(index)), now);
+  assert.equal(result.completed, 20);
+  assert.equal(result.next?.id, 'ja.alphabet.hiragana.checkpoint.basic');
+});
+
+test('word practice resumes a deliberate unfinished group and counts only known successful tasks', () => {
+  const lesson = japaneseAlphabetLessons.find(item => item.kind === 'checkpoint')!;
+  const index = japaneseAlphabetLessons.indexOf(lesson);
+  const task = lesson.practice![0]!;
+  const attempt = completion(index, { activity: 'sentence', itemId: task.id, result: 'correct', hints: 1 });
+  const invalid = [completion(index, { activity: 'sentence', itemId: 'unknown', result: 'correct' }),
+    completion(index, { activity: 'sentence', itemId: lesson.practice![1]!.id, result: 'incorrect' }),
+    completion(index, { activity: 'sentence', itemId: lesson.practice![2]!.id, result: 'correct', revision: 2 })];
+  const result = alphabetProgress([attempt, attempt, ...invalid], now);
+  assert.equal(result.completed, 0);
+  assert.equal(result.next?.id, lesson.id);
+  assert.deepEqual([...result.taskIds.get(lesson.id)!], [task.id]);
+  assert.equal(alphabetProgress([attempt, completion(index)], now).next?.id, 'ja.alphabet.hiragana.a');
 });

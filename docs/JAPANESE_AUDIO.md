@@ -57,7 +57,7 @@ Alternatively, run the [official VOICEVOX engine](https://github.com/VOICEVOX/vo
 
 ## Credit and rights
 
-Required displayed credit: **VOICEVOX:四国めたん**. Profile identifies this as synthetic speech. The [model terms](https://github.com/VOICEVOX/voicevox_vvm/blob/0.17.1/TERMS.txt) and [voice terms/common conditions](https://zunko.jp/con_ongen_kiyaku.html) allow commercial and noncommercial generated-audio use with the required credit and their stated conditions. Any onward use of generated audio must retain the applicable conditions and credit. No character artwork, third-party recordings or voice binaries are committed or bundled into the app export. Source download URLs, exact artifact sizes and hashes live in `scripts/japanese_voice/setup.py`.
+Required displayed credit: **VOICEVOX:四国めたん**. Profile identifies this as synthetic speech. The [model terms](https://github.com/VOICEVOX/voicevox_vvm/blob/0.17.1/TERMS.txt) and [voice terms/common conditions](https://zunko.jp/con_ongen_kiyaku.html) allow commercial and noncommercial generated-audio use with the required credit and their stated conditions. Any onward use of generated audio must retain the applicable conditions and credit. The app bundles generated lesson clips and their exact transcript manifest. Character artwork, third-party recordings and voice binaries are separate. Source download URLs, exact artifact sizes and hashes live in `scripts/japanese_voice/setup.py`.
 
 ## Verification
 
@@ -68,3 +68,11 @@ python -X utf8 -m unittest discover -s scripts/japanese_voice -p test_server.py
 ```
 
 Live checks require explicit local setup/start above. Automated tests do not establish Japanese pronunciation quality or native/Safari support; the checkpoint records the actual engine and browser runs.
+
+## Bundled Japanese course clips
+
+Course listening questions, kana audio and new Japanese practice use exact Japanese transcript keys from the source. The guided dialogue and key phrases also have bundled playback. The files are original course text rendered in **VOICEVOX:四国めたん** style 2. Foundation and A1 prompts use a gentler base pace. The Japanese playback-speed preference applies to both bundled clips and device or local speech. Other text and personal words can use the selected device or local source.
+
+The app export includes the clip files and SHA-256 manifest, with no voice model or engine. The [pinned model terms](https://github.com/VOICEVOX/voicevox_vvm/blob/0.17.1/TERMS.txt) and [voice and onward-use conditions](https://zunko.jp/con_ongen_kiyaku.html) apply to the generated clips. Keep the credit and these applicable conditions with supplied copies. These are synthetic examples. Listening checks record comprehension or reading support. Speaking tasks use model playback and manual self-review.
+
+[Clip collection](../scripts/japanese_voice/collect-course-clips.ts) uses the same lesson questions and practice sources as the learner. [Rendering](../scripts/japanese_voice/render-course-clips.py) requires locally installed CORE, the official style 2 model, Open JTalk dictionary and ffmpeg. Run the collector with `node --import tsx scripts/japanese_voice/collect-course-clips.ts`. Pass the redirected JSON and a fresh output directory to the renderer, with the installed runtime library, dictionary and model paths. Reconcile the complete output with the authored sources before replacing a clip set. The application checks verify source coverage and file hashes. Device availability, pitch accent naturalness and qualified listening review remain separate from source/hash verification.

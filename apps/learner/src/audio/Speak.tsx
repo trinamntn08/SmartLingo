@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { TargetLanguage } from '@smartlingo/domain';
 import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
-import { audio } from './index';
+import { audio, speakCourseAudio } from './index';
 import { generatedPreferences } from './generated/preferences';
 import { subscribeAudioNotice, subscribeGeneratedPreferences } from './generated/runtime';
 import { GeneratedPhraseOptions } from './generated/GeneratedPhraseOptions';
@@ -10,7 +10,7 @@ import { Button } from '../ui/controls';
 import { isAndroidApp } from '../platform/runtime';
 import { colors, designTokens, styles as s } from '../ui/theme';
 
-export function Speak({ text, onError, language = 'fr-FR' }: { text: string; onError?: (message: string) => void; language?: TargetLanguage }) {
+export function Speak({ text, label, onError, onPlayed, courseClip, language = 'fr-FR' }: { text: string; label?: string; onPlayed?: () => void; courseClip?: boolean; onError?: (message: string) => void; language?: TargetLanguage }) {
   const [state, setState] = useState<'idle' | 'playing'>('idle');
   const [error, setError] = useState('');
   useEffect(() => () => audio.stop(), [text, language]);
@@ -35,7 +35,13 @@ export function Speak({ text, onError, language = 'fr-FR' }: { text: string; onE
   async function play() {
     if (state === 'playing') { audio.stop(); setState('idle'); return; }
     setError(''); onError?.(''); setState('playing');
-    try { await audio.speak(text, language); } catch (failure) {
+    try {
+      if (courseClip) {
+        if (await speakCourseAudio(text, language)) onPlayed?.();
+      } else {
+        await audio.speak(text, language);
+      }
+    } catch (failure) {
       const message = failure instanceof Error ? failure.message : 'Voice is unavailable. You can continue using the text.';
       setError(message); onError?.(message);
     }
@@ -43,7 +49,7 @@ export function Speak({ text, onError, language = 'fr-FR' }: { text: string; onE
   }
   return <View style={{ gap: 6, maxWidth: '100%' }}>
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}>
-    <AudioIconButton playing={state === 'playing'} label={`Listen to ${text}`} onPress={() => void play()} />
+    <AudioIconButton playing={state === 'playing'} label={label ?? `Listen to ${text}`} onPress={() => void play()} />
     {canGenerate && <Pressable accessibilityRole="button" accessibilityLabel={`Audio options for ${text}`} aria-expanded={options} onPress={() => setOptions(value => !value)}
       onFocus={() => setOptionsFocused(true)} onBlur={() => setOptionsFocused(false)}
       style={({ pressed }) => ({ minWidth: designTokens.control.minimumTarget, minHeight: designTokens.control.minimumTarget, justifyContent: 'center', alignItems: 'center', borderRadius: 22, borderWidth: 2, borderColor: optionsFocused ? colors.focusRing : 'transparent', backgroundColor: pressed ? colors.sand : 'transparent' })}><Text style={{ fontSize: 22, color: colors.ink }}>⋯</Text></Pressable>}</View>

@@ -9,6 +9,8 @@ const MAX_TOTAL_BYTES = 100 * 1024 * 1024;
 const MAX_FILE_BYTES = 32 * 1024 * 1024;
 const MAX_MANIFEST_BYTES = 1024 * 1024;
 const MAX_FILES = 2000;
+const DOWNLOAD_BATCH_SIZE = 6;
+const CACHE_CHECK_BATCH_SIZE = 32;
 const REQUEST_TIMEOUT_MS = 30000;
 const DOCUMENT_TIMEOUT_MS = 3000;
 let mutations = Promise.resolve();
@@ -98,6 +100,14 @@ async function sha256(bytes) {
   return Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
+async function allFilesCached(cache, files) {
+  for (let start = 0; start < files.length; start += CACHE_CHECK_BATCH_SIZE) {
+    const entries = await Promise.all(files.slice(start, start + CACHE_CHECK_BATCH_SIZE).map(file => cache.match(file.url)));
+    if (entries.some(entry => !entry)) return false;
+  }
+  return true;
+}
+
 async function completeRecord(cache) {
   const response = await cache.match(RECORD_PATH);
   if (!response) return null;
@@ -108,10 +118,7 @@ async function completeRecord(cache) {
     if (typeof record.downloadedAt !== 'string' || !Number.isFinite(Date.parse(record.downloadedAt))) return null;
   } catch { return null; }
   // The browser can evict individual entries after a successful download.
-  for (const file of record.manifest.files) {
-    if (!await cache.match(file.url)) return null;
-  }
-  return record;
+  return await allFilesCached(cache, record.manifest.files) ? record : null;
 }
 
 async function inspectCaches() {
@@ -137,6 +144,17 @@ async function inspectCaches() {
   };
 }
 
+async function stageFile(cache, file) {
+  const downloaded = await fetchBytes(file.url, file.size);
+  if (downloaded.bytes.byteLength !== file.size || await sha256(downloaded.bytes) !== file.sha256) {
+    throw new Error('An offline file failed its integrity check. Retry the download.');
+  }
+  // Preserve content/security headers, excluding transport details for decoded bytes.
+  const headers = new Headers(downloaded.headers);
+  for (const header of ['content-encoding', 'content-length', 'transfer-encoding']) headers.delete(header);
+  await cache.put(file.url, new Response(downloaded.bytes, { status: 200, headers }));
+}
+
 async function download(expectedBuildId, progress) {
   if (expectedBuildId !== undefined && (typeof expectedBuildId !== 'string' || !/^[a-f0-9]{64}$/.test(expectedBuildId))) {
     throw new Error('The requested offline build is invalid.');
@@ -157,21 +175,18 @@ async function download(expectedBuildId, progress) {
   let bytes = 0;
   let completed = 0;
   progress({ completed, total: manifest.files.length, bytes });
-  for (const file of manifest.files) {
-    const downloaded = await fetchBytes(file.url, file.size);
-    if (downloaded.bytes.byteLength !== file.size || await sha256(downloaded.bytes) !== file.sha256) {
-      throw new Error('An offline file failed its integrity check. Retry the download.');
-    }
-    // Preserve content/security headers, excluding transport details for decoded bytes.
-    const headers = new Headers(downloaded.headers);
-    for (const header of ['content-encoding', 'content-length', 'transfer-encoding']) headers.delete(header);
-    await cache.put(file.url, new Response(downloaded.bytes, { status: 200, headers }));
-    bytes += file.size;
-    progress({ completed: ++completed, total: manifest.files.length, bytes });
+  for (let start = 0; start < manifest.files.length; start += DOWNLOAD_BATCH_SIZE) {
+    const batch = manifest.files.slice(start, start + DOWNLOAD_BATCH_SIZE);
+    // Wait for every staged write before reporting failure. A retry must never race
+    // leftover writes into a cache it has already cleaned up.
+    const results = await Promise.allSettled(batch.map(file => stageFile(cache, file)));
+    const failed = results.find(result => result.status === 'rejected');
+    if (failed) throw failed.reason;
+    completed += batch.length;
+    bytes += batch.reduce((total, file) => total + file.size, 0);
+    progress({ completed, total: manifest.files.length, bytes });
   }
-  for (const file of manifest.files) {
-    if (!await cache.match(file.url)) throw new Error('Browser storage lost an offline file. Free space and retry.');
-  }
+  if (!await allFilesCached(cache, manifest.files)) throw new Error('Browser storage lost an offline file. Free space and retry.');
   // This is the only publication point. Failed/terminated attempts remain incomplete.
   await cache.put(RECORD_PATH, new Response(JSON.stringify({ manifest, downloadedAt: new Date().toISOString() }), {
     headers: { 'content-type': 'application/json' },

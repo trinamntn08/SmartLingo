@@ -66,7 +66,7 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model, onChan
       <View style={[t.stack, { padding: 8, gap: 16 }]}>
         {!android && language === 'ja-JP' && <>
           <Text accessibilityRole="header" style={s.heading}>Japanese study support</Text>
-          <Text style={s.body}>Japanese lessons, kana readings, listening and guided speaking work without AI. Optional AI conversation, Azure neural audio and the curriculum workshop currently support French only.</Text>
+          <Text style={s.body}>Japanese lessons include bundled synthetic listening clips credited to VOICEVOX:四国めたん. Guided speaking uses a model and self-check. Optional AI conversation, Azure neural audio and the curriculum workshop currently support French only.</Text>
         </>}
         <Text style={s.body}>Bundled lessons don’t need the local API or an AI key. {android
           ? 'Listening uses a device voice when available.'

@@ -29,7 +29,7 @@ function isLearnerDocumentPath(pathname) {
   if (section === 'courses') return parts.length <= 4;
   if (section === 'listening') return parts.length <= 5 && (extra === undefined || (item !== 'library' && question(extra)));
   if (section === 'speaking') return parts.length <= 6 && (extra === undefined || (positive(extra) && positive(final)));
-  return section === 'letters' && language === 'ja' && parts.length <= 6 && (extra === undefined || extra === 'study' || extra === 'recognition')
+  return section === 'letters' && language === 'ja' && parts.length <= 6 && (extra === undefined || extra === 'study' || extra === 'recognition' || extra === 'words')
     && (final === undefined || (extra === 'recognition' && key(final)));
 }
 

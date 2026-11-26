@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { frenchCourses, frenchCourseLessonsByDay, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
-import { checkAnswer, courseDayProgressRevision, lessonSchema } from '@smartlingo/domain';
+import { frenchCourses, frenchCourseLessonsByDay, currentJapaneseStudyExplanation, getJapaneseDailyGuide, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
+import { checkAnswer, courseDayProgressRevision, lessonSchema, type CourseEvent } from '@smartlingo/domain';
 import { buildCourseLesson } from '../src/course/courseLessonContent';
+import { courseRecommendation, latestCourseStudy } from '../src/course/courseRecommendation';
 
 test('every bundled course day has a draft lesson view under its existing progress scope', () => {
   const libraryIds = new Set([...lessons, ...japaneseLessons].map(lesson => lesson.id));
@@ -22,7 +23,7 @@ test('every bundled course day has a draft lesson view under its existing progre
       assert.equal(lesson.level, day.level);
       assert.deepEqual(lesson.vocabulary, day.vocabulary);
       assert.deepEqual(lesson.dialogue, dialogue.lines);
-      assert.deepEqual(lesson.grammar, { title: study.title, explanation: study.explanation });
+      assert.deepEqual(lesson.grammar, { title: study.title, explanation: course.language === 'ja-JP' ? currentJapaneseStudyExplanation(study.explanation) : study.explanation });
       assert.ok(!libraryIds.has(lesson.id), day.id);
     }
   }
@@ -72,3 +73,43 @@ function canAssemble(tokens: readonly string[], answer: string): boolean {
       && canAssemble([...tokens.slice(0, index), ...tokens.slice(index + 1)], answer.slice(token.length + 1));
   });
 }
+
+
+test('daily Japanese lesson projection selects daily Can-dos rather than topic practice without changing legacy exercises', () => {
+  for (const day of japaneseCourse.days) {
+    const lesson = buildCourseLesson(japaneseCourse, day);
+    const guide = getJapaneseDailyGuide(day.id)!;
+    assert.deepEqual(lesson.japanesePractice?.tasks, [...guide.tasks, ...guide.checkpoint]);
+    assert.equal(lesson.japanesePractice?.checkpoint, true);
+    assert.equal(lesson.japanesePractice?.prerequisites, guide.preparation);
+    assert.equal(lesson.japanesePractice?.revisit, guide.review);
+    assert.ok(lesson.japanesePractice?.tasks.every(task => task.id.startsWith(`${day.id}.`)));
+  }
+});
+
+
+test('Japanese guided views do not repeat the archived claim that Japanese audio is unavailable', () => {
+  const day = japaneseCourse.days[0];
+  const archived = day.blocks.find(block => block.kind === 'study')!;
+  assert.match(archived.explanation, /Japanese audio is not available/);
+  const lesson = buildCourseLesson(japaneseCourse, day);
+  assert.doesNotMatch(lesson.grammar.explanation, /Japanese audio is not available/);
+  assert.match(lesson.grammar.explanation, /speaker buttons for Japanese audio/);
+  assert.equal(currentJapaneseStudyExplanation('Unrelated explanation.'), 'Unrelated explanation.');
+});
+
+
+test('supplementary task history does not activate a course or replace the last intentional lesson visit', () => {
+  const first = japaneseCourse.days[0];
+  const second = japaneseCourse.days[1];
+  const navigation: CourseEvent = { id: '11111111-1111-4111-8111-111111111111', courseId: japaneseCourse.id,
+    courseRevision: courseDayProgressRevision(japaneseCourse, first), dayId: first.id, blockId: 'lesson-vocabulary',
+    occurredAt: '2026-11-26T09:00:00Z', kind: 'navigation' };
+  const practice: CourseEvent = { ...navigation, id: '22222222-2222-4222-8222-222222222222', dayId: second.id,
+    occurredAt: '2026-11-26T10:00:00Z', kind: 'practice', blockId: 'lesson-sentence',
+    taskId: getJapaneseDailyGuide(second.id)!.tasks[0].id, result: 'correct', supported: false };
+  assert.equal(latestCourseStudy([japaneseCourse], [navigation, practice]), navigation);
+  assert.equal(latestCourseStudy([japaneseCourse], [practice]), undefined);
+  assert.equal(courseRecommendation(japaneseCourse, [practice], false).status, 'start');
+  assert.equal(courseRecommendation(japaneseCourse, [navigation, practice], false).day.id, first.id);
+});

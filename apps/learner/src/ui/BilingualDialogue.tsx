@@ -57,7 +57,7 @@ function SpokenTurn({ turn, language, phone }: { turn: DialogueTurn; language: T
         <Text {...languageProps} style={[s.body, t.frenchSentence]}>{turn.target}</Text>
         {!!turn.reading && <Text style={s.muted}>{turn.reading}</Text>}
       </View>
-      <Speak language={language} text={turn.target} onError={setVoiceError} />
+      <Speak language={language} courseClip={language === 'ja-JP'} text={turn.target} onError={setVoiceError} />
     </View>
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, t.voiceError]}>{voiceError}</Text>}
   </>;

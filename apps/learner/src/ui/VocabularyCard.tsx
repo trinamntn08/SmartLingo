@@ -9,8 +9,8 @@ import { WordIllustration } from './WordIllustration';
 import { JapaneseWordReading } from './JapaneseWordReading';
 import { genderLabels, vocabularyPresentation } from '../content/vocabularyPresentation';
 
-export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustration = true, study = false, phoneStudy = false }: {
-  entry: Vocabulary; model: LearningModel; language?: TargetLanguage; showIllustration?: boolean; study?: boolean; phoneStudy?: boolean;
+export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustration = true, study = false, phoneStudy = false, romanization = true, courseClip = false }: {
+  entry: Vocabulary; model: LearningModel; language?: TargetLanguage; showIllustration?: boolean; study?: boolean; phoneStudy?: boolean; romanization?: boolean; courseClip?: boolean;
 }) {
   const [message, setMessage] = useState('');
   const [voiceError, setVoiceError] = useState('');
@@ -31,9 +31,9 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
   const illustration = showIllustration && <WordIllustration entry={entry} size={illustrationSize} />;
   const term = <Text {...languageProps} accessibilityRole="header"
     style={[s.target, layout.target, compact && layout.compactTarget, phoneStudy && layout.phoneTarget]}>{entry.target}</Text>;
-  const japaneseReading = language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />;
+  const japaneseReading = language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} romanization={romanization} />;
   const genderLabel = gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>;
-  const audio = <Speak language={language} text={entry.target} onError={setVoiceError} />;
+  const audio = <Speak language={language} courseClip={courseClip} text={entry.target} onError={setVoiceError} />;
   const example = <View style={study ? layout.studyExample : layout.example}>
     {!study && <Text style={s.eyebrow}>In a sentence</Text>}
     <Text {...languageProps} style={[s.body, study && layout.studySentence]}>{entry.example}</Text>

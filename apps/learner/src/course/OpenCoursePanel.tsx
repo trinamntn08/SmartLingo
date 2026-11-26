@@ -1,8 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
-import { frenchCourseLessonsByDay, getFrenchTopicPractice } from '@smartlingo/content';
-import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId,
-  type CourseDay, type CourseEvent, type LearningEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
+import { frenchCourseLessonsByDay, getFrenchTopicPractice, getJapaneseDailyGuide } from '@smartlingo/content';
+import { courseDayProgress, courseDayProgressRevision, coursePracticeProgress, courseLessonStageForBlock, courseLessonStageId,
+  type CourseDay, type CourseEvent, type JapanesePracticeTask, type JapanesePracticeResult, type LearningEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, type AppRoute, type LessonStage } from '../app/routes';
 import { tabRoute } from '../app/useLearnerNavigation';
@@ -13,6 +13,7 @@ import { FrenchTransferPractice } from '../ui/FrenchTransferPractice';
 import { LessonScreen } from '../ui/LessonScreen';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
+import { JapaneseDailyGuide } from './JapaneseDailyGuide';
 import { CourseCredits } from './CourseCredits';
 import { buildCourseLesson } from './courseLessonContent';
 import { CourseOutline } from './CourseOutline';
@@ -52,6 +53,9 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const day = requestedDay ?? recommendedDay;
   const progress = useMemo(() => courseDayProgress(course, day, learning.events), [course, day, learning.events]);
   const lesson = useMemo(() => buildCourseLesson(course, day), [course, day]);
+  const guide = course.language === 'ja-JP' ? getJapaneseDailyGuide(day.id) : undefined;
+  const practice = coursePracticeProgress(course, day, lesson.japanesePractice?.tasks ?? [], learning.events);
+  const checkpointCount = guide?.checkpoint.filter(task => practice.completedIds.has(task.id)).length ?? 0;
   const authored = frenchCourseLessonsByDay.get(day.id);
   const transfer = authored && getFrenchTopicPractice(authored);
   const listeningQuestion = useMemo(() => buildCourseListeningQuestion(day, course.language), [day, course.language]);
@@ -115,6 +119,11 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     learning.save([{ ...eventFields(day, activity), kind: 'choice', choiceId: outcome, result: outcome, supported: hints > 0 }], after);
   }
 
+  function recordPractice(task: JapanesePracticeTask, result: JapanesePracticeResult, supported: boolean) {
+    if (disabled || browseOnly || !lesson.japanesePractice?.tasks.some(authoredTask => authoredTask.id === task.id)) return;
+    learning.save([{ ...eventFields(day, 'sentence'), kind: 'practice', taskId: task.id, result, supported }]);
+  }
+
   const following = course.days[day.dayNumber];
   const nextLesson = following && {
     title: `Lesson ${following.dayNumber}: ${following.title}`,
@@ -158,9 +167,16 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       ...(sidebar ? { flexDirection: 'row', alignItems: 'flex-start' } : {}) }}>
       {outline}
       <View style={{ gap: 16, minWidth: 0, flex: sidebar ? 1 : undefined }}>
+        {guide && stage === 'dialogue' && <JapaneseDailyGuide key={day.id} guide={guide} />}
+        {guide && stage === 'sentence' && <View testID="daily-checkpoint-status" style={[s.notice, { gap: 6 }]}>
+          <Text accessibilityRole="header" style={s.heading}>Can-do practice and checkpoint</Text>
+          <Text accessibilityLiveRegion="polite" style={s.body}>{practice.completedIds.size} of {lesson.japanesePractice!.tasks.length} practice activities saved · {checkpointCount} of {guide.checkpoint.length} checkpoint activities saved</Text>
+          <Text style={s.muted}>Study-day completion and checkpoint practice are separate. Earlier saved days stay available. Self-review records your comparison with a model, not an automatic skill assessment.</Text>
+        </View>}
         <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
           extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
           timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{
+          practiceCompletedIds: [...practice.completedIds], onPracticeResult: recordPractice,
           stage, progress: { wordsStudied: progress.lessonWordsStudied, pictureDone: progress.lessonPictureDone,
             sentenceDone: progress.lessonSentenceDone, completed: progress.completed },
           exitHref: routeHref(learn), disabled, browseOnly, nextLesson, listeningQuestion, dialoguePhoto: getDailyDialoguePhoto(day.id),

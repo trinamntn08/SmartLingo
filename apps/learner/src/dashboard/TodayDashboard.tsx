@@ -49,10 +49,11 @@ export function TodayDashboard({ language, courseLaunch, courseStudiedAt, alphab
   const recent = [...alphabetEvents].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
   const japanese = language === 'ja-JP';
   const recentStudy = recent[0];
-  const recommendLetters = japanese && (!recentStudy || isAlphabetLessonId(recentStudy.lessonId))
-    && (!courseStudiedAt || (!!recentStudy && Date.parse(recentStudy.occurredAt) > Date.parse(courseStudiedAt)));
   const alphabet = alphabetProgress(alphabetEvents);
-  const alphabetAction = alphabet.completed === 0 ? 'Start Hiragana' : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
+  const recommendLetters = japanese && !!alphabet.next && (!recentStudy || isAlphabetLessonId(recentStudy.lessonId))
+    && (!courseStudiedAt || (!!recentStudy && Date.parse(recentStudy.occurredAt) > Date.parse(courseStudiedAt)));
+  const lettersStarted = alphabet.completed > 0 || alphabet.taskIds.size > 0;
+  const alphabetAction = !lettersStarted ? 'Start Hiragana' : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
   const disabled = courseLaunch.disabled;
   const topicsHref = routeHref({ kind: 'topics', language });
   const shortcuts: Shortcut[] = [
@@ -69,10 +70,11 @@ export function TodayDashboard({ language, courseLaunch, courseStudiedAt, alphab
           {alphabet.next?.title ?? 'Hiragana and katakana'}
         </Text>
         <Button accent label={alphabetAction} onPress={onAlphabet} href="/learn/ja/letters" disabled={disabled} trailingIcon="arrow-right">
-          {alphabet.completed === 0 ? 'Start' : alphabet.next ? 'Continue' : 'Review'}
+          {!lettersStarted ? 'Start' : alphabet.next ? 'Continue' : 'Review'}
         </Button>
       </View> : <CourseLaunchCard {...courseLaunch} featured concise />}
     </View>
+    {recommendLetters && <CourseLaunchCard {...courseLaunch} concise />}
     <TodayPhoto language={language} stacked compact />
   </View>;
 
@@ -143,12 +145,12 @@ function KanaRecommendation({ alphabet, action, onOpen, disabled }: {
   return <View style={[s.card, today.kanaCard]}>
     <View style={today.kanaCopy}>
       <Text accessibilityRole="header" aria-level={2} style={today.kanaCourse}>
-        {alphabet.completed === 0 ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}
+        {!alphabet.completed && !alphabet.taskIds.size ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}
       </Text>
       {alphabet.next && <Text accessibilityRole="header" aria-level={3} style={s.heading}>{alphabet.next.title}</Text>}
-      <Text style={today.kanaDescription}>{alphabet.next ? 'Hear the characters, read their sounds and practise recognising them.'
-        : 'Practise recognising the characters in any hiragana or katakana row.'}</Text>
-      <Text style={today.translation}>{alphabet.completed} of {alphabet.total} rows studied</Text>
+      <Text style={today.kanaDescription}>{alphabet.next ? 'Hear the sounds, read real words and practise typing them.'
+        : 'Revisit hiragana, katakana and sound patterns.'}</Text>
+      <Text style={today.translation}>{alphabet.completed} of {alphabet.total} letter lessons studied</Text>
     </View>
     <View style={s.row}><Button accent onPress={onOpen} href="/learn/ja/letters" disabled={disabled} trailingIcon="arrow-right">{action}</Button></View>
   </View>;

@@ -1,0 +1,44 @@
+# Japanese curriculum map and audit
+
+Reviewed source `cd9d0789d3a5050ede678b11799b90b4f7a67efb`. SmartLingo teaches English-speaking adults who study independently, including first-time Japanese learners. English explains new language. Japanese is the practice language unless an activity asks for the meaning in English. Foundations and A1–B1 are estimates for particular tasks. There are no JLPT labels, exam-preparation claims or placement test in this catalog.
+
+The Japan Foundation Standard describes levels in terms of communicative tasks. Irodori uses listening and materials such as menus, signs and everyday messages. This redesign uses those principles and original examples. See [JF Standard](https://www.jfstandard.jpf.go.jp/pdf/jfs2024_pamphlet_en.pdf) and [Irodori](https://www.irodori.jpf.go.jp/en/about.html).
+
+## Catalog
+
+The [complete inventory](japanese-lesson-inventory.md) lists every lesson, stable ID and activity type.
+
+| Path | Entry and level | Main abilities | Script progression |
+| --- | --- | --- | --- |
+| Japanese letters | Today recommendation or Learn → Letters. Foundations, with parallel access to a spoken first lesson. | Identify characters, read words, type kana from a cue and compare mora timing with audio. Handwriting is optional paper practice with a visual self-check. | 53 lessons. Per script, ten original rows plus basic words, sound marks, combinations and practical reading checkpoints. Full basic hiragana and katakana, voiced and semi-voiced forms, contracted sounds, small っ or ッ, long vowels, borrowed katakana combinations and lookalikes. |
+| Everyday Japanese guided course | Today, Learn or the course picker. 13 lessons across three groups from Foundations through selected B1 tasks. | Ask for repair, exchange personal and purchase details, handle practical arrangements, then pass on a notice, explain a view and confirm an agreement. Listen for details, say replies aloud and draft short notes and messages. | Recognise the three scripts and learn from kana support early. Read contextual kanji in prices, times, signs and notices. Recall particular word readings and use kanji only when the prompt requires it. |
+| Japanese topic library | Learn → Topics. 69 study and practice lessons across 16 banks. | Start with greetings and low-stakes exchanges. Practise and revisit a situation before transferring it to a new notice, short exchange, oral reply or written message. | Use kana readings and English support in study. Rōmaji appears in foundation key phrases and is optional at A1. Check word readings in hiragana, preserving small kana and sound marks. Reveal contextual furigana and full readings after trying a fresh passage. |
+| Listening and speaking | Learn → Listen or Speak. Scoped by current language and optionally topic. | Hear or read a short line, pick out its intended meaning and replay. Take a role, compare a spoken response with a model and repeat. | Practice reveals Japanese transcript and kana separately. Five Japanese external listening recommendations remain link-only and need a connection. Their public landing pages were rechecked on 2026-11-26. |
+
+## Guided progression
+
+| Unit and checkpoint | Lessons and their main Can-dos | Reading and register |
+| --- | --- | --- |
+| Foundations and selected A1 tasks, checkpoint in lesson 5 | 1 repair a misunderstanding and recognise the scripts. 2 introduce name, origin and present home. 3 buy items, check price and decline a bag. 4 find a station and confirm the time. 5 describe habits and contrast two routines. | Polite chunks first. Hiragana alongside spoken repair. Katakana in names and loanwords. 円, 駅, 右, 左 and clock readings appear in prices and signs. Particles identify origin, residence, time, location and object in those situations. |
+| Selected A2 situations, checkpoint in lesson 9 | 6 tell what happened and ask about a photo. 7 state a plan, ask permission and read a restriction. 8 explain a problem and make a polite service request. 9 compare options and arrange another time. | Read brief rules and messages, with kana support available. Use past and te-forms, reason clauses, counters and comparisons. Choose a staff request or familiar invitation based on the relationship. |
+| Connected B1 tasks, checkpoint in lesson 13 | 10 connect a setback, response and result. 11 state a view with a reason and acknowledge a trade-off. 12 convey what changed, what is conditional and what is unknown. 13 negotiate and confirm who will do what by when. | Read longer notices and constraints. Use connectors, plain clauses within polite turns, comparisons, qualifications and conditionals. Report information without guessing. |
+
+The [topic-bank audit and map](japanese-topic-practice-audit.md) covers all 16 library banks, including the four starter lessons, and documents what was retained. Every library lesson includes a reading check and original reply with a model and acceptable alternatives. Every bank ends with a fresh check. Each of the 13 guided lessons includes five skill tasks and two fresh checkpoint components. The final checkpoint in each guided unit revisits earlier language in new circumstances. The six kana checkpoints revisit basic words, sound marks and cumulative reading for both scripts.
+
+## Audit findings and handling
+
+- The former kana sequence covered basic symbols and recognition. It now connects symbols to words and recall, then adds sound marks, small kana, timing contrasts and signs. Learners can hear contrasts such as きて／きって and ビル／ビール.
+- The library and guided route exposed the same mostly recognition and sentence-building flow. They now include typed reading recall, fresh comprehension, open replies, practical self-review and clear criteria. For open writing and speaking the model is one viable answer.
+- Source review covered vocabulary, readings, examples, dialogue, instructions and answers. The perspective pattern is now explained as にとって. The first guided lesson’s obsolete audio copy was corrected in both current readers. Existing canonical senses and useful bilingual material remain available.
+- The course used device or locally installed speech for replay. Bundled synthetic audio makes authored practice and lesson listening available without that setup. Pronunciation features and playback speed are explicitly taught. The Japanese and English portions of a model are displayed separately, with only the Japanese portion sent to synthesis.
+- Core answer checking now accepts incidental Japanese width, spaces and terminal punctuation. A typed meaning response accepts reviewed kana/kanji variants when the author lists them. Script exercises keep the requested form, voiced marks, vowel length and small kana distinctions. First-round explanations tell learners what to try next. Opening support or seeing corrective feedback marks a subsequent attempt as supported.
+- Original course/day, topic, vocabulary and kana-row IDs and progress revisions remain. Existing lesson and stage URLs resolve. The new letters words mode is addressable. Reading support and temporary typed replies survive browser Back within a visit. Study completion, checkpoint results and self-review describe saved activities. They do not certify proficiency.
+
+## Source and progress
+
+- [Kana rows](../../packages/content/src/japanese-alphabet.ts) and [patterns/checkpoints](../../packages/content/src/japanese-kana-support.ts) are bundled lesson sources. Legacy row completion is still recognised.
+- [Guided course](../../packages/content/src/japanese-course.ts), [guided tasks](../../packages/content/src/japanese-daily-practice.ts) and [topic tasks](../../packages/content/src/japanese-topic-practice.ts) feed the existing shared reader. The workshop still edits French through SQLite preview/publication. Japanese ships as bundled draft content.
+- [Task validation and grading](../../packages/domain/src/japanese-practice.ts) check layouts and authored answer keys. [The learner component](../../apps/learner/src/japanese/JapanesePractice.tsx) handles typed input, reading and transcript reveal, replay and the models.
+- Browser IndexedDB and backup version 4 keep their existing store structure. Prior backup formats are still accepted. New tasks add stable result events scoped to their original lesson or guided day. A previously completed core lesson stays complete and its new checkpoint can be opened separately. New event variants require the redesigned app when restoring a backup that contains them. Typed drafts and spoken self-checks stay outside durable events.
+
+Qualified Japanese editorial and audible voice review are outstanding for draft publication. The product provides real-world practice and self-review. It has no handwriting recognition, recorded speaking evaluation or validated level assignment.

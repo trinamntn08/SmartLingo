@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import { checkAnswer, normalizeAnswer, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
+import { checkAnswer, normalizeAnswer, normalizeJapaneseAnswer, type LearningEvent, type Lesson, type TargetLanguage } from '@smartlingo/domain';
 import { useVisitState } from '../app/WebNavigation';
 import { Button } from './controls';
 import { Icon } from './Icon';
@@ -90,8 +90,9 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
   const exercise = lesson.sentenceActivity;
   const answer = selected.map(index => exercise.tokens[index]).join(' ');
-  const accepted = done ? exercise.answers.find(value => normalizeAnswer(value) === normalizeAnswer(answer)) ?? exercise.answers[0] : '';
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
+  const normalize = language === 'ja-JP' ? (value: string) => normalizeJapaneseAnswer(value, 'verbatim') : normalizeAnswer;
+  const accepted = done ? exercise.answers.find(value => normalize(value) === normalize(answer)) ?? exercise.answers[0] : '';
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
   const nextLessonButton = nextLesson && <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
     href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>

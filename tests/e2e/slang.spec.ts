@@ -90,5 +90,5 @@ test('the direct slang URL works and the Japanese navigation keeps its existing 
   const navigation = page.getByRole('navigation', { name: 'Learning navigation' });
   await expect(navigation.getByRole('button')).toHaveText(['Today', 'Learn', 'Review', 'Report', 'Profile']);
   await page.getByTestId('today-next-step').getByRole('button').click();
-  await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 1 of 2/)).toBeVisible();
+  await expect(page.getByText(/Hiragana.*Row 1 of \d+.*Study/)).toBeVisible();
 });

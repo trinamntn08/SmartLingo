@@ -3,6 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import type { LearningEvent } from '@smartlingo/domain';
+import audioClips from '../../apps/learner/public/japanese-audio/manifest.json';
 
 const first = japaneseAlphabetLessons[0]!;
 const second = japaneseAlphabetLessons[1]!;
@@ -36,9 +37,12 @@ async function tryRow(page: Page, row: JapaneseAlphabetLesson, wrongFirst = fals
   for (const [index, character] of row.characters.entries()) {
     await expect(practice.getByRole('heading')).toHaveText('Which kana matches the sound?');
     if (index === 0) {
+      const clip = audioClips[character.audioText as keyof typeof audioClips];
+      const played = page.waitForResponse(response => response.url().endsWith(`/japanese-audio/${clip.file}`));
       await practice.getByRole('button', { name: 'Play sound', exact: true }).click();
-      await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}')))
-        .toEqual({ text: character.audioText, language: 'ja-JP' });
+      const response = await played;
+      expect(response.ok()).toBe(true);
+      expect(response.headers()['content-type']).toContain('audio/mpeg');
     } else {
       await practice.getByRole('button', { name: 'Show reading', exact: true }).click();
       await expect(practice.getByRole('heading')).toContainText(character.romaji);
@@ -55,15 +59,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {
     localStorage.setItem('smartlingo.target-language.v1', 'ja-JP');
-    const voices = ['en-GB', 'fr-FR', 'ja-JP'].map(lang => ({ name: `Test ${lang}`, voiceURI: `test.${lang}`, lang, localService: true, default: lang === 'en-GB' }));
-    Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(public text: string) {} } });
-    Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
-      getVoices: () => voices, cancel() {}, addEventListener() {}, removeEventListener() {},
-      speak(utterance: SpeechSynthesisUtterance) {
-        sessionStorage.setItem('kana-audio', JSON.stringify({ text: utterance.text, language: utterance.lang }));
-        setTimeout(() => utterance.onend?.({} as SpeechSynthesisEvent), 10);
-      },
-    } });
+    Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined });
   });
 });
 
@@ -82,8 +78,11 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
     await expect(alphabet.getByText(character.kana, { exact: true })).toBeVisible();
     await expect(alphabet.getByText(character.romaji, { exact: true })).toBeVisible();
   }
+  const clipResponse = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media' && response.ok());
   await alphabet.getByRole('button', { name: `Listen to ${first.characters[0]!.kana}`, exact: true }).click();
-  await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}'))).toEqual({ text: first.characters[0]!.audioText, language: 'ja-JP' });
+  const clip = await clipResponse;
+  expect(clip.headers()['content-type']).toContain('audio/mpeg');
+  expect(clip.url()).toContain(audioClips[first.characters[0]!.audioText as keyof typeof audioClips].file);
   // Vocabulary remains available before any character practice or saved row.
   const oldLesson = japaneseLessons[0]!;
   await openTopic(page, oldLesson.topic);
@@ -105,7 +104,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).not.toContainText('Not studied');
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).toHaveAccessibleName(/Explore row.*Studied$/);
   await expect(alphabet.getByTestId(`kana-row-${second.id}`)).toContainText('Current row');
-  await expect(alphabet.getByText(/1 of 20 rows studied/)).toBeVisible();
+  await expect(alphabet.getByText(`1 of ${japaneseAlphabetLessons.length} rows studied`, { exact: true })).toBeVisible();
   const saved = await events(page);
   expect(saved).toEqual(expect.arrayContaining(oldEvents));
   expect(saved.filter(event => event.lessonId === first.id)).toEqual([expect.objectContaining({ revision: 1, itemId: `${first.id}.completion`, activity: 'completion', result: 'completed', hints: 0 })]);
@@ -218,4 +217,68 @@ test('French keeps its vocabulary default without a Japanese alphabet entry', as
   await expect(button(page, 'Japanese letters')).toHaveCount(0);
   await expect(page.getByTestId('japanese-alphabet')).toHaveCount(0);
   await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+});
+
+test('kana word recall preserves script distinctions, resumes stable tasks and gates new timing groups', async ({ page }) => {
+  const lesson = japaneseAlphabetLessons.find(item => item.id === 'ja.alphabet.hiragana.pattern.small-tsu')!;
+  await page.goto(`/learn/ja/letters/${lesson.id}/words`);
+  const alphabet = page.getByTestId('japanese-alphabet');
+  const save = alphabet.getByRole('button', { name: 'Mark row studied', exact: true });
+  await expect(save).toBeDisabled();
+  const reading = alphabet.getByTestId(`${lesson.id}.read`);
+  await reading.getByRole('button', { name: 'postage stamp', exact: true }).click();
+  await expect(alphabet.getByText('1 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  const typed = alphabet.getByTestId(`${lesson.id}.type`);
+  const answer = typed.getByRole('textbox', { name: 'Type your answer', exact: true });
+  await answer.fill('kitte'); await typed.getByRole('button', { name: 'Check answer', exact: true }).click();
+  await expect(typed.getByText(/Use your Japanese keyboard/)).toBeVisible();
+  await expect(alphabet.getByText('1 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await answer.fill('きつて'); await typed.getByRole('button', { name: 'Check answer', exact: true }).click();
+  await expect(save).toBeDisabled();
+  await answer.fill('きって');
+  await answer.dispatchEvent('compositionstart'); await answer.press('Enter');
+  await expect(alphabet.getByText('1 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await answer.dispatchEvent('compositionend'); await answer.press('Enter');
+  await expect(alphabet.getByText('2 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(alphabet.getByRole('button', { name: 'Read words & type', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(alphabet.getByText('2 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(save).toBeDisabled();
+  const listening = alphabet.getByTestId(`${lesson.id}.listen`);
+  await listening.getByRole('button', { name: 'Show transcript', exact: true }).click();
+  await listening.getByRole('button', { name: 'きって · postage stamp · 3 beats', exact: true }).click();
+  await expect(alphabet.getByText('3 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(save).toBeEnabled();
+  const saved = await events(page);
+  expect(saved.filter(event => event.itemId === `${lesson.id}.listen`)).toEqual([expect.objectContaining({ result: 'correct', hints: 1 })]);
+  expect(saved.filter(event => event.itemId === `${lesson.id}.type`).sort((a, b) => a.occurredAt.localeCompare(b.occurredAt)).map(event => event.result)).toEqual(['incorrect', 'incorrect', 'correct']);
+  await save.click();
+  await expect.poll(async () => (await events(page)).some(event => event.itemId === `${lesson.id}.completion`)).toBe(true);
+});
+
+test('cumulative kana checkpoint requires reading, typed recall and an explicit spoken self-review', async ({ page }) => {
+  const lesson = japaneseAlphabetLessons.find(item => item.id === 'ja.alphabet.katakana.checkpoint')!;
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(`/learn/ja/letters/${lesson.id}/words`);
+  const alphabet = page.getByTestId('japanese-alphabet');
+  const save = alphabet.getByRole('button', { name: 'Mark row studied', exact: true });
+  await expect(save).toBeDisabled();
+  for (const task of lesson.practice ?? []) {
+    const panel = alphabet.getByTestId(task.id);
+    if (task.mode === 'choice') await panel.getByRole('button', { name: task.answer, exact: true }).click();
+    else if (task.mode === 'text') {
+      await panel.getByRole('textbox', { name: 'Type your answer', exact: true }).fill(task.answers[0]!);
+      await panel.getByRole('button', { name: 'Check answer', exact: true }).click();
+    } else {
+      await expect(save).toBeDisabled();
+      await panel.getByRole('button', { name: 'Show model and checklist', exact: true }).click();
+      await panel.getByRole('button', { name: 'Mark self-review complete', exact: true }).click();
+    }
+    await expect(panel.getByText(task.feedback, { exact: true })).toBeVisible();
+    await expect.poll(async () => (await events(page)).filter(event => event.lessonId === lesson.id && event.result === 'correct').length).toBe((lesson.practice ?? []).indexOf(task) + 1);
+  }
+  await expect(save).toBeEnabled();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await save.click();
+  await expect.poll(async () => (await events(page)).some(event => event.itemId === `${lesson.id}.completion`)).toBe(true);
 });

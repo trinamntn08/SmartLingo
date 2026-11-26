@@ -77,3 +77,6 @@ export const [openCoursePilot] = frenchCourses;
 export const frenchCourseLessonsByDay = french.lessonsByDay;
 export { japaneseCourse } from './japanese-course';
 export { japaneseLessons } from './japanese-lessons';
+
+export { japaneseDailyGuides, japaneseDailyUnits, getJapaneseDailyGuide, type JapaneseDailyGuide } from './japanese-daily-practice';
+export { currentJapaneseStudyExplanation } from './japanese-study-copy';

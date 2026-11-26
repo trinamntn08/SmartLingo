@@ -20,6 +20,7 @@ test('course events persist every kind across reopen, deduplicate retries, and r
     { ...navigation, id: '44444444-4444-4444-8444-444444444444', kind: 'choice', choiceId: 'answer.hello', result: 'correct', supported: true },
     { ...navigation, id: '55555555-5555-4555-8555-555555555555', kind: 'reflection' },
     { ...navigation, id: '66666666-6666-4666-8666-666666666666', kind: 'completion' },
+    { ...navigation, id: '77777777-7777-4777-8777-777777777777', kind: 'practice', taskId: 'ja.everyday-course.day-1.practice.listen', result: 'correct', supported: true },
   ];
   for (const event of events) { await first.recordCourseEvent(event); await first.recordCourseEvent(event); }
   await assert.rejects(first.recordCourseEvent({ ...navigation, courseRevision: 2 }), /different attempt/);

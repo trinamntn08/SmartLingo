@@ -32,9 +32,13 @@ function calendarWeek(today: string): ReportDay[] {
   });
 }
 
-function isLessonAction(event: LearningEvent): boolean {
+function isLessonAction(event: LearningEvent, lesson: Lesson): boolean {
   if (event.activity === 'vocabulary') return event.result === 'viewed';
   if (event.activity === 'completion') return event.result === 'completed';
+  if (event.activity === 'practice') {
+    const task = lesson.japanesePractice?.tasks.find(task => task.id === event.itemId);
+    return !!task && (task.mode === 'self' ? event.result === 'viewed' : ['correct', 'incorrect'].includes(event.result));
+  }
   return ['correct', 'almost', 'incorrect'].includes(event.result);
 }
 
@@ -64,7 +68,7 @@ export function buildLearningReport(input: LearningReportInput): LearningReport 
   const courseById = new Map(courses.map(course => [course.id, course]));
   const events = uniqueEvents(input.events).filter(event => {
     const lesson = lessonById.get(event.lessonId);
-    return lesson && event.revision > 0 && event.revision <= lesson.revision && recorded(event.occurredAt) && isLessonAction(event);
+    return lesson && event.revision > 0 && event.revision <= lesson.revision && recorded(event.occurredAt) && isLessonAction(event, lesson);
   });
   const courseEvents = uniqueEvents(input.courseEvents).filter(event => {
     const course = courseById.get(event.courseId);

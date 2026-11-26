@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { japanesePracticeSetSchema } from './japanese-practice';
 
 const id = z.string().regex(/^[a-z0-9][a-z0-9.-]+$/).max(120);
 const text = z.string().trim().min(1).max(2000);
@@ -24,8 +25,12 @@ export const lessonSchema = z.object({
     // Accents may change meaning; only explicitly reviewed variants receive "almost".
     almostAnswers: z.array(text),
   }),
+  japanesePractice: japanesePracticeSetSchema.optional(),
   provenance: z.object({ author: text, rights: text, review: text }),
 }).superRefine((lesson, context) => {
+  if (lesson.japanesePractice && lesson.language !== 'ja-JP') {
+    context.addIssue({ code: 'custom', message: 'Japanese practice requires a Japanese lesson.' });
+  }
   const ids = lesson.vocabulary.map(entry => entry.id);
   if (new Set(ids).size !== ids.length) context.addIssue({ code: 'custom', message: 'Duplicate vocabulary IDs' });
   const picture = lesson.pictureActivity;

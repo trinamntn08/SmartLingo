@@ -2,12 +2,13 @@ import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
-import { audio } from '../audio';
+import { audio, speakCourseAudio } from '../audio';
 import { AudioIconButton } from '../audio/AudioIconButton';
 import { Badge, Button } from '../ui/controls';
 import { colors, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
-import { alphabetProgress } from './progress';
+import { alphabetLearningPath, alphabetProgress } from './progress';
+import { KanaExamples, KanaWordPractice } from './KanaWords';
 
 type Character = JapaneseAlphabetLesson['characters'][number];
 
@@ -22,11 +23,11 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   const lesson = selected ?? progress.next ?? japaneseAlphabetLessons[0];
   useEffect(() => {
     if (!letters || letters.rowId || model.loading || !lesson) return;
-    navigate({ kind: 'letters', language: 'ja-JP', rowId: lesson.id, mode: 'study' }, { replace: true });
+    navigate({ kind: 'letters', language: 'ja-JP', rowId: lesson.id, mode: progress.taskIds.has(lesson.id) ? 'words' : 'study' }, { replace: true });
   }, [letters, lesson, model.loading, navigate]);
   if (!lesson) return <View style={s.card}><Text style={s.heading}>Japanese alphabet</Text><Text style={s.body}>Alphabet lessons are not available yet. You can still explore vocabulary and lessons.</Text></View>;
   const rows = japaneseAlphabetLessons.filter(item => item.script === lesson.script);
-  const next = japaneseAlphabetLessons[japaneseAlphabetLessons.findIndex(item => item.id === lesson.id) + 1];
+  const next = alphabetLearningPath[alphabetLearningPath.findIndex(item => item.id === lesson.id) + 1];
   function selectRow(id: string, afterSave = false) {
     navigate({ kind: 'letters', language: 'ja-JP', rowId: id, mode: 'study' }, { afterSave });
   }
@@ -41,7 +42,7 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   return <View testID="japanese-alphabet" style={{ gap: 24, minWidth: 0 }}>
     <View style={{ gap: 12 }}>
       <View style={[s.row, { justifyContent: 'space-between' }]}>
-        <View style={{ gap: 8, flexShrink: 1 }}><Text style={s.eyebrow}>Kana studio · Read, listen, recognise</Text><Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>Japanese alphabet</Text>
+        <View style={{ gap: 8, flexShrink: 1 }}><Text accessibilityRole="header" style={[s.title, compact && s.compactTitle]}>Japanese alphabet</Text>
           <Text style={s.muted}>{model.loading ? 'Loading saved alphabet progress…' : model.loadError ? 'Saved progress is unavailable. You can still study and practise.' : `${progress.completed} of ${progress.total} rows studied`}</Text></View>
         <Button expanded={choosingRow} onPress={() => setChoosingRow(value => !value)}>{choosingRow ? 'Close row chooser' : 'Choose another row'}</Button>
       </View>
@@ -104,7 +105,7 @@ function KanaRowCard({ row, number, selected, studied, statusUnavailable, sugges
       borderColor: selected ? colors.ink : colors.line, backgroundColor: selected ? colors.goldTint : colors.card,
       opacity: pressed ? 0.8 : 1, ...(focused ? { outlineColor: colors.ink, outlineWidth: 3, outlineStyle: 'solid', outlineOffset: 2 } : {}) })}>
     <Text style={[s.eyebrow, { letterSpacing: 0.5, color: colors.ink }]}>{number.toString().padStart(2, '0')} · {positionStatus}</Text>
-    <Text style={[s.target, { fontSize: 28, lineHeight: 40 }]}>{row.characters.map(character => character.kana).join('')}</Text>
+    <Text style={[s.target, { fontSize: 28, lineHeight: 40 }]}>{row.characters.length ? row.characters.map(character => character.kana).join('') : '読む · type'}</Text>
     <Text style={[s.body, { fontWeight: '700' }]}>{row.title}</Text>
     <Text style={s.muted}>{studyStatus}</Text>
   </Pressable>;
@@ -125,7 +126,7 @@ function useKanaAudio() {
     audio.stop();
     const current = ++request.current;
     setPlaying(character.id); setError('');
-    try { await audio.speak(character.audioText, 'ja-JP'); }
+    try { await speakCourseAudio(character.audioText, 'ja-JP'); }
     catch { if (current === request.current) setError('Audio could not play. Retry when a Japanese voice is available, or continue with the visible reading.'); }
     finally { if (current === request.current) setPlaying(''); }
   }
@@ -137,7 +138,12 @@ function AlphabetRow({ lesson, model, completed, onSave, onNext }: {
 }) {
   const { route, navigate } = useNavigation();
   const addressed = route.kind === 'letters' && route.rowId === lesson.id ? route : undefined;
-  const practice = addressed?.mode === 'recognition';
+  const practice = addressed?.mode === 'recognition' && !!lesson.characters.length;
+  const wordsMode = addressed?.mode === 'words';
+  const savedTaskIds = [...(alphabetProgress(model.events).taskIds.get(lesson.id) ?? [])];
+  const requiresWords = lesson.kind !== 'basic';
+  const missingPrerequisites = (lesson.prerequisites ?? []).filter(id => !alphabetProgress(model.events).completedIds.has(id));
+  const wordsDone = !!lesson.practice?.length && lesson.practice.every(task => savedTaskIds.includes(task.id));
   const key = `kana:${lesson.id}:${lesson.revision}`;
   const [round] = useVisitState(`${key}:round`, 0);
   const [tried, setTried] = useVisitState<readonly string[]>(`${key}:tried`, []);
@@ -150,33 +156,38 @@ function AlphabetRow({ lesson, model, completed, onSave, onNext }: {
     navigate({ kind: 'letters', language: 'ja-JP', rowId: lesson.id, mode: 'recognition', characterId: character.id },
       { repeat, snapshot: { [`${key}:round`]: repeat ? round + 1 : round, [`${key}:tried`]: tried } });
   }
+  function openWords() { playback.stop(); navigate({ kind: 'letters', language: 'ja-JP', rowId: lesson.id, mode: 'words' }, { snapshot: { [`${key}:tried`]: tried } }); }
   function switchMode(value: boolean) {
-    if (value === practice) return;
+    if (value === practice && !wordsMode) return;
     if (value) openCharacter(lesson.characters[0]);
     else navigate({ kind: 'letters', language: 'ja-JP', rowId: lesson.id, mode: 'study' }, { snapshot: { [`${key}:tried`]: tried } });
   }
   const compact = useWindowDimensions().width < 600;
   return <View style={[s.card, { padding: compact ? 18 : 32, gap: 22, minWidth: 0, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
-    <View style={s.row}><Text style={s.eyebrow}>{lesson.script === 'hiragana' ? 'Hiragana' : 'Katakana'} · Row {rowNumber} of {rows.length} · Step {practice ? '2' : '1'} of 2</Text>{completed && <Badge>Row studied</Badge>}</View>
+    <View style={s.row}><Text style={s.eyebrow}>{lesson.script === 'hiragana' ? 'Hiragana' : 'Katakana'} · Row {rowNumber} of {rows.length} · {wordsMode ? 'Word recall' : practice ? 'Recognition' : lesson.kind === 'checkpoint' ? 'Checkpoint study' : 'Study'}</Text>{completed && <Badge>Row studied</Badge>}</View>
     <View style={{ gap: 12 }}><Text accessibilityRole="header" style={[s.title, { fontWeight: '500' }, compact && s.compactTitle]}>{lesson.title}</Text>
     <Text style={[s.body, { maxWidth: 760 }]}>{lesson.summary}</Text></View>
-    <View style={s.row}><Button selected={!practice} onPress={() => switchMode(false)}>Study characters</Button><Button selected={practice} onPress={() => switchMode(true)}>Recognition practice</Button></View>
-    {!practice ? <>
-      <Text style={s.muted}>Read each character and its romaji (Latin-letter reading). Listen whenever you like.{compact ? ' Swipe across to explore this row.' : ''}</Text>
+    {!!missingPrerequisites.length && <View style={s.notice}><Text style={s.muted}>Suggested preparation: {missingPrerequisites.map(id => japaneseAlphabetLessons.find(item => item.id === id)?.title ?? id).join('; ')}. You can explore this group now and return to the earlier forms whenever needed.</Text></View>}
+    <View style={s.row}><Button selected={!practice && !wordsMode} onPress={() => switchMode(false)}>Study characters</Button>{!!lesson.characters.length && <Button selected={practice} onPress={() => switchMode(true)}>Recognition practice</Button>}<Button selected={wordsMode} onPress={openWords}>Read words & type</Button></View>
+    {wordsMode ? <KanaWordPractice lesson={lesson} model={model} completedIds={savedTaskIds} /> : !practice ? <>
+      {!!lesson.characters.length && <Text style={s.muted}>Read each character and its romaji (Latin-letter reading). Listen whenever you like.{compact ? ' Swipe across to explore this row.' : ''}</Text>}
       {compact ? <ScrollView horizontal showsHorizontalScrollIndicator accessibilityLabel="Characters and sounds in this row" style={{ maxWidth: '100%' }} contentContainerStyle={{ gap: 14, padding: 4, paddingBottom: 16 }}>
         {lesson.characters.map(character => <KanaCharacterCard key={character.id} character={character} compact playing={playback.playing === character.id} onPlay={() => void playback.play(character)} />)}
       </ScrollView> : <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
         {lesson.characters.map(character => <KanaCharacterCard key={character.id} character={character} playing={playback.playing === character.id} onPlay={() => void playback.play(character)} />)}
       </View>}
-      <Button primary={!completed} onPress={() => switchMode(true)}>Try recognising this row</Button>
+      {!!lesson.examples?.length && <KanaExamples lesson={lesson} />}
+      {lesson.characters.length ? <Button primary={!completed} onPress={() => switchMode(true)}>Try recognising this row</Button> : <Button primary onPress={openWords}>Try the reading checkpoint</Button>}
     </> : <RecognitionRound lesson={lesson} round={round} characterId={addressed?.characterId} stateKey={key} playback={playback}
       onAttempt={id => setTried(current => current.includes(id) ? current : [...current, id])}
       onNext={openCharacter} onRepeat={() => openCharacter(lesson.characters[0], true)} />}
     {!!playback.error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{playback.error}</Text>}
-    {practice && <Text style={s.muted}>{allTried ? 'You have tried every character in this row. Save your practice, or repeat whenever you like.' : `${tried.length}/${lesson.characters.length} characters tried. Try each one before saving this row.`}</Text>}
+    {practice && <Text style={s.muted}>{allTried ? requiresWords ? 'You have tried every form. Continue to word reading and typed recall before saving this group.' : 'You have tried every character in this row. Save your practice, then build recall with Read words & type.' : `${tried.length}/${lesson.characters.length} characters tried. Try each one before saving this row.`}</Text>}
     {model.blocked && <Text style={s.muted}>{model.busy ? 'Saving progress…' : model.saveError ? 'Progress was not saved. Use Retry save above; you can continue practising here.' : model.loading ? 'You can study while saved progress loads.' : 'Browser storage is unavailable. Study and practice still work, but row progress cannot be saved.'}</Text>}
     <View style={s.row}>
-      {practice && !completed && <Button primary={allTried} disabled={!allTried || model.blocked} onPress={onSave}>Mark row studied</Button>}
+      {practice && requiresWords && <Button primary={allTried} onPress={openWords}>Continue to word recall</Button>}
+      {(practice || wordsMode) && !completed && <Button primary={requiresWords ? wordsDone : allTried} disabled={(requiresWords ? !wordsDone : !allTried) || model.blocked} onPress={onSave}>Mark row studied</Button>}
+      {wordsMode && requiresWords && <Text style={s.muted}>Save this group after every word and timing task has been checked successfully or explicitly self-reviewed. Recognition remains available for extra practice.</Text>}
       {onNext && completed && <Button primary onPress={() => { playback.stop(); onNext(); }}>Next row</Button>}
     </View>
     {completed && !onNext && <Text style={s.body}>You have reached the last row. Choose another row whenever you want to practise again.</Text>}

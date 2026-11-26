@@ -2,6 +2,13 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-26 Redesign the Japanese learning experience
+
+- Request. Audit and implement the full Japanese curriculum, preserve learner access and verify the normal journeys.
+- Source. The clean initial Cloud checkout was `chore/cloud-workflow` at `2249086` and contained only French. In an isolated checkout, fetched all origin heads and compared 68 live refs with the same 68 fetched refs. Selected the latest relevant bilingual source `cd9d0789d3a5050ede678b11799b90b4f7a67efb` at `origin/feat/android-phone-redesign`. The clean task branch `feat/japanese-curriculum-redesign` started at that SHA. The current app already includes the adapted bilingual Cloud catalog; the older hosted branch remains a separate target.
+- Implementation. Reviewed all 69 topic lessons in 16 banks, 13 guided lessons and 20 original kana rows. The redesigned paths have 53 kana lessons, 91 guided tasks and 154 topic tasks. Preserved IDs, progress revisions and v4 backup compatibility. Bundled 506 credited synthetic clips and added contextual furigana, composition-safe text, manual replies, cumulative checkpoints and source-specific feedback. Curriculum authors and the independent reviewer used GPT-6.1 Sol with high reasoning. The primary agent integrated shared contracts, audio, navigation, and verification. [Curriculum audit](curriculum/japanese-curriculum-redesign.md) · [Execution plan](plans/0061-japanese-curriculum-redesign.md)
+- Verification. Repository and TypeScript, 34 tooling and 310 application tests and staged checks passed. The combined run and reruns account for 249 Chromium cases and one intentional skip, 34 cold-offline cases, eight Android browser contracts, all media decodes and final exported kana bookmark playback. The test runs corrected static route matching and adjusted the download waits for the larger offline package. The final export has 656 files and 16,702,426 bytes. See the [checkpoint](SESSION_CHECKPOINT.md) for proof and open device/editorial checks.
+
 ## 2026-11-26 Redesign the Android phone learner
 
 - Request. Review the installed bilingual app, simplify the shared phone interface and provide a signed in-place APK update and matched device screenshots.

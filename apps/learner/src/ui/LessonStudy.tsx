@@ -1,18 +1,28 @@
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { Lesson } from '@smartlingo/domain';
 import { BilingualDialogue } from './BilingualDialogue';
 import { getLessonDialoguePhoto } from './dialoguePhotos';
 import type { ContextPhoto } from './contextPhotos';
 import { GrammarNote } from './GrammarNote';
+import { Button } from './controls';
+import { styles as s } from './theme';
 import { VocabularyCard } from './VocabularyCard';
 import type { LearningModel } from './useLearning';
 
-export function LessonWords({ lesson, model, compact, phone }: { lesson: Lesson; model: LearningModel; compact: boolean; phone: boolean }) {
+export function LessonWords({ lesson, model, compact, phone, guided }: { lesson: Lesson; model: LearningModel; compact: boolean; phone: boolean; guided?: boolean }) {
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
-  return <View style={layout.wordGrid}>
-    {lesson.vocabulary.map(entry => <View key={entry.id} style={[layout.word, compact && layout.fullWidth]}>
-      <VocabularyCard entry={entry} model={model} language={language} study phoneStudy={phone} />
-    </View>)}
+  const [showRomanization, setShowRomanization] = useState(false);
+  const optionalRomanization = language === 'ja-JP' && lesson.level === 'A1';
+  const romanization = lesson.level === 'foundation' || (optionalRomanization && showRomanization);
+  return <View style={{ gap: 12 }}>
+    {optionalRomanization && <View style={s.row}><Button quiet compact expanded={showRomanization}
+      onPress={() => setShowRomanization(value => !value)}>{showRomanization ? 'Hide rōmaji' : 'Show rōmaji'}</Button></View>}
+    <View style={layout.wordGrid}>
+      {lesson.vocabulary.map(entry => <View key={entry.id} style={[layout.word, compact && layout.fullWidth]}>
+        <VocabularyCard entry={entry} model={model} language={language} study phoneStudy={phone} romanization={romanization} courseClip={guided} />
+      </View>)}
+    </View>
   </View>;
 }
 

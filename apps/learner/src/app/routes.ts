@@ -14,7 +14,7 @@ export type AppRoute =
   | { kind: 'courses'; language: TargetLanguage; courseId?: string }
   | { kind: 'listening'; language: TargetLanguage; topic?: string; lessonId?: string; questionId?: string; library?: boolean; chooser?: boolean }
   | { kind: 'speaking'; language: TargetLanguage; topic?: string; lessonId?: string; revision?: number; line?: number }
-  | { kind: 'letters'; language: 'ja-JP'; rowId?: string; mode?: 'study' | 'recognition'; characterId?: string }
+  | { kind: 'letters'; language: 'ja-JP'; rowId?: string; mode?: 'study' | 'recognition' | 'words'; characterId?: string }
   | { kind: 'review'; language: TargetLanguage; view?: 'notebook' | 'practice' }
   | { kind: 'editor'; lessonId?: string; revision?: number };
 
@@ -94,7 +94,7 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
     if (extra === undefined || (revision && line)) return { kind: 'speaking', language, topic, lessonId: item, revision, line };
   }
   if (section === 'letters' && language === 'ja-JP' && parts.length <= 6 && (item === undefined || id(item))) {
-    if ((extra === undefined || extra === 'study' || extra === 'recognition') && (final === undefined || (extra === 'recognition' && id(final)))) {
+    if ((extra === undefined || extra === 'study' || extra === 'recognition' || extra === 'words') && (final === undefined || (extra === 'recognition' && id(final)))) {
       return { kind: 'letters', language, rowId: item, mode: extra, characterId: final };
     }
   }

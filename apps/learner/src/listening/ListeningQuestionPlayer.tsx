@@ -2,7 +2,8 @@ import { useId, useLayoutEffect, useMemo, useRef, useState, type ComponentRef, t
 import type { TargetLanguage } from '@smartlingo/domain';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useVisitState } from '../app/WebNavigation';
-import { audio } from '../audio';
+import { audio, speakCourseAudio } from '../audio';
+import { hasJapaneseCourseClip, japaneseCourseVoiceCredit } from '../audio/japanese/course-clips';
 import { Button } from '../ui/controls';
 import { Icon } from '../ui/Icon';
 import { colors, designTokens as tokens, styles as s } from '../ui/theme';
@@ -97,7 +98,7 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
     setError('');
     setPlaying(true);
     setAttempt(previous => ({ ...previous, played: true }));
-    try { await audio.speak(question.sentence, question.language as TargetLanguage); }
+    try { await speakCourseAudio(question.sentence, question.language as TargetLanguage); }
     catch {
       if (current !== request.current) return;
       setError('Audio could not play. Try again or use the transcript.');
@@ -144,6 +145,7 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
   const languageProps = Platform.OS === 'web' ? { lang: question.language } : { accessibilityLanguage: question.language };
 
   return <View testID="listening-question-player" style={[s.card, layout.exercise]}>
+    {question.language === 'ja-JP' && hasJapaneseCourseClip(question.sentence) && <Text style={s.muted}>{japaneseCourseVoiceCredit}</Text>}
     <View style={[layout.player, compact && layout.playerCompact, embedded && layout.embeddedPlayer,
       embedded && compact && layout.embeddedPlayerCompact]}>
       {!embedded && <View style={layout.progress}>

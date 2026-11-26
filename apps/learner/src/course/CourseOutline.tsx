@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { japaneseDailyUnits } from '@smartlingo/content';
 import { courseDayProgress, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 import { routeHref, type AppRoute } from '../app/routes';
 import { Button } from '../ui/controls';
@@ -35,7 +36,8 @@ export function CourseOutline({ id, sidebar, phone, course, route, day, events,
   const nearbyDays = course.days.slice(Math.max(0, index - neighborCount), index + neighborCount + 1);
   const visibleDays = level !== 'All' ? course.days.filter(candidate => candidate.level === level)
     : showAll ? course.days : nearbyDays;
-  const unitGroups = course.units?.map((unit, position) => ({
+  const units = course.units ?? (course.language === 'ja-JP' ? japaneseDailyUnits : undefined);
+  const unitGroups = units?.map((unit, position) => ({
     unit, position, days: visibleDays.filter(candidate => unit.dayIds.includes(candidate.id)),
   })).filter(group => group.days.length);
 
@@ -81,6 +83,7 @@ export function CourseOutline({ id, sidebar, phone, course, route, day, events,
       {unitGroups ? unitGroups.map(({ unit, position, days }) =>
         <View key={unit.id} testID={`course-unit-${unit.id}`} style={t.group}>
           <Text accessibilityRole="header" style={[s.muted, t.unit]}>Unit {position + 1}: {unit.title}</Text>
+          {course.language === 'ja-JP' && unit.dayIds.includes(day.id) && <Text style={s.muted}>{unit.outcome}</Text>}
           {renderDays(days)}
         </View>) : renderDays(visibleDays)}
     </View>

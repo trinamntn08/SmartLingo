@@ -4,6 +4,8 @@ import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonCon
 import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline,
   openProfileSection, openTopic } from '../e2e/learner-journeys';
 
+test.describe.configure({ timeout: 100_000 });
+
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
 const step = (page: Page, name: string) => panel(page).getByRole('heading', { name, exact: true });
@@ -14,7 +16,7 @@ async function downloadApp(page: Page) {
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
-  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible({ timeout: 20000 });
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible({ timeout: 55_000 });
 }
 
 test.beforeEach(async ({ request, context }) => {

@@ -12,3 +12,4 @@ export * from './speech';
 export * from './course';
 export * from './report-types';
 export * from './report';
+export * from './japanese-practice';

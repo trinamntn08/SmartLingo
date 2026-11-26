@@ -5,6 +5,11 @@ import { openLearningRepository } from '../persistence';
 import { isAndroidApp } from '../platform/runtime';
 import { localContentApi } from './api';
 
+const starterOrder = new Map(['ja.greetings.hello', 'ja.greetings.courtesy', 'ja.introductions.name', 'ja.cafe.drinks']
+  .map((id, index) => [id, index] as const));
+const orderedJapaneseLessons = [...japaneseLessons].sort((left, right) =>
+  (starterOrder.get(left.id) ?? starterOrder.size) - (starterOrder.get(right.id) ?? starterOrder.size));
+
 export function useCatalogue() {
   const repository = useRef<LearningRepository | null>(null);
   const [published, setPublished] = useState<Lesson[]>([]);
@@ -41,5 +46,5 @@ export function useCatalogue() {
     } catch (failure) { setError(failure instanceof Error ? failure.message : 'Published content could not be loaded. Your current catalogue was kept.'); }
     finally { inFlight.current = false; setBusy(false); }
   }
-  return { lessons: mergeLessonCatalogue([...frenchLessons, ...japaneseLessons], published), loading, busy, error, message, refreshPublished };
+  return { lessons: mergeLessonCatalogue([...frenchLessons, ...orderedJapaneseLessons], published), loading, busy, error, message, refreshPublished };
 }

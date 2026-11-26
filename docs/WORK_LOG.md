@@ -2,6 +2,13 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-26 Confirm the Android update on GitHub
+
+- Request. Verify that the Android update was pushed to GitHub.
+- Start. At 21:41 CET, Europe/Paris, inspected the primary checkout and worktrees. Fetched all heads from the owner-selected origin. All 66 fetched and live branch names and full SHAs matched. The clean `fix/android-apk-upgrade` worktree matched local, tracking and live head `4d569e6c707eb354e359263d995924ac48c920cc` (0/0). The primary learner stayed at `e1774bbaf2e195af5ee2dba9ae0199e4427c1043`. Account usage is unavailable.
+- Source check. The APK build source `ff9678987b1c7880033628934cf007c73a8893c2` is on the task branch. It includes the adapted Cloud UI `563fdaa01b8d56cc4c0baf971b9f2664b26212f8` and bilingual curriculum `47eebafdf5050cad95549ffe49204d94fc053c39` through `af5c4ff9b2503ad05e89fd7c0e0c15a5e994af99`, and Slang `1068589290305171539f327c5e7e043e6b992444` through `5b82a24e1649f6701c647bfe84ed97606d216189`. The known hosted, historical Android and Cloud workflow branches remain separate. The Android phone redesign branch `1a02fc14f20cfa35c58be6d4cf86461b5989164c` records prompt preparation. The shared learner preview did not respond on port 8082 (curl exit 7). This is a Git status check.
+- Outcome. The update code and emulator handoff were already on GitHub. The generated APK and receipt remain local. Repository, TypeScript and Git whitespace checks passed. Next is the owner’s phone check using [the Android guide](ANDROID_TESTING.md).
+
 ## 2026-11-26 Preserve learning data through Android APK updates
 
 - Request. Verify an in-place upgrade of the bilingual Android APK, add compatibility checks before installation, and document the Files update and backup recovery.

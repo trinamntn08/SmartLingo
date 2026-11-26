@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import type { LearningBackup, LearningRepository, RestoreReport } from '@smartlingo/domain';
 import { openLearningRepository } from '../persistence';
+import { isAndroidApp } from '../platform/runtime';
 import { Badge, Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { downloadBackup, readBackupFile } from './files';
@@ -15,6 +16,7 @@ async function withRepository<T>(operation: (repository: LearningRepository) => 
 type Operation = 'download' | 'read' | 'restore';
 
 export function BackupPanel() {
+  const android = isAndroidApp();
   const operation = useRef<Operation | null>(null);
   const [busy, setBusy] = useState<Operation | null>(null);
   const [error, setError] = useState('');
@@ -36,8 +38,9 @@ export function BackupPanel() {
     if (!begin('download')) return;
     try {
       const backup = await withRepository(repository => repository.exportBackup());
-      downloadBackup(backup);
-      setMessage('Backup download requested. Keep the file somewhere private and check that your browser saved it.');
+      await downloadBackup(backup);
+      setMessage(android ? 'Learning backup saved to your chosen location. Keep the file somewhere private.'
+        : 'Backup download requested. Keep the file somewhere private and check that your browser saved it.');
     } catch (failure) { showError(failure); }
     finally { finish(); }
   }
@@ -59,7 +62,7 @@ export function BackupPanel() {
   }
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>Keep a copy of your learning</Text>
-    <Text style={s.body}>Download your notebook, practice and course history, and cached published lessons as a JSON file. A backup lets you bring them back to this browser or another device.</Text>
+    <Text style={s.body}>Download your notebook, practice and course history, and cached published lessons as a JSON file. A backup lets you bring them back to {android ? 'this app' : 'this browser'} or another device.</Text>
     <View style={s.notice}><Text style={s.body}>Backup files are private and unencrypted. They contain your personal notes and learning history. Server curriculum drafts, recordings, and credentials are excluded.</Text></View>
     <View style={s.row}><Button primary disabled={!!busy} onPress={() => void download()}>Download learning backup</Button></View>
     <View style={s.divider} />
@@ -101,7 +104,7 @@ export function BackupPanel() {
       <Text accessibilityLiveRegion="polite" style={s.body}>Practice events: {report.eventsAdded} added, {report.eventsKept} already kept.{ '\n' }Notebook entries: {report.notesAdded} added, {report.notesKept} existing notes kept.{ '\n' }Cached lessons: {report.lessonsUpdated} added or updated, {report.lessonsKept} kept.</Text>
       <Text style={s.body}>Review ratings: {report.reviewsAdded} added, {report.reviewsKept} already kept.</Text>
       <Text style={s.body}>Course events: {report.courseEventsAdded} added, {report.courseEventsKept} already kept.</Text>
-      <Text style={s.body}>Reload learning to display the restored progress, notebook, and cached lessons. Save any unsaved curriculum edits before reloading.</Text>
+      <Text style={s.body}>Reload learning to display the restored progress, notebook, and cached lessons.{!android && ' Save any unsaved curriculum edits before reloading.'}</Text>
       <View style={s.row}><Button primary disabled={!!busy} onPress={() => { if (typeof window !== 'undefined') window.location.reload(); }}>Reload learning</Button></View>
     </View>}
   </View>;

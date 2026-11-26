@@ -96,6 +96,13 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
   return unavailable;
 }
 
+/** Android's bundled document uses the fragment for the same learner routes and query filters. */
+export function parseAndroidRoute(pathname: string, search = '', hash = ''): AppRoute {
+  const [path, query] = pathname === '/' && hash.startsWith('#/') ? hash.slice(1).split('?', 2) : [];
+  const route = path ? parseRoute(path, query) : parseRoute(pathname, search, hash);
+  return route.kind === 'editor' ? { kind: 'home' } : route;
+}
+
 export function routeHref(route: AppRoute): string {
   const path = (...segments: (string | number | undefined)[]) => `/${segments.filter(value => value !== undefined).map(value => encodeURIComponent(String(value))).join('/')}`;
   if (route.kind === 'editor') return path('editor', route.lessonId, route.revision);

@@ -5,6 +5,7 @@ Reviewed: 2026-11-22 against the Japanese-enabled shared learner. French/Japanes
 | Location | Responsibility |
 | --- | --- |
 | apps/learner | Expo/React Native learner app; web first, native later |
+| apps/android | Capacitor test shell, Android system Back and private document-picker export |
 | apps/api | Local Node/Fastify API, private credentials, media generation/cache, SQLite content |
 | packages/domain | Shared content/course/backup contracts, answer checking, review scheduling and pure report aggregation |
 | packages/content | Schema-validated French/Japanese draft lessons and daily courses, basic kana metadata and bundled media metadata |
@@ -31,6 +32,8 @@ The [maintenance review](CODEBASE_REVIEW.md) records the 2026-11-22 cleanup and 
 Dependency direction remains application composition → feature components/services → small domain/adapter contracts. The domain has no React/Fastify/database dependency. Base UI does not import audio features; audio UI may compose base controls. Refactoring changes neither learning/backup schemas nor content identity/revisions.
 
 ## Boundaries
+
+- The Android test shell bundles the shared web export at the stable `https://localhost` origin. Android's learner routes use a fragment to keep reloads on the bundled root. The shell delegates system Back to the WebView, uses device speech where available, and saves backups through the Android document picker. The shared IndexedDB schema and backup validation apply on both platforms. [Android preview decision](decisions/0046-shared-learner-android-preview.md)
 
 - Client -> local API -> provider. Permanent credentials stay on the API.
 - Optional practice -> validated shared contracts -> expiring in-memory session service -> injected conversation/transcription providers. Explicit actions share bounded attempts/single flight and idempotent request tombstones; terminal failures permit a new deliberate attempt. Browser recording is temporary and separate from editable message text and notebook persistence. Only explicitly saved phrases reach learner storage. See [ADR 0016](decisions/0016-optional-ai-practice.md).

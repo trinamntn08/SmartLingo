@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": { "web": "expo start --web --localhost", "export": "expo export --platform web" },
   "dependencies": {
+    "@capacitor/core": "8.6.2",
     "@smartlingo/domain": "0.1.0",
     "@smartlingo/content": "0.1.0",
     "expo": "58.0.25",

@@ -1,4 +1,5 @@
 import type { DownloadProgress, OfflineAssetManager, OfflineInfo, OfflineManifest, OfflineStatus } from './contracts';
+import { isAndroidApp } from '../platform/runtime';
 
 const workerPath = '/smartlingo-sw.js';
 const empty: OfflineStatus = { state: 'empty', bytes: 0 };
@@ -23,7 +24,7 @@ export function parseOfflineManifest(input: unknown): OfflineManifest {
 }
 
 function supported(): boolean {
-  return typeof window !== 'undefined' && window.isSecureContext &&
+  return !isAndroidApp() && typeof window !== 'undefined' && window.isSecureContext &&
     typeof navigator !== 'undefined' && 'serviceWorker' in navigator &&
     typeof navigator.locks?.request === 'function' && typeof MessageChannel !== 'undefined';
 }

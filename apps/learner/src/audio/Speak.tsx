@@ -7,6 +7,7 @@ import { subscribeAudioNotice, subscribeGeneratedPreferences } from './generated
 import { GeneratedPhraseOptions } from './generated/GeneratedPhraseOptions';
 import { AudioIconButton } from './AudioIconButton';
 import { Button } from '../ui/controls';
+import { isAndroidApp } from '../platform/runtime';
 import { colors, designTokens, styles as s } from '../ui/theme';
 
 export function Speak({ text, onError, language = 'fr-FR' }: { text: string; onError?: (message: string) => void; language?: TargetLanguage }) {
@@ -14,7 +15,7 @@ export function Speak({ text, onError, language = 'fr-FR' }: { text: string; onE
   const [error, setError] = useState('');
   useEffect(() => () => audio.stop(), [text, language]);
   const [neuralEnabled, setNeuralEnabled] = useState(() => generatedPreferences.get().enabled);
-  const canGenerate = language === 'fr-FR' && neuralEnabled;
+  const canGenerate = !isAndroidApp() && language === 'fr-FR' && neuralEnabled;
   const [options, setOptions] = useState(false);
   const [optionsFocused, setOptionsFocused] = useState(false);
   useEffect(() => subscribeGeneratedPreferences(() => setNeuralEnabled(generatedPreferences.get().enabled)), []);

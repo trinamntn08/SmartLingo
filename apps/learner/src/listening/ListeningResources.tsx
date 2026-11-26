@@ -2,6 +2,7 @@ import { useId, useState } from 'react';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { Linking, Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useVisitState } from '../app/WebNavigation';
+import { isAndroidApp } from '../platform/runtime';
 import { Button } from '../ui/controls';
 import { colors, designTokens as tokens, styles as s } from '../ui/theme';
 import { getListeningResources, listeningFormats, listeningLevels, type ListeningFormat, type ListeningLevel, type ListeningResource } from './resources';
@@ -109,13 +110,14 @@ function ResourceLink({ resource }: { resource: ListeningResource }) {
   const [error, setError] = useState(false);
   const [focused, setFocused] = useState(false);
   const action = resource.format === 'Podcast' ? 'Listen' : resource.format === 'YouTube' ? 'Watch' : 'Open';
-  const label = `${action === 'Listen' ? 'Listen to' : action} ${resource.title} — ${Platform.OS === 'web' ? 'new tab' : 'external provider'}`;
+  const browserTab = Platform.OS === 'web' && !isAndroidApp();
+  const label = `${action === 'Listen' ? 'Listen to' : action} ${resource.title} — ${browserTab ? 'new tab' : 'external provider'}`;
   async function open() {
     setError(false);
     try { await Linking.openURL(resource.url); }
     catch { setError(true); }
   }
-  if (Platform.OS === 'web') return <a href={resource.url} target="_blank" rel="noopener noreferrer" aria-label={label}
+  if (Platform.OS === 'web') return <a href={resource.url} target={browserTab ? '_blank' : undefined} rel="noopener noreferrer" aria-label={label}
     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     style={{ color: colors.onPrimary, backgroundColor: colors.primary, borderRadius: tokens.radius.pill, padding: '8px 14px',
       minHeight: tokens.control.minimumTarget, boxSizing: 'border-box', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',

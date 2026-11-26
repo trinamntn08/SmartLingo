@@ -2,6 +2,7 @@ import { useEffect, useId, useState } from 'react';
 import { Platform, Text, View } from 'react-native';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
+import { isAndroidApp } from '../platform/runtime';
 import { colors, styles as s } from '../ui/theme';
 import { audio, deviceAudio } from './index';
 import { preferencesForLanguage, audioRates, type AudioPreferences } from './preferences';
@@ -11,7 +12,7 @@ import { JapaneseAudioPreferencesPanel } from './japanese/JapaneseAudioPreferenc
 const previewText = 'Bonjour ! Je voudrais un café, s’il vous plaît.';
 
 export function AudioPreferencesPanel({ language = 'fr-FR' }: { language?: TargetLanguage }) {
-  return language === 'ja-JP' ? <JapaneseAudioPreferencesPanel /> : <DeviceAudioPreferencesPanel language={language} />;
+  return language === 'ja-JP' && !isAndroidApp() ? <JapaneseAudioPreferencesPanel /> : <DeviceAudioPreferencesPanel language={language} />;
 }
 
 function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage }) {
@@ -42,7 +43,8 @@ function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage })
     audio.stop(); setPlaying(false); setError('');
     const persisted = store.save(next);
     setPreferences(next);
-    setNotice(persisted ? 'Audio choice saved in this browser.' : 'Audio choice applies for this visit. Browser storage is unavailable, so it may reset after reload.');
+    const location = isAndroidApp() ? 'this app' : 'this browser';
+    setNotice(persisted ? `Audio choice saved in ${location}.` : 'Audio choice applies for this visit. Local storage is unavailable, so it may reset after reload.');
   }
 
   async function preview() {
@@ -55,7 +57,7 @@ function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage })
 
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>{name} audio</Text>
-    <Text style={s.body}>Choose a synthetic voice offered by your browser and listen before deciding. Voice quality varies by device.</Text>
+    <Text style={s.body}>Choose a synthetic voice offered by your {isAndroidApp() ? 'device' : 'browser'} and listen before deciding. Voice quality varies by device.</Text>
     {!supported ? <Text style={s.body}>Device speech is unavailable here. All lesson text and translations remain available.</Text> : <>
       {discovering && voices.length === 0 && <Text accessibilityLiveRegion="polite" style={s.muted}>Checking for {name} voices…</Text>}
       {!discovering && voices.length === 0 && <Text style={s.body}>No {name} voice is available yet. Add a {name} speech voice in your device settings, then refresh the voice list.</Text>}
@@ -79,6 +81,6 @@ function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage })
     </>}
     {!!error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{error}</Text>}
     {!!notice && <Text accessibilityLiveRegion="polite" style={s.muted}>{notice}</Text>}
-    <Text style={s.muted}>Device voices may work offline after installation. Network voices send the spoken text to your browser’s speech service and need a connection. The offline app download does not include voices. These controls make no SmartLingo AI requests.</Text>
+    <Text style={s.muted}>Device voices may work offline after installation. Network voices send the spoken text to a speech service and need a connection. {isAndroidApp() ? 'The APK does not include voices.' : 'The offline app download does not include voices.'} These controls make no SmartLingo AI requests.</Text>
   </View>;
 }

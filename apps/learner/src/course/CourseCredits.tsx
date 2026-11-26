@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Linking, Text, View } from 'react-native';
 import type { OpenCourse } from '@smartlingo/domain';
+import { isAndroidApp } from '../platform/runtime';
 import { Button } from '../ui/controls';
 import { styles as s } from '../ui/theme';
 
@@ -11,7 +12,11 @@ export function CourseCredits({ course }: { course: OpenCourse }) {
   if (!hasSources && (course.language === 'fr-FR' || !course.provenance)) return null;
   async function follow(url: string) {
     setError('');
-    try { await Linking.openURL(url); } catch { setError('The external link could not be opened. All course study material is available here.'); }
+    try {
+      // Capacitor hands out-of-origin main-frame navigation to Android.
+      if (isAndroidApp()) window.location.assign(url);
+      else await Linking.openURL(url);
+    } catch { setError('The external link could not be opened. All course study material is available here.'); }
   }
   return <View style={{ gap: 12, minWidth: 0, paddingTop: 16, borderTopWidth: 1, borderTopColor: '#DCE3DB' }}>
     <Button expanded={open} onPress={() => setOpen(value => !value)}>{hasSources

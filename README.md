@@ -2,7 +2,7 @@
 
 A local French and Japanese learning preview for English-speaking adults. Start French with everyday greetings, or Japanese with hiragana and katakana, then explore practical topics and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
 
-This checkout uses the Japanese-enabled shared learner. Android APK tooling and the older hosted release live on separate branches; [repository and branch state](docs/REPOSITORY_STATE.md) explains what each contains. Full native Android/iOS integration remains planned.
+This checkout includes the shared learner and private Android APK tooling. [Repository and branch state](docs/REPOSITORY_STATE.md) records the earlier French-only APK and separate hosted release. Full native Android and iOS integration remains planned.
 
 See [current capabilities and gaps](docs/STATUS.md) for the verified scope. Bundled curriculum remains draft until owner review and explicit publication; lesson completion and level labels do not establish proficiency.
 
@@ -37,6 +37,10 @@ npm run dev:api
 The API defaults to `http://127.0.0.1:3001`. Keep learner data at the same browser/hostname/port; other origins have separate storage. Do not expose this loopback API to the public internet.
 
 For lesson, notebook, editor/publication, private learning-backup and voice instructions, use [Local operations](docs/LOCAL_OPERATIONS.md). Credentials are optional server-process settings described in [.env.example](.env.example); real `.env` files are not loaded automatically.
+
+## Test on Android
+
+Build the private French and Japanese test APK with `npm.cmd run build:apk` after setting up the Android SDK and passing `npm.cmd run android:doctor`. The installer is saved to `dist/android/SmartLingo-preview.apk`. The [Android testing guide](docs/ANDROID_TESTING.md) covers Windows setup, verification, phone installation, backup and device testing.
 
 ## Test the offline-ready preview
 
@@ -87,7 +91,7 @@ Detailed commands, fixtures and verification limits belong in [Testing](docs/TES
 ## Start here
 
 - [Documentation index](docs/README.md): choose the current guide for your task.
-- [Repository and branch state](docs/REPOSITORY_STATE.md): locate the Japanese learner, separate Android/hosting work and safe synchronization steps.
+- [Repository and branch state](docs/REPOSITORY_STATE.md): locate shared learner, Android, and hosted branches and follow safe synchronization steps.
 - [Current status](docs/STATUS.md) and [session checkpoint](docs/SESSION_CHECKPOINT.md): capabilities, gaps and latest handoff.
 - [Product plan](PROJECT_PLAN.md) and [architecture](docs/ARCHITECTURE.md): target requirements and implementation boundaries.
 - [Codebase review](docs/CODEBASE_REVIEW.md) and [design system](docs/DESIGN_SYSTEM.md): current module map, cleanup findings, shared tokens and component extension guidance.

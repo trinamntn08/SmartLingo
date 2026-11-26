@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { IDBFactory } from 'fake-indexeddb';
-import { restaurantLesson } from '@smartlingo/content';
-import { parseBackupText, serializeBackup, maximumBackupBytes, type LearningBackup } from '@smartlingo/domain';
+import { openCoursePilot, restaurantLesson } from '@smartlingo/content';
+import { courseDayProgress, courseLessonStageForBlock, notebookLanguage, parseBackupText, serializeBackup, maximumBackupBytes, type LearningBackup } from '@smartlingo/domain';
 import { openLearningRepository } from '../src/persistence';
 import { readBackupFile } from '../src/backup/files';
 
@@ -103,6 +103,27 @@ test('version2 backups preserve reviews and restore with no invented course hist
   assert.deepEqual(await store.listCourseEvents(), backup.courseEvents);
   assert.deepEqual(await store.listReviewEvents(), backup.reviewEvents);
   store.close();
+});
+
+test('the old Android version3 backup preserves French notes and unchanged lesson progress', async () => {
+  const [first, second] = openCoursePilot.days;
+  const oldFirst = { ...backup.courseEvents[0], courseId: 'fr.open-course-pilot', courseRevision: 1,
+    dayId: 'fr.open-course-pilot.day-1', blockId: 'fr.open-course-pilot.day-1.vocabulary' };
+  const oldSecond = { ...oldFirst, id: '88888888-8888-4888-8888-888888888888', courseRevision: 2,
+    dayId: 'fr.open-course-pilot.day-2', blockId: 'fr.open-course-pilot.day-2.vocabulary' };
+  const file = new File([JSON.stringify({ ...backup, version: 3, courseEvents: [oldFirst, oldSecond] })], 'old-android.json');
+  const store = await openLearningRepository({ factory: new IDBFactory() });
+  try {
+    const parsed = await readBackupFile(file);
+    assert.equal(parsed.version, 4);
+    assert.equal((await store.restoreBackup(parsed)).courseEventsAdded, 2);
+    assert.deepEqual(await store.listNotebook(), backup.notebook);
+    assert.equal(notebookLanguage((await store.listNotebook())[0]), 'fr-FR');
+    const stored = await store.listCourseEvents();
+    assert.deepEqual(stored, [oldFirst, oldSecond]);
+    assert.equal(courseDayProgress(openCoursePilot, first, stored).lastBlockId, first.blocks[0].id);
+    assert.equal(courseLessonStageForBlock(second, courseDayProgress(openCoursePilot, second, stored).lastBlockId), 'vocabulary');
+  } finally { store.close(); }
 });
 
 test('course event conflicts roll back every store, and a corrected retry is idempotent', async () => {

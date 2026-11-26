@@ -5,6 +5,7 @@ import { GeneratedSpeechPanel } from '../audio/generated/GeneratedSpeechPanel';
 import { BackupPanel } from '../backup/BackupPanel';
 import type { useCatalogue } from '../content/useCatalogue';
 import { OfflinePanel } from '../offline/OfflinePanel';
+import { isAndroidApp } from '../platform/runtime';
 import { Button } from '../ui/controls';
 import { Disclosure } from '../ui/Disclosure';
 import { colors, styles as s } from '../ui/theme';
@@ -21,24 +22,27 @@ interface ProfileScreenProps {
 }
 
 export function ProfileScreen({ catalogue, onOpenEditor, language, model }: ProfileScreenProps) {
+  const android = isAndroidApp();
   return <View style={t.page}>
-    <ScreenHeader title="Profile" subtitle="Manage your audio, offline lessons and learning data." />
+    <ScreenHeader title="Profile" subtitle={android ? 'Manage your audio and learning data.' : 'Manage your audio, offline lessons and learning data.'} />
     <View style={t.board}>
       <View style={[t.main, { flexBasis: 600 }]}>
       <Text accessibilityRole="header" style={t.sectionTitle}>Learning settings</Text>
 
-    <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description="Choose a voice, adjust the pace and manage saved audio.">
+    <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description={android ? 'Choose a device voice and adjust the pace.' : 'Choose a voice, adjust the pace and manage saved audio.'}>
       <AudioPreferencesPanel language={language} />
-      {language === 'fr-FR' && <GeneratedSpeechPanel />}
+      {!android && language === 'fr-FR' && <GeneratedSpeechPanel />}
     </Disclosure>
 
-    <Disclosure title="Offline & backups" description="Download lessons and keep a private copy of your learning.">
-      <Text style={[s.muted, { paddingHorizontal: 8 }]}>Offline app downloads and private learning backups include both French and Japanese.</Text>
-      <OfflinePanel />
+    <Disclosure title="Offline & backups" description={android ? 'Study bundled lessons and keep a private copy of your learning.' : 'Download lessons and keep a private copy of your learning.'}>
+      <Text style={[s.muted, { paddingHorizontal: 8 }]}>{android
+        ? 'French and Japanese lessons are bundled for offline study. Learning backups include both languages.'
+        : 'Offline app downloads and private learning backups include both French and Japanese.'}</Text>
+      {!android && <OfflinePanel />}
       <BackupPanel />
     </Disclosure>
 
-    {language === 'fr-FR' && <Disclosure title="Curriculum tools" description="Load published lessons or open the local draft workshop.">
+    {!android && language === 'fr-FR' && <Disclosure title="Curriculum tools" description="Load published lessons or open the local draft workshop.">
       <View style={t.inset}>
         <Text style={s.heading}>Local curriculum workshop</Text>
         <Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text>
@@ -55,13 +59,15 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model }: Prof
 
     <Disclosure title="About SmartLingo" description="Study support and draft content.">
       <View style={[t.stack, { padding: 8, gap: 16 }]}>
-        {language === 'ja-JP' && <>
+        {!android && language === 'ja-JP' && <>
           <Text accessibilityRole="header" style={s.heading}>Japanese study support</Text>
           <Text style={s.body}>Japanese lessons, kana readings, listening and guided speaking work without AI. Optional AI conversation, Azure neural audio and the curriculum workshop currently support French only.</Text>
         </>}
-        <Text style={s.body}>Bundled lessons don’t need the local API or an AI key. {language === 'ja-JP' ? 'Japanese listening uses a device voice, saved clip or free local VOICEVOX voice.' : 'French listening uses a device voice or explicitly saved neural audio.'} You can always read and practise from the text.</Text>
+        <Text style={s.body}>Bundled lessons don’t need the local API or an AI key. {android
+          ? 'Listening uses a device voice when available.'
+          : language === 'ja-JP' ? 'Japanese listening uses a device voice, saved clip or free local VOICEVOX voice.' : 'French listening uses a device voice or explicitly saved neural audio.'} You can always read and practise from the text.</Text>
         <Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text>
-        <Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>
+        <Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. {android ? 'Keep private learning backups separately.' : 'Keep private learning backups separately; browser storage may be cleared or evicted.'}</Text>
       </View>
     </Disclosure>
       </View>
@@ -73,12 +79,15 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model }: Prof
             {!model.loadError && <Text style={t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'word' : 'words'}</Text>}
           </View>
           <View style={s.divider} />
-          <Text style={t.detail}>Your progress and notebook stay in this browser on this device. There is no account or sync.</Text>
+          <Text style={t.detail}>{android
+            ? 'Your progress and notebook stay in this app on this phone. There is no account or sync.'
+            : 'Your progress and notebook stay in this browser on this device. There is no account or sync.'}</Text>
         </View>
         <View style={t.panel}>
           <View style={s.row}><Icon name="offline" size={22} /><Text accessibilityRole="header" style={t.sectionTitle}>Yours to keep</Text></View>
-          <Text style={t.detail}>Download the app for offline study. Export a private learning backup before clearing browser data or changing devices.</Text>
-          <Text style={t.detail}>Audio is optional. A microphone is only requested when you choose to record in French AI practice.</Text>
+          {android ? <Text style={t.detail}>Clearing app storage or uninstalling removes your learning data. Export a private learning backup before clearing storage or changing phones.</Text>
+            : <><Text style={t.detail}>Download the app for offline study. Export a private learning backup before clearing browser data or changing devices.</Text>
+              <Text style={t.detail}>Audio is optional. A microphone is only requested when you choose to record in French AI practice.</Text></>}
         </View>
       </View>
     </View>

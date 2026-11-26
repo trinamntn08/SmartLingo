@@ -1,7 +1,8 @@
 import { createContext, useContext, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react';
 import { Platform } from 'react-native';
 import { audio } from '../audio';
-import { parseRoute, routeHref, type AppRoute } from './routes';
+import { isAndroidApp, learnerDocumentHref } from '../platform/runtime';
+import { parseAndroidRoute, parseRoute, routeHref, type AppRoute } from './routes';
 
 interface EntryState { group: string; index: number; visit: string; href: string; chooser?: true }
 interface Entry extends EntryState { route: AppRoute }
@@ -21,8 +22,12 @@ const visitLimit = 96;
 const browser = () => Platform.OS === 'web' && typeof window !== 'undefined' ? window : undefined;
 const token = () => Math.random().toString(36).slice(2);
 const locationHref = (web: Window) => `${web.location.pathname}${web.location.search}${web.location.hash}`;
-const hrefFor = (route: AppRoute, web?: Window) => route.kind === 'unavailable' && web ? locationHref(web) : routeHref(route);
-const initialRoute = (web?: Window) => web ? parseRoute(web.location.pathname, web.location.search, web.location.hash) : { kind: 'home' } as const;
+const hrefFor = (route: AppRoute, web?: Window) => route.kind === 'unavailable' && web ? locationHref(web) : learnerDocumentHref(routeHref(route));
+function initialRoute(web?: Window): AppRoute {
+  if (!web) return { kind: 'home' };
+  const parse = isAndroidApp() ? parseAndroidRoute : parseRoute;
+  return parse(web.location.pathname, web.location.search, web.location.hash);
+}
 
 function currentMetadata(web: Window): EntryState | undefined {
   const meta: Partial<EntryState> | null | undefined = web.history.state?.[metadataKey];
@@ -75,6 +80,7 @@ export function WebNavigation({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const web = browser();
     if (!web) return;
+    const browserHashNavigation = !isAndroidApp();
     save(web, current.current, true);
 
     function traverse() {
@@ -96,7 +102,7 @@ export function WebNavigation({ children }: { children: ReactNode }) {
         return;
       }
       const chooser = route.kind === 'listening' && !route.library && meta?.chooser === true;
-      const inPageEditor = web.location.hash === '#editor' && !meta;
+      const inPageEditor = route.kind === 'editor' && web.location.hash === '#editor' && !meta;
       const next: Entry = {
         group: meta?.group ?? (inPageEditor ? previous.group : token()),
         index: meta?.index ?? (inPageEditor ? previous.index + 1 : 0),
@@ -109,22 +115,24 @@ export function WebNavigation({ children }: { children: ReactNode }) {
     }
 
     web.addEventListener('popstate', traverse);
-    web.addEventListener('hashchange', traverse);
+    // Android's managed fragments also emit popstate, which owns history restoration.
+    if (browserHashNavigation) web.addEventListener('hashchange', traverse);
     return () => {
       web.removeEventListener('popstate', traverse);
-      web.removeEventListener('hashchange', traverse);
+      if (browserHashNavigation) web.removeEventListener('hashchange', traverse);
       audio.stop();
     };
   }, []);
 
   function navigate(route: AppRoute, options: MoveOptions = {}) {
     const previous = current.current;
+    if (route.kind === 'editor' && isAndroidApp()) return;
     if (previous.visit !== entry.visit || (blockers.current.size && !options.afterSave)) return;
     if (restoration.current) {
       if (options.afterSave) afterRestoration.current = () => navigate(route, options);
       return;
     }
-    const href = routeHref(route);
+    const href = learnerDocumentHref(routeHref(route));
     const chooser = route.kind === 'listening' && route.chooser ? true : undefined;
     if (!options.repeat && previous.href === href && previous.chooser === chooser && previous.route.kind === route.kind) return;
     const next: Entry = { group: previous.group, index: previous.index + (options.replace ? 0 : 1), visit: token(), href, route, chooser };

@@ -21,7 +21,8 @@ The main folder previously selected `feat/android-test-apk`, a French-only sibli
 | `feat/japanese-topic-vocabulary` | `4122183` | 13 Japanese topic banks expanded to 30 entries each. Included in the current baseline. |
 | `feat/shared-language-learning` | `337d922` | Homepage language choice, shared lessons/notebook/review and backup v4. Included in the current baseline. |
 | `feat/japanese-course-b1` | `58fe9b6` | Original 13-day Japanese draft course with selected foundations/A1/A2/B1 tasks. Its content is present in the current source, but its commit is not an ancestor: the original implementation was incorporated into the shared-language work. |
-| `feat/android-test-apk` | `0d21d67` | Capacitor Android debug APK tooling and phone-local document backup. A sibling of the Japanese learner, based on French daily-course head `ee23e93`; not integrated here. |
+| `feat/android-test-apk` | `0d21d67` | Earlier French-only Capacitor Android debug APK and document backup, based on French daily-course head `ee23e93`. |
+| `feat/android-current-learner-apk` | [Task checkpoint](SESSION_CHECKPOINT.md) | Current French/Japanese learner packaged for private Android testing, based on `feat/french-daily-opening`; see the [Android guide](ANDROID_TESTING.md). |
 | `codex/free-learner-cloud-deploy` | `c88bc41` | Earlier static-hosted learner implementation. Separate from the current Japanese hub; its previous checkpoint reports account/network-blocked publication and no live URL. |
 | `feat/deployment-ready-beta` | `ac061ec` | Earlier complete-content deployment preparation; not the current Japanese hub. |
 | `main` | `1c6e943` | Older repository checkpoint; does not represent the current learner implementation. |
@@ -32,7 +33,7 @@ The inspected local hub, Japanese feature branches and Android branch matched th
 
 The current `package.json` provides `dev`, `dev:api`, `setup:japanese-voice`, `dev:japanese-voice`, web build/preview, tests and backup tooling. See [README](../README.md), [local operations](LOCAL_OPERATIONS.md) and [Japanese audio](JAPANESE_AUDIO.md).
 
-`android:doctor`, `build:apk`, `android:install` and `test:android-contract` belong to `feat/android-test-apk`. Its tracked instructions are `docs/ANDROID_TESTING.md` on that branch. The previously verified APK is a French-preview artifact, not proof of Japanese Android support. Native SQLite/audio adapters, physical-phone acceptance and integration with the current hub remain open.
+`android:doctor`, `build:apk`, `android:install` and `test:android-contract` are available on `feat/android-current-learner-apk` for the shared learner. The initial `feat/android-test-apk` branch remains a historical French-only snapshot. See the [Android guide](ANDROID_TESTING.md) for setup and the [session checkpoint](SESSION_CHECKPOINT.md) for actual validation. Full native SQLite and audio adapters remain planned.
 
 Residual Android build/cache files left after the branch switch were moved and hash-verified outside this source tree at `D:/dev/projects/SmartLingo-sessions/android-build-preserved-2026-11-22/apps-android`, with a local sibling manifest. This clears untracked generated-file noise while preserving the build; it does not move or remove the Android source branch. See [cleanup evidence](CODEBASE_REVIEW.md).
 

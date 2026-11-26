@@ -13,6 +13,16 @@ coverage/
 test-results/
 playwright-report/
 *.tsbuildinfo
+# Android test packaging
+.gradle/
+local.properties
+*.apk
+*.aab
+*.jks
+*.keystore
+apps/android/android/.kotlin/
+apps/android/android/app/src/main/assets/
+apps/android/android/capacitor-cordova-android-plugins/
 # Secrets (keep blank templates)
 .env
 .env.*

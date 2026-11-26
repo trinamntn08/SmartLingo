@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseRoute, routeHref, topicRouteKey, type AppRoute } from '../src/app/routes';
+import { parseAndroidRoute, parseRoute, routeHref, topicRouteKey, type AppRoute } from '../src/app/routes';
 
 test('web routes retain the explicit destination through a copy or refresh', () => {
   const routes: AppRoute[] = [
@@ -28,6 +28,20 @@ test('web routes retain the explicit destination through a copy or refresh', () 
   assert.equal(routeHref({ kind: 'listening', language: 'ja-JP', chooser: true }), '/learn/ja/listening');
   assert.equal(routeHref({ kind: 'slang', language: 'fr-FR' }), '/slang/fr');
   assert.deepEqual(parseRoute('/', '', '#editor'), { kind: 'editor' });
+});
+
+test('Android reopens dotted course IDs and preserves query filters in the bundled root document', () => {
+  const course: AppRoute = { kind: 'course', language: 'fr-FR', courseId: 'fr.open-course-pilot', dayId: 'fr.open-course-pilot.day-2', sectionId: 'fr.open-course-pilot.day-2.vocabulary' };
+  const listening: AppRoute = { kind: 'listening', language: 'ja-JP', topic: 'Food & drink', lessonId: 'ja.first', questionId: 'ja.first:ja.one' };
+  for (const route of [course, listening]) {
+    const url = new URL('/#' + routeHref(route), 'https://localhost');
+    assert.equal(url.pathname, '/');
+    assert.equal(url.search, '');
+    assert.deepEqual(parseAndroidRoute(url.pathname, url.search, url.hash), route);
+  }
+  assert.deepEqual(parseAndroidRoute('/', '', '#editor'), { kind: 'home' });
+  assert.deepEqual(parseAndroidRoute('/', '', '#/editor/fr.first/2'), { kind: 'home' });
+  assert.deepEqual(parseAndroidRoute('/editor/fr.first/2'), { kind: 'home' });
 });
 
 test('long editor topic names and maximum-length listening IDs produce reopenable links', () => {

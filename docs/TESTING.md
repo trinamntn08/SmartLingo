@@ -28,6 +28,7 @@ git diff --check
 | `test:e2e` | Chromium desktop and narrow learner/editor journeys, validation, explicit preview/publication, cache/reload, notebook/search/review/backups, fake AI/recording and saved speech. One duplicate narrow publication case is deliberately skipped because test content is shared. |
 | `build:web` | Expo export plus offline-manifest/worker preparation under ignored `apps/learner/dist`. This is not a deployment. |
 | `test:offline` | Exported-browser journeys across desktop/320px for explicit download, interrupted/corrupt transfer, update, removal, cold learning/report/resource use and stalled-navigation fallback. Uses test-only response controls; the production server has none. |
+| `test:android-contract` | Chromium tests on the export with a simulated Android bridge and ordinary browser regression cases. |
 
 `npm test` runs tooling and application suites. The [GitHub workflow](../.github/workflows/verify.yml) runs those checks plus Chromium and offline journeys on Ubuntu with isolated fixtures, read-only repository permissions and fake providers. It creates no deployment; remote job success must be verified separately.
 
@@ -65,7 +66,7 @@ These describe their tested revisions, not a fresh run of the current checkout. 
 
 ## Known gaps
 
-- Chromium viewport/touch emulation is not physical-phone, Safari, Android/iOS or screen-reader verification. This branch has no Android build/run commands. Separate Android test-APK work on `origin/feat/android-test-apk` (`0d21d67` at inspection) is not covered by these commands; consult [repository state](REPOSITORY_STATE.md). iOS packaging and remaining native adapters are not established by this branch.
+- Follow the [Android device checklist](ANDROID_TESTING.md#5-run-the-device-smoke-tests) after the APK build. Record Chromium, emulator and physical-phone results separately. Physical-phone, Safari, iOS and screen-reader verification require their own test environments. iOS packaging and full native adapters remain planned.
 - Fake speech and an original test MP3 establish playback/control behaviour, not audible French quality, OS voice installation, real microphone hardware or provider/subscription compatibility. No paid provider success is established by these suites.
 - Real storage quota/eviction, power loss, ongoing multiprocess contention and some filesystem alias/durability scenarios remain unverified. Browser data can be cleared; keep private backups separately.
 - Automated content/schema checks do not establish French/Japanese teaching accuracy, complete CEFR alignment, JLPT equivalence, owner approval or media suitability. Bundled drafts require owner/qualified review; the French editor additionally requires saved-revision preview and explicit publication.

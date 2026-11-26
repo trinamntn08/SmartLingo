@@ -10,6 +10,7 @@ import { ListeningResources } from '../listening/ListeningResources';
 import { ListeningComprehension } from '../listening/ListeningComprehension';
 import { GuidedSpeaking } from '../practice/GuidedSpeaking';
 import { FrenchPractice } from '../practice/FrenchPractice';
+import { isAndroidApp } from '../platform/runtime';
 import { JapaneseAlphabet } from '../alphabet/JapaneseAlphabet';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, topicRouteKey } from '../app/routes';
@@ -61,7 +62,7 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
       : activeMode === 'Listening & videos' ? <ListeningSection key={`${language}:${selectedTopic ?? 'all'}`}
         lessons={studyLessons} language={language} active={active} /> : <>
         <GuidedSpeaking key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons} />
-        {active && conversationLessons.length > 0 && <Disclosure title="Optional AI conversation" description="Try a temporary French exchange with English feedback." keepMounted={false}>
+        {!isAndroidApp() && active && conversationLessons.length > 0 && <Disclosure title="Optional AI conversation" description="Try a temporary French exchange with English feedback." keepMounted={false}>
           <FrenchPractice lessons={conversationLessons} model={model} active={active} />
         </Disclosure>}
       </>}

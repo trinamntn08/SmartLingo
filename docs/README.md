@@ -8,12 +8,13 @@ Use the current guides below. Dated plans, audits and decisions explain earlier 
 | --- | --- |
 | [README](../README.md) | Install/run overview and short command list. |
 | [STATUS](STATUS.md) | Implemented capabilities, milestone gates and remaining work. |
-| [Repository and branch state](REPOSITORY_STATE.md) | Current Japanese-enabled baseline, separate Android/hosting work, source heads and safe synchronization. |
+| [Repository and branch state](REPOSITORY_STATE.md) | Shared learner, Android and hosted branch history, source heads and safe synchronization. |
 | [Session checkpoint](SESSION_CHECKPOINT.md) | Latest task, actual validation, commit/upload state and recovery action. |
 | [Work log](WORK_LOG.md) | Dated tracking for every task/status request, source synchronization, progress and outcomes. |
 | [Session workflow](SESSION_WORKFLOW.md) | Required local/remote synchronization before every request, ongoing documentation and checkpoint procedure. |
 | [Product plan](../PROJECT_PLAN.md) | Target requirements and product constraints, including future scope. |
 | [Local operations](LOCAL_OPERATIONS.md) | Learner/editor use, backups, offline study and optional speech/AI setup. |
+| [Android testing](ANDROID_TESTING.md) | Windows setup, private APK build, phone installation, backups and device checks. |
 | [Architecture](ARCHITECTURE.md) | Module responsibilities, boundaries and implementation/review standards. |
 | [Codebase review](CODEBASE_REVIEW.md) | Generated-file cleanup, completed modular refactors, confirmed fixes and remaining architecture opportunities. |
 | [Design system](DESIGN_SYSTEM.md) | Shared tokens, base controls, feature composition, accessibility and extension guidance. |

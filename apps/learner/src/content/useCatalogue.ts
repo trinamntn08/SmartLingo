@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { lessons as frenchLessons, japaneseLessons } from '@smartlingo/content';
 import { mergeLessonCatalogue, type LearningRepository, type Lesson } from '@smartlingo/domain';
 import { openLearningRepository } from '../persistence';
+import { isAndroidApp } from '../platform/runtime';
 import { localContentApi } from './api';
 
 export function useCatalogue() {
@@ -28,7 +29,7 @@ export function useCatalogue() {
   }, []);
 
   async function refreshPublished() {
-    if (inFlight.current) return;
+    if (inFlight.current || isAndroidApp()) return;
     inFlight.current = true; setBusy(true); setError(''); setMessage('');
     try {
       const incoming = await localContentApi.getPublished();

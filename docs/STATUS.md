@@ -1,10 +1,10 @@
 # Project status
 
-Reviewed on 2026-11-24, Europe/Paris, against this checkout's source. See [PROJECT_PLAN](../PROJECT_PLAN.md) for target requirements, [local operations](LOCAL_OPERATIONS.md) for setup, and [the session checkpoint](SESSION_CHECKPOINT.md) for recent changes, validation and preview availability.
+Reviewed on 2026-11-26, Europe/Paris, against this checkout's source. See [PROJECT_PLAN](../PROJECT_PLAN.md) for target requirements, [local operations](LOCAL_OPERATIONS.md) for setup, and [the session checkpoint](SESSION_CHECKPOINT.md) for recent changes, validation and preview availability.
 
 Before every status/progress answer, complete the [local/remote repository check and safe synchronization](SESSION_WORKFLOW.md#repository-check-and-synchronization-first), then record the observation and work in [WORK_LOG](WORK_LOG.md). This dated summary alone does not prove the checkout is current.
 
-Source baseline: `feat/calm-learner-redesign` starts from maintainable-foundation checkpoint `786219d`, descended from unified-hub head `d8274ee`, containing Japanese and French. Android APK work (`0d21d67`) and the older hosted learner (`c88bc41`) are separate branches, not absent work and not integrated features here. [Repository and branch state](REPOSITORY_STATE.md) records the earlier inspected heads and safe continuation procedure.
+This Android task branch starts from the shared French and Japanese learner at `e1774bb`. It adapts the earlier French-only Android shell (`0d21d67`) for both languages. The earlier hosted learner (`c88bc41`) remains separate. [Repository and branch state](REPOSITORY_STATE.md)
 
 ## Implemented
 
@@ -58,7 +58,7 @@ Code and documentation have been uploaded on topic branches; that does not mean 
 | M2 — speaking/personal vocabulary | Partial: conversation, capture, recorded input and explicit saved speech exist; real-provider/device quality and broader speaking work remain. |
 | M3 — personal web beta | Partial: review/search/offline/publication/backups exist; owner approval, full editor, learner controls and per-topic packs remain. |
 | M4 — learner observation | Future owner/learner testing and improvement. |
-| M5 — mobile | Separate French-only Android debug APK tooling/build verified on `feat/android-test-apk`; not integrated with this Japanese hub. Full native storage/audio adapters, physical-phone acceptance, iOS and store release remain future work. |
+| M5 — mobile | This topic branch packages the shared French/Japanese learner as a private Android WebView APK. The shell keeps local study and private backup export. Full native storage/audio adapters, physical-phone acceptance, iOS and store release remain open. [Android setup and testing](ANDROID_TESTING.md) |
 
 ## Verification and limits
 

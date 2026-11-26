@@ -123,7 +123,7 @@ The earlier French-only APK exports backup version 3. The current learner accept
 
 Record whether each test used an emulator or a physical phone, along with the Android API level, WebView version, and reproducible failures. Keep personal notes and backups out of bug reports. Desktop browser contract tests exercise the expected bridge and browser behaviour. See the [session checkpoint](SESSION_CHECKPOINT.md) for validation actually performed.
 
-The reference APK passed the offline study, persistence, Back, rotation, private file backup and same-key update checks on an Android 15 (API 35) emulator with WebView `124.0.6367.219`. The emulator had no speech engine, and the written activities were usable. The physical-phone checklist is ready for testing.
+The bilingual update from version code 2 to 3 passed on Android 15 (API 35) with WebView `124.0.6367.219`. The first offline launch and relaunch retained both edited notes, review and completion history, a studied Hiragana row, both guided lesson positions, and the selected language before any backup restore. The emulator had no speech engine. The physical-phone checklist is ready for testing.
 
 ## What works offline
 

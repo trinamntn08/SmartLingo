@@ -58,7 +58,7 @@ Code and documentation have been uploaded on topic branches; that does not mean 
 | M2 — speaking/personal vocabulary | Partial: conversation, capture, recorded input and explicit saved speech exist; real-provider/device quality and broader speaking work remain. |
 | M3 — personal web beta | Partial: review/search/offline/publication/backups exist; owner approval, full editor, learner controls and per-topic packs remain. |
 | M4 — learner observation | Future owner/learner testing and improvement. |
-| M5 — mobile | This topic branch packages the shared French/Japanese learner as a private Android WebView APK. An Android 15 emulator passed offline study, persistence, private backups, and a same-key update from the earlier APK. Physical-phone testing, full native storage and audio adapters, iOS, and store release remain open. [Android setup and testing](ANDROID_TESTING.md) |
+| M5 — mobile | The private Android WebView APK bundles the shared French/Japanese learner. Android 15 emulator checks verified offline study, backups, a same-key update from the earlier French APK, and a guarded update from bilingual version code 2 to 3 with data and exact saved positions retained. Physical-phone testing, full native storage and audio adapters, iOS, and store release remain open. [Android setup and testing](ANDROID_TESTING.md) |
 
 ## Verification and limits
 

@@ -1,6 +1,6 @@
 # Preserve learning data through an Android APK update
 
-Status: in progress.
+Status: completed for private APK handoff.
 
 ## Outcome
 
@@ -19,3 +19,5 @@ The previous APK uses the package `com.smartlingo.preview`, origin `https://loca
 ## Validation and handoff
 
 Run repository, application and Android browser checks. Compare both APKs, verify the prior APK stays intact, and compare synthetic learning state on the emulator with the exact new artifact before and after relaunch. Report physical-phone testing separately.
+
+The clean implementation APK passed an offline code 2 to 3 update and relaunch on Android 15. The original APK and receipt are preserved. The Android guide gives the Files update, APK comparison and backup recovery steps. [Validation record](../WORK_LOG.md#2026-11-26-preserve-learning-data-through-android-apk-updates), [Android guide](../ANDROID_TESTING.md)

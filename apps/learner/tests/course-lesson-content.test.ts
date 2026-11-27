@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { frenchCourses, frenchCourseLessonsByDay, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
+import { frenchCourses, frenchCourseLessonsByDay, getLearnerGrammar, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
 import { checkAnswer, courseDayProgressRevision, lessonSchema } from '@smartlingo/domain';
 import { buildCourseLesson } from '../src/course/courseLessonContent';
 
@@ -22,10 +22,23 @@ test('every bundled course day has a draft lesson view under its existing progre
       assert.equal(lesson.level, day.level);
       assert.deepEqual(lesson.vocabulary, day.vocabulary);
       assert.deepEqual(lesson.dialogue, dialogue.lines);
-      assert.deepEqual(lesson.grammar, { title: study.title, explanation: study.explanation });
+      assert.ok(lesson.grammar.explanation.length < study.explanation.length, day.id);
       assert.ok(!libraryIds.has(lesson.id), day.id);
     }
   }
+});
+
+test('all bundled learner grammar briefs are shorter and custom copy takes precedence', () => {
+  for (const lesson of [...lessons, ...japaneseLessons]) {
+    const brief = getLearnerGrammar(lesson);
+    assert.ok(lessonSchema.shape.grammar.safeParse(brief).success, lesson.id);
+    assert.ok(brief.explanation.length < lesson.grammar.explanation.length, lesson.id);
+  }
+  const lesson = lessons[0];
+  const custom = { title: lesson.grammar.title, explanation: 'A custom grammar explanation.' };
+  assert.equal(getLearnerGrammar({ ...lesson, grammar: custom }), custom);
+  assert.equal(getLearnerGrammar({ ...lesson, revision: lesson.revision + 1 }), lesson.grammar);
+  assert.equal(getLearnerGrammar({ ...lesson, status: 'published' }), lesson.grammar);
 });
 
 test('French practice uses nearby meanings and every accepted sentence can be assembled', () => {

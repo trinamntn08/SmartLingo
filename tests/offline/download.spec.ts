@@ -1,6 +1,6 @@
-import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, openGrammar, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
-import { getFrenchTopicPractice, lessons, restaurantLesson } from '@smartlingo/content';
+import { getFrenchTopicPractice, getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -39,10 +39,14 @@ test('a fresh offline download starts greetings and saves study, practice and no
   const cold = await context.newPage();
   await cold.goto('/');
   await openLessonFromTopics(cold, opening);
-  await expect(cold.getByTestId('grammar-explanation')).toHaveText(opening.grammar.explanation, { useInnerText: true });
+  await expect(cold.getByTestId('grammar-note')).toHaveCount(0);
   await cold.reload();
   await expect(cold.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
-  await openKeyPhrases(cold);
+  await openGrammar(cold);
+  await expect(cold).toHaveURL(/\/grammar$/);
+  await cold.reload();
+  await expect(cold.getByTestId('grammar-note')).toContainText(getLearnerGrammar(opening).explanation);
+  await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   for (const target of ['bonsoir', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;
     const card = cold.getByTestId(`vocabulary-${entry.id}`);
@@ -104,7 +108,7 @@ test('French slang cold-loads by URL with its photos and can save expressions of
   await expect.poll(() => photos.evaluateAll(images => images.length >= 2 && images.every(img => (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
   const target = (await heading.textContent())!;
   await button(cold, `Save ${target}`).click();
-  await expect(button(cold, `Saved ${target} to notebook`)).toBeDisabled();
+  await expect(button(cold, `Unsave ${target}`)).toHaveAttribute('aria-pressed', 'true');
   const [events, notebook] = await learningSnapshot(cold);
   expect(events).toEqual([]);
   expect(notebook).toEqual([expect.objectContaining({ target })]);
@@ -156,7 +160,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await expect(cold.getByTestId('lesson-stage')).toBeVisible();
   await openKeyPhrases(cold);
   await expect(cold.getByRole('heading', { name: 'bonjour', exact: true })).toBeVisible();
-  await expect(button(cold, 'Save bonjour')).toBeDisabled();
+  await expect(button(cold, 'Unsave bonjour')).toHaveAttribute('aria-pressed', 'true');
   await expect.poll(() => cold.locator('img').evaluateAll(images => images.length > 0 && images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
   await button(cold, 'Learn').click();
   await button(cold, 'Topic Restaurant').click();

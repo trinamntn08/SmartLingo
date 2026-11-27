@@ -40,7 +40,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await cold.reload();
   await expect(cold).toHaveURL(url => url.pathname === path);
   await expect(panel.getByTestId('lesson-stage-heading')).toHaveText('Key phrases');
-  await expect(panel.getByRole('button', { name: `Save ${word.target}`, exact: true })).toBeDisabled();
+  await expect(panel.getByRole('button', { name: `Unsave ${word.target}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   const oldVocabulary = day.blocks.find(block => block.kind === 'vocabulary')!;
   await cold.goto(`/course/ja/${japaneseCourse.id}/${day.id}/${oldVocabulary.id}`);
   await expect(cold).toHaveURL(url => url.pathname === path);

@@ -21,6 +21,9 @@ test('Today and Learn share the guided lesson, resume point and next lesson', as
   await expect(button(page, 'Learn')).toHaveAttribute('aria-selected', 'true');
   await button(page, 'Next').click();
   await expect(panel(page).getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
+  await button(page, 'Next').click();
+  await expect(panel(page).getByTestId('grammar-note')).toBeVisible();
+  await expect(page).toHaveURL(/\/lesson-grammar$/);
   const savedStep = page.url();
   await button(page, 'Today').click();
   await expect(launch(page)).toHaveAccessibleName('Continue lesson');

@@ -120,8 +120,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   await expect(page.getByText('In France, un café usually means an espresso.', { exact: true })).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toBeDisabled();
-  await expect(page.getByRole('button', { name: 'Save bonjour', exact: true })).toContainText('In notebook');
+  await expect(page.getByRole('button', { name: 'Unsave bonjour', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Read conversation', exact: true }).click();
   await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();

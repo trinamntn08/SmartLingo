@@ -89,6 +89,8 @@ test('French lesson listening assembles phrase cards, checks their order and kee
   const sentence = 'Au revoir et bonne journée !';
   await page.goto(`${lessonPath}/vocabulary`);
   await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page).toHaveURL(`${lessonPath}/grammar`);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page).toHaveURL(`${lessonPath}/listening`);
   const player = page.getByTestId('listening-question-player');
   const button = (name: string) => player.getByRole('button', { name, exact: true });
@@ -143,7 +145,7 @@ test('French lesson listening assembles phrase cards, checks their order and kee
 test('the final answer completes the lesson in place and retries both records together', async ({ page }) => {
   const location = '/lesson/fr/' + restaurantLesson.id;
   await page.goto(location + '/vocabulary');
-  await expect(page.locator('[data-testid^="lesson-step-"]')).toHaveCount(5);
+  await expect(page.locator('[data-testid^="lesson-step-"]')).toHaveCount(6);
   await page.getByRole('button', { name: /Try picture practice/ }).click();
   const match = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: match.target, exact: true }).click();
@@ -202,7 +204,7 @@ test('the final answer completes the lesson in place and retries both records to
   expect((await storedEvents<LearningEvent>(page, 'events')).map(event => event.activity).sort()).toEqual(['completion', 'picture', 'sentence', 'vocabulary']);
 });
 
-test('French course history uses the five-step strip beside a lessons-only outline', async ({ page }) => {
+test('French course history uses the six-step strip beside a lessons-only outline', async ({ page }) => {
   const day = openCoursePilot.days[0];
   const location = `/course/fr/${openCoursePilot.id}/${day.id}`;
   await page.goto(`/course/fr/${openCoursePilot.id}`);
@@ -228,7 +230,7 @@ test('French course history uses the five-step strip beside a lessons-only outli
   await expect(outline.getByRole('button', { name: /^Choose lesson / })).toHaveCount(openCoursePilot.days.length);
   const steps = panel.getByRole('navigation', { name: 'Lesson steps' });
   const dialogue = steps.getByRole('link', { name: 'Read dialogue', exact: true });
-  await expect(steps.getByRole('link')).toHaveCount(5);
+  await expect(steps.getByRole('link')).toHaveCount(6);
   await expect(dialogue).toHaveAttribute('aria-current', 'step');
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual([]);
   if (!wide) {

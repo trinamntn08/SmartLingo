@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
+import { getLearnerGrammar } from '@smartlingo/content';
 import { Button } from './controls';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
@@ -46,7 +47,7 @@ interface CourseLessonSession {
   stageHref: (step: LessonStage) => string;
   changeStage: (step: LessonStage, snapshot: Record<string, unknown>) => void;
   studyDialogue: (snapshot: Record<string, unknown>) => void;
-  studyWords: (next: 'listening' | 'picture', snapshot: Record<string, unknown>) => void;
+  studyWords: (next: 'grammar' | 'picture', snapshot: Record<string, unknown>) => void;
   record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number, after?: () => void) => void;
   nextLesson?: LessonLink;
   dialoguePhoto?: ContextPhoto;
@@ -84,6 +85,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const meaningMatch = lesson.pictureActivity.mode === 'meaning';
   const courseListeningQuestion = courseSession?.listeningQuestion;
   const listeningQuestion = useMemo(() => courseListeningQuestion ?? buildLessonListeningQuestion(lesson), [lesson, courseListeningQuestion]);
+  const afterGrammar = listeningQuestion ? 'listening' : 'picture';
   const { heading } = stageLabels(stage, meaningMatch);
   const scene = stage === 'dialogue' ? courseSession?.dialoguePhoto ?? getLessonDialoguePhoto(lesson.id) : undefined;
   const practiceLabel = meaningMatch ? 'Try meaning practice' : 'Try picture practice';
@@ -173,7 +175,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     }
   }
 
-  function reviewVocabulary(next: 'listening' | 'picture') {
+  function reviewVocabulary(next: 'grammar' | 'picture') {
     if (browseOnly || wordsStudied) setStage(next);
     else if (courseSession) courseSession.studyWords(next, { [focusStageKey]: next });
     else record('vocabulary', lesson.id, 'viewed', 0, () => setStage(next, true));
@@ -200,33 +202,38 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         disabled={exitBlocked} hrefForStep={stageHref} onStep={setStage} />
     </View>
     <View testID="lesson-stage" style={layout.stage}>
-      <View style={layout.stageOpening}>
-        <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
-          {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading]}>{heading}</Text>
-        {scene && <View testID="dialogue-context-photo" style={[layout.scene, compact && layout.compactScene]}>
-          <ContextImage photo={scene} style={layout.sceneImage} />
-        </View>}
-      </View>
+      <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
+        aria-level={2} style={layout.stageHeading}>{heading}</Text>
+      {scene && <View testID="dialogue-context-photo" style={[layout.scene, compact && layout.compactScene]}>
+        <ContextImage photo={scene} style={layout.sceneImage} />
+      </View>}
       {stage === 'dialogue' && <>
         <LessonConversation lesson={lesson} />
         <StudyActions sticky={!compactCourse}>
           {skipStudiedPhrases && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
           {skipStudiedPhrases
-            ? <Button primary trailingIcon="arrow-right" href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
-              onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>Next</Button>
+            ? <Button primary trailingIcon="arrow-right" href={stageHref('grammar')} disabled={exitBlocked}
+              onPress={() => setStage('grammar')}>Next</Button>
             : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked}
               onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>Next</Button>}
         </StudyActions>
       </>}
       {stage === 'vocabulary' && <>
         <LessonWords lesson={lesson} model={model} />
-        <GrammarNote lessonId={lesson.id} note={lesson.grammar} />
         <StudyActions sticky={!compact}>
           <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
           {listeningQuestion && <Button quiet disabled={exerciseBlocked && !browseOnly}
             onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>}
           <Button primary trailingIcon="arrow-right" disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary(listeningQuestion ? 'listening' : 'picture')}>Next</Button>
+            onPress={() => reviewVocabulary('grammar')}>Next</Button>
+        </StudyActions>
+      </>}
+      {stage === 'grammar' && <>
+        <GrammarNote note={routed ? getLearnerGrammar(lesson) : lesson.grammar}
+          language={lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR'} />
+        <StudyActions sticky={!compactCourse}>
+          <Button primary trailingIcon="arrow-right" href={stageHref(afterGrammar)} disabled={exitBlocked}
+            onPress={() => setStage(afterGrammar)}>Next</Button>
         </StudyActions>
       </>}
       {stage === 'listening' && (listeningQuestion
@@ -258,6 +265,7 @@ function stageLabels(stage: LessonStage, meaningMatch: boolean) {
   switch (stage) {
     case 'vocabulary': return { label: 'Key phrases', short: 'Phrases', heading: 'Key phrases' };
     case 'dialogue': return { label: 'Read dialogue', short: 'Read', heading: 'Read a conversation' };
+    case 'grammar': return { label: 'Grammar', short: 'Grammar', heading: 'Grammar' };
     case 'listening': return { label: 'Listen', short: 'Listen', heading: 'Listening practice' };
     case 'picture': return { label: meaningMatch ? 'Match meanings' : 'Match a picture', short: 'Match', heading: meaningMatch ? 'Match the meaning' : 'Match a picture' };
     case 'sentence': return { label: 'Build a sentence', short: 'Build', heading: 'Build a sentence' };
@@ -280,7 +288,7 @@ function LessonProgress({ stage, compact, meaningMatch, recorded, total, disable
       aria-valuemin={0} aria-valuemax={total} aria-valuenow={recorded} style={[s.progressTrack, layout.progressTrack]}>
       <View style={[s.progressFill, { width: `${recorded / total * 100}%` }]} />
     </View>}
-    <View role="navigation" accessibilityLabel="Lesson steps" style={layout.steps}>
+    <View role="navigation" accessibilityLabel="Lesson steps" style={[layout.steps, compact && layout.compactSteps]}>
       {lessonStages.map((step, index) => {
         const { label, short } = stageLabels(step, meaningMatch);
         return <LessonStep key={step} step={step} number={index + 1} label={label} text={compact ? short : label}
@@ -320,8 +328,7 @@ const layout = StyleSheet.create({
   compactCourseOutcome: { fontSize: 16, lineHeight: 24 },
   outcome: { color: colors.muted, maxWidth: 690 },
   stage: { minWidth: 0, gap: 16 },
-  stageOpening: { flexDirection: 'row', alignItems: 'center', gap: 16 },
-  stageHeading: { flexShrink: 1, outlineColor: colors.focusRing, outlineOffset: 2 },
+  stageHeading: { position: 'absolute', top: 0, left: 0, width: 1, height: 1, opacity: 0, overflow: 'hidden' },
   scene: { width: 200, aspectRatio: 2 },
   compactScene: { width: 112 },
   sceneImage: { flex: 1, borderRadius: tokens.radius.md },
@@ -333,10 +340,11 @@ const layout = StyleSheet.create({
   recorded: { ...tokens.typography.caption, color: colors.muted, fontVariant: ['tabular-nums'] },
   progressTrack: { height: 4 },
   steps: { flexDirection: 'row', gap: 4, borderBottomWidth: 1, borderColor: colors.line },
+  compactSteps: { gap: 2 },
   segment: { flex: 1, minWidth: 0, minHeight: tokens.control.minimumTarget, flexDirection: 'row', alignItems: 'center',
     justifyContent: 'center', gap: 8, paddingHorizontal: 4, paddingVertical: 8,
     outlineStyle: 'solid', outlineWidth: 0, borderBottomWidth: 3, borderBottomColor: 'transparent' },
-  compactSegment: { flexDirection: 'column', gap: 0, paddingHorizontal: 2, paddingVertical: 4 },
+  compactSegment: { flexDirection: 'column', gap: 0, paddingHorizontal: 0, paddingVertical: 4 },
   hoverSegment: { backgroundColor: colors.sand },
   activeSegment: { backgroundColor: colors.card, borderBottomColor: colors.yellow },
   focusLabel: { color: colors.ink, textDecorationLine: 'underline' },
@@ -346,6 +354,6 @@ const layout = StyleSheet.create({
   numberText: { ...tokens.typography.caption, fontSize: 12, lineHeight: 16, color: colors.muted, fontVariant: ['tabular-nums'] },
   activeNumberText: { color: colors.ink },
   stepLabel: { ...tokens.typography.smallLabel, flexShrink: 1, fontSize: 13, lineHeight: 16, textAlign: 'center', color: colors.muted },
-  compactLabel: { fontSize: 12 },
+  compactLabel: { fontSize: 11 },
   activeLabel: { color: colors.ink, fontWeight: '600' },
 });

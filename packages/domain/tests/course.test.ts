@@ -191,7 +191,7 @@ test('resume respects the latest compatible visit and ignores unknown days, bloc
 
 test('course lesson steps have stable compatible navigation IDs alongside authored block links', () => {
   assert.deepEqual(courseLessonStages.map(stage => courseLessonStageForBlock(day, courseLessonStageId(stage))),
-    ['dialogue', 'vocabulary', 'listening', 'picture', 'sentence']);
+    ['dialogue', 'vocabulary', 'grammar', 'listening', 'picture', 'sentence']);
   assert.deepEqual(day.blocks.map(block => courseLessonStageForBlock(day, block.id)),
     ['dialogue', 'vocabulary', 'dialogue', 'picture', 'picture', 'picture', 'sentence']);
   assert.equal(courseLessonStageForBlock(day, 'lesson-unknown'), undefined);
@@ -202,11 +202,11 @@ test('course lesson steps have stable compatible navigation IDs alongside author
   ] }), /reserved lesson step IDs/);
 });
 
-test('the five-step course reader completes from saved words, matching and sentence work in one lesson scope', () => {
+test('the course reader completes from saved words, matching and sentence work in one lesson scope', () => {
   const words = event(courseLessonStageId('vocabulary'));
   const match = event(courseLessonStageId('picture'), { kind: 'choice', choiceId: 'correct', result: 'correct', supported: true });
   const sentence = event(courseLessonStageId('sentence'), { kind: 'choice', choiceId: 'correct', result: 'correct', supported: false });
-  const visit = event(courseLessonStageId('listening'), { kind: 'navigation', occurredAt: '2026-11-17T09:01:00Z' });
+  const visit = event(courseLessonStageId('grammar'), { kind: 'navigation', occurredAt: '2026-11-17T09:01:00Z' });
   const started = courseDayProgress(course, day, [sentence, words, visit]);
   assert.equal(started.lessonWordsStudied, true);
   assert.equal(started.lessonPictureDone, false);

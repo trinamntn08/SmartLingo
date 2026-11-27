@@ -23,5 +23,10 @@ export function usePreviewLearning(): LearningModel {
       setNotebook(current => current.some(saved => saved.id === entry.id) ? current : [...current, entry]);
       after();
     },
+    removeEntries: (ids, after = () => {}) => {
+      const removed = new Set(ids);
+      setNotebook(current => current.filter(saved => !removed.has(saved.id)));
+      after();
+    },
   };
 }

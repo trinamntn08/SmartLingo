@@ -1,6 +1,6 @@
-import { guidedLessonButton, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
+import { guidedLessonButton, openGrammar, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
 import { test, expect } from '@playwright/test';
-import { lessons } from '@smartlingo/content';
+import { getLearnerGrammar, lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
 
 const topics = groupLessonTopics(lessons);
@@ -66,18 +66,19 @@ test('foundations and A2 experience lessons expose translated study material and
     const grammar = page.getByTestId('grammar-note');
     await expect(grammar).toHaveCount(0);
     await openKeyPhrases(page);
-    await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
+    await expect(grammar).toHaveCount(0);
+    await openGrammar(page);
+    const brief = getLearnerGrammar(lesson);
+    await expect(grammar.getByRole('heading', { name: brief.title, exact: true })).toBeVisible();
+    await expect(grammar).toContainText(brief.explanation);
     if (slug === 'essentials') {
-      await expect(grammar.getByText('Vous pouvez répéter ?', { exact: true })).toBeVisible();
-      await expect(grammar.getByText('Can you repeat that?', { exact: true })).toBeVisible();
-      await expect(grammar.getByText('Vous pouvez + a verb', { exact: true })).toBeVisible();
-      await expect(grammar.getByText('Use the dictionary form of the verb.', { exact: true })).toBeVisible();
+      await expect(grammar).toContainText('Vous pouvez');
+      await expect(grammar).toContainText('répéter');
+      await expect(grammar.locator('[lang="fr-FR"]')).toHaveText('Vous pouvez répéter ?');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await grammar.screenshot({ path: info.outputPath('grammar-card.png') });
-      await page.getByRole('button', { name: /Try meaning practice/ }).click();
+      await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Match meanings', exact: true }).click();
       await expect(page.getByText(lesson.pictureActivity.prompt, { exact: true })).toBeVisible();
-    } else {
-      await expect(grammar.getByTestId('grammar-explanation')).toHaveText(lesson.grammar.explanation, { useInnerText: true });
     }
   }
 });
@@ -117,6 +118,15 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await expect(page.getByText('un rendez-vous', { exact: true }).first()).toBeVisible();
   await expect(page.getByText('an appointment', { exact: true })).toBeVisible();
+  await page.goBack();
+  await openTopicVocabulary(page);
+  const unsave = page.getByRole('button', { name: 'Unsave un rendez-vous', exact: true });
+  await expect(unsave).toHaveAttribute('aria-pressed', 'true');
+  await unsave.press('Space');
+  await expect(page.getByRole('button', { name: 'Save un rendez-vous', exact: true })).toHaveAttribute('aria-pressed', 'false');
+  await page.reload();
+  await page.getByRole('button', { name: 'Review', exact: true }).click();
+  await expect(page.getByText('un rendez-vous', { exact: true })).toHaveCount(0);
 });
 
 test('new A2 meaning and sentence practice work at 320px and survive reload', async ({ page }, info) => {

@@ -1,4 +1,4 @@
-import { frenchCourseLessonsByDay, japaneseLessons } from '@smartlingo/content';
+import { frenchCourseLessonsByDay, frenchPilotBriefGrammar, getLearnerGrammar, japaneseLessons } from '@smartlingo/content';
 import { courseDayProgressRevision, lessonSchema, type CourseDay, type Lesson, type OpenCourse } from '@smartlingo/domain';
 
 interface FrenchPractice {
@@ -104,12 +104,13 @@ export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
   if (course.language === 'ja-JP') {
     const authored = japaneseLessons.find(lesson => lesson.id === `ja.lesson.day-${day.dayNumber}`);
     if (!authored) throw new Error(`Missing shared Japanese lesson material for ${day.id}`);
-    return lessonSchema.parse({ ...authored, ...identity });
+    return lessonSchema.parse({ ...authored, ...identity, grammar: getLearnerGrammar(authored) });
   }
 
   const authored = frenchCourseLessonsByDay.get(day.id);
   if (authored) return lessonSchema.parse({
     ...authored, ...identity, durationMinutes: 12,
+    grammar: getLearnerGrammar(authored),
     sentenceActivity: { ...authored.sentenceActivity, id: `${day.id}.sentence` },
   });
 
@@ -124,7 +125,7 @@ export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
     role: practice.role,
     vocabulary: day.vocabulary,
     dialogue: dialogue.lines,
-    grammar: { title: study.title, explanation: study.explanation },
+    grammar: frenchPilotBriefGrammar[`${day.id}@${identity.revision}`] ?? { title: study.title, explanation: study.explanation },
     pictureActivity: { mode: 'meaning', ...practice.matching },
     sentenceActivity: { id: `${day.id}.sentence`, ...practice.sentence, almostAnswers: [] },
     provenance: course.provenance,

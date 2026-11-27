@@ -29,6 +29,7 @@ export interface LearningRepository {
   listNotebook(): Promise<NotebookEntry[]>;
   captureNotebook(entry: NotebookEntry): Promise<NotebookEntry>;
   saveNotebook(entry: NotebookEntry): Promise<void>;
+  removeNotebookEntries(ids: readonly NotebookEntry['id'][]): Promise<void>;
   listPublishedLessons(): Promise<Lesson[]>;
   cachePublishedLessons(lessons: Lesson[]): Promise<Lesson[]>;
   exportBackup(): Promise<LearningBackup>;

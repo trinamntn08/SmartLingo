@@ -27,11 +27,11 @@ for (const language of ['French', 'Japanese'] as const) {
     if (language === 'French') {
       const opening = openCoursePilot.days[0];
       await expect(page.getByRole('heading', { name: `Lesson 1: ${opening.title}`, exact: true })).toBeVisible();
-      await expect(page.getByText('Step 1 of 5', { exact: true })).toBeVisible();
+      await expect(page.getByText('Step 1 of 6', { exact: true })).toBeVisible();
       await expect(page.getByTestId('dialogue-french-transcript').locator('[lang="fr-FR"]').first()).toBeInViewport();
       await expect(page.getByTestId('dialogue-english-transcript')).toBeVisible();
       await button(page, 'Next').click();
-      await expect(page.getByText('Step 2 of 5', { exact: true })).toBeVisible();
+      await expect(page.getByText('Step 2 of 6', { exact: true })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
     } else {
       const first = japaneseAlphabetLessons[0]!;

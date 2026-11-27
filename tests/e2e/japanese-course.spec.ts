@@ -63,7 +63,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(panel(page).getByTestId('grammar-note')).toHaveCount(0);
   await expect(japaneseTranscript.getByText('Hitori de ryokou shita koto ga arimasu ka?', { exact: true })).toBeVisible();
   await openStep(page, 'Key phrases', 'Key phrases');
-  await expect(panel(page).getByTestId('grammar-note').getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
+  await expect(panel(page).getByTestId('grammar-note')).toHaveCount(0);
   const word = day.vocabulary[0];
   const card = panel(page).getByTestId(`vocabulary-${word.id}`);
   await expect(card.getByText(word.reading!, { exact: true })).toBeVisible();
@@ -76,6 +76,11 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   expect(captured).toMatchObject({ language: 'ja-JP', target: word.target, reading: word.reading, exampleReading: word.exampleReading });
   await openStep(page, 'Read dialogue', 'Read a conversation');
   await openStep(page, 'Key phrases', 'Key phrases');
+  await button(page, 'Next').click();
+  await expect(page).toHaveURL(/\/lesson-grammar$/);
+  const grammar = panel(page).getByTestId('grammar-note');
+  await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
+  await expect(grammar).toContainText(lesson.grammar.explanation);
   await button(page, 'Next').click();
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Listening practice');
   await button(page, 'Next').click();

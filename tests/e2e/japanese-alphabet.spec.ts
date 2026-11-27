@@ -91,7 +91,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await button(page, `Open ${oldLesson.subtitle}`).click();
   await openKeyPhrases(page);
   await button(page, `Save ${oldLesson.vocabulary[0]!.target}`).click();
-  await expect(button(page, `Save ${oldLesson.vocabulary[0]!.target}`)).toBeDisabled();
+  await expect(button(page, `Unsave ${oldLesson.vocabulary[0]!.target}`)).toHaveAttribute('aria-pressed', 'true');
   await button(page, 'Try meaning practice').click();
   await expect(page.getByTestId('lesson-step-picture')).toHaveAttribute('aria-current', 'step');
   const oldEvents = await events(page);

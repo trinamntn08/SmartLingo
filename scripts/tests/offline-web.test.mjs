@@ -46,6 +46,7 @@ test('exported preview serves only known files with correct types and loopback H
     const nested = await fetch(`${url}/lesson/fr/fr.essentials.repair/dialogue`);
     assert.equal(await nested.text(), '<html>preview</html>');
     assert.match(nested.headers.get('content-type'), /text\/html/);
+    assert.equal((await fetch(`${url}/lesson/fr/fr.essentials.repair/grammar`, { method: 'HEAD' })).status, 200);
     assert.equal((await fetch(`${url}/learn/ja/listening/lesson/question%3Aexample`, { method: 'HEAD' })).status, 200);
     for (const [name, type] of [['coffee.jpg', 'image/jpeg'], ['street.webp', 'image/webp']]) {
       await writeFile(path.join(directory, name), 'test image bytes');

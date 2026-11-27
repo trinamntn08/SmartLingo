@@ -36,6 +36,8 @@ test('the B1 starter course and its connected response are available after cold 
   await expect(step(cold, `Lesson 1: ${day.title}`)).toBeVisible();
   await button(cold, 'Next').click();
   await button(cold, 'Next').click();
+  await expect(panel(cold).getByTestId('grammar-note')).toBeVisible();
+  await button(cold, 'Next').click();
   await expect(step(cold, 'Listening practice')).toBeVisible();
   await button(cold, 'Next').click();
   const correct = lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!;
@@ -69,34 +71,37 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   if (dialogue.kind !== 'dialogue') throw new Error('Missing dialogue');
   await expectFrenchTranscripts(panel(cold), dialogue.lines);
   await expectDialoguePhoto(panel(cold), 'french-neighbour-dialogue.jpg');
-  const study = opening.blocks.find(block => block.kind === 'study')!;
-  if (study.kind !== 'study') throw new Error('Missing study explanation');
+  const lesson = buildCourseLesson(openCoursePilot, opening);
   const grammar = panel(cold).getByTestId('grammar-note');
   await expect(grammar).toHaveCount(0);
   await expect(button(cold, 'Source credits and licence')).toHaveCount(0);
   await expect(button(cold, 'Authorship and review')).toHaveCount(0);
   await button(cold, 'Next').click();
   await expect(step(cold, 'Key phrases')).toBeVisible();
-  await expect(grammar.getByRole('heading', { name: study.title, exact: true })).toBeVisible();
-  await expect(grammar.getByTestId('grammar-explanation')).toContainText(study.explanation, { useInnerText: true });
+  await expect(grammar).toHaveCount(0);
   await expect(panel(cold).getByTestId('vocabulary-fr.greetings.bonsoir')).toContainText('good evening');
   await button(cold, 'Save bonsoir').click();
-  await expect(button(cold, 'Save bonsoir')).toHaveText(/In notebook/);
+  await expect(button(cold, 'Unsave bonsoir')).toHaveAttribute('aria-pressed', 'true');
+  await button(cold, 'Next').click();
+  await expect(cold).toHaveURL(/\/lesson-grammar$/);
+  await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
+  await expect(grammar).toContainText(lesson.grammar.explanation);
+  await cold.reload();
+  await expect(grammar).toBeVisible();
   await button(cold, 'Next').click();
   await expect(step(cold, 'Listening practice')).toBeVisible();
   await expect(cold).toHaveURL(/\/lesson-listening$/);
   await cold.reload();
   await expect(step(cold, 'Listening practice')).toBeVisible();
   await steps(cold).getByRole('link', { name: 'Key phrases', exact: true }).click();
-  await expect(button(cold, 'Save bonsoir')).toBeDisabled();
-  await expect(button(cold, 'Save bonsoir')).toHaveText(/In notebook/);
+  await expect(button(cold, 'Unsave bonsoir')).toHaveAttribute('aria-pressed', 'true');
   await openTopic(cold, 'Restaurant');
   await cold.getByRole('button', { name: 'Open Explain food needs', exact: true }).click();
   await expectDialoguePhoto(cold.getByTestId('lesson-stage'), 'french-bistro-dialogue.jpg');
   expect(sourceRequests).toEqual([]);
 });
 
-test('the spelling lesson uses the shared five steps and saves completion offline', async ({ page, context, baseURL }) => {
+test('the spelling lesson uses the shared six steps and saves completion offline', async ({ page, context, baseURL }) => {
   const externalRequests: string[] = [];
   context.on('request', request => {
     if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== new URL(baseURL!).origin) externalRequests.push(request.url());
@@ -116,12 +121,14 @@ test('the spelling lesson uses the shared five steps and saves completion offlin
   await expect(step(cold, `Lesson 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Read a conversation')).toBeVisible();
   const stepLinks = steps(cold).getByRole('link');
-  const stepNames = ['Read dialogue', 'Key phrases', 'Listen', 'Match meanings', 'Build a sentence'];
+  const stepNames = ['Read dialogue', 'Key phrases', 'Grammar', 'Listen', 'Match meanings', 'Build a sentence'];
   await expect(stepLinks).toHaveCount(stepNames.length);
   for (const [index, name] of stepNames.entries()) await expect(stepLinks.nth(index)).toHaveAccessibleName(name);
   await expectDialoguePhoto(panel(cold), 'french-workshop-dialogue.jpg');
   await button(cold, 'Next').click();
   await expect(step(cold, 'Key phrases')).toBeVisible();
+  await button(cold, 'Next').click();
+  await expect(panel(cold).getByTestId('grammar-note')).toBeVisible();
   await button(cold, 'Next').click();
   await expect(step(cold, 'Listening practice')).toBeVisible();
   await button(cold, 'Next').click();

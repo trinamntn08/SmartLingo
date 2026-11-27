@@ -43,7 +43,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   await openKeyPhrases(page);
   const french = lessons[0].vocabulary[0];
   await page.getByRole('button', { name: `Save ${french.target}`, exact: true }).click();
-  await expect(page.getByRole('button', { name: `Save ${french.target}`, exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: `Unsave ${french.target}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
@@ -63,7 +63,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   const card = cold.getByTestId(`vocabulary-${japanese.id}`);
   await expect(card.getByText(japanese.exampleMeaning, { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true }).click();
-  await expect(cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true })).toBeDisabled();
+  await expect(cold.getByRole('button', { name: `Unsave ${japanese.target}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   await cold.getByRole('button', { name: /Try meaning practice/ }).click();
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
   await cold.getByRole('button', { name: 'Next', exact: true }).click();

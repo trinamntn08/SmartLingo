@@ -105,7 +105,7 @@ test('French courses open independently and B1 is also available in the topic li
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('all five opening lessons share a five-step reader with full transcripts and photos', async ({ page }) => {
+test('all five opening lessons share a six-step reader with full transcripts and photos', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByTestId('today-next-step').getByRole('heading', { name: `Lesson 1: ${firstDay.title}` })).toBeVisible();
   await guidedLessonButton(page).focus();
@@ -125,7 +125,7 @@ test('all five opening lessons share a five-step reader with full transcripts an
     await chooseDay(page, day).click();
     await expect(dayHeading(page, day)).toBeVisible();
     await expect(step(page, 'Read a conversation')).toBeVisible();
-    await expect(coursePanel(page).getByRole('navigation', { name: 'Lesson steps' }).getByRole('link')).toHaveCount(5);
+    await expect(coursePanel(page).getByRole('navigation', { name: 'Lesson steps' }).getByRole('link')).toHaveCount(6);
     await expect(stepTab(page, 'dialogue')).toHaveAttribute('aria-current', 'step');
     const dialogue = day.blocks.find(block => block.kind === 'dialogue')!;
     if (dialogue.kind !== 'dialogue') throw new Error('Missing dialogue');
@@ -191,6 +191,8 @@ test('the shared stages save progress, restore matching and unlock the next less
   await stepTab(page, 'dialogue').press('Enter');
   await button(page, 'Next').click();
   await button(page, 'Next').click();
+  await expect(coursePanel(page).getByTestId('grammar-note')).toBeVisible();
+  await button(page, 'Next').click();
   await expect(step(page, 'Listening practice')).toBeVisible();
   await button(page, 'Next').click();
   const lesson = buildCourseLesson(openCoursePilot, firstDay);
@@ -249,9 +251,9 @@ test('notebook, progress and the resume step survive backup and restore', async 
   await guidedLessonButton(page).click();
   await button(page, 'Next').click();
   await button(page, 'Save bonjour').click();
-  await expect(button(page, 'Save bonjour')).toBeDisabled();
+  await expect(button(page, 'Unsave bonjour')).toHaveAttribute('aria-pressed', 'true');
   await button(page, 'Next').click();
-  await expect(step(page, 'Listening practice')).toBeVisible();
+  await expect(coursePanel(page).getByTestId('grammar-note')).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
   const download = page.waitForEvent('download');
@@ -275,10 +277,11 @@ test('notebook, progress and the resume step survive backup and restore', async 
     await expect(restored).toHaveURL(/\/profile\/fr$/);
     await restored.getByRole('button', { name: 'Today', exact: true }).click();
     await guidedLessonButton(restored).click();
-    await expect(step(restored, 'Listening practice')).toBeVisible();
+    await expect(restored).toHaveURL(/\/lesson-grammar$/);
+    await expect(coursePanel(restored).getByTestId('grammar-note')).toBeVisible();
     await stepTab(restored, 'vocabulary').click();
     await expect(step(restored, 'Key phrases')).toBeVisible();
-    await expect(button(restored, 'Save bonjour')).toBeDisabled();
+    await expect(button(restored, 'Unsave bonjour')).toHaveAttribute('aria-pressed', 'true');
   } finally { await restoredContext.close(); }
 });
 
@@ -311,7 +314,7 @@ test('Next retries a failed cursor write without duplicating dialogue study', as
   expect((await storedEvents(page)).map(value => value.kind).sort()).toEqual(['navigation', 'study']);
 });
 
-test('all five steps can be browsed at 320 px when progress storage is unavailable', async ({ page }) => {
+test('all six steps can be browsed at 320 px when progress storage is unavailable', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await page.addInitScript(() => { Object.defineProperty(globalThis, 'indexedDB', { configurable: true, value: undefined }); });
   await page.goto('/');
@@ -319,6 +322,8 @@ test('all five steps can be browsed at 320 px when progress storage is unavailab
   await expect(button(page, 'Retry course storage')).toBeVisible();
   await button(page, 'Next').click();
   await expect(step(page, 'Key phrases')).toBeVisible();
+  await button(page, 'Next').click();
+  await expect(coursePanel(page).getByTestId('grammar-note')).toBeVisible();
   await button(page, 'Next').click();
   await expect(step(page, 'Listening practice')).toBeVisible();
   await button(page, 'Next').click();

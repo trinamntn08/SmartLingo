@@ -16,6 +16,10 @@ export async function openKeyPhrases(page: Page) {
   await page.getByRole('button', { name: /^(?:Review key phrases|Next)$/ }).first().click();
 }
 
+export async function openGrammar(page: Page) {
+  await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Grammar', exact: true }).click();
+}
+
 export async function openTopicVocabulary(page: Page) {
   const toggle = page.getByRole('button', { name: 'Topic vocabulary', exact: true });
   if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();

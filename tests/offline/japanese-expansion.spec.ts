@@ -24,7 +24,7 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   await expect(cold.getByRole('heading', { name: 'Vocabulary · 30', exact: true })).toBeVisible();
   await cold.getByRole('textbox', { name: 'Search lessons', exact: true }).fill(entry.reading!);
   await cold.getByRole('button', { name: `Save ${entry.target}`, exact: true }).click();
-  await expect(cold.getByRole('button', { name: `Save ${entry.target}`, exact: true })).toBeDisabled();
+  await expect(cold.getByRole('button', { name: `Unsave ${entry.target}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   await cold.getByRole('textbox', { name: 'Search lessons', exact: true }).fill('');
   await cold.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
   await openKeyPhrases(cold);

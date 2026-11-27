@@ -45,7 +45,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await expect(card.getByRole('button', { name: `Listen to ${word.target}`, exact: true })).toBeVisible();
     if (word.reading) await expect(card.getByText(word.reading, { exact: true }).first()).toBeVisible();
     await button(page, `Save ${word.target}`).click();
-    await expect(button(page, `Save ${word.target}`)).toBeDisabled();
+    await expect(button(page, `Unsave ${word.target}`)).toHaveAttribute('aria-pressed', 'true');
     await card.scrollIntoViewIfNeeded();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`${name.toLowerCase()}-shared-words.png`), fullPage: true });

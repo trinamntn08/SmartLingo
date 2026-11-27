@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { Vocabulary, TargetLanguage } from '@smartlingo/domain';
-import { Button } from './controls';
+import { NotebookStar } from './NotebookStar';
 import { Speak } from '../audio/Speak';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
@@ -15,17 +15,9 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
   const [message, setMessage] = useState('');
   const [voiceError, setVoiceError] = useState('');
   const compact = useWindowDimensions().width < tokens.layout.compactBreakpoint;
-  const saved = model.notebook.some(note => note.sourceEntryId === entry.id || note.id === `notebook.${entry.id}`);
   const presentation = vocabularyPresentation(entry);
   const gender = presentation.gender ? genderLabels[presentation.gender] : undefined;
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
-
-  function saveWord() {
-    setMessage('');
-    model.captureEntry({ id: `notebook.${entry.id}`, sourceEntryId: entry.id, language, reading: entry.reading, exampleReading: entry.exampleReading, target: entry.target,
-      meaning: entry.meaning, example: entry.example, updatedAt: new Date().toISOString() },
-    () => setMessage(`Saved ${entry.target} to your notebook.`));
-  }
 
   const illustration = showIllustration && <WordIllustration entry={entry} size={study ? (compact ? 88 : 144) : compact ? 240 : 280} />;
   const example = <View style={study ? layout.studyExample : layout.example}>
@@ -40,23 +32,21 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
       <Text {...languageProps} accessibilityRole="header" aria-level={3} style={[s.target, layout.target, compact && layout.compactTarget, study && layout.studyTarget]}>{entry.target}</Text>
       {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
       {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
-      <Speak language={language} text={entry.target} onError={setVoiceError} />
+      <View style={layout.termActions}>
+        <Speak language={language} text={entry.target} onError={setVoiceError} />
+        <NotebookStar model={model} entry={{ id: `notebook.${entry.id}`, sourceEntryId: entry.id, language, reading: entry.reading,
+          exampleReading: entry.exampleReading, target: entry.target, meaning: entry.meaning, example: entry.example }}
+          onChange={saved => setMessage(saved ? `Saved ${entry.target} to your notebook.` : `Removed ${entry.target} from your notebook.`)} />
+      </View>
     </View>
     {language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}
     <Text style={[s.body, layout.meaning]}>{entry.meaning}</Text>
   </View>;
-  const actions = <View style={[s.row, layout.actions, study && layout.studyActions]}>
-    <Button compact quiet icon={saved ? 'check' : 'bookmark'} label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
-      {saved ? 'In notebook' : 'Save word'}
-    </Button>
-  </View>;
-
   return <View testID={`vocabulary-${entry.id}`} style={study ? [layout.studyCard, compact && layout.compactCard] : [s.card, layout.card, compact && layout.compactCard]}>
     {definition}
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, layout.voiceError]}>{voiceError}</Text>}
     {study ? <View style={[s.row, layout.studyContent]}>{illustration}{example}</View> : <>{illustration}{example}</>}
     {!!presentation.note && <Text style={s.muted}>{presentation.note}</Text>}
-    {actions}
     {!!message && <Text accessibilityLiveRegion="polite" style={s.muted}>{message}</Text>}
   </View>;
 }
@@ -67,6 +57,7 @@ const layout = StyleSheet.create({
   studyCard: { minWidth: 0, padding: 24, gap: 12 },
   definition: { minWidth: 0, gap: 4 },
   phrase: { gap: 8 },
+  termActions: { ...s.row, gap: 4, maxWidth: '100%' },
   target: { flexShrink: 1, minWidth: 0 },
   compactTarget: { fontSize: 32, lineHeight: 42 },
   studyTarget: { fontSize: 28, lineHeight: 36, fontWeight: '500' },
@@ -76,6 +67,4 @@ const layout = StyleSheet.create({
   studyExample: { flexGrow: 1, flexShrink: 1, flexBasis: 144, minWidth: 0, borderLeftWidth: 1, borderColor: colors.line, paddingLeft: 12, gap: 4 },
   studySentence: { fontWeight: '500' },
   example: { gap: 4, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
-  actions: { marginTop: 'auto', gap: 8 },
-  studyActions: { marginTop: 0 },
 });

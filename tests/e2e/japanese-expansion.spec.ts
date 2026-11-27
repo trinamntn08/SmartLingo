@@ -54,7 +54,7 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   await openTopic(page, lesson.topic);
   await openTopicVocabulary(page);
   await button(page, `Save ${entry.target}`).click();
-  await expect(button(page, `Save ${entry.target}`)).toBeDisabled();
+  await expect(button(page, `Unsave ${entry.target}`)).toHaveAttribute('aria-pressed', 'true');
   await button(page, 'Review').click();
   const notebook = page.getByTestId('notebook-entries');
   await notebook.getByRole('button', { name: 'Edit note', exact: true }).click();

@@ -28,6 +28,27 @@ test('attempt retries are idempotent and notebook edits persist across reopen', 
   second.close();
 });
 
+test('unstar removes only the saved word and can be repeated after reopening', async () => {
+  const factory = new IDBFactory();
+  const repository = await openLearningRepository({ factory });
+  const entry = { id: 'notebook.fr.cafe', sourceEntryId: 'fr.cafe', target: 'un café', meaning: 'a coffee', example: '', updatedAt: attempt.occurredAt };
+  const imported = { ...entry, id: 'imported.fr.cafe' };
+  const other = { ...entry, id: 'notebook.fr.bonjour', sourceEntryId: 'fr.bonjour', target: 'bonjour', meaning: 'hello' };
+  await repository.recordEvent(attempt);
+  await repository.captureNotebook(entry);
+  await repository.captureNotebook(imported);
+  await repository.captureNotebook(other);
+  await repository.removeNotebookEntries([entry.id, imported.id]);
+  repository.close();
+
+  const reopened = await openLearningRepository({ factory });
+  await reopened.removeNotebookEntries([entry.id, imported.id]);
+  assert.deepEqual(await reopened.listNotebook(), [other]);
+  assert.deepEqual(await reopened.listEvents(), [attempt]);
+  assert.deepEqual(await reopened.captureNotebook(entry), entry);
+  reopened.close();
+});
+
 test('independent tabs append without losing each other’s attempts', async () => {
   const factory = new IDBFactory();
   const first = await openLearningRepository({ factory });

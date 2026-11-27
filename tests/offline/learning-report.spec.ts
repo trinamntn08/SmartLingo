@@ -38,7 +38,7 @@ test('downloaded report cold-starts, switches saved language histories and retri
     await button(page, `Open ${lesson.subtitle}`).click();
     await openKeyPhrases(page);
     await button(page, `Save ${lesson.vocabulary[0].target}`).click();
-    await expect(button(page, `Save ${lesson.vocabulary[0].target}`)).toBeDisabled();
+    await expect(button(page, `Unsave ${lesson.vocabulary[0].target}`)).toHaveAttribute('aria-pressed', 'true');
     await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
     await expect(page.getByTestId('lesson-step-picture')).toHaveAttribute('aria-current', 'step');
     await report(page, language);

@@ -21,6 +21,9 @@ import type { FrenchTransferTask } from './french-practice/types';
 import { a1CourseAliases, a1CourseTasks, a1CourseTopics } from './topics/french-course-a1';
 import { a2CourseAliases, a2CourseTasks, a2CourseTopics } from './topics/french-course-a2';
 import { b1CourseAliases, b1CourseTasks, b1CourseTopics } from './topics/french-course-b1';
+import { frenchBriefGrammar, type LearnerGrammarNote } from './french-grammar';
+import { japaneseBriefGrammar } from './japanese-grammar';
+import { japaneseLessons } from './japanese-lessons';
 
 export type { FrenchTransferTask } from './french-practice/types';
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
@@ -55,6 +58,20 @@ const courseDrafts = {
   B1: reuseSharedVocabulary(b1CourseTopics.flatMap(buildTopic), openingLessons.flatMap(lesson => lesson.vocabulary), b1CourseAliases),
 };
 export const lessons: Lesson[] = orderCourseLessons([...openingLessons, ...Object.values(courseDrafts).flat()]);
+const bundledLessonsById = new Map([...lessons, ...japaneseLessons].map(lesson => [lesson.id, lesson]));
+
+/** Alternate learner copy for the exact bundled note. Custom and newer notes display as authored. */
+export function getLearnerGrammar(lesson: Lesson): LearnerGrammarNote {
+  const bundled = bundledLessonsById.get(lesson.id);
+  if (lesson.status !== 'draft' || bundled?.revision !== lesson.revision || bundled.language !== lesson.language
+    || bundled.grammar.title !== lesson.grammar.title
+    || bundled.grammar.explanation !== lesson.grammar.explanation) return lesson.grammar;
+
+  const brief = lesson.language === 'ja-JP' ? japaneseBriefGrammar : frenchBriefGrammar;
+  return brief[`${lesson.id}@${lesson.revision}`] ?? lesson.grammar;
+}
+
+export { frenchPilotBriefGrammar, type LearnerGrammarNote } from './french-grammar';
 export const frenchTopicPractice: Readonly<Partial<Record<string, FrenchTransferTask>>> = {
   ...foundationPractice,
   ...everydayPractice,
@@ -76,4 +93,4 @@ export const frenchCourses = french.courses;
 export const [openCoursePilot] = frenchCourses;
 export const frenchCourseLessonsByDay = french.lessonsByDay;
 export { japaneseCourse } from './japanese-course';
-export { japaneseLessons } from './japanese-lessons';
+export { japaneseLessons };

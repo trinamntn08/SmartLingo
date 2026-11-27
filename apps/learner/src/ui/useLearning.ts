@@ -63,7 +63,15 @@ export function useLearning() {
       setNotebook(current => [...current.filter(saved => saved.id !== captured.id), captured]); after();
     } });
   }
-  return { events, notebook, loading, loadError, saveError, busy, load, record, recordMany, saveEntry, captureEntry,
+  function removeEntries(ids: readonly NotebookEntry['id'][], after: () => void = () => {}) {
+    if (!ids.length || pending.current) return;
+    const removed = new Set(ids);
+    void execute({ run: store => store.removeNotebookEntries(ids), apply: () => {
+      setNotebook(current => current.filter(saved => !removed.has(saved.id)));
+      after();
+    } });
+  }
+  return { events, notebook, loading, loadError, saveError, busy, load, record, recordMany, saveEntry, captureEntry, removeEntries,
     blocked: loading || !!loadError || busy || !!saveError,
     retry: () => { if (pending.current) void execute(pending.current); },
     cancelWrite: () => { pending.current = null; setSaveError(''); },

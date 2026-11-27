@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
 
-test('French slang is searchable, keeps its history and saves expressions to the notebook', async ({ page }, info) => {
+test('French slang is searchable, keeps its history and toggles notebook stars', async ({ page }, info) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   const narrow = info.project.name === 'small-screen';
   if (narrow) await page.setViewportSize({ width: 320, height: 740 });
@@ -38,6 +38,7 @@ test('French slang is searchable, keeps its history and saves expressions to the
   const cards = page.getByTestId(/^expression-fr\.slang\./);
   await expect(cards).toHaveCount(12);
   await expect(cards.first().getByText('Informal', { exact: true })).toHaveCount(0);
+  await expect(cards.first().getByText('Small talk', { exact: true })).toHaveCount(0);
   const firstTerm = cards.first().getByTestId('slang-term');
   const titleBounds = (await firstTerm.getByRole('heading').boundingBox())!;
   for (const control of await firstTerm.getByRole('button').all()) {
@@ -71,16 +72,19 @@ test('French slang is searchable, keeps its history and saves expressions to the
     expect(bounds.height).toBeGreaterThanOrEqual(44);
   }
   await expect(save).toHaveText('');
+  await expect(save).toHaveAttribute('aria-pressed', 'false');
   await save.focus();
   await expect(save).toBeFocused();
   await page.keyboard.press('Enter');
-  await expect(term.getByRole('button', { name: `Saved ${target} to notebook`, exact: true })).toBeDisabled();
+  const saved = term.getByRole('button', { name: `Unsave ${target}`, exact: true });
+  await expect(saved).toBeEnabled();
+  await expect(saved).toHaveAttribute('aria-pressed', 'true');
   await button(page, 'Calls & messages').click();
   await search.fill('tkt');
   await expect(cards.first().getByText('Text shorthand')).toBeVisible();
   await expect(button(page, 'Listen to tkt')).toHaveCount(0);
   await button(page, 'Save tkt').click();
-  await expect(cards.first().getByRole('button', { name: 'Saved tkt to notebook', exact: true })).toBeDisabled();
+  await expect(button(page, 'Unsave tkt')).toHaveAttribute('aria-pressed', 'true');
 
   await button(page, 'Review').click();
   const notebook = page.getByTestId('notebook-entries');
@@ -95,6 +99,20 @@ test('French slang is searchable, keeps its history and saves expressions to the
   await expect(notebook.getByRole('heading', { name: 'tkt', exact: true })).toBeVisible();
   await page.reload();
   await expect(notebook.getByRole('heading', { name: 'tkt', exact: true })).toBeVisible();
+  await button(page, 'Slang').click();
+  await search.fill('tkt');
+  const unsave = button(page, 'Unsave tkt');
+  await expect(unsave).toBeEnabled();
+  await expect(unsave).toHaveAttribute('aria-pressed', 'true');
+  await unsave.press('Space');
+  await expect(button(page, 'Save tkt')).toBeEnabled();
+  await expect(button(page, 'Save tkt')).toHaveAttribute('aria-pressed', 'false');
+  await page.reload();
+  await search.fill('tkt');
+  await expect(button(page, 'Save tkt')).toHaveAttribute('aria-pressed', 'false');
+  await button(page, 'Review').click();
+  await expect(notebook.getByRole('heading', { name: 'tkt', exact: true })).toHaveCount(0);
+  await expect(notebook.getByRole('heading', { name: target, exact: true })).toBeVisible();
 });
 
 test('the direct slang URL works and the Japanese navigation keeps its existing destinations', async ({ page }) => {

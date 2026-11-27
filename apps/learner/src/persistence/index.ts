@@ -108,6 +108,14 @@ class IndexedDbLearningRepository implements LearningRepository {
     await done;
   }
 
+  async removeNotebookEntries(ids: readonly NotebookEntry['id'][]): Promise<void> {
+    const transaction = this.database.transaction('notebook', 'readwrite');
+    const done = transactionDone(transaction);
+    const store = transaction.objectStore('notebook');
+    for (const id of ids) store.delete(id);
+    await done;
+  }
+
   async listPublishedLessons(): Promise<Lesson[]> {
     const transaction = this.database.transaction('publishedLessons', 'readonly');
     const done = transactionDone(transaction);

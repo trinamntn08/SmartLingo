@@ -27,7 +27,7 @@ export const courseBlockSchema = z.discriminatedUnion('kind', [
 export type CourseBlock = z.infer<typeof courseBlockSchema>;
 export type CourseChoice = Extract<CourseBlock, { kind: 'choice' }>;
 
-export const courseLessonStages = ['dialogue', 'vocabulary', 'listening', 'picture', 'sentence'] as const;
+export const courseLessonStages = ['dialogue', 'vocabulary', 'grammar', 'listening', 'picture', 'sentence'] as const;
 export type CourseLessonStage = typeof courseLessonStages[number];
 
 export function courseLessonStageId(stage: CourseLessonStage): `lesson-${CourseLessonStage}` {

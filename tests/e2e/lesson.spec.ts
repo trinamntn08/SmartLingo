@@ -1,6 +1,6 @@
-import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openKeyPhrases, openRestaurant, openTopic } from './learner-journeys';
+import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openGrammar, openKeyPhrases, openRestaurant, openTopic } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
-import { getFrenchTopicPractice, lessons, restaurantLesson } from '@smartlingo/content';
+import { getFrenchTopicPractice, getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
 
 const button = (page: Page, name: string | RegExp) => page.getByRole('button', { name, exact: typeof name === 'string' });
 
@@ -19,14 +19,28 @@ test('the food-needs dialogue keeps the complete French and English transcripts 
   await button(page, 'Open Explain food needs').click();
   const stage = page.getByTestId('lesson-stage');
   const lesson = lessons.find(item => item.id === 'fr.restaurant.explain-food-needs')!;
+  const brief = getLearnerGrammar(lesson);
   const { french } = await expectFrenchTranscripts(stage, lesson.dialogue);
   await expectDialoguePhoto(stage, 'french-bistro-dialogue.jpg');
   await expect(french.getByRole('button', { name: `Listen to ${lesson.dialogue[0].target}`, exact: true })).toBeVisible();
-  await expect(stage.getByText('Naming an allergy', { exact: true })).toHaveCount(0);
+  const grammar = stage.getByTestId('grammar-note');
+  await expect(grammar).toHaveCount(0);
   await expect(button(page, 'Next')).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await button(page, 'Next').click();
-  await expect(stage.getByText('Naming an allergy', { exact: true })).toBeVisible();
+  const label = stage.getByRole('heading', { name: 'Key phrases', exact: true });
+  await expect(label).toBeFocused();
+  await expect(label).toHaveCSS('opacity', '0');
+  await expect(grammar).toHaveCount(0);
+  await button(page, 'Next').click();
+  await expect(page).toHaveURL(`/lesson/fr/${lesson.id}/grammar`);
+  await expect(grammar.getByRole('heading', { name: brief.title, exact: true })).toBeVisible();
+  await expect(grammar).toContainText(brief.explanation);
+  await expect(stage.getByTestId(`vocabulary-${lesson.vocabulary[0].id}`)).toHaveCount(0);
+  await page.reload();
+  await expect(grammar).toBeVisible();
+  await button(page, 'Next').click();
+  await expect(page).toHaveURL(/\/listening$/);
 });
 
 async function storedRows(page: Page, store: 'events' | 'notebook') {
@@ -83,7 +97,10 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(button(page, /Show translation|Show grammar help/)).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('dialogue.png'), fullPage: true });
   await openKeyPhrases(page);
-  await expect(page.getByTestId('grammar-note').getByText('Je voudrais means', { exact: false })).toBeVisible();
+  await expect(page.getByTestId('grammar-note')).toHaveCount(0);
+  await openGrammar(page);
+  await expect(page.getByTestId('grammar-note')).toContainText(getLearnerGrammar(restaurantLesson).explanation);
+  await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   await button(page, /Try picture practice/).click();
   await button(page, 'l’addition').click();
   await expect(page.getByText('Take another look.', { exact: false })).toBeVisible();
@@ -129,8 +146,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await revisit.click();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
-  await expect(button(page, 'Save bonjour')).toBeDisabled();
-  await expect(button(page, 'Save bonjour')).toContainText('In notebook');
+  await expect(button(page, 'Unsave bonjour')).toHaveAttribute('aria-pressed', 'true');
   const notes = await storedRows(page, 'notebook');
   expect(notes).toHaveLength(1);
   expect(notes[0].meaning).toBe('My morning greeting');
@@ -160,8 +176,7 @@ test('stale tab capture preserves another tab’s notebook edit', async ({ page,
   await button(page, 'Save changes').click();
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
   await button(stale, 'Save bonjour').click();
-  await expect(button(stale, 'Save bonjour')).toBeDisabled();
-  await expect(button(stale, 'Save bonjour')).toContainText('In notebook');
+  await expect(button(stale, 'Unsave bonjour')).toHaveAttribute('aria-pressed', 'true');
   await button(stale, 'Review').click();
   await expect(stale.getByText('Keep my personal note')).toBeVisible();
   expect((await storedRows(page, 'notebook'))[0].meaning).toBe('Keep my personal note');

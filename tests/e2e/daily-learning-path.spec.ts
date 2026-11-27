@@ -36,17 +36,15 @@ test('Today and Learn share the guided lesson, resume point and next lesson', as
   const sentence = panel(page).getByRole('heading', { name: 'Build a sentence', exact: true });
   await expect(sentence).toBeVisible();
   const sentenceUrl = page.url();
-  await page.getByTestId('daily-related-practice').getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
-  await expect(page).toHaveURL(/\/lesson\/fr\/fr\.greetings\.hello-goodbye\/dialogue\?course=/);
-
+  await expect(page.getByRole('heading', { name: 'Related practice', exact: true })).toHaveCount(0);
+  const bookmark = new URLSearchParams({ course: openCoursePilot.id, day: first.id, section: 'lesson-sentence' });
   const copied = await context.newPage();
-  await copied.goto(page.url());
+  await copied.goto(`/lesson/fr/fr.greetings.hello-goodbye/dialogue?${bookmark}`);
+  await expect(copied).toHaveURL(/\/lesson\/fr\/fr\.greetings\.hello-goodbye\/dialogue\?course=/);
   await button(copied, 'Back to guided lesson').click();
   await expect(copied).toHaveURL(sentenceUrl);
   await copied.close();
 
-  await button(page, 'Back to guided lesson').click();
-  await expect(page).toHaveURL(sentenceUrl);
   await expect(sentence).toBeVisible();
   const completed = panel(page).getByRole('heading', { name: 'Lesson complete', exact: true });
   await expect(completed).toHaveCount(0);
@@ -62,6 +60,19 @@ test('Today and Learn share the guided lesson, resume point and next lesson', as
   await expect(panel(page).getByRole('heading', { name: `Lesson 2: ${second.title}`, exact: true })).toBeVisible();
   await button(page, 'Close course').click();
   await expect(page).toHaveURL('/learn/fr');
+});
+
+test('solving the sentence early leaves the answer and the lesson steps available', async ({ page }) => {
+  const lesson = buildCourseLesson(openCoursePilot, second);
+  await page.goto(`${path(second.id)}/lesson-sentence`);
+  await buildAcceptedSentence(page, lesson);
+  await expect(panel(page).getByText(lesson.sentenceActivity.answers[0], { exact: true })).toBeVisible();
+  await expect(panel(page).getByText('Sentence solved', { exact: true })).toHaveCount(0);
+  await expect(panel(page).getByText(lesson.sentenceActivity.explanation, { exact: true })).toHaveCount(0);
+  await expect(panel(page).getByRole('button', { name: 'Review key phrases', exact: true })).toHaveCount(0);
+  await expect(panel(page).getByRole('heading', { name: 'Related practice', exact: true })).toHaveCount(0);
+  await expect(panel(page).getByRole('navigation', { name: 'Lesson steps' })
+    .getByRole('link', { name: 'Key phrases', exact: true })).toBeVisible();
 });
 
 test('a failed course save can be retried after Back leaves a reloaded course', async ({ context, page }) => {

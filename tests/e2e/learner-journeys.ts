@@ -91,6 +91,9 @@ export async function expectDialoguePhoto(scope: Locator, filename: string) {
   await expect.poll(() => photo.locator('img').evaluateAll((images, name) => images.some(image =>
     image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.src.endsWith(`/learning-scenes/${name}`),
   ), filename)).toBe(true);
+  const photoBox = await photo.boundingBox();
+  const frenchBox = await scope.getByTestId('dialogue-french-transcript').boundingBox();
+  expect(photoBox!.y + photoBox!.height).toBeLessThanOrEqual(frenchBox!.y);
 }
 
 export async function buildAcceptedSentence(page: Page, lesson: Lesson) {

@@ -223,14 +223,14 @@ test('the shared stages save progress, restore matching and unlock the next less
   expect([...new Set(events.map(event => event.courseRevision))]).toEqual([courseDayProgressRevision(openCoursePilot, firstDay)]);
   expect(await storedEvents(page, 'events')).toEqual([]);
   await expect(coursePanel(page).getByText('About 10 min', { exact: true })).toBeVisible();
-  await expect(activity.getByText(lesson.sentenceActivity.explanation, { exact: true })).toBeVisible();
+  await expect(activity.getByText(lesson.sentenceActivity.answers[0], { exact: true })).toBeVisible();
   await expect(button(page, 'Practise the conversation')).toHaveCount(0);
   await expect(activity.getByTestId('french-transfer-practice')).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await stepTab(page, 'dialogue').click();
   await expect(step(page, 'Read a conversation')).toBeVisible();
   await page.goBack();
-  await expect(activity.getByText(lesson.sentenceActivity.explanation, { exact: true })).toBeVisible();
+  await expect(activity.getByText(lesson.sentenceActivity.answers[0], { exact: true })).toBeVisible();
   await button(page, `Next lesson: Lesson 2: ${secondDay.title}`).click();
   await expect(dayHeading(page, secondDay)).toBeVisible();
   await expect(step(page, 'Read a conversation')).toBeVisible();

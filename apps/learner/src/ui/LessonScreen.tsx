@@ -10,7 +10,9 @@ import { PictureActivity, SentenceActivity } from './LessonPractice';
 import { ListeningQuestionPlayer } from '../listening/ListeningQuestionPlayer';
 import { buildLessonListeningQuestion } from '../listening/lessonQuestions';
 import type { ListeningQuestion } from '../listening/comprehension';
+import { ContextImage } from './ContextImage';
 import type { ContextPhoto } from './contextPhotos';
+import { getLessonDialoguePhoto } from './dialoguePhotos';
 import { routePress } from './routePress';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { lessonStages, routeHref, topicRouteKey, type LessonStage } from '../app/routes';
@@ -83,6 +85,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const courseListeningQuestion = courseSession?.listeningQuestion;
   const listeningQuestion = useMemo(() => courseListeningQuestion ?? buildLessonListeningQuestion(lesson), [lesson, courseListeningQuestion]);
   const { heading } = stageLabels(stage, meaningMatch);
+  const scene = stage === 'dialogue' ? courseSession?.dialoguePhoto ?? getLessonDialoguePhoto(lesson.id) : undefined;
   const practiceLabel = meaningMatch ? 'Try meaning practice' : 'Try picture practice';
   const canComplete = wordsStudied && progress.pictureDone && !progress.completed;
   const skipStudiedPhrases = wordsStudied && !courseSession;
@@ -176,9 +179,6 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     else record('vocabulary', lesson.id, 'viewed', 0, () => setStage(next, true));
   }
 
-  const reviewStage = progress.completed || !wordsStudied ? 'vocabulary' : 'picture';
-  const reviewLabel = progress.completed ? 'Revisit the words' : !wordsStudied ? 'Review key phrases' : meaningMatch ? 'Match the meanings' : 'Match the picture';
-
   return <View style={[layout.page, compact && layout.compactPage]}>
     {!courseSession && <View style={[s.row, layout.breadcrumb]}>
       <Button compact quiet icon="arrow-left" href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
@@ -200,10 +200,15 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         disabled={exitBlocked} hrefForStep={stageHref} onStep={setStage} />
     </View>
     <View testID="lesson-stage" style={layout.stage}>
-      <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
-        {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading]}>{heading}</Text>
+      <View style={layout.stageOpening}>
+        <Text key={stage} nativeID={headingId} testID="lesson-stage-heading" accessibilityRole="header"
+          {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading]}>{heading}</Text>
+        {scene && <View testID="dialogue-context-photo" style={[layout.scene, compact && layout.compactScene]}>
+          <ContextImage photo={scene} style={layout.sceneImage} />
+        </View>}
+      </View>
       {stage === 'dialogue' && <>
-        <LessonConversation lesson={lesson} photo={courseSession?.dialoguePhoto} />
+        <LessonConversation lesson={lesson} />
         <StudyActions sticky={!compactCourse}>
           {skipStudiedPhrases && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
           {skipStudiedPhrases
@@ -237,8 +242,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
         done={progress.sentenceDone || (!courseSession && progress.completed)} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
         record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson} extraPractice={extraPractice}
-        onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))}
-        reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
+        onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))} />}
     </View>
   </View>;
 }
@@ -297,11 +301,11 @@ function LessonStep({ step, number, label, text, current, compact, disabled, hre
     {...routePress(disabled ? undefined : href, onPress)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
     style={({ pressed }) => [layout.segment, compact && layout.compactSegment, hovered && !disabled && layout.hoverSegment,
-      current && layout.activeSegment, focused && layout.focusSegment, pressed && layout.pressedSegment, disabled && layout.disabledSegment]}>
+      current && layout.activeSegment, pressed && layout.pressedSegment, disabled && layout.disabledSegment]}>
     <View aria-hidden style={layout.stepNumber}>
       <Text style={[layout.numberText, current && layout.activeNumberText]}>{number}</Text>
     </View>
-    <Text style={[layout.stepLabel, compact && layout.compactLabel, current && layout.activeLabel]}>{text}</Text>
+    <Text style={[layout.stepLabel, compact && layout.compactLabel, current && layout.activeLabel, focused && layout.focusLabel]}>{text}</Text>
   </Pressable>;
 }
 
@@ -316,7 +320,11 @@ const layout = StyleSheet.create({
   compactCourseOutcome: { fontSize: 16, lineHeight: 24 },
   outcome: { color: colors.muted, maxWidth: 690 },
   stage: { minWidth: 0, gap: 16 },
-  stageHeading: { alignSelf: 'flex-start', outlineColor: colors.focusRing, outlineOffset: 2 },
+  stageOpening: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  stageHeading: { flexShrink: 1, outlineColor: colors.focusRing, outlineOffset: 2 },
+  scene: { width: 200, aspectRatio: 2 },
+  compactScene: { width: 112 },
+  sceneImage: { flex: 1, borderRadius: tokens.radius.md },
   actions: { justifyContent: 'flex-end', gap: 8 },
   progress: { gap: 8, marginTop: 8 },
   compactProgress: { marginTop: 4 },
@@ -327,11 +335,11 @@ const layout = StyleSheet.create({
   steps: { flexDirection: 'row', gap: 4, borderBottomWidth: 1, borderColor: colors.line },
   segment: { flex: 1, minWidth: 0, minHeight: tokens.control.minimumTarget, flexDirection: 'row', alignItems: 'center',
     justifyContent: 'center', gap: 8, paddingHorizontal: 4, paddingVertical: 8,
-    borderTopLeftRadius: tokens.radius.sm, borderTopRightRadius: tokens.radius.sm, borderBottomWidth: 3, borderBottomColor: 'transparent' },
+    outlineStyle: 'solid', outlineWidth: 0, borderBottomWidth: 3, borderBottomColor: 'transparent' },
   compactSegment: { flexDirection: 'column', gap: 0, paddingHorizontal: 2, paddingVertical: 4 },
   hoverSegment: { backgroundColor: colors.sand },
   activeSegment: { backgroundColor: colors.card, borderBottomColor: colors.yellow },
-  focusSegment: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 1 },
+  focusLabel: { color: colors.ink, textDecorationLine: 'underline' },
   pressedSegment: { opacity: tokens.opacity.pressed },
   disabledSegment: { opacity: tokens.opacity.disabled },
   stepNumber: { minWidth: 12, flexShrink: 0, alignItems: 'center', justifyContent: 'center' },

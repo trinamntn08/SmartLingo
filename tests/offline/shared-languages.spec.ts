@@ -30,7 +30,7 @@ test('Today study links and the Cloud French and Japanese drafts load from a col
   const japanese = japaneseLessons.find(lesson => lesson.id === 'ja.cafe.drinks')!;
   await cold.goto('/lesson/ja/ja.cafe.drinks/sentence');
   await buildAcceptedSentence(cold, japanese);
-  await expect(cold.getByText(japanese.sentenceActivity.explanation, { exact: true })).toBeVisible();
+  await expect(cold.getByText(japanese.sentenceActivity.answers[0], { exact: true })).toBeVisible();
 });
 
 test('the same French and Japanese lesson widgets and notebooks cold-start and switch offline', async ({ page, context, baseURL }, info) => {

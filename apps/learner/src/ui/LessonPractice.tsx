@@ -73,14 +73,14 @@ function MatchChoice({ name, language, correct, disabled, onPress }: {
 }
 
 interface SentenceProps extends ActivityProps {
-  completed: boolean; canComplete: boolean; onComplete: () => void; onReview: () => void; reviewLabel: string;
+  completed: boolean; canComplete: boolean; onComplete: () => void;
   returnLabel?: string;
   nextLesson?: { title: string; href: string; onOpen: () => void };
   extraPractice?: ReactNode;
 }
 
 export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, record, nextHref, onNext,
-  completed, canComplete, onComplete, onReview, reviewLabel, returnLabel = 'Back to lessons', nextLesson, extraPractice }: SentenceProps) {
+  completed, canComplete, onComplete, returnLabel = 'Back to lessons', nextLesson, extraPractice }: SentenceProps) {
   const key = `lesson:${lesson.id}:${lesson.revision}:sentence`;
   const [selected, setSelected] = useActivityState<number[]>(routed, `${key}:selected`, []);
   const [hint, setHint] = useActivityState(routed, `${key}:hint`, false);
@@ -93,6 +93,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
   const nextLessonButton = nextLesson && <Button primary trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
     href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>Next lesson · {nextLesson.title}</Button>;
+  const showExit = completed || canComplete || browseOnly;
 
   function check() {
     const result = checkAnswer(answer, exercise);
@@ -103,7 +104,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   return <View style={layout.card}>
     <View style={layout.lead}>
       <Text accessibilityRole="header" style={[s.body, layout.prompt]}>{exercise.prompt}</Text>
-      <View style={layout.tray}>
+      <View style={layout.tray} accessibilityLiveRegion={done ? 'polite' : undefined}>
         {done ? <Text {...languageProps} style={[s.heading, layout.clue]}>{accepted}</Text>
           : selected.length ? <View style={layout.pieces}>
             {selected.map(index => <Button compact accent disabled={disabled} key={index} label={`Remove ${exercise.tokens[index]}`}
@@ -111,24 +112,18 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
           </View> : <Text style={[s.muted, layout.trayPlaceholder]}>{browseOnly ? 'Sentence practice' : 'Tap the pieces below to build your sentence.'}</Text>}
       </View>
     </View>
-    <View style={layout.body}>
-      {done ? <>
-        <View style={layout.result} accessibilityLiveRegion="polite">
-          <View style={[s.row, { gap: 8 }]}>
-            <Icon name="check" size={19} color={colors.primary} />
-            <Text accessibilityRole="header" style={[s.heading, layout.resultTitle]}>{completed ? 'Lesson complete' : 'Sentence solved'}</Text>
-          </View>
-          <Text style={s.body}>{exercise.explanation}</Text>
-        </View>
+    {done
+      ? (showExit || extraPractice) && <View style={layout.body}>
+        {completed && <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={s.muted}>Lesson complete</Text>}
         {extraPractice}
-        <View style={layout.actions}>
-          <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly} disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
-          {(completed || canComplete || browseOnly) && <Button primary={!nextLesson} quiet={!!nextLesson}
+        {showExit && <View style={layout.actions}>
+          <Button primary={!nextLesson} quiet={!!nextLesson}
             trailingIcon={nextLesson ? undefined : 'arrow-right'} href={nextHref} disabled={disabled && !browseOnly}
-            onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>}
+            onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>
           {nextLessonButton}
-        </View>
-      </> : <>
+        </View>}
+      </View>
+      : <View style={layout.body}>
         <View style={layout.pieces}>
           {exercise.tokens.map((token, index) => <Button key={index} disabled={selected.includes(index) || disabled} onPress={() => setSelected([...selected, index])}>{token}</Button>)}
         </View>
@@ -146,8 +141,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         {completed && nextLessonButton && <View style={layout.actions}>
           <Text style={s.muted}>Lesson already completed</Text>{nextLessonButton}
         </View>}
-      </>}
-    </View>
+      </View>}
   </View>;
 }
 
@@ -175,6 +169,4 @@ const layout = StyleSheet.create({
   trayPlaceholder: { paddingHorizontal: 4 },
   pieces: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, minWidth: 0 },
   secondary: { flexDirection: 'row', flexWrap: 'wrap', gap: 4 },
-  result: { backgroundColor: colors.sageTint, padding: 12, borderRadius: 8, gap: 4 },
-  resultTitle: { fontSize: 20, lineHeight: 28 },
 });

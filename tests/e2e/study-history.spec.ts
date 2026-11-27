@@ -251,6 +251,10 @@ test('French course history uses the five-step strip beside a lessons-only outli
   await expect(panel.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   expect(await storedEvents<CourseEvent>(page, 'courseEvents')).toEqual(initialEvents);
 
+  await dialogue.focus();
+  await expect(dialogue).toHaveCSS('outline-width', '0px');
+  await expect(dialogue).toHaveCSS('outline-style', 'solid');
+  await expect(dialogue.getByText(/^(Read|Read dialogue)$/u)).toHaveCSS('text-decoration-line', 'underline');
   await dialogue.press('Enter');
   await expect(page).toHaveURL(`${location}/lesson-dialogue`);
   await expect(panel.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeFocused();

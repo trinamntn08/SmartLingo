@@ -137,7 +137,7 @@ test('the spelling lesson uses the shared five steps and saves completion offlin
   await cold.reload();
   await expect(step(cold, `Lesson 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Lesson complete')).toBeVisible();
-  await expect(panel(cold).getByText(lesson.sentenceActivity.explanation, { exact: true })).toBeVisible();
+  await expect(panel(cold).getByText(lesson.sentenceActivity.answers[0], { exact: true })).toBeVisible();
   await expect(button(cold, 'Practise the conversation')).toHaveCount(0);
   await expect(panel(cold).getByTestId('french-transfer-practice')).toHaveCount(0);
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);

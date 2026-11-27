@@ -1,8 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import type { Lesson } from '@smartlingo/domain';
 import { BilingualDialogue } from './BilingualDialogue';
-import { getLessonDialoguePhoto } from './dialoguePhotos';
-import type { ContextPhoto } from './contextPhotos';
 import { VocabularyCard } from './VocabularyCard';
 import { colors, designTokens as tokens } from './theme';
 import type { LearningModel } from './useLearning';
@@ -16,9 +14,9 @@ export function LessonWords({ lesson, model }: { lesson: Lesson; model: Learning
   </View>;
 }
 
-export function LessonConversation({ lesson, photo = getLessonDialoguePhoto(lesson.id) }: { lesson: Lesson; photo?: ContextPhoto }) {
+export function LessonConversation({ lesson }: { lesson: Lesson }) {
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
-  return <BilingualDialogue turns={lesson.dialogue} language={language} photo={photo} highlightedRole={lesson.role} study />;
+  return <BilingualDialogue turns={lesson.dialogue} language={language} highlightedRole={lesson.role} study />;
 }
 
 const layout = StyleSheet.create({

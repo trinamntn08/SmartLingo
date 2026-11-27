@@ -2,6 +2,13 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Refine the shared lesson reader
+
+- Start. At 19:11–19:13 CET the clean primary `feat/notebook-learner-ui` checkout and live origin matched at `20cfe0ac0049f47bc00a6dbbe863e3cc5508b8aa`, ahead/behind 0/0. Inspected the worktrees and matched all 75 fetched and live branch names and SHAs for the three reader requests.
+- Cloud comparison. `origin/feat/material-first-lessons` at `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8` still places the photo after the transcripts and uses a boxed step focus style. The earlier French ending simplification is already in the current lineage. Existing adapted Cloud content stays in the reader. Separate platform and curriculum refs retain the previously recorded scope.
+- Outcome. The scene sits beside the dialogue heading above the transcripts. A smaller phone thumbnail keeps the opening line within reach. The step strip uses the yellow current-step marker and an underline for keyboard focus. The solved panel, review button and Related practice block are gone from the final step. The assembled answer, lesson completion and continuation, and previously bookmarked related lesson URLs remain available.
+- Verification. All 75 fetched and live refs matched again before export. Repository and TypeScript checks passed. On the final export, 16 targeted Chromium cases and eight cold-offline cases passed. Visually checked the scene, step focus and solved sentence at 1440 and 320 px. Port 8082 serves build `47e9520136df9b7bf3e63a65ed2739de77e483a111b4a870dd2f9636c3e7d2aa` and all 148 served assets match the export manifest. Next is owner review in the local preview.
+
 ## 2026-11-27 Put Slang audio and saving beside each expression
 
 - Start. At 18:57 CET the primary `feat/notebook-learner-ui` checkout and live origin matched at `6e8acf12d2b10f027ac4443ab0f2dc077483a30d`, ahead/behind 0/0. All 75 live and fetched branch names and SHAs matched. The separate grammar change was in progress and preserved.

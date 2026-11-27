@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { frenchCourseLessonsByDay, getFrenchTopicPractice } from '@smartlingo/content';
 import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId,
-  type CourseDay, type CourseEvent, type LearningEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
+  type CourseDay, type CourseEvent, type LearningEvent, type OpenCourse } from '@smartlingo/domain';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, type AppRoute, type LessonStage } from '../app/routes';
 import { tabRoute } from '../app/useLearnerNavigation';
@@ -17,7 +17,6 @@ import { CourseCredits } from './CourseCredits';
 import { buildCourseLesson } from './courseLessonContent';
 import { CourseOutline } from './CourseOutline';
 import { CourseWriteStatus } from './CourseWriteStatus';
-import { RelatedCoursePractice } from './RelatedCoursePractice';
 import type { CourseLearningModel } from './useCourseLearning';
 
 type CourseRoute = Extract<AppRoute, { kind: 'course' }>;
@@ -28,14 +27,13 @@ interface CourseProps {
   recommendedDay: CourseDay;
   learning: CourseLearningModel;
   model: LearningModel;
-  lessons: readonly Lesson[];
 }
 
 function resumeStage(day: CourseDay, progress: ReturnType<typeof courseDayProgress>): LessonStage {
   return courseLessonStageForBlock(day, progress.lastBlockId) ?? (progress.completed ? 'sentence' : 'dialogue');
 }
 
-export function OpenCoursePanel({ course, route, recommendedDay, learning, model, lessons }: CourseProps) {
+export function OpenCoursePanel({ course, route, recommendedDay, learning, model }: CourseProps) {
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
   const sidebar = Platform.OS === 'web' && width >= 900
@@ -151,7 +149,6 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
           studyDialogue: snapshot => select(day, 'vocabulary', snapshot, 'dialogue'),
           studyWords: (targetStage, snapshot) => select(day, targetStage, snapshot, 'vocabulary'), record,
         }} />
-        {stage === 'sentence' && <RelatedCoursePractice section={{ ...route, dayId: day.id, sectionId }} lessons={lessons} disabled={disabled} />}
         <CourseCredits course={course} />
       </View>
     </View>

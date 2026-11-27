@@ -126,7 +126,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         studyDayHref={studyDay && routeHref(studyDay)} sequence={sequence} onExit={() => exitLesson(studyDay)} routed />;
     }
     if (route.kind === 'course' && activeCourse) return <OpenCoursePanel key={activeCourse.course.id} route={route} course={activeCourse.course}
-      recommendedDay={activeCourse.day} learning={courseLearning} model={model} lessons={lessons} />;
+      recommendedDay={activeCourse.day} learning={courseLearning} model={model} />;
     if (route.kind === 'slang') return <SlangCatalogue model={model} />;
     if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch} otherCourses={otherCourses}
       alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}

@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { openCoursePilot } from '@smartlingo/content';
 import { guidedLessonButton, openProfileSection } from '../e2e/learner-journeys';
 
-test('a downloaded course opens related practice and returns to the exact lesson step offline', async ({ request, page, context, baseURL }) => {
+test('a downloaded related lesson bookmark returns to the exact course step offline', async ({ request, page, context, baseURL }) => {
   await request.post('/__test__/mode');
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
@@ -20,10 +21,10 @@ test('a downloaded course opens related practice and returns to the exact lesson
   await guidedLessonButton(cold).click();
   await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Build a sentence', exact: true }).click();
   await expect(cold).toHaveURL(/\/lesson-sentence$/);
-  const related = cold.getByTestId('daily-related-practice');
-  await expect(related).toBeVisible();
+  await expect(cold.getByRole('heading', { name: 'Related practice', exact: true })).toHaveCount(0);
   const courseStepUrl = cold.url();
-  await related.getByRole('button', { name: 'Say hello and goodbye', exact: true }).click();
+  const bookmark = new URLSearchParams({ course: openCoursePilot.id, day: openCoursePilot.days[0].id, section: 'lesson-sentence' });
+  await cold.goto(`/lesson/fr/fr.greetings.hello-goodbye/dialogue?${bookmark}`);
   await expect(cold).toHaveURL(/\/dialogue\?course=/);
   expect(new URL(cold.url()).searchParams.get('section')).toBe('lesson-sentence');
   await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Listen', exact: true }).click();

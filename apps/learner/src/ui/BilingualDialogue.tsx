@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import type { TargetLanguage } from '@smartlingo/domain';
 import { Speak } from '../audio/Speak';
-import { ContextImage } from './ContextImage';
-import type { ContextPhoto } from './contextPhotos';
 import { colors, styles as s } from './theme';
 
 interface DialogueTurn {
@@ -13,21 +11,15 @@ interface DialogueTurn {
   reading?: string;
 }
 
-export function BilingualDialogue({ turns, photo, highlightedRole = turns[0]?.role, language = 'fr-FR', study = false }: {
+export function BilingualDialogue({ turns, highlightedRole = turns[0]?.role, language = 'fr-FR', study = false }: {
   turns: readonly DialogueTurn[];
-  photo?: ContextPhoto;
   highlightedRole?: string;
   language?: TargetLanguage;
   study?: boolean;
 }) {
-  return <View style={t.dialogue}>
-    <View style={t.transcripts}>
-      <Transcript turns={turns} language={language} highlightedRole={highlightedRole} study={study} />
-      <Transcript turns={turns} language="en" highlightedRole={highlightedRole} study={study} />
-    </View>
-    {photo && <View testID="dialogue-context-photo" style={t.photoFrame}>
-      <ContextImage photo={photo} style={[t.photo, study && t.studyPhoto]} />
-    </View>}
+  return <View style={t.transcripts}>
+    <Transcript turns={turns} language={language} highlightedRole={highlightedRole} study={study} />
+    <Transcript turns={turns} language="en" highlightedRole={highlightedRole} study={study} />
   </View>;
 }
 
@@ -63,11 +55,7 @@ function SpokenTurn({ turn, language }: { turn: DialogueTurn; language: TargetLa
 }
 
 const t = StyleSheet.create({
-  dialogue: { gap: 16, minWidth: 0 },
-  photoFrame: { alignItems: 'flex-start' },
-  photo: { width: '100%', maxWidth: 420, aspectRatio: 2, borderRadius: 12 },
-  studyPhoto: { maxWidth: 480 },
-  transcripts: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'stretch', gap: 16 },
+  transcripts: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'stretch', gap: 16, minWidth: 0 },
   transcript: { flexBasis: 284, flexGrow: 1, flexShrink: 1, minWidth: 0, padding: 16, gap: 12, borderRadius: 12,
     borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card },
   frenchTranscript: { backgroundColor: colors.paper },

@@ -22,9 +22,11 @@ test('the food-needs dialogue keeps the complete French and English transcripts 
   const { french } = await expectFrenchTranscripts(stage, lesson.dialogue);
   await expectDialoguePhoto(stage, 'french-bistro-dialogue.jpg');
   await expect(french.getByRole('button', { name: `Listen to ${lesson.dialogue[0].target}`, exact: true })).toBeVisible();
-  await expect(stage.getByText('Naming an allergy', { exact: true })).toBeVisible();
+  await expect(stage.getByText('Naming an allergy', { exact: true })).toHaveCount(0);
   await expect(button(page, 'Next')).toBeVisible();
   await expectNoHorizontalOverflow(page);
+  await button(page, 'Next').click();
+  await expect(stage.getByText('Naming an allergy', { exact: true })).toBeVisible();
 });
 
 async function storedRows(page: Page, store: 'events' | 'notebook') {
@@ -126,7 +128,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(revisit).toContainText('Revisit');
   await revisit.click();
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
-  await button(page, 'Revisit the words').click();
+  await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();
   await expect(button(page, 'Save bonjour')).toContainText('In notebook');
   const notes = await storedRows(page, 'notebook');

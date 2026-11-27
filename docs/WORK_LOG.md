@@ -2,6 +2,10 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Android phone download
+
+The owner approved hosting the signed 0.2.6-preview APK in the public SmartLingo repository for direct phone downloads. Verified all 73 origin heads. The downloads branch carries the existing package from source commit 5d31ae05296820483d786569daa1d5ae1155905e. Its size is 23,530,701 bytes and its SHA-256 is 9523853ac30abf6177b8f7d6ba3873ef404cb7c0f00a5f7621f4fe2a79dbed2d.
+
 ## 2026-11-27 Human Japanese pronunciation recordings
 
 The owner found the synthesized vowels unnatural after the previous level adjustment. Compared 72 live and fetched origin heads; this release starts at 304e518, which includes the combined Android and web learner and tap-to-speak controls. Locate reusable speaker recordings of the actual learning material, preserve them offline and credit each source.

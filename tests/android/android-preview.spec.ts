@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { japaneseLessons } from '@smartlingo/content';
+import { japaneseAlphabetLessons, japaneseLessons } from '@smartlingo/content';
 import { guidedLessonButton, openKeyPhrases, openLessonFromTopics, openProfileSection } from '../e2e/learner-journeys';
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
@@ -9,6 +9,9 @@ interface AndroidFixture extends Window {
   Capacitor: object;
   backupRequests: Array<{ filename: string; contents: string }>;
   completeBackup: (saved: boolean) => void;
+  speechRequests: Array<{ text: string; language: string; rate: number; voiceName: string }>;
+  speechStops: number;
+  completeSpeech?: (error?: string) => void;
 }
 
 test.beforeEach(async ({ page }) => {
@@ -17,10 +20,38 @@ test.beforeEach(async ({ page }) => {
     const runtime = window as unknown as AndroidFixture;
     runtime.androidBridge = {};
     runtime.backupRequests = [];
+    runtime.speechRequests = [];
+    runtime.speechStops = 0;
     runtime.Capacitor = {
-      PluginHeaders: [{ name: 'LearningBackup', methods: [{ name: 'save', rtype: 'promise' }] }],
-      nativePromise(plugin: string, method: string, options: AndroidFixture['backupRequests'][number]) {
+      PluginHeaders: [
+        { name: 'LearningBackup', methods: [{ name: 'save', rtype: 'promise' }] },
+        { name: 'DeviceSpeech', methods: ['getVoices', 'speak', 'stop'].map(name => ({ name, rtype: 'promise' })) },
+      ],
+      nativePromise(plugin: string, method: string, options: AndroidFixture['backupRequests'][number] | AndroidFixture['speechRequests'][number]) {
+        if (plugin === 'DeviceSpeech') {
+          if (method === 'getVoices' && 'language' in options) {
+            return Promise.resolve({ voices: [{
+              voiceURI: 'android:Test voice', name: 'Test voice', lang: options.language, localService: true, default: true,
+            }] });
+          }
+          if (method === 'speak' && 'text' in options) {
+            runtime.completeSpeech?.();
+            runtime.speechRequests.push(options);
+            return new Promise((resolve, reject) => {
+              runtime.completeSpeech = error => {
+                runtime.completeSpeech = undefined;
+                if (error) reject({ message: error }); else resolve(undefined);
+              };
+            });
+          }
+          if (method === 'stop') {
+            runtime.speechStops++;
+            runtime.completeSpeech?.();
+            return Promise.resolve();
+          }
+        }
         if (plugin !== 'LearningBackup' || method !== 'save') return Promise.reject(new Error('Unexpected native call'));
+        if (!('filename' in options)) return Promise.reject(new Error('Missing backup filename'));
         runtime.backupRequests.push(options);
         return new Promise((resolve, reject) => {
           runtime.completeBackup = saved => saved ? resolve({ saved: true }) : reject(new Error('Backup save cancelled.'));
@@ -28,6 +59,51 @@ test.beforeEach(async ({ page }) => {
       },
     };
   });
+});
+
+test('French lessons and Japanese kana use native speech, with voice preferences, stop and retry', async ({ page }) => {
+  const requests = () => page.evaluate(() => (window as unknown as AndroidFixture).speechRequests);
+  await page.goto('/#/today/fr');
+  await guidedLessonButton(page.getByTestId('open-course-panel')).click();
+  await openKeyPhrases(page);
+  const text = 'bonjour';
+  const phrase = button(page, `Listen to ${text}`);
+  await phrase.click();
+  await expect.poll(requests).toEqual([{ text, language: 'fr-FR', rate: 0.85, voiceName: '' }]);
+  await page.evaluate(() => (window as unknown as AndroidFixture).completeSpeech?.());
+  await expect(phrase).toBeVisible();
+
+  await button(page, 'Today').click();
+  await button(page, 'Change language').click();
+  await button(page, 'Learn Japanese').click();
+  await button(page, 'Learn').click();
+  const character = japaneseAlphabetLessons[0]!.characters[0]!;
+  const listen = button(page, `Listen to ${character.kana}`);
+  const bundled = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
+  await listen.click();
+  expect((await bundled).ok()).toBe(true);
+  expect(await requests()).toHaveLength(1);
+  await button(page, 'Profile').click();
+  await openProfileSection(page, 'Audio & pronunciation');
+  await expect(page.getByText(/Current voice: Test voice \(ja-JP\)/)).toBeVisible();
+  await page.getByLabel('Japanese voice', { exact: true }).selectOption(JSON.stringify(['android:Test voice', 'Test voice', 'ja-JP']));
+  await button(page, 'Speaking speed: Slow').click();
+  await button(page, 'Learn').click();
+  await listen.click();
+  await expect.poll(async () => (await requests()).at(-1)).toEqual({
+    text: character.audioText, language: 'ja-JP', rate: 0.7, voiceName: 'Test voice',
+  });
+  await button(page, `Stop audio for ${character.kana}`).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as AndroidFixture).speechStops)).toBe(1);
+  await listen.click();
+  await expect.poll(requests).toHaveLength(3);
+  await page.evaluate(() => (window as unknown as AndroidFixture).completeSpeech?.('Install Japanese voice data, then retry.'));
+  await expect(page.getByText('Install Japanese voice data, then retry.', { exact: true })).toBeVisible();
+  await listen.click();
+  await expect.poll(requests).toHaveLength(4);
+  await page.evaluate(() => (window as unknown as AndroidFixture).completeSpeech?.());
+  await expect(listen).toBeVisible();
+  await expect(page.getByText('Install Japanese voice data, then retry.', { exact: true })).toHaveCount(0);
 });
 
 test('Android study, navigation and reload retain the shared learner without desktop services', async ({ page, context }) => {

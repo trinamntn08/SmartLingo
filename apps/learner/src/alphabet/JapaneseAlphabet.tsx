@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-na
 import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio, speakCourseAudio } from '../audio';
+import { isAndroidApp } from '../platform/runtime';
 import { AudioIconButton } from '../audio/AudioIconButton';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
@@ -91,7 +92,9 @@ function useKanaAudio() {
     const current = ++request.current;
     setPlaying(character.id); setError('');
     try { await speakCourseAudio(character.audioText, 'ja-JP'); }
-    catch { if (current === request.current) setError('Audio unavailable. Try again.'); }
+    catch (failure) {
+      if (current === request.current) setError(isAndroidApp() && failure instanceof Error ? failure.message : 'Audio unavailable. Try again.');
+    }
     finally { if (current === request.current) setPlaying(''); }
   }
   return { playing, error, stop, play };

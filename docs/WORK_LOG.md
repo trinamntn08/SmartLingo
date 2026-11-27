@@ -2,6 +2,15 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Combined learner preview
+
+Compared all 70 fetched origin branch heads with their live SHAs. The release branch joins the redesigned bilingual learner at eb7202a with Android device speech at 368a42f. The audit found French slang, cycling and waste lessons, Japanese curricula, saved navigation and pronunciation improvements in the redesigned source. Hosted beta provisioning and developer worktree tooling have separate delivery targets.
+
+Verified the combined release with repository and TypeScript checks, 34 tooling tests, 310 application tests and 10 Android/browser contracts. The exported app plays bundled Japanese clips by default and honors a deliberately selected Android device voice. The contracts exercise voice selection, rate, cancellation, errors and retry. The extracted web download launched with its included local server on port 8082 and passed French vocabulary saving and Japanese study, clip playback and recognition.
+
+The previous Windows build used a machine-local debug signing key. This Cloud build uses a separate debug signer for fresh-install testing. Preserve an existing phone installation and export learning data before changing installations. The repository build records the APK signature, version and source commit in its generated receipt.
+
+
 ## 2026-11-27 Material-first learner redesign
 
 - Verified all 69 live origin heads against the fetched refs. The original clean checkout (2249086) predates Japanese. The task branch starts at afe9d7e on the Japanese curriculum lineage, which contains the screenshot's exact study and recognition flows. The older hosted branch has a different deployment target.
@@ -15,6 +24,14 @@ Track every work request here, including status checks, reviews and documentatio
 - Source. The clean initial Cloud checkout was `chore/cloud-workflow` at `2249086` and contained only French. In an isolated checkout, fetched all origin heads and compared 68 live refs with the same 68 fetched refs. Selected the latest relevant bilingual source `cd9d0789d3a5050ede678b11799b90b4f7a67efb` at `origin/feat/android-phone-redesign`. The clean task branch `feat/japanese-curriculum-redesign` started at that SHA. The current app already includes the adapted bilingual Cloud catalog; the older hosted branch remains a separate target.
 - Implementation. Reviewed all 69 topic lessons in 16 banks, 13 guided lessons and 20 original kana rows. The redesigned paths have 53 kana lessons, 91 guided tasks and 154 topic tasks. Preserved IDs, progress revisions and v4 backup compatibility. Bundled 506 credited synthetic clips and added contextual furigana, composition-safe text, manual replies, cumulative checkpoints and source-specific feedback. Curriculum authors and the independent reviewer used GPT-6.1 Sol with high reasoning. The primary agent integrated shared contracts, audio, navigation, and verification. [Curriculum audit](curriculum/japanese-curriculum-redesign.md) · [Execution plan](plans/0061-japanese-curriculum-redesign.md)
 - Verification. Repository and TypeScript, 34 tooling and 310 application tests and staged checks passed. The combined run and reruns account for 249 Chromium cases and one intentional skip, 34 cold-offline cases, eight Android browser contracts, all media decodes and final exported kana bookmark playback. The test runs corrected static route matching and adjusted the download waits for the larger offline package. The final export has 656 files and 16,702,426 bytes. See the [checkpoint](SESSION_CHECKPOINT.md) for proof and open device/editorial checks.
+
+## 2026-11-26 Restore Android playback in French and Japanese
+
+- Request. Both languages fail to play speech in the Android redesign on the owner's phone.
+- Start. The clean Cloud checkout and live Android redesign matched at `cd9d0789d3a5050ede678b11799b90b4f7a67efb` (0/0). All 67 fetched branch heads matched the live inventory. The relevant browser audio branches provide server-backed playback and do not contain an Android engine integration. Started `fix/android-native-speech` from the redesign.
+- Scope. Use Android's system speech engine for both languages through the existing shared controls, with clear missing-voice recovery. Verify both bridge paths and an in-place version 4 to 5 update with the original Cloud debug key.
+- Changes. Added the native speech adapter with language-matched voice discovery, local voice preference, per-language settings, playback cancellation and Android pause cleanup. The APK version code increased to 5. Browser playback uses its existing adapters.
+- Verification. Repository and TypeScript checks, 326 tooling and application tests, 10 Android browser contract cases and 12 web audio and kana browser cases passed. Native Java compiled. The candidate and the issued Cloud v4 APK have the same application ID and signing certificate, with version code 4 → 5. Physical-phone playback and data retention still need a device check. The commit containing this entry is the source checkpoint for the clean handoff APK.
 
 ## 2026-11-26 Redesign the Android phone learner
 

@@ -11,6 +11,7 @@ import { japaneseSource } from './japanese/preferences';
 import { japaneseAudioStore, japaneseSpeechClient } from './japanese/runtime';
 import { JapaneseCourseClipPlayer } from './japanese/course-clips';
 import { isAndroidApp } from '../platform/runtime';
+import { AndroidSpeechPlayer, hasSelectedAndroidVoice } from './android';
 
 export interface AudioPlayer {
   available(language?: TargetLanguage): boolean;
@@ -115,7 +116,7 @@ export class DeviceSpeechPlayer implements AudioPlayer {
   }
 }
 
-export const deviceAudio: AudioPlayer = new DeviceSpeechPlayer();
+export const deviceAudio: AudioPlayer = isAndroidApp() ? new AndroidSpeechPlayer() : new DeviceSpeechPlayer();
 const frenchAudio = new HybridSpeechPlayer(deviceAudio, generatedAudioStore, savedClipPlayer, generatedPreferences, reportAudioNotice);
 const preferredAudio: AudioPlayer = isAndroidApp() ? deviceAudio : new JapaneseSpeechPlayer(frenchAudio, deviceAudio, japaneseSpeechClient, japaneseAudioStore,
   new BrowserClipPlayer(), japaneseSource, () => preferencesForLanguage('ja-JP').get().rate);
@@ -135,7 +136,8 @@ export const audio: AudioPlayer = {
 
 export async function speakCourseAudio(text: string, language: TargetLanguage): Promise<boolean> {
   audio.stop();
-  const clip = language === 'ja-JP' ? courseClips.play(text) : undefined;
+  const useCourseClip = language === 'ja-JP' && !(isAndroidApp() && hasSelectedAndroidVoice(language));
+  const clip = useCourseClip ? courseClips.play(text) : undefined;
   if (clip) return clip;
   await preferredAudio.speak(text, language);
   return true;

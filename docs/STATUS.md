@@ -6,6 +6,10 @@ Before every status/progress answer, complete the [local/remote repository check
 
 This learner builds on the Japanese curriculum at `afe9d7e`, including the Android phone redesign at `cd9d078`. The earlier French-only shell (`0d21d67`) and hosted learner (`c88bc41`) are recorded separately. [Repository and branch state](REPOSITORY_STATE.md)
 
+## Combined web and Android preview
+
+Android 0.2.4-preview (version code 6) brings the bilingual curriculum and material-first lessons together with native device speech. Japanese study clips work offline with the default voice setting. Selecting an Android voice in Profile applies it to Japanese study items as well. The local web app retains its optional API-backed editor and conversation tools.
+
 ## Material-first lessons
 
 Japanese letters open in study mode. The title, kana, readings and audio come first, with a single Practice button. Longer rows wrap and the script chooser, examples and guide use vertical scrolling. Both languages share a vocabulary list with meanings, audio and save controls, followed by examples in context. Today, Learn, Review, Report and Profile use shorter headings, actions and status messages. [Mobile vowel lesson](screenshots/material-first-vowels.png)
@@ -45,6 +49,7 @@ The app bundles 506 synthetic listening and study clips from exact authored Japa
 | Speech | Shared optional language-specific device voice and speed settings. French playback waits briefly for a delayed browser voice list. Japanese speaker buttons fall back to free local VOICEVOX Shikoku Metan when no Japanese device voice is installed, with Profile source/preview/speed, bounded saved clips/offline replay and isolated removal. Compact VOICEVOX Windows CPU setup and actual synthesis are verified. French explicit Azure generation and saved replay are available. A standalone Pocket TTS French sample was generated locally and is awaiting the lesson-audio pilot and listening review. [Japanese audio](JAPANESE_AUDIO.md) · [French voice options](VOICE_OPTIONS.md) |
 | Optional AI | Explicit text conversation and temporary recorded-input transcription, visible French/English help/feedback, editable transcript and separate Send. Explicit notebook capture is durable; raw clips and unsaved conversations remain temporary. Server-only credentials and bounded fake-tested provider adapters. |
 | Tooling | TypeScript workspaces, repository/secret checks, application/browser/offline suites and GitHub CI configuration. Installed/prepared Codex files are validated copies, not proof of client loading/trust. |
+| Android speech | The version 5 preview sends French and Japanese speaker requests to Android text-to-speech. Installed voices and saved speed preferences work through the same learner controls. Missing voice data is described in the Android audio settings. Audible phone verification is pending. [Android testing](ANDROID_TESTING.md#5-run-the-device-smoke-tests) |
 | Maintainable structure | App mounting, guarded learner navigation and Profile have dedicated modules. Shared design tokens/base controls stay independent of audio; Speak belongs to the audio feature. Seed content is separate from catalogue assembly. API routes share disconnect cleanup; invalid Japanese options reject before speech database acquisition. Direct editor hash navigation stops hidden learner audio. Content payloads/storage formats stay unchanged. [Review and remaining work](CODEBASE_REVIEW.md), [design guidance](DESIGN_SYSTEM.md). |
 
 ## Research and deployment boundaries

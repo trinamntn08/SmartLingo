@@ -18,7 +18,7 @@ export const designTokens = {
   space: { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 },
   radius: { sm: 8, md: 12, input: 11, lg: 16, card: 12, pill: 11 },
   layout: {
-    compactBreakpoint: 600, desktopNavBreakpoint: 1000, desktopFrenchNavBreakpoint: 1100, sidebarBreakpoint: 1050,
+    compactBreakpoint: 600, desktopNavBreakpoint: 1000, fullNavBreakpoint: 1100, sidebarBreakpoint: 1050,
     shellMaxWidth: 1536, contentMaxWidth: 1240, libraryMaxWidth: 1320, sidebarWidth: 250,
   },
   control: { minimumTarget: 48, buttonHeight: 48, inputHeight: 48, audioIconSize: 18 },

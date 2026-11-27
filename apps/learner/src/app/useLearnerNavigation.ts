@@ -7,7 +7,7 @@ import { topicRouteKey, type AppRoute } from './routes';
 
 export function tabRoute(tab: LearnerTab, language: TargetLanguage): AppRoute {
   switch (tab) {
-    case 'Learn': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
+    case 'Learn': return { kind: 'topics', language };
     case 'Slang': return language === 'fr-FR' ? { kind: 'slang', language } : { kind: 'unavailable' };
     case 'Today': return { kind: 'today', language };
     case 'Review': return { kind: 'review', language };

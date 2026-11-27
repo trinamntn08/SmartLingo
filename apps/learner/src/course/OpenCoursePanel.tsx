@@ -53,7 +53,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const day = requestedDay ?? recommendedDay;
   const progress = useMemo(() => courseDayProgress(course, day, learning.events), [course, day, learning.events]);
   const lesson = useMemo(() => buildCourseLesson(course, day), [course, day]);
-  const guide = course.language === 'ja-JP' ? getJapaneseDailyGuide(day.id) : undefined;
+  const guide = getJapaneseDailyGuide(day.id);
   const practice = coursePracticeProgress(course, day, lesson.japanesePractice?.tasks ?? [], learning.events);
   const checkpointCount = guide?.checkpoint.filter(task => practice.completedIds.has(task.id)).length ?? 0;
   const authored = frenchCourseLessonsByDay.get(day.id);
@@ -131,7 +131,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     onOpen: () => select(following, resumeStage(following, courseDayProgress(course, following, learning.events))),
   };
   const outline = (sidebar || outlineOpen) && <CourseOutline id={outlineId} sidebar={sidebar} phone={compact} course={course} route={lessonRoute} day={day}
-    events={learning.events} level={level} onLevelChange={setLevel} blocked={disabled}
+    events={learning.events} level={level} showUnitOutcomes={!!guide} onLevelChange={setLevel} blocked={disabled}
     onDay={target => select(target, resumeStage(target, courseDayProgress(course, target, learning.events)))} />;
 
   return <View testID="open-course-panel" style={compact
@@ -169,7 +169,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       <View style={{ gap: 16, minWidth: 0, flex: sidebar ? 1 : undefined }}>
         <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
           extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
-          timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{
+          timeEstimate={guide ? undefined : `About ${lesson.durationMinutes} min`} courseSession={{
           practiceCompletedIds: [...practice.completedIds], onPracticeResult: recordPractice,
           stage, progress: { wordsStudied: progress.lessonWordsStudied, pictureDone: progress.lessonPictureDone,
             sentenceDone: progress.lessonSentenceDone, completed: progress.completed },

@@ -1,13 +1,21 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { frenchCourses, frenchCourseLessonsByDay, currentJapaneseStudyExplanation, getJapaneseDailyGuide, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
-import { checkAnswer, courseDayProgressRevision, lessonSchema, type CourseEvent } from '@smartlingo/domain';
+import { courseOutlineUnits, frenchCourses, frenchCourseLessonsByDay, currentJapaneseStudyExplanation, getJapaneseDailyGuide, japaneseCourse, japaneseLessons, languageCurricula } from '@smartlingo/content';
+import { checkAnswer, courseDayProgressRevision, lessonSchema, targetLanguages, type CourseEvent } from '@smartlingo/domain';
 import { buildCourseLesson } from '../src/course/courseLessonContent';
 import { courseRecommendation, latestCourseStudy } from '../src/course/courseRecommendation';
 
 test('every bundled course day has a draft lesson view under its existing progress scope', () => {
-  const libraryIds = new Set([...lessons, ...japaneseLessons].map(lesson => lesson.id));
-  for (const course of [...frenchCourses, japaneseCourse]) {
+  const libraryIds = new Set(Object.values(languageCurricula).flatMap(curriculum => curriculum.topicLessons.map(lesson => lesson.id)));
+  const courses = targetLanguages.flatMap(language => {
+    const curriculum = languageCurricula[language];
+    assert.ok(curriculum.topicLessons.length && curriculum.topicLessons.every(lesson => lesson.language === language));
+    assert.ok(curriculum.courses.every(course => course.language === language));
+    return curriculum.courses;
+  });
+  for (const course of courses) {
+    const units = courseOutlineUnits(course);
+    assert.deepEqual(units?.flatMap(unit => unit.dayIds), course.days.map(day => day.id));
     for (const day of course.days) {
       const lesson = buildCourseLesson(course, day);
       const dialogue = day.blocks.find(block => block.kind === 'dialogue');

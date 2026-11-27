@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { languageCurricula } from '@smartlingo/content';
 import audioClips from '../../apps/learner/public/japanese-audio/manifest.json';
 import { guidedLessonButton } from './learner-journeys';
 
@@ -20,6 +21,7 @@ for (const locale of ['fr', 'ja'] as const) {
     await expect(page.getByText('Open your notebook', { exact: true })).toHaveCount(0);
     await expect(recommendation).toHaveCount(1);
     await expect(recommendation).toBeInViewport();
+    await expect(course).toHaveAccessibleName('Start lesson');
     if (narrow) {
       await expect(vocabulary).toHaveCount(0);
       await expect(recommendation).toHaveAccessibleName(locale === 'fr' ? 'Start lesson' : 'Start Hiragana');
@@ -30,7 +32,8 @@ for (const locale of ['fr', 'ja'] as const) {
         await expect(page.getByRole('heading', { name: 'Lesson 1: Meet a neighbour', exact: true })).toBeVisible();
       }
       await button('Learn').click();
-      if (locale === 'ja') await button('Topics').click();
+      await expect(page).toHaveURL(new RegExp(`/learn/${locale}$`, 'u'));
+      await expect(button('Courses')).toBeVisible();
       await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
       await button('Listening & videos').click();
       await expect(page.getByTestId('listening-comprehension')).toBeVisible();
@@ -72,6 +75,43 @@ for (const locale of ['fr', 'ja'] as const) {
     await button('Review').click();
     await expect(page).toHaveURL(new RegExp(`/review/${locale}(?:/notebook)?$`));
     await expect(button('Add personal word')).toBeVisible();
+  });
+}
+
+for (const [locale, name, courses] of [
+  ['fr', 'French', languageCurricula['fr-FR'].courses],
+  ['ja', 'Japanese', languageCurricula['ja-JP'].courses],
+] as const) {
+  test(`${name} opens the same course picker and reader from Learn`, async ({ page }) => {
+    const narrow = page.viewportSize()!.width < 600;
+    // At tablet width both languages should have the same navigation placement.
+    await page.setViewportSize(narrow ? { width: 320, height: 740 } : { width: 1050, height: 900 });
+    await page.goto('/');
+    await page.getByRole('button', { name: `Learn ${name}`, exact: true }).click();
+    await page.locator('#learner-bottom-bar').getByRole('button', { name: 'Learn', exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/learn/${locale}$`, 'u'));
+    const trigger = page.getByRole('button', { name: 'Courses', exact: true });
+    await expect(trigger).toBeInViewport();
+    await trigger.click();
+    const picker = page.getByTestId('course-picker');
+    await expect(picker.getByRole('heading', { name: 'Courses', exact: true })).toBeFocused();
+    await expect(picker.getByRole('button', { name: 'Close courses', exact: true })).toBeVisible();
+    await page.goBack();
+    await expect(trigger).toBeFocused();
+    await trigger.click();
+
+    const course = courses[0];
+    await picker.getByRole('button', { name: `${course.title}, current course`, exact: true }).click();
+    const selected = page.getByTestId('chosen-course');
+    const day = course.days[0];
+    await expect(selected.getByRole('heading', { name: course.title, exact: true })).toBeFocused();
+    await expect(selected.getByRole('button', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
+    await guidedLessonButton(selected).click();
+    const lesson = page.getByTestId('open-course-panel');
+    await expect(lesson.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link')).toHaveCount(5);
+    await expect(lesson.getByTestId('lesson-stage-heading')).toHaveText('Read a conversation');
+    await expect(page).toHaveURL(new RegExp(`/course/${locale}/${course.id}/${day.id}/lesson-dialogue$`, 'u'));
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
 

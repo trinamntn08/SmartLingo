@@ -77,6 +77,7 @@ test('French lessons and Japanese kana use native speech, with voice preferences
   await button(page, 'Change language').click();
   await button(page, 'Learn Japanese').click();
   await button(page, 'Learn').click();
+  await button(page, 'Japanese letters').click();
   const character = japaneseAlphabetLessons[0]!.characters[0]!;
   const listen = button(page, `Listen to ${character.kana}`);
   const bundled = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
@@ -89,6 +90,7 @@ test('French lessons and Japanese kana use native speech, with voice preferences
   await page.getByLabel('Japanese voice', { exact: true }).selectOption(JSON.stringify(['android:Test voice', 'Test voice', 'ja-JP']));
   await button(page, 'Speaking speed: Slow').click();
   await button(page, 'Learn').click();
+  await button(page, 'Japanese letters').click();
   const reference = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
   await listen.click();
   expect((await reference).ok()).toBe(true);
@@ -153,6 +155,7 @@ test('Android study, navigation and reload retain the shared learner without des
   await button(page, 'Change language').click();
   await button(page, 'Learn Japanese').click();
   await button(page, 'Learn').click();
+  await button(page, 'Japanese letters').click();
   await expect(page.getByTestId('japanese-alphabet')).toBeVisible();
   const lesson = japaneseLessons[0];
   await openLessonFromTopics(page, lesson);

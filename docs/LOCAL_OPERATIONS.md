@@ -57,7 +57,7 @@ npm run dev
 
 Open the localhost URL printed by Expo and choose a language. No API key is required. For French, start with Everyday greetings and politeness; for Japanese, Today recommends Start Hiragana. Study with meanings, examples, translations and explanations visible directly, save a word, and find/edit it under Review. Returning learners resume their previously studied lesson. Restaurant and every other topic remain freely accessible. Attempts and notebook entries are stored in this browser's IndexedDB and survive reload. Use the same hostname/port/browser to return to that storage. Browser data can be cleared or evicted; keep a backup using Profile → Offline & backups → Download learning backup.
 
-Choose a topic in **Learn → Lessons**. The first unfinished lesson is highlighted. Open any card, or use **Next lesson** after completing one. **All lessons** returns to the topic, and **All topics** returns to discovery. Search and level filters preserve the original lesson numbers. Japanese Learn opens Japanese letters by default.
+Choose a topic in **Learn → Lessons**. The first unfinished lesson is highlighted. Open any card, or use **Next lesson** after completing one. **All lessons** returns to the topic, and **All topics** returns to discovery. Search and level filters preserve the original lesson numbers. Use **Learn → Japanese letters** to study kana or **Learn → Courses** to open a guided course.
 
 Click SmartLingo to return home, including from the editor. Unsaved editor fields stay available when you reopen it. After the dialogue, key phrases show meanings, examples, compact noun gender markers, audio and Save. Choosing **Try meaning practice** or **Try picture practice** from key phrases records review of the displayed set.
 

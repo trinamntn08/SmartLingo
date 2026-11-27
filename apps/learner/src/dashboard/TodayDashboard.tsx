@@ -9,6 +9,7 @@ import { getContextPhoto } from '../ui/contextPhotos';
 import { Icon, type IconName } from '../ui/Icon';
 import { Button } from '../ui/controls';
 import { routePress } from '../ui/routePress';
+import { StudyLaunchCard } from '../ui/StudyLaunchCard';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 
@@ -71,10 +72,7 @@ export function TodayDashboard({ language, courseLaunch, courseStudiedAt, alphab
       </View>
       <TodayPhoto language={language} stacked={stackedHero} compact={compact} />
     </View>
-    {recommendLetters && <View testID="open-course-panel" style={[s.row, today.courseLink]}>
-      <Text style={[s.body, { minWidth: 0, flexShrink: 1 }]}>{courseLaunch.course.title.split(':', 1)[0]}</Text>
-      <Button compact quiet disabled={disabled || courseLaunch.loading} onPress={courseLaunch.onOpen} href={courseLaunch.href}>Open course</Button>
-    </View>}
+    {recommendLetters && <CourseLaunchCard {...courseLaunch} concise />}
     {!compact && <>
       <View style={today.section}>
         <View style={[s.row, today.sectionHeader]}>
@@ -127,14 +125,10 @@ function TodayPhoto({ language, stacked, compact }: { language: TargetLanguage; 
 function KanaRecommendation({ alphabet, action, onOpen, disabled }: {
   alphabet: ReturnType<typeof alphabetProgress>; action: string; onOpen: () => void; disabled: boolean;
 }) {
-  return <View style={[s.card, today.kanaCard]}>
-    <View style={today.kanaCopy}>
-      <Text style={today.kanaCourse}>{alphabet.next?.script === 'katakana' ? 'Katakana' : 'Hiragana'}</Text>
-      <Text accessibilityRole="header" aria-level={2} style={s.heading}>{alphabet.next ? alphabetLessonTitle(alphabet.next) : 'Japanese letters'}</Text>
-      {!!alphabet.completed && <Text style={today.translation}>{alphabet.completed} of {alphabet.total} rows studied</Text>}
-    </View>
-    <View style={s.row}><Button primary onPress={onOpen} href="/learn/ja/letters" disabled={disabled}>{action}</Button></View>
-  </View>;
+  return <StudyLaunchCard featured context={alphabet.next?.script === 'katakana' ? 'Katakana' : 'Hiragana'}
+    title={alphabet.next ? alphabetLessonTitle(alphabet.next) : 'Japanese letters'}
+    status={alphabet.completed ? `${alphabet.completed} of ${alphabet.total} rows studied` : undefined}
+    action={{ label: action, href: routeHref({ kind: 'letters', language: 'ja-JP' }), onOpen, disabled }} />;
 }
 
 function ShortcutTile({ item, disabled, accessibleLabel }: {
@@ -172,10 +166,6 @@ const today = StyleSheet.create({
   photoCompact: { height: 144, borderRadius: 16 },
   photo: { width: '100%', height: '100%' },
   translation: { ...designTokens.typography.caption, color: colors.muted },
-  kanaCard: { flexGrow: 1, justifyContent: 'center', backgroundColor: colors.sageTint, borderWidth: 0, gap: 16, padding: 20 },
-  courseLink: { justifyContent: 'space-between', borderBottomWidth: 1, borderColor: colors.line, paddingBottom: 8 },
-  kanaCopy: { minWidth: 0, gap: 5 },
-  kanaCourse: { ...designTokens.typography.smallLabel, fontWeight: '700', color: colors.primary },
   section: { gap: 10 },
   sectionHeader: { justifyContent: 'space-between' },
   tileGrid: { flexDirection: 'row', gap: 10 },

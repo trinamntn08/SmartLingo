@@ -1,9 +1,11 @@
 import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, courseLessonStageForBlock, courseLessonStageId, nextCourseDay, resumeCourseDay,
   type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 
-export function courseRecommendation(course: OpenCourse, events: readonly CourseEvent[], unavailable: boolean): {
+export interface CourseRecommendation {
   day: CourseDay; status: 'start' | 'resume' | 'next' | 'complete' | 'unavailable';
-} {
+}
+
+export function courseRecommendation(course: OpenCourse, events: readonly CourseEvent[], unavailable: boolean): CourseRecommendation {
   if (unavailable) return { day: course.days[0], status: 'unavailable' };
   const last = resumeCourseDay(course, events) ?? course.days[0];
   const day = courseDayProgress(course, last, events).completed ? nextCourseDay(course, events) : last;

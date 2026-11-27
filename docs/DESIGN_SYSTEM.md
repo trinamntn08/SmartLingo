@@ -16,7 +16,7 @@ Use tokens for shared decisions. Keep feature-specific layouts and artwork value
 | Shared card | 18 radius, 24 padding, minimal shadow |
 | Touch targets | 44 minimum for icon controls; shared button 46 high; input 48 high |
 | Keyboard focus | Explicit focus state; shared button outline 3 with offset 3 |
-| Navigation and topic rail | Labelled bottom destinations below 1,000px. Learn uses a 250px topic rail from 1,050px and an inline topic selector at narrower widths. |
+| Navigation and topic rail | Labelled bottom destinations below 1,100px in both languages. Learn uses a 250px topic rail from 1,050px and an inline topic selector at narrower widths. |
 | Shell / ordinary content / Learn library maximum widths | 1536 / 1240 / 1320 pixels |
 
 These values are current visual choices, not a mandate to override native accessibility scaling or a promise every feature-specific control already uses identical dimensions.
@@ -32,6 +32,8 @@ The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/
 ## Information hierarchy
 
 Today leads with one photo-led recommendation followed by the guided daily course. Explore and practice groups direct links to vocabulary and lessons, listening and videos, and speaking. Review opens saved words. Topics belong in Learn, metrics in Report and settings in Profile. Pine identifies ordinary primary actions, gold highlights the lead recommendation and sage identifies selections. Keep meanings, examples, translations and reading aids visible during study.
+
+The French and Japanese course paths use the same launch card, course picker, outline and reader. Learn opens the topic landing in both languages with links to Courses and supported skills. Japanese kana uses the same recommendation card and opens its own study route. [Course interface decision](decisions/0049-shared-course-interface.md)
 
 The library shows topic covers alongside searchable lessons and vocabulary. The lesson canvas places readable study text before bounded photographs. Five numbered lesson steps share a cream strip, with gold highlighting the current step. On phones the number sits above the short label. Choosing a step moves web focus to its heading. The separate progress bar reflects saved activity. The listening player puts the playback action and transcript toggle together, followed by the question and feedback. Kana focuses on one row with an explicit row chooser and large glyphs. Daily-course day and section choices reflow when expanded. On narrow screens the Learn mode strip scrolls horizontally so the current activity remains near the top. Focus review hides the notebook while retaining unsaved form text. The editor has a lesson rail and an explicit draft, preview and publication sequence.
 

@@ -25,7 +25,7 @@ export async function openCourseOutline(panel: Locator) {
   await expect(panel.getByTestId('course-outline')).toBeVisible();
 }
 
-/** Browse a topic through Learn, including the Japanese letters-first entry. */
+/** Browse a topic through the shared Learn entry. */
 export async function openTopic(page: Page, name: string) {
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   const nameOfMode = (page.viewportSize()?.width ?? 600) < 600 ? 'Topics' : 'Lessons';

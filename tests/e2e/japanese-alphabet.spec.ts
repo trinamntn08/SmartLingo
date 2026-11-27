@@ -94,6 +94,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
   await button(page, 'Learn').click();
+  await button(page, 'Japanese letters').click();
   await expect(alphabet.getByRole('heading', { name: 'Vowels', exact: true })).toBeVisible();
   await tryRow(page, first, true);
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
@@ -218,6 +219,7 @@ test('visual kana rows support keyboard choices at 320px without a dropdown or s
 test('failed alphabet saving keeps the current row and retries the same event once', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto('/'); await button(page, 'Learn').click();
+  await button(page, 'Japanese letters').click();
   await expect(page.getByTestId('japanese-alphabet')).toBeVisible();
   await revealRows(page);
   await tryRow(page, first);

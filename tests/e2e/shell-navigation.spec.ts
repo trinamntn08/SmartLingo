@@ -87,6 +87,7 @@ test('hash navigation cancels hidden learner speech and preserves the mounted le
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {
     localStorage.setItem('smartlingo.target-language.v1', 'ja-JP');
+    localStorage.setItem('smartlingo.japanese-audio-source.v1', JSON.stringify({ version: 1, source: 'device' }));
     const voice = { voiceURI: 'test.ja-JP', name: 'Test Japanese', lang: 'ja-JP', localService: true, default: true };
     Object.defineProperty(window, 'SpeechSynthesisUtterance', {
       configurable: true, value: class { constructor(public text: string) {} },

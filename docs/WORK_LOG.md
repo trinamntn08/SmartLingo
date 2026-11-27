@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Shared course interface
+
+At 23:07 UTC, all 76 fetched branch heads matched the live origin inventory. The original clean `chore/cloud-workflow` checkout at `2249086` was two commits behind its upstream and predates Japanese. The separate `feat/shared-course-interface` worktree starts clean at `5d31ae0`, which contains the scope of `feat/japanese-curriculum-redesign`, `feat/material-first-lessons`, `release/combined-learner` and `fix/native-japanese-recordings`. The APK download branch adds a signed binary. The separate hosted branch targets an earlier learner. [Execution plan](plans/0062-shared-course-interface.md)
+
+French and Japanese now share the Learn entry and launch controls, with course and topic data supplied by the common registry. Japanese keeps the authored kana recommendation, guides, practice and units. The immutable Japanese course hash guard passes. Independent review used the SmartLingo change-reviewer role with GPT-6.1 Sol at medium effort. Review identified kana test fixtures that still expected Learn to open letters and a French A1 outline filter regression. The fixes retain the old French outline and use the explicit Japanese letters action in the fixtures.
+
+Rechecked all 76 origin branches before the checkpoint. Repository and TypeScript checks, 34 tooling tests, 311 application tests and the web build passed. The Chromium matrix passed 258 with one intentional skip and one stale device-audio fixture. After the fixture explicitly selected device speech, that case passed at both widths on the final export, for 259 unique passing browser cases. All 18 focused offline course and navigation cases and 10 Android browser contracts passed. Five French screens matched the baseline pixel-for-pixel at 320 and 1440 px. Japanese readings wrapped at 320 px, and the final Today launch opened the guided lesson at both widths. The validated task commit contains this entry. [Checkpoint](SESSION_CHECKPOINT.md)
+
 ## 2026-11-27 Human Japanese pronunciation recordings
 
 The owner found the synthesized vowels unnatural after the previous level adjustment. Compared 72 live and fetched origin heads; this release starts at 304e518, which includes the combined Android and web learner and tap-to-speak controls. Locate reusable speaker recordings of the actual learning material, preserve them offline and credit each source.

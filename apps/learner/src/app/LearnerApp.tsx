@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type CourseDay, type OpenCourse, type TargetLanguage } from '@smartlingo/domain';
-import { frenchCourses, getFrenchTopicPractice, japaneseCourse } from '@smartlingo/content';
+import { getFrenchTopicPractice, languageCurricula } from '@smartlingo/content';
 import { FrenchTransferPractice, frenchTopicPracticeMinutes } from '../ui/FrenchTransferPractice';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { useCatalogue } from '../content/useCatalogue';
@@ -30,8 +30,6 @@ import { useLearning, type LearningModel } from '../ui/useLearning';
 import { tabRoute, useLearnerNavigation } from './useLearnerNavigation';
 import { useNavigation } from './WebNavigation';
 import { routeHref } from './routes';
-
-const japaneseCourses = [japaneseCourse];
 
 interface LearnerAppProps {
   active: boolean;
@@ -64,8 +62,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
   const compactReader = compact && (route.kind === 'course' || !!lesson);
-  const desktopNavBreakpoint = language === 'fr-FR' ? designTokens.layout.desktopFrenchNavBreakpoint : designTokens.layout.desktopNavBreakpoint;
-  const mobileNav = width < desktopNavBreakpoint;
+  const mobileNav = width < designTokens.layout.fullNavBreakpoint;
   const pickerOpen = route.kind === 'courses' && !route.courseId;
   const previouslyPicking = useRef(false);
   useLayoutEffect(() => {
@@ -81,7 +78,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
   const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
   const wideLibrary = showLibrary && width >= designTokens.layout.sidebarBreakpoint;
-  const courses = language === 'ja-JP' ? japaneseCourses : frenchCourses;
+  const courses = languageCurricula[language ?? 'fr-FR'].courses;
   const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses });
   const reportVisible = !!language && !choosing && !lesson && tab === 'Report';
   useEffect(() => {

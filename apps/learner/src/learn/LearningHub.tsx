@@ -49,7 +49,7 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   const picker = { kind: 'courses', language } as const;
   const coursesButton = <Button nativeID="learn-courses-trigger" compact icon="layers" href={routeHref(picker)}
     disabled={disabled} onPress={() => navigate(picker)}>Courses</Button>;
-  const slangButton = language === 'fr-FR' && width < designTokens.layout.desktopFrenchNavBreakpoint
+  const slangButton = language === 'fr-FR' && width < designTokens.layout.fullNavBreakpoint
     ? <Button compact quiet icon="grid" href="/slang/fr" disabled={disabled} onPress={() => navigate({ kind: 'slang', language })}>Slang</Button> : null;
   const hrefForMode = (choice: LearnMode) => routeHref(learnRoute(choice, language, selectedTopic ? topicRouteKey(selectedTopic) : undefined));
   const sectionNavigation = compact ? <View role="navigation" accessibilityLabel="Learning sections" style={phone.actions}>

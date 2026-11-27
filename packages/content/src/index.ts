@@ -1,4 +1,4 @@
-import type { Lesson } from '@smartlingo/domain';
+import type { Lesson, OpenCourse, TargetLanguage } from '@smartlingo/domain';
 import { buildTopic } from './build-topic';
 import { frenchSeedLessons } from './topics/preview-lessons';
 import { foodHomeTopics } from './topics/food-home';
@@ -15,6 +15,9 @@ import { cyclingTopic } from './topics/cycling';
 import { householdWasteTopic } from './topics/household-waste';
 import { buildOpenCoursePilot } from './open-course-pilot';
 import { buildFrenchCourses } from './french-courses';
+import { japaneseCourse } from './japanese-course';
+import { japaneseDailyUnits } from './japanese-daily-practice';
+import { japaneseLessons } from './japanese-lessons';
 import { everydayPractice } from './french-practice/everyday';
 import { foundationPractice } from './french-practice/foundations';
 import type { FrenchTransferTask } from './french-practice/types';
@@ -75,8 +78,29 @@ const french = buildFrenchCourses(buildOpenCoursePilot(openingLessons.flatMap(le
 export const frenchCourses = french.courses;
 export const [openCoursePilot] = frenchCourses;
 export const frenchCourseLessonsByDay = french.lessonsByDay;
-export { japaneseCourse } from './japanese-course';
-export { japaneseLessons } from './japanese-lessons';
+
+const japaneseStarterOrder = new Map(['ja.greetings.hello', 'ja.greetings.courtesy', 'ja.introductions.name', 'ja.cafe.drinks']
+  .map((id, index) => [id, index] as const));
+const orderedJapaneseLessons = [...japaneseLessons].sort((left, right) =>
+  (japaneseStarterOrder.get(left.id) ?? japaneseStarterOrder.size) - (japaneseStarterOrder.get(right.id) ?? japaneseStarterOrder.size));
+
+interface LanguageCurriculum {
+  courses: readonly [OpenCourse, ...OpenCourse[]];
+  topicLessons: readonly Lesson[];
+}
+
+export const languageCurricula: Readonly<Record<TargetLanguage, LanguageCurriculum>> = {
+  'fr-FR': { courses: frenchCourses, topicLessons: lessons },
+  'ja-JP': { courses: [japaneseCourse], topicLessons: orderedJapaneseLessons },
+};
+
+const supplementalCourseUnits = new Map([[japaneseCourse.id, japaneseDailyUnits]]);
+
+export function courseOutlineUnits(course: OpenCourse) {
+  return course.units ?? supplementalCourseUnits.get(course.id);
+}
+
+export { japaneseCourse, japaneseLessons };
 
 export { japaneseDailyGuides, japaneseDailyUnits, getJapaneseDailyGuide, type JapaneseDailyGuide } from './japanese-daily-practice';
 export { currentJapaneseStudyExplanation } from './japanese-study-copy';

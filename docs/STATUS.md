@@ -12,7 +12,7 @@ French and Japanese use one course catalogue, launch card, Learn entry, course p
 
 ## Combined web and Android preview
 
-Android 0.2.6-preview (version code 8) includes the bilingual curriculum, material-first lessons and native device speech. Tap a character, its reading, or a vocabulary word to hear it. The five vowels use recordings made by a native Japanese speaker in both study and recognition. Japanese starts at the recorded pace and honors previously saved speed preferences. Other Japanese study items can use a voice selected in Profile. The local web app retains its optional API-backed editor and conversation tools.
+Android 0.2.7-preview (version code 9) includes the shared course interface, bilingual curriculum, material-first lessons and native device speech. Tap a character, its reading, or a vocabulary word to hear it. The five vowels use recordings made by a native Japanese speaker in both study and recognition. Japanese starts at the recorded pace and honors previously saved speed preferences. Other Japanese study items can use a voice selected in Profile. The local web app retains its optional API-backed editor and conversation tools.
 
 ## Material-first lessons
 

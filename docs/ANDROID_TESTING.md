@@ -16,7 +16,7 @@ Open PowerShell at the root of the SmartLingo worktree that includes `apps/andro
 For a fresh checkout, clone the Android task branch into a new folder after installing Git.
 
 ```powershell
-git clone --branch fix/native-japanese-recordings https://github.com/trinamntn08/SmartLingo.git SmartLingo-Android
+git clone --branch build/android-0.2.7 https://github.com/trinamntn08/SmartLingo.git SmartLingo-Android
 Set-Location -LiteralPath '.\SmartLingo-Android'
 ```
 

@@ -6,6 +6,8 @@ Track every work request here, including status checks, reviews and documentatio
 
 The owner requested a downloadable APK containing the course refactor. All 77 fetched and live origin branch heads matched. The clean course worktree at `ada219f15fae69b4d73170b8501688b7e62f6fe4` matches `origin/feat/shared-course-interface`. The `build/android-0.2.7` branch starts from that commit and increases the Android preview from version code 8 to 9. The previous APK is on `downloads/android-0.2.6`.
 
+Repository and staged checks, TypeScript, Android doctor and `npm run build:apk` passed. Temurin 21.0.13.1, SDK Platform 36, Build Tools 35.0.0 and the pinned Gradle 8.14.3 assembled clean source `e958050a2cea9ec944b84956b4b5fc4748c8b109`. The build verified the signature and 817 packaged learner files. The delivered copy is 23,530,717 bytes with SHA-256 `45d119999fecdd1990d8abda87ea0d5da52897e30f1a5180e92026a2996d9852`. The APK targets API 36 and requires API 24 or later. The upgrade check found a different signing certificate from the previous public package. Device installation remains open. [Checkpoint](SESSION_CHECKPOINT.md)
+
 ## 2026-11-27 Shared course interface
 
 At 23:07 UTC, all 76 fetched branch heads matched the live origin inventory. The original clean `chore/cloud-workflow` checkout at `2249086` was two commits behind its upstream and predates Japanese. The separate `feat/shared-course-interface` worktree starts clean at `5d31ae0`, which contains the scope of `feat/japanese-curriculum-redesign`, `feat/material-first-lessons`, `release/combined-learner` and `fix/native-japanese-recordings`. The APK download branch adds a signed binary. The separate hosted branch targets an earlier learner. [Execution plan](plans/0062-shared-course-interface.md)

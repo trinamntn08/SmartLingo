@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Image, Platform, ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { findSlangExpressions, slangCategories, slangCategoryIds, slangExpressions,
   type SlangCategory, type SlangExpression, type SlangRegister } from '@smartlingo/content';
 import { useVisitState } from '../app/WebNavigation';
 import { Speak } from '../audio/Speak';
 import { Button } from './controls';
+import { Icon } from './Icon';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 
@@ -13,8 +14,7 @@ const cardGap = 16;
 const initialBrowse = { query: '', category: null as SlangCategory | null, limit: pageSize };
 const frenchLanguage = { accessibilityLanguage: 'fr-FR', ...(Platform.OS === 'web' ? { lang: 'fr-FR' } : {}) };
 
-const registerLabels: Record<SlangRegister, string> = {
-  informal: 'Informal',
+const registerLabels: Record<Exclude<SlangRegister, 'informal'>, string> = {
   slang: 'Slang',
   vulgar: 'Vulgar',
 };
@@ -92,7 +92,7 @@ export function SlangCatalogue({ model }: { model: LearningModel }) {
       {category === 'strong' && <Text style={s.muted}>These expressions include swear words and insults. Use the notes to understand how strong each one sounds.</Text>}
       {visible.length ? <View style={styles.cards} onLayout={event => setResultWidth(Math.floor(event.nativeEvent.layout.width))}>
         {visible.map(expression => <View key={expression.id} style={{ width: cardWidth, minWidth: 0 }}>
-          <ExpressionCard expression={expression} saved={savedIds.has(expression.sourceEntryId)} model={model} />
+          <ExpressionCard expression={expression} saved={savedIds.has(expression.sourceEntryId)} model={model} compact={compact} />
         </View>)}
       </View> : <View style={s.card}>
         <Text accessibilityRole="header" style={s.heading}>No expressions found</Text>
@@ -107,8 +107,12 @@ export function SlangCatalogue({ model }: { model: LearningModel }) {
   </View>;
 }
 
-function ExpressionCard({ expression, saved, model }: { expression: SlangExpression; saved: boolean; model: LearningModel }) {
+function ExpressionCard({ expression, saved, model, compact }: {
+  expression: SlangExpression; saved: boolean; model: LearningModel; compact: boolean;
+}) {
   const { id, sourceEntryId, category, target, meaning, example, exampleMeaning, note, register, textAbbreviation } = expression;
+  const [saveFocused, setSaveFocused] = useState(false);
+  const saveDisabled = model.blocked || saved;
 
   function saveExpression() {
     model.captureEntry({ id: `notebook.${sourceEntryId}`, sourceEntryId, language: 'fr-FR', target, meaning, example, updatedAt: new Date().toISOString() });
@@ -118,26 +122,33 @@ function ExpressionCard({ expression, saved, model }: { expression: SlangExpress
     <View style={styles.summary}>
       <View style={styles.definition}>
         <Text style={styles.categoryLabel}>{slangCategories[category]}</Text>
-        <Text accessibilityRole="header" {...frenchLanguage} style={styles.target}>{target}</Text>
+        <View testID="slang-term" style={styles.term}>
+          <Text accessibilityRole="header" {...frenchLanguage} style={[styles.target, compact && styles.targetCompact]}>{target}</Text>
+          <View style={styles.termActions}>
+            {!textAbbreviation && <Speak language="fr-FR" text={target} />}
+            <Pressable accessibilityRole="button" accessibilityLabel={saved ? `Saved ${target} to notebook` : `Save ${target}`}
+              accessibilityState={{ disabled: saveDisabled }} disabled={saveDisabled} onPress={saveExpression}
+              onFocus={() => setSaveFocused(true)} onBlur={() => setSaveFocused(false)}
+              style={({ pressed }) => [styles.save, saved && styles.saved, pressed && styles.savePressed,
+                saveFocused && !saveDisabled && styles.saveFocused, saveDisabled && !saved && styles.saveDisabled]}>
+              <Icon name={saved ? 'star-filled' : 'star'} color={saved ? colors.primary : colors.ink} />
+            </Pressable>
+          </View>
+        </View>
         <Text style={styles.meaning}>{meaning}</Text>
+        {(register !== 'informal' || textAbbreviation) && <View style={styles.tags}>
+          {register !== 'informal' && <Text style={[styles.tag, register === 'vulgar' && styles.vulgarTag]}>{registerLabels[register]}</Text>}
+          {textAbbreviation && <Text style={styles.tag}>Text shorthand</Text>}
+        </View>}
       </View>
       <Image source={{ uri: `/slang-photos/${category}.jpg` }} accessibilityRole="img" accessibilityLabel={photoDescriptions[category]}
-        style={styles.thumbnail} resizeMode="cover" />
+        style={[styles.thumbnail, compact && styles.thumbnailCompact]} resizeMode="cover" />
     </View>
     <View style={styles.example}>
       <Text {...frenchLanguage} style={styles.exampleFrench}>{example}</Text>
       <Text style={s.muted}>{exampleMeaning}</Text>
     </View>
     <Text style={s.muted}>{note}</Text>
-    <View style={styles.actions}>
-      <View style={styles.tags}>
-        <Text style={[styles.tag, register === 'vulgar' && styles.vulgarTag]}>{registerLabels[register]}</Text>
-        {textAbbreviation ? <Text style={styles.tag}>Text shorthand</Text> : <Speak language="fr-FR" text={target} />}
-      </View>
-      <Button compact label={saved ? undefined : `Save ${target}`} disabled={model.blocked || saved} onPress={saveExpression}>
-        {saved ? 'In notebook' : 'Save'}
-      </Button>
-    </View>
   </View>;
 }
 
@@ -162,12 +173,21 @@ const styles = StyleSheet.create({
   summary: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   definition: { flex: 1, minWidth: 0, gap: 4 },
   categoryLabel: { ...tokens.typography.caption, color: colors.muted },
-  target: { ...s.heading, fontSize: 22, lineHeight: 28 },
+  term: { ...s.row, alignItems: 'center', gap: 4 },
+  target: { ...s.heading, fontSize: 22, lineHeight: 28, maxWidth: '100%', flexShrink: 1 },
+  targetCompact: { fontSize: 20, lineHeight: 28 },
+  termActions: { ...s.row, alignItems: 'flex-start', gap: 4, maxWidth: '100%' },
+  save: { minWidth: tokens.control.minimumTarget, minHeight: tokens.control.minimumTarget, alignItems: 'center',
+    justifyContent: 'center', borderRadius: tokens.radius.sm, borderWidth: 2, borderColor: colors.line },
+  saved: { backgroundColor: colors.goldTint, borderColor: 'transparent' },
+  savePressed: { backgroundColor: colors.sand },
+  saveFocused: { borderColor: colors.focusRing },
+  saveDisabled: { opacity: tokens.opacity.disabled },
   meaning: { ...s.body, fontSize: 16, lineHeight: 24 },
   thumbnail: { width: 72, height: 72, borderRadius: tokens.radius.sm, backgroundColor: colors.sand },
+  thumbnailCompact: { width: 48, height: 48 },
   example: { paddingVertical: 8, paddingLeft: 12, borderLeftWidth: 1, borderColor: colors.inputBorder, gap: 4 },
   exampleFrench: { ...s.body, fontSize: 16, lineHeight: 24, fontWeight: '500' },
-  actions: { ...s.row, marginTop: 'auto', justifyContent: 'space-between', gap: 8 },
   tags: { ...s.row, gap: 8, flexShrink: 1 },
   tag: { ...tokens.typography.caption, color: colors.muted },
   vulgarTag: { color: colors.danger },

@@ -104,7 +104,7 @@ test('French slang cold-loads by URL with its photos and can save expressions of
   await expect.poll(() => photos.evaluateAll(images => images.length >= 2 && images.every(img => (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
   const target = (await heading.textContent())!;
   await button(cold, `Save ${target}`).click();
-  await expect(button(cold, 'In notebook')).toBeDisabled();
+  await expect(button(cold, `Saved ${target} to notebook`)).toBeDisabled();
   const [events, notebook] = await learningSnapshot(cold);
   expect(events).toEqual([]);
   expect(notebook).toEqual([expect.objectContaining({ target })]);

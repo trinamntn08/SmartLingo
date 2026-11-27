@@ -1,10 +1,14 @@
 import { Image } from 'react-native';
 import { colors } from './theme';
 
+const starPath = 'm12 2.7 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9z';
+
 const iconPaths = {
   book: 'M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1m0-15c3-2 6-2 10-1v15c-4-1-7-1-10 1V5',
   calendar: 'M3 6h18v15H3zM3 10h18M8 3v5m8-5v5m-8 6h2m4 0h2m-8 3h2',
   bookmark: 'M6 3h12v18l-6-4-6 4z',
+  star: starPath,
+  'star-filled': starPath,
   headphones: 'M4 14v-2a8 8 0 0 1 16 0v2M4 13h3v6H5a1 1 0 0 1-1-1v-5Zm16 0h-3v6h2a1 1 0 0 0 1-1v-5Z',
   mic: 'M9 9V5a3 3 0 0 1 6 0v4a3 3 0 0 1-6 0Zm-3 0v1a6 6 0 0 0 12 0V9m-6 7v4m-3 1h6',
   chart: 'M4 4v16h16M8 16v-4m5 4V7m5 9V9',
@@ -36,7 +40,8 @@ const iconPaths = {
 export type IconName = keyof typeof iconPaths;
 
 export function Icon({ name, size = 18, color = colors.ink }: { name: IconName; size?: number; color?: string }) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="${iconPaths[name]}" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const fill = name === 'star-filled' ? color : 'none';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${fill}"><path d="${iconPaths[name]}" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   return <Image accessible={false} aria-hidden source={{ uri: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` }}
     style={{ width: size, height: size, flexShrink: 0 }} />;
 }

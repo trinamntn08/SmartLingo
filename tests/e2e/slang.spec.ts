@@ -37,6 +37,14 @@ test('French slang is searchable, keeps its history and saves expressions to the
 
   const cards = page.getByTestId(/^expression-fr\.slang\./);
   await expect(cards).toHaveCount(12);
+  await expect(cards.first().getByText('Informal', { exact: true })).toHaveCount(0);
+  const firstTerm = cards.first().getByTestId('slang-term');
+  const titleBounds = (await firstTerm.getByRole('heading').boundingBox())!;
+  for (const control of await firstTerm.getByRole('button').all()) {
+    const bounds = (await control.boundingBox())!;
+    expect(bounds.x).toBeGreaterThanOrEqual(titleBounds.x + titleBounds.width);
+    expect(bounds.y).toBeLessThan(titleBounds.y + titleBounds.height);
+  }
   await button(page, 'Show more expressions').click();
   await expect(cards).toHaveCount(24);
   const search = page.getByRole('textbox', { name: 'Search slang' });
@@ -51,17 +59,28 @@ test('French slang is searchable, keeps its history and saves expressions to the
   await expect(button(page, 'All expressions')).toHaveAttribute('aria-pressed', 'false');
   await search.fill('relou');
   const card = cards.filter({ has: page.getByRole('heading', { name: /relou/i }) }).first();
-  const target = (await card.getByRole('heading').textContent())!;
-  await expect(card.getByRole('heading')).toHaveAttribute('lang', 'fr-FR');
-  await expect(card.getByRole('button', { name: `Listen to ${target}`, exact: true })).toBeVisible();
-  await card.getByRole('button', { name: `Save ${target}`, exact: true }).click();
-  await expect(card.getByRole('button', { name: 'In notebook', exact: true })).toBeDisabled();
+  const term = card.getByTestId('slang-term');
+  const target = (await term.getByRole('heading').textContent())!;
+  await expect(term.getByRole('heading')).toHaveAttribute('lang', 'fr-FR');
+  const listen = term.getByRole('button', { name: `Listen to ${target}`, exact: true });
+  const save = term.getByRole('button', { name: `Save ${target}`, exact: true });
+  for (const control of [listen, save]) {
+    await expect(control).toBeVisible();
+    const bounds = (await control.boundingBox())!;
+    expect(bounds.width).toBeGreaterThanOrEqual(44);
+    expect(bounds.height).toBeGreaterThanOrEqual(44);
+  }
+  await expect(save).toHaveText('');
+  await save.focus();
+  await expect(save).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(term.getByRole('button', { name: `Saved ${target} to notebook`, exact: true })).toBeDisabled();
   await button(page, 'Calls & messages').click();
   await search.fill('tkt');
   await expect(cards.first().getByText('Text shorthand')).toBeVisible();
   await expect(button(page, 'Listen to tkt')).toHaveCount(0);
   await button(page, 'Save tkt').click();
-  await expect(cards.first().getByRole('button', { name: 'In notebook', exact: true })).toBeDisabled();
+  await expect(cards.first().getByRole('button', { name: 'Saved tkt to notebook', exact: true })).toBeDisabled();
 
   await button(page, 'Review').click();
   const notebook = page.getByTestId('notebook-entries');

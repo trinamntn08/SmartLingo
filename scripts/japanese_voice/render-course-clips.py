@@ -6,13 +6,17 @@ import json
 import subprocess
 from pathlib import Path
 
+from isolated_vowels import CARRIER_PREFIX, render_vowel
 from voicevox_core.blocking import Onnxruntime, OpenJtalk, Synthesizer, VoiceModelFile
 
 
 def render(synthesizer, text, speed, destination):
-    query = synthesizer.create_audio_query(text, 2)
-    query.speed_scale = speed
-    wav = synthesizer.synthesis(query, 2)
+    if text in CARRIER_PREFIX:
+        wav = render_vowel(synthesizer, text, speed)
+    else:
+        query = synthesizer.create_audio_query(text, 2)
+        query.speed_scale = speed
+        wav = synthesizer.synthesis(query, 2)
     temporary = destination.with_suffix(".tmp.mp3")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-threads", "1", "-filter_threads", "1", "-f", "wav", "-i", "pipe:0", "-map_metadata", "-1",
                     "-ar", "24000", "-ac", "1", "-b:a", "48k", str(temporary)], input=wav, check=True)
@@ -36,7 +40,10 @@ def main():
         synthesizer.load_voice_model(model)
     manifest = {}
     for index, (text, speed) in enumerate(records.items(), 1):
-        identity = hashlib.sha256(f"{text}\0{speed}".encode()).hexdigest()[:24]
+        key = f"{text}\0{speed}"
+        if text in CARRIER_PREFIX:
+            key += "\0isolated-vowel-v1"
+        identity = hashlib.sha256(key.encode()).hexdigest()[:24]
         name = f"{identity}.mp3"
         destination = args.output / name
         if not destination.exists():

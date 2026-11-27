@@ -95,9 +95,10 @@ function PracticeTask({ task, disabled, saved, onResult }: Omit<Props, 'tasks' |
         : 'Try your own reply first. Then compare it with the model and checklist.'}</Text>
       <View style={s.row}><Button quiet compact expanded={showModel} onPress={() => setAttempt(previous => ({ ...previous, showModel: !previous.showModel, usedSupport: true }))}>{showModel ? 'Hide model' : 'Show model and checklist'}</Button></View>
       {showModel && <View style={{ gap: 8 }}>
-        <Text style={s.body}><JapaneseText text={task.model} /></Text>
+        {task.response === 'speak' || task.skill === 'speaking'
+          ? <Speak text={task.model} language="ja-JP" courseClip wordStyle={s.body} label="Listen to model reply" />
+          : <Text style={s.body}><JapaneseText text={task.model} /></Text>}
         {task.modelMeaning && <Text style={s.muted}>{task.modelMeaning}</Text>}
-        {(task.response === 'speak' || task.skill === 'speaking') && <Speak text={task.model} language="ja-JP" courseClip label="Listen to model reply" />}
         {task.criteria.map(criterion => <Text key={criterion} style={s.body}>• {criterion}</Text>)}
         <Text style={s.muted}>You judge your reply against the checklist.</Text>
         <View style={s.row}><Button disabled={disabled || (task.response === 'write' && !writing.trim())} onPress={() => submit('self-reviewed')}>Mark self-review complete</Button></View>

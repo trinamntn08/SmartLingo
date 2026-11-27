@@ -37,8 +37,6 @@ function VocabularyRow({ entry, model, language, romanization = true, courseClip
   const saved = model.notebook.some(note => note.sourceEntryId === entry.id || note.id === `notebook.${entry.id}`);
   const presentation = vocabularyPresentation(entry);
   const gender = presentation.gender ? genderLabels[presentation.gender] : undefined;
-  const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
-
   function saveWord() {
     setMessage('');
     model.captureEntry({ id: `notebook.${entry.id}`, sourceEntryId: entry.id, language, reading: entry.reading, exampleReading: entry.exampleReading, target: entry.target,
@@ -49,16 +47,14 @@ function VocabularyRow({ entry, model, language, romanization = true, courseClip
   return <View testID={`vocabulary-${entry.id}`} style={layout.row}>
     <View style={layout.head}>
       <View style={layout.definition}>
-        <Text {...languageProps} accessibilityRole="header" style={[s.target, layout.term]}>{entry.target}</Text>
+        <Speak text={entry.target} language={language} courseClip={courseClip}
+          wordStyle={[s.target, layout.term]} heading onError={setVoiceError} />
         {language === 'ja-JP'
           ? <JapaneseWordReading target={entry.target} reading={entry.reading} romanization={romanization} />
           : !!entry.reading && <Text style={s.muted}>{entry.reading}</Text>}
       </View>
-      <View style={layout.actions}>
-        <Speak language={language} courseClip={courseClip} text={entry.target} onError={setVoiceError} />
-        <Button compact quiet iconOnly icon={saved ? 'check' : 'bookmark'} toggle selected={saved}
-          label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord} />
-      </View>
+      <Button compact quiet iconOnly icon={saved ? 'check' : 'bookmark'} toggle selected={saved}
+        label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord} />
     </View>
     <View style={[s.row, layout.meaning]}>
       {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
@@ -93,7 +89,6 @@ const layout = StyleSheet.create({
   meaning: { alignItems: 'baseline', gap: 6 },
   translation: { flexShrink: 1, minWidth: 0 },
   exampleTarget: { fontWeight: '600' },
-  actions: { flexDirection: 'row', alignItems: 'flex-start', flexWrap: 'wrap', maxWidth: '100%', gap: 2 },
   support: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
   example: { minWidth: 0, flex: 1, gap: 2 },
   error: { color: colors.danger },

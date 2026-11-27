@@ -153,7 +153,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   } finally { await fresh.close(); }
 });
 
-test('the five vowels, speakers and Practice fit the first phone view', async ({ page }) => {
+test('tapping a vowel or its reading plays the sound and Practice fits the phone', async ({ page }) => {
   await page.goto(`/learn/ja/letters/${first.id}/study`);
   const alphabet = page.getByTestId('japanese-alphabet');
   const grid = alphabet.getByTestId('kana-grid');
@@ -168,6 +168,14 @@ test('the five vowels, speakers and Practice fit the first phone view', async ({
     await expect(practice).toHaveCount(1);
     await expect(practice).toBeInViewport({ ratio: 1 });
     expect(await grid.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+  }
+  await expect(grid.getByRole('button')).toHaveCount(first.characters.length);
+  await expect(grid.locator('svg')).toHaveCount(0);
+  for (const [index, character] of first.characters.entries()) {
+    const clip = audioClips[character.audioText as keyof typeof audioClips];
+    const media = page.waitForResponse(response => response.url().endsWith(`/japanese-audio/${clip.file}`));
+    await grid.getByText(index % 2 ? character.romaji : character.kana, { exact: true }).click();
+    expect((await media).ok()).toBe(true);
   }
   const tip = alphabet.getByRole('button', { name: 'Pronunciation tip', exact: true });
   await expect(tip).toHaveAttribute('aria-expanded', 'false');

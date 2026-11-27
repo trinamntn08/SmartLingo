@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import type { TargetLanguage } from '@smartlingo/domain';
 import { Speak } from '../audio/Speak';
@@ -43,23 +42,15 @@ function Transcript({ turns, language, highlightedRole, study, phone }: {
     <Text accessibilityRole="header" style={[t.transcriptHeading, study && t.studyHeading, phone && t.phoneTranscriptHeading]}>{label}</Text>
     {turns.map((turn, index) => <View key={index} style={[t.turn, index === 0 && t.firstTurn]}>
       <Text style={[phone ? t.phoneRole : s.eyebrow, turn.role === highlightedRole && t.highlightedRole]}>{turn.role}</Text>
-      {target ? <SpokenTurn turn={turn} language={language} phone={phone} /> : <Text {...languageProps} style={s.body}>{turn.meaning}</Text>}
+      {target ? <SpokenTurn turn={turn} language={language} /> : <Text {...languageProps} style={s.body}>{turn.meaning}</Text>}
     </View>)}
   </View>;
 }
 
-function SpokenTurn({ turn, language, phone }: { turn: DialogueTurn; language: TargetLanguage; phone: boolean }) {
-  const [voiceError, setVoiceError] = useState('');
-  const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
+function SpokenTurn({ turn, language }: { turn: DialogueTurn; language: TargetLanguage }) {
   return <>
-    <View style={[t.frenchTurn, phone && t.phoneTurn]}>
-      <View style={t.frenchText}>
-        <Text {...languageProps} style={[s.body, t.frenchSentence]}>{turn.target}</Text>
-        {!!turn.reading && <Text style={s.muted}>{turn.reading}</Text>}
-      </View>
-      <Speak language={language} courseClip={language === 'ja-JP'} text={turn.target} onError={setVoiceError} />
-    </View>
-    {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, t.voiceError]}>{voiceError}</Text>}
+    <Speak text={turn.target} language={language} courseClip={language === 'ja-JP'} wordStyle={[s.body, t.frenchSentence]} />
+    {!!turn.reading && <Text style={s.muted}>{turn.reading}</Text>}
   </>;
 }
 
@@ -82,9 +73,5 @@ const t = StyleSheet.create({
   turn: { gap: 2, minWidth: 0, borderTopWidth: 1, borderColor: colors.line, paddingTop: 8 },
   firstTurn: { borderTopWidth: 0, paddingTop: 0 },
   highlightedRole: { color: colors.primary },
-  frenchTurn: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 0 },
-  phoneTurn: { alignItems: 'flex-start', gap: 8 },
-  frenchText: { flex: 1, minWidth: 0 },
   frenchSentence: { fontWeight: '600' },
-  voiceError: { color: colors.danger },
 });

@@ -19,9 +19,13 @@ test('French slang is searchable, keeps its history and saves expressions to the
   } else {
     const language = button(page, 'Change language');
     await page.setViewportSize({ width: 1050, height: 1000 });
-    await expect.poll(async () => (await navigation.boundingBox())!.y - (await language.boundingBox())!.y).toBeGreaterThan(500);
+    const navOffset = async () => {
+      const [nav, picker] = await Promise.all([navigation.boundingBox(), language.boundingBox()]);
+      return nav && picker ? Math.abs(nav.y - picker.y) : Number.NaN;
+    };
+    await expect.poll(navOffset).toBeGreaterThan(500);
     await page.setViewportSize({ width: 1100, height: 1000 });
-    await expect.poll(async () => Math.abs((await navigation.boundingBox())!.y - (await language.boundingBox())!.y)).toBeLessThan(15);
+    await expect.poll(navOffset).toBeLessThan(15);
     await page.setViewportSize({ width: 1440, height: 1000 });
   }
   if (narrow) await button(page, 'Learn').click();

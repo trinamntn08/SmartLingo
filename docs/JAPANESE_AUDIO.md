@@ -76,3 +76,13 @@ Course listening questions, kana audio and new Japanese practice use exact Japan
 The app export includes the clip files and SHA-256 manifest, with no voice model or engine. The [pinned model terms](https://github.com/VOICEVOX/voicevox_vvm/blob/0.17.1/TERMS.txt) and [voice and onward-use conditions](https://zunko.jp/con_ongen_kiyaku.html) apply to the generated clips. Keep the credit and these applicable conditions with supplied copies. These are synthetic examples. Listening checks record comprehension or reading support. Speaking tasks use model playback and manual self-review.
 
 [Clip collection](../scripts/japanese_voice/collect-course-clips.ts) uses the same lesson questions and practice sources as the learner. [Rendering](../scripts/japanese_voice/render-course-clips.py) requires locally installed CORE, the official style 2 model, Open JTalk dictionary and ffmpeg. Run the collector with `node --import tsx scripts/japanese_voice/collect-course-clips.ts`. Pass the redirected JSON and a fresh output directory to the renderer, with the installed runtime library, dictionary and model paths. Reconcile the complete output with the authored sources before replacing a clip set. The application checks verify source coverage and file hashes. Device availability, pitch accent naturalness and qualified listening review remain separate from source/hash verification.
+
+### Isolated study vowels
+
+The five single-vowel clips use the same VOICEVOX:四国めたん model and style 2. Isolated synthesis produced a breathy or very quiet onset for some vowels. The renderer now generates the target mora inside a Japanese carrier, checks its vowel phoneme and voicing, and cuts the steady vowel from the model's mora timings. A 40 ms margin at each boundary excludes the neighbouring sounds. The retained vowel lasts about 226 ms at the stored pace, with a short fade at each edge. The renderer matches the vowel level before encoding and rejects a source that would require more than 10 dB of gain.
+
+Run the decoded-media check after regenerating the clips. It uses Python and ffmpeg to measure periodic speech in 20 ms windows, compare levels across the five vowels, and check peak headroom.
+
+```sh
+python scripts/japanese_voice/isolated_vowels.py apps/learner/public/japanese-audio
+```

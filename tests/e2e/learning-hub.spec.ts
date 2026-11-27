@@ -151,12 +151,13 @@ for (const language of ['fr-FR', 'ja-JP'] as const) {
     await expect(speaking.getByTestId('speaking-target')).toHaveCount(0);
     await speaking.getByRole('button', { name: 'Show model reply', exact: true }).click();
     await expect(speaking.getByTestId('speaking-target')).toHaveText(lesson.dialogue[0]!.target);
-    await speaking.getByRole('button', { name: 'Listen to model reply', exact: true }).click();
+    await expect(speaking.getByRole('button', { name: 'Listen to model reply', exact: true })).toHaveText(lesson.dialogue[0]!.target);
+    await speaking.getByTestId('speaking-target').click();
     await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('hub-speech') ?? '[]').at(-1))).toEqual({ text: lesson.dialogue[0]!.target, language });
     const otherRole = lesson.dialogue.find(line => line.role !== lesson.dialogue[0]!.role)!.role;
     await speaking.getByRole('button', { name: `Practise as ${otherRole}`, exact: true }).click();
     await expect(speaking.getByTestId('speaking-target')).toHaveText(lesson.dialogue[0]!.target);
-    await expect(speaking.getByRole('button', { name: 'Listen to partner', exact: true })).toBeVisible();
+    await expect(speaking.getByRole('button', { name: 'Listen to partner', exact: true })).toHaveText(lesson.dialogue[0]!.target);
     await speaking.getByRole('button', { name: 'Next line', exact: true }).click();
     await expect(speaking.getByTestId('speaking-line')).toContainText(lesson.dialogue[1]!.meaning);
     await page.getByRole('button', { name: /^(Lessons|Topics)$/ }).click();

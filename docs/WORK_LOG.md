@@ -2,6 +2,16 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Tap-to-pronounce preview
+
+Compared all 71 origin branch heads with the live inventory. This patch starts from combined release 7d1e116, with its speech adapter, material-first reader and saved progress. The five bundled vowel clips had uneven levels. The owner heard distorted, quiet or unnatural sound. The revised VOICEVOX renderer extracts the steady voiced portion of each target vowel and fades its edges. Decoding all five final MP3s produced 220–240 ms of audible periodic speech, a 0.4 dB spread in voiced RMS and at least 9.4 dB of peak headroom. New asset URLs allow saved offline downloads to refresh.
+
+Tap a vowel or its reading, a vocabulary headword, or a visible dialogue model for playback. The five isolated vowels use the same files in study and recognition, including on Android. Word saving stays separate. Audio-only questions keep their play action.
+
+Verified 34 tooling tests, 310 application tests, repository checks and TypeScript. The exported browser player produced a non-silent waveform and played through to the end on direct taps of all five vowels and あお. Inspected the vowel, long-vowel, contracted-kana and long-translation lessons and the five main screens at 320, 390, 430 and 1440 px. All 36 page/width combinations fit horizontally and scrolled to the bottom. The extracted web ZIP passed checksum verification for 656 offline assets and exercised French vocabulary saving, Japanese pronunciation and recognition. [Mobile screenshot](screenshots/material-first-vowels.png)
+
+The targeted browser runs passed 20 kana, voice and media cases and 18 word, dialogue and notebook cases on mobile and desktop. All 10 Android bridge contracts and both cold-offline kana cases passed. The release checks cover the web player, cached media and Android bridge. Physical-phone listening quality still needs owner verification.
+
 ## 2026-11-27 Combined learner preview
 
 Compared all 70 fetched origin branch heads with their live SHAs. The release branch joins the redesigned bilingual learner at eb7202a with Android device speech at 368a42f. The audit found French slang, cycling and waste lessons, Japanese curricula, saved navigation and pronunciation improvements in the redesigned source. Hosted beta provisioning and developer worktree tooling have separate delivery targets.

@@ -80,7 +80,7 @@ test('French lessons and Japanese kana use native speech, with voice preferences
   const character = japaneseAlphabetLessons[0]!.characters[0]!;
   const listen = button(page, `Listen to ${character.kana}`);
   const bundled = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
-  await listen.click();
+  await page.getByText(character.kana, { exact: true }).click();
   expect((await bundled).ok()).toBe(true);
   expect(await requests()).toHaveLength(1);
   await button(page, 'Profile').click();
@@ -89,6 +89,14 @@ test('French lessons and Japanese kana use native speech, with voice preferences
   await page.getByLabel('Japanese voice', { exact: true }).selectOption(JSON.stringify(['android:Test voice', 'Test voice', 'ja-JP']));
   await button(page, 'Speaking speed: Slow').click();
   await button(page, 'Learn').click();
+  const reference = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
+  await listen.click();
+  expect((await reference).ok()).toBe(true);
+  expect(await requests()).toHaveLength(1);
+
+  // If the bundled reference fails, a usable Japanese device voice can still play the vowel.
+  await page.route('**/japanese-audio/*.mp3', route => route.abort());
+  await expect(listen).toBeVisible();
   await listen.click();
   await expect.poll(async () => (await requests()).at(-1)).toEqual({
     text: character.audioText, language: 'ja-JP', rate: 0.7, voiceName: 'Test voice',

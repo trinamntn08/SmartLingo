@@ -16,7 +16,7 @@ Open PowerShell at the root of the SmartLingo worktree that includes `apps/andro
 For a fresh checkout, clone the Android task branch into a new folder after installing Git.
 
 ```powershell
-git clone --branch release/combined-learner https://github.com/trinamntn08/SmartLingo.git SmartLingo-Android
+git clone --branch fix/tap-to-pronounce https://github.com/trinamntn08/SmartLingo.git SmartLingo-Android
 Set-Location -LiteralPath '.\SmartLingo-Android'
 ```
 
@@ -65,7 +65,7 @@ if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
 & (Join-Path $env:ANDROID_HOME 'build-tools\35.0.0\aapt.exe') dump permissions $apk.Path
 ```
 
-The application ID is `com.smartlingo.preview`. This preview is version `0.2.4-preview` (version code 6), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
+The application ID is `com.smartlingo.preview`. This preview is version `0.2.5-preview` (version code 7), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
 
 ## 3. Install on your phone
 
@@ -127,7 +127,7 @@ The bilingual updates from version code 2 to 3 and from 3 to 4 passed on Android
 
 ## What works offline
 
-Ordinary lessons, pictures and kana practice are bundled. Notebook entries and learning progress are stored on the phone. Japanese course and kana items use their bundled clips by default. Selecting an Android Japanese voice in Profile uses that voice for course items too. Other phrases use Android text-to-speech. With the matching French or Japanese device voice data installed, speech can play offline. Network voices depend on the selected engine and connectivity. Written study support stays visible. Listening and video links open externally and need internet. For transfer between a browser and the APK, use a compatible private learning backup.
+Ordinary lessons, pictures and kana practice are bundled. Notebook entries and learning progress are stored on the phone. Japanese course and kana items use their bundled clips by default. The five isolated vowels use bundled pronunciation models. Selecting an Android Japanese voice in Profile applies it to other course items. Other phrases use Android text-to-speech. With the matching French or Japanese device voice data installed, speech can play offline. Network voices depend on the selected engine and connectivity. Written study support stays visible. Listening and video links open externally and need internet. For transfer between a browser and the APK, use a compatible private learning backup.
 
 The Android app omits the desktop curriculum editor and publication controls, AI conversation and transcription, and server-generated voices. To refresh bundled study material, install a newer APK. This private preview uses the existing web learner in Android WebView. Store distribution and full native Android and iOS adapters remain planned.
 

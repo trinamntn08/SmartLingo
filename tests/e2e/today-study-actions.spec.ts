@@ -74,10 +74,19 @@ for (const locale of ['fr', 'ja'] as const) {
   });
 }
 
-test('a direct Japanese lesson shows the written pronunciation and an icon-only speaker', async ({ page }) => {
+test('a Japanese word shows its written pronunciation and plays a bundled clip when tapped without a device voice', async ({ page, hasTouch }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { getVoices: () => [], cancel() {} } });
+  });
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/lesson/ja/ja.lesson.day-1/vocabulary');
   const greeting = page.getByTestId('vocabulary-ja.greetings.konnichiwa');
   await expect(greeting.getByTestId('word-pronunciation')).toHaveText('konnichiwa');
-  await expect(greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true })).toHaveText('');
+  const word = greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true });
+  await expect(word).toHaveText('こんにちは');
+  const clip = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
+  const visibleWord = word.getByText('こんにちは', { exact: true });
+  if (hasTouch) await visibleWord.tap();
+  else await visibleWord.click();
+  expect((await clip).ok()).toBe(true);
 });

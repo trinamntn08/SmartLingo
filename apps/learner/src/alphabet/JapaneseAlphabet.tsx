@@ -4,7 +4,6 @@ import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLe
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio, speakCourseAudio } from '../audio';
 import { isAndroidApp } from '../platform/runtime';
-import { AudioIconButton } from '../audio/AudioIconButton';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
@@ -88,7 +87,6 @@ function useKanaAudio() {
   function stop() { request.current++; audio.stop(); setPlaying(''); setError(''); }
   async function play(character: Character) {
     if (playing === character.id) { stop(); return; }
-    audio.stop();
     const current = ++request.current;
     setPlaying(character.id); setError('');
     try { await speakCourseAudio(character.audioText, 'ja-JP'); }
@@ -170,13 +168,15 @@ function AlphabetRow({ lesson, model, progress, completed, onSave, onNext }: {
 }
 
 function KanaCell({ character, playing, onPlay, compact }: { character: Character; playing: boolean; onPlay: () => void; compact: boolean }) {
-  return <View style={[styles.cell, { flexBasis: compact ? '31.66%' : '19%' }]}>
+  const [focused, setFocused] = useState(false);
+  return <Pressable accessibilityRole="button"
+    accessibilityLabel={playing ? `Stop audio for ${character.kana}` : `Listen to ${character.kana}`}
+    onPress={onPlay} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+    style={({ pressed }) => [styles.cell, { flexBasis: compact ? '31.66%' : '19%' },
+      (playing || pressed) && styles.playingCell, focused && styles.focus]}>
     <Text {...{ lang: 'ja', accessibilityLanguage: 'ja-JP' }} style={[styles.kana, character.kana.length > 1 && styles.kanaPair]}>{character.kana}</Text>
-    <View style={styles.sound}>
-      <Text style={styles.reading}>{character.romaji}</Text>
-      <AudioIconButton playing={playing} label={`Listen to ${character.kana}`} stopLabel={`Stop audio for ${character.kana}`} onPress={onPlay} />
-    </View>
-  </View>;
+    <Text style={styles.reading}>{character.romaji}</Text>
+  </Pressable>;
 }
 
 const styles = StyleSheet.create({
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   kana: { color: colors.ink, fontFamily: '"Yu Mincho", "Hiragino Mincho ProN", "Noto Serif CJK JP", serif',
     fontSize: 46, lineHeight: 60, maxWidth: '100%', textAlign: 'center' },
   kanaPair: { fontSize: 34, lineHeight: 54 },
-  sound: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', maxWidth: '100%' },
+  playingCell: { backgroundColor: colors.green },
   reading: { ...designTokens.typography.label, color: colors.primary, textAlign: 'center', maxWidth: '100%', paddingHorizontal: 3 },
   studyActions: { gap: 4, alignItems: 'stretch' },
   tip: { gap: 8, borderLeftWidth: 2, borderColor: colors.primary, paddingLeft: 12 },

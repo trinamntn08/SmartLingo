@@ -21,7 +21,7 @@ test('the food-needs dialogue keeps the complete French and English transcripts 
   const lesson = lessons.find(item => item.id === 'fr.restaurant.explain-food-needs')!;
   const { french } = await expectFrenchTranscripts(stage, lesson.dialogue);
   await expectDialoguePhoto(stage, 'french-bistro-dialogue.jpg');
-  await expect(french.getByRole('button', { name: `Listen to ${lesson.dialogue[0].target}`, exact: true })).toBeVisible();
+  await expect(french.getByRole('button', { name: `Listen to ${lesson.dialogue[0].target}`, exact: true })).toHaveText(lesson.dialogue[0].target);
   await expect(stage.getByText('Naming an allergy', { exact: true })).toBeVisible();
   await expect(button(page, 'Continue to key phrases')).toBeVisible();
   await expectNoHorizontalOverflow(page);
@@ -66,7 +66,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expectPictureLoaded(page);
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.eau').getByText('f.', { exact: true })).toBeVisible();
-  await expect(button(page, 'Listen to bonjour')).toHaveText('');
+  await expect(button(page, 'Listen to bonjour')).toHaveText('bonjour');
   const speakerBox = await button(page, 'Listen to bonjour').boundingBox();
   expect(speakerBox!.width).toBeGreaterThanOrEqual(44);
   expect(speakerBox!.height).toBeGreaterThanOrEqual(44);
@@ -197,7 +197,7 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   await expect(page.getByRole('heading', { name: 'Match a picture', exact: true })).toBeVisible();
 });
 
-test('speaker icon plays and stops through keyboard controls', async ({ page }) => {
+test('tapping a vocabulary word plays its pronunciation and the keyboard can stop and replay it', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(window, 'SpeechSynthesisUtterance', {
       configurable: true,
@@ -215,14 +215,16 @@ test('speaker icon plays and stops through keyboard controls', async ({ page }) 
   await page.goto('/');
   await openRestaurant(page);
   const speaker = button(page, 'Listen to bonjour');
-  await speaker.focus();
-  await page.keyboard.press('Enter');
+  await speaker.getByText('bonjour', { exact: true }).click();
   await expect(button(page, 'Stop audio for bonjour')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.spoken)).toBe('bonjour');
   await page.evaluate(() => { delete document.documentElement.dataset.stopped; });
   await page.keyboard.press('Space');
   await expect(speaker).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.stopped)).toBe('true');
+  await speaker.focus();
+  await page.keyboard.press('Enter');
+  await expect(button(page, 'Stop audio for bonjour')).toHaveText('bonjour');
   await expect(button(page, 'Try picture practice')).toBeEnabled();
 });
 

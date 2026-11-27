@@ -114,7 +114,9 @@ function ExpressionCard({ expression, saved, model }: { expression: SlangExpress
     <View style={styles.summary}>
       <View style={styles.definition}>
         <Text style={styles.categoryLabel}>{slangCategories[category]}</Text>
-        <Text accessibilityRole="header" {...frenchLanguage} style={styles.target}>{target}</Text>
+        {textAbbreviation
+          ? <Text accessibilityRole="header" {...frenchLanguage} style={styles.target}>{target}</Text>
+          : <Speak text={target} language="fr-FR" heading wordStyle={styles.target} />}
         <Text style={styles.meaning}>{meaning}</Text>
       </View>
       <Image source={{ uri: `/slang-photos/${category}.jpg` }} accessibilityRole="img" accessibilityLabel={photoDescriptions[category]}
@@ -128,7 +130,7 @@ function ExpressionCard({ expression, saved, model }: { expression: SlangExpress
     <View style={styles.actions}>
       <View style={styles.tags}>
         <Text style={[styles.tag, register === 'slang' && styles.slangTag, register === 'vulgar' && styles.vulgarTag]}>{registerLabels[register]}</Text>
-        {textAbbreviation ? <Text style={styles.tag}>Text shorthand</Text> : <Speak language="fr-FR" text={target} />}
+        {textAbbreviation && <Text style={styles.tag}>Text shorthand</Text>}
       </View>
       <Button label={saved ? undefined : `Save ${target}`} disabled={model.blocked || saved} onPress={saveExpression}>
         {saved ? '✓ In notebook' : '+ Save'}

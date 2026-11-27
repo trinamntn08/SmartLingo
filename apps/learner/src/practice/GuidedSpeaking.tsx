@@ -3,7 +3,7 @@ import type { Lesson, TargetLanguage } from '@smartlingo/domain';
 import { Platform, Text, View, useWindowDimensions } from 'react-native';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
-import { AudioIconButton } from '../audio/AudioIconButton';
+import { WordPlaybackButton } from '../audio/WordPlaybackButton';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { ScreenHeader } from '../ui/ScreenHeader';
@@ -101,10 +101,9 @@ function DialogueRound({ lesson, role, index, stateKey, onNext, onRepeat }: {
       {!compact && <View style={s.row}><Icon name={ownLine ? 'mic' : 'headphones'} size={24} /><Text style={s.eyebrow}>{ownLine ? 'Your reply' : 'Listen to your partner'}</Text></View>}
       <Text style={t.label}>English meaning</Text><Text style={s.body}>{line.meaning}</Text>
       {(!ownLine || revealed) ? <>
-        <View style={s.row}>
-          <Text testID="speaking-target" style={[s.target, { minWidth: 0, flexShrink: 1, fontSize: 31, lineHeight: 43, fontWeight: '500' }]}>{line.target}</Text>
-          <AudioIconButton playing={playing} label={ownLine ? 'Listen to model reply' : 'Listen to partner'} onPress={() => void play()} />
-        </View>
+        <WordPlaybackButton testID="speaking-target" text={line.target} language={lesson.language as TargetLanguage}
+          textStyle={[s.target, { fontSize: 31, lineHeight: 43, fontWeight: '500' }]} playing={playing}
+          label={ownLine ? 'Listen to model reply' : 'Listen to partner'} onPress={() => void play()} />
         {!!line.reading && <>
           <View style={s.row}><Button selected={reading} onPress={() => setReading(value => !value)}>{reading ? 'Hide reading' : 'Show reading'}</Button></View>
           {reading && <Text style={s.body}>{line.reading}</Text>}

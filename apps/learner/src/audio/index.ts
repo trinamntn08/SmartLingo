@@ -122,13 +122,16 @@ const preferredAudio: AudioPlayer = isAndroidApp() ? deviceAudio : new JapaneseS
   new BrowserClipPlayer(), japaneseSource, () => preferencesForLanguage('ja-JP').get().rate);
 
 const courseClips = new JapaneseCourseClipPlayer();
+let playbackSequence = 0;
 export const audio: AudioPlayer = {
   available: language => preferredAudio.available(language),
   speak(text, language) {
+    playbackSequence++;
     courseClips.stop();
     return preferredAudio.speak(text, language);
   },
   stop() {
+    playbackSequence++;
     courseClips.stop();
     preferredAudio.stop();
   },
@@ -136,9 +139,20 @@ export const audio: AudioPlayer = {
 
 export async function speakCourseAudio(text: string, language: TargetLanguage): Promise<boolean> {
   audio.stop();
-  const useCourseClip = language === 'ja-JP' && !(isAndroidApp() && hasSelectedAndroidVoice(language));
+  const sequence = playbackSequence;
+  // Use the same isolated vowel model in study and sound recognition.
+  const vowel = language === 'ja-JP' && /^[アイウエオ]$/u.test(text);
+  const useCourseClip = language === 'ja-JP' && (vowel || !(isAndroidApp() && hasSelectedAndroidVoice(language)));
   const clip = useCourseClip ? courseClips.play(text) : undefined;
-  if (clip) return clip;
+  if (clip) {
+    try { return await clip; }
+    catch (error) {
+      if (sequence !== playbackSequence) return false;
+      if (!vowel || !deviceAudio.available(language)) throw error;
+      await deviceAudio.speak(text, language);
+      return sequence === playbackSequence;
+    }
+  }
   await preferredAudio.speak(text, language);
-  return true;
+  return sequence === playbackSequence;
 }

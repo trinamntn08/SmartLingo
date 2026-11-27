@@ -8,7 +8,7 @@ This learner builds on the Japanese curriculum at `afe9d7e`, including the Andro
 
 ## Combined web and Android preview
 
-Android 0.2.4-preview (version code 6) brings the bilingual curriculum and material-first lessons together with native device speech. Japanese study clips work offline with the default voice setting. Selecting an Android voice in Profile applies it to Japanese study items as well. The local web app retains its optional API-backed editor and conversation tools.
+Android 0.2.5-preview (version code 7) includes the bilingual curriculum, material-first lessons and native device speech. Tap a character, its reading, or a vocabulary word to hear it. The five isolated Japanese vowels use bundled reference recordings in study and recognition. Other Japanese study items can use a voice selected in Profile. The local web app retains its optional API-backed editor and conversation tools.
 
 ## Material-first lessons
 

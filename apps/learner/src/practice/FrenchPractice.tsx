@@ -81,7 +81,8 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
       {state.exchanges.map(exchange => <View key={exchange.request.requestId} style={{ gap: 14 }}>
         <View style={[t.inset, { alignSelf: 'flex-end', width: '92%', backgroundColor: colors.sand }]}><Text style={s.eyebrow}>You{exchange.request.englishHelp ? ' · English help requested' : ''}</Text><Text style={s.body}>{exchange.request.text}</Text></View>
         <View style={[t.inset, { alignSelf: 'flex-start', width: '100%', backgroundColor: colors.sageTint }]}>
-          <Text style={s.eyebrow}>AI conversation partner</Text><View style={s.row}><Text style={[s.heading, { flexGrow: 1, flexShrink: 1, fontWeight: '500' }]}>{exchange.response.reply.french}</Text><Speak text={exchange.response.reply.french} /></View>
+          <Text style={s.eyebrow}>AI conversation partner</Text>
+          <Speak text={exchange.response.reply.french} wordStyle={[s.heading, { fontWeight: '500' }]} />
           <Text style={s.body}>{exchange.response.reply.english}</Text>
           {!!exchange.response.reply.feedback && <Text style={s.body}>{exchange.response.reply.feedback}</Text>}
           {exchange.response.reply.phrase && <SuggestedPhrase phrase={exchange.response.reply.phrase} id={`ai.${exchange.request.sessionId}.${exchange.request.requestId}`} model={model} />}
@@ -126,7 +127,7 @@ function SuggestedPhrase({ phrase, id, model }: { phrase: NonNullable<PracticeRe
     model.captureEntry({ id, sourceEntryId: id, target: phrase.target, meaning: phrase.meaning, example: '', updatedAt: new Date().toISOString() }, () => { saving.current = false; setSaved(true); });
   }
   useEffect(() => { if (!model.busy) saving.current = false; }, [model.busy]);
-  return <View style={{ gap: 8 }}><View style={s.divider} /><Text style={s.eyebrow}>Suggested phrase</Text><Text style={s.body}>{phrase.target}</Text><Text style={s.body}>{phrase.meaning}</Text>
+  return <View style={{ gap: 8 }}><View style={s.divider} /><Text style={s.eyebrow}>Suggested phrase</Text><Speak text={phrase.target} label={`Listen to suggested phrase ${phrase.target}`} wordStyle={s.body} /><Text style={s.body}>{phrase.meaning}</Text>
     <Button disabled={model.blocked || captured} onPress={save}>Save suggested phrase</Button>
     {captured && <Text accessibilityLiveRegion="polite" style={s.muted}>Saved to your notebook. You can edit it there.</Text>}
     {!!model.saveError && <><Text accessibilityRole="alert" style={s.body}>{model.saveError}</Text><Button disabled={model.busy} onPress={model.retry}>Retry notebook save</Button></>}

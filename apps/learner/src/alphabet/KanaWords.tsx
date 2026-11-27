@@ -10,14 +10,9 @@ export function KanaExamples({ lesson }: { lesson: JapaneseAlphabetLesson }) {
   return <View style={{ gap: 4 }}>
     {!!lesson.characters.length && <Text accessibilityRole="header" style={s.heading}>Words</Text>}
     {lesson.examples?.map(example => <View key={example.text} style={{ gap: 4, paddingVertical: 12, borderBottomWidth: 1, borderColor: colors.line }}>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
-        <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 148, minWidth: 0, gap: 2 }}>
-          <Text {...{ lang: 'ja', accessibilityLanguage: 'ja-JP' }} style={[s.target, { fontSize: 28, lineHeight: 38 }]}>{example.text}</Text>
-          {example.reading !== example.text && <Text style={[s.muted, designTokens.typography.caption]}>{example.reading}</Text>}
-          <Text style={s.body}>{example.meaning}</Text>
-        </View>
-        <Speak courseClip text={example.text} language="ja-JP" />
-      </View>
+      <Speak courseClip text={example.text} language="ja-JP" wordStyle={[s.target, { fontSize: 28, lineHeight: 38 }]} />
+      {example.reading !== example.text && <Text style={[s.muted, designTokens.typography.caption]}>{example.reading}</Text>}
+      <Text style={s.body}>{example.meaning}</Text>
       {!!example.note && <Text style={s.muted}>{example.note}</Text>}
     </View>)}
   </View>;

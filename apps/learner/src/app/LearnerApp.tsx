@@ -155,12 +155,12 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
 
   return <View style={s.app}>
     <LearnerSkipLinks mobileNavigation={!!language && !choosing && mobileNav} />
-    <View style={[s.header, compact && { paddingHorizontal: 15, paddingVertical: 8 }]}>
+    <View style={[s.header, compact && { paddingHorizontal: 16 }]}>
       <View style={[s.headerInner, mobileNav && { gap: 8, flexWrap: 'nowrap' }]}>
         <BrandHome onPress={chooseHome} />
         {language && !choosing && !mobileNav && <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile={false} />}
         {language && !choosing && <View style={{ flexShrink: 1, minWidth: 0 }}>
-          <Button compact icon={compact ? undefined : 'globe'} trailingIcon="chevron-down" label="Change language"
+          <Button compact quiet icon={compact ? undefined : 'globe'} trailingIcon="chevron-down" label="Change language"
             disabled={switchingBlocked} onPress={changeLanguage}>{languageNames[language]}</Button>
         </View>}
       </View>
@@ -173,7 +173,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         onScroll={event => { if (active) write('learner.scroll', event.nativeEvent.contentOffset.y); }} scrollEventThrottle={16}
         contentContainerStyle={{ flexGrow: 1 }}>
         <View role="main" nativeID={learnerContentId} tabIndex={-1}
-          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 }, compact && { padding: 14, paddingTop: 16 }]}>
+          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 20 }, compact && { padding: 16, paddingBottom: 32 }]}>
           {!courseVisible && <CourseWriteStatus learning={courseLearning} />}
           {route.kind === 'unavailable' ? unavailable() : !language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
@@ -202,7 +202,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         </View>
       </ScrollView>
     </View>
-    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 5, paddingBottom: 7 }}>
+    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line, padding: 4 }}>
       <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile />
     </View>}
   </View>;

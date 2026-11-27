@@ -86,6 +86,12 @@ test('French courses open independently and B1 is also available in the topic li
   await visitCourse(a2.title);
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
+  if (page.viewportSize()!.width < 600) {
+    const moreCourses = button(page, 'More French courses');
+    await expect(moreCourses).toHaveAttribute('aria-expanded', 'false');
+    await moreCourses.click();
+    await expect(moreCourses).toHaveAttribute('aria-expanded', 'true');
+  }
   await visitCourse(b1.title);
   await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
 

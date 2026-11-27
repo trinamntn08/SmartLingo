@@ -14,11 +14,7 @@ import type { LearningModel } from '../ui/useLearning';
 
 const bakeryPhoto = require('./assets/lyon-bakery.jpg');
 
-const starterTileStyles = [
-  { icon: 'book', tint: colors.goldTint },
-  { icon: 'person', tint: colors.sageTint },
-  { icon: 'grid', tint: colors.skyTint },
-] as const;
+const starterTopicCount = 3;
 
 interface TodayDashboardProps {
   language: TargetLanguage;
@@ -36,8 +32,7 @@ interface TodayDashboardProps {
 interface Shortcut {
   label: string;
   description: string;
-  icon: IconName;
-  tint: string;
+  icon?: IconName;
   open: () => void;
   href: string;
 }
@@ -54,13 +49,13 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetE
   const disabled = courseLaunch.disabled;
   const topicsHref = routeHref({ kind: 'topics', language });
   const shortcuts: Shortcut[] = [
-    { label: 'Listening & videos', description: 'Listen to sentences and find videos', icon: 'headphones', tint: colors.lilacTint, open: onListen, href: routeHref({ kind: 'listening', language }) },
-    { label: 'Speaking practice', description: 'Say your part in a dialogue', icon: 'mic', tint: colors.sageTint, open: onSpeak, href: routeHref({ kind: 'speaking', language }) },
+    { label: 'Listening & videos', description: 'Listen to sentences and find videos', icon: 'headphones', open: onListen, href: routeHref({ kind: 'listening', language }) },
+    { label: 'Speaking practice', description: 'Say your part in a dialogue', icon: 'mic', open: onSpeak, href: routeHref({ kind: 'speaking', language }) },
   ];
 
   return <View style={[today.screen, compact && today.compactScreen]}>
     <View style={today.intro}>
-      <Text accessibilityRole="header" aria-level={1} style={[s.heading, compact && today.compactHeading]}>Today</Text>
+      <Text accessibilityRole="header" aria-level={1} style={[s.hero, today.pageTitle, compact && today.compactTitle]}>Today</Text>
       <View testID="today-next-step" style={[today.hero, stackedHero && today.stacked]}>
         <View style={!stackedHero && today.recommendationWide}>
           {recommendLetters
@@ -78,16 +73,15 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetE
         <Text accessibilityRole="header" aria-level={2} style={[s.heading, compact && today.compactHeading]}>
           Explore topics
         </Text>
-        <Button compact icon="grid" trailingIcon="arrow-right" onPress={onExplore} href={topicsHref} disabled={disabled}>
+        <Button quiet compact trailingIcon="arrow-right" onPress={onExplore} href={topicsHref} disabled={disabled}>
           Browse lessons
         </Button>
       </View>
       {!!topics.length && <View style={[today.tileGrid, compact && today.stacked]}>
-        {topics.slice(0, starterTileStyles.length).map((topic, index) => (
+        {topics.slice(0, starterTopicCount).map(topic => (
           <ShortcutTile key={topic.name} compact={compact} disabled={disabled} accessibleLabel={`Explore ${topic.name}`} item={{
             label: topic.name,
             description: `${topic.lessons.length} short ${topic.lessons.length === 1 ? 'lesson' : 'lessons'}`,
-            ...starterTileStyles[index]!,
             open: () => onTopic(topic.name),
             href: routeHref({ kind: 'topics', language, topic: topicRouteKey(topic.name) }),
           }} />
@@ -126,7 +120,7 @@ function KanaRecommendation({ alphabet, action, onOpen, disabled }: {
   return <View style={[s.card, today.kanaCard]}>
     <View style={today.kanaCopy}>
       <Text accessibilityRole="header" aria-level={2} style={today.kanaCourse}>
-        {alphabet.completed === 0 ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}
+        {alphabet.completed === 0 ? 'Start with Japanese letters' : alphabet.next ? 'Japanese letters' : 'Revisit Japanese letters'}
       </Text>
       {alphabet.next && <Text accessibilityRole="header" aria-level={3} style={s.heading}>{alphabet.next.title}</Text>}
       <Text style={today.kanaDescription}>{alphabet.next ? 'Hear the characters, read their sounds and practise recognising them.'
@@ -148,46 +142,45 @@ function ShortcutTile({ item, compact, disabled, accessibleLabel }: {
     onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
     style={({ pressed }) => [today.tile, compact ? today.tileCompact : today.tileWide, (pressed || hovered) && today.tileHovered,
       focused && today.tileFocused, disabled && today.tileDisabled]}>
-    <View style={[today.tileIcon, { backgroundColor: item.tint }]}>
-      <Icon name={item.icon} size={20} color={colors.primary} />
-    </View>
+    {item.icon && <Icon name={item.icon} size={18} color={colors.primary} />}
     <View style={today.tileCopy}>
       <Text style={today.tileTitle}>{item.label}</Text>
       <Text style={today.translation}>{item.description}</Text>
     </View>
-    <Icon name="chevron" size={16} color={colors.muted} />
+    <Icon name="chevron" size={18} color={colors.muted} />
   </Pressable>;
 }
 
 const today = StyleSheet.create({
-  screen: { gap: 24, minWidth: 0 },
-  compactScreen: { gap: 16 },
-  intro: { gap: 12 },
-  hero: { flexDirection: 'row', gap: 14 },
+  screen: { gap: 32, minWidth: 0 },
+  compactScreen: { gap: 24 },
+  intro: { gap: 16 },
+  pageTitle: { fontSize: 48, lineHeight: 52 },
+  compactTitle: { fontSize: 36, lineHeight: 40 },
+  hero: { flexDirection: 'row', borderWidth: 1, borderColor: colors.line, borderRadius: designTokens.radius.lg, overflow: 'hidden', backgroundColor: colors.card },
   stacked: { flexDirection: 'column' },
-  recommendationWide: { flex: 1.25, minWidth: 0, justifyContent: 'center' },
-  photoFrame: { minWidth: 0, borderRadius: 18, backgroundColor: colors.sageTint, overflow: 'hidden' },
-  photoWide: { flex: 1, minHeight: 236 },
-  photoStacked: { height: 165 },
-  photoCompact: { height: 108, borderRadius: 14 },
+  recommendationWide: { flex: 0.9, minWidth: 0 },
+  photoFrame: { minWidth: 0, backgroundColor: colors.sand, overflow: 'hidden' },
+  photoWide: { flex: 1, minHeight: 300 },
+  photoStacked: { height: 208 },
+  photoCompact: { height: 152 },
   photo: { width: '100%', height: '100%' },
   translation: { ...designTokens.typography.caption, color: colors.muted },
-  kanaCard: { flexGrow: 1, justifyContent: 'center', backgroundColor: colors.goldTint, borderBottomWidth: 3, gap: 14, padding: 20 },
-  kanaCopy: { minWidth: 0, gap: 5 },
-  kanaCourse: { ...designTokens.typography.smallLabel, fontWeight: '700', color: colors.primary },
+  kanaCard: { flexGrow: 1, justifyContent: 'center', borderWidth: 0, borderRadius: 0, borderLeftWidth: 4, borderLeftColor: colors.yellow, boxShadow: 'none', gap: 20 },
+  kanaCopy: { minWidth: 0, gap: 8 },
+  kanaCourse: { ...designTokens.typography.label, color: colors.primary },
   kanaDescription: { ...designTokens.typography.muted, color: colors.ink },
   compactHeading: { ...designTokens.typography.compactHeading },
-  section: { gap: 10 },
+  section: { gap: 8 },
   sectionHeader: { justifyContent: 'space-between' },
-  tileGrid: { flexDirection: 'row', gap: 10 },
-  tile: { minWidth: 0, minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10,
-    borderRadius: 13, borderWidth: 1, borderBottomWidth: 3, borderColor: colors.line, backgroundColor: colors.card },
+  tileGrid: { flexDirection: 'row', gap: 16, borderTopWidth: 1, borderTopColor: colors.line },
+  tile: { minWidth: 0, minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingVertical: 8,
+    borderBottomWidth: 1, borderColor: colors.line },
   tileWide: { flex: 1 },
   tileCompact: { minHeight: 60 },
-  tileHovered: { backgroundColor: colors.sageTint },
+  tileHovered: { backgroundColor: colors.sand },
   tileFocused: { outlineWidth: designTokens.focus.outlineWidth, outlineColor: colors.focusRing, outlineStyle: 'solid', outlineOffset: 2 },
   tileDisabled: { opacity: designTokens.opacity.disabled },
-  tileIcon: { width: 35, height: 35, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
   tileCopy: { flex: 1, minWidth: 0, gap: 2 },
   tileTitle: { ...designTokens.typography.label, color: colors.ink },
 });

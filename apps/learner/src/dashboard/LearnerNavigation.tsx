@@ -9,11 +9,6 @@ export const learnerTabs = ['Today', 'Learn', 'Slang', 'Review', 'Report', 'Prof
 export type LearnerTab = typeof learnerTabs[number];
 const japaneseTabs = learnerTabs.filter(tab => tab !== 'Slang');
 const icons: Record<LearnerTab, IconName> = { Today: 'home', Learn: 'book', Slang: 'grid', Review: 'bookmark', Report: 'chart', Profile: 'person' };
-const iconColors: Record<LearnerTab, string> = {
-  Today: colors.goldTint, Learn: colors.sageTint, Slang: colors.goldTint, Review: colors.lilacTint,
-  Report: colors.skyTint, Profile: colors.sand,
-};
-
 export const learnerContentId = 'learner-main';
 const learnerNavigationId = 'learner-navigation';
 
@@ -40,7 +35,7 @@ export function LearnerNavigation({ language, selected, disabled, onSelect, href
 }) {
   const tabs = language === 'fr-FR' ? learnerTabs : japaneseTabs;
   return <View role="navigation" accessibilityLabel="Learning navigation" nativeID={learnerNavigationId} tabIndex={-1}
-    style={{ flexDirection: 'row', gap: mobile ? 2 : 6, maxWidth: '100%', minWidth: 0, ...(mobile ? { width: '100%' } : {}) }}>
+    style={[navigation.tabs, mobile && navigation.mobileTabs]}>
     {tabs.map(tab => <NavigationItem key={tab} tab={tab} selected={selected === tab} disabled={disabled} onPress={() => onSelect(tab)} href={hrefFor?.(tab)} mobile={mobile} />)}
   </View>;
 }
@@ -54,22 +49,27 @@ function NavigationItem({ tab, selected, disabled, onPress, href, mobile }: {
     aria-selected={selected} aria-current={selected ? 'page' : undefined} disabled={disabled}
     {...routePress(disabled ? undefined : href, onPress)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
-    style={({ pressed }) => ({ flexDirection: mobile ? 'column' : 'row', gap: mobile ? 4 : 8, alignItems: 'center', justifyContent: 'center',
-      minHeight: mobile ? 51 : 47, paddingVertical: 5, paddingHorizontal: mobile ? 2 : 11,
-      ...(mobile ? { flex: 1, minWidth: 0 } : {}),
-      borderRadius: 10, borderWidth: 1, borderColor: selected ? colors.yellow : 'transparent',
-      backgroundColor: selected ? colors.goldTint : pressed || hovered ? colors.sand : 'transparent', opacity: disabled ? 0.5 : 1,
-      outlineWidth: focused ? 3 : 0, outlineStyle: 'solid', outlineOffset: 2, outlineColor: colors.focusRing })}>
-    <View style={{ width: mobile ? 22 : 27, height: mobile ? 22 : 27, borderRadius: 7, alignItems: 'center', justifyContent: 'center',
-      backgroundColor: mobile || selected ? 'transparent' : iconColors[tab] }}>
-      <Icon name={icons[tab]} size={mobile ? 20 : 17} color={selected ? colors.primary : colors.ink} />
-    </View>
-    <Text style={{ ...(mobile ? designTokens.typography.caption : designTokens.typography.muted), textAlign: 'center', flexShrink: 1, color: selected ? colors.primary : colors.muted,
-      fontWeight: selected ? '700' : '600' }}>{tab}</Text>
+    style={({ pressed }) => [navigation.item, mobile && navigation.mobileItem, selected && navigation.selected,
+      (pressed || hovered) && navigation.hovered, disabled && navigation.disabled, focused && navigation.focused]}>
+    <Icon name={icons[tab]} size={18} color={selected ? colors.primary : colors.muted} />
+    <Text style={[navigation.label, mobile && navigation.mobileLabel, selected && navigation.selectedLabel]}>{tab}</Text>
+    {selected && <View aria-hidden style={navigation.marker} />}
   </Pressable>;
 }
 
 const navigation = StyleSheet.create({
+  tabs: { flexDirection: 'row', gap: 4, maxWidth: '100%', minWidth: 0 },
+  mobileTabs: { width: '100%', gap: 2 },
+  item: { flexDirection: 'row', minHeight: 44, justifyContent: 'center', alignItems: 'center', gap: 8, paddingHorizontal: 12, borderRadius: 8 },
+  mobileItem: { flex: 1, minWidth: 0, flexDirection: 'column', minHeight: 52, paddingHorizontal: 0, gap: 4 },
+  label: { ...designTokens.typography.caption, textAlign: 'center', color: colors.muted, fontWeight: '500' },
+  mobileLabel: { fontSize: 12, lineHeight: 16 },
+  selectedLabel: { color: colors.ink, fontWeight: '600' },
+  selected: { backgroundColor: colors.paper },
+  hovered: { backgroundColor: colors.sand },
+  marker: { position: 'absolute', bottom: 0, width: 20, height: 3, borderRadius: 2, backgroundColor: colors.yellow },
+  disabled: { opacity: designTokens.opacity.disabled },
+  focused: { outlineWidth: designTokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 2, outlineColor: colors.focusRing },
   skipLinks: { position: 'absolute', top: 8, left: 12, gap: 7, zIndex: 2 },
   skipFocused: { minHeight: designTokens.control.minimumTarget, justifyContent: 'center', paddingHorizontal: 14,
     borderRadius: 9, backgroundColor: colors.primary, outlineColor: colors.focusRing,

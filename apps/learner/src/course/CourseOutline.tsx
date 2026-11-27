@@ -53,11 +53,11 @@ export function CourseOutline({ id, sidebar, course, route, day, events,
     return days.map(item => {
       const active = item.id === day.id;
       const completed = courseDayProgress(course, item, events).completed;
-      return <View key={item.id} nativeID={active ? activeDayId : undefined} testID={`course-day-${item.id}`}>
+      return <View key={item.id} nativeID={active ? activeDayId : undefined} testID={`course-day-${item.id}`} style={[t.day, active && t.currentDay]}>
         <Button compact marker={String(item.dayNumber)} trailingIcon={completed ? 'check' : undefined}
           label={`Choose lesson ${item.dayNumber}: ${item.title}${completed ? ', completed' : ''}`}
           href={routeHref({ ...route, dayId: item.id, sectionId: undefined })}
-          selected={active} disabled={blocked} onPress={() => onDay(item)}>{item.title}</Button>
+          quiet selected={active} disabled={blocked} onPress={() => onDay(item)}>{item.title}</Button>
       </View>;
     });
   }
@@ -96,10 +96,12 @@ export function CourseOutline({ id, sidebar, course, route, day, events,
 }
 
 const t = StyleSheet.create({
-  outline: { backgroundColor: colors.sand, borderRadius: 14, padding: 12, gap: 12, minWidth: 0 },
-  title: { fontSize: 21, lineHeight: 29 },
-  group: { gap: 5, minWidth: 0 },
-  label: { ...s.eyebrow, fontSize: 13, letterSpacing: 0.6 },
+  outline: { backgroundColor: colors.card, borderRadius: 12, padding: 12, gap: 12, minWidth: 0, borderWidth: 1, borderColor: colors.line },
+  title: { fontSize: 20, lineHeight: 28 },
+  group: { gap: 4, minWidth: 0 },
+  label: { ...s.eyebrow, fontSize: 14, lineHeight: 20 },
   unit: { fontSize: 14, lineHeight: 20, fontWeight: '600', paddingBottom: 4 },
-  filters: { gap: 5, marginBottom: 4 },
+  filters: { gap: 4, marginBottom: 4 },
+  day: { borderLeftWidth: 3, borderLeftColor: 'transparent' },
+  currentDay: { borderLeftColor: colors.yellow },
 });

@@ -1,13 +1,15 @@
+import { useState } from 'react';
 import { Image, Platform, ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import { findSlangExpressions, slangCategories, slangCategoryIds, slangExpressions,
   type SlangCategory, type SlangExpression, type SlangRegister } from '@smartlingo/content';
 import { useVisitState } from '../app/WebNavigation';
 import { Speak } from '../audio/Speak';
 import { Button } from './controls';
-import { colors, styles as s } from './theme';
+import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 
 const pageSize = 12;
+const cardGap = 16;
 const initialBrowse = { query: '', category: null as SlangCategory | null, limit: pageSize };
 const frenchLanguage = { accessibilityLanguage: 'fr-FR', ...(Platform.OS === 'web' ? { lang: 'fr-FR' } : {}) };
 
@@ -35,6 +37,9 @@ const photoDescriptions: Record<SlangCategory, string> = {
 export function SlangCatalogue({ model }: { model: LearningModel }) {
   const { width } = useWindowDimensions();
   const compact = width < 680;
+  const [resultWidth, setResultWidth] = useState(0);
+  const columns = resultWidth >= 900 ? 3 : resultWidth >= 600 ? 2 : 1;
+  const cardWidth = columns === 1 ? '100%' : (resultWidth - (columns - 1) * cardGap) / columns;
   const [{ query, category, limit }, setBrowse] = useVisitState('slang:browse', initialBrowse);
   const results = findSlangExpressions(query, category);
   const visible = results.slice(0, limit);
@@ -49,8 +54,8 @@ export function SlangCatalogue({ model }: { model: LearningModel }) {
   }
 
   const categoryButtons = <>
-    <Button toggle selected={category === null} onPress={() => chooseCategory(null)}>All expressions</Button>
-    {slangCategoryIds.map(id => <Button key={id} toggle selected={category === id} onPress={() => chooseCategory(id)}>
+    <Button compact toggle selected={category === null} onPress={() => chooseCategory(null)}>All expressions</Button>
+    {slangCategoryIds.map(id => <Button compact key={id} toggle selected={category === id} onPress={() => chooseCategory(id)}>
       {slangCategories[id]}
     </Button>)}
   </>;
@@ -58,8 +63,8 @@ export function SlangCatalogue({ model }: { model: LearningModel }) {
   return <View style={styles.catalogue}>
     <View testID="slang-intro" style={[styles.hero, compact && styles.heroCompact]}>
       <View style={[styles.intro, compact ? styles.introCompact : styles.introWide]}>
-        <Text accessibilityRole="header" style={[s.hero, compact && styles.titleCompact]}>Everyday French & slang</Text>
-        <Text style={[s.body, compact && styles.descriptionCompact]}>Learn the expressions people use with friends, at work and around town in France.</Text>
+        <Text accessibilityRole="header" aria-level={1} style={[s.title, compact && s.compactTitle]}>Everyday French & slang</Text>
+        <Text style={s.muted}>Expressions for conversations, work and everyday life in France</Text>
       </View>
       <Image source={{ uri: '/slang-photos/hero.jpg' }} accessibilityRole="img"
         accessibilityLabel="Three friends laughing together on a French café terrace"
@@ -79,15 +84,14 @@ export function SlangCatalogue({ model }: { model: LearningModel }) {
     <View style={styles.results}>
       <View style={styles.resultHeader}>
         <Text accessibilityRole="header" style={s.heading}>{category ? slangCategories[category] : 'Browse expressions'}</Text>
-        <Text accessibilityLiveRegion="polite" style={s.muted}>
+        <Text accessibilityLiveRegion="polite" style={styles.count}>
           {results.length === slangExpressions.length ? `${results.length} expressions` : `${results.length} of ${slangExpressions.length} expressions`}
         </Text>
       </View>
       {category === 'verlan' && <Text style={s.muted}>Verlan flips the sounds of a word. Usage varies by age, place and group of friends.</Text>}
       {category === 'strong' && <Text style={s.muted}>These expressions include swear words and insults. Use the notes to understand how strong each one sounds.</Text>}
-      {visible.length ? <View style={styles.cards}>
-        {visible.map(expression => <View key={expression.id} style={[styles.cardColumn,
-          !compact && styles.cardColumnMedium, width >= 1040 && styles.cardColumnWide]}>
+      {visible.length ? <View style={styles.cards} onLayout={event => setResultWidth(Math.floor(event.nativeEvent.layout.width))}>
+        {visible.map(expression => <View key={expression.id} style={{ width: cardWidth, minWidth: 0 }}>
           <ExpressionCard expression={expression} saved={savedIds.has(expression.sourceEntryId)} model={model} />
         </View>)}
       </View> : <View style={s.card}>
@@ -127,50 +131,45 @@ function ExpressionCard({ expression, saved, model }: { expression: SlangExpress
     <Text style={s.muted}>{note}</Text>
     <View style={styles.actions}>
       <View style={styles.tags}>
-        <Text style={[styles.tag, register === 'slang' && styles.slangTag, register === 'vulgar' && styles.vulgarTag]}>{registerLabels[register]}</Text>
+        <Text style={[styles.tag, register === 'vulgar' && styles.vulgarTag]}>{registerLabels[register]}</Text>
         {textAbbreviation ? <Text style={styles.tag}>Text shorthand</Text> : <Speak language="fr-FR" text={target} />}
       </View>
-      <Button label={saved ? undefined : `Save ${target}`} disabled={model.blocked || saved} onPress={saveExpression}>
-        {saved ? '✓ In notebook' : '+ Save'}
+      <Button compact label={saved ? undefined : `Save ${target}`} disabled={model.blocked || saved} onPress={saveExpression}>
+        {saved ? 'In notebook' : 'Save'}
       </Button>
     </View>
   </View>;
 }
 
 const styles = StyleSheet.create({
-  catalogue: { alignSelf: 'center', width: '100%', gap: 18, minWidth: 0 },
-  hero: { flexDirection: 'row', alignItems: 'stretch', borderWidth: 1, borderColor: colors.line, backgroundColor: colors.goldTint, borderRadius: 24, overflow: 'hidden' },
-  heroCompact: { flexDirection: 'column', borderRadius: 20 },
-  intro: { minWidth: 0, justifyContent: 'center', padding: 34, gap: 14 },
+  catalogue: { alignSelf: 'center', width: '100%', gap: 16, minWidth: 0 },
+  hero: { flexDirection: 'row', alignItems: 'stretch', gap: 24 },
+  heroCompact: { flexDirection: 'column', gap: 16 },
+  intro: { minWidth: 0, justifyContent: 'center', paddingVertical: 24, gap: 8 },
   introWide: { flex: 1 },
-  introCompact: { padding: 18, gap: 8 },
-  titleCompact: { fontSize: 33, lineHeight: 36, letterSpacing: -1.1 },
-  descriptionCompact: { fontSize: 15, lineHeight: 22 },
-  heroPhoto: { width: '44%', minHeight: 263, backgroundColor: colors.sand },
+  introCompact: { paddingVertical: 0 },
+  heroPhoto: { width: '48%', minHeight: 224, borderRadius: tokens.radius.card, backgroundColor: colors.sand },
   heroPhotoCompact: { width: '100%', height: 124, minHeight: 0 },
-  filters: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 10 },
+  filters: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 8 },
   search: { ...s.input, minWidth: 180, flexGrow: 1, flexBasis: 300 },
   categories: { ...s.row, gap: 8 },
   categoryStrip: { ...s.row, flexWrap: 'nowrap', gap: 8, padding: 4 },
-  results: { marginTop: 4, gap: 14 },
-  resultHeader: { ...s.row, justifyContent: 'space-between', alignItems: 'baseline', gap: 6 },
-  cards: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, alignItems: 'stretch' },
-  cardColumn: { flexGrow: 1, flexShrink: 1, flexBasis: 310, minWidth: 0 },
-  cardColumnMedium: { maxWidth: '49%' },
-  cardColumnWide: { flexBasis: 300, maxWidth: '33%' },
-  expression: { flex: 1, padding: 16, borderRadius: 18, borderBottomWidth: 3, gap: 13 },
-  summary: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
+  results: { marginTop: 8, gap: 16 },
+  resultHeader: { ...s.row, justifyContent: 'space-between', alignItems: 'baseline', gap: 8 },
+  count: { ...s.muted, ...tokens.typography.caption, fontVariant: ['tabular-nums'] },
+  cards: { flexDirection: 'row', flexWrap: 'wrap', gap: cardGap, alignItems: 'stretch' },
+  expression: { flex: 1, padding: 16, gap: 12 },
+  summary: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   definition: { flex: 1, minWidth: 0, gap: 4 },
-  categoryLabel: { color: colors.muted, fontSize: 12, lineHeight: 17, fontWeight: '700' },
-  target: { ...s.heading, fontSize: 22, lineHeight: 26 },
-  meaning: { color: colors.ink, fontSize: 16, lineHeight: 22 },
-  thumbnail: { width: 80, height: 74, borderRadius: 10, backgroundColor: colors.sand },
-  example: { paddingVertical: 8, paddingLeft: 10, paddingRight: 8, borderLeftWidth: 3, borderColor: colors.yellow, backgroundColor: colors.paper, borderRadius: 5, gap: 3 },
-  exampleFrench: { ...s.body, fontSize: 15, lineHeight: 22, fontWeight: '600' },
+  categoryLabel: { ...tokens.typography.caption, color: colors.muted },
+  target: { ...s.heading, fontSize: 22, lineHeight: 28 },
+  meaning: { ...s.body, fontSize: 16, lineHeight: 24 },
+  thumbnail: { width: 72, height: 72, borderRadius: tokens.radius.sm, backgroundColor: colors.sand },
+  example: { paddingVertical: 8, paddingLeft: 12, borderLeftWidth: 1, borderColor: colors.inputBorder, gap: 4 },
+  exampleFrench: { ...s.body, fontSize: 16, lineHeight: 24, fontWeight: '500' },
   actions: { ...s.row, marginTop: 'auto', justifyContent: 'space-between', gap: 8 },
-  tags: { ...s.row, gap: 5, flexShrink: 1 },
-  tag: { ...s.badgeText, backgroundColor: colors.sand, paddingHorizontal: 8, paddingVertical: 5, borderRadius: 6 },
-  slangTag: { backgroundColor: colors.goldTint },
-  vulgarTag: { backgroundColor: colors.softDanger, color: colors.danger },
-  more: { alignItems: 'center', gap: 6, marginTop: 4 },
+  tags: { ...s.row, gap: 8, flexShrink: 1 },
+  tag: { ...tokens.typography.caption, color: colors.muted },
+  vulgarTag: { color: colors.danger },
+  more: { alignItems: 'center', gap: 8, marginTop: 4 },
 });

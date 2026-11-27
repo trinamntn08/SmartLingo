@@ -65,26 +65,30 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
 
 export function OtherFrenchCourses({ courses }: { courses: readonly CourseLaunchProps[] }) {
   if (!courses.length) return null;
-  return <View style={s.row} accessibilityLabel="More French courses">
-    {courses.map(({ course, href, onOpen, disabled, loading }) =>
-      <Button key={course.id} compact icon="book" href={href} onPress={onOpen} disabled={loading || disabled}>
-        {course.title}
-      </Button>)}
+  return <View style={launch.moreCourses}>
+    <Text accessibilityRole="header" aria-level={2} style={launch.courseTitle}>More French courses</Text>
+    <View style={s.row}>
+      {courses.map(({ course, href, onOpen, disabled, loading }) =>
+        <Button key={course.id} compact href={href} onPress={onOpen} disabled={loading || disabled} trailingIcon="arrow-right">
+          {course.title}
+        </Button>)}
+    </View>
   </View>;
 }
 
 const launch = StyleSheet.create({
-  regular: { padding: 20, borderTopWidth: 3, borderTopColor: colors.yellow, gap: 8 },
-  regularCompact: { padding: 16, gap: 6 },
-  featured: { flexGrow: 1, justifyContent: 'center', padding: 24, backgroundColor: colors.goldTint, borderBottomWidth: 3, gap: 18 },
-  featuredCompact: { padding: 16, gap: 14 },
-  copy: { minWidth: 0, gap: 8 },
-  copyCompact: { gap: 6 },
-  courseTitle: { ...designTokens.typography.smallLabel, color: colors.primary, fontWeight: '700' },
-  lessonTitle: { fontSize: 22, lineHeight: 29 },
-  featuredTitle: { fontSize: 34, lineHeight: 40 },
-  featuredTitleCompact: { fontSize: 27, lineHeight: 33 },
-  outcome: { fontSize: 16, lineHeight: 25 },
+  regular: { padding: 20, gap: 12 },
+  regularCompact: { padding: 16 },
+  featured: { flexGrow: 1, justifyContent: 'center', padding: 32, borderRadius: 0, borderWidth: 0, borderLeftWidth: 4, borderLeftColor: colors.yellow, boxShadow: 'none', gap: 20 },
+  featuredCompact: { padding: 20, gap: 16 },
+  copy: { minWidth: 0, gap: 12 },
+  copyCompact: { gap: 8 },
+  courseTitle: { ...designTokens.typography.smallLabel, color: colors.primary },
+  lessonTitle: { fontSize: 22, lineHeight: 28 },
+  featuredTitle: { fontSize: 36, lineHeight: 44, letterSpacing: -0.9 },
+  featuredTitleCompact: { fontSize: 28, lineHeight: 36, letterSpacing: -0.5 },
+  outcome: { fontSize: 16, lineHeight: 24 },
   note: { ...designTokens.typography.caption, color: colors.muted },
-  regularAction: { marginTop: 4 },
+  regularAction: { alignSelf: 'flex-start' },
+  moreCourses: { gap: 8 },
 });

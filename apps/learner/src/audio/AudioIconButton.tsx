@@ -12,7 +12,7 @@ export function AudioIconButton({ playing, label, stopLabel = 'Stop audio', onPr
     style={({ pressed }) => ({
       alignSelf: 'flex-start', alignItems: 'center', justifyContent: 'center',
       minWidth: designTokens.control.minimumTarget, minHeight: designTokens.control.minimumTarget,
-      borderRadius: designTokens.radius.pill, borderWidth: 2, borderColor: focused ? colors.focusRing : 'transparent',
+      borderRadius: designTokens.radius.sm, borderWidth: 2, borderColor: focused ? colors.focusRing : 'transparent',
       backgroundColor: pressed ? colors.sand : colors.sageTint,
     })}>
     <Icon name={playing ? 'stop' : 'speaker'} color={colors.audioIcon} size={designTokens.control.audioIconSize} />

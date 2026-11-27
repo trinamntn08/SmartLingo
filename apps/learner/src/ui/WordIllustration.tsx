@@ -18,7 +18,7 @@ export function WordIllustration({ entry, size = 230 }: { entry: Vocabulary; siz
   }
   const visual = getWordVisual(entry);
   if (visual) {
-    return <Image accessibilityRole="img" accessibilityLabel={visual.alt} source={{ uri: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(visual.svg)}` }} style={{ width: size, aspectRatio: 16 / 10, maxWidth: '100%', alignSelf: 'center', borderRadius: 12, backgroundColor: colors.skyTint }} resizeMode="contain" />;
+    return <Image accessibilityRole="img" accessibilityLabel={visual.alt} source={{ uri: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(visual.svg)}` }} style={{ width: size, aspectRatio: 16 / 10, maxWidth: '100%', alignSelf: 'center', borderRadius: 12, backgroundColor: colors.soft }} resizeMode="contain" />;
   }
   if (entry.picture !== 'context') {
     return <Illustration picture={entry.picture} alt={entry.pictureAlt} size={size} />;

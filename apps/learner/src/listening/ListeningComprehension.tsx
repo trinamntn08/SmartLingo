@@ -77,7 +77,7 @@ export function ListeningComprehension({ lessons, onBrowse, active = true, headi
 
   return <View testID="listening-comprehension" style={layout.page}>
     <View style={layout.pageHeader}>
-      <Text nativeID={headingId} accessibilityRole="header" style={[s.title, layout.destinationHeading, compact && s.compactTitle]}>
+      <Text nativeID={headingId} accessibilityRole="header" aria-level={1} style={[s.title, layout.destinationHeading, compact && s.compactTitle]}>
         Listening
       </Text>
       {onBrowse && <Button compact quiet label="Browse videos & audio" icon={compact ? undefined : 'headphones'} onPress={onBrowse}>
@@ -92,7 +92,7 @@ export function ListeningComprehension({ lessons, onBrowse, active = true, headi
     </View>}
     {lesson && question ? <>
       <View style={layout.lessonRow}>
-        <Text style={[s.heading, layout.lessonTitle]}>{lesson.title}</Text>
+        <Text accessibilityRole="header" aria-level={2} style={[s.heading, layout.lessonTitle]}>{lesson.title}</Text>
         {available.length > 1 && <Button compact quiet label="Change lesson" trailingIcon="chevron-down" expanded={choosing}
           controls={choosing ? pickerId : undefined} onPress={() => choosing ? closeChooser() : navigate({ ...playerRoute, chooser: true })}>
           {compact ? 'Change' : 'Change lesson'}
@@ -135,11 +135,11 @@ function LessonPicker({ id, lessons, selected, onChoose, compact }: {
 }
 
 const layout = StyleSheet.create({
-  page: { alignSelf: 'center', width: '100%', maxWidth: 760, minWidth: 0, gap: 12 },
+  page: { alignSelf: 'center', width: '100%', maxWidth: 840, minWidth: 0, gap: 16 },
   pageHeader: { ...s.row, justifyContent: 'space-between', columnGap: 16, rowGap: 0 },
   destinationHeading: { outlineWidth: 0 },
   lessonRow: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 0 },
-  lessonTitle: { flex: 1, minWidth: 0, fontSize: 20, lineHeight: 26, letterSpacing: -0.3 },
-  picker: { padding: 12, gap: 9 },
-  pickerRows: { padding: 4, gap: 6 },
+  lessonTitle: { flex: 1, minWidth: 0, fontSize: 20, lineHeight: 28, letterSpacing: -0.3 },
+  picker: { padding: 12, gap: 8 },
+  pickerRows: { padding: 4, gap: 4 },
 });

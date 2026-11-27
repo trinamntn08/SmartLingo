@@ -1,8 +1,7 @@
-import { ActivityIndicator, Text, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { LearningReport } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
-import { Icon } from '../ui/Icon';
 import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 export type ReportState = {
@@ -23,59 +22,72 @@ export function ReportStatus({ state }: { state: ReportState }) {
 }
 
 export function ReportMetrics({ report }: { report: LearningReport }) {
-  const compact = useWindowDimensions().width < 600;
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const metrics = [
-    { id: 'lessons', icon: 'book', color: colors.skyTint, value: report.completedLessons, total: report.totalLessons, title: 'Lessons completed', detail: 'Saved lesson sessions' },
-    { id: 'explored', icon: 'globe', color: colors.sageTint, value: report.exploredWords, total: report.totalWords, title: 'Words explored', detail: 'Studied, not a mastery score' },
-    { id: 'saved', icon: 'bookmark', color: colors.goldTint, value: report.savedWords, total: null, title: 'Words saved', detail: 'In your personal notebook' },
-    { id: 'days', icon: 'calendar', color: colors.lilacTint, value: report.completedStudyDays, total: report.totalStudyDays, title: 'Course lessons completed', detail: 'At your own pace' },
+    { id: 'lessons', value: report.completedLessons, total: report.totalLessons, title: 'Lessons completed' },
+    { id: 'explored', value: report.exploredWords, total: report.totalWords, title: 'Words explored' },
+    { id: 'saved', value: report.savedWords, total: null, title: 'Words saved' },
+    { id: 'days', value: report.completedStudyDays, total: report.totalStudyDays, title: 'Course lessons completed' },
   ] as const;
-  return <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
-    {metrics.map(metric => <View key={metric.id} testID={`report-${metric.id}`} style={[t.panel, {
-      flexGrow: 1, flexShrink: 1, flexBasis: compact ? '45%' : 190, minWidth: 0, padding: compact ? 16 : 22, gap: compact ? 10 : 16,
-    }]}>
-      <View style={[t.icon, { backgroundColor: metric.color }, compact && { width: 34, height: 34, borderRadius: 10 }]}><Icon name={metric.icon} size={compact ? 20 : 23} /></View>
-      <Text style={[t.number, compact && { fontSize: 32, lineHeight: 42 }]}>{metric.value}{metric.total !== null && <Text style={{ fontSize: compact ? 16 : 21, lineHeight: compact ? 23 : 30, color: colors.muted, fontWeight: '400', letterSpacing: 0 }}> / {metric.total}</Text>}</Text>
-      <View style={t.stack}><Text style={[s.body, { ...(compact ? designTokens.typography.label : designTokens.typography.button), textAlign: 'left' }]}>{metric.title}</Text>{!compact && <Text style={t.detail}>{metric.detail}</Text>}</View>
+  return <View style={[t.panel, reportStyles.metrics]}>
+    {metrics.map((metric, index) => <View key={metric.id} testID={`report-${metric.id}`} style={[reportStyles.metric,
+      compact && reportStyles.compactMetric, index % (compact ? 2 : 4) !== 0 && reportStyles.metricDivider,
+      compact && index >= 2 && reportStyles.metricRowDivider]}>
+      <Text style={t.detail}>{metric.title}</Text>
+      <Text style={[t.number, reportStyles.metricValue]}>{metric.value}{metric.total !== null && <Text style={reportStyles.total}> / {metric.total}</Text>}</Text>
     </View>)}
   </View>;
 }
 
 export function WeeklyActivity({ report }: { report: LearningReport }) {
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const maximum = Math.max(1, ...report.week.map(day => day.actions));
-  return <View testID="report-week" style={[t.panel, { minWidth: 0, gap: 18 }]}>
-    <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
-      <Text accessibilityRole="header" style={s.heading}>Your week in small steps</Text>
-      <Text style={t.label}>Mon – Sun</Text>
+  const plotHeight = compact ? 128 : 176;
+  return <View testID="report-week" style={[t.panel, compact && reportStyles.compactPanel]}>
+    <View style={t.panelHeader}>
+      <Text accessibilityRole="header" style={t.sectionTitle}>Weekly activity</Text>
+      <Text style={t.detail}>{report.weekStart} to {report.weekEnd}</Text>
     </View>
-    <View style={[s.row, { gap: 28 }]}><View style={t.stack}><Text style={t.number}>{report.actionsThisWeek}</Text><Text style={t.detail}>saved practice actions</Text></View><View style={t.stack}><Text style={t.number}>{report.activeDaysThisWeek}</Text><Text style={t.detail}>active {report.activeDaysThisWeek === 1 ? 'day' : 'days'}</Text></View></View>
-    <View style={{ flexDirection: 'row', gap: 7, alignItems: 'flex-end', minHeight: 210, paddingTop: 8, borderBottomWidth: 1, borderColor: colors.line, paddingBottom: 14 }}>
-      {report.week.map(day => <View key={day.date} accessible accessibilityLabel={`${day.label}, ${day.date}: ${day.actions} actions${day.future ? ', upcoming' : ''}${day.today ? ', today' : ''}`}
-        style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 8 }}>
-        <Text style={[t.detail, designTokens.typography.caption]}>{day.future ? '–' : day.actions}</Text>
-        <View style={{ height: 142, width: '100%', maxWidth: 48, borderRadius: 8, backgroundColor: colors.paper, justifyContent: 'flex-end', overflow: 'hidden' }}>
-          <View style={{ height: day.actions ? Math.max(8, day.actions / maximum * 142) : 3, borderRadius: 8,
-            backgroundColor: day.future ? colors.line : day.today ? '#145448' : day.actions ? colors.yellow : colors.line }} />
+    <View style={s.row}>
+      <Text style={reportStyles.weekSummary}>{report.actionsThisWeek} saved practice {report.actionsThisWeek === 1 ? 'action' : 'actions'}</Text>
+      <Text style={t.detail}>{report.activeDaysThisWeek} active {report.activeDaysThisWeek === 1 ? 'day' : 'days'}</Text>
+    </View>
+    <View style={reportStyles.chart}>
+      <View aria-hidden style={[reportStyles.grid, { height: plotHeight }]}>
+        {[0, 1, 2, 3].map(line => <View key={line} style={s.divider} />)}
+      </View>
+      {report.week.map(day => <View key={day.date} accessible
+        accessibilityLabel={`${day.label}, ${day.date}: ${day.actions} actions${day.future ? ', upcoming' : ''}${day.today ? ', today' : ''}`}
+        style={reportStyles.chartColumn}>
+        <Text style={reportStyles.chartCount}>{day.future ? '–' : day.actions}</Text>
+        <View aria-hidden style={[reportStyles.barSpace, { height: plotHeight }]}>
+          {!!day.actions && <View style={[reportStyles.bar, day.today && reportStyles.currentBar,
+            { height: Math.max(4, day.actions / maximum * plotHeight) }]} />}
         </View>
-        <Text style={[s.muted, { ...designTokens.typography.caption, fontWeight: day.today ? '800' : '400', color: day.today ? colors.ink : colors.muted }]}>{day.label.slice(0, 3)}</Text>
+        <Text style={[t.detail, reportStyles.dayLabel, day.today && reportStyles.currentDay]}>{day.label.slice(0, 3)}</Text>
       </View>)}
     </View>
-    <Text style={[s.muted, designTokens.typography.smallLabel]}>{report.weekStart} to {report.weekEnd} · {report.timeZone}</Text>
-    <Text style={s.muted}>{report.actionsThisWeek === 0 ? 'A quiet week is a fresh start. Your next small step is ready whenever you are.' : 'Every saved practice action is a small step. Take breaks and return when it suits you.'}</Text>
+    <Text style={t.detail}>{report.timeZone}</Text>
   </View>;
 }
 
-export function WeeklyRhythm({ state }: { state: ReportState }) {
-  const report = state.report;
-  return <View style={[s.card, { backgroundColor: '#FFFEF6', flexGrow: 1, flexShrink: 1, flexBasis: 230, maxWidth: 310, gap: 12, padding: 22 }]}>
-    <Text accessible={false} style={{ fontSize: 29, color: colors.ink }}>☀</Text>
-    <Text style={[s.heading, designTokens.typography.compactHeading]}>A rhythm that fits you</Text>
-    {report && !state.error ? <><Text style={s.body}>{report.activeDaysThisWeek} active {report.activeDaysThisWeek === 1 ? 'day' : 'days'} this week</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 5 }}>{report.week.map(day => <View key={day.date} style={{ alignItems: 'center', gap: 7 }}>
-        <View style={{ width: 23, height: 23, borderRadius: 12, backgroundColor: day.actions ? colors.yellow : colors.sand, alignItems: 'center', justifyContent: 'center', borderWidth: day.today ? 1 : 0, borderColor: colors.ink }}>
-          <Text accessible={false} style={{ fontSize: 12, color: colors.ink }}>{day.actions ? '✓' : '·'}</Text>
-        </View><Text style={[s.muted, { fontSize: 11 }]}>{day.label.slice(0, 1)}</Text>
-      </View>)}</View></> : <Text style={s.muted}>{state.error ? 'Your weekly rhythm is unavailable for now.' : 'Opening your saved weekly activity…'}</Text>}
-    <Text style={[s.muted, designTokens.typography.smallLabel]}>A little room to learn, whenever life allows.</Text>
-  </View>;
-}
+const reportStyles = StyleSheet.create({
+  metrics: { flexDirection: 'row', flexWrap: 'wrap', padding: 0, gap: 0 },
+  compactPanel: { padding: 16 },
+  metric: { alignSelf: 'stretch', flexBasis: '25%', minWidth: 0, padding: 20, gap: 4 },
+  compactMetric: { flexBasis: '50%', padding: 16 },
+  metricDivider: { borderLeftWidth: 1, borderColor: colors.line },
+  metricRowDivider: { borderTopWidth: 1, borderColor: colors.line },
+  metricValue: { fontSize: 28, lineHeight: 36, letterSpacing: 0 },
+  total: { ...designTokens.typography.caption, color: colors.muted },
+  weekSummary: { ...designTokens.typography.label, color: colors.ink, fontVariant: ['tabular-nums'] },
+  chart: { flexDirection: 'row', gap: 4, position: 'relative' },
+  grid: { position: 'absolute', top: 28, left: 0, right: 0, justifyContent: 'space-between' },
+  chartColumn: { flex: 1, minWidth: 0, alignItems: 'center', gap: 8 },
+  chartCount: { ...designTokens.typography.caption, color: colors.muted, lineHeight: 20, fontVariant: ['tabular-nums'] },
+  barSpace: { width: '70%', maxWidth: 48, justifyContent: 'flex-end' },
+  bar: { backgroundColor: colors.inputBorder, borderTopLeftRadius: 4, borderTopRightRadius: 4 },
+  currentBar: { backgroundColor: colors.yellow },
+  dayLabel: { textAlign: 'center', paddingBottom: 4, borderBottomWidth: 2, borderBottomColor: 'transparent' },
+  currentDay: { color: colors.ink, fontWeight: '600', borderBottomColor: colors.yellow },
+});

@@ -183,14 +183,14 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       <Button compact quiet icon="arrow-left" href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
       <Text style={[s.muted, layout.meta]}>{lessonMeta}</Text>
     </View>}
-    <View style={[s.card, layout.intro, compact && layout.compactIntro, compactCourse && layout.compactCourseIntro]}>
+    <View style={[layout.intro, compact && layout.compactIntro]}>
       {sequence && <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
         <Text style={s.eyebrow}>Lesson {sequence.position} of {sequence.total}</Text>
         {previousLesson && <Button compact quiet icon="arrow-left" label={`Previous lesson: ${previousLesson.title}`}
           href={previousLesson.href} onPress={previousLesson.onOpen} disabled={exitBlocked}>Previous lesson</Button>}
       </View>}
       {courseSession && !compact && <Text style={s.eyebrow}>{lesson.level === 'foundation' ? 'Foundations' : lesson.level}</Text>}
-      <Text nativeID={titleId} accessibilityRole="header"
+      <Text nativeID={titleId} accessibilityRole="header" aria-level={1}
         style={[s.title, compact && s.compactTitle, compactCourse && layout.compactCourseTitle]}>{lesson.subtitle}</Text>
       <Text style={[s.body, layout.outcome, compact && s.muted, compactCourse && layout.compactCourseOutcome]}>{lesson.outcome}</Text>
       {timeEstimate && <Text style={[s.muted, layout.meta]}>{timeEstimate}</Text>}
@@ -213,8 +213,8 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         </StudyActions>
       </>}
       {stage === 'vocabulary' && <>
-        <LessonWords lesson={lesson} model={model} compact={compact} />
-        <StudyActions>
+        <LessonWords lesson={lesson} model={model} />
+        <StudyActions sticky={!compact}>
           <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
           <Button primary={!listeningQuestion} quiet={!!listeningQuestion} disabled={exerciseBlocked && !browseOnly}
             onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>
@@ -296,7 +296,7 @@ function LessonStep({ step, number, label, text, current, compact, disabled, hre
     onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
     style={({ pressed }) => [layout.segment, compact && layout.compactSegment, hovered && !disabled && layout.hoverSegment,
       current && layout.activeSegment, focused && layout.focusSegment, pressed && layout.pressedSegment, disabled && layout.disabledSegment]}>
-    <View aria-hidden style={[layout.stepNumber, current && layout.activeNumber]}>
+    <View aria-hidden style={layout.stepNumber}>
       <Text style={[layout.numberText, current && layout.activeNumberText]}>{number}</Text>
     </View>
     <Text style={[layout.stepLabel, compact && layout.compactLabel, current && layout.activeLabel]}>{text}</Text>
@@ -304,41 +304,38 @@ function LessonStep({ step, number, label, text, current, compact, disabled, hre
 }
 
 const layout = StyleSheet.create({
-  page: { width: '100%', maxWidth: 900, alignSelf: 'center', minWidth: 0, gap: 16 },
-  compactPage: { gap: 12 },
+  page: { width: '100%', maxWidth: 960, alignSelf: 'center', minWidth: 0, gap: 24 },
+  compactPage: { gap: 16 },
   breadcrumb: { gap: 8 },
   meta: { flexShrink: 1, minWidth: 0 },
-  intro: { gap: 8 },
-  compactIntro: { padding: 12, gap: 6 },
-  compactCourseIntro: { padding: 10, gap: 4 },
-  compactCourseTitle: { fontSize: 27, lineHeight: 33 },
-  compactCourseOutcome: { fontSize: 15, lineHeight: 21 },
+  intro: { gap: 8, minWidth: 0, paddingTop: 4 },
+  compactIntro: { gap: 4 },
+  compactCourseTitle: { fontSize: 28, lineHeight: 36 },
+  compactCourseOutcome: { fontSize: 16, lineHeight: 24 },
   outcome: { color: colors.muted, maxWidth: 690 },
-  stage: { minWidth: 0, gap: 14 },
+  stage: { minWidth: 0, gap: 16 },
   stageHeading: { alignSelf: 'flex-start', outlineColor: colors.focusRing, outlineOffset: 2 },
   actions: { justifyContent: 'flex-end', gap: 8 },
-  progress: { gap: 8, marginTop: 4, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
-  compactProgress: { gap: 6, marginTop: 2, paddingTop: 8 },
+  progress: { gap: 8, marginTop: 8 },
+  compactProgress: { marginTop: 4 },
   progressLabels: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', columnGap: 12, rowGap: 2 },
-  stepCount: { ...tokens.typography.smallLabel, color: colors.ink },
-  recorded: { ...tokens.typography.caption, color: colors.muted },
+  stepCount: { ...tokens.typography.smallLabel, color: colors.ink, fontVariant: ['tabular-nums'] },
+  recorded: { ...tokens.typography.caption, color: colors.muted, fontVariant: ['tabular-nums'] },
   progressTrack: { height: 4 },
-  steps: { flexDirection: 'row', gap: 4, padding: 4, borderRadius: tokens.radius.md, backgroundColor: colors.paper },
+  steps: { flexDirection: 'row', gap: 4, borderBottomWidth: 1, borderColor: colors.line },
   segment: { flex: 1, minWidth: 0, minHeight: tokens.control.minimumTarget, flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'center', gap: 8, paddingHorizontal: 6, paddingVertical: 6,
-    borderRadius: tokens.radius.sm, borderWidth: 1, borderColor: 'transparent' },
-  compactSegment: { flexDirection: 'column', gap: 3, paddingHorizontal: 2, paddingVertical: 4 },
-  hoverSegment: { backgroundColor: colors.card, borderColor: colors.line },
-  activeSegment: { backgroundColor: colors.goldTint, borderColor: colors.yellow },
+    justifyContent: 'center', gap: 8, paddingHorizontal: 4, paddingVertical: 8,
+    borderTopLeftRadius: tokens.radius.sm, borderTopRightRadius: tokens.radius.sm, borderBottomWidth: 3, borderBottomColor: 'transparent' },
+  compactSegment: { flexDirection: 'column', gap: 0, paddingHorizontal: 2, paddingVertical: 4 },
+  hoverSegment: { backgroundColor: colors.sand },
+  activeSegment: { backgroundColor: colors.card, borderBottomColor: colors.yellow },
   focusSegment: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 1 },
   pressedSegment: { opacity: tokens.opacity.pressed },
   disabledSegment: { opacity: tokens.opacity.disabled },
-  stepNumber: { width: 22, height: 22, flexShrink: 0, alignItems: 'center', justifyContent: 'center',
-    borderRadius: 11, backgroundColor: colors.green },
-  activeNumber: { backgroundColor: colors.primary },
-  numberText: { ...tokens.typography.smallLabel, fontSize: 12, lineHeight: 16, color: colors.primary },
-  activeNumberText: { color: colors.onPrimary },
-  stepLabel: { ...tokens.typography.smallLabel, flexShrink: 1, fontSize: 13, lineHeight: 17, textAlign: 'center', color: colors.muted },
-  compactLabel: { fontSize: 11, lineHeight: 14 },
-  activeLabel: { color: colors.ink, fontWeight: '700' },
+  stepNumber: { minWidth: 12, flexShrink: 0, alignItems: 'center', justifyContent: 'center' },
+  numberText: { ...tokens.typography.caption, fontSize: 12, lineHeight: 16, color: colors.muted, fontVariant: ['tabular-nums'] },
+  activeNumberText: { color: colors.ink },
+  stepLabel: { ...tokens.typography.smallLabel, flexShrink: 1, fontSize: 13, lineHeight: 16, textAlign: 'center', color: colors.muted },
+  compactLabel: { fontSize: 12 },
+  activeLabel: { color: colors.ink, fontWeight: '600' },
 });

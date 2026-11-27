@@ -46,14 +46,14 @@ function ListeningLibrary({ language = 'fr-FR', onClose, headingId }: Props) {
   return <View testID="listening-resources" style={layout.page}>
     <View style={layout.header}>
       <View style={[layout.headerCopy, compact && layout.wide]}>
-        <Text nativeID={headingId} accessibilityRole="header" style={[s.title, layout.destinationHeading, compact && s.compactTitle]}>{languageNames[language]} listening library</Text>
+        <Text nativeID={headingId} accessibilityRole="header" aria-level={1} style={[s.title, layout.destinationHeading, compact && s.compactTitle]}>{languageNames[language]} listening library</Text>
         <Text style={s.muted}>Playback opens on an external provider and requires internet.</Text>
       </View>
       {onClose && <Button compact quiet icon="arrow-left" onPress={onClose}>Back to practice</Button>}
     </View>
     {!compact && filters}
     <View style={layout.resultBar}>
-      <Text testID="listening-count" accessibilityLiveRegion="polite" style={s.muted}>
+      <Text testID="listening-count" accessibilityLiveRegion="polite" style={layout.metadataText}>
         {filtered.length} {filtered.length === 1 ? 'resource' : 'resources'}
       </Text>
       <View style={layout.actions}>
@@ -63,7 +63,8 @@ function ListeningLibrary({ language = 'fr-FR', onClose, headingId }: Props) {
       </View>
     </View>
     {compact && filters}
-    {filtered.length ? <View style={layout.resourceList}>{filtered.map(resource => <ResourceCard key={resource.id} resource={resource} />)}</View>
+    {filtered.length ? <View style={layout.resourceList}>{filtered.map((resource, index) =>
+      <ResourceCard key={resource.id} resource={resource} divided={index > 0} />)}</View>
       : <View style={layout.empty}>
         <Text accessibilityRole="header" style={s.heading}>No listening resources match</Text>
         <Button onPress={reset}>Show all listening resources</Button>
@@ -72,18 +73,14 @@ function ListeningLibrary({ language = 'fr-FR', onClose, headingId }: Props) {
   </View>;
 }
 
-function ResourceCard({ resource }: { resource: ListeningResource }) {
+function ResourceCard({ resource, divided }: { resource: ListeningResource; divided: boolean }) {
   const contentId = useId();
   const [expanded, setExpanded] = useVisitState(`listening-library-notes:${resource.id}`, false);
-  return <View testID={`listening-resource-${resource.id}`} style={layout.card}>
+  return <View testID={`listening-resource-${resource.id}`} style={[layout.card, divided && layout.rule]}>
     <View style={layout.resourceRow}>
       <View style={layout.resourceCopy}>
-        <Text accessibilityRole="header" style={layout.resourceTitle}>{resource.title}</Text>
-        <View style={layout.metadata}>
-          <Text style={s.muted}>{resource.provider}</Text>
-          <Text style={[s.badgeText, layout.format]}>{resource.format}</Text>
-          <Text style={[s.badgeText, layout.level]}>{resource.levels.join(' / ')}</Text>
-        </View>
+        <Text accessibilityRole="header" aria-level={2} style={layout.resourceTitle}>{resource.title}</Text>
+        <Text style={layout.metadataText}>{resource.provider} · {resource.format} · {resource.levels.join(' / ')}</Text>
       </View>
       <View style={layout.actions}>
         <Button compact quiet label="Listening notes" expanded={expanded} controls={contentId} onPress={() => setExpanded(value => !value)}>Listening notes {expanded ? '−' : '+'}</Button>
@@ -117,14 +114,14 @@ function ResourceLink({ resource }: { resource: ListeningResource }) {
   }
   if (Platform.OS === 'web') return <a href={resource.url} target="_blank" rel="noopener noreferrer" aria-label={label}
     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-    style={{ color: colors.onPrimary, backgroundColor: colors.primary, borderRadius: tokens.radius.pill, padding: '8px 14px',
+    style={{ color: colors.ink, backgroundColor: colors.card, border: `1px solid ${colors.line}`, borderRadius: tokens.radius.sm, padding: '8px 12px',
       minHeight: tokens.control.minimumTarget, boxSizing: 'border-box', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
       fontFamily: tokens.typography.button.fontFamily, fontWeight: 600, fontSize: 15, lineHeight: '22px', textDecoration: 'none',
       outline: focused ? `${tokens.focus.outlineWidth}px solid ${colors.focusRing}` : undefined, outlineOffset: tokens.focus.outlineOffset }}>
     {action} ↗
   </a>;
   return <View style={layout.nativeLink}>
-    <Button primary compact label={label} onPress={() => void open()}>{action} ↗</Button>
+    <Button compact label={label} onPress={() => void open()}>{action} ↗</Button>
     {error && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>The resource could not be opened. Check your connection and try again.</Text>}
   </View>;
 }
@@ -140,19 +137,18 @@ const layout = StyleSheet.create({
   filterGroup: { flexGrow: 1, flexShrink: 1, flexBasis: 244, minWidth: 0, gap: tokens.space.xs },
   filterOptions: { flexDirection: 'row', flexWrap: 'wrap', gap: tokens.space.xs },
   resultBar: { flexDirection: 'row', flexWrap: 'wrap', gap: tokens.space.sm, alignItems: 'center', justifyContent: 'space-between' },
-  resourceList: { gap: tokens.space.md },
-  card: { minWidth: 0, gap: tokens.space.md, padding: tokens.space.lg, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, borderRadius: tokens.radius.lg },
+  resourceList: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, borderRadius: tokens.radius.card },
+  card: { minWidth: 0, gap: tokens.space.md, padding: tokens.space.lg },
+  rule: { borderTopWidth: 1, borderColor: colors.line },
   resourceRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: tokens.space.sm },
   resourceCopy: { flexGrow: 1, flexShrink: 1, flexBasis: 275, minWidth: 0, gap: tokens.space.xs },
-  resourceTitle: { ...tokens.typography.heading, color: colors.ink, fontSize: 20, lineHeight: 26, letterSpacing: -0.3 },
-  metadata: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: tokens.space.sm },
-  format: { backgroundColor: colors.goldTint, borderRadius: tokens.radius.sm, paddingHorizontal: tokens.space.sm, paddingVertical: 2 },
-  level: { backgroundColor: colors.sand, borderRadius: tokens.radius.sm, paddingHorizontal: tokens.space.sm, paddingVertical: 2 },
+  resourceTitle: { ...tokens.typography.heading, color: colors.ink, fontSize: 20, lineHeight: 28, letterSpacing: -0.3 },
+  metadataText: { ...tokens.typography.caption, color: colors.muted, fontVariant: ['tabular-nums'] },
   actions: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: tokens.space.xs, minWidth: 0, maxWidth: '100%' },
   notes: { minWidth: 0, paddingTop: tokens.space.md, gap: tokens.space.md, borderTopWidth: 1, borderColor: colors.line },
   noteColumns: { flexDirection: 'row', flexWrap: 'wrap', gap: tokens.space.md },
   noteColumn: { flexGrow: 1, flexShrink: 1, flexBasis: 220, minWidth: 0, gap: tokens.space.xs },
-  practice: { padding: tokens.space.md, gap: tokens.space.xs, backgroundColor: colors.sageTint, borderRadius: tokens.radius.md },
+  practice: { padding: tokens.space.md, gap: tokens.space.xs, backgroundColor: colors.paper, borderRadius: tokens.radius.md },
   hidden: { display: 'none' },
   nativeLink: { minWidth: 0, flexShrink: 1, alignItems: 'flex-start', gap: tokens.space.xs },
   empty: { padding: tokens.space.xl, gap: tokens.space.md, alignItems: 'flex-start', backgroundColor: colors.sand, borderRadius: tokens.radius.lg },

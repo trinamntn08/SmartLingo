@@ -5,8 +5,10 @@ import { useNavigation } from '../app/WebNavigation';
 import { localContentApi } from '../content/api';
 import { Badge, Button } from '../ui/controls';
 import { BrandHome } from '../ui/BrandHome';
+import { Icon } from '../ui/Icon';
 import { LessonScreen } from '../ui/LessonScreen';
-import { colors, styles as s } from '../ui/theme';
+import { ScreenHeader } from '../ui/ScreenHeader';
+import { colors, designTokens, styles as s } from '../ui/theme';
 import { DraftFields } from './DraftFields';
 import { usePreviewLearning } from './usePreviewLearning';
 
@@ -170,11 +172,12 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
     }
   }
   return <View style={s.app}>
-    <View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}><View style={[s.row, { maxWidth: '100%' }]}><BrandHome onPress={() => { if (!busy) onHome(); }} /><Badge>LOCAL EDITOR</Badge></View><Button disabled={busy} onPress={onExit}>← Return to learning</Button></View></View>
+    <View style={[s.header, width < 600 && { paddingHorizontal: 16 }]}><View style={s.headerInner}>
+      <BrandHome onPress={() => { if (!busy) onHome(); }} />
+      <Button compact quiet icon="arrow-left" disabled={busy} onPress={onExit}>Return to learning</Button>
+    </View></View>
     <ScrollView ref={scroll} keyboardShouldPersistTaps="handled"><View style={[s.main, { maxWidth: 1440 }, width < 600 && { padding: 16, paddingTop: 24 }]}>
-      <View style={{ gap: 10 }}><Text style={s.eyebrow}>French curriculum workshop</Text><Text accessibilityRole="header" style={s.title}>Draft. Try. Review.</Text>
-        <Text style={[s.body, { maxWidth: 760 }]}>A quiet workspace for shaping practical French lessons. Save a draft, try its saved revision, then approve publication.</Text>
-      </View>
+      <ScreenHeader title="French curriculum editor" />
       {!!navigation && <View style={s.notice}><Text style={s.heading}>Keep your unsaved edits?</Text><Text style={s.body}>Save this draft first, discard the form to continue, or keep editing. Reloading latest will not merge your text.</Text><View style={s.row}>
         {navigation.kind === 'select' && <Button primary disabled={busy || loading} onPress={() => void saveAndNavigate()}>Save draft and switch</Button>}
         <Button disabled={busy || loading} onPress={discardAndNavigate}>Discard edits and continue</Button><Button disabled={busy} onPress={() => setNavigation(null)}>Keep editing</Button>
@@ -188,25 +191,28 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
       {!loading && !error && !knownLesson && <View style={s.notice}><Text accessibilityRole="alert" style={s.body}>That lesson is unavailable in the local catalogue.</Text><Button onPress={() => navigate({ kind: 'editor' })}>Open the editor catalogue</Button></View>}
       {loading ? <View style={s.card}><ActivityIndicator color={colors.ink} /><Text accessibilityLiveRegion="polite" style={s.body}>Loading local curriculum…</Text></View> : <>
         {!catalogue.length && !error && <View style={s.card}><Text style={s.heading}>No local lessons yet.</Text><Text style={s.body}>The first editor updates existing curriculum. Start the local API with its bundled lesson seeds.</Text><Button onPress={() => void loadLatest()}>Reload catalogue</Button></View>}
-        <View style={{ flexDirection: wide ? 'row' : 'column', gap: 28, alignItems: 'flex-start', minWidth: 0 }}>
-        {!!catalogue.length && <View style={{ width: wide ? 270 : '100%', flexShrink: 0, gap: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, padding: 18, borderRadius: 18 }}>
+        <View style={{ flexDirection: wide ? 'row' : 'column', gap: 24, alignItems: 'flex-start', minWidth: 0 }}>
+        {!!catalogue.length && <View style={{ width: wide ? 272 : '100%', flexShrink: 0, gap: 12, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, padding: 16, borderRadius: designTokens.radius.md }}>
           <View style={[s.row, { justifyContent: 'space-between' }]}><Text style={s.heading}>Lesson catalogue</Text><Badge>{catalogue.length}</Badge></View>
           <TextInput accessibilityLabel="Search curriculum" placeholder="Find a topic or lesson" value={search} onChangeText={setSearch} style={s.input} />
           {!wide && <Button expanded={catalogueOpen || !!search} onPress={() => setCatalogueOpen(value => !value)}>{catalogueOpen ? 'Hide lesson catalogue' : 'Browse lesson catalogue'}</Button>}
           {(wide || catalogueOpen || !!search) && <ScrollView style={{ maxHeight: wide ? 660 : 260 }} nestedScrollEnabled keyboardShouldPersistTaps="handled">
-            <View style={{ gap: 8 }}>{catalogue.filter(lesson => matchesLesson(lesson, search)).map(lesson =>
+            <View>{catalogue.filter(lesson => matchesLesson(lesson, search)).map(lesson =>
               <CatalogueLesson key={lesson.id} lesson={lesson} selected={saved?.id === lesson.id} disabled={busy || saved?.id === lesson.id}
                 onPress={() => requestNavigation({ kind: 'select', lesson })} />)}</View>
           </ScrollView>
           }
           {!catalogue.some(lesson => matchesLesson(lesson, search)) && <Text style={s.muted}>No matching lessons.</Text>}
-          <Text style={s.muted}>French · Local curriculum</Text>
         </View>}
-        {knownLesson && saved && draft && (!requestedId || requestedId === saved.id) && <View style={{ flex: wide ? 1 : undefined, width: wide ? undefined : '100%', minWidth: 0, gap: 22 }}>
-          <View style={[s.card, { gap: 18, padding: width < 600 ? 18 : 24 }]}><View style={s.row}><Badge>{saved.status} · revision {saved.revision}</Badge><Badge>{dirty ? 'Unsaved changes' : 'Form matches saved revision'}</Badge></View><Text style={s.heading}>{saved.title}</Text>
+        {knownLesson && saved && draft && (!requestedId || requestedId === saved.id) && <View style={{ flex: wide ? 1 : undefined, width: wide ? undefined : '100%', minWidth: 0, gap: 24 }}>
+          <View style={[s.card, { padding: width < 600 ? 16 : 24 }]}><View style={s.row}><Badge>{saved.status} · revision {saved.revision}</Badge>{dirty && <Badge>Unsaved changes</Badge>}</View><Text style={s.heading}>{saved.title}</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{[
-              ['01', 'Edit draft', !previewOpen], ['02', 'Try saved revision', previewOpen], ['03', 'Review & publish', reviewed],
-            ].map(([number, title, active]) => <View key={String(number)} style={{ flexGrow: 1, flexBasis: 150, padding: 14, borderRadius: 12, backgroundColor: active ? colors.green : colors.paper, gap: 6 }}><Text style={s.eyebrow}>{number}</Text><Text style={s.body}>{title}</Text></View>)}</View>
+              ['Edit draft', !previewOpen], ['Try saved revision', previewOpen && !reviewed], ['Review & publish', reviewed],
+            ].map(([title, active], index) => <View key={String(title)} aria-current={active ? 'step' : undefined}
+              style={{ flexGrow: 1, flexBasis: 144, flexDirection: 'row', alignItems: 'center', padding: 12, gap: 8, borderBottomWidth: 3,
+                borderBottomColor: active ? colors.yellow : colors.line }}>
+              <Text style={s.eyebrow}>{index + 1}</Text><Text style={[s.body, { flexShrink: 1 }]}>{title}</Text>
+            </View>)}</View>
             <View style={s.row}><Button primary disabled={busy || conflict || (!dirty && saved.status === 'draft')} onPress={() => void saveDraft()}>{busy ? 'Working…' : saved.status === 'published' ? 'Save new draft revision' : 'Save draft revision'}</Button>
               <Button disabled={busy || conflict || dirty || saved.status !== 'draft'} onPress={() => void previewDraft()}>Preview saved revision</Button>
               <Button disabled={busy} onPress={() => requestNavigation({ kind: 'reload' })}>Reload latest revision</Button>
@@ -218,7 +224,10 @@ export function CurriculumEditor({ onExit, onHome }: { onExit: () => void; onHom
           <View style={[s.card, { borderTopWidth: 4, borderTopColor: colors.yellow }]}><Text style={s.eyebrow}>03 · Explicit publication</Text><Text accessibilityRole="header" style={s.heading}>Publication review</Text><Text style={s.body}>Check the French and English for naturalness and accuracy, the accepted exercise answers, picture meaning, level, and media rights. Device speech is synthetic and has not been reviewed.</Text>
             <Text style={s.muted}>{saved.provenance.rights}</Text><Text style={s.muted}>{receipt ? `Preview receipt: revision ${receipt.lesson.revision}. Valid for up to 15 minutes.` : 'Save and preview the current draft to enable review and publication.'}</Text>
             <Pressable accessibilityRole="checkbox" aria-checked={reviewed} aria-disabled={busy || !receipt || dirty} accessibilityState={{ checked: reviewed, disabled: busy || !receipt || dirty }} disabled={busy || !receipt || dirty} onFocus={() => setReviewFocused(true)} onBlur={() => setReviewFocused(false)} onPress={() => setReviewed(!reviewed)} style={({ pressed }) => [s.notice, { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: reviewed ? colors.green : colors.sand, borderWidth: 2, borderColor: reviewFocused ? '#246944' : 'transparent', opacity: pressed ? 0.7 : 1 }]}>
-              <Text style={s.heading}>{reviewed ? '☑' : '☐'}</Text><Text style={[s.body, { flex: 1 }]}>I have reviewed this saved revision for language, answers, suitability, and rights, and approve its local publication.</Text>
+              <View aria-hidden style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center', borderRadius: 4,
+                borderWidth: 1, borderColor: colors.inputBorder, backgroundColor: colors.card }}>
+                {reviewed && <Icon name="check" color={colors.primary} />}
+              </View><Text style={[s.body, { flex: 1 }]}>I have reviewed this saved revision for language, answers, suitability, and rights, and approve its local publication.</Text>
             </Pressable>
             <Button primary disabled={busy || conflict || !receipt || !reviewed || dirty} onPress={() => void publishDraft()}>Publish reviewed revision</Button><Text style={s.muted}>Publication creates a new local revision. Earlier content and learner history are retained.</Text>
           </View>
@@ -234,8 +243,9 @@ function CatalogueLesson({ lesson, selected, disabled, onPress }: { lesson: Less
   const [focused, setFocused] = useState(false);
   return <Pressable accessibilityRole="button" accessibilityLabel={`${lesson.topic} · ${lesson.subtitle}`} aria-selected={selected}
     aria-disabled={disabled} accessibilityState={{ selected, disabled }} disabled={disabled} onPress={onPress}
-    onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} style={({ pressed }) => ({ padding: 14, gap: 6, borderRadius: 12,
-      borderWidth: 1, borderColor: selected ? colors.ink : colors.line, backgroundColor: selected ? colors.green : colors.card,
+    onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} style={({ pressed }) => ({ padding: 12, gap: 4,
+      borderBottomWidth: 1, borderBottomColor: colors.line, borderLeftWidth: 3, borderLeftColor: selected ? colors.yellow : 'transparent',
+      backgroundColor: selected ? colors.paper : colors.card,
       opacity: pressed ? 0.75 : 1, ...(focused ? { outlineColor: colors.ink, outlineWidth: 3, outlineStyle: 'solid', outlineOffset: 2 } : {}) })}>
     <Text style={s.eyebrow}>{lesson.topic}</Text><Text style={s.body}>{lesson.subtitle}</Text>
     <Text style={s.muted}>{lesson.level === 'foundation' ? 'Foundations' : lesson.level} · {lesson.status} · r{lesson.revision}</Text>
@@ -245,7 +255,7 @@ function CatalogueLesson({ lesson, selected, disabled, onPress }: { lesson: Less
 function SavedPreview({ lesson, onClose }: { lesson: Lesson; onClose: () => void }) {
   const model = usePreviewLearning();
   const pictureAnswer = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
-  return <View style={{ gap: 20 }}><View style={[s.notice, { backgroundColor: colors.yellow }]}><Text style={s.heading}>Saved revision {lesson.revision} · temporary practice</Text><Text style={s.body}>This is the real lesson interface. Attempts, word saves, and completion here exist only in this preview and do not touch your learner notebook or progress.</Text></View><LessonScreen lesson={lesson} model={model} onExit={onClose} />
+  return <View style={{ gap: 20 }}><View style={[s.notice, { borderLeftWidth: 4, borderLeftColor: colors.yellow }]}><Text style={s.heading}>Saved revision {lesson.revision} · temporary practice</Text><Text style={s.body}>Preview attempts, word saves and completions are temporary.</Text></View><LessonScreen lesson={lesson} model={model} onExit={onClose} />
     <View style={s.card}><Text accessibilityRole="header" style={s.heading}>Author review details</Text><Text style={s.muted}>Answer keys are shown here for curriculum review. These details are separate from learner practice.</Text>
       <Text style={s.body}>Level: {lesson.level} · Target language: {lesson.language} · Explanation language: {lesson.explanationLanguage}</Text>
       <Text style={s.body}>Estimated duration: {lesson.durationMinutes} minutes</Text>

@@ -38,7 +38,7 @@ for (const language of ['French', 'Japanese'] as const) {
       await expect(page.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
       await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 1 of 2/)).toBeVisible();
       await expect(page.getByTestId(/^kana-row-/)).toHaveCount(0);
-      await button(page, 'Try recognising this row').click();
+      await button(page, 'Recognition practice').click();
       await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 2 of 2/)).toBeVisible();
       await expect(button(page, 'Mark row studied')).toBeDisabled();
     }

@@ -153,9 +153,8 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
       <View style={[layout.playerActions, embedded && layout.embeddedPlayerActions]}>
         <Pressable ref={playerRef} accessibilityRole="button" accessibilityLabel={playLabel}
           onPress={() => void play()} onFocus={() => setPlayFocused(true)} onBlur={() => setPlayFocused(false)}
-          style={({ pressed }) => [layout.play, embedded && layout.embeddedPlay, playFocused && layout.focus,
-            playFocused && layout.inverseFocus, pressed && layout.pressed]}>
-          <Icon name={playing ? 'stop' : 'speaker'} size={embedded ? 21 : 29} />
+          style={({ pressed }) => [layout.play, embedded && layout.embeddedPlay, playFocused && layout.focus, pressed && layout.pressed]}>
+          <Icon name={playing ? 'stop' : 'speaker'} size={18} />
           <Text style={[s.buttonText, layout.playText, embedded && layout.embeddedPlayText,
             embedded && compact && layout.embeddedPlayTextCompact]}>{playLabel}</Text>
         </Pressable>
@@ -163,8 +162,7 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
           aria-controls={transcriptVisible ? transcriptId : undefined} onPress={() => setAttempt(previous => ({
             ...previous, transcriptOverride: !transcriptVisible, usedTranscript: previous.usedTranscript || (!transcriptVisible && !passed),
           }))} onFocus={() => setTranscriptFocused(true)} onBlur={() => setTranscriptFocused(false)}
-          style={({ pressed }) => [layout.transcriptAction, embedded && layout.embeddedTranscriptAction, transcriptFocused && layout.focus,
-            transcriptFocused && layout.inverseFocus, pressed && layout.pressed]}>
+          style={({ pressed }) => [layout.transcriptAction, transcriptFocused && layout.focus, pressed && layout.pressed]}>
           <Text style={[s.buttonText, layout.transcriptActionText]}>{transcriptVisible ? 'Hide transcript' : 'Show transcript'}</Text>
         </Pressable>
       </View>
@@ -240,51 +238,50 @@ export function ListeningChoiceRow({ label, detail, selected, correct = false, d
 
 const layout = StyleSheet.create({
   exercise: { padding: 0, gap: 0, minWidth: 0 },
-  player: { backgroundColor: colors.dark, borderRadius: 17, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, padding: 20, gap: 18 },
-  playerCompact: { padding: 16, gap: 14 },
-  embeddedPlayer: { paddingHorizontal: 14, paddingVertical: 10 },
-  embeddedPlayerCompact: { paddingHorizontal: 10 },
+  player: { backgroundColor: colors.sand, borderColor: colors.line, borderBottomWidth: 1,
+    borderTopLeftRadius: tokens.radius.card - 1, borderTopRightRadius: tokens.radius.card - 1, padding: 20, gap: 16 },
+  playerCompact: { padding: 12, gap: 8 },
+  embeddedPlayer: { paddingHorizontal: 16, paddingVertical: 8 },
+  embeddedPlayerCompact: { paddingHorizontal: 12 },
   progress: { alignSelf: 'stretch', flexDirection: 'row', alignItems: 'center', gap: 12 },
-  progressText: { color: colors.sageTint, textTransform: 'none', letterSpacing: 0, fontSize: 14 },
-  progressTrack: { height: 3, flex: 1, backgroundColor: '#3F6259', borderRadius: 3 },
-  progressFill: { height: '100%', backgroundColor: colors.yellow, borderRadius: 3 },
-  playerActions: { alignItems: 'center', gap: 2 },
-  embeddedPlayerActions: { ...s.row, justifyContent: 'space-between', gap: 4 },
+  progressText: { color: colors.muted, fontVariant: ['tabular-nums'] },
+  progressTrack: { height: 4, flex: 1, backgroundColor: colors.line, borderRadius: 4 },
+  progressFill: { height: '100%', backgroundColor: colors.primary, borderRadius: 4 },
+  playerActions: { ...s.row, gap: 4 },
+  embeddedPlayerActions: { justifyContent: 'space-between' },
   play: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center',
-    minHeight: 64, minWidth: 178, paddingHorizontal: 18, paddingVertical: 12, gap: 10, borderRadius: 34, backgroundColor: colors.yellow },
-  playText: { fontWeight: '700' },
-  embeddedPlay: { minHeight: tokens.control.minimumTarget, minWidth: 0, paddingHorizontal: 12, paddingVertical: 6, gap: 7 },
+    minHeight: tokens.control.buttonHeight, paddingHorizontal: 16, paddingVertical: 8, gap: 8, borderRadius: tokens.radius.input, backgroundColor: colors.yellow },
+  playText: { fontWeight: '600' },
+  embeddedPlay: { minHeight: tokens.control.minimumTarget, paddingHorizontal: 12 },
   embeddedPlayText: { fontSize: 16 },
   embeddedPlayTextCompact: { fontSize: 14 },
-  transcriptAction: { minHeight: tokens.control.minimumTarget, justifyContent: 'center', paddingHorizontal: 12, borderRadius: 10 },
-  embeddedTranscriptAction: { paddingHorizontal: 5 },
-  transcriptActionText: { color: colors.onPrimary, fontSize: 14, textDecorationLine: 'underline' },
-  answers: { padding: 22, gap: 16, minWidth: 0 },
-  answersCompact: { padding: 14, gap: 14 },
+  transcriptAction: { minHeight: tokens.control.minimumTarget, justifyContent: 'center', paddingHorizontal: 8, borderRadius: tokens.radius.input },
+  transcriptActionText: { color: colors.primary, fontSize: 14, textDecorationLine: 'underline' },
+  answers: { padding: 24, gap: 16, minWidth: 0 },
+  answersCompact: { padding: 12, gap: 12 },
   error: { color: colors.danger },
-  transcript: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: tokens.radius.md, backgroundColor: colors.sageTint, gap: 3 },
-  transcriptSentence: { fontWeight: '600', fontSize: 20, lineHeight: 29 },
-  question: { gap: 10 },
-  questionTitle: { fontSize: 21, lineHeight: 27 },
-  choices: { gap: 7 },
-  choice: { minHeight: 49, borderRadius: tokens.radius.input, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card,
-    flexDirection: 'row', alignItems: 'center', paddingVertical: 9, paddingHorizontal: 11, gap: 11, minWidth: 0 },
+  transcript: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: tokens.radius.md, backgroundColor: colors.paper, gap: 4 },
+  transcriptSentence: { fontWeight: '500', fontSize: 20, lineHeight: 28 },
+  question: { gap: 12 },
+  questionTitle: { fontSize: 20, lineHeight: 28 },
+  choices: { gap: 8 },
+  choice: { minHeight: 48, borderRadius: tokens.radius.input, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card,
+    flexDirection: 'row', alignItems: 'center', paddingVertical: 8, paddingHorizontal: 12, gap: 12, minWidth: 0 },
   choiceCopy: { flex: 1, minWidth: 0 },
-  choiceText: { fontSize: 16, lineHeight: 23, fontWeight: '500' },
+  choiceText: { fontSize: 16, lineHeight: 24, fontWeight: '500' },
   choiceSelected: { borderColor: colors.primary, backgroundColor: colors.sageTint },
   choiceOther: { borderColor: colors.yellow, backgroundColor: colors.goldTint },
   indicator: { width: 20, height: 20, borderRadius: 10, borderWidth: 1, borderColor: colors.inputBorder,
     justifyContent: 'center', alignItems: 'center', flexShrink: 0 },
   indicatorSelected: { borderColor: colors.primary, backgroundColor: colors.primary },
-  indicatorDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.onPrimary },
-  feedback: { padding: 14, gap: 3, borderRadius: tokens.radius.md },
+  indicatorDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.onPrimary },
+  feedback: { padding: 12, gap: 4, borderRadius: tokens.radius.md },
   feedbackCorrect: { backgroundColor: colors.sageTint },
   feedbackOther: { backgroundColor: colors.goldTint },
-  feedbackTitle: { fontSize: 20, lineHeight: 27 },
-  footer: { ...s.row, justifyContent: 'space-between', gap: 5 },
+  feedbackTitle: { fontSize: 20, lineHeight: 28 },
+  footer: { ...s.row, justifyContent: 'space-between', gap: 4 },
   embeddedFooter: { justifyContent: 'flex-end' },
-  answerActions: { ...s.row, justifyContent: 'flex-end', gap: 5 },
+  answerActions: { ...s.row, justifyContent: 'flex-end', gap: 4 },
   focus: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineStyle: 'solid', outlineOffset: 2 },
-  inverseFocus: { outlineColor: colors.onPrimary },
   pressed: { opacity: tokens.opacity.pressed },
 });

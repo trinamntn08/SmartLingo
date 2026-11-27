@@ -12,7 +12,7 @@ const featuredWords = new Map([
 ]);
 
 /** Decorative topic media never participates in vocabulary or practice bindings. */
-export function TopicCover({ topic, hero = false }: { topic: LessonTopic; hero?: boolean }) {
+export function TopicCover({ topic, hero = false, thumbnail = false }: { topic: LessonTopic; hero?: boolean; thumbnail?: boolean }) {
   const [failedUri, setFailedUri] = useState<string | null>(null);
   const candidates = topic.lessons[0]?.language === 'ja-JP' ? [] : topic.vocabulary
     .map(entry => ({ id: entry.id, photo: getVocabularyPhoto(entry.id, entry.target) }));
@@ -22,8 +22,8 @@ export function TopicCover({ topic, hero = false }: { topic: LessonTopic; hero?:
     ?? candidates.find(candidate => candidate.photo)?.photo;
   const fallback = getContextPhoto(topic.lessons[0]?.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', topic.name);
   const uri = photo?.uri;
-  return <View style={{ width: '100%', aspectRatio: hero ? 2.7 : 2, maxHeight: hero ? 168 : 180,
-    backgroundColor: colors.green, overflow: 'hidden' }}>
+  const size = thumbnail ? { height: '100%' as const } : { aspectRatio: hero ? 2.7 : 2, maxHeight: hero ? 168 : 180 };
+  return <View style={{ width: '100%', ...size, backgroundColor: colors.sand, overflow: 'hidden' }}>
     {uri && failedUri !== uri ? <Image accessibilityLabel={`Topic context: ${photo.alt}`}
       source={{ uri }} resizeMode="cover" onError={() => setFailedUri(uri)} style={{ width: '100%', height: '100%' }} />
       : <ContextImage photo={{ uri: fallback.uri, alt: `Topic context: ${fallback.alt}` }} style={{ width: '100%', height: '100%' }} />}

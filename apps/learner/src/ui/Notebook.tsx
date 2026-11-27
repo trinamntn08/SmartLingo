@@ -1,23 +1,23 @@
 import { useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { slangExpressions } from '@smartlingo/content';
 import { normalizeSearch, notebookEntrySchema, languageNames, notebookLanguage, type TargetLanguage, type NotebookEntry } from '@smartlingo/domain';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { Button } from './controls';
 import { Speak } from '../audio/Speak';
 import { JapaneseWordReading } from './JapaneseWordReading';
-import { colors, styles as s } from './theme';
+import { colors, designTokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';
 import { PersonalWordForm } from './PersonalWordForm';
 import { ScreenHeader } from './ScreenHeader';
-import { Icon } from './Icon';
 import { toolsStyles as t } from './learnerToolsStyles';
 
 const textAbbreviations = new Map(slangExpressions.filter(expression => expression.textAbbreviation)
   .map(expression => [expression.sourceEntryId, normalizeSearch(expression.target)]));
 
 export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked }: { model: LearningModel; onExplore: () => void; language?: TargetLanguage; onWriteBlocked?: (blocked: boolean) => void }) {
+  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
   const { route, navigate, backTo } = useNavigation();
   const [query, setQuery] = useVisitState(`notebook:${language}:query`, '');
   const focusRecall = route.kind === 'review' && route.view === 'practice';
@@ -29,24 +29,34 @@ export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked 
     else navigate({ kind: 'review', language, view: 'practice' });
   }
   return <View style={t.page}>
-    <ScreenHeader eyebrow={name} title="Review saved words" subtitle="Recall due words, or search and edit your notes."
-      action={focusRecall || model.notebook.length ? <Button compact icon={focusRecall ? 'bookmark' : 'layers'} primary={!focusRecall} accent={!focusRecall} selected={focusRecall}
+    <ScreenHeader eyebrow={name} title={focusRecall ? 'Review saved words' : 'Notebook'}
+      action={focusRecall || model.notebook.length ? <Button compact icon={focusRecall ? 'arrow-left' : 'layers'} quiet={focusRecall}
         onPress={toggleFocus}>{focusRecall ? 'Show notebook' : 'Focus review'}</Button> : null} />
     <View style={t.board}>
       <View style={[t.main, focusRecall && { display: 'none' }]}>
-        <View style={t.panel}>
-          <View style={t.panelHeader}><View style={[s.row, { flexShrink: 1, minWidth: 0, maxWidth: '100%' }]}><View style={t.icon}><Icon name="bookmark" size={22} /></View><View style={[t.stack, { flexShrink: 1 }]}><Text accessibilityRole="header" style={t.sectionTitle}>Your word collection</Text><Text style={t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'entry' : 'entries'} · {name}</Text></View></View><PersonalWordForm embedded model={model} language={language} /></View>
-          {!!model.notebook.length && <View style={t.stack}>
-            <Text style={t.label}>Find a saved word</Text>
-            <TextInput accessibilityLabel="Search notebook" placeholder={`${name}, reading, English or a note`} value={query} onChangeText={setQuery} style={s.input} />
-            <View style={t.panelHeader}><Text accessibilityLiveRegion="polite" style={t.detail}>{matches.size} of {model.notebook.length} saved entries</Text>{!!query && <Button quiet compact onPress={() => setQuery('')}>Clear notebook search</Button>}</View>
-            {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
+        <View style={[t.panel, compact && notebookStyles.compactPanel]}>
+          <View style={t.panelHeader}>
+            <Text accessibilityRole="header" style={t.sectionTitle}>{model.notebook.length ? 'Saved words' : 'No saved words yet'}</Text>
+            <PersonalWordForm embedded model={model} language={language} />
+          </View>
+          {model.notebook.length ? <>
+            <View style={t.stack}>
+              <TextInput accessibilityLabel="Search notebook" placeholder="Search words or notes"
+                value={query} onChangeText={setQuery} style={s.input} />
+              <View style={t.panelHeader}>
+                <Text accessibilityLiveRegion="polite" style={t.detail}>{matches.size} of {model.notebook.length} saved {model.notebook.length === 1 ? 'entry' : 'entries'}</Text>
+                {!!query && <Button quiet compact label="Clear notebook search" onPress={() => setQuery('')}>Clear</Button>}
+              </View>
+              {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
+            </View>
+            <View testID="notebook-entries">{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>
+          </> : <View style={[t.stack, notebookStyles.prompt]}>
+            <Text style={s.body}>Save a word from a lesson or add your own.</Text>
+            <Button compact accent trailingIcon="arrow-right" onPress={onExplore}>Find a lesson</Button>
           </View>}
-          {!model.notebook.length ? <View style={[t.inset, { backgroundColor: colors.sageTint }]}><Text style={s.heading}>No saved words yet</Text><Text style={s.body}>Add a personal word or save an expression from a lesson to start reviewing.</Text><View style={s.row}><Button primary onPress={onExplore}>Find a lesson →</Button></View></View>
-            : <View testID="notebook-entries">{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} />)}</View>}
         </View>
       </View>
-      {(focusRecall || model.notebook.length > 0) && <View style={[t.side, { flexBasis: 380 }, focusRecall && { flexBasis: '100%', maxWidth: 700 }]}>
+      {(focusRecall || model.notebook.length > 0) && <View style={[t.side, notebookStyles.review, focusRecall && notebookStyles.focusedReview]}>
         <ReviewPanel notebook={model.notebook} onWriteBlocked={onWriteBlocked} />
       </View>}
     </View>
@@ -81,8 +91,8 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
     {japanese && <><Text style={s.body}>Example kana reading (optional)</Text><TextInput accessibilityLabel="Example kana reading" value={exampleReading} onChangeText={setExampleReading} maxLength={1000} editable={!model.busy && !model.saveError} multiline style={s.input} /></>}
     {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}<View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save changes</Button><Button disabled={model.busy || !!model.saveError} onPress={() => setEditing(false)}>Cancel</Button></View>
   </> : <>
-    <View style={t.panelHeader}>
-      <View style={[t.stack, { flexGrow: 1, flexShrink: 1 }]}>
+    <View style={[t.panelHeader, notebookStyles.entryHeader]}>
+      <View style={[t.stack, notebookStyles.entryCopy]}>
         <View style={s.row}>
           <Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text>
           {japanese && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
@@ -95,10 +105,19 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
       <Button quiet compact icon="edit" disabled={model.blocked} onPress={edit}>Edit note</Button>
     </View>
     {!isTextAbbreviation && !!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
-    {!!entry.example && <View style={[t.inset, { padding: 16 }]}>
-      <Text style={t.label}>Example / personal note</Text><Text style={s.body}>{entry.example}</Text>
+    {!!entry.example && <View style={t.stack}>
+      <Text style={t.label}>Example or note</Text><Text style={s.muted}>{entry.example}</Text>
       {!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}
     </View>}
     {saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}
   </>}</View>;
 }
+
+const notebookStyles = StyleSheet.create({
+  compactPanel: { padding: 16 },
+  prompt: { alignItems: 'flex-start' },
+  review: { flexBasis: 340 },
+  focusedReview: { flexBasis: '100%', maxWidth: 700 },
+  entryHeader: { flexWrap: 'nowrap', alignItems: 'flex-start' },
+  entryCopy: { flex: 1 },
+});

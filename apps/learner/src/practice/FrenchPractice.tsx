@@ -63,7 +63,7 @@ export function FrenchPractice({ lessons, model, active = true }: { lessons: Les
         {pages > 1 && <View style={s.row}><Button disabled={state.busy || visiblePage === 0} onPress={() => setPage(visiblePage - 1)}>Previous situations</Button><Text style={s.muted}>{visiblePage + 1} / {pages}</Text><Button disabled={state.busy || visiblePage === pages - 1} onPress={() => setPage(visiblePage + 1)}>More situations</Button></View>}
       </>}
       </View>
-      <View style={[t.side, t.inset, { backgroundColor: colors.skyTint }]}>
+      <View style={[t.side, t.inset, { backgroundColor: colors.soft }]}>
       <View style={s.row}><Icon name="mic" size={23} /><Text style={t.sectionTitle}>Your situation</Text></View>
       {selected && <View style={t.stack}><Text style={s.body}>Topic: {selected.topic}</Text><Text style={s.body}>Your role: {selected.role}</Text><Text style={s.muted}>Selected lesson: {selected.title}</Text></View>}
       <Text style={s.eyebrow}>Conversation level</Text>

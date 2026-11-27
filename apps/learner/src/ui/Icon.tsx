@@ -34,7 +34,7 @@ const iconPaths = {
 
 export type IconName = keyof typeof iconPaths;
 
-export function Icon({ name, size = 20, color = colors.ink }: { name: IconName; size?: number; color?: string }) {
+export function Icon({ name, size = 18, color = colors.ink }: { name: IconName; size?: number; color?: string }) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="${iconPaths[name]}" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   return <Image accessible={false} aria-hidden source={{ uri: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` }}
     style={{ width: size, height: size, flexShrink: 0 }} />;

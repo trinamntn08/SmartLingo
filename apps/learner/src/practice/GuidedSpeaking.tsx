@@ -1,13 +1,12 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Lesson, TargetLanguage } from '@smartlingo/domain';
-import { Platform, Text, View, useWindowDimensions } from 'react-native';
+import { Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { audio } from '../audio';
 import { AudioIconButton } from '../audio/AudioIconButton';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import { ScreenHeader } from '../ui/ScreenHeader';
-import { Icon } from '../ui/Icon';
 import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 export function GuidedSpeaking({ lessons }: { lessons: Lesson[] }) {
@@ -24,25 +23,22 @@ export function GuidedSpeaking({ lessons }: { lessons: Lesson[] }) {
     navigate({ kind: 'speaking', language: choice.language as TargetLanguage, topic: speaking?.topic, lessonId: id, revision: choice.revision, line: 1 });
   }
   return <View testID="guided-speaking" style={t.page}>
-    <ScreenHeader eyebrow="Say it in context" title="Speaking practice" subtitle={compact ? 'Listen to your partner. Try your reply aloud.' : 'Take a part in an everyday conversation. Listen to your partner, then try your own reply.'} />
+    <ScreenHeader title="Speaking practice" subtitle="Listen to your partner, then try your reply aloud." />
     {speaking?.lessonId && !selected && lesson && <Text accessibilityLiveRegion="polite" style={s.muted}>That dialogue is unavailable. An available dialogue is shown instead.</Text>}
-    {!lesson ? <View style={t.panel}><Text style={s.body}>No scripted dialogues are available yet. Choose another language or return to vocabulary and lessons to study useful phrases.</Text></View> : <View style={t.board}>
+    {!lesson ? <View style={t.panel}><Text style={s.body}>No scripted dialogues are available for these lessons.</Text></View> : <View style={t.board}>
       <View style={[t.side, compact ? { gap: 8 } : t.panel]}>
-      {!compact && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.sageTint }]}><Icon name="mic" size={24} /></View><Text accessibilityRole="header" style={t.sectionTitle}>Set the scene</Text></View>}
       {Platform.OS === 'web' ? <label htmlFor={selectId} style={{ color: colors.ink, fontFamily: designTokens.typography.body.fontFamily, fontSize: designTokens.typography.label.fontSize, display: 'grid', gap: 8, minWidth: 0 }}>Speaking lesson
-        <select id={selectId} value={lesson.id} onChange={event => chooseLesson(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 10, border: `1px solid ${colors.inputBorder}`, borderRadius: 12, color: colors.ink, background: colors.card, fontSize: designTokens.typography.body.fontSize }}>
+        <select id={selectId} value={lesson.id} onChange={event => chooseLesson(event.target.value)} style={{ width: '100%', maxWidth: '100%', minWidth: 0, minHeight: 48, padding: 8, border: `1px solid ${colors.inputBorder}`, borderRadius: designTokens.radius.input, color: colors.ink, background: colors.card, font: 'inherit' }}>
           {available.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}
         </select>
       </label> : <View style={s.row}>{available.map(item => <Button key={item.id} selected={item.id === lesson.id} onPress={() => chooseLesson(item.id)}>{item.title}</Button>)}</View>}
-      {!compact && <><Text style={s.body}>{lesson.outcome}</Text>
-      <View style={s.divider} />
-      <Text style={t.detail}>Use the English meaning to plan your line. Compare with the model whenever you need it.</Text>
-      <Text style={t.detail}>No microphone, recording or scoring. This practice stays in this session.</Text>
+      {!compact && <><Text style={s.muted}>{lesson.outcome}</Text>
+      <Text style={t.detail}>Scripted practice stays in this session. It uses no microphone or recording.</Text>
       </>}
       </View>
       <DialoguePractice key={`${lesson.id}:${lesson.revision}`} lesson={lesson} />
     </View>}
-    {compact && <Text style={t.detail}>Use the English meaning and model reply whenever you need them. No microphone, recording or scoring. This practice stays in this session.</Text>}
+    {compact && <Text style={t.detail}>Scripted practice stays in this session. It uses no microphone or recording.</Text>}
   </View>;
 }
 
@@ -61,7 +57,7 @@ function DialoguePractice({ lesson }: { lesson: Lesson }) {
     navigate({ kind: 'speaking', language: lesson.language as TargetLanguage, topic: speaking?.topic, lessonId: lesson.id, revision: lesson.revision, line: position + 1 },
       { repeat: options.repeat, snapshot: { [`${stateKey}:role`]: selectedRole, [`${stateKey}:reading`]: options.reading ?? false } });
   }
-  return <View style={[t.main, t.panel, compact && { padding: 18, gap: 14 }]}>
+  return <View style={[t.main, t.panel, compact && { padding: 16, gap: 12 }]}>
     <Text style={s.eyebrow}>Choose your role</Text>
     <View style={s.row}>{roles.map(choice => <Button compact={compact} key={choice} selected={choice === role} label={`Practise as ${choice}`} onPress={() => {
       if (choice !== role || index !== 0) openLine(0, choice, { repeat: true });
@@ -94,15 +90,15 @@ function DialogueRound({ lesson, role, index, stateKey, onNext, onRepeat }: {
     catch { if (current === request.current) setError('Audio could not play. You can retry, read the text and continue speaking aloud.'); }
     finally { if (current === request.current) setPlaying(false); }
   }
-  return <View style={{ gap: compact ? 14 : 22, minWidth: 0 }}>
-    <View style={t.panelHeader}><Text accessibilityLiveRegion="polite" style={s.eyebrow}>Line {index + 1} of {lesson.dialogue.length}</Text><Text style={t.label}>{ownLine ? 'Your turn' : 'Your partner'} · {line.role}</Text></View>
-    <View style={s.progressTrack}><View style={[s.progressFill, { width: `${(index + 1) / lesson.dialogue.length * 100}%` }]} /></View>
-    <View testID="speaking-line" style={[t.stage, { backgroundColor: ownLine ? colors.goldTint : colors.skyTint, paddingVertical: compact ? 18 : 30 }, compact && { paddingHorizontal: 18, gap: 14 }]}>
-      {!compact && <View style={s.row}><Icon name={ownLine ? 'mic' : 'headphones'} size={24} /><Text style={s.eyebrow}>{ownLine ? 'Your reply' : 'Listen to your partner'}</Text></View>}
+  return <View style={{ gap: compact ? 12 : 20, minWidth: 0 }}>
+    <View style={t.panelHeader}><Text accessibilityLiveRegion="polite" style={speakingStyles.counter}>Line {index + 1} of {lesson.dialogue.length}</Text><Text style={t.label}>{ownLine ? 'Your turn' : 'Your partner'} · {line.role}</Text></View>
+    <View aria-hidden style={s.progressTrack}><View style={[s.progressFill, { width: `${(index + 1) / lesson.dialogue.length * 100}%` }]} /></View>
+    <View testID="speaking-line" style={[t.stage, speakingStyles.line, ownLine && speakingStyles.ownLine, compact && speakingStyles.lineCompact]}>
       <Text style={t.label}>English meaning</Text><Text style={s.body}>{line.meaning}</Text>
       {(!ownLine || revealed) ? <>
         <View style={s.row}>
-          <Text testID="speaking-target" style={[s.target, { minWidth: 0, flexShrink: 1, fontSize: 31, lineHeight: 43, fontWeight: '500' }]}>{line.target}</Text>
+          <Text testID="speaking-target" {...(Platform.OS === 'web' ? { lang: lesson.language } : { accessibilityLanguage: lesson.language })}
+            style={[s.target, speakingStyles.target]}>{line.target}</Text>
           <AudioIconButton playing={playing} label={ownLine ? 'Listen to model reply' : 'Listen to partner'} onPress={() => void play()} />
         </View>
         {!!line.reading && <>
@@ -124,3 +120,11 @@ function DialogueRound({ lesson, role, index, stateKey, onNext, onRepeat }: {
     </View>
   </View>;
 }
+
+const speakingStyles = StyleSheet.create({
+  counter: { ...designTokens.typography.caption, color: colors.muted, fontVariant: ['tabular-nums'] },
+  line: { borderLeftWidth: 4, borderLeftColor: colors.line, backgroundColor: colors.paper },
+  ownLine: { borderLeftColor: colors.yellow },
+  lineCompact: { padding: 16, gap: 12 },
+  target: { minWidth: 0, flexShrink: 1, fontSize: 32, lineHeight: 44, fontWeight: '500' },
+});

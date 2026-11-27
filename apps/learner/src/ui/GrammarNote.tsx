@@ -20,7 +20,7 @@ export function GrammarNote({ lessonId, note }: { lessonId: string; note: Lesson
   return <View style={layout.card} testID="grammar-note">
     <View style={layout.header}>
       <Text style={[s.eyebrow, layout.label]}>Grammar</Text>
-      <Text accessibilityRole="header" style={[s.heading, layout.title]}>{note.title}</Text>
+      <Text accessibilityRole="header" aria-level={3} style={[s.heading, layout.title]}>{note.title}</Text>
     </View>
     {showRepeatPattern ? <RepeatPattern /> : <GrammarExplanation explanation={note.explanation} />}
   </View>;
@@ -60,15 +60,15 @@ const layout = StyleSheet.create({
     minWidth: 0, backgroundColor: colors.card, borderRadius: tokens.radius.lg,
     borderWidth: 1, borderColor: colors.line, overflow: 'hidden',
   },
-  header: { paddingHorizontal: tokens.space.lg, paddingVertical: tokens.space.md, gap: tokens.space.xs, backgroundColor: colors.sageTint },
+  header: { paddingHorizontal: tokens.space.lg, paddingVertical: tokens.space.md, gap: tokens.space.xs, borderBottomWidth: 1, borderColor: colors.line },
   label: { color: colors.primary },
   title: { fontSize: 21, lineHeight: 28 },
   patternRow: { padding: tokens.space.md, gap: tokens.space.md, flexDirection: 'row', flexWrap: 'wrap' },
   column: { flexGrow: 1, flexShrink: 1, flexBasis: 240, minWidth: 0, padding: tokens.space.lg, borderRadius: tokens.radius.md, gap: tokens.space.xs },
-  example: { backgroundColor: colors.goldTint },
+  example: { backgroundColor: colors.paper },
   french: { fontSize: 25, lineHeight: 32 },
   rule: { backgroundColor: colors.paper },
   formula: { fontSize: 21, lineHeight: 28 },
   explanation: { padding: tokens.space.lg, gap: tokens.space.md },
-  point: { maxWidth: 690, borderLeftWidth: 3, borderColor: colors.green, paddingLeft: tokens.space.md },
+  point: { maxWidth: 690, borderLeftWidth: 2, borderColor: colors.line, paddingLeft: tokens.space.md },
 });

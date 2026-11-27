@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
 import { AudioPreferencesPanel } from '../audio/AudioPreferencesPanel';
 import { GeneratedSpeechPanel } from '../audio/generated/GeneratedSpeechPanel';
@@ -7,10 +7,9 @@ import type { useCatalogue } from '../content/useCatalogue';
 import { OfflinePanel } from '../offline/OfflinePanel';
 import { Button } from '../ui/controls';
 import { Disclosure } from '../ui/Disclosure';
-import { colors, styles as s } from '../ui/theme';
+import { styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { ScreenHeader } from '../ui/ScreenHeader';
-import { Icon } from '../ui/Icon';
 import { toolsStyles as t } from '../ui/learnerToolsStyles';
 
 interface ProfileScreenProps {
@@ -22,65 +21,60 @@ interface ProfileScreenProps {
 
 export function ProfileScreen({ catalogue, onOpenEditor, language, model }: ProfileScreenProps) {
   return <View style={t.page}>
-    <ScreenHeader title="Profile" subtitle="Manage your audio, offline lessons and learning data." />
+    <ScreenHeader title="Profile" />
     <View style={t.board}>
-      <View style={[t.main, { flexBasis: 600 }]}>
-      <Text accessibilityRole="header" style={t.sectionTitle}>Learning settings</Text>
+      <View style={[t.main, profile.settings]}>
+        <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description="Voice, playback speed and saved audio">
+          <AudioPreferencesPanel language={language} />
+          {language === 'fr-FR' && <GeneratedSpeechPanel />}
+        </Disclosure>
 
-    <Disclosure key={`audio-${language}`} title="Audio & pronunciation" description="Choose a voice, adjust the pace and manage saved audio.">
-      <AudioPreferencesPanel language={language} />
-      {language === 'fr-FR' && <GeneratedSpeechPanel />}
-    </Disclosure>
+        <Disclosure title="Offline & backups" description="Lesson downloads and private backups for both languages">
+          <OfflinePanel />
+          <BackupPanel />
+        </Disclosure>
 
-    <Disclosure title="Offline & backups" description="Download lessons and keep a private copy of your learning.">
-      <Text style={[s.muted, { paddingHorizontal: 8 }]}>Offline app downloads and private learning backups include both French and Japanese.</Text>
-      <OfflinePanel />
-      <BackupPanel />
-    </Disclosure>
-
-    {language === 'fr-FR' && <Disclosure title="Curriculum tools" description="Load published lessons or open the local draft workshop.">
-      <View style={t.inset}>
-        <Text style={s.heading}>Local curriculum workshop</Text>
-        <Text style={s.body}>Edit a draft, preview its saved revision, and review it before explicitly publishing to the local catalogue.</Text>
-        <Button onPress={onOpenEditor}>Open curriculum editor</Button>
-      </View>
-      <View style={t.inset}>
-        <Text style={s.heading}>Published lessons</Text>
-        <Text style={s.body}>Load owner-published local revisions into this browser. Draft edits stay in the workshop. Earlier practice and personal notes stay recorded when a new revision arrives.</Text>
-        <Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>
-        {!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}
-        {!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}
-      </View>
-    </Disclosure>}
-
-    <Disclosure title="About SmartLingo" description="Study support and draft content.">
-      <View style={[t.stack, { padding: 8, gap: 16 }]}>
-        {language === 'ja-JP' && <>
-          <Text accessibilityRole="header" style={s.heading}>Japanese study support</Text>
-          <Text style={s.body}>Japanese lessons, kana readings, listening and guided speaking work without AI. Optional AI conversation, Azure neural audio and the curriculum workshop currently support French only.</Text>
-        </>}
-        <Text style={s.body}>Bundled lessons don’t need the local API or an AI key. {language === 'ja-JP' ? 'Japanese listening uses a device voice, saved clip or free local VOICEVOX voice.' : 'French listening uses a device voice or explicitly saved neural audio.'} You can always read and practise from the text.</Text>
-        <Text style={s.muted}>Session completion records practice, not a language level or proficiency score.</Text>
-        <Text style={s.muted}>Draft lessons, photographs and illustrations still need owner review. Keep private learning backups separately; browser storage may be cleared or evicted.</Text>
-      </View>
-    </Disclosure>
-      </View>
-      <View style={t.side}>
-        <View style={[t.panel, { backgroundColor: colors.sageTint }]}>
-          <View style={[t.icon, { backgroundColor: colors.card }]}><Icon name="settings" size={24} /></View>
-          <View style={t.stack}>
-            <Text accessibilityRole="header" style={s.heading}>{languageNames[language]} with English explanations</Text>
-            {!model.loadError && <Text style={t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'word' : 'words'}</Text>}
+        {language === 'fr-FR' && <Disclosure title="Curriculum tools" description="Local drafts and published lessons">
+          <View style={profile.tool}>
+            <Text accessibilityRole="header" style={t.sectionTitle}>Local curriculum workshop</Text>
+            <Text style={s.muted}>Edit a draft and preview its saved revision before publishing to the local catalogue.</Text>
+            <Button onPress={onOpenEditor}>Open curriculum editor</Button>
           </View>
-          <View style={s.divider} />
-          <Text style={t.detail}>Your progress and notebook stay in this browser on this device. There is no account or sync.</Text>
+          <View style={[profile.tool, t.listRow]}>
+            <Text accessibilityRole="header" style={t.sectionTitle}>Published lessons</Text>
+            <Text style={s.muted}>Load owner-published revisions into this browser. Your earlier practice and personal notes stay recorded.</Text>
+            <Button disabled={catalogue.busy} onPress={() => void catalogue.refreshPublished()}>{catalogue.busy ? 'Loading published lessons…' : 'Load published lessons'}</Button>
+            {!!catalogue.error && <Text accessibilityRole="alert" style={s.body}>{catalogue.error}</Text>}
+            {!!catalogue.message && <Text accessibilityLiveRegion="polite" style={s.body}>{catalogue.message}</Text>}
+          </View>
+        </Disclosure>}
+
+        <Disclosure title="About SmartLingo" description="Study support and draft content">
+          <View style={profile.tool}>
+            <Text style={s.body}>Read and practise from bundled lessons without AI. {language === 'ja-JP'
+              ? 'Japanese listening can use a device voice, saved clip or free local VOICEVOX voice.'
+              : 'French listening can use a device voice or saved neural audio.'}</Text>
+            <Text style={s.muted}>French supports optional AI practice. SmartLingo asks for the microphone when you choose to record.</Text>
+            <Text style={s.muted}>Session completion records practice. Draft lessons, photographs and illustrations still need owner review.</Text>
+          </View>
+        </Disclosure>
+      </View>
+      <View style={[t.side, t.panel, profile.summary]}>
+        <View style={t.stack}>
+          <Text style={t.detail}>Study language</Text>
+          <Text accessibilityRole="header" style={t.sectionTitle}>{languageNames[language]}</Text>
+          <Text style={s.muted}>English explanations{!model.loadError ? ` · ${model.notebook.length} saved ${model.notebook.length === 1 ? 'word' : 'words'}` : ''}</Text>
         </View>
-        <View style={t.panel}>
-          <View style={s.row}><Icon name="offline" size={22} /><Text accessibilityRole="header" style={t.sectionTitle}>Yours to keep</Text></View>
-          <Text style={t.detail}>Download the app for offline study. Export a private learning backup before clearing browser data or changing devices.</Text>
-          <Text style={t.detail}>Audio is optional. A microphone is only requested when you choose to record in French AI practice.</Text>
-        </View>
+        <View style={s.divider} />
+        <Text accessibilityRole="header" style={t.sectionTitle}>Stored in this browser</Text>
+        <Text style={s.muted}>Your progress and notebook stay in this browser. Export a private backup before clearing browser data or moving to another device.</Text>
       </View>
     </View>
   </View>;
 }
+
+const profile = StyleSheet.create({
+  settings: { flexBasis: 560 },
+  summary: { gap: 12 },
+  tool: { alignItems: 'flex-start', gap: 12, paddingHorizontal: 8, paddingBottom: 8 },
+});

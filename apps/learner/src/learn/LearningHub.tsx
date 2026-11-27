@@ -1,5 +1,5 @@
-import { useId, useLayoutEffect, useRef, type ReactNode } from 'react';
-import { Platform, Text, useWindowDimensions, View } from 'react-native';
+import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { type Lesson, type LessonTopic, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { Disclosure } from '../ui/Disclosure';
@@ -34,26 +34,28 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   const visibleModes = learnModes.filter(choice => language === 'ja-JP' || choice !== 'Japanese letters');
   const activeMode = visibleModes.includes(mode) ? mode : 'Lessons';
   const { width } = useWindowDimensions();
-  const lessonsLead = !!selectedTopic && activeMode === 'Lessons' && width < designTokens.layout.compactBreakpoint;
+  const compact = width < designTokens.layout.compactBreakpoint;
+  const materialFirst = activeMode === 'Japanese letters' || (!!selectedTopic && activeMode === 'Lessons' && compact);
   const showCourseCard = !selectedTopic && (activeMode === 'Lessons' || activeMode === 'Japanese letters');
+  const courseCards = showCourseCard && (compact ? <CompactCourseEntry courseLaunch={courseLaunch} otherCourses={otherCourses} /> : <>
+    <CourseLaunchCard {...courseLaunch} />
+    <OtherFrenchCourses courses={otherCourses} />
+  </>);
   const courseShortcut = !showCourseCard && <Button compact icon="calendar" href={courseLaunch.href}
     disabled={courseLaunch.disabled || courseLaunch.loading} onPress={courseLaunch.onOpen}>Course</Button>;
   const hrefForMode = (choice: LearnMode) => routeHref(learnRoute(choice, language, selectedTopic ? topicRouteKey(selectedTopic) : undefined));
-  const sectionNavigation = <View style={{ gap: 10, paddingBottom: 12, borderBottomWidth: 1, borderColor: colors.line }}>
-      <View accessibilityLabel="Learning sections" style={s.row}>
-        {visibleModes.map(choice => <Button compact quiet key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)} href={hrefForMode(choice)}>{choice}</Button>)}
-        {courseShortcut}
-      </View>
-      {!!selectedTopic && activeMode !== 'Lessons' && activeMode !== 'Japanese letters' && <View style={s.row}>
-        <Text style={s.muted}>{selectedTopic}</Text><Button compact quiet disabled={disabled} onPress={() => onSelectTopic(null)}>All topics</Button>
-      </View>}
-    </View>;
-  return <View style={{ gap: 16, minWidth: 0 }}>
-    {showCourseCard && <>
-      <CourseLaunchCard {...courseLaunch} />
-      <OtherFrenchCourses courses={otherCourses} />
-    </>}
-    {!lessonsLead && sectionNavigation}
+  const sectionNavigation = <View style={[hub.sectionNavigation, materialFirst && hub.trailingNavigation]}>
+    <View role="navigation" accessibilityLabel="Learning sections" style={hub.modes}>
+      {visibleModes.map(choice => <Button compact quiet key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)} href={hrefForMode(choice)}>{choice}</Button>)}
+      {courseShortcut}
+    </View>
+    {!!selectedTopic && activeMode !== 'Lessons' && activeMode !== 'Japanese letters' && <View style={hub.modes}>
+      <Text style={s.muted}>{selectedTopic}</Text><Button compact quiet disabled={disabled} onPress={() => onSelectTopic(null)}>All topics</Button>
+    </View>}
+  </View>;
+  return <View style={hub.page}>
+    {!materialFirst && courseCards}
+    {!materialFirst && sectionNavigation}
     {topicNavigation}
     {activeMode === 'Japanese letters' && language === 'ja-JP' ? <JapaneseAlphabet model={model} />
       : activeMode === 'Lessons' ? <TopicCatalogue key={language} language={language} lessons={lessons} topics={topics} model={model}
@@ -65,9 +67,41 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
           <FrenchPractice lessons={conversationLessons} model={model} active={active} />
         </Disclosure>}
       </>}
-    {lessonsLead && sectionNavigation}
+    {materialFirst && sectionNavigation}
+    {materialFirst && courseCards}
   </View>;
 }
+
+function CompactCourseEntry({ courseLaunch, otherCourses }: {
+  courseLaunch: CourseLaunchProps; otherCourses: readonly CourseLaunchProps[];
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const otherCoursesId = useId();
+  const { course, day, status, loading, disabled, href, onOpen } = courseLaunch;
+  return <View style={[s.card, hub.courseEntry]} testID="open-course-panel">
+    <Text style={hub.courseTitle}>{course.title}</Text>
+    <Text style={s.body}>{loading ? 'Loading course progress…' : `Lesson ${day.dayNumber}: ${day.title}`}</Text>
+    {status === 'unavailable' && <Text accessibilityLiveRegion="polite" style={s.muted}>Saved course progress is unavailable. You can still study.</Text>}
+    <View style={hub.modes}>
+      <Button compact primary href={href} disabled={loading || disabled} onPress={onOpen}>Open course</Button>
+      {!!otherCourses.length && <Button compact quiet label="More French courses" trailingIcon="chevron-down"
+        controls={otherCoursesId} expanded={expanded} onPress={() => setExpanded(value => !value)}>More courses</Button>}
+    </View>
+    <View nativeID={otherCoursesId} style={expanded ? undefined : hub.hidden}>
+      {expanded && <OtherFrenchCourses courses={otherCourses} />}
+    </View>
+  </View>;
+}
+
+const hub = StyleSheet.create({
+  page: { gap: 20, minWidth: 0 },
+  sectionNavigation: { gap: 4, paddingBottom: 8, borderBottomWidth: 1, borderColor: colors.line },
+  trailingNavigation: { paddingBottom: 0, paddingTop: 8, borderBottomWidth: 0, borderTopWidth: 1 },
+  modes: { ...s.row, gap: 4 },
+  courseEntry: { padding: 12, gap: 4 },
+  courseTitle: { ...designTokens.typography.smallLabel, color: colors.primary },
+  hidden: { display: 'none' },
+});
 
 function ListeningSection({ lessons, language, active }: { lessons: Lesson[]; language: TargetLanguage; active: boolean }) {
   const { route, navigate, backTo } = useNavigation();

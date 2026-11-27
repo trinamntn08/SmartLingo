@@ -38,10 +38,10 @@ function Transcript({ turns, language, highlightedRole, study }: {
   const label = language === 'fr-FR' ? 'French' : language === 'ja-JP' ? 'Japanese' : 'English';
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
 
-  return <View testID={`dialogue-${label.toLowerCase()}-transcript`} style={[t.transcript, target && (study ? t.studyTranscript : t.frenchTranscript)]}>
-    <Text accessibilityRole="header" style={[t.transcriptHeading, study && t.studyHeading]}>{label}</Text>
-    {turns.map((turn, index) => <View key={index} style={[t.turn, index === 0 && t.firstTurn]}>
-      <Text style={[s.eyebrow, turn.role === highlightedRole && t.highlightedRole]}>{turn.role}</Text>
+  return <View testID={`dialogue-${label.toLowerCase()}-transcript`} style={[t.transcript, target && !study && t.frenchTranscript]}>
+    <Text accessibilityRole="header" aria-level={3} style={[t.transcriptHeading, study && t.studyHeading]}>{label}</Text>
+    {turns.map((turn, index) => <View key={index} style={t.turn}>
+      <Text style={[s.muted, t.role, turn.role === highlightedRole && t.highlightedRole]}>{turn.role}</Text>
       {target ? <SpokenTurn turn={turn} language={language} /> : <Text {...languageProps} style={s.body}>{turn.meaning}</Text>}
     </View>)}
   </View>;
@@ -63,22 +63,21 @@ function SpokenTurn({ turn, language }: { turn: DialogueTurn; language: TargetLa
 }
 
 const t = StyleSheet.create({
-  dialogue: { gap: 14, minWidth: 0 },
-  photoFrame: { alignItems: 'center' },
-  photo: { width: '100%', maxWidth: 420, aspectRatio: 2, borderRadius: 14 },
-  studyPhoto: { maxWidth: 440 },
-  transcripts: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'stretch', gap: 12 },
-  transcript: { flexBasis: 290, flexGrow: 1, flexShrink: 1, minWidth: 0, padding: 14, gap: 8, borderRadius: 14,
+  dialogue: { gap: 16, minWidth: 0 },
+  photoFrame: { alignItems: 'flex-start' },
+  photo: { width: '100%', maxWidth: 420, aspectRatio: 2, borderRadius: 12 },
+  studyPhoto: { maxWidth: 480 },
+  transcripts: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'stretch', gap: 16 },
+  transcript: { flexBasis: 284, flexGrow: 1, flexShrink: 1, minWidth: 0, padding: 16, gap: 12, borderRadius: 12,
     borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card },
   frenchTranscript: { backgroundColor: colors.paper },
-  studyTranscript: { backgroundColor: colors.sageTint },
-  studyHeading: { marginBottom: 3 },
-  transcriptHeading: { ...s.heading, fontSize: 20, lineHeight: 27 },
-  turn: { gap: 2, minWidth: 0, borderTopWidth: 1, borderColor: colors.line, paddingTop: 8 },
-  firstTurn: { borderTopWidth: 0, paddingTop: 0 },
-  highlightedRole: { color: colors.primary },
-  frenchTurn: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 0 },
+  studyHeading: { marginBottom: 4 },
+  transcriptHeading: { ...s.heading, fontSize: 20, lineHeight: 28 },
+  turn: { gap: 4, minWidth: 0, borderTopWidth: 1, borderColor: colors.line, paddingTop: 8 },
+  role: { fontSize: 14, lineHeight: 20 },
+  highlightedRole: { color: colors.ink, fontWeight: '600' },
+  frenchTurn: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 0 },
   frenchText: { flex: 1, minWidth: 0 },
-  frenchSentence: { fontWeight: '600' },
+  frenchSentence: { fontWeight: '500' },
   voiceError: { color: colors.danger },
 });

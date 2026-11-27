@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { frenchCourses } from '@smartlingo/content';
 import { guidedLessonButton } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -26,6 +27,10 @@ for (const locale of ['fr', 'ja'] as const) {
     } else {
       await expect(recommendation).toHaveAccessibleName('Start lesson');
       await course.focus();
+      for (const otherCourse of frenchCourses.slice(1)) {
+        await page.keyboard.press('Tab');
+        await expect(button(otherCourse.title)).toBeFocused();
+      }
     }
     await page.keyboard.press('Tab');
     await expect(vocabulary).toBeFocused();

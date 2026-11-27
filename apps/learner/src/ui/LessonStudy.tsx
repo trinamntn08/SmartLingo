@@ -5,12 +5,13 @@ import { getLessonDialoguePhoto } from './dialoguePhotos';
 import type { ContextPhoto } from './contextPhotos';
 import { GrammarNote } from './GrammarNote';
 import { VocabularyCard } from './VocabularyCard';
+import { colors, designTokens as tokens } from './theme';
 import type { LearningModel } from './useLearning';
 
-export function LessonWords({ lesson, model, compact }: { lesson: Lesson; model: LearningModel; compact: boolean }) {
+export function LessonWords({ lesson, model }: { lesson: Lesson; model: LearningModel }) {
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
-  return <View style={layout.wordGrid}>
-    {lesson.vocabulary.map(entry => <View key={entry.id} style={[layout.word, compact && layout.fullWidth]}>
+  return <View style={layout.wordList}>
+    {lesson.vocabulary.map((entry, index) => <View key={entry.id} style={index > 0 && layout.rule}>
       <VocabularyCard entry={entry} model={model} language={language} study />
     </View>)}
   </View>;
@@ -25,8 +26,7 @@ export function LessonConversation({ lesson, photo = getLessonDialoguePhoto(less
 }
 
 const layout = StyleSheet.create({
-  wordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, minWidth: 0 },
-  word: { flexGrow: 1, flexShrink: 1, flexBasis: '42%', minWidth: 0 },
-  fullWidth: { flexBasis: '100%' },
-  conversation: { minWidth: 0, gap: 16 },
+  wordList: { minWidth: 0, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, borderRadius: tokens.radius.lg },
+  rule: { borderTopWidth: 1, borderTopColor: colors.line },
+  conversation: { minWidth: 0, gap: tokens.space.xxl },
 });

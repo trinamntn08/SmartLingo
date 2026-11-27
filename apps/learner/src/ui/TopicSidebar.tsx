@@ -22,33 +22,31 @@ export function TopicSidebar({ topics, selected, onSelect, compact, disabled }: 
   }
 
   const all = <TopicChoice label="Browse all topics" selected={selected === null} disabled={disabled} compact={compact}
-    onPress={() => choose(null)} title="All topics" count={topics.length} all />;
+    onPress={() => choose(null)} title="All topics" count={topics.length} />;
   const choices = topics.map(topic => <TopicChoice key={topic.name} label={`Browse topic ${topic.name}`} selected={selected === topic.name}
     disabled={disabled} compact={compact} onPress={() => choose(topic.name)} title={topic.name} count={topic.lessons.length} />);
-  const empty = !topics.length && <Text style={[s.muted, { padding: 12 }]}>No topics available yet.</Text>;
-  if (compact) return <View testID="topic-navigation" accessibilityLabel="Topics" style={{ gap: 6, minWidth: 0 }}>
+  const empty = !topics.length && <Text style={[s.muted, { padding: 12 }]}>No topics available</Text>;
+  if (compact) return <View testID="topic-navigation" accessibilityLabel="Topics" style={{ gap: 4, minWidth: 0 }}>
     <TopicDisclosure trigger={trigger} expanded={expanded} selected={selected} contentId={contentId} onPress={() => setExpanded(value => !value)} />
-    {expanded && <ScrollView horizontal nativeID={contentId} keyboardShouldPersistTaps="handled" testID="topic-navigation-strip"
-      contentContainerStyle={layout.strip}>
+    {expanded && <View nativeID={contentId} testID="topic-navigation-strip" style={layout.strip}>
       {all}
       {choices}
       {empty}
-    </ScrollView>}
+    </View>}
   </View>;
-  const railChoices = <View style={{ gap: 3 }}>
+  const railChoices = <View style={{ gap: 4 }}>
     {all}
-    <View style={{ marginLeft: 13, paddingLeft: 9, borderLeftWidth: 1, borderColor: colors.line, gap: 3 }}>
+    <View style={layout.railTopics}>
       {choices}
     </View>
     {empty}
   </View>;
   return <View testID="topic-navigation" accessibilityLabel="Topics" style={{ flex: 1, minHeight: 0, backgroundColor: colors.card,
     borderRightWidth: 1, borderColor: colors.line }}>
-    <View style={{ padding: 18, paddingTop: 22, gap: 5 }}>
+    <View style={{ padding: 16, paddingTop: 24 }}>
       <Text accessibilityRole="header" style={[s.heading, designTokens.typography.sectionHeading]}>Your library</Text>
-      <Text style={s.muted}>Everyday situations</Text>
     </View>
-    <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 10, paddingTop: 0, paddingBottom: 24 }}>
+    <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 24 }}>
       {railChoices}
     </ScrollView>
   </View>;
@@ -60,8 +58,8 @@ function TopicDisclosure({ trigger, expanded, selected, contentId, onPress }: {
   const [focused, setFocused] = useState(false);
   return <Pressable ref={trigger} accessibilityRole="button" accessibilityLabel="Topics" accessibilityState={{ expanded }} aria-expanded={expanded} aria-controls={expanded ? contentId : undefined}
     onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-    style={{ minHeight: designTokens.control.minimumTarget, flexDirection: 'row', gap: 10, alignItems: 'center',
-      paddingHorizontal: 12, paddingVertical: 7, borderWidth: 1, borderColor: colors.line, borderRadius: 10, backgroundColor: colors.card,
+    style={{ minHeight: designTokens.control.minimumTarget, flexDirection: 'row', gap: 8, alignItems: 'center',
+      paddingHorizontal: 12, paddingVertical: 8, borderWidth: 1, borderColor: colors.line, borderRadius: designTokens.radius.input, backgroundColor: colors.card,
       outlineWidth: focused ? designTokens.focus.outlineWidth : 0, outlineColor: colors.focusRing, outlineStyle: 'solid' }}>
     <Icon name="folder" size={18} color={colors.primary} />
     <Text style={[s.body, { ...designTokens.typography.button, textAlign: 'left', flex: 1, minWidth: 0 }]}>Topics · {selected ?? 'All topics'}</Text>
@@ -69,28 +67,31 @@ function TopicDisclosure({ trigger, expanded, selected, contentId, onPress }: {
   </Pressable>;
 }
 
-function TopicChoice({ label, selected, disabled, onPress, title, count, compact, all }: {
-  label: string; selected: boolean; disabled: boolean; onPress: () => void; title: string; count: number; compact: boolean; all?: boolean;
+function TopicChoice({ label, selected, disabled, onPress, title, count, compact }: {
+  label: string; selected: boolean; disabled: boolean; onPress: () => void; title: string; count: number; compact: boolean;
 }) {
   const [focused, setFocused] = useState(false);
   return <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected, disabled }} aria-selected={selected}
     disabled={disabled} onPress={onPress} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-    style={({ pressed }) => [layout.choice, compact && (all ? layout.stripAll : layout.stripChoice), {
-      backgroundColor: selected ? colors.sageTint : pressed ? colors.sand : compact ? colors.card : 'transparent',
-      borderColor: selected || compact ? colors.line : 'transparent', opacity: disabled ? designTokens.opacity.disabled : 1,
+    style={({ pressed }) => [layout.choice, compact && layout.stripChoice, {
+      backgroundColor: selected || pressed ? colors.sand : compact ? colors.card : 'transparent',
+      borderColor: compact ? colors.line : 'transparent', borderLeftColor: selected ? colors.yellow : compact ? colors.line : 'transparent',
+      opacity: disabled ? designTokens.opacity.disabled : 1,
       outlineWidth: focused ? designTokens.focus.outlineWidth : 0, outlineColor: colors.focusRing, outlineStyle: 'solid',
     }]}>
-    <Text numberOfLines={compact ? 2 : undefined} style={[s.body, { flex: 1, minWidth: 0, ...designTokens.typography.button,
-      textAlign: 'left', fontWeight: selected ? '700' : '400' }, compact && designTokens.typography.caption]}>{title}</Text>
-    <Text style={[s.muted, compact ? designTokens.typography.caption : designTokens.typography.label]}>{count}</Text>
+    <Text style={[layout.choiceLabel, selected && layout.selectedLabel]}>{title}</Text>
+    <Text style={layout.count}>{count}</Text>
   </Pressable>;
 }
 
 const layout = StyleSheet.create({
-  strip: { flexDirection: 'row', gap: 7, paddingHorizontal: 4, paddingVertical: 5 },
+  strip: { gap: 4, padding: 4 },
+  railTopics: { marginLeft: 8, paddingLeft: 4, borderLeftWidth: 1, borderColor: colors.line, gap: 4 },
   openChevron: { transform: [{ rotate: '180deg' }] },
-  choice: { minHeight: designTokens.control.minimumTarget, flexDirection: 'row', alignItems: 'center', gap: 8,
-    paddingVertical: 8, paddingHorizontal: 10, borderRadius: 9, borderWidth: 1 },
-  stripChoice: { flexShrink: 0, width: 172 },
-  stripAll: { flexShrink: 0, width: 116 },
+  choice: { minHeight: 36, flexDirection: 'row', alignItems: 'center', gap: 8,
+    paddingVertical: 8, paddingHorizontal: 8, borderRadius: 8, borderWidth: 1, borderLeftWidth: 4 },
+  stripChoice: { minHeight: designTokens.control.minimumTarget },
+  choiceLabel: { ...designTokens.typography.caption, flex: 1, minWidth: 0, color: colors.ink },
+  selectedLabel: { fontWeight: '600' },
+  count: { ...designTokens.typography.caption, color: colors.muted, fontVariant: ['tabular-nums'] },
 });

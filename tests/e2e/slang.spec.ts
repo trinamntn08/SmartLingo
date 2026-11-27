@@ -55,13 +55,13 @@ test('French slang is searchable, keeps its history and saves expressions to the
   await expect(card.getByRole('heading')).toHaveAttribute('lang', 'fr-FR');
   await expect(card.getByRole('button', { name: `Listen to ${target}`, exact: true })).toBeVisible();
   await card.getByRole('button', { name: `Save ${target}`, exact: true }).click();
-  await expect(card.getByRole('button', { name: '✓ In notebook' })).toBeDisabled();
+  await expect(card.getByRole('button', { name: 'In notebook', exact: true })).toBeDisabled();
   await button(page, 'Calls & messages').click();
   await search.fill('tkt');
   await expect(cards.first().getByText('Text shorthand')).toBeVisible();
   await expect(button(page, 'Listen to tkt')).toHaveCount(0);
   await button(page, 'Save tkt').click();
-  await expect(cards.first().getByRole('button', { name: '✓ In notebook' })).toBeDisabled();
+  await expect(cards.first().getByRole('button', { name: 'In notebook', exact: true })).toBeDisabled();
 
   await button(page, 'Review').click();
   const notebook = page.getByTestId('notebook-entries');

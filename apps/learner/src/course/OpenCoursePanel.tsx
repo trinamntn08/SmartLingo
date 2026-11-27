@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { Platform, Text, useWindowDimensions, View } from 'react-native';
+import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { frenchCourseLessonsByDay, getFrenchTopicPractice } from '@smartlingo/content';
 import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId,
   type CourseDay, type CourseEvent, type LearningEvent, type Lesson, type OpenCourse } from '@smartlingo/domain';
@@ -112,14 +112,13 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     events={learning.events} level={level} onLevelChange={setLevel} blocked={disabled}
     onDay={target => select(target, resumeStage(target, courseDayProgress(course, target, learning.events)))} />;
 
-  return <View testID="open-course-panel" style={[s.card,
-    { minWidth: 0, padding: compact ? 8 : 16, gap: compact ? 8 : 20, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
-    <View style={[s.row, { justifyContent: 'space-between', gap: compact ? 6 : 16 }]}>
-      <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 260, minWidth: 0, gap: 2 }}>
+  return <View testID="open-course-panel" style={[layout.panel, compact && layout.compactPanel]}>
+    <View style={[s.row, layout.header]}>
+      <View style={[layout.context, compact && layout.compactContext]}>
         <Text accessibilityRole="header" style={[s.heading, compact ? designTokens.typography.label : { fontSize: 21 }]}>{course.title}</Text>
         {!compact && <Text style={s.muted}>{course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview</Text>}
       </View>
-      <View style={[s.row, { flexGrow: compact ? 1 : 0, justifyContent: compact ? 'space-between' : 'flex-end', gap: 6 }]}>
+      <View style={[s.row, layout.navigation, compact && layout.compactNavigation]}>
         <Button compact quiet icon="arrow-left" label="Close course" href={routeHref(learn)} disabled={disabled} onPress={close}>
           {compact ? 'Close' : 'Close course'}
         </Button>
@@ -138,10 +137,9 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       <Button onPress={() => void learning.load()}>Retry course storage</Button>
     </View>}
     <CourseWriteStatus learning={learning} />
-    <View testID="course-journey" style={{ gap: compact ? 8 : 16, minWidth: 0,
-      ...(sidebar ? { flexDirection: 'row', alignItems: 'flex-start' } : {}) }}>
+    <View testID="course-journey" style={[layout.journey, compact && layout.compactJourney, sidebar && layout.splitJourney]}>
       {outline}
-      <View style={{ gap: 16, minWidth: 0, flex: sidebar ? 1 : undefined }}>
+      <View style={[layout.reader, sidebar && layout.splitReader]}>
         <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
           extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
           timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{
@@ -159,3 +157,18 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     </View>
   </View>;
 }
+
+const layout = StyleSheet.create({
+  panel: { minWidth: 0, gap: 24 },
+  compactPanel: { gap: 16 },
+  header: { justifyContent: 'space-between', gap: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: colors.line },
+  context: { flexGrow: 1, flexShrink: 1, flexBasis: 260, minWidth: 0, gap: 4 },
+  compactContext: { flexBasis: '100%' },
+  navigation: { justifyContent: 'flex-end', gap: 8 },
+  compactNavigation: { flexGrow: 1, justifyContent: 'space-between' },
+  journey: { gap: 24, minWidth: 0 },
+  compactJourney: { gap: 16 },
+  splitJourney: { flexDirection: 'row', alignItems: 'flex-start' },
+  reader: { gap: 16, minWidth: 0 },
+  splitReader: { flex: 1 },
+});

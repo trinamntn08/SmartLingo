@@ -31,17 +31,17 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
     const status = completed ? 'Completed' : next ? 'Up next' : started ? 'In progress' : undefined;
     return <View key={lesson.id} testID={`topic-lesson-${lesson.id}`} role="listitem"
       style={[s.card, layout.lesson, compact && layout.compactLesson, { width: lesson.id === leadId ? '100%' : cardWidth }, next && layout.nextLesson]}>
-      <View style={[s.row, { justifyContent: 'space-between', gap: 6 }]}>
+      <View style={layout.cardHeader}>
         <Text style={layout.position}>Lesson {index + 1}</Text>
-        {progressAvailable && status && <View style={[layout.status, completed && layout.completedStatus, next && layout.nextStatus]}>
-          {completed && <Icon name="check" size={14} color={colors.primary} />}
-          <Text style={layout.statusText}>{status}</Text>
+        {progressAvailable && status && <View style={layout.status}>
+          {completed && <Icon name="check" size={16} color={colors.primary} />}
+          <Text style={[layout.statusText, completed && layout.completedStatus]}>{status}</Text>
         </View>}
       </View>
       <Text accessibilityRole="header" aria-level={3} style={layout.lessonTitle}>{lesson.subtitle}</Text>
       <Text style={layout.outcome}>{lesson.outcome}</Text>
       <View style={[layout.footer, compact && next && layout.mobileAction]}>
-        <Button compact={!next} primary={next} accent={next} trailingIcon="arrow-right" label={`Open ${lesson.subtitle}`} disabled={disabled}
+        <Button compact={!next} accent={next} trailingIcon="arrow-right" label={`Open ${lesson.subtitle}`} disabled={disabled}
           href={routeHref({ kind: 'lesson', language, lessonId: lesson.id })} onPress={() => onOpen(lesson)}>
           {completed ? 'Revisit lesson' : started ? 'Continue lesson' : 'Start lesson'}
         </Button>
@@ -72,19 +72,17 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
 }
 
 const layout = StyleSheet.create({
-  lesson: {
-    padding: 16, gap: 8, minWidth: 0, maxWidth: '100%', borderBottomWidth: 3,
-  },
-  compactLesson: { padding: 13, gap: 6 },
-  nextLesson: { backgroundColor: colors.goldTint, borderColor: colors.yellow },
-  position: { ...tokens.typography.smallLabel, color: colors.primary },
-  status: { backgroundColor: colors.sand, borderRadius: tokens.radius.sm, paddingHorizontal: 8, paddingVertical: 2, flexDirection: 'row', alignItems: 'center', gap: 4 },
-  completedStatus: { backgroundColor: colors.sageTint },
-  nextStatus: { backgroundColor: colors.yellow },
-  statusText: { ...tokens.typography.caption, fontWeight: '600', color: colors.ink },
-  lessonTitle: { ...tokens.typography.sectionHeading, fontSize: 22, lineHeight: 28, color: colors.ink },
-  outcome: { ...tokens.typography.muted, fontSize: 16, lineHeight: 23, color: colors.ink },
-  footer: { marginTop: 'auto', paddingTop: 4, gap: 10, alignItems: 'flex-start' },
+  lesson: { padding: 16, gap: 8, minWidth: 0, maxWidth: '100%', borderLeftWidth: 4 },
+  compactLesson: { padding: 12 },
+  nextLesson: { borderLeftColor: colors.yellow },
+  cardHeader: { ...s.row, gap: 8, justifyContent: 'space-between' },
+  position: { ...tokens.typography.caption, color: colors.muted, fontVariant: ['tabular-nums'] },
+  status: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  completedStatus: { color: colors.primary },
+  statusText: { ...tokens.typography.caption, fontWeight: '500', color: colors.ink },
+  lessonTitle: { ...tokens.typography.sectionHeading, fontSize: 20, lineHeight: 28, color: colors.ink },
+  outcome: { ...tokens.typography.muted, fontSize: 16, lineHeight: 24, color: colors.ink },
+  footer: { marginTop: 'auto', paddingTop: 4, gap: 8, alignItems: 'flex-start' },
   mobileAction: { alignItems: 'stretch' },
   metadata: { ...tokens.typography.caption, color: colors.muted },
 });

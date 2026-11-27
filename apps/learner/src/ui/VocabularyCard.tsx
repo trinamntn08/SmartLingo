@@ -27,7 +27,7 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
     () => setMessage(`Saved ${entry.target} to your notebook.`));
   }
 
-  const illustration = showIllustration && <WordIllustration entry={entry} size={study ? (compact ? 148 : 144) : compact ? 240 : 280} />;
+  const illustration = showIllustration && <WordIllustration entry={entry} size={study ? (compact ? 88 : 144) : compact ? 240 : 280} />;
   const example = <View style={study ? layout.studyExample : layout.example}>
     {!study && <Text style={s.eyebrow}>In a sentence</Text>}
     <Text {...languageProps} style={[s.body, study && layout.studySentence]}>{entry.example}</Text>
@@ -35,43 +35,47 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
     <Text style={study ? s.muted : s.body}>{entry.exampleMeaning}</Text>
   </View>;
 
-  return <View testID={`vocabulary-${entry.id}`} style={[s.card, layout.card, compact && layout.compactCard, study && layout.studyCard]}>
-    <View style={layout.definition}>
-      <View style={[s.row, layout.phrase]}>
-        <Text {...languageProps} accessibilityRole="header" style={[s.target, layout.target, compact && layout.compactTarget]}>{entry.target}</Text>
-        {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
-        {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
-        <Speak language={language} text={entry.target} onError={setVoiceError} />
-      </View>
-      {language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}
-      <Text style={[s.body, layout.meaning]}>{entry.meaning}</Text>
+  const definition = <View style={layout.definition}>
+    <View style={[s.row, layout.phrase]}>
+      <Text {...languageProps} accessibilityRole="header" aria-level={3} style={[s.target, layout.target, compact && layout.compactTarget, study && layout.studyTarget]}>{entry.target}</Text>
+      {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
+      {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
+      <Speak language={language} text={entry.target} onError={setVoiceError} />
     </View>
+    {language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}
+    <Text style={[s.body, layout.meaning]}>{entry.meaning}</Text>
+  </View>;
+  const actions = <View style={[s.row, layout.actions, study && layout.studyActions]}>
+    <Button compact quiet icon={saved ? 'check' : 'bookmark'} label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
+      {saved ? 'In notebook' : 'Save word'}
+    </Button>
+  </View>;
+
+  return <View testID={`vocabulary-${entry.id}`} style={study ? [layout.studyCard, compact && layout.compactCard] : [s.card, layout.card, compact && layout.compactCard]}>
+    {definition}
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, layout.voiceError]}>{voiceError}</Text>}
     {study ? <View style={[s.row, layout.studyContent]}>{illustration}{example}</View> : <>{illustration}{example}</>}
     {!!presentation.note && <Text style={s.muted}>{presentation.note}</Text>}
-    <View style={[s.row, layout.actions, study && layout.studyActions]}>
-      <Button compact quiet label={`Save ${entry.target}`} disabled={model.blocked || saved} onPress={saveWord}>
-        {saved ? '✓ In notebook' : '+ Save word'}
-      </Button>
-    </View>
+    {actions}
     {!!message && <Text accessibilityLiveRegion="polite" style={s.muted}>{message}</Text>}
   </View>;
 }
 
 const layout = StyleSheet.create({
-  card: { width: '100%', minWidth: 0, flexGrow: 1, padding: 20, gap: 14, boxShadow: 'none', borderRadius: 16 },
+  card: { width: '100%', minWidth: 0, flexGrow: 1, padding: 20, gap: 12, boxShadow: 'none', borderRadius: 16 },
   compactCard: { padding: 16 },
-  studyCard: { gap: 12, borderBottomWidth: 3 },
+  studyCard: { minWidth: 0, padding: 24, gap: 12 },
   definition: { minWidth: 0, gap: 4 },
   phrase: { gap: 8 },
   target: { flexShrink: 1, minWidth: 0 },
   compactTarget: { fontSize: 32, lineHeight: 42 },
+  studyTarget: { fontSize: 28, lineHeight: 36, fontWeight: '500' },
   meaning: { fontWeight: '600' },
   voiceError: { color: colors.danger },
-  studyContent: { minWidth: 0 },
-  studyExample: { flex: 1, flexBasis: 150, minWidth: 0, backgroundColor: colors.paper, borderRadius: 10, padding: 12, gap: 4 },
-  studySentence: { fontWeight: '600' },
-  example: { gap: 6, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
+  studyContent: { minWidth: 0, alignItems: 'flex-start' },
+  studyExample: { flexGrow: 1, flexShrink: 1, flexBasis: 144, minWidth: 0, borderLeftWidth: 1, borderColor: colors.line, paddingLeft: 12, gap: 4 },
+  studySentence: { fontWeight: '500' },
+  example: { gap: 4, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
   actions: { marginTop: 'auto', gap: 8 },
-  studyActions: { paddingTop: 4, borderTopWidth: 1, borderColor: colors.line },
+  studyActions: { marginTop: 0 },
 });

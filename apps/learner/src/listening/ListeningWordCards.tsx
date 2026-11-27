@@ -43,8 +43,8 @@ export function ListeningWordCards({ cards, selected, onToggle }: {
 
 const layout = StyleSheet.create({
   exercise: { gap: tokens.space.md, minWidth: 0 },
-  heading: { ...tokens.typography.sectionHeading, fontSize: 21, lineHeight: 27, color: colors.ink },
+  heading: { ...tokens.typography.sectionHeading, fontSize: 20, lineHeight: 28, color: colors.ink },
   cards: { ...s.row, gap: tokens.space.sm },
-  tray: { justifyContent: 'center', minHeight: 60, padding: tokens.space.sm, borderRadius: tokens.radius.md,
-    borderWidth: 1, borderStyle: 'dashed', borderColor: colors.inputBorder, backgroundColor: colors.paper },
+  tray: { justifyContent: 'center', minHeight: 60, padding: tokens.space.sm, borderRadius: tokens.radius.input,
+    borderBottomWidth: 1, borderColor: colors.inputBorder, backgroundColor: colors.paper },
 });

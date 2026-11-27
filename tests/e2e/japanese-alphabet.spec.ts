@@ -33,6 +33,7 @@ async function tryRow(page: Page, row: JapaneseAlphabetLesson, wrongFirst = fals
   const alphabet = page.getByTestId('japanese-alphabet');
   await alphabet.getByRole('button', { name: 'Recognition practice', exact: true }).click();
   const practice = alphabet.getByTestId('kana-recognition');
+  await expect(practice.getByRole('heading')).toBeFocused();
   for (const [index, character] of row.characters.entries()) {
     await expect(practice.getByRole('heading')).toHaveText('Which kana matches the sound?');
     if (index === 0) {
@@ -173,7 +174,11 @@ test('visual kana rows support keyboard choices at 320px without a dropdown or s
   await expect(current).toHaveAttribute('aria-selected', 'false');
   await expect(current).toHaveAccessibleName(/Suggested next.*Not studied$/);
   await expect(next).toHaveAccessibleName(/Current row.*Not studied$/);
-  await expect(alphabet.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
+  const heading = alphabet.getByRole('heading', { name: second.title, exact: true });
+  await expect(heading).toBeFocused();
+  await expect(heading).toBeInViewport();
+  await page.keyboard.press('Tab');
+  await expect(button(page, `Listen to ${second.characters[0]!.kana}`)).toBeFocused();
   await expect(next).toContainText('Current row');
   await expect(next).toContainText('Not studied');
   expect(await events(page)).toHaveLength(0);

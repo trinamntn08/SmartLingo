@@ -65,7 +65,7 @@ if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
 & (Join-Path $env:ANDROID_HOME 'build-tools\35.0.0\aapt.exe') dump permissions $apk.Path
 ```
 
-The application ID is `com.smartlingo.preview`. This preview is version `0.2.6-preview` (version code 8), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
+The application ID is `com.smartlingo.preview`. This preview is version `0.2.7-preview` (version code 9), with minimum API 24 (Android 7) and target API 36. Use a current Android System WebView or Chrome supported by your device. [APK signature verification](https://developer.android.com/tools/apksigner), [Capacitor Android support](https://capacitorjs.com/docs/android)
 
 ## 3. Install on your phone
 

@@ -2,6 +2,10 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Android preview with the shared course interface
+
+The owner requested a downloadable APK containing the course refactor. All 77 fetched and live origin branch heads matched. The clean course worktree at `ada219f15fae69b4d73170b8501688b7e62f6fe4` matches `origin/feat/shared-course-interface`. The `build/android-0.2.7` branch starts from that commit and increases the Android preview from version code 8 to 9. The previous APK is on `downloads/android-0.2.6`.
+
 ## 2026-11-27 Shared course interface
 
 At 23:07 UTC, all 76 fetched branch heads matched the live origin inventory. The original clean `chore/cloud-workflow` checkout at `2249086` was two commits behind its upstream and predates Japanese. The separate `feat/shared-course-interface` worktree starts clean at `5d31ae0`, which contains the scope of `feat/japanese-curriculum-redesign`, `feat/material-first-lessons`, `release/combined-learner` and `fix/native-japanese-recordings`. The APK download branch adds a signed binary. The separate hosted branch targets an earlier learner. [Execution plan](plans/0062-shared-course-interface.md)

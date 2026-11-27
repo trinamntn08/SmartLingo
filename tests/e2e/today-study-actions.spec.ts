@@ -121,10 +121,10 @@ test('French Today resumes Lesson 3 at the saved step with one action', async ({
   await expect(course.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
 });
 
-test('a direct Japanese lesson shows the written pronunciation and an icon-only speaker', async ({ page }) => {
+test('a direct Japanese lesson shows written pronunciation beside the playable word', async ({ page }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/lesson/ja/ja.lesson.day-1/vocabulary');
   const greeting = page.getByTestId('vocabulary-ja.greetings.konnichiwa');
   await expect(greeting.getByTestId('word-pronunciation')).toHaveText('konnichiwa');
-  await expect(greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true })).toHaveText('');
+  await expect(greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true })).toHaveText('こんにちは');
 });

@@ -115,9 +115,10 @@ function ExpressionCard({ expression, model, compact }: {
     <View style={styles.summary}>
       <View style={styles.definition}>
         <View testID="slang-term" style={styles.term}>
-          <Text accessibilityRole="header" {...frenchLanguage} style={[styles.target, compact && styles.targetCompact]}>{target}</Text>
+          {textAbbreviation
+            ? <Text accessibilityRole="header" {...frenchLanguage} style={[styles.target, compact && styles.targetCompact]}>{target}</Text>
+            : <Speak language="fr-FR" text={target} headingLevel={3} wordStyle={[styles.target, compact && styles.targetCompact]} />}
           <View style={styles.termActions}>
-            {!textAbbreviation && <Speak language="fr-FR" text={target} />}
             <NotebookStar model={model} entry={{ id: `notebook.${sourceEntryId}`, sourceEntryId, language: 'fr-FR', target, meaning, example }} />
           </View>
         </View>

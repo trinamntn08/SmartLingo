@@ -29,11 +29,11 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
 
   const definition = <View style={layout.definition}>
     <View style={[s.row, layout.phrase]}>
-      <Text {...languageProps} accessibilityRole="header" aria-level={3} style={[s.target, layout.target, compact && layout.compactTarget, study && layout.studyTarget]}>{entry.target}</Text>
+      <Speak language={language} text={entry.target} onError={setVoiceError} headingLevel={3}
+        wordStyle={[s.target, layout.target, compact && layout.compactTarget, study && layout.studyTarget]} />
       {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
       {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
       <View style={layout.termActions}>
-        <Speak language={language} text={entry.target} onError={setVoiceError} />
         <NotebookStar model={model} entry={{ id: `notebook.${entry.id}`, sourceEntryId: entry.id, language, reading: entry.reading,
           exampleReading: entry.exampleReading, target: entry.target, meaning: entry.meaning, example: entry.example }}
           onChange={saved => setMessage(saved ? `Saved ${entry.target} to your notebook.` : `Removed ${entry.target} from your notebook.`)} />

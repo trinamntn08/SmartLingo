@@ -1,6 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { lessonProgress, type LearningEvent, type Lesson } from '@smartlingo/domain';
+import { completedJapanesePracticeIds, lessonProgress, type JapanesePracticeResult, type JapanesePracticeTask, type LearningEvent, type Lesson } from '@smartlingo/domain';
 import { getLearnerGrammar } from '@smartlingo/content';
 import { Button } from './controls';
 import { colors, designTokens as tokens, styles as s } from './theme';
@@ -16,6 +16,7 @@ import type { ContextPhoto } from './contextPhotos';
 import { getLessonDialoguePhoto } from './dialoguePhotos';
 import { routePress } from './routePress';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
+import { JapaneseLessonPractice } from '../japanese/JapaneseLessonPractice';
 import { lessonStages, routeHref, topicRouteKey, type LessonStage } from '../app/routes';
 
 function resumeStage(wordsStudied: boolean, progress: ReturnType<typeof lessonProgress>): LessonStage {
@@ -52,12 +53,15 @@ interface CourseLessonSession {
   nextLesson?: LessonLink;
   dialoguePhoto?: ContextPhoto;
   listeningQuestion?: ListeningQuestion;
+  practiceCompletedIds?: readonly string[];
+  onPracticeResult?: (task: JapanesePracticeTask, result: JapanesePracticeResult, assisted: boolean) => void;
 }
 
-export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession, timeEstimate, extraPractice }: {
+export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession, timeEstimate, extraDialogue, extraPractice }: {
   lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; sequence?: LessonSequence; routed?: boolean;
   courseSession?: CourseLessonSession;
   timeEstimate?: string;
+  extraDialogue?: ReactNode;
   extraPractice?: ReactNode;
 }) {
   const { route, navigate, read } = useNavigation();
@@ -181,6 +185,17 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     else record('vocabulary', lesson.id, 'viewed', 0, () => setStage(next, true));
   }
 
+  function recordPractice(task: JapanesePracticeTask, result: JapanesePracticeResult, assisted: boolean) {
+    if (courseSession) {
+      courseSession.onPracticeResult?.(task, result, assisted);
+    } else if (!exerciseBlocked && !browseOnly) {
+      record('practice', task.id, result === 'self-reviewed' ? 'viewed' : result, Number(assisted));
+    }
+  }
+
+  const practical = lesson.japanesePractice;
+  const completedPracticeIds = courseSession?.practiceCompletedIds ?? completedJapanesePracticeIds(lesson, model.events);
+
   return <View style={[layout.page, compact && layout.compactPage]}>
     {!courseSession && <View style={[s.row, layout.breadcrumb]}>
       <Button compact quiet icon="arrow-left" href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
@@ -217,6 +232,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
             : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked}
               onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>Next</Button>}
         </StudyActions>
+        {extraDialogue}
       </>}
       {stage === 'vocabulary' && <>
         <LessonWords lesson={lesson} model={model} />
@@ -248,7 +264,10 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}
       {stage === 'sentence' && <SentenceActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
         done={progress.sentenceDone || (!courseSession && progress.completed)} completed={progress.completed} canComplete={canComplete && progress.sentenceDone}
-        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson} extraPractice={extraPractice}
+        record={record} nextHref={exitHref} onNext={onExit} returnLabel={returnLabel} nextLesson={nextLesson} extraPractice={practical
+          ? <JapaneseLessonPractice practice={practical} completedIds={completedPracticeIds}
+            disabled={exerciseBlocked} browseOnly={browseOnly} guided={!!courseSession} onResult={recordPractice} />
+          : extraPractice}
         onComplete={() => record('completion', lesson.id, 'completed', 0, () => setReturnAfterCompletion(true))} />}
     </View>
   </View>;

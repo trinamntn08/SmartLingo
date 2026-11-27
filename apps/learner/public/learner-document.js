@@ -28,7 +28,8 @@ function isLearnerDocumentPath(pathname) {
   if (item !== undefined && !key(item)) return false;
   if (section === 'listening') return parts.length <= 5 && (extra === undefined || (item !== 'library' && question(extra)));
   if (section === 'speaking') return parts.length <= 6 && (extra === undefined || (positive(extra) && positive(final)));
-  return section === 'letters' && language === 'ja' && parts.length <= 6 && (extra === undefined || extra === 'study' || extra === 'recognition')
+  return section === 'letters' && language === 'ja' && parts.length <= 6
+    && (extra === undefined || extra === 'study' || extra === 'words' || extra === 'recognition')
     && (final === undefined || (extra === 'recognition' && key(final)));
 }
 

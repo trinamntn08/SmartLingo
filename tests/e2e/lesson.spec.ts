@@ -81,7 +81,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expectPictureLoaded(page);
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.eau').getByText('f.', { exact: true })).toBeVisible();
-  await expect(button(page, 'Listen to bonjour')).toHaveText('');
+  await expect(button(page, 'Listen to bonjour')).toHaveText('bonjour');
   const speakerBox = await button(page, 'Listen to bonjour').boundingBox();
   expect(speakerBox!.width).toBeGreaterThanOrEqual(44);
   expect(speakerBox!.height).toBeGreaterThanOrEqual(44);

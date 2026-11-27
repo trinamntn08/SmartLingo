@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { vocabularySchema } from './content';
+import type { JapanesePracticeTask } from './japanese-practice';
 
 const id = z.string().regex(/^[a-z0-9][a-z0-9.-]+$/).max(120);
 const text = z.string().trim().min(1).max(2000);
@@ -149,6 +150,8 @@ export const courseEventSchema = z.discriminatedUnion('kind', [
   z.object({ ...eventFields, kind: z.literal('support') }),
   z.object({ ...eventFields, kind: z.literal('choice'), choiceId: id,
     result: z.enum(['correct', 'incorrect']), supported: z.boolean() }),
+  z.object({ ...eventFields, kind: z.literal('practice'), taskId: id,
+    result: z.enum(['correct', 'incorrect', 'self-reviewed']), supported: z.boolean() }),
   z.object({ ...eventFields, kind: z.literal('reflection') }),
   z.object({ ...eventFields, kind: z.literal('completion') }),
 ]);
@@ -192,6 +195,8 @@ export function courseDayProgress(course: OpenCourse, day: CourseDay, inputs: re
   let legacyCompletion = false;
   let lastBlockId = day.blocks[0].id;
   for (const event of events) {
+    // Supplementary task attempts have their own progress and must never move the reader cursor.
+    if (event.kind === 'practice') continue;
     const block = blocks.get(event.blockId);
     if (!block) {
       if (!courseLessonEventStage(event)) continue;
@@ -232,8 +237,31 @@ export function resumeCourseDay(course: OpenCourse, inputs: readonly CourseEvent
   const days = new Map(course.days.map(day => [day.id, day]));
   for (const event of orderedEvents(inputs).reverse()) {
     const day = days.get(event.dayId);
-    if (day && event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day)
+    if (event.kind !== 'practice' && day && event.courseId === course.id && event.courseRevision === courseDayProgressRevision(course, day)
       && (day.blocks.some(block => block.id === event.blockId) || courseLessonEventStage(event))) return day;
   }
   return nextCourseDay(course, inputs) ?? course.days.at(-1);
+}
+
+/** Supplementary Can-do/checkpoint activity is distinct from historical study-day completion. */
+export function coursePracticeProgress(course: OpenCourse, day: CourseDay, tasks: readonly JapanesePracticeTask[], inputs: readonly CourseEvent[]) {
+  const authored = new Map(tasks.filter(task => task.id.startsWith(`${day.id}.`)).map(task => [task.id, task]));
+  const completedIds = new Set<string>();
+  const supportedIds = new Set<string>();
+  const attemptedIds = new Set<string>();
+  for (const event of orderedEvents(inputs)) {
+    if (event.kind !== 'practice' || !isCoursePracticeAttempt(course, day, authored.get(event.taskId), event)) continue;
+    attemptedIds.add(event.taskId);
+    if (event.supported) supportedIds.add(event.taskId);
+    if (event.result === 'correct' || event.result === 'self-reviewed') completedIds.add(event.taskId);
+  }
+  return { completedIds, supportedIds, attemptedIds, completed: tasks.length > 0 && tasks.every(task => completedIds.has(task.id)) };
+}
+
+export function isCoursePracticeAttempt(course: OpenCourse, day: CourseDay, task: JapanesePracticeTask | undefined,
+  event: Extract<CourseEvent, { kind: 'practice' }>): boolean {
+  return !!task && task.id === event.taskId && task.id.startsWith(`${day.id}.`)
+    && event.courseId === course.id && event.dayId === day.id
+    && event.courseRevision === courseDayProgressRevision(course, day) && event.blockId === courseLessonStageId('sentence')
+    && (task.mode === 'self') === (event.result === 'self-reviewed');
 }

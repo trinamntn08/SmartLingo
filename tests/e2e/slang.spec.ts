@@ -40,12 +40,10 @@ test('French slang is searchable, keeps its history and toggles notebook stars',
   await expect(cards.first().getByText('Informal', { exact: true })).toHaveCount(0);
   await expect(cards.first().getByText('Small talk', { exact: true })).toHaveCount(0);
   const firstTerm = cards.first().getByTestId('slang-term');
-  const titleBounds = (await firstTerm.getByRole('heading').boundingBox())!;
-  for (const control of await firstTerm.getByRole('button').all()) {
-    const bounds = (await control.boundingBox())!;
-    expect(bounds.x).toBeGreaterThanOrEqual(titleBounds.x + titleBounds.width);
-    expect(bounds.y).toBeLessThan(titleBounds.y + titleBounds.height);
-  }
+  const playbackBounds = (await firstTerm.getByRole('button', { name: /^Listen to / }).boundingBox())!;
+  const saveBounds = (await firstTerm.getByRole('button', { name: /^Save / }).boundingBox())!;
+  expect(saveBounds.x).toBeGreaterThanOrEqual(playbackBounds.x + playbackBounds.width);
+  expect(saveBounds.y).toBeLessThan(playbackBounds.y + playbackBounds.height);
   await button(page, 'Show more expressions').click();
   await expect(cards).toHaveCount(24);
   const search = page.getByRole('textbox', { name: 'Search slang' });
@@ -64,6 +62,7 @@ test('French slang is searchable, keeps its history and toggles notebook stars',
   const target = (await term.getByRole('heading').textContent())!;
   await expect(term.getByRole('heading')).toHaveAttribute('lang', 'fr-FR');
   const listen = term.getByRole('button', { name: `Listen to ${target}`, exact: true });
+  await expect(listen).toHaveText(target);
   const save = term.getByRole('button', { name: `Save ${target}`, exact: true });
   for (const control of [listen, save]) {
     await expect(control).toBeVisible();
@@ -125,5 +124,5 @@ test('the direct slang URL works and the Japanese navigation keeps its existing 
   const navigation = page.getByRole('navigation', { name: 'Learning navigation' });
   await expect(navigation.getByRole('button')).toHaveText(['Today', 'Learn', 'Review', 'Report', 'Profile']);
   await page.getByTestId('today-next-step').getByRole('button').click();
-  await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 1 of 2/)).toBeVisible();
+  await expect(page.getByText(/Hiragana.*Row 1 of \d+.*Step 1 of 3/)).toBeVisible();
 });

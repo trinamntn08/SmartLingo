@@ -1,4 +1,4 @@
-import { frenchCourseLessonsByDay, frenchPilotBriefGrammar, getLearnerGrammar, japaneseLessons } from '@smartlingo/content';
+import { frenchCourseLessonsByDay, frenchPilotBriefGrammar, getJapaneseDailyGuide, getLearnerGrammar, japaneseLessons } from '@smartlingo/content';
 import { courseDayProgressRevision, lessonSchema, type CourseDay, type Lesson, type OpenCourse } from '@smartlingo/domain';
 
 interface FrenchPractice {
@@ -104,7 +104,16 @@ export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
   if (course.language === 'ja-JP') {
     const authored = japaneseLessons.find(lesson => lesson.id === `ja.lesson.day-${day.dayNumber}`);
     if (!authored) throw new Error(`Missing shared Japanese lesson material for ${day.id}`);
-    return lessonSchema.parse({ ...authored, ...identity, grammar: getLearnerGrammar(authored) });
+    const guide = getJapaneseDailyGuide(day.id);
+    return lessonSchema.parse({
+      ...authored, ...identity, grammar: getLearnerGrammar(authored),
+      japanesePractice: guide ? {
+        tasks: [...guide.tasks, ...guide.checkpoint],
+        checkpoint: guide.checkpoint.length > 0,
+        prerequisites: guide.preparation,
+        revisit: guide.review,
+      } : authored.japanesePractice,
+    });
   }
 
   const authored = frenchCourseLessonsByDay.get(day.id);

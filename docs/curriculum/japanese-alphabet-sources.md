@@ -1,14 +1,14 @@
-# Japanese kana opening — draft provenance
+# Japanese kana lessons and draft provenance
 
-Original AI-assisted draft for owner review, 2026-11-22 (Europe/Paris). No publication, qualified Japanese-teacher review, certified level coverage or pronunciation assessment is claimed.
+Original AI-assisted opening draft dated 2026-11-22 (Europe/Paris). The expanded kana path was authored on the Japanese curriculum redesign branch and adapted to the shared web learner on 2026-11-27. The lessons remain drafts for owner and qualified Japanese-teacher review.
 
 ## Scope and progression
 
-The owner requested Japanese alphabet lessons before vocabulary. The separate alphabet metadata provides ten short hiragana groups followed by ten matching katakana groups: vowels, k, s, t, n, h, m, y, r, then wa / o (wo) / nasal n. Each script covers the standard 46 modern basic characters, 92 forms altogether. The three-character final group intentionally combines the remaining w forms with nasal n. This introductory recognition/listening route uses three or five characters per lesson rather than padding a vocabulary lesson to six items.
+The owner requested Japanese alphabet lessons before vocabulary. Each script begins with ten groups covering the 46 modern basic characters. The final basic group combines wa, o (wo) and nasal n. The 20 basic groups retain their original IDs, revision 1 and recognition practice. Word examples and optional recall add reading and script typing to those groups.
 
-Existing Japanese lesson, course, vocabulary and answer payloads are untouched. Alphabet IDs are new, stable identifiers; all lessons carry revision 1 and draft status. Visible English summaries and notes are original. These are sound symbols, not noun vocabulary, so articles, gender, dialogues and translation answers are not applicable. Romaji is a temporary aid; the display uses shi, chi, tsu, fu, and o (wo). No free-text answer validator or accepted-answer list is introduced.
+The expanded path has 53 groups, including reading checkpoints, dakuten and handakuten, contracted sounds, small tsu, long vowels, and borrowed katakana combinations. The new groups use stable IDs. To save a group, the learner checks each word task and completes any self-review the group includes. Learners can jump to either script and explore any group. The [kana patterns and checkpoints](../../packages/content/src/japanese-kana-support.ts) come from Japanese curriculum redesign checkpoint `afe9d7e1df57328cfc8c8004b73b4141819b7581`.
 
-Sound marks (dakuten/handakuten), small kana and combinations, vowel length, kanji, handwriting and stroke order require later instruction. Recognising these 92 forms is not complete Japanese orthography or proficiency.
+English summaries and notes are original. Romaji supports reading and uses shi, chi, tsu, fu and o (wo). Typed recall checks the requested script and preserves distinctions in size, voicing and vowel length. Pronunciation and handwriting are opportunities for learner self-review.
 
 ## Factual sources inspected
 
@@ -18,10 +18,10 @@ Sound marks (dakuten/handakuten), small kana and combinations, vowel length, kan
 
 ## Audio and rights
 
-Only Unicode characters and original English explanations are added. There are no downloaded or generated media assets, copied charts, paid calls or new media licences. Ordinary playback uses the existing optional speech adapter. Audio prompts use matching katakana for both scripts to reduce the risk of isolated hiragana は / へ being interpreted as particles; the prompts for を / ヲ use オ and nasal n uses ン. This prompt choice is an implementation aid, not evidence of correct speech from every engine. No external source audio is reused.
+Kana playback uses the shared Japanese audio adapter. Isolated basic prompts use matching katakana for both scripts to reduce the risk of は and へ being interpreted as particles. The prompts for を and ヲ use オ, and nasal n uses ン. For timing signs such as small っ, playback uses a complete example word. See [Japanese audio](../JAPANESE_AUDIO.md) for recording sources and voice options.
 
 ## Review and validation
 
-Focused automated content tests check the exact basic-form inventory, 20-group order, 92 unique character IDs/forms, script matching, stable lesson IDs, draft/revision metadata, Hepburn-style readings and katakana audio prompts including the particle-prone forms. The implementation report records the command actually run and its outcome; tests do not establish teaching quality or pronunciation accuracy.
+Automated content tests check the basic-form inventory and original order, stable IDs and revisions, the 53-group path, answer schemas, and coverage of contracted sounds and mora timing. Progress tests cover the original completion events and new word recall resume. Browser tests cover navigation, review and saved study. Actual results are recorded in the [work log](../WORK_LOG.md).
 
-Manual comparison with the readable Irodori chart checked all row membership and displayed readings. Original English explanations were reviewed for beginner readability, modern o versus keyboard wo, nasal n versus vowel-bearing n-row forms, and the limited scope of this introduction. Open review: owner or qualified Japanese teacher should review the vowel/tongue/lip cues, typography and ordering, and audition isolated syllables from the actual device/free speech voice. Actual audio quality, handwriting competence and learner recognition have not been tested by this content task.
+Manual comparison with the readable Irodori chart checked basic row membership and displayed readings. The original explanations were reviewed for beginner readability, modern o and keyboard wo, and nasal n. Qualified review of the expanded explanations, lesson sequence and audio remains pending.

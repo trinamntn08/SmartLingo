@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { frenchCourses, japaneseCourse, japaneseLessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
+import { frenchCourses, japaneseCourse, japaneseDailyGuides, japaneseLessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
 import { buildLearningReport, courseDayProgressRevision, courseLessonStageId, localStudyDate, type CourseEvent, type LearningEvent,
   type LearningReportInput, type NotebookEntry, type ReviewEvent } from '../src';
 
@@ -24,6 +24,22 @@ function input(overrides: Partial<LearningReportInput> = {}): LearningReportInpu
   return { language: 'fr-FR', lessons: [french, japanese], courses: [...frenchCourses, japaneseCourse],
     events: [], courseEvents: [], notebook: [], reviewEvents: [], now, timeZone: 'Europe/Paris', ...overrides };
 }
+
+test('weekly activity counts authored guided practice without completing the study day', () => {
+  const day = japaneseCourse.days[0];
+  const task = japaneseDailyGuides[0].tasks.find(task => task.mode !== 'self')!;
+  const attempt: CourseEvent = {
+    id: randomUUID(), courseId: japaneseCourse.id, dayId: day.id,
+    courseRevision: courseDayProgressRevision(japaneseCourse, day), blockId: courseLessonStageId('sentence'),
+    kind: 'practice', taskId: task.id, result: 'correct', supported: false, occurredAt: evening,
+  };
+  const report = buildLearningReport(input({
+    language: 'ja-JP', guidedPracticeByDay: new Map([[day.id, [task]]]),
+    courseEvents: [attempt, { ...attempt, id: randomUUID(), taskId: `${day.id}.unknown` }],
+  }));
+  assert.equal(report.actionsThisWeek, 1);
+  assert.equal(report.completedStudyDays, 0);
+});
 
 test('reports have truthful empty totals, Monday–Sunday labels, and no browsing or note-edit activity', () => {
   const course = openCoursePilot; const day = course.days[0];

@@ -94,3 +94,4 @@ export const [openCoursePilot] = frenchCourses;
 export const frenchCourseLessonsByDay = french.lessonsByDay;
 export { japaneseCourse } from './japanese-course';
 export { japaneseLessons };
+export { japaneseDailyGuides, japaneseDailyUnits, getJapaneseDailyGuide, type JapaneseDailyGuide } from './japanese-daily-practice';

@@ -3,15 +3,20 @@ import { Pressable, Text, View } from 'react-native';
 import { colors, designTokens, styles as s } from './theme';
 
 /** Mount settings on first use, then retain their state while collapsed. */
-export function Disclosure({ title, description, children, keepMounted = true }: { title: string; description?: string; children: ReactNode; keepMounted?: boolean }) {
+export function Disclosure({ title, description, children, keepMounted = true, open, onToggle }: {
+  title: string; description?: string; children: ReactNode; keepMounted?: boolean;
+  open?: boolean; onToggle?: (expanded: boolean) => void;
+}) {
   const contentId = useId();
-  const [expanded, setExpanded] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const expanded = open ?? internalOpen;
   const [visited, setVisited] = useState(false);
   const [focused, setFocused] = useState(false);
 
   function toggle() {
     setVisited(true);
-    setExpanded(value => !value);
+    if (open === undefined) setInternalOpen(!expanded);
+    onToggle?.(!expanded);
   }
 
   return <View style={[s.card, { padding: 0, gap: 0, minWidth: 0 }]}>

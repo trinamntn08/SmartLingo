@@ -8,6 +8,7 @@ import { colors, styles as s } from '../../ui/theme';
 import { japaneseSource, type JapaneseSource } from './preferences';
 import { japaneseAudioStore, japaneseSpeechClient } from './runtime';
 import { japaneseCredit, japaneseHelp, type JapaneseStatus } from './client';
+import { RecordingCredits } from './RecordingCredits';
 
 export function JapaneseAudioPreferencesPanel() {
   const sourceId = useId();
@@ -72,11 +73,11 @@ export function JapaneseAudioPreferencesPanel() {
   const selectStyle = { width: '100%', minWidth: 0, minHeight: 48, padding: 12, borderRadius: 12, border: '1px solid #8B8D7E', background: colors.card, color: colors.ink, fontSize: 16 };
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>Japanese audio</Text>
-    <Text style={s.body}>Choose synthetic device speech or a free local Japanese voice. Automatic uses a Japanese device voice when available, then saved audio or VOICEVOX.</Text>
+    <Text style={s.body}>Automatic plays bundled Japanese recordings when available. For other phrases it uses a Japanese device voice, saved audio or the free local VOICEVOX voice.</Text>
     <View style={{ gap: 8 }}>
       <label htmlFor={sourceId} style={{ color: colors.ink, fontSize: 17, fontWeight: 600 }}>Japanese audio source</label>
       <select id={sourceId} value={source} onChange={event => saveSource(event.target.value as JapaneseSource)} style={selectStyle}>
-        <option value="auto">Automatic — device, then free local voice</option>
+        <option value="auto">Automatic — recordings, device or free local voice</option>
         <option value="device">Device voice only</option>
         <option value="voicevox">Free local voice — Shikoku Metan</option>
       </select>
@@ -94,7 +95,7 @@ export function JapaneseAudioPreferencesPanel() {
         {voices.map(voice => <option key={voiceId(voice)} value={voiceId(voice)}>{voice.name} · {voice.lang} · {voice.localService ? 'Device' : 'Network'}</option>)}
       </select>
     </View>
-    <Text style={s.muted}>{selectedVoice ? `Current device voice: ${selectedVoice.name} (${selectedVoice.lang}).` : 'No Japanese device voice is available. Automatic and Free local voice can use VOICEVOX or saved Japanese audio.'}</Text>
+    <Text style={s.muted}>{selectedVoice ? `Current device voice: ${selectedVoice.name} (${selectedVoice.lang}).` : 'No Japanese device voice is available. Automatic can use bundled recordings, saved Japanese audio or VOICEVOX.'}</Text>
     <Text style={s.body}>Speaking speed</Text>
     <View style={s.row}>{audioRates.map(rate => <Button key={rate} selected={preferences.rate === rate} label={`Speaking speed: ${rate === 0.7 ? 'Slow' : rate === 0.85 ? 'Gentle' : 'Normal'}`} onPress={() => savePreferences({ ...preferences, rate })}>{rate === 0.7 ? 'Slow · 0.7×' : rate === 0.85 ? 'Gentle · 0.85×' : 'Normal · 1×'}</Button>)}</View>
     <View style={s.notice}><Text style={s.body}>こんにちは。コーヒーをください。</Text><Text style={s.muted}>Hello. A coffee, please.</Text></View>
@@ -107,5 +108,6 @@ export function JapaneseAudioPreferencesPanel() {
     {!!notice && <Text accessibilityLiveRegion="polite" style={s.muted}>{notice}</Text>}
     <Text style={s.muted}>With Free local voice, spoken text goes only to the local API and VOICEVOX engine on this computer. A speaker click may save its clip in this browser for offline replay (up to 100 clips / 32 MB); browser storage can be unavailable or evicted. Clearing Japanese audio cancels this preview and keeps lesson history and French audio.</Text>
     <Text style={s.muted}>Device network voices may send text to your browser’s speech service. Installed device voices and saved clips may work offline. The app download does not install VOICEVOX. All lesson text and translations remain available.</Text>
+    <RecordingCredits />
   </View>;
 }

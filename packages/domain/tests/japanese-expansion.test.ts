@@ -13,8 +13,13 @@ test('the French library and the Japanese course and core lessons keep their rev
   const newFrenchLessons = new Set([...frenchCourseLessonsByDay.values()].map(lesson => lesson.id));
   assert.equal(hash(lessons.filter(lesson => !newFrenchLessons.has(lesson.id) && !/^fr\.(?:cycling|household-waste)\./.test(lesson.id))),
     '0354161d5f3fadeefbab8f58ed6bc95c6145afd38b51bb185643fe8e53abb49e');
-  // Rebaselined for the learner-facing Lesson names, including shared vocabulary notes.
-  assert.equal(hash(coreLessons()), '6fe97b934f5c8a411f54858187e9e83fab2cb19d523830149f4d2a1a16d8cdff');
+  // Keep the reviewed core guard: practice is additive and the day-1 learner
+  // copy intentionally fixes the old no-audio statement without revising history.
+  const originalStudy = japaneseCourse.days[0].blocks.find(block => block.kind === 'study');
+  assert.ok(originalStudy);
+  const reviewedCore = coreLessons().map(({ japanesePractice: _practice, ...lesson }) => lesson.id === 'ja.lesson.day-1'
+    ? { ...lesson, grammar: { ...lesson.grammar, explanation: originalStudy.explanation } } : lesson);
+  assert.equal(hash(reviewedCore), '6fe97b934f5c8a411f54858187e9e83fab2cb19d523830149f4d2a1a16d8cdff');
   assert.equal(hash(japaneseCourse), '7bc08c1af962ad5861a623fd261bdff19b9705fe70dd645176587d654ff1b586');
 });
 

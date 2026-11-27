@@ -1,4 +1,4 @@
-import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, type CourseEvent, type OpenCourse } from './course';
+import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, isCoursePracticeAttempt, type CourseEvent, type OpenCourse } from './course';
 import { lessonProgress, type LearningEvent } from './learning';
 import { notebookLanguage } from './languages';
 import { localStudyDate } from './review-schema';
@@ -32,15 +32,22 @@ function calendarWeek(today: string): ReportDay[] {
   });
 }
 
-function isLessonAction(event: LearningEvent): boolean {
+function isLessonAction(event: LearningEvent, lesson: Lesson): boolean {
   if (event.activity === 'vocabulary') return event.result === 'viewed';
   if (event.activity === 'completion') return event.result === 'completed';
+  if (event.activity === 'practice') {
+    const task = lesson.japanesePractice?.tasks.find(task => task.id === event.itemId);
+    return !!task && (task.mode === 'self' ? event.result === 'viewed' : ['correct', 'incorrect'].includes(event.result));
+  }
   return ['correct', 'almost', 'incorrect'].includes(event.result);
 }
 
-function isCourseAction(event: CourseEvent, course: OpenCourse): boolean {
+function isCourseAction(event: CourseEvent, course: OpenCourse, practice: LearningReportInput['guidedPracticeByDay']): boolean {
   const day = course.days.find(day => day.id === event.dayId);
   if (!day) return false;
+  if (event.kind === 'practice') {
+    return isCoursePracticeAttempt(course, day, practice?.get(day.id)?.find(task => task.id === event.taskId), event);
+  }
   if (courseLessonEventStage(event)) return event.kind !== 'navigation' && event.courseRevision <= courseDayProgressRevision(course, day);
   const block = day.blocks.find(block => block.id === event.blockId);
   if (!block) return false;
@@ -64,7 +71,7 @@ export function buildLearningReport(input: LearningReportInput): LearningReport 
   const courseById = new Map(courses.map(course => [course.id, course]));
   const events = uniqueEvents(input.events).filter(event => {
     const lesson = lessonById.get(event.lessonId);
-    return lesson && event.revision > 0 && event.revision <= lesson.revision && recorded(event.occurredAt) && isLessonAction(event);
+    return lesson && event.revision > 0 && event.revision <= lesson.revision && recorded(event.occurredAt) && isLessonAction(event, lesson);
   });
   const courseEvents = uniqueEvents(input.courseEvents).filter(event => {
     const course = courseById.get(event.courseId);
@@ -75,7 +82,8 @@ export function buildLearningReport(input: LearningReportInput): LearningReport 
   const addAction = (instant: string) => { const day = days.get(localStudyDate(instant, input.timeZone)); if (day && !day.future) day.actions++; };
   events.filter(event => event.activity !== 'completion' || !event.automaticCompletion)
     .forEach(event => addAction(event.occurredAt));
-  courseEvents.filter(event => isCourseAction(event, courseById.get(event.courseId)!)).forEach(event => addAction(event.occurredAt));
+  courseEvents.filter(event => isCourseAction(event, courseById.get(event.courseId)!, input.guidedPracticeByDay))
+    .forEach(event => addAction(event.occurredAt));
   reviews.forEach(event => addAction(event.occurredAt));
 
   const explored = new Set<string>();

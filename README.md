@@ -53,7 +53,7 @@ Device speech is optional and synthetic. Explicit Azure generation/saving is a s
 
 ## Free Japanese audio
 
-Japanese speaker buttons use a free local VOICEVOX fallback when no Japanese device voice is installed. Profile → Audio & pronunciation → Japanese audio lets you select and preview Shikoku Metan, set speed and remove saved clips. On Windows x64 with Python 3.12+, run `npm run setup:japanese-voice` once, then keep `npm run dev:japanese-voice` and `npm run dev:api` running in separate terminals. Already saved clips can replay offline. [Setup, research and voice credits](docs/JAPANESE_AUDIO.md) explains the local runtime and limits; no API key or paid speech is required.
+Japanese Automatic playback uses bundled recordings where available. They also work in the offline download. Profile → Audio & pronunciation → Japanese audio lets you choose and preview a voice, set speed and remove saved generated clips. For optional local VOICEVOX on Windows x64 with Python 3.12+, run `npm run setup:japanese-voice` once, then start `npm run dev:japanese-voice` and `npm run dev:api` in separate terminals. [Setup, research and voice credits](docs/JAPANESE_AUDIO.md)
 
 ## Back up and recover server curriculum
 

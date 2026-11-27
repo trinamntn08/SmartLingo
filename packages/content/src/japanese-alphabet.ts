@@ -1,3 +1,5 @@
+import type { JapanesePracticeTask } from '@smartlingo/domain';
+import { kanaRowSupport, kanaPatternLessons } from './japanese-kana-support';
 // Original introductory drafts. Factual references and review limits:
 // docs/curriculum/japanese-alphabet-sources.md
 export const kanaScripts = ['hiragana', 'katakana'] as const;
@@ -19,6 +21,11 @@ export interface JapaneseAlphabetLesson {
   title: string;
   summary: string;
   characters: readonly KanaCharacter[];
+  /** Additive practice metadata; original row identities and study history stay valid. */
+  kind?: 'basic' | 'pattern' | 'checkpoint';
+  prerequisites?: readonly string[];
+  examples?: readonly { text: string; reading: string; meaning: string; note?: string }[];
+  practice?: readonly JapanesePracticeTask[];
 }
 
 interface KanaRow {
@@ -100,6 +107,8 @@ function buildAlphabetLesson(script: KanaScript, row: KanaRow): JapaneseAlphabet
     script,
     title: `${script === 'hiragana' ? 'Hiragana' : 'Katakana'}: ${row.title}`,
     summary: row.summary,
+    kind: 'basic',
+    ...kanaRowSupport(script, row.id),
     characters: [...row[script]].map((kana, index) => {
       const reading = row.readings[index]!;
       const note = characterNote(script, reading);
@@ -116,9 +125,11 @@ function buildAlphabetLesson(script: KanaScript, row: KanaRow): JapaneseAlphabet
   };
 }
 
-export const japaneseAlphabetLessons: readonly JapaneseAlphabetLesson[] = kanaScripts.flatMap(script =>
-  rows.map(row => buildAlphabetLesson(script, row)),
-);
+// Keep the original twenty positions stable for saved links and legacy consumers.
+export const japaneseAlphabetLessons: readonly JapaneseAlphabetLesson[] = [
+  ...kanaScripts.flatMap(script => rows.map(row => buildAlphabetLesson(script, row))),
+  ...kanaPatternLessons,
+];
 
 export const japaneseAlphabetNotes: readonly { title: string; body: string }[] = [
   {
@@ -131,11 +142,15 @@ export const japaneseAlphabetNotes: readonly { title: string; body: string }[] =
   },
   {
     title: 'Short first steps',
-    body: 'These 20 short groups cover 46 basic forms in each script. Most characters represent a consonant plus a vowel, or just a vowel; nasal n is separate. Sound marks, small kana, long vowels and kanji come later. This is a beginning, not the whole Japanese writing system.',
+    body: 'These 20 short groups cover 46 basic forms in each script. Most characters represent a consonant plus a vowel, or just a vowel; nasal n is separate. Continue with sound marks, small kana, long vowels and cumulative reading checkpoints. Kanji has its own path. This is a beginning, not the whole Japanese writing system.',
   },
   {
     title: 'Read, listen and repeat',
     body: 'Look at each character, use its reading, and repeat the sound if audio is available. English vowel comparisons are only approximate. Recognition and listening are useful first steps; finishing a group does not measure pronunciation or reading proficiency.',
+  },
+  {
+    title: 'Typing and handwriting are different skills',
+    body: 'Typed recall uses a Japanese keyboard or IME. Commit the kana before checking; small kana, sound marks and long vowels matter. Romaji is a cue, not the accepted script answer. Handwriting is optional paper practice: copy, cover, write and compare the shape. This app does not assess stroke order, handwriting or pronunciation.',
   },
   {
     title: 'Draft for owner review',

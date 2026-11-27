@@ -35,11 +35,12 @@ for (const language of ['French', 'Japanese'] as const) {
       await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
     } else {
       const first = japaneseAlphabetLessons[0]!;
+      const rowCount = japaneseAlphabetLessons.filter(row => row.script === first.script).length;
       await expect(page.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
-      await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 1 of 2/)).toBeVisible();
+      await expect(page.getByText(`Hiragana · Row 1 of ${rowCount} · Step 1 of 3`, { exact: true })).toBeVisible();
       await expect(page.getByTestId(/^kana-row-/)).toHaveCount(0);
       await button(page, 'Recognition practice').click();
-      await expect(page.getByText(/Hiragana.*Row 1 of 10.*Step 2 of 2/)).toBeVisible();
+      await expect(page.getByText(`Hiragana · Row 1 of ${rowCount} · Step 2 of 3`, { exact: true })).toBeVisible();
       await expect(button(page, 'Mark row studied')).toBeDisabled();
     }
     await expectContained(page);

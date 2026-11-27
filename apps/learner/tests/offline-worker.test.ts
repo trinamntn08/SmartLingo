@@ -130,8 +130,10 @@ test('worker lifecycle never downloads; explicit download verifies and publishes
   assert.equal(replies.at(-1)?.type, 'RESULT');
   assert.equal(replies.at(-1)?.status?.buildId, manifest.buildId);
   assert.equal(replies.at(-1)?.status?.bytes, manifest.totalBytes);
-  assert.equal(replies.filter(reply => reply.type === 'PROGRESS').length, 3);
-  assert.equal(replies.at(-2)?.progress?.completed, 2);
+  const progress = replies.flatMap(reply => reply.progress ? [reply.progress] : []);
+  assert.deepEqual({ ...progress[0] }, { completed: 0, total: manifest.files.length, bytes: 0 });
+  assert.deepEqual({ ...progress.at(-1) }, { completed: manifest.files.length, total: manifest.files.length, bytes: manifest.totalBytes });
+  assert(progress.slice(1).every((update, index) => update.completed > progress[index].completed));
   const before = worker.requests.length;
   assert.match(await (await worker.fetchAsset('/assets/one.js'))!.text(), /one/);
   assert.equal(worker.requests.length, before);

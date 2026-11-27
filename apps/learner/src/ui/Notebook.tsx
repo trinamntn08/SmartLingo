@@ -94,10 +94,12 @@ function NotebookCard({ entry, model, visible }: { entry: NotebookEntry; model: 
     <View style={[t.panelHeader, notebookStyles.entryHeader]}>
       <View style={[t.stack, notebookStyles.entryCopy]}>
         <View style={s.row}>
-          <Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text>
+          {isTextAbbreviation
+            ? <Text accessibilityRole="header" style={[s.heading, { fontWeight: '500', flexShrink: 1 }]}>{entry.target}</Text>
+            : <Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError}
+              headingLevel={2} wordStyle={[s.heading, { fontWeight: '500' }]} />}
           {japanese && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
-          {isTextAbbreviation ? <Text style={t.detail}>Text shorthand</Text>
-            : <Speak language={notebookLanguage(entry)} text={entry.target} onError={setVoiceError} />}
+          {isTextAbbreviation && <Text style={t.detail}>Text shorthand</Text>}
         </View>
         {!japanese && !!entry.reading && <Text style={t.detail}>{entry.reading}</Text>}
         <Text style={s.body}>{entry.meaning}</Text>

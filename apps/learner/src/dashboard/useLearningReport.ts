@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { japaneseDailyGuides } from '@smartlingo/content';
 import { buildLearningReport, type LearningReport, type Lesson, type OpenCourse, type TargetLanguage } from '@smartlingo/domain';
 import { openLearningRepository } from '../persistence';
 
 type Parameters = { language: TargetLanguage; lessons: readonly Lesson[]; courses: readonly OpenCourse[] };
 type State = { key: string; report: LearningReport | null; loading: boolean; error: string };
+const guidedPracticeByDay = new Map(japaneseDailyGuides.map(guide => [guide.dayId, [...guide.tasks, ...guide.checkpoint]]));
 
 /** Loads existing history only; report visits never record learning or change progress. */
 export function useLearningReport(parameters: Parameters) {
@@ -22,7 +24,7 @@ export function useLearningReport(parameters: Parameters) {
       const [events, notebook, reviewEvents, courseEvents] = await Promise.all([
         repository.listEvents(), repository.listNotebook(), repository.listReviewEvents(), repository.listCourseEvents(),
       ]);
-      const report = buildLearningReport({ ...request.parameters, events, notebook, reviewEvents, courseEvents,
+      const report = buildLearningReport({ ...request.parameters, events, notebook, reviewEvents, courseEvents, guidedPracticeByDay,
         now: new Date().toISOString(), timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC' });
       if (version === generation.current && latest.current.key === request.key) setState({ key: request.key, report, loading: false, error: '' });
     } catch (failure) {

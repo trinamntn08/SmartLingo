@@ -4,6 +4,8 @@ import { buildJapaneseExpansion } from './japanese-expansion';
 import { foundationsExpansions } from './japanese-vocabulary/foundations';
 import { routinesExpansions } from './japanese-vocabulary/routines';
 import { discussionExpansions } from './japanese-vocabulary/discussion';
+import { buildJapaneseTopicPractice } from './japanese-topic-practice';
+import { currentJapaneseStudyExplanation } from './japanese-study-copy';
 import { buildJapaneseStarter } from './topics/japanese';
 
 type SentenceDraft = Omit<Lesson['sentenceActivity'], 'id' | 'almostAnswers'>;
@@ -123,7 +125,7 @@ const originalJapaneseLessons: Lesson[] = japaneseCourse.days.map(day => {
     role: [...new Set(dialogue.lines.map(line => line.role))].join(' / '),
     vocabulary: day.vocabulary,
     dialogue: dialogue.lines,
-    grammar: { title: study.title, explanation: study.explanation },
+    grammar: { title: study.title, explanation: currentJapaneseStudyExplanation(study.explanation) },
     pictureActivity: {
       mode: 'meaning', prompt: `Choose the Japanese expression meaning: ${entry.meaning}`,
       entryId: entry.id, choices: day.vocabulary.slice(0, 3).map(word => word.id),
@@ -147,7 +149,9 @@ const expandedJapaneseLessons = originalJapaneseLessons.flatMap((lesson, index) 
   const day = japaneseCourse.days[index];
   const expansion = byDay.get(day.dayNumber);
   if (!expansion) throw new Error(`Missing Japanese vocabulary expansion for day ${day.dayNumber}`);
-  return [lesson, ...buildJapaneseExpansion(day, expansion)];
+  return [lesson, ...buildJapaneseExpansion(day, expansion)].map(authored => lessonSchema.parse({
+    ...authored, japanesePractice: buildJapaneseTopicPractice(authored),
+  }));
 });
 
 export const japaneseLessons: Lesson[] = [...expandedJapaneseLessons, ...buildJapaneseStarter(expandedJapaneseLessons)];

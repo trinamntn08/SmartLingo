@@ -1,0 +1,3387 @@
+{
+  "A店は安いですが、B店のほうが静かです。B店で勉強しませんか。": {
+    "file": "f48496fad66d5f3b4a592f64.mp3",
+    "sha256": "4b940b1716635164b75b31e21c2796294721d862bc2f908d5cbda3c8f7990c8a",
+    "speed": 0.95
+  },
+  "B室なら二時から使えますね。": {
+    "file": "f15d882000658732c87843fe.mp3",
+    "sha256": "d289b23aeb7a2ec0bcb653516887322fad98fcdc934893725efeb5c863afa8dd",
+    "speed": 1
+  },
+  "あお": {
+    "file": "8ed3f28670875e6c5e369c8d.mp3",
+    "sha256": "6ffa0c1c563f60cd13f094f41fef6852717541e1d20a2f69056c751946539e4d",
+    "speed": 0.84
+  },
+  "あさ": {
+    "file": "6c92c372d034cc5bb4dfb7b1.mp3",
+    "sha256": "6c92c372d034cc5bb4dfb7b133fa241f9b8ad80ef47aafbfc8adf53f091b8cb6",
+    "speed": 1
+  },
+  "ありがとうございます": {
+    "file": "af5be825f59174e702d90381.mp3",
+    "sha256": "b148245c6acf85f298852178297aa5c0527ea4f12e6065c91f2028a4e04cbfe9",
+    "speed": 0.84
+  },
+  "ありがとうございます。": {
+    "file": "b8f2e59edf6d5fbae810b162.mp3",
+    "sha256": "9b497f61183bc527c1ea1fdfa6c6c9e1d4c7b6c1e966b20e14fa53793768ec25",
+    "speed": 0.9
+  },
+  "ありがとうございます。分かりました。": {
+    "file": "f0ae6435d9cc1ede218fcd20.mp3",
+    "sha256": "d2a1a918a34652a3c4970ad61e90188c8e340369019a5336d191415784a37460",
+    "speed": 0.84
+  },
+  "ありがとうございます。部屋が寒いので、毛布を一枚お願いできますか。": {
+    "file": "36660e6ae9a84dd4ca661685.mp3",
+    "sha256": "5353c38ed8e1923cdb1a59b8e4eb8ec9afe3d30c470cd3e4efe2efe09c172d18",
+    "speed": 0.95
+  },
+  "ありがとうございます。駅の案内所は何時からですか。": {
+    "file": "155d1ad96c45bc79c61cf400.mp3",
+    "sha256": "66cd392707bceb8a566a8909c11c6bdef9c7fa3b296ba9acb47d25eac7729562",
+    "speed": 0.9
+  },
+  "いいえ、週末は働きません。よく料理をします。": {
+    "file": "6f0187f3d565d7e5e842a522.mp3",
+    "sha256": "167a02b8583e4846827fcaff9750c304237f265df0aa8cbb00afd33bdba9817f",
+    "speed": 0.9
+  },
+  "いいえ。雨の場合も室内で行うそうです。飲み物は持ってきてください。": {
+    "file": "7e3de43bddf993efb095bf72.mp3",
+    "sha256": "5e442c0bbb1201688f6191472a204a62b01cc6a07b6c4044e11865aa6baf7724",
+    "speed": 1
+  },
+  "いいですね。この店は安いですが、駅から遠いです。": {
+    "file": "adb90f89be2c6f5725079cc6.mp3",
+    "sha256": "fc2cac98b3f4b9d6954f6381ce006af51f330f42458d2b444545175648f80285",
+    "speed": 0.95
+  },
+  "いいですね。まず一か月試して、その後で話し合いましょう。": {
+    "file": "59de2fd870c182ed00bd5630.mp3",
+    "sha256": "2c4a56003d66d220e4e9a8ea3b99158b766e88b3d9b5bf6b82e518f2b9a367e1",
+    "speed": 1
+  },
+  "いいですね。今日の六時までに全員の都合を確かめます。全員が参加できれば、A室を予約します。": {
+    "file": "865777ac517461bf81246147.mp3",
+    "sha256": "4304faa6c0c412de1bdfe6b9fac622795f22b4b9a2e57a9500b5c76318b91ace",
+    "speed": 1
+  },
+  "いえ": {
+    "file": "9fb3ee7311d47e24a66e7830.mp3",
+    "sha256": "9fb3ee7311d47e24a66e7830a8ba7c4ab428b8c7df4b161e134490eb7cb2fc34",
+    "speed": 1
+  },
+  "いくら": {
+    "file": "9c295aecf72a4a6ebf708243.mp3",
+    "sha256": "cac1c4f2376936dfbf5aabbd1c247139bd878c27f8c908d8a71bed6e44f7e64d",
+    "speed": 0.9
+  },
+  "いけ": {
+    "file": "0605dab74e980c5d7b2afd68.mp3",
+    "sha256": "0605dab74e980c5d7b2afd68d0bd4f669860d8a2605cd0cdb27bfa8e5b542d6c",
+    "speed": 1
+  },
+  "いりません": {
+    "file": "b1a0bd69ce1d55728ce9ce90.mp3",
+    "sha256": "4da7a2476eed0b549c3de62549945dcbb6c49bce7d5cc33bed0a4ee9291e5a64",
+    "speed": 0.9
+  },
+  "うみ": {
+    "file": "39e3fd55d1fc616f7ecdbda7.mp3",
+    "sha256": "39e3fd55d1fc616f7ecdbda77eb1aa59c572325ff85950c33e4a7ad5a39f3993",
+    "speed": 1
+  },
+  "おかげで": {
+    "file": "b2ed7b8e59ce4280b31185a0.mp3",
+    "sha256": "6d67b8c1a717de8029234bd3c034eb6ff7eda09ba79950eafbb5aa636acbc418",
+    "speed": 1
+  },
+  "おちゃ": {
+    "file": "4b1f84f050e4191d0262b9d9.mp3",
+    "sha256": "4b1f84f050e4191d0262b9d957c40569e51bb5abcca587e9916b46426767ad66",
+    "speed": 1
+  },
+  "おはようございます、田中さん。では、また明日。": {
+    "file": "35d26f2d482590926e389331.mp3",
+    "sha256": "098d203a697a0bcf66d3b4a81ad0bde782d45b56374a02dc468aed0f5d8b0cb3",
+    "speed": 0.84
+  },
+  "おはようございます。駅はあそこです。では、また明日。": {
+    "file": "e2ffd7552924af25f3ee220d.mp3",
+    "sha256": "fb0eb8df6f07208d9988cd2ed3f301e28b798568040d7bfe628e2bc9d453d0c5",
+    "speed": 0.84
+  },
+  "おばあさん": {
+    "file": "933dc5aa2aa0187ce4507614.mp3",
+    "sha256": "933dc5aa2aa0187ce45076147b0756df9afbb62433c57bd62b6ac48974aae36e",
+    "speed": 1
+  },
+  "おばさん": {
+    "file": "e75978684f6eca7b88eaa1e5.mp3",
+    "sha256": "f9aeb3d76efcee4c3906cf0943cc0a575f2f8f8705ede4bb172a5d053313a85d",
+    "speed": 0.84
+  },
+  "お仕事は何ですか。": {
+    "file": "e8be002846e12eb1012f5ab9.mp3",
+    "sha256": "ff969ca2d7e3f1a704f58229a6743dbb83a8067f750415d2e1d6f2fdea8e8279",
+    "speed": 0.9
+  },
+  "お名前は何ですか。": {
+    "file": "e500d33b1125da17a8510aa6.mp3",
+    "sha256": "e57fe868d50a148cc6f40cb4af0f28dcdc24e43b1bae08339fed7c3cfd2507be",
+    "speed": 0.9
+  },
+  "お知らせ": {
+    "file": "7dcf3bf016d74264c6fe9cba.mp3",
+    "sha256": "7dcf3bf016d74264c6fe9cba44207d3fc6a80a8aef6d19a17bdc7320de8e51ef",
+    "speed": 1
+  },
+  "お知らせには書いてありません。あるかどうか、確認します。": {
+    "file": "67bc3ce8922a9b46255551da.mp3",
+    "sha256": "ad968f0a3b310ae409153755aa4050240e27226e3afc2e42304187e5f3e9cfc4",
+    "speed": 1
+  },
+  "お茶を一つください。持ち帰りでお願いします。": {
+    "file": "5e45c4518bee6a17798f8795.mp3",
+    "sha256": "2aa1e0e963e06a16cf82dd0749f617c9ff32f0fd1b93d88d48aef4cc9d5d3084",
+    "speed": 0.9
+  },
+  "お茶を一つですね。お持ち帰りですか。": {
+    "file": "597474fba6d5f9ecf3ae9ac8.mp3",
+    "sha256": "ba1996f978a1c6cbf673daa790c7778cb4e221a74ad8b920b5613878991f68a8",
+    "speed": 0.9
+  },
+  "お茶を一本ください。水も一本ください。": {
+    "file": "fff890c2e7d4177c9176d6e3.mp3",
+    "sha256": "95b69c197fe3d3a4fa2393a59da01affad286ed600acc10ac88b721b854fbda8",
+    "speed": 0.9
+  },
+  "お願いします": {
+    "file": "3808ba6d5bf6e2163cf16eb1.mp3",
+    "sha256": "3808ba6d5bf6e2163cf16eb1b69514ec18068528b1c81c3cfce5eff14d593592",
+    "speed": 1
+  },
+  "かお": {
+    "file": "9d4cd9d3e037128157dd9c90.mp3",
+    "sha256": "9d4cd9d3e037128157dd9c9026c8448371f87e0fc5225744e5ced1dd1d2a83cf",
+    "speed": 1
+  },
+  "かぎ": {
+    "file": "76636002cedbe6a1fa75ad2e.mp3",
+    "sha256": "76636002cedbe6a1fa75ad2edb1ec17c73b25de40aa691adc1a08e877f37c87c",
+    "speed": 1
+  },
+  "かぎ、みず、かばん": {
+    "file": "5d5fe204a3260f621e69aaed.mp3",
+    "sha256": "8a6612acd33aa7372b867298c335dc2f6f2fbc594ab0bdb825ef77cab67c72af",
+    "speed": 0.84
+  },
+  "かばん": {
+    "file": "490b93bb8a7c4fe2f9b23c77.mp3",
+    "sha256": "eb069a906078aa6ba3eda4e4552346905482be24c2e7b0720be0533effe540b3",
+    "speed": 0.84
+  },
+  "きって": {
+    "file": "abc49c84d58ada28d4038895.mp3",
+    "sha256": "abc49c84d58ada28d40388956a72236de7b421ccc8a0b6f5ac1d21cbdb6aa879",
+    "speed": 1
+  },
+  "きっぷ": {
+    "file": "b46edaa46aa0acb448840dfa.mp3",
+    "sha256": "b46edaa46aa0acb448840dfa88e690699867258fd5def08ce3138230effde155",
+    "speed": 1
+  },
+  "きっぷ、びょういん、ぎんこう": {
+    "file": "8c91bf113f8820027b6b153b.mp3",
+    "sha256": "b93ef055b984f1e35bf782b4589b69833414f730b1e85830ac78693e1d43a091",
+    "speed": 0.84
+  },
+  "きて": {
+    "file": "537b08701ad34cd4f3af4432.mp3",
+    "sha256": "469f821cd6e5c8ce682c873a982906a5c8a33192d3000f8bd610733cdab89a6a",
+    "speed": 0.84
+  },
+  "きゃく": {
+    "file": "52acbc27cc93a188208303f0.mp3",
+    "sha256": "9f7fb860485bc4160d12ca6e4520ad0e7c54d8cea7a9adb3e6dcf90cc475d5cc",
+    "speed": 0.84
+  },
+  "ぎゅうにゅう": {
+    "file": "12974eb894dcff7cd5bfb232.mp3",
+    "sha256": "12974eb894dcff7cd5bfb232f797ccfe909ccc5c6c8fc7e82520b2b41b9bd030",
+    "speed": 1
+  },
+  "ぎんこう": {
+    "file": "25d6c5f97a5e9a4d10bf3c80.mp3",
+    "sha256": "25d6c5f97a5e9a4d10bf3c80ade6d919cc5d42ea145d27183ff0e82d6ff41d95",
+    "speed": 1
+  },
+  "ください": {
+    "file": "b2b422a01242552cf47c6021.mp3",
+    "sha256": "b2b422a01242552cf47c6021848b0ea8dbd83082cff6ae3f856882da96389022",
+    "speed": 1
+  },
+  "くち": {
+    "file": "eb150d540d8b24c1c9bcc7d7.mp3",
+    "sha256": "eb150d540d8b24c1c9bcc7d76c4a3b6657cda01bc282565e3a7be8f7d6014060",
+    "speed": 1
+  },
+  "くるま": {
+    "file": "c606e783311abcf8c03057fb.mp3",
+    "sha256": "c606e783311abcf8c03057fb9adbdb8285e15ec860f213f57070c6c645006929",
+    "speed": 1
+  },
+  "こうえん": {
+    "file": "cc4397ea6204034665d14b6f.mp3",
+    "sha256": "cc4397ea6204034665d14b6fc83913e656cd5a23401633149c45f87ca1a90fd8",
+    "speed": 1
+  },
+  "ここでパソコンを使ってもいいですか。": {
+    "file": "d45fb4763b6959f3306f618b.mp3",
+    "sha256": "00d32759bafc05ecd2626af1bcee7a78f19dc522a9a84b4dc6f1315ff018a566",
+    "speed": 0.95
+  },
+  "こちらは友達のリーさんです。": {
+    "file": "52205c03d5d4e816735bb8b1.mp3",
+    "sha256": "6f8219927cb8f5b22b43b4088980a3be9e3b34d7605a94036ce29eeca8ef6cf5",
+    "speed": 0.9
+  },
+  "こちらは友達のリーさんです。この町に家族と住んでいます。": {
+    "file": "0d69c5e31cb169013364933b.mp3",
+    "sha256": "dcdae648260c7aa9b4a285db7c3dc35b334f6a00519c3266341499524943232a",
+    "speed": 0.9
+  },
+  "このパンを三つください。全部でいくらですか。": {
+    "file": "0567e61f9e1c9b4f510680bc.mp3",
+    "sha256": "2966fe9b5b570de78a8e9f20f1f225574f7dac75c6516cf2f465c58df7dae6fd",
+    "speed": 0.9
+  },
+  "この本を借りてもいいですか。": {
+    "file": "ccee7ba838cf2a0860cf33d9.mp3",
+    "sha256": "9baa1b7c2aa9be85567634c4e8755af2a9eb069d7a26213be5ce0dbcb9fece8e",
+    "speed": 0.95
+  },
+  "この本を借りてもいいですか。閲覧室は飲食禁止です。": {
+    "file": "410f2cb154ca1aba701bef6f.mp3",
+    "sha256": "688e8ac742fb8704c3bfc9a5c4653d6e48e83bb5b0e109500345fa7f518feb32",
+    "speed": 0.95
+  },
+  "この漢字の読み方は何ですか。": {
+    "file": "b89c3d251d909fc907f13fdb.mp3",
+    "sha256": "c7bcf2951fc7da4ba454f8bd29f7391d3655a7d6d253a42f1962c5ee383c7d42",
+    "speed": 0.84
+  },
+  "この紙に書くのを手伝ってください。": {
+    "file": "853096d9500c2da0adccefb6.mp3",
+    "sha256": "ee77a1d30c62ff27d10595ccbcdfd9f1eacac9e44e2ce65693f9dc07bad23985",
+    "speed": 0.95
+  },
+  "この言葉はどういう意味ですか。ここに書いてください。": {
+    "file": "38711997d8ea66c7a0897439.mp3",
+    "sha256": "d6a83901ebbec1c0b28ed9a783470245291f7b39aa0b49484ac0380df6a1d747",
+    "speed": 0.84
+  },
+  "この道をまっすぐ行ってください。次の交差点を左に曲がってください。": {
+    "file": "0e3868231636e936437d458f.mp3",
+    "sha256": "4de8b9b70e6dc26a9bca0cccf9a7d1c5fab0daa41b68e8252a52841562bdf78e",
+    "speed": 0.9
+  },
+  "これを一つください。いくらですか。": {
+    "file": "7126eec3a4d5a64471ec9999.mp3",
+    "sha256": "05f280975ac4eaad2d7d9047458e288b54419e4426664bb92098eb1e40129a89",
+    "speed": 0.9
+  },
+  "これを二つください。袋はいりません。": {
+    "file": "b3e36775b962d490b44eaf38.mp3",
+    "sha256": "f97fa635c994d4de1cba22af802c6fd6c4daa66b5f9a40bb6d644e743c15dfe0",
+    "speed": 0.9
+  },
+  "こんにちは": {
+    "file": "eddaac6d192a0deb91fa6986.mp3",
+    "sha256": "eddaac6d192a0deb91fa6986750fde157a37eb060105d3111bf07f3e5fc41991",
+    "speed": 1
+  },
+  "こんにちは。アレックスです。フランスから来ました。すみません。もう一度お願いします。": {
+    "file": "1900481c15035b0633ee2631.mp3",
+    "sha256": "61c62ef8ee97561447bd3e746ef0c135ca7ec9c613fc6a2fdbc4b8a66685dbc0",
+    "speed": 0.9
+  },
+  "こんにちは。田中です。": {
+    "file": "45912de93aaddb112825a009.mp3",
+    "sha256": "b6e06bd0a84a3196ca163d07889af85c0bd098dbbd9d4fe2252381fb33aac064",
+    "speed": 0.84
+  },
+  "こんばんは。もう一度、ゆっくりお願いします。では、また明日。": {
+    "file": "dccde3f0ffe56c2814ddf908.mp3",
+    "sha256": "3408bddea90cb700212cb3e958313b682a53b374176424436fc052c717a59bd5",
+    "speed": 0.84
+  },
+  "こんばんは。名前をここに書いてください。": {
+    "file": "c786d05a8f6e5d6b88a3c520.mp3",
+    "sha256": "6e97aa66c6259e9ef4e9ec6ce939479a697c5c8de28369bd3472f60eae1c3706",
+    "speed": 0.84
+  },
+  "ごご": {
+    "file": "729f814d5bfef10f286e68d6.mp3",
+    "sha256": "729f814d5bfef10f286e68d68f4bbbb7e2410122203f1b9f6823d402a8d53793",
+    "speed": 1
+  },
+  "さんぽ": {
+    "file": "f74dd42481aa97f7a7361832.mp3",
+    "sha256": "f74dd42481aa97f7a7361832fe896309583e46b47e648494dcb454e71641a2d0",
+    "speed": 1
+  },
+  "した": {
+    "file": "c99159be017634c3ab206bf4.mp3",
+    "sha256": "c99159be017634c3ab206bf4d590a66d2032b14069716e00c74956a264a22559",
+    "speed": 1
+  },
+  "じかん": {
+    "file": "42a50adf3436ce96a5c3eae5.mp3",
+    "sha256": "42a50adf3436ce96a5c3eae5c258fd93a7cf42c9a06d148953723dc5548c80e4",
+    "speed": 1
+  },
+  "じゃま": {
+    "file": "ec5fc53c300b693fdf32f0a2.mp3",
+    "sha256": "ec5fc53c300b693fdf32f0a2bd053d43cf45b2a0a73c9c2116427e00330987ad",
+    "speed": 1
+  },
+  "じゅんび": {
+    "file": "fb09ac818590e5039af61209.mp3",
+    "sha256": "fb09ac818590e5039af612093901fb2a96575519178bcfa815394aa540f2c39c",
+    "speed": 1
+  },
+  "すし": {
+    "file": "1f79916172f3f8453375cda0.mp3",
+    "sha256": "1f79916172f3f8453375cda0341f61757f0a64a2240ac93f249568bb44a2e3cd",
+    "speed": 1
+  },
+  "すし、ねこ、ほん": {
+    "file": "e6b6ca570765d7dcd316a99b.mp3",
+    "sha256": "773fbf419a5c5efeb02a82b8c9b92c15a84f66843da2f00427777c7026e25d37",
+    "speed": 0.84
+  },
+  "すみません": {
+    "file": "d6dcd79e2c2bb1c2db7c094f.mp3",
+    "sha256": "a6b8026e9e745ab07c640be275dc11920784772857dea0813015b155bf05eee0",
+    "speed": 0.84
+  },
+  "すみません、駅はどこですか。": {
+    "file": "25e210a35467d44de1926cea.mp3",
+    "sha256": "003283aa5532ed84247ee0f5bb3c78ec4fa897ca39ee1f60b8d1e8249a1d3793",
+    "speed": 0.84
+  },
+  "すみません。この言葉はどういう意味ですか。": {
+    "file": "3cf27f1f03929ee6abf65925.mp3",
+    "sha256": "3b81cf171f1a63396e979b7dd8028a73003e58f8a4ee57418d86dbb7003f5860",
+    "speed": 0.84
+  },
+  "すみません。これはいくらですか。": {
+    "file": "4c1dd78a587422641cc3be7c.mp3",
+    "sha256": "cd0ef9ff283230e222c30cc2d49ac8cb6e3118c1b88414b32dc2d231cf19e067",
+    "speed": 0.9
+  },
+  "すみません。もう一度、ゆっくりお願いします。": {
+    "file": "79aa76012b2045403f541387.mp3",
+    "sha256": "13e3a8072c76434dbd1834ae04eced7d0240165385c4e3023e9a32947872fcbc",
+    "speed": 0.84
+  },
+  "すみません。もう一度、ゆっくりお願いします。ありがとうございます。": {
+    "file": "4dfc6c1a9e76912731f61441.mp3",
+    "sha256": "3187b8b3c41d13b2bdae2f18faeb3cc8859b4ea9ffe1dbe60d6fd9282769ca24",
+    "speed": 0.84
+  },
+  "すみません。もう一度お願いします。": {
+    "file": "112b0d07dae38fa5c70c3c2d.mp3",
+    "sha256": "294b508f400019b485c65de1a08e4f0439c826915ff1d426b5cdf2f7987e6809",
+    "speed": 0.84
+  },
+  "すみません。パンの売り場はどこですか。": {
+    "file": "115dc53f02354446058d8daf.mp3",
+    "sha256": "6e6a7e7b71c5765f6c7a3b33ef7eb9cec09a8eb64307ef574248d9db98560be9",
+    "speed": 0.9
+  },
+  "すみません。パンを二つください。いくらですか。ありがとうございます。": {
+    "file": "c24c8c9f761d85d368dc5181.mp3",
+    "sha256": "88097648c2c04eb8e4a99b5920a2e670bf918e5bca9e0d3b7ef8c44105f5aacf",
+    "speed": 0.9
+  },
+  "すみません。写真を撮ってください。": {
+    "file": "a8baf669f040b1ff48d9d937.mp3",
+    "sha256": "2312d112340637a14b92455ea5862b3fe380777adf5b4ff2e45a30224a5419fb",
+    "speed": 0.95
+  },
+  "すみません。案内所はどこですか。何時からですか。": {
+    "file": "0edf5475043028650fd9dded.mp3",
+    "sha256": "d39a975eb9922f5e0b4d921446a0fe3dd2d2638ddc0928b45a2a04627fe60829",
+    "speed": 0.9
+  },
+  "すみません。牛乳はどこですか。この商品はいくらですか。": {
+    "file": "c1494e582ebdeb70954e2d16.mp3",
+    "sha256": "ea4e60f879aba9de2e8a9738afbfb02a931b81fb213c7e06b88d80ce5d74df44",
+    "speed": 0.9
+  },
+  "すみません。部屋が寒いので、毛布を一枚お願いします。もう一度、ゆっくりお願いします。": {
+    "file": "74191a1386a74ba53969eb8a.mp3",
+    "sha256": "829c808dac43ab35d869cfa21e22278b8282a255e01be1de1c4e5782dd2c9e51",
+    "speed": 0.95
+  },
+  "すみません。部屋のエアコンが動きません。": {
+    "file": "575b1ef9d8b8d1f8798bafc8.mp3",
+    "sha256": "43c0ee07be57491559cad932b1a759ea344644054e33657ef1a00bd9b8b10856",
+    "speed": 0.95
+  },
+  "すみません。駅はどこですか。": {
+    "file": "da9ca17764ac3c268741519a.mp3",
+    "sha256": "e51ddc8ef54ec074a8c445bac39a134f18895af716532da42dd9a7da333c1fa6",
+    "speed": 0.9
+  },
+  "すみません。駅はどこですか。ありがとうございます。助かりました。": {
+    "file": "433593edab1ed62c565e94db.mp3",
+    "sha256": "45c0819e031df6c01eda6485f1c8992b696eedb3d88c8859a48c3645d51b798c",
+    "speed": 0.84
+  },
+  "すみません。駅はどこですか。もう一度、ゆっくりお願いします。ありがとうございます。": {
+    "file": "cf72cfc717a93c5fc721cfa0.mp3",
+    "sha256": "a21ea8630032bf609986f2bdc6143dee547aef25c26b65d05a969f37bbd3efe6",
+    "speed": 0.9
+  },
+  "そうですか。私は週末も働きます。": {
+    "file": "0723a496669f423f9d17cddb.mp3",
+    "sha256": "eb890caa7efa0d148a8acecb13f0d201548131a3641e7201cfaa3ab44e411d76",
+    "speed": 0.9
+  },
+  "そこで": {
+    "file": "f4a5ed1c87f6d5e320be03a9.mp3",
+    "sha256": "5af898be497c8e092942b723c2e7a4f7ea44c092eadc7fa1b1e1d7ca4bc5ca49",
+    "speed": 1
+  },
+  "そのとき、どうしましたか。": {
+    "file": "3f0baaa76584a8751aba26f9.mp3",
+    "sha256": "8eb53fab81be597d9a026d50168837894f630b6958597d3654186c688af88af2",
+    "speed": 1
+  },
+  "その点は私も大切だと思います。会議の日は会社に集まるのはどうですか。": {
+    "file": "8a8c0183275957a44c7dfb51.mp3",
+    "sha256": "74628c52146c26b8247751870a83e21372a3dc2bff7c25bed5021e3746121fee",
+    "speed": 1
+  },
+  "つづく": {
+    "file": "2f051cb207aa92ff28691aee.mp3",
+    "sha256": "2f051cb207aa92ff28691aeec6f824bfa133051ca749ac39616605d27090f366",
+    "speed": 1
+  },
+  "てんぷら": {
+    "file": "1c48c0f103f4dce2d4cd62df.mp3",
+    "sha256": "12f84d505680dbc11377bc12ccc3d5854aceeb2309dfbfe8c8b07fce105e64e9",
+    "speed": 0.84
+  },
+  "では、また明日。": {
+    "file": "54731761c2d03c93c65e3b87.mp3",
+    "sha256": "049ab5fdf5c41db8b8525b84c4079315c8ec333a66bd363b5660eddc0285a731",
+    "speed": 0.84
+  },
+  "では、三時から四時半という案ですね。確認できたら、連絡してください。": {
+    "file": "c23aeca1e3f6c8f126005f7a.mp3",
+    "sha256": "a1baaef2f1d55ece1d313b4f1a0dd131efcd9f9c8aa470b08451ce30177df842",
+    "speed": 1
+  },
+  "では、土曜日の十二時に駅で会いましょう。": {
+    "file": "e00b27e23d3bfc36c09e86e3.mp3",
+    "sha256": "d55da4a96a73bf67cf4d3417052ebefa8eea7b513428f32f37081fde90f08cfe",
+    "speed": 0.95
+  },
+  "でんわ": {
+    "file": "3c8373fff4bb3de5ad0674de.mp3",
+    "sha256": "3c8373fff4bb3de5ad0674de161b37bcd02194889244e9a716c3ae0c5366e091",
+    "speed": 1
+  },
+  "とり": {
+    "file": "5f1b591008f13b9dab0816f4.mp3",
+    "sha256": "5f1b591008f13b9dab0816f41c82b5542436d6d78fbb3b93e3b8b1bca0ebff38",
+    "speed": 1
+  },
+  "どうでしたか。": {
+    "file": "1b88dc990986938ad73f307f.mp3",
+    "sha256": "cd23fb4ce7267a3d560a792b658da867ff0c46c8d5ac4cfbedc6bdeab02cdc70",
+    "speed": 0.95
+  },
+  "なに": {
+    "file": "efcb66db12cb9df86d13584c.mp3",
+    "sha256": "efcb66db12cb9df86d13584c9200abb99f4c2a7c8d0aead568b29dbfedfa8d09",
+    "speed": 1
+  },
+  "にゅういん": {
+    "file": "f5fa6892e2aa2f4f66585863.mp3",
+    "sha256": "f5fa6892e2aa2f4f66585863edf5e126c11353e427b510e82d7fa605c62055db",
+    "speed": 1
+  },
+  "ねこ": {
+    "file": "6316a31cbc7e790950271387.mp3",
+    "sha256": "6316a31cbc7e790950271387e6ee5046ce8e58f9c0f327eed643c1d29f76bb44",
+    "speed": 1
+  },
+  "ので": {
+    "file": "05bb981e325006afcabecf71.mp3",
+    "sha256": "fe3c08500aa2ea053218708b65b70dc891c8fc6063513a2c9c48014bf07c1ab7",
+    "speed": 0.95
+  },
+  "はい、すぐお持ちします。": {
+    "file": "14058d43dde143afe339f4e6.mp3",
+    "sha256": "85cebf6e208c7c6dec1bff2b685f68a14a97b7de9f8188410ea6300d3b4b7c30",
+    "speed": 0.95
+  },
+  "はい、どうぞ。": {
+    "file": "d1415199a94219e9a6523af4.mp3",
+    "sha256": "82f1a17b0cb9155cea9018af27d52ae5733dde4516bfa950ffa8a15b4383ee91",
+    "speed": 0.95
+  },
+  "はい、大丈夫です。ただ、この部屋は飲食禁止です。": {
+    "file": "03047843399a941fa270ba7c.mp3",
+    "sha256": "3c8eae5cf535850ba13326db6b242f1a6ad11de6424de579a53711936c90db9f",
+    "speed": 0.95
+  },
+  "はい、席の予約が必要です。": {
+    "file": "f5b65e6baa2f0be118e8d5d4.mp3",
+    "sha256": "f9e244847cd7be5ee3cf7ef3589811072a0a2e733a80f8d3f5a21fd945f2a047",
+    "speed": 0.95
+  },
+  "はい。ただ、八千円なので予算を超えます。A室にして、開始時間を遅らせるのはどうですか。": {
+    "file": "7ad33fe44d50dab709983db7.mp3",
+    "sha256": "2ab6aa8891589fd8d788237871331069038325b8d88e407115465037c8a7afa1",
+    "speed": 1
+  },
+  "はい。た・な・か、です。": {
+    "file": "1ea79dec9948ab9b0a2e7edb.mp3",
+    "sha256": "98c290173b0227d86221140f1b3f6ed0d3d5b027073ec64540fec5cf60a780c6",
+    "speed": 0.84
+  },
+  "はい。会場が市民センターの二階に変わりました。申し込みは木曜日の午後六時までです。": {
+    "file": "7513b3ebd657e7ed0580869d.mp3",
+    "sha256": "3e68221a2c22178051ebbcc0bcba06ad7eb13ab8facc74a369ce240c24c10105",
+    "speed": 1
+  },
+  "はい。先月、小さな町へ行きましたが、途中で道に迷いました。": {
+    "file": "1df7d922439fdb26fa3ba9e1.mp3",
+    "sha256": "b2dcf61b80e07a8cdafde1833cc988d70ccc8a1bf8a5dc927876bbd4229c38d1",
+    "speed": 1
+  },
+  "はい。六百円です。": {
+    "file": "c533816b419ae07d7bba89ef.mp3",
+    "sha256": "21097958a14f992df24449cb5fbf9106614f6876f53ea0be3bdf774ba36cdf48",
+    "speed": 0.9
+  },
+  "はじめまして": {
+    "file": "6dee0ffb50b99a8d8298dbd1.mp3",
+    "sha256": "4e1dff15a22b63ecfcbc7154d4705e5b40f16f3c5d672c4f2dc42504b3fcf169",
+    "speed": 0.9
+  },
+  "はじめまして。アレックスです。": {
+    "file": "43b9564c997fc4a268507d2c.mp3",
+    "sha256": "b61bae5cf5fbf6c984d9d8cd0dab5738d3124752f62cd3fe209afd7fdfc29ff5",
+    "speed": 0.9
+  },
+  "はじめまして。アレックスです。フランスから来ました。お名前は何ですか。": {
+    "file": "0b3f876f6f01048fe0b7f432.mp3",
+    "sha256": "58089dd49160cd6689adf2a48e11b5ce205aa2fb0dee58088485d063dc4901b8",
+    "speed": 0.9
+  },
+  "はじめまして。アレックスです。フランス出身です。会社員です。家族と住んでいます。映画が好きです。お仕事は何ですか。": {
+    "file": "a22daf8c08f569299e52feed.mp3",
+    "sha256": "5ff09ce924058e0e9a6eb052c9f451c3fdf77568bd1181cb0c5b6251a1470d09",
+    "speed": 0.9
+  },
+  "はじめまして。エマです。お名前は何ですか。よろしくお願いします。": {
+    "file": "253312c18ae3512249681a40.mp3",
+    "sha256": "cab6c300198257b10e66e975f895777ea3e8e9b434785aa3563c4646a0f8fd80",
+    "speed": 0.84
+  },
+  "はじめまして。エマです。よろしくお願いします。": {
+    "file": "4e7e2749182341dd3da1d9b0.mp3",
+    "sha256": "bec98aa15295760a7beb5defa56f66c98e17952eb043d7536a8deebf3c947751",
+    "speed": 0.84
+  },
+  "はじめまして。リーです。お名前は何ですか。": {
+    "file": "4e8ddd2d3740ed03f8baa4de.mp3",
+    "sha256": "0d2f15b5ecb6d286f8436a471afe9bc176977ebafe5f41018bb0f06379d7eac0",
+    "speed": 0.84
+  },
+  "はっぴょう": {
+    "file": "f1562a06585e6f6a83270d31.mp3",
+    "sha256": "f1562a06585e6f6a83270d31cd795feada74a08b8d54a2416177d6a0d35d5102",
+    "speed": 1
+  },
+  "はな": {
+    "file": "cc5f05159c522d8bede2824d.mp3",
+    "sha256": "cc5f05159c522d8bede2824de8e18ac7f529c71e111aecf3cc806f7d2eef8f1e",
+    "speed": 1
+  },
+  "ばんごはん": {
+    "file": "e6dc3717708a08abfdd42115.mp3",
+    "sha256": "e6dc3717708a08abfdd4211551adfe7e48f2d28081d6bf911599c82c85ca6dfb",
+    "speed": 1
+  },
+  "ひゃく": {
+    "file": "241682b8d72a2e1873fa1e75.mp3",
+    "sha256": "241682b8d72a2e1873fa1e755084384ad4e42be84fcf5809a4421194b1b74bd3",
+    "speed": 1
+  },
+  "びょういん": {
+    "file": "bb3b7f98909fc87f226ce0c0.mp3",
+    "sha256": "bb3b7f98909fc87f226ce0c0fc937765d5cbc4852f2b888ff823902b39afb2b5",
+    "speed": 1
+  },
+  "ふね": {
+    "file": "40a70381ba08654a8f3c2168.mp3",
+    "sha256": "40a70381ba08654a8f3c2168c7fb54b2bf1ca65ef02b8ea04d70ffcf346a5b66",
+    "speed": 1
+  },
+  "ほうが": {
+    "file": "089a3733b46176bacefef7bd.mp3",
+    "sha256": "6cb1db94d100ffd922079aade737ae36c1795393037e5a1e8e72a20127edc4e3",
+    "speed": 0.95
+  },
+  "ほん": {
+    "file": "4d82f0ce0007086bef0c1f9a.mp3",
+    "sha256": "4d82f0ce0007086bef0c1f9aa2705d5a2a251c27b42ed3aa612794ba2bd8f408",
+    "speed": 1
+  },
+  "まず一か月、週二日だけ家で働く方法を試しませんか。": {
+    "file": "b688f0e749534bdade591e01.mp3",
+    "sha256": "91e12b199c4c27b7e08b1461316647c904abaf8ed2c23b10f63f302230025209",
+    "speed": 1
+  },
+  "まっすぐ": {
+    "file": "0397d7ffaa29472ad54a2798.mp3",
+    "sha256": "654a62841ff6b6dff695f6952e252d469d083904700f74492fb65ac92bbfed5d",
+    "speed": 0.9
+  },
+  "まっすぐ行って、右に曲がってください。駅はそこです。": {
+    "file": "4fc0c679924a4b13f7116089.mp3",
+    "sha256": "cc32b95e575acc93cbb5e949f5e2f5b62a9146d8be0403fc7023579a6413f07f",
+    "speed": 0.9
+  },
+  "まっすぐ行って、右に曲がってください。駅は左です。": {
+    "file": "e063fb0c9f2e15c7f3747e64.mp3",
+    "sha256": "86f3b63c9c9832d1158b94868cbafd085abf775966383dcdc3ce28a975775eb3",
+    "speed": 0.9
+  },
+  "みず": {
+    "file": "5f46f0042d3bae51a41df18a.mp3",
+    "sha256": "5f46f0042d3bae51a41df18a87aca9f97dc7fcf067d63dc2926e51b09bc9637c",
+    "speed": 1
+  },
+  "みみ": {
+    "file": "3e38cb2da22f1fe960396dab.mp3",
+    "sha256": "3e38cb2da22f1fe960396dab0b270586a774d7eb0c6b39915660d5d6cff174c0",
+    "speed": 1
+  },
+  "みゃく": {
+    "file": "ef8c524fdc5a69ed656882fd.mp3",
+    "sha256": "8e40f45ced99a8c9f9e9c799ae01bc67174c55ed69d73abdefccacd4a2dae58d",
+    "speed": 0.84
+  },
+  "もう一度": {
+    "file": "1766a92e5e911e536484874f.mp3",
+    "sha256": "ad4475d5cd165cb8babfc8b3845058f46c0eeaede488261e02780e1f01a7a126",
+    "speed": 0.84
+  },
+  "もう一度、ゆっくりお願いします。": {
+    "file": "f8b022d0ec532e451cc7d257.mp3",
+    "sha256": "40e36baf80c6aa34d550553c0ae562e337f9a08f414f52fdca355303bd1ad1c3",
+    "speed": 0.84
+  },
+  "やま": {
+    "file": "f597c141f35d9885cc24ef84.mp3",
+    "sha256": "f597c141f35d9885cc24ef843a3a3c4e206f16827f86a9b94e93852f05aa976d",
+    "speed": 1
+  },
+  "ゆっくり": {
+    "file": "638daafbfeab5d5838d8924f.mp3",
+    "sha256": "6f60c8726ba8cbb055916967b09ddadb9be8145f4b893be64d14dcb84e1db2c8",
+    "speed": 0.84
+  },
+  "ゆめ": {
+    "file": "c3a6d0bf3d6c34f78d0e9ad0.mp3",
+    "sha256": "c3a6d0bf3d6c34f78d0e9ad05a653560c154e5f02f4884b9ca53377cee3f8509",
+    "speed": 1
+  },
+  "よく": {
+    "file": "880368ad846f48e3dd0f43f1.mp3",
+    "sha256": "5d583030cc1b217c81040065cfe167d60b23605baa0faef11e726a2702a8edcd",
+    "speed": 0.9
+  },
+  "より": {
+    "file": "b16fb89bcc09cb84ae99ca75.mp3",
+    "sha256": "134a8c163b3ab29e06a7533f7e9a3dabb546a073a3ab153807dc9427d6e57fa6",
+    "speed": 0.95
+  },
+  "よろしくお願いします": {
+    "file": "6f3369d104e8b7f3e505b00c.mp3",
+    "sha256": "a821488f2b264e753c1fa33240cbabd319fd3643e830204147631a3dc73d522b",
+    "speed": 0.9
+  },
+  "よろしくお願いします。": {
+    "file": "847993aba440f318c9e8182b.mp3",
+    "sha256": "a821488f2b264e753c1fa33240cbabd319fd3643e830204147631a3dc73d522b",
+    "speed": 0.9
+  },
+  "りょかん": {
+    "file": "73d6d70170f94cf1bce5aca4.mp3",
+    "sha256": "73d6d70170f94cf1bce5aca4b29ff0271725b25cbbbfc02b0741f3a213d92c4c",
+    "speed": 1
+  },
+  "わたし": {
+    "file": "116a4f3c594bcf84d579e4e0.mp3",
+    "sha256": "116a4f3c594bcf84d579e4e02ca6e8687e28f683a39a38e9179499a743761daf",
+    "speed": 1
+  },
+  "ア": {
+    "file": "d08fe55f232d6270ca0b27a9.mp3",
+    "sha256": "d08fe55f232d6270ca0b27a9bfa94560025395669877101fa7f9b4e65948dfaa",
+    "speed": 1
+  },
+  "アア": {
+    "file": "ef369b1b643fc7ae3d2fc045.mp3",
+    "sha256": "a0f6bd7b6d2ab5f68cd8ba26d1f1897fbd636730969097f842e002d59d6aca9a",
+    "speed": 0.84
+  },
+  "アイス": {
+    "file": "65b29afd76a45cf7e04d4b0e.mp3",
+    "sha256": "52fdf9b0e3981de1bb1061c97211729c63248bdf12e01f538908833ab48bd796",
+    "speed": 0.84
+  },
+  "アイス、テスト、ホテル": {
+    "file": "cf067a08d07df90955315356.mp3",
+    "sha256": "4223b317036ad1ecf5f2178f74499734c7910296f6ec295a975b8f9e90d5b818",
+    "speed": 0.84
+  },
+  "アレックスです。フランスから来ました。今、東京に住んでいます。": {
+    "file": "fc84b280dfe66cf900cc0869.mp3",
+    "sha256": "93a4337dcc865b6d8e32924bb138256821031753c90c02162d1099e14496877d",
+    "speed": 0.9
+  },
+  "アレックスです。毎朝、七時に起きます。家で朝ご飯を食べます。午後三時に駅ですね。": {
+    "file": "eb51a0dea536a1cc443da17d.mp3",
+    "sha256": "bbd3ebdcda0536614908f45cb748d93cca9fb251c4442d90b3ae079f88c8b724",
+    "speed": 0.9
+  },
+  "アレックスです。駅はどこですか。午後三時ですか。": {
+    "file": "c908fbb1f4c0927d49f93046.mp3",
+    "sha256": "f361c3be0a564b0ba5ba7e477ca160d36c3c9949105b3733884f46982fd5cae0",
+    "speed": 0.9
+  },
+  "イ": {
+    "file": "d06ba03dc744098fa2f64bd6.mp3",
+    "sha256": "d06ba03dc744098fa2f64bd6904d897e8e0fb8b14cd0bdb8d9af3863754302ac",
+    "speed": 1
+  },
+  "イイ": {
+    "file": "696f36644898d87f7af8473a.mp3",
+    "sha256": "76c2eef14e2e8335fdcb17a00ea9d8f04a4d70b60418ed777a01e341596c8e45",
+    "speed": 0.84
+  },
+  "インタビュー": {
+    "file": "5dcae60c5e5f5ae0f0f37859.mp3",
+    "sha256": "c85712948e7b2fe2e91bc45b3390e80d3176e2b62d70b3c52b2e65a5c9c1222a",
+    "speed": 0.84
+  },
+  "ウ": {
+    "file": "8885545a90620b61c2f78c10.mp3",
+    "sha256": "8885545a90620b61c2f78c104a439b41b5d4e37b7b736f40bcb79ca7c0e68639",
+    "speed": 1
+  },
+  "ウウ": {
+    "file": "7408b54294a449cb4b4a0763.mp3",
+    "sha256": "915e93c3687ce79f01bc12301c1b3914606372aa399f34e33897e238ebc75f8b",
+    "speed": 0.84
+  },
+  "エ": {
+    "file": "92bfd10100cfeeb4bddaf603.mp3",
+    "sha256": "92bfd10100cfeeb4bddaf603517593cf0c8c2d49427615e150f6d47647711405",
+    "speed": 1
+  },
+  "エア": {
+    "file": "ab7fc832bb95492981fb2c1c.mp3",
+    "sha256": "26a277440a5a8f224f536826d81f9d67a93fb98c32e595414b8e7585d4c0819c",
+    "speed": 0.84
+  },
+  "エイ": {
+    "file": "1de25ab3b3f45d93ea718f33.mp3",
+    "sha256": "b03e4e711b48fbcc74bce4df679c7b2e35335bbd0773b99b692e895446692521",
+    "speed": 0.84
+  },
+  "オ": {
+    "file": "d9daf038ca06792d0227d7e8.mp3",
+    "sha256": "d9daf038ca06792d0227d7e8dc28dee438f582100e549687d52dfbebc9ca18d5",
+    "speed": 1
+  },
+  "オウ": {
+    "file": "c27112df589427b9c1a7b078.mp3",
+    "sha256": "91a0cf6f9a1f9efede70c15f7a4ae9c154a320c4ab4be9c6ae35ee9187c2760e",
+    "speed": 0.84
+  },
+  "カ": {
+    "file": "c3642337bed2742b6934d2c9.mp3",
+    "sha256": "c3642337bed2742b6934d2c96e1fdb4b8c52b2592c0cd1ed195e0ac587641222",
+    "speed": 1
+  },
+  "カカオ": {
+    "file": "25be5491686035f47f525a58.mp3",
+    "sha256": "9db6e1737206261e196c7142f6899090b6ae8462078d758699e2218365647c16",
+    "speed": 0.84
+  },
+  "カフェ": {
+    "file": "d9b35d6bdc32a9256fc70433.mp3",
+    "sha256": "125f973b17e595918bad44292e78c249ca4b671d1b3cd6a7ae0c256a3f4bd18b",
+    "speed": 0.84
+  },
+  "カメラ": {
+    "file": "fb3df122b193e34c5f9646c1.mp3",
+    "sha256": "a321d936d736b37f30e4834c988eeb7c2d8c662e3a97ec4d3cad028f9ad2532b",
+    "speed": 0.84
+  },
+  "カードで払えますか。": {
+    "file": "dc29db1f7ff01f955eaf07fd.mp3",
+    "sha256": "2a28e9153c37db5d536fad4cd8943eb750f07e833eae8e4c0fd42339766085eb",
+    "speed": 0.9
+  },
+  "ガ": {
+    "file": "6eb4d0c1d5b54e7a0579e145.mp3",
+    "sha256": "6eb4d0c1d5b54e7a0579e1458a5942dcf313d9f8a08ab94b4c651fb50c108f1c",
+    "speed": 1
+  },
+  "ガス": {
+    "file": "e0cbed069a4fcc57e3285961.mp3",
+    "sha256": "4553e3d117a6664765cdd8d6902e520ded896e10361d4a2e162b65c42be59af8",
+    "speed": 0.84
+  },
+  "ガス、バス、パン": {
+    "file": "2a5334f674a773eaeee5fa72.mp3",
+    "sha256": "6facc611502e7095c2972faaea8fe2791ca926af186074264b415c368ac05965",
+    "speed": 0.84
+  },
+  "キ": {
+    "file": "53287e56641aa0a007b18774.mp3",
+    "sha256": "53287e56641aa0a007b18774e5fb4c4268a9141485eae6ee3ef61092761b99a7",
+    "speed": 1
+  },
+  "キャ": {
+    "file": "1f49991da0c0c43f55ed0781.mp3",
+    "sha256": "957ac5096a929d10a5981f45da4af7677d2fb77198fd1dce7a35fc33865534c5",
+    "speed": 0.84
+  },
+  "キャベツ": {
+    "file": "026723e12a510a1ad3ed32d2.mp3",
+    "sha256": "2d2c7695dcad7c7aa4f87ac09eac1e536b20b1509e214a34eb1de101561ba877",
+    "speed": 0.84
+  },
+  "キャンプ": {
+    "file": "acee0491cd7956d0ced452df.mp3",
+    "sha256": "efc11658cc1b03b0fd48e85c3038b13678d6b89e74ab36dd01d80d7aa13f4072",
+    "speed": 0.84
+  },
+  "キュ": {
+    "file": "5bfbe7fc859e369507fc9dd3.mp3",
+    "sha256": "2596981d37ce08a73c46626939ae75f91cd468cf45649f650ea880b48590ac6f",
+    "speed": 0.84
+  },
+  "キョ": {
+    "file": "25a8105eab00ef5ad1d6e13a.mp3",
+    "sha256": "381fd819c4ba0a9008d44167e30235851a00eb00bd6f5755d959fdc1d9e5f4b7",
+    "speed": 0.84
+  },
+  "ギ": {
+    "file": "a82892c8cbaa0ea38b3566bb.mp3",
+    "sha256": "a82892c8cbaa0ea38b3566bb07a1e5b7f32daa080ae2c5b06515154373fcb973",
+    "speed": 1
+  },
+  "ギャ": {
+    "file": "24daa82f0dd19ce9212c94fd.mp3",
+    "sha256": "afeaaf41f3dd1a6ae175854f9811e0d33322e13a4858c339e5688fc4d50ff0bb",
+    "speed": 0.84
+  },
+  "ギュ": {
+    "file": "97d8b857f51ad5c7c990555b.mp3",
+    "sha256": "86672b187acfb1ef97e8727210aad177aa28270fd7b4a1d9ec063304c27d6425",
+    "speed": 0.84
+  },
+  "ギョ": {
+    "file": "4a0d8b222bb9b278f4c385f2.mp3",
+    "sha256": "cddd808c66f2090ca4d5fa051ffee2e00211315442e71da9953bb355fe6e9471",
+    "speed": 0.84
+  },
+  "ク": {
+    "file": "b92725e94356f54c4369d0dc.mp3",
+    "sha256": "b92725e94356f54c4369d0dcc1658e46f2b15dc97500a0feb356abcdd457476f",
+    "speed": 1
+  },
+  "グ": {
+    "file": "697ba018b95e73182f57d5fa.mp3",
+    "sha256": "697ba018b95e73182f57d5fa44b5e996b87de9085634920f1b503629540c6c4a",
+    "speed": 1
+  },
+  "ケ": {
+    "file": "bf67e138fae23c3dd7f26a62.mp3",
+    "sha256": "bf67e138fae23c3dd7f26a625bc0b50e067ca71574134b618370427bcf8605d0",
+    "speed": 1
+  },
+  "ケア": {
+    "file": "587082db78ffc61ad65eb620.mp3",
+    "sha256": "972584aea40f5612a21697804f4864bb18e41893f5951637f128c7c0781bfa11",
+    "speed": 0.84
+  },
+  "ゲ": {
+    "file": "47bd3a9b5be014afaf79f50e.mp3",
+    "sha256": "47bd3a9b5be014afaf79f50e7959751df24ceecb3fdb1ae310eb99b55876cb94",
+    "speed": 1
+  },
+  "ゲーム": {
+    "file": "c706e17c5657277c6ba0967e.mp3",
+    "sha256": "3b020869d413f70964811b96eed855b0986db75349abcb4a4067227327cd2274",
+    "speed": 0.84
+  },
+  "コ": {
+    "file": "2d7e07fe41400a161817b0be.mp3",
+    "sha256": "2d7e07fe41400a161817b0beb730bbd7dfad61395cbeb4018e28d3c4ed97e0a3",
+    "speed": 1
+  },
+  "コンピューター": {
+    "file": "4c18a8c58cc7772c50d43a12.mp3",
+    "sha256": "8151fa5bc68a0fa7f553c20dca65eef54c6a248a533ece8c39413c1a886d1af8",
+    "speed": 0.84
+  },
+  "コーヒー": {
+    "file": "53a22a6c18bfab67a4586587.mp3",
+    "sha256": "a43b2d71e46abc70d8a0fe2024b69854096e72f15c9a703871e27c78a82ab39a",
+    "speed": 0.84
+  },
+  "コーヒー、チケット、メニュー": {
+    "file": "c6be21f479573960453d7876.mp3",
+    "sha256": "5f7e17c350cbd5425994c46fa35ca5cdc80493d3a56d3f4ecc55afb479465f2c",
+    "speed": 0.84
+  },
+  "コーヒーを一つください。": {
+    "file": "9323e61021192f6e19390828.mp3",
+    "sha256": "3dcb05e46abd13e0e42894846d6c19915af6880ea3b2c8c96ee8785ac48b44c4",
+    "speed": 0.9
+  },
+  "ゴ": {
+    "file": "505f2a3fe795ef1640306647.mp3",
+    "sha256": "505f2a3fe795ef164030664739e7f77e707259895a0555976279b3e73cf7ec95",
+    "speed": 1
+  },
+  "サ": {
+    "file": "f7c3d84eefb8f4dfd1c2ee6a.mp3",
+    "sha256": "f7c3d84eefb8f4dfd1c2ee6ab71a746e9ab1e0515a891c1ebe5a3cf02d2a41c6",
+    "speed": 1
+  },
+  "ザ": {
+    "file": "033aca9b21f86edd4a38c4c3.mp3",
+    "sha256": "033aca9b21f86edd4a38c4c35accdd2b137bfe935b7125424e7e212e6bfd49f9",
+    "speed": 1
+  },
+  "シ": {
+    "file": "9bdd18ca710b45e366804190.mp3",
+    "sha256": "9bdd18ca710b45e366804190daac47a57d5f745cf85b321e4daf564fbd8b9806",
+    "speed": 1
+  },
+  "シャ": {
+    "file": "313744fe582c9a0722eb2289.mp3",
+    "sha256": "572796ae1b7dc233e53aad0a3a83aa088b14e4768b28790e93d44c03378d2c48",
+    "speed": 0.84
+  },
+  "シャツ": {
+    "file": "cf4bc7c19f77aa912c8fd352.mp3",
+    "sha256": "a6492d4ea668a310213226acb470f74c16314d6fc46ebad3376ab2cdda44c3dd",
+    "speed": 0.84
+  },
+  "シュ": {
+    "file": "1a9dcb6e633cc2542da7f2cb.mp3",
+    "sha256": "6a1db3c9fb136d5225c06b9e61c498284fc2a18266e25b27b63dde27bd8f1060",
+    "speed": 0.84
+  },
+  "ショ": {
+    "file": "d9725755c7502d42b0389499.mp3",
+    "sha256": "ac000af2c8c88ef6d733e7fcf47da222d34656d6c72da0513a02f48771eedd68",
+    "speed": 0.84
+  },
+  "シーツに汚れがあります。部屋に変なにおいがします。": {
+    "file": "3c0a0e9f96a85da772eecae6.mp3",
+    "sha256": "7929455c47d6c28dca8391700aaaf4b46116b0ea4f5dd8cb67288710463aa023",
+    "speed": 0.95
+  },
+  "ジ": {
+    "file": "5d1955e6e384dc99cce73861.mp3",
+    "sha256": "5d1955e6e384dc99cce738618f970a260ffe3e61d08e99222e521634ea96d13c",
+    "speed": 1
+  },
+  "ジャ": {
+    "file": "7cfd017e08149bd9d4cf296c.mp3",
+    "sha256": "8251718505a4d5c01bb51b94c4d47dc23a643c333a566e5409a719a61a6fdb6b",
+    "speed": 0.84
+  },
+  "ジャム": {
+    "file": "907bbe732fa276454edd7772.mp3",
+    "sha256": "a76cf3b6dfb4e9f66192fb2ff22417bcdbf07c25e9f2d4f4f70d922a67b85759",
+    "speed": 0.84
+  },
+  "ジュ": {
+    "file": "bf0bef24151904304576e923.mp3",
+    "sha256": "731748c54851e8abb60b93dfc468f638ad16e5490a187c800f6d0e5d9329a915",
+    "speed": 0.84
+  },
+  "ジュース": {
+    "file": "3d4da5cf8f16a0fbb31baca7.mp3",
+    "sha256": "42183388dc4721d9f83d18993f45fdb9ee9d6e6960cb426907fe8fc576bae82b",
+    "speed": 0.84
+  },
+  "ジョ": {
+    "file": "829279e811a6cfedf9691f29.mp3",
+    "sha256": "fbe245b73a67ff7e7e0802433db1124a92d2a97f45f2735c9fb5b3a9b34d3841",
+    "speed": 0.84
+  },
+  "ス": {
+    "file": "3e065ead33875b6029b40388.mp3",
+    "sha256": "3e065ead33875b6029b4038840b07cff195fc9e5f144105e8e1cd2c326034bbc",
+    "speed": 1
+  },
+  "ズ": {
+    "file": "2c5d2f1b944ec22df9aef042.mp3",
+    "sha256": "2c5d2f1b944ec22df9aef04278ba5590210db44f7c8752db43115fa4ebfc6ef6",
+    "speed": 1
+  },
+  "セ": {
+    "file": "3c2483f78ded6fffd8f834ea.mp3",
+    "sha256": "3c2483f78ded6fffd8f834ea1d1cc2b8d1e816a82a316d1c69aba3264bae6ad9",
+    "speed": 1
+  },
+  "ゼ": {
+    "file": "73da531dc5ece4c71f274753.mp3",
+    "sha256": "73da531dc5ece4c71f274753a94ed0b80a7897aa853b44a56d85fc87b2dcdfea",
+    "speed": 1
+  },
+  "ソ": {
+    "file": "c5198c1bb467e59bb476b6de.mp3",
+    "sha256": "c5198c1bb467e59bb476b6dee02c5f7b6bca5d72eaa541e0ed59d0000757c15d",
+    "speed": 1
+  },
+  "ゾ": {
+    "file": "f179a438c8bbb3f83ca774ae.mp3",
+    "sha256": "f179a438c8bbb3f83ca774ae5590438004cf88ae066896e8e58e95692b9660ed",
+    "speed": 1
+  },
+  "タ": {
+    "file": "7a505ee57dffce4ebccb80bd.mp3",
+    "sha256": "7a505ee57dffce4ebccb80bd2b352159aacbc6932ebab09693daa27546f7edaf",
+    "speed": 1
+  },
+  "タイヤ": {
+    "file": "1b8d36a4f3882814bdb19c49.mp3",
+    "sha256": "d901f8b294ffd451c86e2b389934e0b6fc58a53a4fb555badad74ec164d9ed87",
+    "speed": 0.84
+  },
+  "タコス": {
+    "file": "3e28c4fe9442dad614dd62e9.mp3",
+    "sha256": "1f047005ad11da02fbd1a07073c8592c790c7831a9603c6e7193323c7ff08b67",
+    "speed": 0.84
+  },
+  "ダ": {
+    "file": "0363d1a61d560339988a5160.mp3",
+    "sha256": "0363d1a61d560339988a5160b74059c8eee9c58bcca8c31244b093cb3c2742f3",
+    "speed": 1
+  },
+  "チ": {
+    "file": "5d819346b81b7c671af05850.mp3",
+    "sha256": "5d819346b81b7c671af058504dd2e4528c01416d1b4c87acc321d3226fbfc12b",
+    "speed": 1
+  },
+  "チケット": {
+    "file": "f7c589a62bdd8c7f44a40c1d.mp3",
+    "sha256": "e5934fa83b73073a99e7740b1691d31065d683996f2f0566ef226627c2011b56",
+    "speed": 0.84
+  },
+  "チャ": {
+    "file": "50bd228d911368f833697d38.mp3",
+    "sha256": "cb8db9ed7bdb9fe0feeb4b07d233d535baf25f993a529b8d44da98715f9a3abf",
+    "speed": 0.84
+  },
+  "チュ": {
+    "file": "2fe237bbdd477cf666afad63.mp3",
+    "sha256": "852c95b7bbd8445aedcde6e7f2179be1f113bc041ffe06586528d2805997ab7f",
+    "speed": 0.84
+  },
+  "チョ": {
+    "file": "112455412a55b5a848f0437a.mp3",
+    "sha256": "fc17445c9d24152d37c9c4dddc9ee6be5a01c8f67ff1f141603288b8eb8b3bf6",
+    "speed": 0.84
+  },
+  "チョコ": {
+    "file": "693e2bcd3a3c99d49c3c96ec.mp3",
+    "sha256": "5c6ceed794cb2db81941f876da81eb838681b2955bf6f4f5970c4859ac1427f6",
+    "speed": 0.84
+  },
+  "チーズ": {
+    "file": "b90d0d1fb1e4d24f026ae888.mp3",
+    "sha256": "c9fc97a58267b074af3e24f0bfe6a15421b83e5b01408996e8d1c0e12fb942d5",
+    "speed": 0.84
+  },
+  "ヂ": {
+    "file": "5e918a2fe52143e0f36c556c.mp3",
+    "sha256": "5e918a2fe52143e0f36c556c36528d73b7cd389ffe61c6392d0ec76903d02215",
+    "speed": 1
+  },
+  "ツ": {
+    "file": "b26593d61fac034ef3d6615a.mp3",
+    "sha256": "b26593d61fac034ef3d6615a7d3c711dbafa095ba446ab6f8c39c02cc409e4ae",
+    "speed": 1
+  },
+  "ヅ": {
+    "file": "d7e5414301e0781458b27ab3.mp3",
+    "sha256": "d7e5414301e0781458b27ab38fbfa61b473eade112eb6e4cfdbecebfb75fcdf9",
+    "speed": 1
+  },
+  "テ": {
+    "file": "b331bcfa8fd83e7262c40526.mp3",
+    "sha256": "b331bcfa8fd83e7262c40526ff1540fed665dfc606533d55f00cad4e471f228c",
+    "speed": 1
+  },
+  "ティ": {
+    "file": "9ba6840db179316808d3176a.mp3",
+    "sha256": "244a2f963f3604ab292b517280446821f17e906c23716de6aef29e8c28071a11",
+    "speed": 0.84
+  },
+  "テスト": {
+    "file": "5490804222fe3e8d4e4c4c7b.mp3",
+    "sha256": "98ccbe471d1308a536233f7f02ce39c5ce56673553ee3bc411aa12507284f887",
+    "speed": 0.84
+  },
+  "デ": {
+    "file": "985f625f4987a9a375187de4.mp3",
+    "sha256": "985f625f4987a9a375187de47d99ba7940045557be44959352ba13ffa527a601",
+    "speed": 1
+  },
+  "ディ": {
+    "file": "2fb90ecf33541bdc2d74c98a.mp3",
+    "sha256": "c7cfb82a67b4f7c4d5e7a8e0b06be304068997fa3c02ad7a1c9596f308bd7f8e",
+    "speed": 0.84
+  },
+  "デザイン": {
+    "file": "329e60c7a0afde40695b2706.mp3",
+    "sha256": "3e520395828630ffbc2d9800a8f0a7e0965f2b7ac95a0c4475514884b879de9c",
+    "speed": 0.84
+  },
+  "ト": {
+    "file": "7e860a4d5ee39ee877275948.mp3",
+    "sha256": "7e860a4d5ee39ee8772759489dcd139ee0917874918ed8bb751981092bc7e097",
+    "speed": 1
+  },
+  "ド": {
+    "file": "0a171506a390f9901b9000de.mp3",
+    "sha256": "0a171506a390f9901b9000de66ab08b4c40d9474eb29105d96ddaf94cfb1e965",
+    "speed": 1
+  },
+  "ドア": {
+    "file": "032b177505986c0f1b8d3321.mp3",
+    "sha256": "f26797588449debb74f9804735ea72ce865894c9a76b06dda30b74b08e1aba7e",
+    "speed": 0.84
+  },
+  "ナ": {
+    "file": "ce29b95844cce0989d8b551b.mp3",
+    "sha256": "ce29b95844cce0989d8b551bb38ac0fe406fe6847eb2a003d0443efe6f5f8198",
+    "speed": 1
+  },
+  "ニ": {
+    "file": "ea328f1857145b4c04947025.mp3",
+    "sha256": "ea328f1857145b4c04947025ba9b5caaaac18dc909a772b3afba246b988a2e57",
+    "speed": 1
+  },
+  "ニャ": {
+    "file": "515d1d99c33a3e865ddc3e9a.mp3",
+    "sha256": "6d94178dd0aaf3c807f845c0695d4ff32ba73a6cb88bb381026d089d7d8ddd21",
+    "speed": 0.84
+  },
+  "ニュ": {
+    "file": "f3bfa4c3785595ee07bcff60.mp3",
+    "sha256": "e467b380ab2bf978277b606e3c7a92d59f3940caae97fba468efa4c62f48660f",
+    "speed": 0.84
+  },
+  "ニュース": {
+    "file": "24ed78d77cfca7632cd6627e.mp3",
+    "sha256": "8c53cc09d785a0f415d2579c28ffa4560cb7dc5e60b1cef6d5326928f994d44f",
+    "speed": 0.84
+  },
+  "ニョ": {
+    "file": "4458214f9671a0009304ef44.mp3",
+    "sha256": "e83016eefe3b4c8203129fc6d8f63f7d5f007ebde27b47661c80ac142ace397e",
+    "speed": 0.84
+  },
+  "ヌ": {
+    "file": "fdf37508724aeb7dec516b94.mp3",
+    "sha256": "fdf37508724aeb7dec516b941d2627aff025560b397e6401d74aec2944403cde",
+    "speed": 1
+  },
+  "ネ": {
+    "file": "4924d0c11b5c64991a333789.mp3",
+    "sha256": "4924d0c11b5c64991a3337896fec5e1f760aa52e8ec44742b89fbdb3b728f64e",
+    "speed": 1
+  },
+  "ネクタイ": {
+    "file": "83e96a87c3edf02a98bd4b6e.mp3",
+    "sha256": "0869cc9cffa534b0ee398583f9b5b394d42b2dde2bab1aab123686b52417a925",
+    "speed": 0.84
+  },
+  "ノ": {
+    "file": "ed5c9e6bd50d3b675b3f69ea.mp3",
+    "sha256": "ed5c9e6bd50d3b675b3f69ea8b842efce169b44e416ac317c70c09195e2c6c56",
+    "speed": 1
+  },
+  "ハ": {
+    "file": "4dbd0608d8c339efa5b5ff4d.mp3",
+    "sha256": "4dbd0608d8c339efa5b5ff4dc3f5c8be59d8e0d717161e47299d796f974d9396",
+    "speed": 1
+  },
+  "ハウス": {
+    "file": "0c384cee2547021c8f278b86.mp3",
+    "sha256": "fd60539a401ae7e9d685c43b7385144ba75dc4dc5cc1395172fb59d485cea549",
+    "speed": 0.84
+  },
+  "ハム": {
+    "file": "e98be20232652fdb053a0ec2.mp3",
+    "sha256": "5bd71392bb5520a76f808da09302bd6bbc7654154bd2994c0bde5f411109d9fb",
+    "speed": 0.84
+  },
+  "バ": {
+    "file": "cf1e91f851c0186657172dba.mp3",
+    "sha256": "cf1e91f851c0186657172dba281d35281c7de0e26675636bb2a226a0c463e728",
+    "speed": 1
+  },
+  "バス": {
+    "file": "762cc7520d8b3afd54b4772a.mp3",
+    "sha256": "d3e6a0f32994fa4c97c8068c045a44db35746861e9fdfd91ac749c700854ad01",
+    "speed": 0.84
+  },
+  "バス停はどこですか。": {
+    "file": "03a7ea2b62ad3aab11e4b3a4.mp3",
+    "sha256": "fba0cbcac49c191113ceb0fa24d2f4e87a8335911bee0cff1d291eaeb3fa9210",
+    "speed": 0.9
+  },
+  "パ": {
+    "file": "8429e8c0c6d8e68fe1386fd6.mp3",
+    "sha256": "8429e8c0c6d8e68fe1386fd6ca742bdb414a58fe5c636e22825583e5690f7bca",
+    "speed": 1
+  },
+  "パソコンを使ってもいいですか。": {
+    "file": "b3af7e57caddc89f9a7032b5.mp3",
+    "sha256": "ed5fb4a7cfeb8b2a3a963632765862a118cb3bfb7df9a2fc947008875ff1ca02",
+    "speed": 0.95
+  },
+  "パン": {
+    "file": "7b814ecc85377ed95c7c3c85.mp3",
+    "sha256": "743dc0de42fae25f9d5a873754470f025b3ac2a1db971780075cd3a0fe015d6c",
+    "speed": 0.84
+  },
+  "パンを一つください。すみません。もう一度、ゆっくりお願いします。袋はいりません。": {
+    "file": "f06db77532b71f58492e8be7.mp3",
+    "sha256": "1060843e12fdd428b4c22a9a73e483378d7ba67c6571cd2f8c70957db0102ed0",
+    "speed": 0.9
+  },
+  "パンを一つください。袋はいりません。": {
+    "file": "763347916e6ddb3716c81e2b.mp3",
+    "sha256": "613495459ce27729ecc4a807508a90280ffb0f76d1fe7b4322c78326c65a05d5",
+    "speed": 0.9
+  },
+  "パンを三つください。水を一本ください。全部でいくらですか。カードで払えますか。レシートをください。": {
+    "file": "d70a1419bf9c3020c135e452.mp3",
+    "sha256": "d58abd65926db033242d8219cf8699fb80d61ccc54d7941cf7b314ca9b111035",
+    "speed": 0.9
+  },
+  "パンを三つと、水を一本ですね。全部で八百円です。カードは使えません。": {
+    "file": "b92807410312fd64d7acfe41.mp3",
+    "sha256": "2240c5bc333e554da6c573da744a48aac343f63fe45e5b33c380ee62f54a536c",
+    "speed": 0.9
+  },
+  "パンを二つですね。全部で三百円です。": {
+    "file": "70a4b30a3a268158a99e2aee.mp3",
+    "sha256": "a668d7b720d0da9b965a1f9f996df8f5183b8d4a0b18fe4bccc89bbc22309624",
+    "speed": 0.9
+  },
+  "パーティー": {
+    "file": "5a20b3ebf3ad96f91a67456b.mp3",
+    "sha256": "860ae33abd4012d4f14ad954e4a7d6e3b5f8f81c8c18721ebd6061191d57f737",
+    "speed": 0.84
+  },
+  "ヒ": {
+    "file": "24223d3155b55c52d2bd758a.mp3",
+    "sha256": "24223d3155b55c52d2bd758a02b1bb89c56ff096b863570af46569dd39cae123",
+    "speed": 1
+  },
+  "ヒャ": {
+    "file": "f4bc062c96587ce3ec356e76.mp3",
+    "sha256": "ae20096d2940787b9da3a6633b02495b4b943bb1ede101a6dc4f88be73f61c9e",
+    "speed": 0.84
+  },
+  "ヒュ": {
+    "file": "afe5ee3352de0976f31f4952.mp3",
+    "sha256": "671ea63ba0eb6699966e35067ad1b1b5ad28586107c166619298668891b110b3",
+    "speed": 0.84
+  },
+  "ヒョ": {
+    "file": "44eb595007730b873b41ddd1.mp3",
+    "sha256": "dd532d812445c41f64f06ec2c39e5bced1f628be41bd365d7d39135471c3f9b3",
+    "speed": 0.84
+  },
+  "ビ": {
+    "file": "629f66e50bbb70962717965b.mp3",
+    "sha256": "629f66e50bbb70962717965b7020a58f2fab8e72f02462e146d0c23f511aeb6c",
+    "speed": 1
+  },
+  "ビャ": {
+    "file": "c61de5c3c8737732f36cdbe0.mp3",
+    "sha256": "54b32b690af77e1d6c4f5e789ea7a506598b2b45449e0a7d97dcb6ae8e003cd1",
+    "speed": 0.84
+  },
+  "ビュ": {
+    "file": "c3b78a750e71cb8c89dd70cb.mp3",
+    "sha256": "298c079a8d0c383d44fba314d4c3a17eb99ca4d68c29cebfa357882080d879e8",
+    "speed": 0.84
+  },
+  "ビョ": {
+    "file": "864883a66a8a9ba4804865e1.mp3",
+    "sha256": "20114fb04f5d82fe252d33c3ffdb8284f093a444eb6c8f96c0545eedb914cc2b",
+    "speed": 0.84
+  },
+  "ビル": {
+    "file": "0e3befc5cdb5b789309999c7.mp3",
+    "sha256": "881070f305aed2c86a627d3519163d7ccc5fdfd2fb0823c204bdeb6744f0dc95",
+    "speed": 0.84
+  },
+  "ビール": {
+    "file": "745931e86cc3b371b66204bb.mp3",
+    "sha256": "a69b82a057ef095944a9ceef314d1ff039a4ce7b889481d9629f6012677b76a9",
+    "speed": 0.84
+  },
+  "ピ": {
+    "file": "97b5c58a75f1a519c29f72bd.mp3",
+    "sha256": "97b5c58a75f1a519c29f72bd7986d93e021147ceb994c39c7000f0942ebdb905",
+    "speed": 1
+  },
+  "ピャ": {
+    "file": "902b89caf2bb98e74ab1a09d.mp3",
+    "sha256": "e32a49c238f812e23ae65b1281a9a76059b08ce94b7a3547d7d6626b0f1ab9b1",
+    "speed": 0.84
+  },
+  "ピュ": {
+    "file": "e02e988829749624c6912763.mp3",
+    "sha256": "d8c59ec30d88fac62a2e745e9e40316dc3ab877edfddaa7637ed025f3ae5cedb",
+    "speed": 0.84
+  },
+  "ピョ": {
+    "file": "323141435fdc1b68cd571a73.mp3",
+    "sha256": "08d7476ba48e512642773825f0718e1498528fb95e606bec2cbf8fabca7de0f8",
+    "speed": 0.84
+  },
+  "フ": {
+    "file": "f5904abb18649aea6eb1e0e5.mp3",
+    "sha256": "f5904abb18649aea6eb1e0e5263f7c2afd365e96be5bca69520a95c7e54dc9bb",
+    "speed": 1
+  },
+  "ファ": {
+    "file": "2648615d32ec959f882e4fa7.mp3",
+    "sha256": "20983cf9134eb766c00d4a7f9388825c9e54dd516f34c2bf30e3dfba11795b2d",
+    "speed": 0.84
+  },
+  "ファイル": {
+    "file": "9f914b22372abcbbdac60282.mp3",
+    "sha256": "70bf6d8edff471d3d35943337798beeec783eada031c1506e1c5b6ebdecf4994",
+    "speed": 0.84
+  },
+  "フィ": {
+    "file": "e990ad19a9dc1c458bae32b4.mp3",
+    "sha256": "30a74081e136900384d2d8efce67cffad6419f33d904b7c3f18334e373ed3b94",
+    "speed": 0.84
+  },
+  "フェ": {
+    "file": "48a800c54e93befa401ea98b.mp3",
+    "sha256": "c2261bd7bad7f3ab3152e5936da94fe0599ca022fa84536ac95f98202894e32c",
+    "speed": 0.84
+  },
+  "フォ": {
+    "file": "315b67421a1ccba5995f32da.mp3",
+    "sha256": "8778627887fbc58e55774ea399da13f0a7b57894e9459a242d6a58cd09644d68",
+    "speed": 0.84
+  },
+  "フランス": {
+    "file": "03bebcf5b3ac4ce94ffa0181.mp3",
+    "sha256": "b2aab9c1a8e69e3c90da80b992742fceedaa02ba492117fc46a5990e72f0e25f",
+    "speed": 0.9
+  },
+  "フランスから来ました。今、東京に住んでいます。": {
+    "file": "42c1e816f88743c289aaec2e.mp3",
+    "sha256": "be4ef287f111996733b9eabe8d0e5723b93799535989a28c0c158a8a3ca8e2fa",
+    "speed": 0.9
+  },
+  "フロントです。": {
+    "file": "8650d1b8868893bd78123fae.mp3",
+    "sha256": "29110982a75b51f776f96894aa7f57d22b958758fb213995967019647619ebea",
+    "speed": 0.95
+  },
+  "ブ": {
+    "file": "eb69bf38bb5f0521d98829d2.mp3",
+    "sha256": "eb69bf38bb5f0521d98829d218654080123ff76b4746d17ebe0cb17930f13bbd",
+    "speed": 1
+  },
+  "プ": {
+    "file": "af88baec387ac018ad5e7670.mp3",
+    "sha256": "af88baec387ac018ad5e7670709940198f83aa62fdc870a9ea458675bb1bce98",
+    "speed": 1
+  },
+  "ヘ": {
+    "file": "192bade8e4368287aea9b4e0.mp3",
+    "sha256": "192bade8e4368287aea9b4e0b74f6d6fee416ff540b9a44cf5131db0f4b68fd2",
+    "speed": 1
+  },
+  "ベ": {
+    "file": "fb295894505f991647911391.mp3",
+    "sha256": "fb295894505f99164791139195def6224674269a30c8458e5290d3c165c2c0ed",
+    "speed": 1
+  },
+  "ベッド": {
+    "file": "749b08b7f7705357465b748a.mp3",
+    "sha256": "9604c2581b3c548fbde6eea5b2ca9565a291f2f15ce0fd1cc2dc304c1871f610",
+    "speed": 0.84
+  },
+  "ペ": {
+    "file": "4bd19a950558f4453c5fa256.mp3",
+    "sha256": "4bd19a950558f4453c5fa2565bcad84dae4e93d774b5962f3dbdd32a7c433411",
+    "speed": 1
+  },
+  "ペン": {
+    "file": "866b7238204505254958a21d.mp3",
+    "sha256": "56bfbe8b8b62dd76a6bfc83ed45c13cabd8fde31dd37c12319ae49f16c1c5be0",
+    "speed": 0.84
+  },
+  "ペンを貸してください。": {
+    "file": "f2a9c0f3ecc2c5766cf1fc06.mp3",
+    "sha256": "61676b680bf7b9475745515603dae51a0c3d3c9aabf324407bc445a7660301a5",
+    "speed": 0.84
+  },
+  "ペンを貸してください。ありがとうございます。": {
+    "file": "ed866dd811d86e2f50eb4243.mp3",
+    "sha256": "57ea0fd9bb94fcbefd47ed6ebdcea2092b888139c96860b0cd364cd54f13d7d3",
+    "speed": 0.84
+  },
+  "ホ": {
+    "file": "c08c527e7f2e7970b3b4076b.mp3",
+    "sha256": "c08c527e7f2e7970b3b4076bcdda0f6dabca8ba4ed3827d63a2625acc495bb95",
+    "speed": 1
+  },
+  "ホテル": {
+    "file": "592ab34b1c1ef35534e91841.mp3",
+    "sha256": "33a47458db2fce5225321f3aa7ac2cb10a35de286ff6b26c6f4272b85f8e0dd7",
+    "speed": 0.84
+  },
+  "ボ": {
+    "file": "aa944363a1c16a312fe47677.mp3",
+    "sha256": "aa944363a1c16a312fe4767759b5aee03cb79092ea4031fc172ca57911f75292",
+    "speed": 1
+  },
+  "ポ": {
+    "file": "b3b7ba212f0969f1531c4e47.mp3",
+    "sha256": "b3b7ba212f0969f1531c4e47f3288e76aec208f9ff5e1a82f2701a1da7cd3aa6",
+    "speed": 1
+  },
+  "マ": {
+    "file": "f5865c7020876fbbf1ec6905.mp3",
+    "sha256": "f5865c7020876fbbf1ec6905309ff1015c7aa92ad4fd6a272e82020ddeaf0459",
+    "speed": 1
+  },
+  "ミ": {
+    "file": "71c3f0ab5f961c2203520d3f.mp3",
+    "sha256": "71c3f0ab5f961c2203520d3f7ff3a5849b0a817f9b30a5d8954c8341b0222e2c",
+    "speed": 1
+  },
+  "ミャ": {
+    "file": "1b48a8c453f566182e06c6d4.mp3",
+    "sha256": "3eff2f637f4a0778b56d8efa26f8f53979b8cc31d56cefcc9a428180811b0249",
+    "speed": 0.84
+  },
+  "ミュ": {
+    "file": "6d78157b780bb1cf6db18527.mp3",
+    "sha256": "f67e43a67ed28329c31e9ab00c8a03c69956cea6348d5f78664b865a6b3cbaa5",
+    "speed": 0.84
+  },
+  "ミョ": {
+    "file": "238a51477b371b306a657657.mp3",
+    "sha256": "0c9f2fb656824ace71a1231535ad1082ab9352bc41bb2f9adf9694989e8003fb",
+    "speed": 0.84
+  },
+  "ム": {
+    "file": "4286b6be81623c8490df4ff3.mp3",
+    "sha256": "4286b6be81623c8490df4ff392a94dd43993824da576d470d2ca60d1a61fe73f",
+    "speed": 1
+  },
+  "メ": {
+    "file": "709c05f8dd82d36cd39352de.mp3",
+    "sha256": "709c05f8dd82d36cd39352ded698255ab8649e5b4906bca6de41d0633dbb707e",
+    "speed": 1
+  },
+  "メニュー": {
+    "file": "acd6e96b05bf9ce1e83f184e.mp3",
+    "sha256": "182d1b5c60c0f3a3816bb8d580681dc1fc41e550ac572042793175c540103aa3",
+    "speed": 0.84
+  },
+  "メモ": {
+    "file": "3170cc0540b2a7892ce9e157.mp3",
+    "sha256": "464c36f55834790a5ef8f93be23266effe2391148c7a70732342f573f2cc86ed",
+    "speed": 0.84
+  },
+  "モ": {
+    "file": "6cb8f2b11d747fc481b1ec01.mp3",
+    "sha256": "6cb8f2b11d747fc481b1ec011a9e430131cb3248c2b773874b907a1ebf12cefd",
+    "speed": 1
+  },
+  "ヤ": {
+    "file": "1de7070baf94b1e2bff63e3e.mp3",
+    "sha256": "1de7070baf94b1e2bff63e3ed229c3679efb1a75d8d309eef8740b5112dda06d",
+    "speed": 1
+  },
+  "ユ": {
+    "file": "614d8e5f8600eecdfa958581.mp3",
+    "sha256": "614d8e5f8600eecdfa9585816dcc9561e31481cbd6334ffff924a1ecc48eb1c8",
+    "speed": 1
+  },
+  "ヨ": {
+    "file": "e1ff0de1173201ef9b7a6584.mp3",
+    "sha256": "e1ff0de1173201ef9b7a6584afdff6584fe33458837cfebb7d204f6712552bfa",
+    "speed": 1
+  },
+  "ヨット": {
+    "file": "1d95151dafe741b6b7982c82.mp3",
+    "sha256": "dfca93b05610ffa1c8fa00bca734b18dd80989a1355b05532eab721ad7d3010b",
+    "speed": 0.84
+  },
+  "ラ": {
+    "file": "80f87c2ad99af823ad7f92d4.mp3",
+    "sha256": "80f87c2ad99af823ad7f92d42eaddb68f1f5f35b2e0202d37a1d86571f6974c6",
+    "speed": 1
+  },
+  "リ": {
+    "file": "51f8abddacef8e31915adc29.mp3",
+    "sha256": "51f8abddacef8e31915adc290a0ad3996aae821f2dd86f8b1349c001a34390b7",
+    "speed": 1
+  },
+  "リャ": {
+    "file": "87c2eb8ede563dec1bf2f6ec.mp3",
+    "sha256": "433be56f84bd8cdd289195def184ecebb4855f2f83e6993cd3dec5b04685d55f",
+    "speed": 0.84
+  },
+  "リュ": {
+    "file": "e518e66d2900f2044512084a.mp3",
+    "sha256": "f34e63b24d6d0e80103231394f22f8891bf3212a04c6f6d59848a5f43879cca2",
+    "speed": 0.84
+  },
+  "リュック": {
+    "file": "0638f6e8bba0e0c065edcd97.mp3",
+    "sha256": "089de5f306133ebc2533ef9f711ed5a5d749648365a6fedfed3c266e0ac0d8a5",
+    "speed": 0.84
+  },
+  "リョ": {
+    "file": "336853d6293662c1a53674c7.mp3",
+    "sha256": "157f290fbc7b10470cce606810f1961c87f77d7fe5bc144b6b1516982c9d0dab",
+    "speed": 0.84
+  },
+  "ル": {
+    "file": "e0ff37f78f9e9a1b3f00d7ab.mp3",
+    "sha256": "e0ff37f78f9e9a1b3f00d7ab952f86947b65a088e7c9a3ce63e0de63216fc26c",
+    "speed": 1
+  },
+  "レ": {
+    "file": "d6f8b3263af939044476398c.mp3",
+    "sha256": "d6f8b3263af939044476398c86632aac6aba1e42ed2bdf039510ab312ee62f9f",
+    "speed": 1
+  },
+  "ロ": {
+    "file": "6347caebf479ec36874f1698.mp3",
+    "sha256": "6347caebf479ec36874f1698f760ab8629242590c77cdb463c0b9960ad85b01e",
+    "speed": 1
+  },
+  "ワ": {
+    "file": "c5644918f6040b4a73e66a05.mp3",
+    "sha256": "c5644918f6040b4a73e66a05ea3a68f70bbe78cc789641894a306ef9b20fc037",
+    "speed": 1
+  },
+  "ワイン": {
+    "file": "f81e1bc927dd3915c1e7c259.mp3",
+    "sha256": "3ce1001d2bae1e7c2e6b6ff3c5c71ac3332db9be5f4db93230e16115e3738b20",
+    "speed": 0.84
+  },
+  "ン": {
+    "file": "2a68cbd0f3ec9e8884643d0a.mp3",
+    "sha256": "2a68cbd0f3ec9e8884643d0a7debef45b2ba210df0639f866fd0120158319561",
+    "speed": 1
+  },
+  "一つ": {
+    "file": "33daa2b83f7fc827b8504371.mp3",
+    "sha256": "33daa2b83f7fc827b850437144c95dd5320e18772b322cced9265ab2e3e04bb8",
+    "speed": 1
+  },
+  "一つ三百円です。": {
+    "file": "5d7184a60c0a7900dc51f692.mp3",
+    "sha256": "a0261a47dfdd91960079ac4fdd199ce642f63dcfc687220cf8cb251b19e44328",
+    "speed": 0.9
+  },
+  "一人で旅行したことがありますか。": {
+    "file": "0cc6059db539f419dabd4308.mp3",
+    "sha256": "50778d64a0fc949a1b520dfc475bcad6303f56872a5c75834773c026015160c9",
+    "speed": 1
+  },
+  "一方で": {
+    "file": "98a1acb725f1aba2869125b1.mp3",
+    "sha256": "4445b12ecb3620ca96efd69f4dc47b064324b2374915a1039a83d75335310ba5",
+    "speed": 1
+  },
+  "一緒に": {
+    "file": "6d029893b1236e075848b316.mp3",
+    "sha256": "58cf819d58448156a44631d86399578d2d3742e1ffb1760dc0d94e288786283f",
+    "speed": 0.95
+  },
+  "七時に起きます。八時に駅に行きます。": {
+    "file": "30d7c900d572bf7dbb476ba5.mp3",
+    "sha256": "5c9c8bcac024489c070ffddb96b6c24e48c7202a4221f6c3c1cf3e9da8c51bcf",
+    "speed": 0.9
+  },
+  "七時に起きます。家で朝ご飯を食べます。": {
+    "file": "8202ac5a00aa1f5b2aaed72c.mp3",
+    "sha256": "4f6957071af74ea596c3c2a2f344db044285af5e45c1893e1ecea85c536accd6",
+    "speed": 0.9
+  },
+  "三千円に材料費は含まれていますか。": {
+    "file": "86dfa13757a8cc0173e29de6.mp3",
+    "sha256": "dbe19af934a298387198a817eda1baf1523433b23489ed3d8056d5ec7acb7916",
+    "speed": 1
+  },
+  "三時からA室にしましょう。全員が参加できれば、明日の正午までに森さんが予約します。": {
+    "file": "d717077685f7cf445676119e.mp3",
+    "sha256": "15ac6b9e10ded97ed8c3ccaf0ccbc5072980a1fd4078d429d9a5b72813608d58",
+    "speed": 1
+  },
+  "三時からなら、A室が使えます。八百円です。A室にするのはどうですか。よろしいですか。では、私が明日の正午までに予約します。": {
+    "file": "0fb15546e1ffc85551831f48.mp3",
+    "sha256": "af704aec5574aa93b886adeee75bdc6b6faa9cb8cf5ce44bdcbed34947c6984a",
+    "speed": 1
+  },
+  "三時からなら参加できます。でも、五時には帰りたいので、四時半に終わりませんか。": {
+    "file": "d9e9ce99c474c36e1bab9904.mp3",
+    "sha256": "794c4e1fa7ae9f05167b22b1d2c776dabebe60112c18228e394d0b37170ddfcf",
+    "speed": 1
+  },
+  "三時に公園の入口で会いましょう。赤い看板が目印です。遅れるときは連絡します。": {
+    "file": "75b6b8c50310d7bb8da8ef12.mp3",
+    "sha256": "cc1a2307f296800c0f4b14e9702ab323ebc782400d2b68d92ad5086f9fe9c508",
+    "speed": 0.95
+  },
+  "九時": {
+    "file": "87dc8174a0f10ed8f2700234.mp3",
+    "sha256": "987788c8e64a5eee2ec13a600bdd4184372a5292e5dc68132f715bc92dc83720",
+    "speed": 0.9
+  },
+  "予定": {
+    "file": "27095e1fbe2f0832b4668169.mp3",
+    "sha256": "27095e1fbe2f0832b4668169d71faa89d01e95a3ef5a2df284a3916cffbb6826",
+    "speed": 1
+  },
+  "予算": {
+    "file": "f36dfa40a54670f75165bddd.mp3",
+    "sha256": "6441a83c01caa4ed89ea422175aa539803243cfe9c1f55944942eacd5f6d9a1d",
+    "speed": 1
+  },
+  "予約": {
+    "file": "20b1a07bdc033d82fe44ef86.mp3",
+    "sha256": "20b1a07bdc033d82fe44ef86bd685b4b8297d42b7947237eb9c31aac56278bf8",
+    "speed": 1
+  },
+  "予約した部屋が使えなくなりました。A室は五千円ですが、三時からです。": {
+    "file": "a382c88fedb30499f7eda599.mp3",
+    "sha256": "64d0a0b290b4b70ed6dc81fe20e73582d6de562aa82974783e818bb4651dca1b",
+    "speed": 1
+  },
+  "二〇三号室です。部屋が寒いので、毛布を一枚お願いします。": {
+    "file": "40a7c8272f9dabc364eed8a5.mp3",
+    "sha256": "be0463531599b29022184b31f681bd8d73c26cb72b497b1bd928c3c752fa34c3",
+    "speed": 0.95
+  },
+  "二つ": {
+    "file": "ada43d7e5b68c067dee34435.mp3",
+    "sha256": "ada43d7e5b68c067dee34435eee9c7da4667e09392aa8692e979482b25a1949e",
+    "speed": 1
+  },
+  "二時から一時間なら、小さい部屋が三千円で使えます。二時間は六千円です。": {
+    "file": "918400b707262bec1c8445ac.mp3",
+    "sha256": "a19ef7f30b79e39a9f259179a757141651a938454ba80ee1e963b3034ede9e13",
+    "speed": 1
+  },
+  "二時は参加できません。三時からなら参加できます。": {
+    "file": "c7605d4fd6ea6a7df5c2143a.mp3",
+    "sha256": "d176e967fd7ad0ba02017eca4908a7b09d0112f0ca66ca484bad17f49095c30a",
+    "speed": 1
+  },
+  "二階までのエレベーターはありますか。": {
+    "file": "7cfa158dcd6d9dc61142b2c0.mp3",
+    "sha256": "1c67e2ea351ad0c7e14ce09a169031743a01852742792dc69295f09c955f7e03",
+    "speed": 1
+  },
+  "交流会は土曜日の午後二時からです。会場は市民センターです。受付は一階です。": {
+    "file": "6454c87a024fb90fddb7895c.mp3",
+    "sha256": "4e5b75ecc9434d550aaa1941745cc4f15c88db7f6a5c1f4eba7a58e249431191",
+    "speed": 1
+  },
+  "今、何時ですか。": {
+    "file": "8830c50e428a2b5d5dd86aac.mp3",
+    "sha256": "883d878c9d1b98b6590596cf155cee6deadd396149244c6c55dee715a8d8b7df",
+    "speed": 0.9
+  },
+  "今日は何時に帰りますか。": {
+    "file": "27ea1ebf1f26fd2796fec30a.mp3",
+    "sha256": "779aa3e8de522ed98d341648bffe4d0bd9c4f5b702cdd2ebc4da5eb4a9ba4180",
+    "speed": 0.9
+  },
+  "今日は六時に帰ります。家で夕ご飯を作ります。": {
+    "file": "3f5570f1a60d92ab191fd2eb.mp3",
+    "sha256": "214a3dd35c6f62f660a5766025c86a6aae045b597cf5cf45443d912bd0b431f1",
+    "speed": 0.9
+  },
+  "今日は閲覧室を何時まで使えますか。本の返却はどこですか。": {
+    "file": "3df1c13a3c24a6a01dde8ffb.mp3",
+    "sha256": "c3d755f8b28157bc066f6855b7f519d938abedb0b1113b23ae89ced06f87712d",
+    "speed": 0.95
+  },
+  "代案": {
+    "file": "1070d29ee3de02c75c908835.mp3",
+    "sha256": "6cd393810fdd69f85bd7484223ceb6f52cfa99fc798815fc50209bc92aa83606",
+    "speed": 1
+  },
+  "会社員です。学校で日本語も勉強しています。": {
+    "file": "e145e40218056b6a7ab4a2f7.mp3",
+    "sha256": "a98eb60027610a1e110d6127ca7babcd50bbe943e277fd886c66bcd64379ba90",
+    "speed": 0.9
+  },
+  "伝える": {
+    "file": "e7a666aed43bc6aac81f808a.mp3",
+    "sha256": "e7a666aed43bc6aac81f808a1fe41090167926530102745e376d31c7e466977f",
+    "speed": 1
+  },
+  "住んでいます": {
+    "file": "98c8acefedb01783810cc55a.mp3",
+    "sha256": "c342df1b84d6b0f73e970b2bf9d79633cc440924abf558b6b323818386e0a400",
+    "speed": 0.9
+  },
+  "何をなくしましたか。": {
+    "file": "df6dc518cc390a09d33f4467.mp3",
+    "sha256": "e8abb23d5351edcfad76b380567e51c33b21228034191940bcbc2497accba0a4",
+    "speed": 0.95
+  },
+  "何時": {
+    "file": "79a80afb36267566aa5dd4f4.mp3",
+    "sha256": "79a80afb36267566aa5dd4f4af6fc2bfe8c01a2099bc21d08ce121cebdc54fac",
+    "speed": 1
+  },
+  "使ってもいいですか": {
+    "file": "012c1af25136559c2c64d93c.mp3",
+    "sha256": "49eea537d74349103c84121b604b07eaffd4ef75319ead0e5c02a0e2715ad213",
+    "speed": 0.95
+  },
+  "便利": {
+    "file": "e6d9286f379f452deccc511a.mp3",
+    "sha256": "e6d9286f379f452deccc511aa4e89ad0550672c6731d5147c0bb7ada00951957",
+    "speed": 1
+  },
+  "修理はいつまでに終わりますか。": {
+    "file": "13a43d2e7de24c33dd8a73ed.mp3",
+    "sha256": "c9b1494c64cc4a33bbd1ae67895f1c6799e453269ec2c54e37865c20eb70782b",
+    "speed": 0.95
+  },
+  "働きます": {
+    "file": "a894356b57e49fa292f091bc.mp3",
+    "sha256": "a07cd47ef31738defa1081049d9069fd533a8f0ed29b28f83dce3f5963f86c23",
+    "speed": 0.9
+  },
+  "先月、友達と旅行しました。朝八時に出発しました。": {
+    "file": "91b10f4559199e49fa4af045.mp3",
+    "sha256": "c42fe764c2cac3cb0aec78b9fbd11705ee33b9bd098fa56e630d80d79875a873",
+    "speed": 1
+  },
+  "先生、さようなら。": {
+    "file": "9b7f5194c5443ecd63fec73a.mp3",
+    "sha256": "3327680b003b40066c5a7eca7760016c2103e7b256ed4f60d41571ae8b2b81ba",
+    "speed": 0.84
+  },
+  "先週、美術館に行きました。展示を見ました。楽しかったです。": {
+    "file": "fc99ce670844bccae1ac34e3.mp3",
+    "sha256": "37bac713b34e2cef6ce03c5a75d0cda41fa02f75802f53e34381805567396a9a",
+    "speed": 0.95
+  },
+  "公園に行きました。写真をたくさん撮りました。": {
+    "file": "3b36721f8ede68ee0bd808e6.mp3",
+    "sha256": "7c07843c53a8d06191e46552798e2458729780f48b200011c75aeac27190505e",
+    "speed": 0.95
+  },
+  "六人全員に確認できたので、二時から三時までの部屋を予約しました。": {
+    "file": "2cd617b4d51d874c7822334d.mp3",
+    "sha256": "73cd9c83d9ee2a905d8e68b421fa42282e2a988c0517ef00c44b69843738bd2d",
+    "speed": 1
+  },
+  "六人全員の参加を確認しました。二時から三時までの部屋を予約しました。材料費は五百円で、部屋代三千円とは別です。森さんは道具を準備します。私は金曜日までに案内を送ります。": {
+    "file": "1292e461bd39e80b866713da.mp3",
+    "sha256": "812bab5aa361d1eb6552458adc15cfc3879e11a4b7608c069be4a0c71d3dd18b",
+    "speed": 1
+  },
+  "写真": {
+    "file": "13551c3be4bcb04833df5438.mp3",
+    "sha256": "13551c3be4bcb04833df543887c9d881507d0e14453f40ec49a44d38a24ffbf3",
+    "speed": 1
+  },
+  "写真を見せてください。": {
+    "file": "2bb28d9e4ed8a03eaef70147.mp3",
+    "sha256": "124a4a491e1746c48aa3b10359d0fa13acb104385e5ce90b968e4fdc213edae4",
+    "speed": 0.95
+  },
+  "出発する前に、宿への行き方を調べたいです。": {
+    "file": "b9462108b57e40664d66932e.mp3",
+    "sha256": "ed422f158b6b4c109709b3ffce648adbf37e05a8a12cab8748b822911feaaad9",
+    "speed": 1
+  },
+  "分かりました。ありがとうございます。": {
+    "file": "970fac1c4fc5aad2937b2693.mp3",
+    "sha256": "02b4d9f75fe66a5d0d109c02dbad02294c14322aef6e69ca5247d3f2a9b5ac48",
+    "speed": 0.95
+  },
+  "動きません": {
+    "file": "93d4928d9d6217a27cd02189.mp3",
+    "sha256": "159acfd4b1302226b1ea4423a3544a0a9f41961e36ee316c0f9a969ec67387fc",
+    "speed": 0.95
+  },
+  "午前九時からです。": {
+    "file": "f5fa33824ad889ba11bf797e.mp3",
+    "sha256": "8d0538fb99748b18cdfd9120cd09de4dc2667985d7a2522891ef59c78b3c6a8f",
+    "speed": 0.9
+  },
+  "午前九時半に駅の前で待ちます。一時間かかります。": {
+    "file": "96ddb6a3e7c6b8adbf8d3657.mp3",
+    "sha256": "a755becde8df71d9e58b13a76db31eaee47c08e2308b6a80e61265d73bf442b0",
+    "speed": 0.9
+  },
+  "午後、動物園に行きました。その後、昼ご飯を食べました。たくさん歩いて、疲れました。": {
+    "file": "3656f2693817100350e5e7e5.mp3",
+    "sha256": "2decd547ae5f192837931dc9c61fcab110f8a421c9b81003f5936b7cec409418",
+    "speed": 0.95
+  },
+  "午後三時です。駅で会いましょう。": {
+    "file": "34604166b2612127e7ff1a2d.mp3",
+    "sha256": "2acd5bd37fd534190686f2fdd7aae443530c18fb015f64ff9ce7262408cadc3c",
+    "speed": 0.9
+  },
+  "卵を一個ください。カードを一枚ください。全部でいくらですか。": {
+    "file": "e615b799997f73cd0b342100.mp3",
+    "sha256": "e08b8d6f3821215f33f1517f4ce1471f86ada42f347ff4bda6ae5ca92b92f883",
+    "speed": 0.9
+  },
+  "右": {
+    "file": "069f5e701defd718d9bb1315.mp3",
+    "sha256": "069f5e701defd718d9bb1315e3999a05376a0eeed892bec67851810dd96b32de",
+    "speed": 1
+  },
+  "合意": {
+    "file": "3651814379ebb16fa4519613.mp3",
+    "sha256": "6ca388db15b9be9d18676f97dea2f7cc3208705a1af30dafb0144c0878cec3a1",
+    "speed": 1
+  },
+  "図書館": {
+    "file": "b82045aed1a716c19e84ce3f.mp3",
+    "sha256": "b82045aed1a716c19e84ce3f5b400165f8b58928f7fb0baa9c930afb31b372f7",
+    "speed": 1
+  },
+  "図書館の見学に参加する予定です。開館時間は何時から何時までですか。持ち物は何ですか。予約は必要ですか。": {
+    "file": "5868786e141a2bd2193d1755.mp3",
+    "sha256": "8cf3969a1a9b373dd1441f8c3d1fd57802e2b9b63e88e8a84ba8221b2ebd5979",
+    "speed": 0.95
+  },
+  "土曜日、午前十時に公園で集まります。雨の場合は、公民館で行います。参加費は五百円です。": {
+    "file": "dc21ec27146b19f91f210f9b.mp3",
+    "sha256": "38342e1a7aa560be21a991adb59290e639419b168c2e8530f105266a49999d89",
+    "speed": 1
+  },
+  "土曜日にこの部屋を使う予定です。予約が必要ですか。": {
+    "file": "3c6a7f3d1b8650b3320ee721.mp3",
+    "sha256": "bc332dcb407bf2409ab466bfc6770bd5e21b78fb3be165d92afa7d18ae6af3e7",
+    "speed": 0.95
+  },
+  "土曜日に一緒に昼ご飯を食べませんか。この店はあの店より安いです。": {
+    "file": "621281fe845b87ccc72b98cf.mp3",
+    "sha256": "d6483c5b2cb14f47a965ea4954cfaa4cb982b0959ceb90d5d904ea39079154b4",
+    "speed": 0.95
+  },
+  "土曜日に図書館に行く予定です。ここでパソコンを使ってもいいですか。": {
+    "file": "404a7e0406145c3aadc7cd3e.mp3",
+    "sha256": "0d1f556048a1ea709be37e76dece476c29224202145c6f0450f4b0f5e3e20819",
+    "speed": 0.95
+  },
+  "土曜日の交流会のお知らせ、何か変更がありましたか。": {
+    "file": "661886a062ad2d2f48b81ae4.mp3",
+    "sha256": "ad3077d3e4162989b2024ea9fda9e3f7b62257b229a8c8e790b38ed9851df099",
+    "speed": 1
+  },
+  "土曜日の午前十時に公園で集まります。雨の場合は公民館です。参加費は五百円です。飲み物を持ってきてください。予約が必要かどうか、確認してもらえますか。": {
+    "file": "bf0dd3082eb606d2db98e423.mp3",
+    "sha256": "c33f5274f5ea8bec35c4288a0915622e546db1fbb038703a29c28308bcb82d24",
+    "speed": 1
+  },
+  "土曜日の午後は空いています。公園で散歩しませんか。土曜日の午後はいかがですか。": {
+    "file": "5ec4295c8465b5fcad451068.mp3",
+    "sha256": "f83f08724cacc0986a27ce4a09046ec827f277eb58d309ff433f0ba28c583d5e",
+    "speed": 0.95
+  },
+  "地下鉄の駅はどこですか。": {
+    "file": "5a87668b6ef03a510af3661b.mp3",
+    "sha256": "346ba83094ae8a85d0777be4a4fea7ad66c4863ea7ea194fd71d8faa193d8e78",
+    "speed": 0.9
+  },
+  "場合": {
+    "file": "0406f4dba00711663a5651aa.mp3",
+    "sha256": "0406f4dba00711663a5651aa72cee799cd85685b42998d520aa3401bc222b8b7",
+    "speed": 1
+  },
+  "壊れています": {
+    "file": "7f80275ce9b9d2c987e35a9e.mp3",
+    "sha256": "4f5cbef7df74db33f479cf31597555f2ed2da928cb47cb6b1f5cada681042621",
+    "speed": 0.95
+  },
+  "変更": {
+    "file": "c9894d10c4d1dc89857a37ab.mp3",
+    "sha256": "c9894d10c4d1dc89857a37ab68e7689291ed4717d03e134706ac9d2a9ad25efa",
+    "speed": 1
+  },
+  "大丈夫": {
+    "file": "e186c1070e08753530226f6d.mp3",
+    "sha256": "e186c1070e08753530226f6d79183ee2dff77d127ac12581d0ba9e06223010f3",
+    "speed": 1
+  },
+  "姓はスミスです。名はアレックスです。フランス出身です。": {
+    "file": "faf9011c35b7b255919e8c50.mp3",
+    "sha256": "a150e21ded4cfb1f060241dd72ad1508fa4716d848d730f1e275778d020ff0f4",
+    "speed": 0.9
+  },
+  "安い": {
+    "file": "316f6717ad7d7e4bdd17d1ae.mp3",
+    "sha256": "316f6717ad7d7e4bdd17d1ae4966e8b1ac2d209fc5c460597fc6a032b1c0f82a",
+    "speed": 1
+  },
+  "家で働くのは便利ですが、全員にとって必ずしもいいとは限りません。": {
+    "file": "f26f860e36ae8c1ffc88f584.mp3",
+    "sha256": "59960541ba9d0b9b62844b76ead2c6e60b0f4b4777a51bdc2a1efbbe08b7e570",
+    "speed": 1
+  },
+  "家で働く長所は、移動の負担が減ることだと思います。": {
+    "file": "6234272286f4c2f07c6a2a12.mp3",
+    "sha256": "02972f0dd55837a029eb59ace5ae8da5b5b942039fd9dd200bb7ddc2ce9c511f",
+    "speed": 1
+  },
+  "家は静かなので、家で働くほうがいいと思います。ただ、相談する時間も必要だと思います。": {
+    "file": "d2ffc99fe4cb33c1103995ea.mp3",
+    "sha256": "4824956d110a74b5b99a13590bd4cb71d817bf19819287b4e730e274f61e8fc0",
+    "speed": 1
+  },
+  "寒い": {
+    "file": "bfb8d9b77c1962164bf8f52b.mp3",
+    "sha256": "bfb8d9b77c1962164bf8f52bf2ca4c56a759a8ffc39cf8e736745fff4058bdfe",
+    "speed": 1
+  },
+  "工作の会は六人です。費用の上限は四千円です。": {
+    "file": "fe8e595e4bca6db1b3bd17b0.mp3",
+    "sha256": "9e4279260d7141fdacc2fb1d7aab6caca9f47a4f067a07da7a9f6a8ec501978e",
+    "speed": 1
+  },
+  "左": {
+    "file": "af158a0acd1811a7de91da65.mp3",
+    "sha256": "af158a0acd1811a7de91da65f8e0d9294041e25f206b447617c73a5123b21734",
+    "speed": 1
+  },
+  "平日は六時に起きて、電車で通勤します。週末は働きません。時々、家で夕ご飯を作ります。": {
+    "file": "7fd6025de553505e7ba42d92.mp3",
+    "sha256": "a4ffde5315a4a3239b0722a131a68e108f15bfd3d661ec489368b815004b2aad",
+    "speed": 0.9
+  },
+  "平日は六時に起きます。電車で通勤します。週末はよく洗濯をします。時々、夕ご飯を作ります。": {
+    "file": "f4e007b661ae32384bfc8a5b.mp3",
+    "sha256": "c0d9dada31a1c4399f2cd40bf2384319516a89e6bf2e8c9b4513c332519db2ce",
+    "speed": 0.9
+  },
+  "待ち合わせは公園の入口で、二時にしましょう。": {
+    "file": "49cd327f91b23216d912e7d9.mp3",
+    "sha256": "433f2d708d57fe3f3b452da81de84c01707e5c358677cdd3867a074eebe37009",
+    "speed": 0.95
+  },
+  "忘れ物は何でしたか。": {
+    "file": "684de59250139e0b3d74b321.mp3",
+    "sha256": "ae697e6862b07bffecd9e92e740dd5fab2d62f4f36a7cd73b48131a6c37f23b4",
+    "speed": 1
+  },
+  "意見": {
+    "file": "6bb39a8b8975d7cca68e699d.mp3",
+    "sha256": "6bb39a8b8975d7cca68e699ddaac3b57620ec8bf20e29e4c03de53619c122808",
+    "speed": 1
+  },
+  "提案": {
+    "file": "9753c59b275fd0cdb6b20bb7.mp3",
+    "sha256": "9753c59b275fd0cdb6b20bb7bfd8226a9b8a26529f0fecbfac90cb3e2fae29cf",
+    "speed": 1
+  },
+  "撮ってください": {
+    "file": "d8fe5243ac76a8ddff89e196.mp3",
+    "sha256": "e1f5e72f0c304360987e75a24c82d445487ae34ef7a125e77c8c40eba1c815a9",
+    "speed": 0.95
+  },
+  "支払いが二重になっています。確認をお願いします。": {
+    "file": "5763890f236a75c7b0333da1.mp3",
+    "sha256": "165414a4a8412bc5a6bc6b0e99313d833cac749c42ba14fb6bc2a4bb1cd1d84c",
+    "speed": 0.95
+  },
+  "支払いが二重になっています。確認をお願いします。領収書をお願いします。": {
+    "file": "9b093c9342d43c14224e76e8.mp3",
+    "sha256": "551c96573ea0cf1139dea8b1c0acc9323a509b9b3bc3b30f402f16de11264cdb",
+    "speed": 0.95
+  },
+  "旅行で何が印象に残りましたか。": {
+    "file": "6864e84fb99aa78eebcfde1e.mp3",
+    "sha256": "8cadc272c4c9342ad1b1dbae74e155eed3826f68b81a15a0b48ff376274096df",
+    "speed": 1
+  },
+  "日曜日に一緒に昼ご飯を食べませんか。": {
+    "file": "cf61da5d98a3bcc0c45a6ebf.mp3",
+    "sha256": "7df9fb9280499c8161356584c36528d31ee645de9ee2f00c163ae6951cdb139c",
+    "speed": 0.95
+  },
+  "日曜日の映画はいかがですか。": {
+    "file": "ff6864621b7bc747f5532116.mp3",
+    "sha256": "388bc0af172bbcda9b2a09933a5e5d2171de8d7c0d73f319a292434442339cd8",
+    "speed": 0.95
+  },
+  "日曜日の映画はまた今度にしましょう。土曜日の散歩は予定どおりです。二時に公園の入口で会いましょう。": {
+    "file": "752e6c99f5d5a7119a93c1cf.mp3",
+    "sha256": "07091efad895224f0c3fe5f0251c9d8b001b97ca025f77dc5c055a8984602190",
+    "speed": 0.95
+  },
+  "日曜日は都合が悪いです。土曜日はどうですか。": {
+    "file": "eced7c16c0734f8806599ac7.mp3",
+    "sha256": "afce616ee2fb8fa0f6b0693c8e2e45a2d22d0f3677064a9bc556c3d96b563304",
+    "speed": 0.95
+  },
+  "日曜日は都合が悪いです。土曜日はどうですか。A店は安いので、A店で飲みませんか。": {
+    "file": "e1410a6034cfa22e24030e8d.mp3",
+    "sha256": "a337626852c28258ce93f55bd601cb6fc4ca01b05a87094cb8d3f3beb6c0f3b1",
+    "speed": 0.95
+  },
+  "明日、ここで勉強する予定です。パソコンを使ってもいいですか。すみません。もう一度お願いします。": {
+    "file": "f647d9f4c3489d646fcf34ac.mp3",
+    "sha256": "4017a9c961bab3fd79716e11df15952a12df762942fc7c17e1bec357661e4731",
+    "speed": 0.95
+  },
+  "昨日": {
+    "file": "6ce70c5cac052ddd7b335f54.mp3",
+    "sha256": "6ce70c5cac052ddd7b335f543020e4e36675682e5d5abfb2225d7448fb0d4083",
+    "speed": 1
+  },
+  "昨日、A店は寒かったです。B店のほうが静かなので、明日はB店で勉強しませんか。パソコンを使ってもいいですか。": {
+    "file": "55c242f3ff167aaca4621fbf.mp3",
+    "sha256": "062080a19b035f0479955b9bdf09731265a203afc648a973d7602bc2895b8ed3",
+    "speed": 0.95
+  },
+  "昨日、どこに行きましたか。": {
+    "file": "e50e084c7628e312130509bb.mp3",
+    "sha256": "c6b0c9dd1aaf804ea72d9c759aeb0dbe3870239c1b9ed752a54b60634e3bb21b",
+    "speed": 0.95
+  },
+  "昨日、京都で道に迷いました。そこで、近くの店で道を聞きました。店の人が教えてくれたので、駅に着きました。": {
+    "file": "1432c1d44740a5dbfae9c4fe.mp3",
+    "sha256": "767ff63c8bf483a066f436760ca39f3d6560cc7fceb42efb3539116d7941dd74",
+    "speed": 1
+  },
+  "昨日、京都で道に迷いました。近くの店で道を聞きました。店の人が教えてくれたので、駅に着きました。": {
+    "file": "43c97d0785c61ddfd932f8b4.mp3",
+    "sha256": "f547c30caa12026a3b2ad78752ca18af4cb777f22895cf9758bde6e3a5068167",
+    "speed": 1
+  },
+  "昨日、公園に行きました。写真を撮りました。でも、博物館には行きませんでした。": {
+    "file": "ffe83089d6d0a371efe49a7d.mp3",
+    "sha256": "5d8c1344129235c869f8ac836abe5d4811bcd2b66599f58ac4ad02927566edb0",
+    "speed": 0.95
+  },
+  "昨日、公園に行きました。写真を撮りました。写真を見せてください。": {
+    "file": "9665a66bebe4b5d09753f0b3.mp3",
+    "sha256": "ab6c37405c1ed48b7d2c9eb997c8899bab9135440bd3539cbeacdc8ab2f06273",
+    "speed": 0.95
+  },
+  "昨日、公園に行きました。楽しかったです。どうでしたか。写真を見せてください。": {
+    "file": "718a3d9024070bab62cbba1c.mp3",
+    "sha256": "46496f6011e1e8fac0c39b368f7947c99735af60cb1f069ac7a7c18a0e479a7a",
+    "speed": 0.95
+  },
+  "昨日、図書館に行きました。明日、パソコンを使ってもいいですか。午前九時からですか。": {
+    "file": "fd4e522bf2b1146cada2e4e3.mp3",
+    "sha256": "8c5e1fd1b826e0157e87b0953c752ad51d74015995cff751fa06fad6400275fc",
+    "speed": 0.95
+  },
+  "昨日、家の鍵をなくしました。電車の時間は覚えていません。": {
+    "file": "773861cee6ebedca7e3bb544.mp3",
+    "sha256": "c8bf3ef1a9c504eddad380dbfce7ba12b34fa9bfb1cc61ada49c56064e40c9e3",
+    "speed": 0.95
+  },
+  "昨日、家はうるさかったので、今日は図書館がいいと思います。確かに、家のほうが便利です。午後三時に図書館で相談しませんか。": {
+    "file": "f41262ec9ed08af17f4764c1.mp3",
+    "sha256": "352499c36dc68b185c469d7f49b644c935b570f61a0d0a5728a17e681b4ae371",
+    "speed": 1
+  },
+  "昨日、電車に傘を忘れました。この紙に書くのを手伝ってください。少し待ってください。": {
+    "file": "bbfd7dfc8dbd461dd2001d90.mp3",
+    "sha256": "25a015a255ee9a4015cb3d163b1134ad5f2935311e6ac93ceb0ab178389116a0",
+    "speed": 0.95
+  },
+  "昨日の午後は何をしましたか。": {
+    "file": "36f9846dc57e0541e987755c.mp3",
+    "sha256": "15a4c1e2630a86ba2bda066f501a60bcc574b1c620c2f403bea7a52ba92b53f5",
+    "speed": 0.95
+  },
+  "晴れたら中庭で、雨天の場合は一階のホールで開催します。開始時間は変わりません。": {
+    "file": "63de1aa1a1476b962f138d3e.mp3",
+    "sha256": "41b2ae9ba40f02615ca4c6a6173dca2138efb17e5cf0292754d7f9887984465a",
+    "speed": 1
+  },
+  "最初": {
+    "file": "6ce3056f544bf1b033f21381.mp3",
+    "sha256": "6ce3056f544bf1b033f213819b108a0c47fa0f102e95580ab64854968851dee0",
+    "speed": 1
+  },
+  "最初の店は寒かったので、別の店に行きました。そちらは静かで、勉強できました。": {
+    "file": "63e55fc2ace3a655d04a6493.mp3",
+    "sha256": "37ea7abb95d86f29b0938c1e3d7853f5356f184f76996f1c7c073309a9b25ab2",
+    "speed": 1
+  },
+  "朝、何をしますか。": {
+    "file": "a43b61196ae9e0b29666eeb6.mp3",
+    "sha256": "08e2e8bb05c9e65320b3ac3e0f7121c34691d876f2b49313970f4008af9d8861",
+    "speed": 0.9
+  },
+  "朝、顔を洗います。歯も磨きます。": {
+    "file": "4879fc833c90806203b10b3c.mp3",
+    "sha256": "8bc0c038172521d27692a6e8d1df73bcb7106fd0f887af1f1e16ba4c81ef4270",
+    "speed": 0.9
+  },
+  "朝ご飯": {
+    "file": "e2b070cc4723dced93745c4f.mp3",
+    "sha256": "e2b070cc4723dced93745c4f6abb8cd614609d60b987715e2308ec224b31b4fc",
+    "speed": 1
+  },
+  "条件": {
+    "file": "873deaf8efd0f4567816215e.mp3",
+    "sha256": "873deaf8efd0f4567816215e306611291f749646fe3cdbfcc59504f3973caccb",
+    "speed": 1
+  },
+  "来ました": {
+    "file": "8993da524fafcc6434cc6add.mp3",
+    "sha256": "333086b84c1f9eb9f5bf9faadb09a32e70124ec308de2d883d14a5f05a2d4102",
+    "speed": 0.9
+  },
+  "来週の月曜日に図書館に行く予定です。": {
+    "file": "165a2a1170a927342ffc32a2.mp3",
+    "sha256": "a480c98983b20bf17dc08a9f19284853a7b95299dcd6e5cc23517137a422383d",
+    "speed": 0.95
+  },
+  "来週の月曜日に図書館に行く予定です。その日は祝日ですね。開館時間を確認しましょう。": {
+    "file": "8802192bb06235ba40b570a2.mp3",
+    "sha256": "14acc8716436f4d1bbd2ccebd807104cea9dbf6f23dc57bdbc92b729ded2a66d",
+    "speed": 0.95
+  },
+  "東京方面のホームはどこですか。": {
+    "file": "df4768266c0f6ba5cef26fa7.mp3",
+    "sha256": "9b9b840ff4f6e0a7ede56902117f0035958647a7ced4f4722b9243b4345af35e",
+    "speed": 0.9
+  },
+  "東京方面のホームはどこですか。乗り換えはここですか。": {
+    "file": "da9d9768a8461c8c6d99f2d8.mp3",
+    "sha256": "3ec9f937381b3bd0ea8101c91c0b76b2a1d00e06ccf8650154411a436d62719e",
+    "speed": 0.9
+  },
+  "森です。どちらから来ましたか。": {
+    "file": "50585c1f048d66e0a5c48974.mp3",
+    "sha256": "94895547336afc452debed9304a18bf8910e7ef1b6014e76b873739a04ea6ce2",
+    "speed": 0.9
+  },
+  "森です。東京から来ました。今、大阪に住んでいます。": {
+    "file": "0a7faf4bdf1af2fa58acba9d.mp3",
+    "sha256": "0aa9e27982d083cc98f7aa12b55c8bfca6ae2a86cdaf98e2bd748dc838eac80f",
+    "speed": 0.9
+  },
+  "楽しかったです。": {
+    "file": "ebaac0299e11b3ed68d9e2c1.mp3",
+    "sha256": "93ac338062f75fb45045dd4dc1f5b9b7398074f25e9a14cbef3cafdb70e39413",
+    "speed": 0.95
+  },
+  "次の交流会の日は未定です。決まり次第、お知らせします。": {
+    "file": "7cb6fb38bd04941f8e2d9671.mp3",
+    "sha256": "62a6f8c2e3973c80720bc07a0143020ae88bcebbec06bb0e83fa35ea04857297",
+    "speed": 1
+  },
+  "次の旅行では、何を変えたいですか。": {
+    "file": "d1ec611794924095a828155d.mp3",
+    "sha256": "d8be07bfd781968f6475c2555000f638f2106717863af11265d8327cab1643bc",
+    "speed": 1
+  },
+  "残念ですが、日曜日は無理です。土曜日の散歩は楽しみです。二時に公園の入口で会いましょう。映画はまた今度にしましょう。": {
+    "file": "9aff81c37e1411c721bf9b22.mp3",
+    "sha256": "322a2da66ae386ccec9c21895b22f919d33d01a264165276b89c68d35e1d935a",
+    "speed": 0.95
+  },
+  "毎日家で働く案には反対です。新人が相談しにくいからです。": {
+    "file": "b3d9db2a7e4767f260a9020e.mp3",
+    "sha256": "6534fef9cc77e03f828580516dd85234aad9c7bf832f0b5872de00b3122a1e49",
+    "speed": 1
+  },
+  "毎朝": {
+    "file": "8036af3b3930b2913a079c82.mp3",
+    "sha256": "8036af3b3930b2913a079c826874b43910e9806750992b277d32ccca90573839",
+    "speed": 1
+  },
+  "毎朝、七時に起きます。家で朝ご飯を食べます。": {
+    "file": "760e686c396b6d160664dcce.mp3",
+    "sha256": "10c198363961a71731c59b3a2f1b0dd5ca63e98bd85a261ec1fede854b12c71d",
+    "speed": 0.9
+  },
+  "毎朝、七時に起きます。家で朝ご飯を食べます。コーヒーはあまり飲みません。": {
+    "file": "ea55074b0fd64fc978b4c608.mp3",
+    "sha256": "ff2e507d530780c8c163719c4388237ebd99c4b811b4c099b4affff1382b3f71",
+    "speed": 0.9
+  },
+  "毎朝、何時に起きますか。": {
+    "file": "8c4189012524ba3d1667bdc0.mp3",
+    "sha256": "b6df2ed68cc6f26563db1d394e1e549c250bb742a60f810f3d7ab2d5696c7847",
+    "speed": 0.9
+  },
+  "毎朝、六時に起きます。家で朝ご飯を食べます。週末は働きません。": {
+    "file": "9f9af7c62cdd186ba62abd4c.mp3",
+    "sha256": "fba9b55185fd9b93e0d3b6c0dc2b68c86a6d56506b56f656b8ccedc13c599485",
+    "speed": 0.9
+  },
+  "毛布": {
+    "file": "73832ea33f00611d87bbe36a.mp3",
+    "sha256": "73832ea33f00611d87bbe36a1aff9733e5c965639b03cf45f5ee0f19387f3e5c",
+    "speed": 1
+  },
+  "毛布を一枚お持ちします。エアコンは明日、確認します。": {
+    "file": "28096831bf850e841d494fb3.mp3",
+    "sha256": "7fe09cf7c5f54a0bbdbe73af7944319eb9bc2108a4919d733a34cd80de926e7a",
+    "speed": 0.95
+  },
+  "水を一本ください。": {
+    "file": "6fbc53ff4f1446e1e1b5eddb.mp3",
+    "sha256": "60d552b3cbb42417814263da690411368f98dd3dcfe9983799ddb04f2ddb5376",
+    "speed": 0.9
+  },
+  "理由": {
+    "file": "8c96fa627edf461c1678e8c3.mp3",
+    "sha256": "8c96fa627edf461c1678e8c3cab21b0456cf03801177b0a91abd3b0dca8b152e",
+    "speed": 1
+  },
+  "申し訳ありません。すぐ確認します。": {
+    "file": "0f492d480f1f0f0fb9c91ec2.mp3",
+    "sha256": "268621af41c72146a893fef585635be6134876c0f9b369613e83126eff1f365d",
+    "speed": 0.95
+  },
+  "申込書に名前と電話番号を記入して、木曜日の午後六時までにメールで送ってください。": {
+    "file": "823d66cf7d29f0255f55168d.mp3",
+    "sha256": "3e542a0b68168202e4813e266d75fece5e7297e03289e7e59803096709aa7f99",
+    "speed": 1
+  },
+  "確かに": {
+    "file": "9743e58dcb4c34ba2d6df52f.mp3",
+    "sha256": "9743e58dcb4c34ba2d6df52f9ddcdd3070687d05fea991ce14afa72e4f7870c7",
+    "speed": 1
+  },
+  "確かに、静かな時間は大切です。ただ、相談する時間も必要だと思います。最初は一人で勉強して、それから一緒に話しませんか。": {
+    "file": "83b2d4b27c95ba92ca3e8d89.mp3",
+    "sha256": "d98ec0a7c55ea55165e46c9b49ee547d71d6033d4637a658772e223c77837fd3",
+    "speed": 1
+  },
+  "確かに便利ですが、すぐ相談できる時間も必要だと思います。": {
+    "file": "7ec91eefc7a116e708d0eff7.mp3",
+    "sha256": "6225e7d4ed91dffffb246a7093415149e386dd63152cd9d384385ed729d361bf",
+    "speed": 1
+  },
+  "確かめる": {
+    "file": "8503ace22cabbb7178c4c51c.mp3",
+    "sha256": "8503ace22cabbb7178c4c51cad65d893fd91c0fad596a193a80e5d747f0cae7a",
+    "speed": 1
+  },
+  "確認": {
+    "file": "47742ff16b7f1ebac38e831d.mp3",
+    "sha256": "47742ff16b7f1ebac38e831d4cd798bea166e745b649da54ee0bbf5ded8996ad",
+    "speed": 1
+  },
+  "禁止": {
+    "file": "8ef0b5d8c4dcad35cd4f627e.mp3",
+    "sha256": "8ef0b5d8c4dcad35cd4f627eece75f38f48077def416b45328833e7e738fee1f",
+    "speed": 1
+  },
+  "私": {
+    "file": "116a4f3c594bcf84d579e4e0.mp3",
+    "sha256": "116a4f3c594bcf84d579e4e02ca6e8687e28f683a39a38e9179499a743761daf",
+    "speed": 1
+  },
+  "私も東京に住んでいます。よろしくお願いします。": {
+    "file": "07cbbd8e34c3b2ffa6ed9b01.mp3",
+    "sha256": "143d300d794ad73e32fe051ec827bd67c18abed5bdafa4b3c78a686dec146390",
+    "speed": 0.9
+  },
+  "締め切り": {
+    "file": "7ece65e4fea00211a20ae04d.mp3",
+    "sha256": "697081e1681a105a23efc24ab1af1fda0c68d56ad5d8b1cf6d3af70c1c256348",
+    "speed": 1
+  },
+  "行きました": {
+    "file": "df5267dd7de123c4facb927e.mp3",
+    "sha256": "43eaa523b4a70c3aecdf2413b368021c5f4dad95a2376bee0f182526c35e6d94",
+    "speed": 0.95
+  },
+  "袋": {
+    "file": "18d2d7f4753233fef0f93fb3.mp3",
+    "sha256": "18d2d7f4753233fef0f93fb33a00f54ea657ab3820f78060ab9ad026296ae190",
+    "speed": 1
+  },
+  "要点": {
+    "file": "c54f050cc4a7c8f1c96930a6.mp3",
+    "sha256": "c54f050cc4a7c8f1c96930a6b154d49a3b965cbf362053bb9ecf77284806d372",
+    "speed": 1
+  },
+  "見せてください": {
+    "file": "5ab8af79e9357030eee86815.mp3",
+    "sha256": "c656d64b07876bd70ec3e05df04eced8d92b1010ed53cfc9bcdb8b10bd6ff437",
+    "speed": 0.95
+  },
+  "見ました": {
+    "file": "0656719b7ac9049a1396c399.mp3",
+    "sha256": "17c8f986b8ed6a32247c8eec93e8a164749a0f522e623346675c50aecb55d815",
+    "speed": 0.95
+  },
+  "見学に参加する予定です。持ち物は何ですか。": {
+    "file": "a3acefe3647285cc0b44167d.mp3",
+    "sha256": "8453a3ae107dc9090ed4be7ff78dd2627ed107e2890e9ed795a062fdcbc328ba",
+    "speed": 0.95
+  },
+  "見学は月曜日の午前九時からです。予約が必要です。筆記用具を持ってきてください。閲覧室は飲食禁止です。": {
+    "file": "8ab2a9c1fdb679617a1f37a7.mp3",
+    "sha256": "cbfd867b86a9d8a45247880d4773ede85cc802c79e46d06864abf2528722acbc",
+    "speed": 0.95
+  },
+  "財布はすぐに戻りましたか。": {
+    "file": "7692c5b0ad8b53474b1f48c8.mp3",
+    "sha256": "94943019e57817629e67fb3e6be2bbe4c764ba69d99130592940334874da3ba6",
+    "speed": 1
+  },
+  "起きます": {
+    "file": "bd1e9bc4a35bbf3005f7d4b4.mp3",
+    "sha256": "d7f2bf0bdaab84b6984cbb3336de7ff713c17ebb29f34d71ae72e7a9a57a330e",
+    "speed": 0.9
+  },
+  "趣味は何ですか。": {
+    "file": "9682e76b839383f548d788d3.mp3",
+    "sha256": "a44c9de9d17c5b0e79eb8aa1efdd8e8f132f394712e9c528ec94f04e3b11f3d7",
+    "speed": 0.9
+  },
+  "近くの店で聞きました。店の人がバス停の場所を教えてくれたので、最後のバスに間に合いました。": {
+    "file": "260f773e697fd5b5e43afa9c.mp3",
+    "sha256": "21366f29cc9519edfd26e8dc51f97b650500763883bedde23bafa3ad5eb8a7bc",
+    "speed": 1
+  },
+  "途中": {
+    "file": "9f8eca2f5f60d8445d5eb91e.mp3",
+    "sha256": "9f8eca2f5f60d8445d5eb91e62f6a831e1d3361a4d64e94ee27b8ed250af4e9e",
+    "speed": 1
+  },
+  "週に二日は家で働けるといいと思います。静かですし、通勤の時間も減ります。": {
+    "file": "49396644908e5a0006f2cdee.mp3",
+    "sha256": "b9aadb405d2dbe97d8eccdf91bd913a79c9ebcf871877cd484d65289c10cd6cc",
+    "speed": 1
+  },
+  "週二日、家で働く案に賛成です。ただし、新人の相談時間が必要です。まず一か月試して、その後で見直しましょう。": {
+    "file": "637ed1c69622dd8970eb04ac.mp3",
+    "sha256": "1fdb1ec62c14bd47f35064cc53738dff2bf890e661cf05f8bde4a10e7561656f",
+    "speed": 1
+  },
+  "週末、一緒に映画を見ませんか。": {
+    "file": "b412ec7d0d1c83f09cc432f9.mp3",
+    "sha256": "fa171dd08df62ba2fa8cc0be0befb9f7ffcd2d297d7ca8267c264f5217d40609",
+    "speed": 0.95
+  },
+  "週末も働きますか。": {
+    "file": "eac3830a1ec79dcf00c683a9.mp3",
+    "sha256": "0ac33a69b3297079c6ed74e9fdccbd54bea8c504f1e759149bdf8a45e86585ee",
+    "speed": 0.9
+  },
+  "週末も忙しいですか。": {
+    "file": "5a422514d667ce88eb28c6a5.mp3",
+    "sha256": "bc5672801c8eb39b5ef45cd26d5a7d281998dfcd2604a15426bf95521c5caaad",
+    "speed": 0.9
+  },
+  "遅らせる": {
+    "file": "09ea2ba0ac1d6deb39aed77e.mp3",
+    "sha256": "581fde4b91aaf89c6c82a387d3371183d179480aa0d807fa1ad38711052eaf85",
+    "speed": 1
+  },
+  "道に迷う": {
+    "file": "a6eb1f8ae28d6d31e868d41b.mp3",
+    "sha256": "a6eb1f8ae28d6d31e868d41b627c6042774e9bbf01a3c98ef5f7160e90d51c8b",
+    "speed": 1
+  },
+  "部屋が寒いので、毛布を一枚お願いします。": {
+    "file": "3bf3d0d77803573ddcb2689b.mp3",
+    "sha256": "18c61459754d4547dd6f42780681984967a7f12fcf29069d25ffef2edeac2cd4",
+    "speed": 0.95
+  },
+  "部屋が暑いです。エアコンが動きません。修理をお願いします。いつまでに終わりますか。": {
+    "file": "10761ba9134a9004c162137a.mp3",
+    "sha256": "2bf9bc1d2414849b9ebb470a781b0b97a236891a4a486aaa0750c7141a848392",
+    "speed": 0.95
+  },
+  "部屋が暑いです。エアコンも動きません。": {
+    "file": "a1ba55cdeeeb46d78f97faed.mp3",
+    "sha256": "3a17141d1643d6c7adfad04e4fd7e13479d6ccfe6f179dc3643e6591259ee182",
+    "speed": 0.95
+  },
+  "部屋番号は二〇三です。部屋の電気がつきません。": {
+    "file": "8030cd2a16a043d44dbb24ea.mp3",
+    "sha256": "7f3f24d82ef7314d54752f4c056ee0d7a9f5befe16666829cdcfe730f7b085f0",
+    "speed": 0.95
+  },
+  "都合": {
+    "file": "3df891afc5b2317b8e6d7026.mp3",
+    "sha256": "3df891afc5b2317b8e6d70263a3242d404d851a55b73ffcc4b3a0396d913e060",
+    "speed": 1
+  },
+  "銀行は店の隣です。駅の向かいです。": {
+    "file": "ca189ed642b64f458b10e739.mp3",
+    "sha256": "1d774134f25528916be2d756fcd97e74979f3ef918fd3d6bb4e2fb138d0d6ab7",
+    "speed": 0.9
+  },
+  "間に合う": {
+    "file": "0867de476aee2d1bb47aaee9.mp3",
+    "sha256": "0867de476aee2d1bb47aaee9f0662b24fd3ae4e3a18de9aa4890dd6e3dadb292",
+    "speed": 1
+  },
+  "閲覧室は何時まで使えますか。": {
+    "file": "42d7f7b47b88ea9aff768bac.mp3",
+    "sha256": "b4ca26a48a5d286b5b4a7fbdcecbe5f1ebbbd9b7b8dc9ec1f0d89bc21350eae6",
+    "speed": 0.95
+  },
+  "集中": {
+    "file": "b80024661e31518620e02758.mp3",
+    "sha256": "b80024661e31518620e02758e0b6e3e59b1779cac313c68e3c281e3fda105348",
+    "speed": 1
+  },
+  "雨が降ったら、中止ですか。": {
+    "file": "294228bf12a80eee19c370b2.mp3",
+    "sha256": "cfca3dbab89abc9a755c4497fc2220945a290f029eba5325af788b65cbc3a0b9",
+    "speed": 1
+  },
+  "電車で通勤します。十二時に昼ご飯を食べます。": {
+    "file": "c824b0f2f4b3f958f28bbe47.mp3",
+    "sha256": "6ea9154fb981daeddbb74039ee9a7f26394d56a80512fee07bb8cfe3eec146dc",
+    "speed": 0.9
+  },
+  "電車で通勤しますか。": {
+    "file": "55f70ad71b38a7924b076ffd.mp3",
+    "sha256": "f1195c35d8c5c24e976058c3cd3f82211355d9abb1622d6dcecb093983c6316c",
+    "speed": 0.9
+  },
+  "食べます": {
+    "file": "c72327bfe4cc17eb2c105661.mp3",
+    "sha256": "2f22ea1c20e54d533f263b6eca4c51a33a87a3af0fa89490fb0e9c86d9f0a048",
+    "speed": 0.9
+  },
+  "駅": {
+    "file": "69ebf5403a13755f1843358a.mp3",
+    "sha256": "69ebf5403a13755f1843358aa970a282d2e59956962d317c2306db32fadcc5eb",
+    "speed": 1
+  },
+  "駅の近くの店のほうが便利ですね。": {
+    "file": "59ec5defbb194374d7c68586.mp3",
+    "sha256": "699c253742e3f8815f992d1e810d2fd1a575abd08ec9b290570a47c22e33b034",
+    "speed": 0.95
+  },
+  "駅前はにぎやかですが、公園は静かです。少し遠いですが、静かな雰囲気のほうが好きです。": {
+    "file": "fd6afa836fcc1c6275bbca04.mp3",
+    "sha256": "8330febc04321c8bce84b3f2766c0352d8a0e10b2be055c3d948280730fb9560",
+    "speed": 0.95
+  },
+  "駅前はにぎやかですが、川の公園は静かですね。": {
+    "file": "b6d1615fc677d690ef1c623b.mp3",
+    "sha256": "057ee52713e7a2e4c629fb53ed2ceadc7ed67cd4ed06f24e8d73b47bf0ef11cb",
+    "speed": 0.95
+  },
+  "お茶": {
+    "file": "4b1f84f050e4191d0262b9d9.mp3",
+    "sha256": "4b1f84f050e4191d0262b9d957c40569e51bb5abcca587e9916b46426767ad66",
+    "speed": 1
+  },
+  "こんばんは": {
+    "file": "07a1fb1961c746f777c42377.mp3",
+    "sha256": "07a1fb1961c746f777c423773e9a76d3d533d8e28f870efb88ff830ee1b3135c",
+    "speed": 1
+  },
+  "しばらく": {
+    "file": "bbe48416e13eed1fd76a4865.mp3",
+    "sha256": "bbe48416e13eed1fd76a4865aeb8ad208c43954175cad11aa93b4c47e62acf1c",
+    "speed": 1
+  },
+  "ひらがな": {
+    "file": "c5a079be9c44f595013e55a3.mp3",
+    "sha256": "c5a079be9c44f595013e55a37fd1f063e8ca38dff728bf7f5f84b54485b5c6d6",
+    "speed": 1
+  },
+  "ようやく": {
+    "file": "6d2a95412a039d2568224d02.mp3",
+    "sha256": "6d2a95412a039d2568224d0289fde8983d3dfe25de0f5a025d4d3f95c7f4cfaf",
+    "speed": 1
+  },
+  "カタカナ": {
+    "file": "ed4ef8f1a0d0119269e0aee1.mp3",
+    "sha256": "ed4ef8f1a0d0119269e0aee1dfc751c0370605db3e961cda47c8de6439f5557d",
+    "speed": 1
+  },
+  "バス停": {
+    "file": "a8d9dbd0b03cf4e1fcce8066.mp3",
+    "sha256": "a8d9dbd0b03cf4e1fcce8066516b071192e8a0cfc15c5b83597e17adab21d423",
+    "speed": 1
+  },
+  "一個": {
+    "file": "6b7e65cb140a48408c4a6a33.mp3",
+    "sha256": "6b7e65cb140a48408c4a6a33c6d6ba3cd767e318eec1f7f8fb3466a5d3bb8adb",
+    "speed": 1
+  },
+  "三つ": {
+    "file": "1a392f1689e7326c63bf6c4c.mp3",
+    "sha256": "1a392f1689e7326c63bf6c4ccad3c5d1c367d4f76a9f06f1e0a63b7c69a46aea",
+    "speed": 1
+  },
+  "中止": {
+    "file": "b403ca010990331cb14ac597.mp3",
+    "sha256": "b403ca010990331cb14ac59734f6e5de7c561b6f2bae46e86f4416bd00feee59",
+    "speed": 1
+  },
+  "乗り場": {
+    "file": "773164668d770f2adaf3cd43.mp3",
+    "sha256": "773164668d770f2adaf3cd438e79b808ab02eaabf8ec07a596f3b3a279f89114",
+    "speed": 1
+  },
+  "二重": {
+    "file": "2d84f009c6c9c746b7fa249e.mp3",
+    "sha256": "2d84f009c6c9c746b7fa249e2867f282532a94daaf48815ea59cdbc3e58eac19",
+    "speed": 1
+  },
+  "交差点": {
+    "file": "e915dccb07f5a50420bd591e.mp3",
+    "sha256": "e915dccb07f5a50420bd591ebd2c6217651173d6ef192a8e2b7c23b701bf2117",
+    "speed": 1
+  },
+  "交番": {
+    "file": "a010f9eb36da4c20f8d8e12a.mp3",
+    "sha256": "a010f9eb36da4c20f8d8e12a7767332889c669216fde037607a9b13bc2bea7ce",
+    "speed": 1
+  },
+  "人数": {
+    "file": "6d05c5c2f768ff30e2440703.mp3",
+    "sha256": "6d05c5c2f768ff30e2440703bc61ac2851bc7340bb7606185d12948e32269bf1",
+    "speed": 1
+  },
+  "今": {
+    "file": "f0ccd67afb6ae7fc7be30c93.mp3",
+    "sha256": "f0ccd67afb6ae7fc7be30c93225359ae6f7708b571354e64f2fda793d48cda41",
+    "speed": 1
+  },
+  "仕事": {
+    "file": "6a864ace98774b4ecbd31358.mp3",
+    "sha256": "6a864ace98774b4ecbd31358a47b92f0203b00a925aa407b00ca3cf090fd54fa",
+    "speed": 1
+  },
+  "休憩": {
+    "file": "d82ba9c35ee50f44e3892b13.mp3",
+    "sha256": "d82ba9c35ee50f44e3892b1392be424e65024f1a1aa7308e043490448a6a969b",
+    "speed": 1
+  },
+  "会社": {
+    "file": "ba1accb53fa2df97e583c3fd.mp3",
+    "sha256": "ba1accb53fa2df97e583c3fdd7f2dd37d0b78e561e0e89783a4e3cf2a28a431e",
+    "speed": 1
+  },
+  "会社員": {
+    "file": "b630fb55b10c50929da5dbee.mp3",
+    "sha256": "b630fb55b10c50929da5dbeef20225a72a79d86c8c8c448b079d65f289c055f1",
+    "speed": 1
+  },
+  "住所": {
+    "file": "6887c56b3025fcdb4ebb0b44.mp3",
+    "sha256": "6887c56b3025fcdb4ebb0b44f624f7bb7fc360437ed1b4f9f354ec3d42bf48f5",
+    "speed": 1
+  },
+  "例えば": {
+    "file": "42116695b8b9190a26372c07.mp3",
+    "sha256": "42116695b8b9190a26372c079dab36d87ed2fa045524e367f05646a3b84d7149",
+    "speed": 1
+  },
+  "信号": {
+    "file": "f2928bfdf3e1e16bc0661ce1.mp3",
+    "sha256": "f2928bfdf3e1e16bc0661ce129af7f30d682286ca01d75ec9f446a023b9f1904",
+    "speed": 1
+  },
+  "修理": {
+    "file": "1d28ad708e933a546cecb4f4.mp3",
+    "sha256": "1d28ad708e933a546cecb4f48679250527a069c2ad15b8975b009538240a957b",
+    "speed": 1
+  },
+  "個人": {
+    "file": "2e864272242bfac69bd1458d.mp3",
+    "sha256": "2e864272242bfac69bd1458d210bcd6f4328bbe2347be6c027dfc168bda3ea62",
+    "speed": 1
+  },
+  "値段": {
+    "file": "2fea78e301af38129660e292.mp3",
+    "sha256": "2fea78e301af38129660e292274362af617f41811a40c77687b27b7cc4b8372f",
+    "speed": 1
+  },
+  "傘": {
+    "file": "eff5f64c01ab2f7bebfda9f0.mp3",
+    "sha256": "eff5f64c01ab2f7bebfda9f085c710dd95953ea1c04c920de5eeb2a82de80a81",
+    "speed": 1
+  },
+  "優先": {
+    "file": "77f74ef47b2df598e2172908.mp3",
+    "sha256": "77f74ef47b2df598e21729087d5ab7024518b6d63be7d39093dd5178a27c383e",
+    "speed": 1
+  },
+  "先生": {
+    "file": "d65dc1af9cf597126db0a9b8.mp3",
+    "sha256": "d65dc1af9cf597126db0a9b8607fbb1461f63baac35a916424f82ad69d9b811a",
+    "speed": 1
+  },
+  "先週": {
+    "file": "ae1ca83020a15a6ac5b70b84.mp3",
+    "sha256": "ae1ca83020a15a6ac5b70b84cc3eabac388ff71d2b6e9dff9b4f93e68a64ba07",
+    "speed": 1
+  },
+  "全部": {
+    "file": "5cb5b638cf78ed308c84a5e2.mp3",
+    "sha256": "5cb5b638cf78ed308c84a5e289701f734b363b8d0cf9b514504c68a6a49bc093",
+    "speed": 1
+  },
+  "公園": {
+    "file": "cc4397ea6204034665d14b6f.mp3",
+    "sha256": "cc4397ea6204034665d14b6fc83913e656cd5a23401633149c45f87ca1a90fd8",
+    "speed": 1
+  },
+  "出口": {
+    "file": "e1e927517dad70dfb43931d5.mp3",
+    "sha256": "e1e927517dad70dfb43931d5842c406e238eab1317a745951f1421105076fa1e",
+    "speed": 1
+  },
+  "出発": {
+    "file": "44c0f401a3600a12f50ea7ef.mp3",
+    "sha256": "44c0f401a3600a12f50ea7ef4df7769897e6ab6e5ca21285596723f82725d8ec",
+    "speed": 1
+  },
+  "分": {
+    "file": "8630de295797632206426176.mp3",
+    "sha256": "8630de29579763220642617653b1453b206370a2499d80c85ddce991a29fcb00",
+    "speed": 1
+  },
+  "切符": {
+    "file": "b46edaa46aa0acb448840dfa.mp3",
+    "sha256": "b46edaa46aa0acb448840dfa88e690699867258fd5def08ce3138230effde155",
+    "speed": 1
+  },
+  "初めて": {
+    "file": "34c2246aa2ba24702073f8b2.mp3",
+    "sha256": "34c2246aa2ba24702073f8b2cf95dd11f25789b3a09864b65f3237a685299db0",
+    "speed": 1
+  },
+  "別々": {
+    "file": "cd8a3f0de026e951be9254ea.mp3",
+    "sha256": "cd8a3f0de026e951be9254eaf6592e15592b877a6b600ce6e2a0197db2cea926",
+    "speed": 1
+  },
+  "到着": {
+    "file": "74c6c0b4ccf8c8a72661e83a.mp3",
+    "sha256": "74c6c0b4ccf8c8a72661e83affbb18bbbb2e1a95cf9a21a6c023d0f773d61a67",
+    "speed": 1
+  },
+  "前": {
+    "file": "543f81b76c91d1afa99962d2.mp3",
+    "sha256": "543f81b76c91d1afa99962d2ebc85bd8ddbeeaf80d6efd2003b6e06a458f9b22",
+    "speed": 1
+  },
+  "助ける": {
+    "file": "4d9edbd1d72a3a810dca05cb.mp3",
+    "sha256": "4d9edbd1d72a3a810dca05cbec6e16387cf604f4f7ba8e18f1ea8e0b1593da80",
+    "speed": 1
+  },
+  "効率": {
+    "file": "ba81e0e6b0935a128c48e17c.mp3",
+    "sha256": "ba81e0e6b0935a128c48e17cefa2b4a1e85e85bd18ff96539cf43db1490a83f9",
+    "speed": 1
+  },
+  "動物園": {
+    "file": "ba7b7acf5c48c9ef4d09494e.mp3",
+    "sha256": "ba7b7acf5c48c9ef4d09494eb3a4b44a2699ded34f107a4f358e13b07e5d2330",
+    "speed": 1
+  },
+  "午前": {
+    "file": "deb102763bf8da4e8a49d41e.mp3",
+    "sha256": "deb102763bf8da4e8a49d41e5eb9d2494492126cde3e35ff205a543930c1c6b3",
+    "speed": 1
+  },
+  "午後": {
+    "file": "729f814d5bfef10f286e68d6.mp3",
+    "sha256": "729f814d5bfef10f286e68d68f4bbbb7e2410122203f1b9f6823d402a8d53793",
+    "speed": 1
+  },
+  "半": {
+    "file": "a25ed5b1eae3ee8820f5ac59.mp3",
+    "sha256": "a25ed5b1eae3ee8820f5ac594d955b5ba1ddeaa4bb25ff7b62ea23c4ac45ab55",
+    "speed": 1
+  },
+  "卵": {
+    "file": "d92308ebe656522e06640de3.mp3",
+    "sha256": "d92308ebe656522e06640de3a56231ae8e18f2c8ec2736cd561f25443fe50aec",
+    "speed": 1
+  },
+  "参加": {
+    "file": "5ed70a90f125592e9424ba87.mp3",
+    "sha256": "5ed70a90f125592e9424ba876a35f3e1b702508a345c439cfcb88e0993bda2a0",
+    "speed": 1
+  },
+  "友達": {
+    "file": "607c5bdc726e1885b84ca73a.mp3",
+    "sha256": "607c5bdc726e1885b84ca73a6716483e2c4cd56efa2db7de37b7f42e75bbd20a",
+    "speed": 1
+  },
+  "反対": {
+    "file": "2eeadbc0d12e7d64338c2345.mp3",
+    "sha256": "2eeadbc0d12e7d64338c234527509179a98c09a298541ba78ce464b0f0d4709c",
+    "speed": 1
+  },
+  "受付": {
+    "file": "67072943365b3d6da2d275d7.mp3",
+    "sha256": "67072943365b3d6da2d275d734fdf1a1f4809f428731d09c3903e1bf626e25ca",
+    "speed": 1
+  },
+  "可能": {
+    "file": "467c315b4006027d090e12a8.mp3",
+    "sha256": "467c315b4006027d090e12a8e007e1a3424382804c6044617283c8107c6ee414",
+    "speed": 1
+  },
+  "名前": {
+    "file": "f38eeca090a62f278b1a25db.mp3",
+    "sha256": "f38eeca090a62f278b1a25dbabcd7dbbcb4ee71078a725bb7c002cf532090665",
+    "speed": 1
+  },
+  "含む": {
+    "file": "53c9650a188369a32b226f18.mp3",
+    "sha256": "53c9650a188369a32b226f181c6553b5c048df971cdbddc3844cb507b6b68b24",
+    "speed": 1
+  },
+  "商品": {
+    "file": "e691c328bb1167687d12f058.mp3",
+    "sha256": "e691c328bb1167687d12f058cfdfa522959fd34fbaf4a3b92a83a7fc7d7bbfe6",
+    "speed": 1
+  },
+  "四つ": {
+    "file": "d1b4a02ceeafd5aa844ace12.mp3",
+    "sha256": "d1b4a02ceeafd5aa844ace124dd693d7ccda680dd8567d29e54939580bd37f39",
+    "speed": 1
+  },
+  "困る": {
+    "file": "562d5b96416e874e04195cc4.mp3",
+    "sha256": "562d5b96416e874e04195cc428f514fe4c15f14b8615f55ba1ff151f12b8dedf",
+    "speed": 1
+  },
+  "国": {
+    "file": "c516d1c8f03b26cd874adca6.mp3",
+    "sha256": "c516d1c8f03b26cd874adca6e604e33342c6a0747a23efb10a07d7a65e47d784",
+    "speed": 1
+  },
+  "地下鉄": {
+    "file": "a6bac579e9828686c386943a.mp3",
+    "sha256": "a6bac579e9828686c386943addda0543f3882429236aa77e0356911308949451",
+    "speed": 1
+  },
+  "地図": {
+    "file": "2888c9cba783ff68f5e52381.mp3",
+    "sha256": "2888c9cba783ff68f5e5238138274c9fd6b8113612f643920da86c363f171f06",
+    "speed": 1
+  },
+  "増やす": {
+    "file": "c1dad147d1300397dcd6586e.mp3",
+    "sha256": "c1dad147d1300397dcd6586eb833052b00888b65916fa430be7178411ea50dd5",
+    "speed": 1
+  },
+  "学ぶ": {
+    "file": "aa06fa0e7710097036ad0457.mp3",
+    "sha256": "aa06fa0e7710097036ad0457351564196a51e49e713d18cb3459eb9dea9cdc46",
+    "speed": 1
+  },
+  "学校": {
+    "file": "29d5c9b1b1d65462bb6cdb57.mp3",
+    "sha256": "29d5c9b1b1d65462bb6cdb57e3a26a7fa7513dba0094bc9e1b134b1f770ab654",
+    "speed": 1
+  },
+  "学生": {
+    "file": "7474cfd4bd5254cb22a9cb70.mp3",
+    "sha256": "7474cfd4bd5254cb22a9cb708bf1edf2eff03ddb47ecbc423ce8ec05c8471fb8",
+    "speed": 1
+  },
+  "安心": {
+    "file": "0078412520972ce8dc6a79a3.mp3",
+    "sha256": "0078412520972ce8dc6a79a3346c22a077f935b116f371b9d9449fec35c97697",
+    "speed": 1
+  },
+  "家": {
+    "file": "9fb3ee7311d47e24a66e7830.mp3",
+    "sha256": "9fb3ee7311d47e24a66e7830a8ba7c4ab428b8c7df4b161e134490eb7cb2fc34",
+    "speed": 1
+  },
+  "家族": {
+    "file": "32e182956e27cbe58d9e64bc.mp3",
+    "sha256": "32e182956e27cbe58d9e64bc3ec50dcdd99c130427854b129217b9e48fa00ca0",
+    "speed": 1
+  },
+  "宿": {
+    "file": "1ea9b37a9aeb452692cc7d43.mp3",
+    "sha256": "1ea9b37a9aeb452692cc7d43f5f27019b1bb6144c0a24adb00a409bd2bd51f19",
+    "speed": 1
+  },
+  "少し": {
+    "file": "0a6e93e1bbda0bf74fae4a5f.mp3",
+    "sha256": "0a6e93e1bbda0bf74fae4a5f4fe37b865ed1de878b430d601aaafbeaae791100",
+    "speed": 1
+  },
+  "届ける": {
+    "file": "8bed394a06ef96ed5cde8ce0.mp3",
+    "sha256": "8bed394a06ef96ed5cde8ce09f50018c89cf25929074ee6651ea4838d1fa6726",
+    "speed": 1
+  },
+  "希望": {
+    "file": "1200d60a48fdced788e851ba.mp3",
+    "sha256": "1200d60a48fdced788e851baa9c0417d13494a0a2ddc902d2b0fe36c4292a4e6",
+    "speed": 1
+  },
+  "席": {
+    "file": "ec8bfa0368ef8debda55b9a2.mp3",
+    "sha256": "ec8bfa0368ef8debda55b9a227d06f16210b361745f3710ad77169e094753cf0",
+    "speed": 1
+  },
+  "平日": {
+    "file": "b449d79ca924480d96c486f5.mp3",
+    "sha256": "b449d79ca924480d96c486f5c8575d04a696201a5f885f9a8523a4760cf96c85",
+    "speed": 1
+  },
+  "店": {
+    "file": "41bbb7ecdc2c42329a9e4c8d.mp3",
+    "sha256": "41bbb7ecdc2c42329a9e4c8dad14504dde98ee5d3bcbbbb2f38b9699207a1567",
+    "speed": 1
+  },
+  "延長": {
+    "file": "4963ef39f4dde207b0217ac2.mp3",
+    "sha256": "4963ef39f4dde207b0217ac2ab13568c64881cfc40c97f957924b26eea0e8026",
+    "speed": 1
+  },
+  "後ろ": {
+    "file": "06c14ef29c7f71cb79ae00b4.mp3",
+    "sha256": "06c14ef29c7f71cb79ae00b4a7c5f05d651866b47af323fb95216fb4876e99fa",
+    "speed": 1
+  },
+  "必要": {
+    "file": "c0e16350fd082faf171de214.mp3",
+    "sha256": "c0e16350fd082faf171de2149cd21b0555e7017184dabed19ee4de2a33fc77f9",
+    "speed": 1
+  },
+  "忘れ物": {
+    "file": "7a7fa437cd86671c5ca34208.mp3",
+    "sha256": "7a7fa437cd86671c5ca342089bc87ed1a77581d33daa5b0ee66e802b46aeff6a",
+    "speed": 1
+  },
+  "忙しい": {
+    "file": "71e4f4195a83bc421a802591.mp3",
+    "sha256": "71e4f4195a83bc421a8025916ebe33f512e1e977b7608253abd51895504b0475",
+    "speed": 1
+  },
+  "思い出": {
+    "file": "6368362a86dc519a761ac8ec.mp3",
+    "sha256": "6368362a86dc519a761ac8ec2292215a441204aa9d016401bb86fd74b9d11fb8",
+    "speed": 1
+  },
+  "担当": {
+    "file": "618ff1e022c60945bcebb2ce.mp3",
+    "sha256": "618ff1e022c60945bcebb2ce44bdfc46175ae3ab054e6dbf96133262f78564c9",
+    "speed": 1
+  },
+  "掃除": {
+    "file": "10822dff2f6794a1d5e03104.mp3",
+    "sha256": "10822dff2f6794a1d5e031046a5a577aa088f169e0d64c21486acd5d1d909e17",
+    "speed": 1
+  },
+  "探す": {
+    "file": "62ad2968d1576c06681d2dc0.mp3",
+    "sha256": "62ad2968d1576c06681d2dc00384d5d48567fcd6220091f455735428f3964ead",
+    "speed": 1
+  },
+  "掲示": {
+    "file": "6e257d00fb06ec9c5291b498.mp3",
+    "sha256": "6e257d00fb06ec9c5291b49852d87338a4fb403b52504f87328fa296eb890ef1",
+    "speed": 1
+  },
+  "撮影": {
+    "file": "6a7b78c66e7ce2c4c413cb7d.mp3",
+    "sha256": "6a7b78c66e7ce2c4c413cb7dcf1216264965ac3d95a9872e3b394128b29a1bc7",
+    "speed": 1
+  },
+  "支払い": {
+    "file": "75ff6fafba918d80584d29dd.mp3",
+    "sha256": "75ff6fafba918d80584d29dd782cea4d2b66c2765b3f9b36cc60b84de90b713a",
+    "speed": 1
+  },
+  "教える": {
+    "file": "4ac83c2fded9dc10d7c72619.mp3",
+    "sha256": "4ac83c2fded9dc10d7c726197292ff897175525efebe436560e0083ee224c6fc",
+    "speed": 1
+  },
+  "散歩": {
+    "file": "f74dd42481aa97f7a7361832.mp3",
+    "sha256": "f74dd42481aa97f7a7361832fe896309583e46b47e648494dcb454e71641a2d0",
+    "speed": 1
+  },
+  "文字": {
+    "file": "ae4b4021c002c76ba13093b2.mp3",
+    "sha256": "ae4b4021c002c76ba13093b2c0aae2a0fe0dab928d45a88ae81b3f2caf4a36a1",
+    "speed": 1
+  },
+  "料理": {
+    "file": "39fad4f251a39ab3dfe8d78e.mp3",
+    "sha256": "39fad4f251a39ab3dfe8d78e76688760bea644060244ff656eb58f7d71707a9a",
+    "speed": 1
+  },
+  "料金": {
+    "file": "8476b4b34b2ff9509081691c.mp3",
+    "sha256": "8476b4b34b2ff9509081691ca6b016d09da48b0ca9d0e7d9d7dc3daed248fdc5",
+    "speed": 1
+  },
+  "断る": {
+    "file": "27e4603c09bff9510e171b95.mp3",
+    "sha256": "27e4603c09bff9510e171b95be80985e438f1a44cd12cfd3da8ea6825c6a63f6",
+    "speed": 1
+  },
+  "旅行": {
+    "file": "2f5adfe845a1bcca312a0c8d.mp3",
+    "sha256": "2f5adfe845a1bcca312a0c8dc6d6e1b5d6fbe912fda9de6dfc9f74d0c4ad58ba",
+    "speed": 1
+  },
+  "日本": {
+    "file": "6155d4b3846f7b3e6abba7fa.mp3",
+    "sha256": "6155d4b3846f7b3e6abba7fae8650767c5a85ca64dcbda5e0db5f4bb91c83665",
+    "speed": 1
+  },
+  "日本語": {
+    "file": "d7195f6a0d5aaa7ebe076970.mp3",
+    "sha256": "d7195f6a0d5aaa7ebe0769700c76e475ae035271ce2713705b6a60cc384826a3",
+    "speed": 1
+  },
+  "日程": {
+    "file": "4d2a368cb9c2c0b697d42661.mp3",
+    "sha256": "4d2a368cb9c2c0b697d42661223a407dfc5ac0900d36cb4fdb12da1607e94e8f",
+    "speed": 1
+  },
+  "早い": {
+    "file": "0492662785c9c8f52e283374.mp3",
+    "sha256": "0492662785c9c8f52e283374f4270f3605581d0262dd02e6ca8360111ed2286e",
+    "speed": 1
+  },
+  "明日": {
+    "file": "430bfa03da83c51a18fe461f.mp3",
+    "sha256": "430bfa03da83c51a18fe461f3de8a74e692f915b59e923e2a5ee7ff38d5716c6",
+    "speed": 1
+  },
+  "映画": {
+    "file": "0fd4aadab07a1a309164c121.mp3",
+    "sha256": "0fd4aadab07a1a309164c121d71efcb0cd39b101a0cdad7eb50d89cbd168237e",
+    "speed": 1
+  },
+  "昼ご飯": {
+    "file": "012dd9b35aa559a2f01cc29b.mp3",
+    "sha256": "012dd9b35aa559a2f01cc29b76fdeb7e9501880477689bf243e63f0f0360ea11",
+    "speed": 1
+  },
+  "時々": {
+    "file": "18574735d5429d02d6b70165.mp3",
+    "sha256": "18574735d5429d02d6b7016553da9778c21fa9c309792a16e7a07c4cf5cb010f",
+    "speed": 1
+  },
+  "時間": {
+    "file": "42a50adf3436ce96a5c3eae5.mp3",
+    "sha256": "42a50adf3436ce96a5c3eae5c258fd93a7cf42c9a06d148953723dc5548c80e4",
+    "speed": 1
+  },
+  "景色": {
+    "file": "4bbd8a29fb63486e971fcd15.mp3",
+    "sha256": "4bbd8a29fb63486e971fcd1530758c1ba72fa804a3abed34db57946c82449e9d",
+    "speed": 1
+  },
+  "暑い": {
+    "file": "e0f041b4667a8033c4ebe53a.mp3",
+    "sha256": "e0f041b4667a8033c4ebe53a310ff63983a84e68143141f22d1e986554f6fb82",
+    "speed": 1
+  },
+  "月曜日": {
+    "file": "a390da2a46b50db85b745c7c.mp3",
+    "sha256": "a390da2a46b50db85b745c7c641add2e6a7631b6170b705b7a24dd7f583dd6ec",
+    "speed": 1
+  },
+  "期限": {
+    "file": "15f064287e3bc551b98e5b26.mp3",
+    "sha256": "15f064287e3bc551b98e5b26015ef258d9795c336be6555e8f37270bd5092938",
+    "speed": 1
+  },
+  "本": {
+    "file": "4d82f0ce0007086bef0c1f9a.mp3",
+    "sha256": "4d82f0ce0007086bef0c1f9aa2705d5a2a251c27b42ed3aa612794ba2bd8f408",
+    "speed": 1
+  },
+  "来週": {
+    "file": "b0911d95eee0d5e06dd49f66.mp3",
+    "sha256": "b0911d95eee0d5e06dd49f66216196416eadcc9916653bf8972c606b750f8a66",
+    "speed": 1
+  },
+  "柔軟": {
+    "file": "34952ed2f6d925e81aef3599.mp3",
+    "sha256": "34952ed2f6d925e81aef35995eecc0363c8dc8623898864a60e6c6b3ddce71fe",
+    "speed": 1
+  },
+  "案内": {
+    "file": "d0b89d380abf558b5649624f.mp3",
+    "sha256": "d0b89d380abf558b5649624fbf85d5a8f183ce6ab37d542a53a612223ac9f933",
+    "speed": 1
+  },
+  "楽しい": {
+    "file": "b422297df0f3da83dfe9b6d8.mp3",
+    "sha256": "b422297df0f3da83dfe9b6d875baa59b180df358dafc653acce69a7f9c7770a4",
+    "speed": 1
+  },
+  "楽しみ": {
+    "file": "d30c92820c9bc550f29b263d.mp3",
+    "sha256": "d30c92820c9bc550f29b263dd90924e125913d0bbfbf8b9a435751f356e124fd",
+    "speed": 1
+  },
+  "次回": {
+    "file": "f78e52c5b67a5b6b468b1824.mp3",
+    "sha256": "f78e52c5b67a5b6b468b18243efb63afd76e5fb12078edc6f626f428ecad4a63",
+    "speed": 1
+  },
+  "正確": {
+    "file": "a0cc411b214fdba21d779b06.mp3",
+    "sha256": "a0cc411b214fdba21d779b066be25365ba113097e3ce1a3d9166b7a479b77db8",
+    "speed": 1
+  },
+  "歯": {
+    "file": "29a530cbfd04e88ab2dbdf55.mp3",
+    "sha256": "29a530cbfd04e88ab2dbdf55b26dd077f2c0d25eec20abf5ccc302be1139c318",
+    "speed": 1
+  },
+  "残念": {
+    "file": "0ec8dbd2d4dc1a4d359467e9.mp3",
+    "sha256": "0ec8dbd2d4dc1a4d359467e94f15b6149a623caada88639638b79bef29e7c6cd",
+    "speed": 1
+  },
+  "毎晩": {
+    "file": "a63b97295eb75cecf316c3cd.mp3",
+    "sha256": "a63b97295eb75cecf316c3cdb9f0846e892647a2625683d56d9f0e4f39e3b565",
+    "speed": 1
+  },
+  "比べる": {
+    "file": "4377a45e4576da7749cddfcd.mp3",
+    "sha256": "4377a45e4576da7749cddfcd2424a546a8b1f856fc9d62c1ee66f6b13b1438dd",
+    "speed": 1
+  },
+  "水": {
+    "file": "5f46f0042d3bae51a41df18a.mp3",
+    "sha256": "5f46f0042d3bae51a41df18a87aca9f97dc7fcf067d63dc2926e51b09bc9637c",
+    "speed": 1
+  },
+  "決める": {
+    "file": "5dc1e2d2d4ce71f3f7cf0728.mp3",
+    "sha256": "5dc1e2d2d4ce71f3f7cf07282f29f6a8f106e71e91c2d22bd780c31948343335",
+    "speed": 1
+  },
+  "減らす": {
+    "file": "7e2ec8d85f5ea5a28a5f2c62.mp3",
+    "sha256": "7e2ec8d85f5ea5a28a5f2c62de9f8bc6267fc78ed2348b461b5a7bd65f4bf8a8",
+    "speed": 1
+  },
+  "漢字": {
+    "file": "e42ff8b3d172005762396680.mp3",
+    "sha256": "e42ff8b3d17200576239668046fa4cbe92176b89aabdb7ec98977d9f1e07129c",
+    "speed": 1
+  },
+  "無事": {
+    "file": "d45dc19844d69b7f7ff813c6.mp3",
+    "sha256": "d45dc19844d69b7f7ff813c68a027c36f53aea81ce0c88abe23f51fbf33a260e",
+    "speed": 1
+  },
+  "無理": {
+    "file": "4dee6ad70449b594af16e0a2.mp3",
+    "sha256": "4dee6ad70449b594af16e0a2dab9c2c1d62271138a5d0dc071ef963aab29fd89",
+    "speed": 1
+  },
+  "牛乳": {
+    "file": "12974eb894dcff7cd5bfb232.mp3",
+    "sha256": "12974eb894dcff7cd5bfb232f797ccfe909ccc5c6c8fc7e82520b2b41b9bd030",
+    "speed": 1
+  },
+  "町": {
+    "file": "fcf66956272e886d5f55592b.mp3",
+    "sha256": "fcf66956272e886d5f55592badc24fba5bbcf1b149551ba35f6648c21b25ee0a",
+    "speed": 1
+  },
+  "省略": {
+    "file": "23a52fbc0bac1f3f7328d12b.mp3",
+    "sha256": "23a52fbc0bac1f3f7328d12b482e9b9a679404e012d74f82dd53838734cb41e1",
+    "speed": 1
+  },
+  "祝日": {
+    "file": "e7e08e52a982ae2dff1da472.mp3",
+    "sha256": "e7e08e52a982ae2dff1da4724ce7616ef8fd32400edb4ce3348be64258f66661",
+    "speed": 1
+  },
+  "納得": {
+    "file": "cd045f87c2ef4baf992bc368.mp3",
+    "sha256": "cd045f87c2ef4baf992bc368f85b9f397e31ecd069723820c676d0e72dc4bce8",
+    "speed": 1
+  },
+  "紙": {
+    "file": "de95871043b48a6a38752269.mp3",
+    "sha256": "de95871043b48a6a38752269909e5d0c3471af717f02e78b4e1505ea08548a87",
+    "speed": 1
+  },
+  "結局": {
+    "file": "191443ddc17221bb6a5dcbc4.mp3",
+    "sha256": "191443ddc17221bb6a5dcbc4794a727239ed039fcbf00196459f10d007aee795",
+    "speed": 1
+  },
+  "続ける": {
+    "file": "d696871f982691e33698d04e.mp3",
+    "sha256": "d696871f982691e33698d04ec0a549404a52e6fcbb2107a38bdffbbb176de3fe",
+    "speed": 1
+  },
+  "美術館": {
+    "file": "0a6b88a301a806dce7bd09e3.mp3",
+    "sha256": "0a6b88a301a806dce7bd09e3fe13b6521233df25c0f98ce36b4219f625ce83db",
+    "speed": 1
+  },
+  "考慮": {
+    "file": "a59445d546de9a32d6f6220c.mp3",
+    "sha256": "a59445d546de9a32d6f6220c389cba4564ea57619b9311a1e4d34c9918c6973d",
+    "speed": 1
+  },
+  "英語": {
+    "file": "b4af3b7e2760f6deced2537b.mp3",
+    "sha256": "b4af3b7e2760f6deced2537b52f14b5c10ce448bf075743d9db0e5e9e6d718d0",
+    "speed": 1
+  },
+  "荷物": {
+    "file": "0210564b827663bdcf316b0e.mp3",
+    "sha256": "0210564b827663bdcf316b0e371c7de386ca9ed97ad002dedf1b2a5dbd8ee0e6",
+    "speed": 1
+  },
+  "落とす": {
+    "file": "5194b8ce5846e631fb40fd47.mp3",
+    "sha256": "5194b8ce5846e631fb40fd4714da3188753d807564d571aaa5837ae681336a6a",
+    "speed": 1
+  },
+  "見直す": {
+    "file": "713a295ddd68a5c6f1babc47.mp3",
+    "sha256": "713a295ddd68a5c6f1babc475e673e18805322bd8dd2e62885377688237c0977",
+    "speed": 1
+  },
+  "記録": {
+    "file": "72a9c317d5d5a4c0e9fe5722.mp3",
+    "sha256": "72a9c317d5d5a4c0e9fe5722f392d4c1f9931f9128756be630e0d839dc429a78",
+    "speed": 1
+  },
+  "許可": {
+    "file": "6ea28374b1877c8f8cac341a.mp3",
+    "sha256": "6ea28374b1877c8f8cac341afd187ef60efa78ae3fc0c306a7effca712781765",
+    "speed": 1
+  },
+  "試す": {
+    "file": "94fea74bb732173cb1ad00de.mp3",
+    "sha256": "94fea74bb732173cb1ad00dee325cfd22e724591bff1bf48d87f2dd643fbc3b2",
+    "speed": 1
+  },
+  "誘う": {
+    "file": "799f483afa78e7f4df53c247.mp3",
+    "sha256": "799f483afa78e7f4df53c24711dafd6173d2ec69c503e3b588f859feaf6b7f10",
+    "speed": 1
+  },
+  "読み方": {
+    "file": "3e3bc54b1971d22c07cdc4e0.mp3",
+    "sha256": "3e3bc54b1971d22c07cdc4e0ec902ce00541182b8f0119832956da7bd09029d6",
+    "speed": 1
+  },
+  "譲る": {
+    "file": "ced82d1bea6712d1982c5dc6.mp3",
+    "sha256": "ced82d1bea6712d1982c5dc683d4ad893c638cbcd80c75247c7d135522e2b0a1",
+    "speed": 1
+  },
+  "負担": {
+    "file": "3cceba858730f2164ff36637.mp3",
+    "sha256": "3cceba858730f2164ff366377cd492aa73789f1fc9cf5b97bc7f5bc153dd9e3e",
+    "speed": 1
+  },
+  "財布": {
+    "file": "d50e890591510c41678535fe.mp3",
+    "sha256": "d50e890591510c41678535fe4c0b1b03ed3e4465e7a7608efdb1b4638a7a3d06",
+    "speed": 1
+  },
+  "費用": {
+    "file": "71a574dd9bbf7ea11cba179b.mp3",
+    "sha256": "71a574dd9bbf7ea11cba179b48e639e1692b32c7e5fbec935af5ce21c04b3c4f",
+    "speed": 1
+  },
+  "賛成": {
+    "file": "b70bb7262aab368407121665.mp3",
+    "sha256": "b70bb7262aab3684071216658c769e5094ea1a99b9cec46c4b771a92be289dc1",
+    "speed": 1
+  },
+  "趣味": {
+    "file": "ee25e4b6171d2d97769ee833.mp3",
+    "sha256": "ee25e4b6171d2d97769ee8337ba9bb652b61c99951fb56e4557b2696e0d012c2",
+    "speed": 1
+  },
+  "辞書": {
+    "file": "9a6dd5f25c5d3d8f65a387c7.mp3",
+    "sha256": "9a6dd5f25c5d3d8f65a387c7d8df75231b2562b99a90daaa92c28f7b88349879",
+    "speed": 1
+  },
+  "近い": {
+    "file": "dc1fd47b85c550630da116bf.mp3",
+    "sha256": "dc1fd47b85c550630da116bf7e686d25fce4f08e0ac6f31895b3a917dc1da889",
+    "speed": 1
+  },
+  "近く": {
+    "file": "c7b03daa54f2fcea6b5659ab.mp3",
+    "sha256": "c7b03daa54f2fcea6b5659abc080dd349248aea23a3d27871f78b8730fa8cd45",
+    "speed": 1
+  },
+  "近所": {
+    "file": "2d0c1b39e98c1edd0e14787c.mp3",
+    "sha256": "2d0c1b39e98c1edd0e14787c9dcce5d1fef1203de70b31e7c80c5bd67d94b374",
+    "speed": 1
+  },
+  "通勤": {
+    "file": "d4da67631a6b45713f35c748.mp3",
+    "sha256": "d4da67631a6b45713f35c7482deb0456e0bfe685b96be4a2bc4c92922362d570",
+    "speed": 1
+  },
+  "週末": {
+    "file": "7aab97e65992ec98e7b0ff82.mp3",
+    "sha256": "7aab97e65992ec98e7b0ff82f0e2f2ca14efc99c5dacab5a7f62d9f01556a7ef",
+    "speed": 1
+  },
+  "遅れる": {
+    "file": "4ff35d1b36349f658008e632.mp3",
+    "sha256": "4ff35d1b36349f658008e632aa902e8bee4ebb26718fdfaa61b2d39b5ad4ef17",
+    "speed": 1
+  },
+  "道": {
+    "file": "0af74c580641d56a0b212542.mp3",
+    "sha256": "0af74c580641d56a0b212542ecbe2c079960ff4c41f28fa86321b225bd92f8f9",
+    "speed": 1
+  },
+  "遠い": {
+    "file": "796e60527bc74c3a909708b2.mp3",
+    "sha256": "796e60527bc74c3a909708b2882d632c4c9a1a99ed75fada53a6f84315e0b0ab",
+    "speed": 1
+  },
+  "鍵": {
+    "file": "76636002cedbe6a1fa75ad2e.mp3",
+    "sha256": "76636002cedbe6a1fa75ad2edb1ec17c73b25de40aa691adc1a08e877f37c87c",
+    "speed": 1
+  },
+  "隣": {
+    "file": "138e20e904a32bf4dd86c0c8.mp3",
+    "sha256": "138e20e904a32bf4dd86c0c89432b7f1da4078505ed290c9248e088932617756",
+    "speed": 1
+  },
+  "難しい": {
+    "file": "2ffc89dca2568b3739df4f1f.mp3",
+    "sha256": "2ffc89dca2568b3739df4f1fb57ffd1eb3ab786a3efa083e17aadb8d4e31c2a9",
+    "speed": 1
+  },
+  "雰囲気": {
+    "file": "ad0b53b778289f2b530ec7fd.mp3",
+    "sha256": "ad0b53b778289f2b530ec7fd8d68df6db8120a9b4e9139c221e33c1c75f5966a",
+    "speed": 1
+  },
+  "電気": {
+    "file": "90ea680945d5f9700c1dc763.mp3",
+    "sha256": "90ea680945d5f9700c1dc76304ff8afbd20f9da9155c1c3cb7b9ef2c92ee9703",
+    "speed": 1
+  },
+  "電車": {
+    "file": "33d636a9a5e494e56b7d7cb4.mp3",
+    "sha256": "33d636a9a5e494e56b7d7cb4e830083f0cc4dacb9553362a8620f6da4e52e392",
+    "speed": 1
+  },
+  "静か": {
+    "file": "521e8ae9c7d8e72891702a13.mp3",
+    "sha256": "521e8ae9c7d8e72891702a136c6a73089aabd73f8ed6df46695edee3e534b756",
+    "speed": 1
+  },
+  "音": {
+    "file": "390930a77ed0259ed7ff55f4.mp3",
+    "sha256": "390930a77ed0259ed7ff55f48292af17290e931a2c1f8beb1f9fcdc20019c137",
+    "speed": 1
+  },
+  "音楽": {
+    "file": "11f3ad79d7b0f39c78fc8f80.mp3",
+    "sha256": "11f3ad79d7b0f39c78fc8f8005bdad353f4246ecf6f8881179708a9b15e3d55d",
+    "speed": 1
+  },
+  "領収書": {
+    "file": "f000005e3f362c1fd9e4b0e5.mp3",
+    "sha256": "f000005e3f362c1fd9e4b0e59861fe470546eae61f85948c99d165629f58b70c",
+    "speed": 1
+  },
+  "顔": {
+    "file": "9d4cd9d3e037128157dd9c90.mp3",
+    "sha256": "9d4cd9d3e037128157dd9c9026c8448371f87e0fc5225744e5ced1dd1d2a83cf",
+    "speed": 1
+  },
+  "駅員": {
+    "file": "9476c494e495a53c48afcf86.mp3",
+    "sha256": "9476c494e495a53c48afcf8632ea9719c2c65265046be99bbf4f817193940688",
+    "speed": 1
+  },
+  "驚く": {
+    "file": "e0e124569822915aa1b0d118.mp3",
+    "sha256": "e0e124569822915aa1b0d118282ac252150a77a6e6fda6a5d7328f02cd5dd8b0",
+    "speed": 1
+  }
+}

@@ -2,6 +2,7 @@ import type { AudioPlayer } from '../index';
 import type { TargetLanguage } from '@smartlingo/domain';
 import type { AudioRate } from '../preferences';
 import type { JapaneseSource } from './preferences';
+import type { BundledJapanesePlayer } from './bundled';
 import type { JapaneseSpeechClient } from './client';
 import { validateJapaneseInput } from './client';
 
@@ -16,7 +17,8 @@ export class JapaneseSpeechPlayer implements AudioPlayer {
   constructor(private readonly other: AudioPlayer, private readonly device: AudioPlayer,
     private readonly client: JapaneseSpeechClient, private readonly store: JapaneseClipStore,
     private readonly clips: { play(bytes: Uint8Array, mime?: string): Promise<void>; stop(): void },
-    private readonly preferences: { get(): JapaneseSource }, private readonly rate: () => AudioRate) {}
+    private readonly preferences: { get(): JapaneseSource }, private readonly rate: () => AudioRate,
+    private readonly bundled?: Pick<BundledJapanesePlayer, 'play' | 'stop'>) {}
   available(language: TargetLanguage = 'fr-FR'): boolean {
     // Keep the explicit retry available even before status is known, including cached offline clips.
     return language === 'ja-JP' ? this.preferences.get() !== 'device' || this.device.available(language) : this.other.available(language);
@@ -25,6 +27,14 @@ export class JapaneseSpeechPlayer implements AudioPlayer {
     this.stop();
     if (language !== 'ja-JP') return this.other.speak(text, language);
     const source = this.preferences.get();
+    const sequence = this.sequence;
+    const bundled = source === 'auto' ? this.bundled?.play(text, this.rate()) : undefined;
+    if (bundled) return bundled.catch(() => {
+      if (sequence === this.sequence) return this.speakJapanese(text, source);
+    });
+    return this.speakJapanese(text, source);
+  }
+  private speakJapanese(text: string, source: JapaneseSource): Promise<void> {
     if (source === 'device' || (source === 'auto' && this.device.available('ja-JP'))) return this.device.speak(text, 'ja-JP');
     const controller = new AbortController();
     this.pending = controller;
@@ -50,6 +60,6 @@ export class JapaneseSpeechPlayer implements AudioPlayer {
   stop(): void {
     this.sequence++;
     this.pending?.abort(); this.pending = undefined;
-    this.clips.stop(); this.other.stop(); this.device.stop();
+    this.bundled?.stop(); this.clips.stop(); this.other.stop(); this.device.stop();
   }
 }

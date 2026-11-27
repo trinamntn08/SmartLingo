@@ -179,6 +179,37 @@ test('Japanese wrapper preserves French, prefers Japanese device and can force l
   player.stop();
 });
 
+test('Automatic Japanese audio plays exact bundled clips first and keeps explicit voice choices', async () => {
+  const calls: string[] = [];
+  let source: JapaneseSource = 'auto';
+  let fail = false;
+  const device: AudioPlayer = { available: () => true, speak: async () => { calls.push('device'); }, stop() {} };
+  const store: JapaneseClipStore = { begin: async () => undefined, get: async () => undefined, put: async () => {} };
+  const player = new JapaneseSpeechPlayer(device, device, {
+    status: async () => ({ available: true, voice: japaneseVoice, credit: japaneseCredit }),
+    play: async () => { calls.push('local'); return wav(); },
+  }, store, { play: async () => {}, stop() {} }, { get: () => source }, () => 0.85, {
+    play: (text, rate) => {
+      if (text !== 'ア') return;
+      calls.push(`bundled:${rate}`);
+      return fail ? Promise.reject(new Error('Corrupt audio')) : Promise.resolve();
+    },
+    stop() {},
+  });
+  await player.speak('ア', 'ja-JP');
+  fail = true;
+  await player.speak('ア', 'ja-JP');
+  const pending = player.speak('ア', 'ja-JP');
+  player.stop();
+  await pending;
+  await player.speak('unknown', 'ja-JP');
+  source = 'device';
+  await player.speak('ア', 'ja-JP');
+  source = 'voicevox';
+  await player.speak('ア', 'ja-JP');
+  assert.deepEqual(calls, ['bundled:0.85', 'bundled:0.85', 'device', 'bundled:0.85', 'device', 'device', 'local']);
+});
+
 test('stopping or superseding a pending Japanese request aborts it and never plays late bytes', async () => {
   const signals: AbortSignal[] = [];
   const completions: ((bytes: Uint8Array) => void)[] = [];

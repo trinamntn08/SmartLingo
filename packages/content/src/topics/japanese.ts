@@ -1,6 +1,7 @@
-import type { Lesson } from '@smartlingo/domain';
+import { lessonSchema, type Lesson } from '@smartlingo/domain';
 import { buildTopic, type TopicDraft } from '../build-topic';
 import { reuseSharedVocabulary } from '../shared-vocabulary';
+import { buildJapaneseTopicPractice } from '../japanese-topic-practice';
 
 const starterAliases = {
   'ja.greetings.hello': 'ja.greetings.konnichiwa',
@@ -123,5 +124,6 @@ export function buildJapaneseStarter(existing: readonly Lesson[]): Lesson[] {
       review: 'Draft requiring owner and qualified Japanese review of language, readings, translations, estimated levels and activities.',
     },
   }));
-  return reuseSharedVocabulary(drafts, existing.flatMap(lesson => lesson.vocabulary), starterAliases);
+  return reuseSharedVocabulary(drafts, existing.flatMap(lesson => lesson.vocabulary), starterAliases)
+    .map(lesson => lessonSchema.parse({ ...lesson, japanesePractice: buildJapaneseTopicPractice(lesson) }));
 }

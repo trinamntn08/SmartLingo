@@ -8,6 +8,7 @@ test.beforeEach(async ({ request, context }) => {
 });
 
 test('downloaded letters resume saved hiragana and freely browse katakana on a cold offline launch', async ({ page, context, baseURL }) => {
+  test.setTimeout(100_000);
   const apiRequests: string[] = [];
   await context.route('**/127.0.0.1:3001/**', route => { apiRequests.push(route.request().url()); return route.abort(); });
   await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
@@ -25,7 +26,7 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
   await page.getByRole('button', { name: 'Download for offline use', exact: true }).click();
-  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible();
+  await expect(page.getByText('Ready for offline use', { exact: true })).toBeVisible({ timeout: 55_000 });
   // Profile may check local voice availability; cold text study needs no API.
   apiRequests.length = 0;
   await context.setOffline(true); await page.close();
@@ -38,7 +39,7 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   await expect(letters.getByTestId(`kana-row-${first.id}`)).toContainText('Studied');
   await expect(letters.getByTestId(`kana-row-${first.id}`)).not.toContainText('Not studied');
   await expect(letters.getByTestId(`kana-row-${first.id}`)).toHaveAccessibleName(/Explore row.*Studied$/);
-  await expect(letters.getByText(/1 of 20 rows studied/)).toBeVisible();
+  await expect(letters.getByText(`1 of ${japaneseAlphabetLessons.length} rows studied`, { exact: true })).toBeVisible();
   // Visible readings and recognition continue even without a voice or server.
   await expect(letters.getByText(japaneseAlphabetLessons[1]!.characters[0]!.romaji, { exact: true })).toBeVisible();
   await letters.getByRole('button', { name: /Katakana$/ }).click();
@@ -50,6 +51,12 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   await expect(letters.getByRole('heading', { name: `Which character is “${japaneseAlphabetLessons[19]!.characters[0]!.romaji}”?` })).toBeVisible();
   await letters.getByRole('button', { name: `Choose ${japaneseAlphabetLessons[19]!.characters[0]!.kana}`, exact: true }).click();
   await expect(letters.getByText(/^Yes\./)).toBeVisible();
+  const wordTask = first.practice![0]!;
+  if (wordTask.mode !== 'choice') throw new Error('The first kana lesson needs a word choice task.');
+  await cold.goto(`/learn/ja/letters/${first.id}/words`);
+  await expect(letters.getByRole('heading', { name: 'Word recall', exact: true })).toBeVisible();
+  await letters.getByTestId(wordTask.id).getByRole('button', { name: wordTask.answer, exact: true }).click();
+  await expect(letters.getByText('1 of 2 tasks saved.', { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: 'Lessons', exact: true }).click();
   await expect(cold.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

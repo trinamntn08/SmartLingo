@@ -56,6 +56,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {
     localStorage.setItem('smartlingo.target-language.v1', 'ja-JP');
+    localStorage.setItem('smartlingo.japanese-audio-source.v1', JSON.stringify({ version: 1, source: 'device' }));
     const voices = ['en-GB', 'fr-FR', 'ja-JP'].map(lang => ({ name: `Test ${lang}`, voiceURI: `test.${lang}`, lang, localService: true, default: lang === 'en-GB' }));
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(public text: string) {} } });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
@@ -82,7 +83,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
     await expect(alphabet.getByText(character.kana, { exact: true })).toBeVisible();
     await expect(alphabet.getByText(character.romaji, { exact: true })).toBeVisible();
   }
-  await alphabet.getByRole('button', { name: `Listen to ${first.characters[0]!.kana}`, exact: true }).click();
+  await alphabet.getByText(first.characters[0]!.kana, { exact: true }).click();
   await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('kana-audio') ?? '{}'))).toEqual({ text: first.characters[0]!.audioText, language: 'ja-JP' });
   // Vocabulary remains available before any character practice or saved row.
   await button(page, 'Lessons').click();
@@ -106,7 +107,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).not.toContainText('Not studied');
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).toHaveAccessibleName(/Explore row.*Studied$/);
   await expect(alphabet.getByTestId(`kana-row-${second.id}`)).toContainText('Current row');
-  await expect(alphabet.getByText(/1 of 20 rows studied/)).toBeVisible();
+  await expect(alphabet.getByText(`1 of ${japaneseAlphabetLessons.length} rows studied`, { exact: true })).toBeVisible();
   const saved = await events(page);
   expect(saved).toEqual(expect.arrayContaining(oldEvents));
   expect(saved.filter(event => event.lessonId === first.id)).toEqual([expect.objectContaining({ revision: 1, itemId: `${first.id}.completion`, activity: 'completion', result: 'completed', hints: 0 })]);
@@ -223,4 +224,31 @@ test('French keeps its vocabulary default without a Japanese alphabet entry', as
   await expect(button(page, 'Japanese letters')).toHaveCount(0);
   await expect(page.getByTestId('japanese-alphabet')).toHaveCount(0);
   await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+});
+
+test('a voiced kana pattern resumes word recall and saves only after checking both tasks', async ({ page }) => {
+  const pattern = japaneseAlphabetLessons.find(row => row.id === 'ja.alphabet.hiragana.pattern.g')!;
+  const [reading, spelling] = pattern.practice!;
+  if (reading?.mode !== 'choice' || spelling?.mode !== 'text') throw new Error('The pattern needs choice and script recall tasks.');
+  await page.goto(`/learn/ja/letters/${pattern.id}/study`);
+  await expect(page.getByRole('heading', { name: pattern.title, exact: true })).toBeVisible();
+  await expect(page.getByText('かぎ', { exact: true })).toBeVisible();
+  await button(page, 'Word recall').click();
+  await expect(page.getByRole('heading', { name: 'Word recall', exact: true })).toBeFocused();
+  await expect(button(page, 'Mark row studied')).toBeDisabled();
+  await page.getByTestId(reading.id).getByRole('button', { name: reading.answer, exact: true }).click();
+  await expect(page.getByText('1 of 2 tasks saved.', { exact: true })).toBeVisible();
+  await page.goto('/learn/ja/letters');
+  await expect(page).toHaveURL(`/learn/ja/letters/${pattern.id}/words`);
+  await expect(page.getByText('1 of 2 tasks saved.', { exact: true })).toBeVisible();
+  const answer = page.getByTestId(spelling.id).getByRole('textbox', { name: 'Type your answer', exact: true });
+  await answer.fill('カギ');
+  await button(page, 'Check answer').click();
+  await expect(page.getByText(`${spelling.retry} ${spelling.feedback}`, { exact: true })).toBeVisible();
+  await expect(button(page, 'Mark row studied')).toBeDisabled();
+  await answer.fill(spelling.answers[0]!);
+  await button(page, 'Check answer').click();
+  await expect(page.getByText('2 of 2 tasks saved.', { exact: true })).toBeVisible();
+  await button(page, 'Mark row studied').click();
+  await expect(page).toHaveURL('/learn/ja/letters/ja.alphabet.hiragana.pattern.z/study');
 });

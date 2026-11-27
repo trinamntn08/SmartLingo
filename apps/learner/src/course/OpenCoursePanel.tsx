@@ -1,8 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { frenchCourseLessonsByDay, getFrenchTopicPractice } from '@smartlingo/content';
-import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId,
-  type CourseDay, type CourseEvent, type LearningEvent, type OpenCourse } from '@smartlingo/domain';
+import { frenchCourseLessonsByDay, getFrenchTopicPractice, getJapaneseDailyGuide } from '@smartlingo/content';
+import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId, coursePracticeProgress,
+  type CourseDay, type CourseEvent, type JapanesePracticeResult, type JapanesePracticeTask, type LearningEvent, type OpenCourse } from '@smartlingo/domain';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, type AppRoute, type LessonStage } from '../app/routes';
 import { tabRoute } from '../app/useLearnerNavigation';
@@ -17,6 +17,7 @@ import { CourseCredits } from './CourseCredits';
 import { buildCourseLesson } from './courseLessonContent';
 import { CourseOutline } from './CourseOutline';
 import { CourseWriteStatus } from './CourseWriteStatus';
+import { JapaneseDailyGuide } from './JapaneseDailyGuide';
 import type { CourseLearningModel } from './useCourseLearning';
 
 type CourseRoute = Extract<AppRoute, { kind: 'course' }>;
@@ -49,6 +50,10 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const day = requestedDay ?? recommendedDay;
   const progress = useMemo(() => courseDayProgress(course, day, learning.events), [course, day, learning.events]);
   const lesson = useMemo(() => buildCourseLesson(course, day), [course, day]);
+  const guide = course.language === 'ja-JP' ? getJapaneseDailyGuide(day.id) : undefined;
+  const completedPracticeIds = useMemo(() => lesson.japanesePractice
+    ? [...coursePracticeProgress(course, day, lesson.japanesePractice.tasks, learning.events).completedIds]
+    : [], [course, day, lesson, learning.events]);
   const authored = frenchCourseLessonsByDay.get(day.id);
   const transfer = authored && getFrenchTopicPractice(authored);
   const listeningQuestion = useMemo(() => buildCourseListeningQuestion(day, course.language), [day, course.language]);
@@ -100,6 +105,11 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     learning.save([{ ...eventFields(day, activity), kind: 'choice', choiceId: outcome, result: outcome, supported: hints > 0 }], after);
   }
 
+  function recordPractice(task: JapanesePracticeTask, result: JapanesePracticeResult, supported: boolean) {
+    if (disabled || browseOnly || !lesson.japanesePractice?.tasks.some(authoredTask => authoredTask.id === task.id)) return;
+    learning.save([{ ...eventFields(day, 'sentence'), kind: 'practice', taskId: task.id, result, supported }]);
+  }
+
   const following = course.days[day.dayNumber];
   const nextLesson = following && {
     title: `Lesson ${following.dayNumber}: ${following.title}`,
@@ -139,10 +149,12 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       {outline}
       <View style={[layout.reader, sidebar && layout.splitReader]}>
         <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
+          extraDialogue={guide && <JapaneseDailyGuide guide={guide} />}
           extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
           timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{
           stage, progress: { wordsStudied: progress.lessonWordsStudied, pictureDone: progress.lessonPictureDone,
             sentenceDone: progress.lessonSentenceDone, completed: progress.completed },
+          practiceCompletedIds: completedPracticeIds, onPracticeResult: recordPractice,
           exitHref: routeHref(learn), disabled, browseOnly, nextLesson, listeningQuestion, dialoguePhoto: getDailyDialoguePhoto(day.id),
           stageHref: targetStage => routeHref({ ...route, dayId: day.id, sectionId: courseLessonStageId(targetStage) }),
           changeStage: (targetStage, snapshot) => select(day, targetStage, snapshot),

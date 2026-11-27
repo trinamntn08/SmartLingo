@@ -77,14 +77,17 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetE
 function KanaRecommendation({ alphabet, onOpen, disabled, compact }: {
   alphabet: ReturnType<typeof alphabetProgress>; onOpen: () => void; disabled: boolean; compact: boolean;
 }) {
-  const action = alphabet.completed === 0 ? 'Start Hiragana' : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
+  const action = !alphabet.completed && !alphabet.wordResumeId ? 'Start Hiragana'
+    : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
+  const description = !alphabet.next ? 'Review characters and word recall in any lesson.'
+    : alphabet.wordResumeId || !alphabet.next.characters.length ? 'Practise reading and recalling words.'
+    : 'Hear the characters, read their sounds and practise recognising them.';
   return <View style={[s.card, today.kanaCard, compact && today.compactKanaCard]}>
     <View style={today.kanaCopy}>
       <Text accessibilityRole="header" aria-level={2} style={[s.title, compact && s.compactTitle]}>
         {alphabet.next?.title ?? 'Review Japanese letters'}
       </Text>
-      <Text style={s.muted}>{alphabet.next ? 'Hear the characters, read their sounds and practise recognising them.'
-        : 'Practise recognising the characters in any hiragana or katakana row.'}</Text>
+      <Text style={s.muted}>{description}</Text>
     </View>
     <View style={s.row}><Button accent onPress={onOpen} href="/learn/ja/letters" disabled={disabled} trailingIcon="arrow-right">{action}</Button></View>
   </View>;

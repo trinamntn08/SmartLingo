@@ -9,6 +9,7 @@ import { BrowserClipPlayer } from './generated/player';
 import { JapaneseSpeechPlayer } from './japanese/player';
 import { japaneseSource } from './japanese/preferences';
 import { japaneseAudioStore, japaneseSpeechClient } from './japanese/runtime';
+import { BundledJapanesePlayer } from './japanese/bundled';
 
 export interface AudioPlayer {
   available(language?: TargetLanguage): boolean;
@@ -115,5 +116,24 @@ export class DeviceSpeechPlayer implements AudioPlayer {
 
 export const deviceAudio: AudioPlayer = new DeviceSpeechPlayer();
 const frenchAudio = new HybridSpeechPlayer(deviceAudio, generatedAudioStore, savedClipPlayer, generatedPreferences, reportAudioNotice);
-export const audio: AudioPlayer = new JapaneseSpeechPlayer(frenchAudio, deviceAudio, japaneseSpeechClient, japaneseAudioStore,
-  new BrowserClipPlayer(), japaneseSource, () => preferencesForLanguage('ja-JP').get().rate);
+const learnerAudio = new JapaneseSpeechPlayer(frenchAudio, deviceAudio, japaneseSpeechClient, japaneseAudioStore,
+  new BrowserClipPlayer(), japaneseSource, () => preferencesForLanguage('ja-JP').get().rate, new BundledJapanesePlayer());
+
+let playbackSequence = 0;
+
+export async function playAudio(text: string, language: TargetLanguage = 'fr-FR'): Promise<boolean> {
+  const sequence = ++playbackSequence;
+  try {
+    await learnerAudio.speak(text, language);
+    return sequence === playbackSequence;
+  } catch (error) {
+    if (sequence === playbackSequence) throw error;
+    return false;
+  }
+}
+
+export const audio: AudioPlayer = {
+  available: language => learnerAudio.available(language),
+  async speak(text, language) { await playAudio(text, language); },
+  stop() { playbackSequence++; learnerAudio.stop(); },
+};

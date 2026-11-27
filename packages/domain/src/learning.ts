@@ -3,10 +3,11 @@ import type { Lesson } from './content';
 import type { LearningBackup, RestoreReport } from './backup';
 import type { ReviewEvent } from './review-schema';
 import type { CourseEvent } from './course';
+import { normalizeJapaneseAnswer } from './japanese-practice';
 
 export const learningEventSchema = z.object({
   id: z.string().uuid(), lessonId: z.string().min(1), revision: z.number().int().positive(),
-  itemId: z.string().min(1), activity: z.enum(['vocabulary', 'picture', 'sentence', 'completion']),
+  itemId: z.string().min(1), activity: z.enum(['vocabulary', 'picture', 'sentence', 'completion', 'practice']),
   result: z.enum(['viewed', 'correct', 'almost', 'incorrect', 'completed']),
   hints: z.number().int().min(0), occurredAt: z.string().datetime({ offset: true }),
   automaticCompletion: z.literal(true).optional(),
@@ -50,7 +51,7 @@ function normalizePracticeAnswer(answer: string): string {
   const normalized = normalizeAnswer(answer);
   if (/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(normalized)) {
     // Japanese token controls add teaching spaces. Kana voicing and internal punctuation still matter.
-    return normalized.replace(/\s+/g, '').replace(/[。！？.!?]+$/, '');
+    return normalizeJapaneseAnswer(answer, 'verbatim');
   }
   return normalized;
 }
@@ -73,4 +74,13 @@ export function lessonProgress(lesson: Lesson, events: LearningEvent[]) {
     sentenceDone: relevant.some(event => event.activity === 'sentence' && event.result === 'correct'),
     completed: relevant.some(event => event.activity === 'completion' && event.result === 'completed'),
   };
+}
+
+export function completedJapanesePracticeIds(lesson: Lesson, events: readonly LearningEvent[]): string[] {
+  const practice = lesson.japanesePractice;
+  if (!practice) return [];
+  const successfulAttempts = events.filter(event => event.lessonId === lesson.id && event.revision === lesson.revision
+    && event.activity === 'practice' && (event.result === 'correct' || event.result === 'viewed'));
+  return practice.tasks.filter(task => successfulAttempts.some(event => event.itemId === task.id
+    && event.result === (task.mode === 'self' ? 'viewed' : 'correct'))).map(task => task.id);
 }

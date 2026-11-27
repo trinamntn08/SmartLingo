@@ -3,10 +3,12 @@ import type { OpenCourse, CourseEvent } from './course';
 import type { LearningEvent, NotebookEntry } from './learning';
 import type { TargetLanguage } from './languages';
 import type { ReviewEvent } from './review-schema';
+import type { JapanesePracticeTask } from './japanese-practice';
 
 export type LearningReportInput = {
   language: TargetLanguage; lessons: readonly Lesson[]; courses: readonly OpenCourse[];
   events: readonly LearningEvent[]; courseEvents: readonly CourseEvent[];
+  guidedPracticeByDay?: ReadonlyMap<string, readonly JapanesePracticeTask[]>;
   notebook: readonly NotebookEntry[]; reviewEvents: readonly ReviewEvent[];
   now: string; timeZone: string;
 };

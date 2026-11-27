@@ -206,7 +206,7 @@ export const discussionExpansions: JapaneseTopicExpansion[] = [
         line('Mori', '例えば、家に静かな場所がない人もいますね。', 'たとえば、いえにしずかなばしょがないひともいますね。', 'For example, some people do not have a quiet place at home.'),
         line('Alex', 'はい。つまり、個人の希望も聞く必要があります。', 'はい。つまり、こじんのきぼうもきくひつようがあります。', 'Yes. In other words, we need to ask about individual preferences too.'),
       ],
-      grammar: { title: 'Not necessarily is not never', explanation: '必ずしも is paired with a negative: 必ずしも便利ではありません, not necessarily convenient. 〜とは限りません means it is not always the case that…. These patterns qualify a broad claim; neither says the option is always bad. とって marks whose perspective is relevant.' },
+      grammar: { title: 'Not necessarily is not never', explanation: '必ずしも is paired with a negative: 必ずしも便利ではありません, not necessarily convenient. 〜とは限りません means it is not always the case that…. These patterns qualify a broad claim; neither says the option is always bad. にとって marks whose perspective is relevant: 全員にとって means for everyone.' },
       sentence: { prompt: 'Qualify the claim: “It is not necessarily convenient for everyone.”', tokens: ['便利ではありません。', '全員にとって', '必ずしも'], answers: ['全員にとって 必ずしも 便利ではありません。', '必ずしも 全員にとって 便利ではありません。'], hint: 'Keep 必ずしも with the negative ending 便利ではありません。', explanation: 'The negative qualification leaves room for different individual circumstances; it does not assert that nobody finds it convenient.' + spacing },
     },
     {

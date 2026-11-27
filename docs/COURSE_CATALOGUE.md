@@ -1,6 +1,6 @@
 # Course catalogue - review drafts
 
-Source inventory checked 2026-11-24 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Lessons opens topic study. Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
+Source inventory checked 2026-11-27 against the exported content modules. French and Japanese share Today, Learn, Review, Report and Profile after homepage language selection. In Learn, Lessons opens topic study. Listening & videos and Speaking provide sentence comprehension, external resources and guided dialogue. English meanings, examples and explanations remain visible.
 
 | Language | Topic banks | Short lessons | Vocabulary appearances | Canonical IDs | Exact written forms |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -13,11 +13,11 @@ These counts come from `lessons` and `japaneseLessons` in [the content entry poi
 
 [Japanese short lessons](../packages/content/src/japanese-lessons.ts) include 13 banks of 30 distinct entries across five six-entry lessons each. Four [starter lessons](../packages/content/src/topics/japanese.ts) cover everyday greetings and courtesy, first introductions, and ordering a drink at a café. They add five new senses and reuse 19 canonical vocabulary entries with their existing IDs. The combined inventory contains 8 foundation, 21 A1, 20 A2 and 20 B1-labelled task drafts. The [topic vocabulary record](curriculum/japanese-topic-vocabulary.md) lists the original 13 banks. Entries provide kana readings, English meanings, examples with readings and translations, and usage notes. Practice uses explicit meaning matching.
 
-The [Japanese daily course](../packages/content/src/japanese-course.ts) has 13 draft lessons with 78 vocabulary appearances, bilingual study/dialogue, two contextual choice activities and manual reflection per lesson. Guided-course progress is independent from the 69 library lessons. [Course sources](curriculum/japanese-course-sources.md) records provenance.
+The 13 guided Japanese drafts have 78 vocabulary appearances and three units. The shared reader provides bilingual dialogue and romaji, key phrases, grammar, listening, matching and sentence building. Additional guided tasks include typed replies, listening and self-review, with cumulative checks after lessons 5, 9 and 13. All 69 topic lessons offer separate practical tasks. [Course sources](curriculum/japanese-course-sources.md) · [Guided practice](../packages/content/src/japanese-daily-practice.ts) · [Topic practice](../packages/content/src/japanese-topic-practice.ts)
 
-Today recommends Hiragana before Katakana; Learn defaults to Japanese letters while vocabulary/topics remain freely accessible. [The alphabet module](../packages/content/src/japanese-alphabet.ts) contains 20 draft row lessons: 10 per script, 46 basic forms each (92 total). Recognition and explicitly saved row study have their own progress and resume; characters do not increase vocabulary-lesson/report totals. [Alphabet scope and sources](curriculum/japanese-alphabet-sources.md) describes the excluded advanced forms, handwriting and review needs.
+Today recommends Hiragana before Katakana. Learn opens Japanese letters and keeps topics freely accessible. There are 53 kana drafts, including the 20 original basic rows with 46 forms per script, plus word recall, sound patterns and reading checkpoints. Kana practice retains separate saved progress. [Alphabet scope and sources](curriculum/japanese-alphabet-sources.md)
 
-All Japanese text remains original AI-assisted material for owner and qualified Japanese review. Labels describe selected task demands; neither route claims complete CEFR coverage, JLPT equivalence or assessed proficiency. [Japanese audio](JAPANESE_AUDIO.md) documents optional device speech and the free local fallback; audio availability is not pronunciation approval.
+Japanese text remains original AI-assisted draft material for owner and qualified Japanese review. Labels describe selected task demands. Audio includes credited native-speaker recordings and authored synthetic clips, with device speech and free local synthesis also available. [Japanese audio](JAPANESE_AUDIO.md)
 
 ## French catalogue
 

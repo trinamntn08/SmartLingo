@@ -42,19 +42,13 @@ function Transcript({ turns, language, highlightedRole, study }: {
 
 function SpokenTurn({ turn, language }: { turn: DialogueTurn; language: TargetLanguage }) {
   const [voiceError, setVoiceError] = useState('');
-  const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
   const pronunciation = language === 'ja-JP' ? japaneseDialoguePronunciation.get(turn.target) : undefined;
   const reading = pronunciation ?? turn.reading;
   const readingLanguage = pronunciation ? 'ja-Latn' : language;
   const readingLanguageProps = Platform.OS === 'web' ? { lang: readingLanguage } : { accessibilityLanguage: readingLanguage };
   return <>
-    <View style={t.frenchTurn}>
-      <View style={t.frenchText}>
-        <Text {...languageProps} style={[s.body, t.frenchSentence]}>{turn.target}</Text>
-        {!!reading && <Text {...readingLanguageProps} style={s.muted}>{reading}</Text>}
-      </View>
-      <Speak language={language} text={turn.target} onError={setVoiceError} />
-    </View>
+    <Speak language={language} text={turn.target} onError={setVoiceError} wordStyle={[s.body, t.frenchSentence]} />
+    {!!reading && <Text {...readingLanguageProps} style={s.muted}>{reading}</Text>}
     {!!voiceError && <Text accessibilityRole="alert" style={[s.muted, t.voiceError]}>{voiceError}</Text>}
   </>;
 }
@@ -69,8 +63,6 @@ const t = StyleSheet.create({
   turn: { gap: 4, minWidth: 0, borderTopWidth: 1, borderColor: colors.line, paddingTop: 8 },
   role: { fontSize: 14, lineHeight: 20 },
   highlightedRole: { color: colors.ink, fontWeight: '600' },
-  frenchTurn: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 0 },
-  frenchText: { flex: 1, minWidth: 0 },
   frenchSentence: { fontWeight: '500' },
   voiceError: { color: colors.danger },
 });

@@ -2,12 +2,13 @@ import { useEffect, useMemo, useRef } from 'react';
 import type { CatalogueLevel, Lesson, TargetLanguage } from '@smartlingo/domain';
 import type { LearnerTab } from '../dashboard/LearnerNavigation';
 import type { LearnMode } from '../learn/LearningHub';
+import { findKanaTopic } from '../alphabet/kanaTopics';
 import { useNavigation, useVisitState } from './WebNavigation';
 import { topicRouteKey, type AppRoute } from './routes';
 
 export function tabRoute(tab: LearnerTab, language: TargetLanguage): AppRoute {
   switch (tab) {
-    case 'Learn': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
+    case 'Learn': return { kind: 'topics', language };
     case 'Slang': return language === 'fr-FR' ? { kind: 'slang', language } : { kind: 'unavailable' };
     case 'Today': return { kind: 'today', language };
     case 'Review': return { kind: 'review', language };
@@ -17,10 +18,10 @@ export function tabRoute(tab: LearnerTab, language: TargetLanguage): AppRoute {
 }
 
 export function learnRoute(mode: LearnMode, language: TargetLanguage, topic?: string): AppRoute {
+  const practiceTopic = language === 'ja-JP' && findKanaTopic(topic) ? undefined : topic;
   switch (mode) {
-    case 'Japanese letters': return language === 'ja-JP' ? { kind: 'letters', language } : { kind: 'topics', language };
-    case 'Listening & videos': return { kind: 'listening', language, topic };
-    case 'Speaking': return { kind: 'speaking', language, topic };
+    case 'Listening & videos': return { kind: 'listening', language, topic: practiceTopic };
+    case 'Speaking': return { kind: 'speaking', language, topic: practiceTopic };
     case 'Lessons': return { kind: 'topics', language, topic };
   }
 }
@@ -40,12 +41,14 @@ export function useLearnerNavigation({ preferred, active, blocked, onChooseLangu
   const topicKey = 'topic' in route ? route.topic : undefined;
   const selectedTopic = useMemo(() => {
     if (!topicKey) return lesson?.topic ?? null;
+    const kanaTopic = route.kind === 'topics' && language === 'ja-JP' ? findKanaTopic(topicKey) : undefined;
+    if (kanaTopic) return kanaTopic.name;
     const matches = new Set(lessons.filter(item => item.language === language && topicRouteKey(item.topic) === topicKey).map(item => item.topic));
     return matches.size === 1 ? [...matches][0]! : topicKey;
-  }, [lessons, language, topicKey, lesson?.topic]);
+  }, [lessons, language, route.kind, topicKey, lesson?.topic]);
   const tab: LearnerTab = route.kind === 'review' ? 'Review' : route.kind === 'profile' ? 'Profile' : route.kind === 'report' ? 'Report'
     : route.kind === 'slang' ? 'Slang' : route.kind === 'today' || route.kind === 'home' ? 'Today' : 'Learn';
-  const learnMode: LearnMode = route.kind === 'letters' ? 'Japanese letters' : route.kind === 'listening' ? 'Listening & videos'
+  const learnMode: LearnMode = route.kind === 'listening' ? 'Listening & videos'
     : route.kind === 'speaking' ? 'Speaking' : 'Lessons';
 
   useEffect(() => {

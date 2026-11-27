@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openCoursePilot, japaneseLessons, japaneseAlphabetLessons } from '@smartlingo/content';
+import { openCoursePilot, japaneseCourse, japaneseLessons } from '@smartlingo/content';
 import { openTopic } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -24,25 +24,15 @@ for (const language of ['French', 'Japanese'] as const) {
     await expect(page.getByRole('button', { name: /^Topic / })).toHaveCount(0);
     await expectContained(page);
     await next.getByRole('button').click();
-    if (language === 'French') {
-      const opening = openCoursePilot.days[0];
-      await expect(page.getByRole('heading', { name: `Lesson 1: ${opening.title}`, exact: true })).toBeVisible();
-      await expect(page.getByText('Step 1 of 6', { exact: true })).toBeVisible();
-      await expect(page.getByTestId('dialogue-french-transcript').locator('[lang="fr-FR"]').first()).toBeInViewport();
-      await expect(page.getByTestId('dialogue-english-transcript')).toBeVisible();
-      await button(page, 'Next').click();
-      await expect(page.getByText('Step 2 of 6', { exact: true })).toBeVisible();
-      await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
-    } else {
-      const first = japaneseAlphabetLessons[0]!;
-      const rowCount = japaneseAlphabetLessons.filter(row => row.script === first.script).length;
-      await expect(page.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
-      await expect(page.getByText(`Hiragana · Row 1 of ${rowCount} · Step 1 of 3`, { exact: true })).toBeVisible();
-      await expect(page.getByTestId(/^kana-row-/)).toHaveCount(0);
-      await button(page, 'Recognition practice').click();
-      await expect(page.getByText(`Hiragana · Row 1 of ${rowCount} · Step 2 of 3`, { exact: true })).toBeVisible();
-      await expect(button(page, 'Mark row studied')).toBeDisabled();
-    }
+    const opening = (language === 'French' ? openCoursePilot : japaneseCourse).days[0];
+    await expect(page.getByRole('heading', { name: `Lesson 1: ${opening.title}`, exact: true })).toBeVisible();
+    await expect(page.getByText('Step 1 of 6', { exact: true })).toBeVisible();
+    if (language === 'French') await expect(page.getByTestId('dialogue-french-transcript').locator('[lang="fr-FR"]').first()).toBeInViewport();
+    else await expect(page.getByTestId('dialogue-japanese-transcript')).toBeVisible();
+    await expect(page.getByTestId('dialogue-english-transcript')).toBeVisible();
+    await button(page, 'Next').click();
+    await expect(page.getByText('Step 2 of 6', { exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
     await expectContained(page);
     for (const destination of ['Today', 'Review', 'Profile']) {
       await button(page, destination).click();
@@ -51,7 +41,6 @@ for (const language of ['French', 'Japanese'] as const) {
       await expectContained(page);
     }
     await button(page, 'Learn').click();
-    if (language === 'Japanese') await button(page, 'Lessons').click();
     await expect(page.getByRole('button', { name: /^Topic / }).first()).toBeVisible();
     await expectContained(page);
     await openTopic(page, language === 'French' ? 'Restaurant' : japaneseLessons[0]!.topic);

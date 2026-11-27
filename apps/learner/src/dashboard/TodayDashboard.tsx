@@ -1,7 +1,7 @@
 import { useId, useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { LessonTopic, TargetLanguage } from '@smartlingo/domain';
-import { alphabetProgress, isAlphabetLessonId } from '../alphabet/progress';
+import { kanaTopics } from '../alphabet/kanaTopics';
 import { routeHref, topicRouteKey } from '../app/routes';
 import { useVisitState } from '../app/WebNavigation';
 import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
@@ -9,7 +9,6 @@ import { Icon } from '../ui/Icon';
 import { Button } from '../ui/controls';
 import { routePress } from '../ui/routePress';
 import { colors, designTokens as tokens, styles as s } from '../ui/theme';
-import type { LearningModel } from '../ui/useLearning';
 
 const starterTopicCount = 3;
 
@@ -17,33 +16,28 @@ interface TodayDashboardProps {
   language: TargetLanguage;
   courseLaunch: CourseLaunchProps;
   otherCourses: readonly CourseLaunchProps[];
-  alphabetEvents: LearningModel['events'];
   topics: readonly LessonTopic[];
   onTopic: (name: string) => void;
   onExplore: () => void;
   onListen: () => void;
   onSpeak: () => void;
-  onAlphabet: () => void;
 }
 
-export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetEvents, topics, onTopic, onExplore, onListen, onSpeak, onAlphabet }: TodayDashboardProps) {
+export function TodayDashboard({ language, courseLaunch, otherCourses, topics, onTopic, onExplore, onListen, onSpeak }: TodayDashboardProps) {
   const { width } = useWindowDimensions();
   const compact = width < tokens.layout.compactBreakpoint;
   const wide = width >= tokens.layout.sidebarBreakpoint;
   const [expanded, setExpanded] = useVisitState('today.study-options', false);
   const optionsId = useId();
-  const recent = [...alphabetEvents].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt));
   const japanese = language === 'ja-JP';
-  const recommendLetters = japanese && (!recent[0] || isAlphabetLessonId(recent[0].lessonId));
+  const studyTopics = [...(japanese ? kanaTopics : []), ...topics.slice(0, starterTopicCount)];
   const disabled = courseLaunch.disabled;
 
   return <View style={[today.screen, wide && today.wideScreen]}>
     <View style={[today.recommendation, wide && today.wideRecommendation]}>
       <Text accessibilityRole="header" aria-level={1} style={[s.hero, today.pageTitle, compact && today.compactTitle]}>Today</Text>
       <View testID="today-next-step" style={today.nextStep}>
-        {recommendLetters
-          ? <KanaRecommendation alphabet={alphabetProgress(alphabetEvents)} onOpen={onAlphabet} disabled={disabled} compact={compact} />
-          : <CourseLaunchCard {...courseLaunch} featured />}
+        <CourseLaunchCard {...courseLaunch} featured />
       </View>
     </View>
     <View style={wide ? today.sidebar : today.options}>
@@ -55,10 +49,10 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetE
             {[courseLaunch, ...otherCourses].map(option => <StudyLink key={option.course.id} label={option.course.title}
               title={japanese ? option.course.title.split(':')[0]! : option.course.title.replace(/^French /u, '')}
               href={option.href} onOpen={option.onOpen} disabled={option.loading || option.disabled}
-              current={!recommendLetters && option.course.id === courseLaunch.course.id} />)}
+              current={option.course.id === courseLaunch.course.id} />)}
           </StudyGroup>
           <StudyGroup title="Topics">
-            {topics.slice(0, starterTopicCount).map(topic => <StudyLink key={topic.name} title={topic.name}
+            {studyTopics.map(topic => <StudyLink key={topic.name} title={topic.name}
               href={routeHref({ kind: 'topics', language, topic: topicRouteKey(topic.name) })}
               onOpen={() => onTopic(topic.name)} disabled={disabled} />)}
             <StudyLink title="Browse all lessons" href={routeHref({ kind: 'topics', language })} onOpen={onExplore} disabled={disabled} />
@@ -66,30 +60,10 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, alphabetE
           <StudyGroup title="Practice">
             <StudyLink title="Listening & videos" href={routeHref({ kind: 'listening', language })} onOpen={onListen} disabled={disabled} />
             <StudyLink title="Speaking practice" href={routeHref({ kind: 'speaking', language })} onOpen={onSpeak} disabled={disabled} />
-            {japanese && <StudyLink title="Japanese letters" href="/learn/ja/letters" onOpen={onAlphabet} disabled={disabled} />}
           </StudyGroup>
         </View>}
       </View>
     </View>
-  </View>;
-}
-
-function KanaRecommendation({ alphabet, onOpen, disabled, compact }: {
-  alphabet: ReturnType<typeof alphabetProgress>; onOpen: () => void; disabled: boolean; compact: boolean;
-}) {
-  const action = !alphabet.completed && !alphabet.wordResumeId ? 'Start Hiragana'
-    : alphabet.next ? 'Continue Japanese letters' : 'Review Japanese letters';
-  const description = !alphabet.next ? 'Review characters and word recall in any lesson.'
-    : alphabet.wordResumeId || !alphabet.next.characters.length ? 'Practise reading and recalling words.'
-    : 'Hear the characters, read their sounds and practise recognising them.';
-  return <View style={[s.card, today.kanaCard, compact && today.compactKanaCard]}>
-    <View style={today.kanaCopy}>
-      <Text accessibilityRole="header" aria-level={2} style={[s.title, compact && s.compactTitle]}>
-        {alphabet.next?.title ?? 'Review Japanese letters'}
-      </Text>
-      <Text style={s.muted}>{description}</Text>
-    </View>
-    <View style={s.row}><Button accent onPress={onOpen} href="/learn/ja/letters" disabled={disabled} trailingIcon="arrow-right">{action}</Button></View>
   </View>;
 }
 
@@ -124,9 +98,6 @@ const today = StyleSheet.create({
   pageTitle: { fontSize: 48, lineHeight: 52 },
   compactTitle: { fontSize: 36, lineHeight: 40 },
   nextStep: { width: '100%', maxWidth: 768 },
-  kanaCard: { borderLeftWidth: 4, borderLeftColor: colors.yellow, boxShadow: 'none', padding: 32, gap: 20 },
-  compactKanaCard: { padding: 20, gap: 16 },
-  kanaCopy: { gap: 8 },
   sidebar: { width: tokens.layout.sidebarWidth, flexShrink: 0, paddingRight: 16, paddingTop: 4, borderRightWidth: 1, borderColor: colors.line },
   options: { gap: 12, maxWidth: 768 },
   hidden: { display: 'none' },

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { frenchCourses, japaneseCourse, japaneseAlphabetLessons, lessons, japaneseLessons } from '@smartlingo/content';
+import { frenchCourses, japaneseCourse, lessons, japaneseLessons } from '@smartlingo/content';
 import { groupLessonTopics } from '@smartlingo/domain';
 import { openCourseOutline, openTodayStudyOptions } from './learner-journeys';
 
@@ -21,7 +21,8 @@ for (const locale of ['fr', 'ja'] as const) {
     const options = studyNav(page);
     const disclosure = button(page, 'Browse study options');
     const titles = (french ? frenchCourses : [japaneseCourse]).map(course => course.title);
-    const suggestedTopics = groupLessonTopics(french ? lessons : japaneseLessons).slice(0, 3).map(topic => topic.name);
+    const suggestedTopics = [...(french ? [] : ['Hiragana', 'Katakana']),
+      ...groupLessonTopics(french ? lessons : japaneseLessons).slice(0, 3).map(topic => topic.name)];
     const course = options.getByRole('link', { name: titles[0], exact: true });
     const library = options.getByRole('link', { name: 'Browse all lessons', exact: true });
 
@@ -29,7 +30,7 @@ for (const locale of ['fr', 'ja'] as const) {
     await expect(nextStep(page).getByRole('img')).toHaveCount(0);
     await expect(recommendation).toHaveCount(1);
     await expect(recommendation).toBeInViewport();
-    await expect(recommendation).toHaveAccessibleName(french ? 'Start lesson' : 'Start Hiragana');
+    await expect(recommendation).toHaveAccessibleName('Start lesson');
     await recommendation.focus();
     await page.keyboard.press('Tab');
 
@@ -50,19 +51,15 @@ for (const locale of ['fr', 'ja'] as const) {
     }
     await expect(course).toBeFocused();
     await expect(course).toHaveCSS('outline-style', 'solid');
-    if (french) await expect(course).toHaveAttribute('aria-current', 'true');
-    await expect(options.getByRole('link')).toHaveCount(titles.length + 4 + (french ? 2 : 3));
+    await expect(course).toHaveAttribute('aria-current', 'true');
+    await expect(options.getByRole('link')).toHaveCount(titles.length + suggestedTopics.length + 3);
     for (const title of titles) await expect(options.getByRole('link', { name: title, exact: true })).toBeVisible();
     for (const title of suggestedTopics) await expect(options.getByRole('link', { name: title, exact: true })).toBeVisible();
     for (const link of await options.getByRole('link').all()) expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
     await recommendation.click();
-    if (french) await expect(page).toHaveURL(/\/course\/fr\//u);
-    else {
-      await expect(page).toHaveURL(/\/learn\/ja\/letters/u);
-      await expect(page.getByRole('heading', { name: japaneseAlphabetLessons[0]!.title, exact: true })).toBeVisible();
-    }
+    await expect(page).toHaveURL(new RegExp(`/course/${locale}/`));
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`/today/${locale}$`));
     await expect(options).toBeVisible();
@@ -89,7 +86,7 @@ for (const locale of ['fr', 'ja'] as const) {
 
     await button(page, 'Change language').click();
     await button(page, french ? 'Learn Japanese' : 'Learn French').click();
-    await expect(nextStep(page).getByRole('button')).toHaveAccessibleName(french ? 'Start Hiragana' : 'Start lesson');
+    await expect(nextStep(page).getByRole('button')).toHaveAccessibleName('Start lesson');
     if (compact) await expect(disclosure).toHaveAttribute('aria-expanded', 'false');
     await openTodayStudyOptions(page);
     await expect(options.getByRole('link', { name: french ? japaneseCourse.title : frenchCourses[1]!.title, exact: true })).toBeVisible();

@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { japaneseAlphabetLessons, japaneseAlphabetNotes, type JapaneseAlphabetLesson } from '@smartlingo/content';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
+import { routeHref, topicRouteKey } from '../app/routes';
 import { audio } from '../audio';
 import { Button } from '../ui/controls';
 import { Icon } from '../ui/Icon';
@@ -17,7 +18,7 @@ type DestinationFocus = 'study' | 'recognition' | 'words' | JapaneseAlphabetLess
 
 export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   const progress = alphabetProgress(model.events);
-  const { route, navigate } = useNavigation();
+  const { route, navigate, backTo } = useNavigation();
   const letters = route.kind === 'letters' ? route : undefined;
   const selected = japaneseAlphabetLessons.find(item => item.id === letters?.rowId);
   const [choosingRow, setChoosingRow] = useState(false);
@@ -49,6 +50,8 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
   }, [destinationFocus, chooserId, headingId, recognitionId, wordsId, setDestinationFocus]);
   if (!lesson) return <View style={s.card}><Text style={s.heading}>Japanese alphabet</Text><Text style={s.body}>Alphabet lessons are not available yet. You can still explore vocabulary and lessons.</Text></View>;
   const rows = japaneseAlphabetLessons.filter(item => item.script === lesson.script);
+  const topicName = lesson.script === 'hiragana' ? 'Hiragana' : 'Katakana';
+  const topic = { kind: 'topics', language: 'ja-JP', topic: topicRouteKey(topicName) } as const;
   const next = alphabetLearningPath[alphabetLearningPath.findIndex(item => item.id === lesson.id) + 1];
   function selectRow(id: string, afterSave = false, focus: DestinationFocus = 'study') {
     navigate({ kind: 'letters', language: 'ja-JP', rowId: id, mode: 'study' }, { afterSave, snapshot: { [destinationFocusKey]: focus } });
@@ -62,6 +65,10 @@ export function JapaneseAlphabet({ model }: { model: LearningModel }) {
     });
   }
   return <View testID="japanese-alphabet" style={layout.page}>
+    <View style={s.row}>
+      <Button compact quiet icon="arrow-left" href={routeHref(topic)} onPress={() => backTo(topic, previous => previous.kind === 'topics'
+        && previous.language === topic.language && previous.topic?.toLowerCase() === lesson.script, true)}>Back to {topicName}</Button>
+    </View>
     {letters?.rowId && !selected && <Text accessibilityLiveRegion="polite" style={s.muted}>That kana row is unavailable. The suggested row is shown below.</Text>}
     <AlphabetRow key={`${lesson.id}:${lesson.revision}`} headingId={headingId} recognitionId={recognitionId} wordsId={wordsId} lesson={lesson} model={model} progress={progress}
       completed={progress.completedIds.has(lesson.id)} onSave={saveRow} onNext={next ? () => selectRow(next.id) : undefined} />

@@ -4,7 +4,7 @@ The web learner includes bundled recordings for Japanese kana, vocabulary and co
 
 ## Readings and where to listen
 
-Choose **Learn Japanese** on the homepage, then use Today, Learn, Review, Report or Profile. **Learn > Japanese letters** shows basic kana with romaji readings and optional sound; **Learn > Vocabulary & lessons** shows Japanese words and examples with written kana readings. These written aids are bundled and remain available without the API. They are not a universal romaji/IPA pronunciation guide or pronunciation scoring.
+Choose **Learn Japanese** on the homepage. In **Learn → Lessons**, the **Hiragana** and **Katakana** topics show kana with romaji readings and optional sound. Vocabulary topics show Japanese words and examples with written kana readings. The written aids are bundled and available without the API.
 
 Activate a word or its speaker icon to play the Japanese target text. **Profile > Japanese audio** controls the source and Slow/Gentle/Normal playback speed. Select Free local voice to use saved local clips or the engine.
 

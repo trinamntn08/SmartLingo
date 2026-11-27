@@ -1,6 +1,6 @@
 # SmartLingo
 
-A local French and Japanese learning preview for English-speaking adults. Start French with everyday greetings, or Japanese with hiragana and katakana, then explore practical topics and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
+A local French and Japanese learning preview for English-speaking adults. Start or resume a guided lesson from Today, or explore practical topics and save personal vocabulary. Study meanings, examples, translations and explanations are visible directly.
 
 This checkout uses the Japanese-enabled shared learner. Android APK tooling and the older hosted release live on separate branches; [repository and branch state](docs/REPOSITORY_STATE.md) explains what each contains. Full native Android/iOS integration remains planned.
 
@@ -16,7 +16,7 @@ After choosing a language, **Today** offers one clear next activity and a compac
 
 **Learn** brings vocabulary and lessons together with **Listening & videos** and **Speaking**. Both French and Japanese offer sentence-meaning comprehension with replay/transcripts, guided dialogue role-play, and video/audio resource recommendations. Today links directly to listening and speaking. External resources open on the provider's site; the in-app activities use existing lesson text and shared speech. These temporary activities do not add assessed proficiency or saved lesson completions.
 
-Japanese starts with **Japanese letters**: 20 short draft groups teach basic Hiragana, then Katakana, with readings, audio, recognition practice and saved row continuation. Vocabulary stays freely available. [Alphabet scope and review limits](docs/curriculum/japanese-alphabet-sources.md).
+In Japanese **Learn → Lessons**, choose **Hiragana** or **Katakana**. The 53 draft lessons offer readings, audio, recognition, word recall and saved progress. [Alphabet scope and review limits](docs/curriculum/japanese-alphabet-sources.md)
 
 ## Run the preview
 

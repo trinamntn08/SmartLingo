@@ -1,4 +1,4 @@
-import { openKeyPhrases, openTopic, openProfileSection, openTodayStudyOptions } from './learner-journeys';
+import { openKanaFromToday, openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
@@ -69,11 +69,40 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('Japanese starts with hiragana, saves studied rows and restores them alongside existing vocabulary history', async ({ page, browser, baseURL }, info) => {
+test('Japanese Learn lists searchable kana topics and keeps the guided lesson as Today’s recommendation', async ({ page }) => {
+  await page.goto('/today/ja');
+  await page.getByTestId('today-next-step').getByRole('button', { name: 'Start lesson' }).click();
+  await button(page, 'Next').click();
+  await expect(page).toHaveURL(/\/lesson-vocabulary$/);
+  await button(page, 'Learn').click();
+  await expect(page).toHaveURL('/learn/ja');
+  await expect(button(page, 'Topic Hiragana')).toBeVisible();
+  await expect(button(page, 'Topic Katakana')).toBeVisible();
+  const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
+  await search.fill('Katakana');
+  await expect(button(page, 'Topic Hiragana')).toHaveCount(0);
+  await button(page, 'Foundations level').click();
+  await button(page, 'Topic Katakana').click();
+  await expect(page).toHaveURL('/learn/ja/topics/Katakana');
+  await expect(page.getByRole('heading', { name: 'Katakana', exact: true })).toBeVisible();
+  const katakana = japaneseAlphabetLessons.find(lesson => lesson.script === 'katakana')!;
+  await button(page, `Open ${katakana.title}`).click();
+  await expect(page).toHaveURL(`/learn/ja/letters/${katakana.id}/study`);
+  await button(page, 'Back to Katakana').click();
+  await expect(page).toHaveURL('/learn/ja/topics/Katakana');
+  await page.goto('/learn/ja/topics/katakana');
+  await expect(button(page, `Open ${katakana.title}`)).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Lesson levels', exact: true })).toHaveCount(0);
+  await button(page, 'Today').click();
+  const resume = page.getByTestId('today-next-step').getByRole('button', { name: 'Continue lesson' });
+  await resume.click();
+  await expect(page).toHaveURL(/\/course\/ja\/.*\/lesson-vocabulary$/);
+});
+
+test('Hiragana lessons save studied rows and restore them alongside existing vocabulary history', async ({ page, browser, baseURL }, info) => {
   test.setTimeout(90000);
   await page.goto('/');
-  await expect(page.getByTestId('today-next-step').getByRole('heading', { name: first.title, exact: true })).toBeVisible();
-  await button(page, 'Start Hiragana').click();
+  await openKanaFromToday(page, 'Hiragana', first.title);
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
   await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
@@ -98,7 +127,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
   await button(page, 'Today').click();
-  await (await openTodayStudyOptions(page)).getByRole('link', { name: 'Japanese letters', exact: true }).click();
+  await openKanaFromToday(page, 'Hiragana', first.title);
   await tryRow(page, first, true);
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
   await revealRows(page);
@@ -144,7 +173,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
     await button(restored, 'Reload learning').click();
     await expect(restored).toHaveURL(/\/profile\/ja$/);
     await button(restored, 'Today').click();
-    await button(restored, 'Continue Japanese letters').click();
+    await openKanaFromToday(restored, 'Hiragana', second.title);
     await revealRows(restored);
     await expect(restored.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
     expect(await events(restored)).toEqual(expect.arrayContaining(saved));
@@ -155,7 +184,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
 
 test('visual kana rows support keyboard choices at 320px without a dropdown or study lock', async ({ page }, info) => {
   await page.setViewportSize({ width: 320, height: 740 });
-  await page.goto('/'); await button(page, 'Start Hiragana').click();
+  await page.goto('/'); await openKanaFromToday(page, 'Hiragana', first.title);
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
   await revealRows(page);
@@ -189,7 +218,9 @@ test('visual kana rows support keyboard choices at 320px without a dropdown or s
 
 test('failed alphabet saving keeps the current row and retries the same event once', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
-  await page.goto('/'); await button(page, 'Learn').click();
+  await page.goto('/');
+  await openTopic(page, 'Hiragana');
+  await button(page, `Open ${first.title}`).click();
   await expect(page.getByTestId('japanese-alphabet')).toBeVisible();
   await revealRows(page);
   await tryRow(page, first);
@@ -238,6 +269,10 @@ test('a voiced kana pattern resumes word recall and saves only after checking bo
   await expect(button(page, 'Mark row studied')).toBeDisabled();
   await page.getByTestId(reading.id).getByRole('button', { name: reading.answer, exact: true }).click();
   await expect(page.getByText('1 of 2 tasks saved.', { exact: true })).toBeVisible();
+  await page.goto('/learn/ja/topics/Hiragana');
+  const resumeCard = page.getByTestId(`topic-lesson-${pattern.id}`);
+  await expect(resumeCard.getByText('Up next', { exact: true })).toBeVisible();
+  await expect(resumeCard.getByRole('button', { name: `Open ${pattern.title}` })).toHaveAttribute('href', `/learn/ja/letters/${pattern.id}/words`);
   await page.goto('/learn/ja/letters');
   await expect(page).toHaveURL(`/learn/ja/letters/${pattern.id}/words`);
   await expect(page.getByText('1 of 2 tasks saved.', { exact: true })).toBeVisible();

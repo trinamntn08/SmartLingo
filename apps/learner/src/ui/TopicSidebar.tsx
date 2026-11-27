@@ -1,13 +1,13 @@
 import { useId, useRef, useState, type ComponentRef, type RefObject } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import type { LessonTopic } from '@smartlingo/domain';
 import { Icon } from './Icon';
 import { colors, designTokens, styles as s } from './theme';
 
 type TopicTrigger = ComponentRef<typeof Pressable>;
 
 export function TopicSidebar({ topics, selected, onSelect, compact, disabled }: {
-  topics: LessonTopic[]; selected: string | null; onSelect: (name: string | null) => void; compact: boolean; disabled: boolean;
+  topics: readonly { name: string; lessons: readonly unknown[] }[]; selected: string | null;
+  onSelect: (name: string | null) => void; compact: boolean; disabled: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const contentId = useId();

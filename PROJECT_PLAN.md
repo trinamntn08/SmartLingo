@@ -157,8 +157,8 @@ Current learner navigation: homepage language choice, then Today, Learn, Review,
 
 Owner direction, 2026-11-22. Browser Back and Forward now cover learner screens and activity steps in the local web preview, with direct URLs for lessons and sections. [Browser navigation and validation plan](docs/plans/0045-web-navigation-and-lesson-links.md)
 
-- French Today recommends a guided lesson. Learn opens the same lesson and saved section and lets learners explore vocabulary, lessons, listening and speaking. Japanese retains its kana-first recommendation. At the end of a French guided lesson, relevant library lessons offer optional practice with a return to that study section. Review opens saved words.
-- Learn: Japanese letters when relevant, Lessons with topic cards and filters, Listening & videos and Speaking.
+- Today recommends a guided lesson in both languages. Learn opens the same lesson and saved section and lets learners explore vocabulary, lessons, listening and speaking. At the end of a French guided lesson, relevant library lessons offer optional practice with a return to that study section. Review opens saved words.
+- Learn offers Lessons with topic cards and filters, Listening & videos and Speaking. Hiragana and Katakana appear under Japanese Lessons as Foundations topics.
 - Topic: numbered lesson cards with useful outcomes and saved progress, plus direct continuation from the completed lesson.
 - Lesson: one main activity, progress, audio, practice hints, directly visible meanings/grammar/translations.
 - Vocabulary: article + word, visible meaning, example/translation, explanation, image, audio, notebook action.

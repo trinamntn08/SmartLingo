@@ -4,6 +4,7 @@ import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLa
 import { frenchCourses, getFrenchTopicPractice, japaneseCourse } from '@smartlingo/content';
 import { FrenchTransferPractice, frenchTopicPracticeMinutes } from '../ui/FrenchTransferPractice';
 import { isAlphabetLessonId } from '../alphabet/progress';
+import { findKanaTopic, kanaTopics } from '../alphabet/kanaTopics';
 import { useCatalogue } from '../content/useCatalogue';
 import type { CourseLaunchProps } from '../course/CourseLaunchCard';
 import { courseRecommendation } from '../course/courseRecommendation';
@@ -71,6 +72,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const wideToday = route.kind === 'today' && !choosing && width >= designTokens.layout.sidebarBreakpoint;
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
   const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
+  const kanaTopicSelected = language === 'ja-JP' && !!findKanaTopic(selectedTopic);
   const wideLibrary = showLibrary && width >= designTokens.layout.sidebarBreakpoint;
   const courses = language === 'ja-JP' ? japaneseCourses : frenchCourses;
   const reportState = useLearningReport({ language: language ?? 'fr-FR', lessons, courses });
@@ -96,7 +98,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   const activeCourse = route.kind === 'course' ? recommendations.find(item => item.course.id === route.courseId) : undefined;
   const missingDestination = route.kind === 'unavailable' || (route.kind === 'lesson' && !lesson)
     || (route.kind === 'course' && !activeCourse)
-    || (route.kind === 'topics' && !!selectedTopic && !topics.some(topic => topic.name === selectedTopic));
+    || (route.kind === 'topics' && !!selectedTopic && !kanaTopicSelected && !topics.some(topic => topic.name === selectedTopic));
   const courseVisible = route.kind === 'course' && !missingDestination && !model.loading && !catalogue.loading;
 
   function unavailable() {
@@ -129,16 +131,16 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
       recommendedDay={activeCourse.day} learning={courseLearning} model={model} />;
     if (route.kind === 'slang') return <SlangCatalogue model={model} />;
     if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch} otherCourses={otherCourses}
-      alphabetEvents={model.events} topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}
+      topics={topics} onTopic={selectTopic} onExplore={() => openLearnMode('Lessons')}
       onListen={() => openLearnMode('Listening & videos')} onSpeak={() => openLearnMode('Speaking')}
-      onAlphabet={() => openLearnMode('Japanese letters')}
     />;
     if (tab === 'Report') return <LearningReportScreen
       language={targetLanguage} state={reportState} onTopic={selectTopic}
       onExplore={() => openLearnMode('Lessons')} onReview={() => navigate('Review')}
     />;
     if (tab === 'Learn') return <LearningHub
-      language={targetLanguage} lessons={lessons} model={model} mode={learnMode} courseLaunch={courseLaunch} otherCourses={otherCourses}
+      language={targetLanguage} lessons={lessons} model={model} mode={learnMode} kanaLesson={route.kind === 'letters'}
+      courseLaunch={courseLaunch} otherCourses={otherCourses}
       onMode={selectLearnMode} selectedTopic={selectedTopic} onSelectTopic={selectTopic}
       onOpen={openLesson} disabled={switchingBlocked} active={active} catalogueSearch={catalogueSearch}
       topics={topics} topicNavigation={showLibrary && !wideLibrary && renderTopicNavigation(true)}
@@ -151,7 +153,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   }
 
   function renderTopicNavigation(compact: boolean) {
-    return <TopicSidebar topics={topics} selected={selectedTopic} onSelect={selectTopic} disabled={switchingBlocked} compact={compact} />;
+    return <TopicSidebar topics={language === 'ja-JP' ? [...kanaTopics, ...topics] : topics}
+      selected={selectedTopic} onSelect={selectTopic} disabled={switchingBlocked} compact={compact} />;
   }
 
   return <View style={s.app}>

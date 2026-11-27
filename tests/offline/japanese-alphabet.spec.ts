@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseAlphabetLessons } from '@smartlingo/content';
-import { openProfileSection } from '../e2e/learner-journeys';
+import { openKanaFromToday, openProfileSection, openTodayStudyOptions } from '../e2e/learner-journeys';
 
 test.beforeEach(async ({ request, context }) => {
   await request.post('/__test__/mode');
@@ -12,10 +12,10 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   const apiRequests: string[] = [];
   await context.route('**/127.0.0.1:3001/**', route => { apiRequests.push(route.request().url()); return route.abort(); });
   await context.addInitScript(() => Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: undefined }));
-  await page.goto('/'); await page.getByRole('button', { name: 'Start Hiragana', exact: true }).click();
+  const first = japaneseAlphabetLessons[0]!;
+  await page.goto('/'); await openKanaFromToday(page, 'Hiragana', first.title);
   const alphabet = page.getByTestId('japanese-alphabet');
   await alphabet.getByRole('button', { name: 'Recognition practice', exact: true }).click();
-  const first = japaneseAlphabetLessons[0]!;
   for (const [index, character] of first.characters.entries()) {
     await alphabet.getByRole('button', { name: `Choose ${character.kana}`, exact: true }).click();
     if (index < first.characters.length - 1) await alphabet.getByRole('button', { name: 'Next character', exact: true }).click();
@@ -31,7 +31,11 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   apiRequests.length = 0;
   await context.setOffline(true); await page.close();
   const cold = await context.newPage(); await cold.goto(baseURL!);
-  await cold.getByRole('button', { name: 'Continue Japanese letters', exact: true }).click();
+  await (await openTodayStudyOptions(cold)).getByRole('link', { name: 'Hiragana', exact: true }).click();
+  const second = japaneseAlphabetLessons[1]!;
+  await expect(cold.getByTestId(`topic-lesson-${first.id}`).getByText('Completed', { exact: true })).toBeVisible();
+  await expect(cold.getByTestId(`topic-lesson-${second.id}`).getByText('Up next', { exact: true })).toBeVisible();
+  await cold.getByRole('button', { name: `Open ${second.title}`, exact: true }).click();
   const letters = cold.getByTestId('japanese-alphabet');
   await letters.getByRole('button', { name: 'Choose another row', exact: true }).click();
   await expect(letters.getByRole('combobox')).toHaveCount(0);

@@ -15,7 +15,7 @@ These counts come from `lessons` and `japaneseLessons` in [the content entry poi
 
 The 13 guided Japanese drafts have 78 vocabulary appearances and three units. The shared reader provides bilingual dialogue and romaji, key phrases, grammar, listening, matching and sentence building. Additional guided tasks include typed replies, listening and self-review, with cumulative checks after lessons 5, 9 and 13. All 69 topic lessons offer separate practical tasks. [Course sources](curriculum/japanese-course-sources.md) · [Guided practice](../packages/content/src/japanese-daily-practice.ts) · [Topic practice](../packages/content/src/japanese-topic-practice.ts)
 
-Today recommends Hiragana before Katakana. Learn opens Japanese letters and keeps topics freely accessible. There are 53 kana drafts, including the 20 original basic rows with 46 forms per script, plus word recall, sound patterns and reading checkpoints. Kana practice retains separate saved progress. [Alphabet scope and sources](curriculum/japanese-alphabet-sources.md)
+Today recommends the current guided lesson. Learn lists Hiragana and Katakana as Foundations topics with 53 kana drafts, including the 20 original basic rows with 46 forms per script, plus word recall, sound patterns and reading checkpoints. Kana practice retains separate saved progress. [Alphabet scope and sources](curriculum/japanese-alphabet-sources.md)
 
 Japanese text remains original AI-assisted draft material for owner and qualified Japanese review. Labels describe selected task demands. Audio includes credited native-speaker recordings and authored synthetic clips, with device speech and free local synthesis also available. [Japanese audio](JAPANESE_AUDIO.md)
 

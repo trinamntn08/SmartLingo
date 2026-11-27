@@ -12,12 +12,33 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
   language: TargetLanguage; lessons: readonly Lesson[]; visibleLessons: readonly Lesson[]; events: LearningEvent[];
   headingId: string; progressAvailable: boolean; onOpen: (lesson: Lesson) => void; compact: boolean; disabled: boolean; afterFirst?: ReactNode;
 }) {
+  const cards = lessons.map(lesson => {
+    const { completed, viewedIds, pictureDone, sentenceDone } = lessonProgress(lesson, events);
+    const duration = getFrenchTopicPractice(lesson) ? frenchTopicPracticeMinutes : `${lesson.durationMinutes} min`;
+    return {
+      id: lesson.id, title: lesson.subtitle, outcome: lesson.outcome,
+      metadata: `${duration} · ${lesson.level === 'foundation' ? 'Foundations' : lesson.level} · ${lesson.status === 'published' ? 'Published' : 'Draft'}`,
+      completed, started: viewedIds.size > 0 || pictureDone || sentenceDone,
+      href: routeHref({ kind: 'lesson', language, lessonId: lesson.id }), onOpen: () => onOpen(lesson),
+    };
+  });
+  return <TopicLessonCardList lessons={cards} visibleIds={new Set(visibleLessons.map(lesson => lesson.id))}
+    headingId={headingId} progressAvailable={progressAvailable} compact={compact} disabled={disabled} afterFirst={afterFirst} />;
+}
+
+interface TopicLessonCard {
+  id: string; title: string; outcome: string; metadata: string; completed: boolean; started: boolean;
+  href: string; onOpen: () => void;
+}
+
+export function TopicLessonCardList({ lessons, visibleIds, headingId, progressAvailable, compact, disabled, afterFirst, resumeId }: {
+  lessons: readonly TopicLessonCard[]; visibleIds: ReadonlySet<string>; headingId: string;
+  progressAvailable: boolean; compact: boolean; disabled: boolean; afterFirst?: ReactNode; resumeId?: string;
+}) {
   const [gridWidth, setGridWidth] = useState(0);
-  const visibleIds = new Set(visibleLessons.map(lesson => lesson.id));
   const leadId = afterFirst ? lessons.find(lesson => visibleIds.has(lesson.id))?.id : undefined;
-  const progress = lessons.map(lesson => lessonProgress(lesson, events));
-  const completeCount = progress.filter(item => item.completed).length;
-  const nextIndex = progressAvailable ? progress.findIndex(item => !item.completed) : -1;
+  const completeCount = lessons.filter(item => item.completed).length;
+  const nextId = progressAvailable ? resumeId ?? lessons.find(item => !item.completed)?.id : undefined;
   const gap = tokens.space.md;
   const preferredWidth = 260;
   const columns = compact ? 1 : Math.max(1, Math.min(3, lessons.length, Math.floor((gridWidth + gap) / (preferredWidth + gap))));
@@ -25,9 +46,8 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
 
   const cards = lessons.flatMap((lesson, index) => {
     if (!visibleIds.has(lesson.id)) return [];
-    const { completed, viewedIds, pictureDone, sentenceDone } = progress[index];
-    const started = viewedIds.size > 0 || pictureDone || sentenceDone;
-    const next = index === nextIndex;
+    const { completed, started } = lesson;
+    const next = lesson.id === nextId;
     const status = completed ? 'Completed' : next ? 'Up next' : started ? 'In progress' : undefined;
     return <View key={lesson.id} testID={`topic-lesson-${lesson.id}`} role="listitem"
       style={[s.card, layout.lesson, compact && layout.compactLesson, { width: lesson.id === leadId ? '100%' : cardWidth }, next && layout.nextLesson]}>
@@ -38,15 +58,14 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
           <Text style={[layout.statusText, completed && layout.completedStatus]}>{status}</Text>
         </View>}
       </View>
-      <Text accessibilityRole="header" aria-level={3} style={layout.lessonTitle}>{lesson.subtitle}</Text>
+      <Text accessibilityRole="header" aria-level={3} style={layout.lessonTitle}>{lesson.title}</Text>
       <Text style={layout.outcome}>{lesson.outcome}</Text>
       <View style={[layout.footer, compact && next && layout.mobileAction]}>
-        <Button compact={!next} accent={next} trailingIcon="arrow-right" label={`Open ${lesson.subtitle}`} disabled={disabled}
-          href={routeHref({ kind: 'lesson', language, lessonId: lesson.id })} onPress={() => onOpen(lesson)}>
+        <Button compact={!next} accent={next} trailingIcon="arrow-right" label={`Open ${lesson.title}`} disabled={disabled}
+          href={lesson.href} onPress={lesson.onOpen}>
           {completed ? 'Revisit lesson' : started ? 'Continue lesson' : 'Start lesson'}
         </Button>
-        <Text style={layout.metadata}>{getFrenchTopicPractice(lesson) ? frenchTopicPracticeMinutes : `${lesson.durationMinutes} min`}
-          {' · '}{lesson.level === 'foundation' ? 'Foundations' : lesson.level} · {lesson.status === 'published' ? 'Published' : 'Draft'}</Text>
+        <Text style={layout.metadata}>{lesson.metadata}</Text>
       </View>
     </View>;
   });
@@ -62,8 +81,8 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
         {completeCount} of {lessons.length} complete
       </Text>}
     </View>
-    {visibleLessons.length > 0 && visibleLessons.length < lessons.length && <Text accessibilityLiveRegion="polite" style={s.muted}>
-      Showing {visibleLessons.length} of {lessons.length} lessons
+    {visibleIds.size > 0 && visibleIds.size < lessons.length && <Text accessibilityLiveRegion="polite" style={s.muted}>
+      Showing {visibleIds.size} of {lessons.length} lessons
     </Text>}
     <View testID="topic-lesson-cards" onLayout={event => setGridWidth(event.nativeEvent.layout.width)} style={{ gap }}>
       {afterFirst ? <>{list(cards.slice(0, 1))}{afterFirst}{list(cards.slice(1))}</> : list(cards)}

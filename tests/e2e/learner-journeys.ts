@@ -12,6 +12,12 @@ export async function openTodayStudyOptions(page: Page) {
   return page.getByRole('navigation', { name: 'Study options', exact: true });
 }
 
+export async function openKanaFromToday(page: Page, script: 'Hiragana' | 'Katakana', lessonTitle: string) {
+  const options = await openTodayStudyOptions(page);
+  await options.getByRole('link', { name: script, exact: true }).click();
+  await page.getByRole('button', { name: `Open ${lessonTitle}`, exact: true }).click();
+}
+
 export async function openKeyPhrases(page: Page) {
   await page.getByRole('button', { name: /^(?:Review key phrases|Next)$/ }).first().click();
 }
@@ -36,7 +42,7 @@ export async function openCourseOutline(panel: Locator) {
   await expect(panel.getByTestId('course-outline')).toBeVisible();
 }
 
-/** Browse a topic through Learn, including the Japanese letters-first entry. */
+/** Browse a topic through Learn. */
 export async function openTopic(page: Page, name: string) {
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   const lessons = page.getByRole('button', { name: 'Lessons', exact: true });

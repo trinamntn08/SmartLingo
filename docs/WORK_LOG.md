@@ -2,6 +2,13 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Material-first learner redesign
+
+- Verified all 69 live origin heads against the fetched refs. The original clean checkout (2249086) predates Japanese. The task branch starts at afe9d7e on the Japanese curriculum lineage, which contains the screenshot's exact study and recognition flows. The older hosted branch has a different deployment target.
+- Rebuilt the kana reader around the lesson title, wrapping character grid, bundled speakers and one Practice action. Word examples and both languages’ vocabulary lists scroll vertically. Optional pronunciation, script selection and progress controls follow the material. Simplified the five learner destinations and shared primary controls.
+- Browser inspection covered vowels, long vowels, contracted kana, a long vocabulary translation and all five destinations at 320, 390, 430 and 1440 pixels. All 36 page/width combinations fit horizontally and scrolled to the end. All five vowels and Practice fitted at 320×568. Additional inspection covered the five tabs in both languages through desktop. Keyboard activation played all five bundled vowel clips. Each speaker exposed visible focus and a 48px touch target. Completing recognition advanced to the next row and persisted after reload. [390px screenshot](screenshots/material-first-vowels.png)
+- Verification ran with Node 24.19.0, npm 11.17.0 and system Chromium 156. The final offline export contains 656 files. Repository checks, TypeScript, 34 tooling tests, 310 application tests and eight Android browser contracts passed. Across the full desktop and phone browser run and targeted reruns, 253 cases passed with one intentional skip. All 34 cold-offline cases passed. The reruns used the completed export and the current topic and script-chooser assertions.
+
 ## 2026-11-26 Redesign the Japanese learning experience
 
 - Request. Audit and implement the full Japanese curriculum, preserve learner access and verify the normal journeys.

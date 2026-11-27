@@ -12,8 +12,8 @@ export function AudioIconButton({ playing, label, stopLabel = 'Stop audio', onPr
     style={({ pressed }) => ({
       alignSelf: 'flex-start', alignItems: 'center', justifyContent: 'center',
       minWidth: designTokens.control.minimumTarget, minHeight: designTokens.control.minimumTarget,
-      borderRadius: designTokens.radius.pill, borderWidth: 2, borderColor: focused ? colors.focusRing : 'transparent',
-      backgroundColor: pressed ? colors.sand : colors.sageTint,
+      borderRadius: designTokens.control.minimumTarget / 2, borderWidth: 2, borderColor: focused ? colors.focusRing : 'transparent',
+      backgroundColor: pressed || playing ? colors.green : 'transparent',
     })}>
     <Icon name={playing ? 'stop' : 'speaker'} color={colors.audioIcon} size={designTokens.control.audioIconSize} />
   </Pressable>;

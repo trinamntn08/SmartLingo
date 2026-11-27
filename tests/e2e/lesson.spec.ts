@@ -73,8 +73,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(button(page, /Next word/)).toHaveCount(0);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
-  if ((page.viewportSize()?.width ?? 600) < 600) await page.getByTestId('lesson-step-dialogue').click();
-  else await button(page, 'Read conversation').click();
+  await page.getByTestId('lesson-step-dialogue').click();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
@@ -131,8 +130,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByText('Lesson complete', { exact: true })).toBeVisible();
   await button(page, 'Revisit the words').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();
-  if ((page.viewportSize()?.width ?? 600) < 600) await expect(button(page, 'Save bonjour')).toHaveAttribute('aria-pressed', 'true');
-  else await expect(button(page, 'Save bonjour')).toContainText('In notebook');
+  await expect(button(page, 'Save bonjour')).toHaveAttribute('aria-pressed', 'true');
   const notes = await storedRows(page, 'notebook');
   expect(notes).toHaveLength(1);
   expect(notes[0].meaning).toBe('My morning greeting');
@@ -163,8 +161,7 @@ test('stale tab capture preserves another tab’s notebook edit', async ({ page,
   await expect(page.getByText('Changes saved in this browser.')).toBeVisible();
   await button(stale, 'Save bonjour').click();
   await expect(button(stale, 'Save bonjour')).toBeDisabled();
-  if ((stale.viewportSize()?.width ?? 600) < 600) await expect(button(stale, 'Save bonjour')).toHaveAttribute('aria-pressed', 'true');
-  else await expect(button(stale, 'Save bonjour')).toContainText('In notebook');
+  await expect(button(stale, 'Save bonjour')).toHaveAttribute('aria-pressed', 'true');
   await button(stale, 'Review').click();
   await expect(stale.getByText('Keep my personal note')).toBeVisible();
   expect((await storedRows(page, 'notebook'))[0].meaning).toBe('Keep my personal note');
@@ -220,7 +217,7 @@ test('speaker icon plays and stops through keyboard controls', async ({ page }) 
   const speaker = button(page, 'Listen to bonjour');
   await speaker.focus();
   await page.keyboard.press('Enter');
-  await expect(button(page, 'Stop audio')).toBeVisible();
+  await expect(button(page, 'Stop audio for bonjour')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.spoken)).toBe('bonjour');
   await page.evaluate(() => { delete document.documentElement.dataset.stopped; });
   await page.keyboard.press('Space');

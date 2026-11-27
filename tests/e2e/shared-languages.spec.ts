@@ -41,7 +41,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     const card = page.getByTestId(`vocabulary-${word.id}`);
     await expect(card.getByRole('heading', { name: word.target, exact: true })).toBeVisible();
     await expect(card.getByText(word.meaning, { exact: true })).toBeVisible();
-    await expect(card.getByText(word.exampleMeaning, { exact: true })).toBeVisible();
+    await expect(page.getByTestId(`example-${word.id}`).getByText(word.exampleMeaning, { exact: true })).toBeVisible();
     await expect(card.getByRole('button', { name: `Listen to ${word.target}`, exact: true })).toBeVisible();
     if (word.reading) await expect(card.getByText(word.reading, { exact: true }).first()).toBeVisible();
     await button(page, `Save ${word.target}`).click();

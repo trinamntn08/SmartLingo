@@ -32,7 +32,7 @@ async function events(page: Page): Promise<LearningEvent[]> {
 
 async function tryRow(page: Page, row: JapaneseAlphabetLesson, wrongFirst = false) {
   const alphabet = page.getByTestId('japanese-alphabet');
-  await alphabet.getByRole('button', { name: 'Recognition practice', exact: true }).click();
+  await alphabet.getByRole('button', { name: 'Practice', exact: true }).click();
   const practice = alphabet.getByTestId('kana-recognition');
   for (const [index, character] of row.characters.entries()) {
     await expect(practice.getByRole('heading')).toHaveText('Which kana matches the sound?');
@@ -66,12 +66,11 @@ test.beforeEach(async ({ page }) => {
 test('Japanese starts with hiragana, saves studied rows and restores them alongside existing vocabulary history', async ({ page, browser, baseURL }, info) => {
   test.setTimeout(90000);
   await page.goto('/');
-  const startingTitle = (page.viewportSize()?.width ?? 600) < 600 ? first.title : 'Start with Japanese letters';
-  await expect(page.getByTestId('today-next-step').getByRole('heading', { name: startingTitle, exact: true })).toBeVisible();
+  await expect(page.getByTestId('today-next-step').getByRole('heading', { name: 'Vowels', exact: true })).toBeVisible();
   await button(page, 'Start Hiragana').click();
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
-  await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'Vowels', exact: true })).toBeVisible();
   await revealRows(page);
   await expect(alphabet.getByTestId(`kana-row-${first.id}`)).toHaveAttribute('aria-selected', 'true');
   for (const character of first.characters) {
@@ -95,7 +94,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
   await button(page, 'Learn').click();
-  await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'Vowels', exact: true })).toBeVisible();
   await tryRow(page, first, true);
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
   await revealRows(page);
@@ -110,18 +109,22 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   expect(saved.filter(event => event.lessonId === first.id)).toEqual([expect.objectContaining({ revision: 1, itemId: `${first.id}.completion`, activity: 'completion', result: 'completed', hints: 0 })]);
   for (let step = 0; step <= first.characters.length; step++) await page.goBack();
   await expect(page).toHaveURL(url => url.pathname === `/learn/ja/letters/${first.id}/study`);
-  await expect(alphabet.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'Vowels', exact: true })).toBeVisible();
   expect(await events(page)).toEqual(saved);
   for (let step = 0; step <= first.characters.length; step++) await page.goForward();
-  await expect(alphabet.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'K row', exact: true })).toBeVisible();
   await page.reload();
   await revealRows(page);
   await expect(alphabet.getByTestId(`kana-row-${second.id}`)).toHaveAttribute('aria-selected', 'true');
   await revealRows(page);
-  await alphabet.getByRole('button', { name: /Katakana$/, exact: false }).click();
-  await expect(alphabet.getByRole('heading', { name: japaneseAlphabetLessons[10]!.title, exact: true })).toBeVisible();
+  const studyUrl = page.url();
+  const katakana = alphabet.getByRole('button', { name: 'Katakana', exact: true });
+  await katakana.focus();
+  await katakana.press('Enter');
+  await expect(katakana).toHaveAttribute('aria-selected', 'true');
+  await expect(page).toHaveURL(studyUrl);
   await alphabet.getByTestId(`kana-row-${japaneseAlphabetLessons[19]!.id}`).click();
-  await expect(alphabet.getByRole('heading', { name: japaneseAlphabetLessons[19]!.title, exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'Wa, o and nasal n', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('japanese-letters.png'), fullPage: false });
   await button(page, 'Profile').click();
@@ -150,6 +153,31 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   } finally { await fresh.close(); }
 });
 
+test('the five vowels, speakers and Practice fit the first phone view', async ({ page }) => {
+  await page.goto(`/learn/ja/letters/${first.id}/study`);
+  const alphabet = page.getByTestId('japanese-alphabet');
+  const grid = alphabet.getByTestId('kana-grid');
+  const practice = alphabet.getByRole('button', { name: 'Practice', exact: true });
+  for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 430, height: 932 }]) {
+    await page.setViewportSize(viewport);
+    await expect(alphabet.getByRole('heading', { name: 'Vowels', exact: true })).toBeInViewport({ ratio: 1 });
+    for (const character of first.characters) {
+      await expect(grid.getByText(character.kana, { exact: true })).toBeInViewport({ ratio: 1 });
+      await expect(grid.getByRole('button', { name: `Listen to ${character.kana}`, exact: true })).toBeInViewport({ ratio: 1 });
+    }
+    await expect(practice).toHaveCount(1);
+    await expect(practice).toBeInViewport({ ratio: 1 });
+    expect(await grid.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+  }
+  const tip = alphabet.getByRole('button', { name: 'Pronunciation tip', exact: true });
+  await expect(tip).toHaveAttribute('aria-expanded', 'false');
+  await tip.click();
+  await expect(alphabet.getByText(/Keep each vowel short and steady/)).toBeVisible();
+  await tip.click();
+  await practice.click();
+  await expect(alphabet.getByTestId('kana-recognition')).toBeVisible();
+});
+
 test('visual kana rows support keyboard choices at 320px without a dropdown or study lock', async ({ page }, info) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto('/'); await button(page, 'Start Hiragana').click();
@@ -164,17 +192,16 @@ test('visual kana rows support keyboard choices at 320px without a dropdown or s
   await expect(next).toHaveAccessibleName(/Explore row.*Not studied$/);
   await expect(current).toHaveAttribute('aria-selected', 'true');
   await expect(current).toContainText('Current row');
-  await expect(current).toContainText('Not studied');
-  await expect(next).toContainText('Explore row');
   await current.focus(); await page.keyboard.press('Tab');
   await expect(next).toBeFocused(); await page.keyboard.press('Enter');
+  await expect(alphabet.getByRole('heading', { name: 'K row', exact: true })).toBeVisible();
+  await revealRows(page);
   await expect(next).toHaveAttribute('aria-selected', 'true');
   await expect(current).toHaveAttribute('aria-selected', 'false');
   await expect(current).toHaveAccessibleName(/Suggested next.*Not studied$/);
   await expect(next).toHaveAccessibleName(/Current row.*Not studied$/);
-  await expect(alphabet.getByRole('heading', { name: second.title, exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'K row', exact: true })).toBeVisible();
   await expect(next).toContainText('Current row');
-  await expect(next).toContainText('Not studied');
   expect(await events(page)).toHaveLength(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('kana-visual-path-320px.png'), fullPage: false });
@@ -227,27 +254,27 @@ test('kana word recall preserves script distinctions, resumes stable tasks and g
   await expect(save).toBeDisabled();
   const reading = alphabet.getByTestId(`${lesson.id}.read`);
   await reading.getByRole('button', { name: 'postage stamp', exact: true }).click();
-  await expect(alphabet.getByText('1 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(alphabet.getByText('1 of 3 tasks saved.', { exact: true })).toBeVisible();
   const typed = alphabet.getByTestId(`${lesson.id}.type`);
   const answer = typed.getByRole('textbox', { name: 'Type your answer', exact: true });
   await answer.fill('kitte'); await typed.getByRole('button', { name: 'Check answer', exact: true }).click();
   await expect(typed.getByText(/Use your Japanese keyboard/)).toBeVisible();
-  await expect(alphabet.getByText('1 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(alphabet.getByText('1 of 3 tasks saved.', { exact: true })).toBeVisible();
   await answer.fill('きつて'); await typed.getByRole('button', { name: 'Check answer', exact: true }).click();
   await expect(save).toBeDisabled();
   await answer.fill('きって');
   await answer.dispatchEvent('compositionstart'); await answer.press('Enter');
-  await expect(alphabet.getByText('1 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(alphabet.getByText('1 of 3 tasks saved.', { exact: true })).toBeVisible();
   await answer.dispatchEvent('compositionend'); await answer.press('Enter');
-  await expect(alphabet.getByText('2 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(alphabet.getByText('2 of 3 tasks saved.', { exact: true })).toBeVisible();
   await page.reload();
-  await expect(alphabet.getByRole('button', { name: 'Read words & type', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await expect(alphabet.getByText('2 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(alphabet.getByRole('heading', { name: 'Word recall', exact: true })).toBeVisible();
+  await expect(alphabet.getByText('2 of 3 tasks saved.', { exact: true })).toBeVisible();
   await expect(save).toBeDisabled();
   const listening = alphabet.getByTestId(`${lesson.id}.listen`);
   await listening.getByRole('button', { name: 'Show transcript', exact: true }).click();
   await listening.getByRole('button', { name: 'きって · postage stamp · 3 beats', exact: true }).click();
-  await expect(alphabet.getByText('3 of 3 word and timing tasks saved.', { exact: true })).toBeVisible();
+  await expect(alphabet.getByText('3 of 3 tasks saved.', { exact: true })).toBeVisible();
   await expect(save).toBeEnabled();
   const saved = await events(page);
   expect(saved.filter(event => event.itemId === `${lesson.id}.listen`)).toEqual([expect.objectContaining({ result: 'correct', hints: 1 })]);

@@ -29,7 +29,7 @@ test('notebook search handles accents, English and examples while preserving a h
   await entries.getByRole('button', { name: 'Edit note', exact: true }).click();
   await entries.getByRole('textbox', { name: 'English meaning', exact: true }).fill('Keep this unsaved edit');
   await search.fill('no-match-here');
-  await expect(page.getByText('No saved words match. Try a different word or clear the search.', { exact: true })).toBeVisible();
+  await expect(page.getByText('No matching words.', { exact: true })).toBeVisible();
   await expect(entries.getByRole('textbox', { name: 'English meaning', exact: true })).toBeHidden();
   await page.getByRole('button', { name: 'Clear notebook search', exact: true }).click();
   await expect(entries.getByRole('textbox', { name: 'English meaning', exact: true })).toHaveValue('Keep this unsaved edit');
@@ -42,6 +42,6 @@ test('notebook search handles accents, English and examples while preserving a h
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.reload();
   await page.getByRole('button', { name: 'Review', exact: true }).click();
-  await expect(page.getByText((page.viewportSize()?.width ?? 600) < 600 ? '2 saved entries' : '2 of 2 saved entries', { exact: true })).toBeVisible();
+  await expect(page.getByText('2 saved entries', { exact: true })).toBeVisible();
   await expect(page.getByTestId('notebook-entries').getByText('Keep this unsaved edit', { exact: true })).toBeVisible();
 });

@@ -24,7 +24,7 @@ export function LanguageChooser({ onChoose }: { onChoose: (language: TargetLangu
           <Text accessibilityRole="header" aria-level={2} style={[s.heading, compact && chooser.compactHeading]}>{languageNames[language]}</Text>
           <Text style={chooser.description}>{introductions[language]}</Text>
           <View style={s.row}>
-            <Button accent compact={compact} trailingIcon={compact ? undefined : 'arrow-right'}
+            <Button primary compact={compact} trailingIcon={compact ? undefined : 'arrow-right'}
               onPress={() => onChoose(language)}>Learn {languageNames[language]}</Button>
           </View>
         </View>

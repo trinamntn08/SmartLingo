@@ -34,7 +34,6 @@ export function PersonalWordForm({ model, language = 'fr-FR', embedded = false }
     <View style={t.panelHeader}>{!embedded && <View style={s.row}><View style={[t.icon, { backgroundColor: colors.sageTint }]}><Icon name="edit" size={22} /></View><View style={t.stack}><Text accessibilityRole="header" style={t.sectionTitle}>Your own vocabulary</Text><Text style={t.detail}>Words you meet along the way.</Text></View></View>}
     {!open && <Button compact disabled={model.blocked} onPress={() => { setSaved(''); setOpen(true); }}>Add personal word</Button>}</View>
     {embedded && open && <Text accessibilityRole="header" style={t.sectionTitle}>Add a personal word</Text>}
-    {open && <Text style={s.body}>Add a word with its English meaning and an optional example.</Text>}
     {open && <>
       <Text style={s.body}>{languageNames[language]} word or phrase</Text>
       <TextInput accessibilityLabel={`New ${languageNames[language]} word or phrase`} value={target} onChangeText={setTarget} maxLength={300} editable={!locked} style={s.input} />
@@ -46,9 +45,8 @@ export function PersonalWordForm({ model, language = 'fr-FR', embedded = false }
       {language === 'ja-JP' && <><Text style={s.body}>Example kana reading (optional)</Text><TextInput accessibilityLabel="New example kana reading" value={exampleReading} onChangeText={setExampleReading} maxLength={1000} editable={!locked} style={s.input} /></>}
       {!!error && <Text accessibilityRole="alert" style={[s.body, { color: colors.danger }]}>{error}</Text>}
       <View style={s.row}><Button primary disabled={model.blocked} onPress={save}>Save personal word</Button><Button disabled={locked} onPress={clear}>Cancel personal word</Button></View>
-      {!!model.saveError && <Text style={s.muted}>Your form is kept. Use Retry save above to retry this same entry, or Dismiss and continue before editing it.</Text>}
+      {!!model.saveError && <Text style={s.muted}>Your word is still here. Retry the save above.</Text>}
     </>}
     {!!saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Saved {saved} to your notebook.</Text>}
-    {open && <Text style={s.muted}>Saved privately in this browser and included in learning backups.</Text>}
   </View>;
 }

@@ -11,7 +11,7 @@ import { Button } from '../ui/controls';
 import { getDailyDialoguePhoto } from '../ui/dialoguePhotos';
 import { FrenchTransferPractice } from '../ui/FrenchTransferPractice';
 import { LessonScreen } from '../ui/LessonScreen';
-import { colors, designTokens, styles as s } from '../ui/theme';
+import { designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { JapaneseDailyGuide } from './JapaneseDailyGuide';
 import { CourseCredits } from './CourseCredits';
@@ -136,7 +136,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
 
   return <View testID="open-course-panel" style={compact
     ? { minWidth: 0, gap: 8 }
-    : [s.card, { minWidth: 0, padding: 16, gap: 20, borderTopWidth: 4, borderTopColor: colors.yellow }]}>
+    : { minWidth: 0, gap: 16 }}>
     <View style={[s.row, { justifyContent: 'space-between', gap: compact ? 6 : 16 }]}>
       {!compact && <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 260, minWidth: 0, gap: 2 }}>
         <Text accessibilityRole="header" style={[s.heading, { fontSize: 21 }]}>{course.title}</Text>
@@ -167,12 +167,6 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       ...(sidebar ? { flexDirection: 'row', alignItems: 'flex-start' } : {}) }}>
       {outline}
       <View style={{ gap: 16, minWidth: 0, flex: sidebar ? 1 : undefined }}>
-        {guide && stage === 'dialogue' && <JapaneseDailyGuide key={day.id} guide={guide} />}
-        {guide && stage === 'sentence' && <View testID="daily-checkpoint-status" style={[s.notice, { gap: 6 }]}>
-          <Text accessibilityRole="header" style={s.heading}>Can-do practice and checkpoint</Text>
-          <Text accessibilityLiveRegion="polite" style={s.body}>{practice.completedIds.size} of {lesson.japanesePractice!.tasks.length} practice activities saved · {checkpointCount} of {guide.checkpoint.length} checkpoint activities saved</Text>
-          <Text style={s.muted}>Study-day completion and checkpoint practice are separate. Earlier saved days stay available. Self-review records your comparison with a model, not an automatic skill assessment.</Text>
-        </View>}
         <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
           extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
           timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{
@@ -185,6 +179,11 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
           studyDialogue: snapshot => select(day, 'vocabulary', snapshot, 'dialogue'),
           studyWords: (targetStage, snapshot) => select(day, targetStage, snapshot, 'vocabulary'), record,
         }} />
+        {guide && stage === 'dialogue' && <JapaneseDailyGuide key={day.id} guide={guide} />}
+        {guide && stage === 'sentence' && <View testID="daily-checkpoint-status" style={[s.notice, { gap: 6 }]}>
+          <Text accessibilityRole="header" style={s.heading}>Checkpoint progress</Text>
+          <Text accessibilityLiveRegion="polite" style={s.body}>{practice.completedIds.size} of {lesson.japanesePractice!.tasks.length} practice activities saved · {checkpointCount} of {guide.checkpoint.length} checkpoint activities saved</Text>
+        </View>}
         {stage === 'sentence' && <RelatedCoursePractice section={{ ...lessonRoute, dayId: day.id, sectionId }} lessons={lessons} disabled={disabled} />}
         <CourseCredits course={course} />
       </View>

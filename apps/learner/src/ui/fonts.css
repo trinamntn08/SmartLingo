@@ -5,3 +5,7 @@
   font-style: normal;
   font-display: swap;
 }
+
+#learner-bottom-bar {
+  padding-bottom: max(3px, env(safe-area-inset-bottom));
+}

@@ -47,7 +47,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
     const entry = opening.vocabulary.find(word => word.target === target)!;
     const card = cold.getByTestId(`vocabulary-${entry.id}`);
     await expect(card.getByText(entry.meaning, { exact: true })).toBeVisible();
-    await expect(card.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
+    await expect(cold.getByTestId(`example-${entry.id}`).getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
   }
   await cold.getByTestId('vocabulary-fr.greetings.bonsoir').scrollIntoViewIfNeeded();
   await cold.screenshot({ path: info.outputPath('greetings-offline-study.png'), fullPage: true });
@@ -168,7 +168,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
     await expect.poll(() => restaurantPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   }
   await openTopicVocabulary(cold);
-  const coffeePhoto = cold.getByTestId('vocabulary-fr.cafe').locator('img[src^="/generated-vocabulary-photos/"]');
+  const coffeePhoto = cold.getByTestId('example-fr.cafe').locator('img[src^="/generated-vocabulary-photos/"]');
   await expect(coffeePhoto).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
   await expect.poll(() => coffeePhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await button(cold, 'Review').click();

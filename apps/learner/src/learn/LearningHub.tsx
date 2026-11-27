@@ -43,16 +43,14 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   const activeMode = visibleModes.includes(mode) ? mode : 'Lessons';
   const { width } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
-  const lessonsLead = !!selectedTopic && activeMode === 'Lessons' && compact;
-  const showCourseCard = !selectedTopic && (activeMode === 'Lessons' || activeMode === 'Japanese letters');
+  const materialFirst = activeMode === 'Japanese letters' || (!!selectedTopic && activeMode === 'Lessons' && compact);
+  const showCourseCard = !selectedTopic && activeMode === 'Lessons';
   const { navigate } = useNavigation();
   const picker = { kind: 'courses', language } as const;
   const coursesButton = <Button nativeID="learn-courses-trigger" compact icon="layers" href={routeHref(picker)}
     disabled={disabled} onPress={() => navigate(picker)}>Courses</Button>;
   const slangButton = language === 'fr-FR' && width < designTokens.layout.desktopFrenchNavBreakpoint
     ? <Button compact quiet icon="grid" href="/slang/fr" disabled={disabled} onPress={() => navigate({ kind: 'slang', language })}>Slang</Button> : null;
-  const courseShortcut = !showCourseCard && <Button compact icon="calendar" href={courseLaunch.href}
-    disabled={courseLaunch.disabled || courseLaunch.loading} onPress={courseLaunch.onOpen}>Course</Button>;
   const hrefForMode = (choice: LearnMode) => routeHref(learnRoute(choice, language, selectedTopic ? topicRouteKey(selectedTopic) : undefined));
   const sectionNavigation = compact ? <View role="navigation" accessibilityLabel="Learning sections" style={phone.actions}>
     {visibleModes.map(choice => <PhoneStudyAction key={choice} {...studyAction[choice]} label={choice === 'Lessons' ? 'Topics' : choice}
@@ -62,8 +60,7 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
   </View> : <View style={{ gap: 10, paddingBottom: 12, borderBottomWidth: 1, borderColor: colors.line }}>
       <View accessibilityLabel="Learning sections" style={s.row}>
         {visibleModes.map(choice => <Button compact quiet key={choice} selected={choice === activeMode} disabled={disabled} onPress={() => onMode(choice)} href={hrefForMode(choice)}>{choice}</Button>)}
-        {courseShortcut}
-        {!showCourseCard && coursesButton}
+        {coursesButton}
         {slangButton}
       </View>
       {!!selectedTopic && activeMode !== 'Lessons' && activeMode !== 'Japanese letters' && <View style={s.row}>
@@ -71,15 +68,12 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
       </View>}
     </View>;
   return <View style={{ gap: compact ? 12 : 16, minWidth: 0 }}>
-    {showCourseCard && <>
-      <View style={phone.headingRow}>
-        <Text accessibilityRole="header" aria-level={1} style={[s.title, compact && phone.title]}>Learn</Text>
-        {coursesButton}
-      </View>
-      {(!compact || activeMode !== 'Japanese letters') && <CourseLaunchCard {...courseLaunch} concise={compact} />}
-    </>}
-    {compact && !showCourseCard && !lessonsLead && <View style={phone.headingRow}>{coursesButton}</View>}
-    {!lessonsLead && sectionNavigation}
+    {showCourseCard && compact && <View style={phone.headingRow}>
+      <Text accessibilityRole="header" aria-level={1} style={[s.title, phone.title]}>Learn</Text>
+      {coursesButton}
+    </View>}
+    {compact && !showCourseCard && !materialFirst && <View style={phone.headingRow}>{coursesButton}</View>}
+    {!materialFirst && sectionNavigation}
     {compact && !!selectedTopic && activeMode !== 'Lessons' && activeMode !== 'Japanese letters' && <View style={s.row}>
       <Text style={s.muted}>{selectedTopic}</Text>
       <Button compact quiet disabled={disabled} onPress={() => onSelectTopic(null)}>All topics</Button>
@@ -91,11 +85,15 @@ export function LearningHub({ language, lessons, model, mode, onMode, selectedTo
       : activeMode === 'Listening & videos' ? <ListeningSection key={`${language}:${selectedTopic ?? 'all'}`}
         lessons={studyLessons} language={language} active={active} /> : <>
         <GuidedSpeaking key={`${language}:${selectedTopic ?? 'all'}`} lessons={studyLessons} />
-        {!isAndroidApp() && active && conversationLessons.length > 0 && <Disclosure title="Optional AI conversation" description="Try a temporary French exchange with English feedback." keepMounted={false}>
+        {!isAndroidApp() && active && conversationLessons.length > 0 && <Disclosure title="Optional AI conversation" keepMounted={false}>
           <FrenchPractice lessons={conversationLessons} model={model} active={active} />
         </Disclosure>}
       </>}
-    {lessonsLead && sectionNavigation}
+    {materialFirst && <View style={{ gap: 8, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line }}>
+      {sectionNavigation}
+      {compact && <View style={s.row}>{coursesButton}</View>}
+    </View>}
+    {showCourseCard && <CourseLaunchCard {...courseLaunch} concise />}
   </View>;
 }
 
@@ -117,9 +115,9 @@ const phone = StyleSheet.create({
   headingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
   title: { fontSize: 32, lineHeight: 39, flexShrink: 1, minWidth: 0 },
   actions: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  action: { flex: 1, minWidth: 57, minHeight: 62, borderWidth: 1, borderColor: colors.line, borderRadius: 12,
+  action: { flex: 1, minWidth: 57, minHeight: 48, borderRadius: 8,
     backgroundColor: colors.card, gap: 4, padding: 5, alignItems: 'center', justifyContent: 'center' },
-  selected: { backgroundColor: colors.sageTint, borderColor: '#B7D3C3' },
+  selected: { backgroundColor: colors.sageTint },
   focus: { outlineColor: colors.focusRing, outlineStyle: 'solid', outlineWidth: designTokens.focus.outlineWidth },
   actionText: { ...designTokens.typography.caption, color: colors.ink, fontWeight: '600', textAlign: 'center' },
 });

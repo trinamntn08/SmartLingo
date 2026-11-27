@@ -78,7 +78,7 @@ test('topic words are directly readable, searchable and save to the notebook wit
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/');
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  if (info.project.name === 'desktop') await expect(page.getByText(`${topics.length} everyday topics · ${[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}`, { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Topic / })).toHaveCount(topics.length);
   const search = page.getByRole('textbox', { name: 'Search lessons', exact: true });
   await search.fill('appointment');
   await page.getByRole('button', { name: 'Topic Health and appointments', exact: true }).click();

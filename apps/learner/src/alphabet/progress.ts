@@ -1,10 +1,15 @@
 import type { LearningEvent } from '@smartlingo/domain';
-import { japaneseAlphabetLessons } from '@smartlingo/content';
+import { japaneseAlphabetLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
 
 const lessonsById = new Map(japaneseAlphabetLessons.map(lesson => [lesson.id, lesson]));
 /** Teaching order is independent from the stable legacy content-array positions. */
 export const alphabetLearningPath = (['hiragana', 'katakana'] as const).flatMap(script => japaneseAlphabetLessons.filter(lesson => lesson.script === script));
 export function isAlphabetLessonId(id: string): boolean { return lessonsById.has(id); }
+
+export function alphabetLessonTitle(lesson: JapaneseAlphabetLesson) {
+  const title = lesson.title.replace(/^(Hiragana|Katakana): /, '').replace(/^The five vowels$/, 'Vowels').replace(/^The /, '');
+  return title.charAt(0).toUpperCase() + title.slice(1);
+}
 
 /** Explicit saved practice, separate from vocabulary totals or script mastery. */
 export function alphabetProgress(events: readonly LearningEvent[], now = Date.now()) {

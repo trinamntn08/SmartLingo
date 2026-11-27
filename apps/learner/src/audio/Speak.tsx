@@ -49,7 +49,7 @@ export function Speak({ text, label, onError, onPlayed, courseClip, language = '
   }
   return <View style={{ gap: 6, maxWidth: '100%' }}>
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}>
-    <AudioIconButton playing={state === 'playing'} label={label ?? `Listen to ${text}`} onPress={() => void play()} />
+    <AudioIconButton playing={state === 'playing'} label={label ?? `Listen to ${text}`} stopLabel={`Stop audio for ${text}`} onPress={() => void play()} />
     {canGenerate && <Pressable accessibilityRole="button" accessibilityLabel={`Audio options for ${text}`} aria-expanded={options} onPress={() => setOptions(value => !value)}
       onFocus={() => setOptionsFocused(true)} onBlur={() => setOptionsFocused(false)}
       style={({ pressed }) => ({ minWidth: designTokens.control.minimumTarget, minHeight: designTokens.control.minimumTarget, justifyContent: 'center', alignItems: 'center', borderRadius: 22, borderWidth: 2, borderColor: optionsFocused ? colors.focusRing : 'transparent', backgroundColor: pressed ? colors.sand : 'transparent' })}><Text style={{ fontSize: 22, color: colors.ink }}>⋯</Text></Pressable>}</View>

@@ -10,7 +10,6 @@ import { colors, designTokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { ReviewPanel } from '../review/ReviewPanel';
 import { PersonalWordForm } from './PersonalWordForm';
-import { ScreenHeader } from './ScreenHeader';
 import { Icon } from './Icon';
 import { toolsStyles as t } from './learnerToolsStyles';
 
@@ -35,45 +34,38 @@ export function Notebook({ model, onExplore, language = 'fr-FR', onWriteBlocked 
     else navigate({ kind: 'review', language, view: 'practice' });
   }
   const reviewAction = (focusRecall || model.notebook.length > 0) && <Button compact
-    icon={focusRecall ? 'bookmark' : 'layers'} primary={!focusRecall} accent={!focusRecall} selected={focusRecall}
+    icon={focusRecall ? 'bookmark' : 'layers'} primary={!focusRecall} quiet={focusRecall}
     disabled={reviewWriteBlocked || model.busy || !!model.saveError} onPress={toggleFocus}>{focusRecall ? 'Show notebook' : 'Focus review'}</Button>;
   return <View style={[t.page, compact && { gap: 14 }]}>
-    {compact ? <View style={[t.panelHeader, { gap: 8 }]}>
-      <Text accessibilityRole="header" aria-level={1} style={[s.heading, { flexShrink: 1 }]}>Review</Text>
+    <View style={t.panelHeader}>
+      <Text accessibilityRole="header" aria-level={1} style={s.title}>Review</Text>
       {reviewAction}
-    </View> : <ScreenHeader eyebrow={name} title="Review saved words" subtitle="Recall due words, or search and edit your notes." action={reviewAction} />}
+    </View>
     <View style={[t.board, compact && { flexDirection: 'column', flexWrap: 'nowrap', alignItems: 'stretch', gap: 14 }]}>
       <View style={[t.main, compact && { flexBasis: 'auto' }, focusRecall && { display: 'none' }]}>
-        <View style={[t.panel, compact && { padding: 14, gap: 12 }]}>
+        <View style={{ gap: 12, minWidth: 0 }}>
+          {!model.notebook.length && <View style={{ gap: 8, paddingVertical: 12 }}>
+            <Text style={s.heading}>No saved words yet</Text>
+            <Text style={s.body}>Save a word from a lesson to review it here.</Text>
+            <View style={s.row}><Button primary onPress={onExplore}>Find a lesson</Button></View>
+          </View>}
           <View style={t.panelHeader}>
-            <View style={[s.row, { flexShrink: 1, minWidth: 0, maxWidth: '100%' }]}>
-              {!compact && <View style={t.icon}><Icon name="bookmark" size={22} /></View>}
-              <View style={[t.stack, { flexShrink: 1 }, compact && { gap: 2 }]}>
-                <Text accessibilityRole="header" style={t.sectionTitle}>{compact ? 'Notebook' : 'Your word collection'}</Text>
-                {(!compact || !!model.notebook.length) && <Text style={compact ? t.label : t.detail}>{model.notebook.length} saved {model.notebook.length === 1 ? 'entry' : 'entries'}{compact ? '' : ` · ${name}`}</Text>}
-              </View>
-            </View>
+            {!!model.notebook.length && <Text style={t.label}>{model.notebook.length} saved {model.notebook.length === 1 ? 'entry' : 'entries'}</Text>}
             <PersonalWordForm embedded model={model} language={language} />
           </View>
           {!!model.notebook.length && <View style={t.stack}>
-            {!compact && <Text style={t.label}>Find a saved word</Text>}
             <View style={compact ? [s.row, { gap: 8 }] : undefined}>
               {compact && <Icon name="search" color={colors.muted} />}
               <TextInput accessibilityLabel="Search notebook" placeholder={compact ? 'Search words' : `${name}, reading, English or a note`}
                 value={query} onChangeText={setQuery} style={[s.input, compact && { flexGrow: 1, flexShrink: 1, flexBasis: 120, minWidth: 0, paddingVertical: 8 }]} />
             </View>
-            {(!compact || !!query) && <View style={t.panelHeader}>
+            {!!query && <View style={t.panelHeader}>
               <Text accessibilityLiveRegion="polite" style={t.detail}>{matches.size} of {model.notebook.length} saved entries</Text>
-              {!!query && <Button quiet compact label="Clear notebook search" onPress={() => setQuery('')}>{compact ? 'Clear' : 'Clear notebook search'}</Button>}
+              <Button quiet compact label="Clear notebook search" onPress={() => setQuery('')}>Clear</Button>
             </View>}
-            {!matches.size && <Text style={s.body}>No saved words match. Try a different word or clear the search.</Text>}
+            {!matches.size && <Text style={s.body}>No matching words.</Text>}
           </View>}
-          {!model.notebook.length ? <View style={[t.inset, { backgroundColor: colors.sageTint }, compact && { padding: 14 }]}>
-            <Text style={[s.heading, compact && designTokens.typography.compactHeading]}>No saved words yet</Text>
-            <Text style={s.body}>{compact ? 'Save a word in a lesson or add your own.' : 'Add a personal word or save an expression from a lesson to start reviewing.'}</Text>
-            <View style={s.row}><Button primary={!compact} accent={compact} trailingIcon={compact ? 'arrow-right' : undefined}
-              onPress={onExplore}>{compact ? 'Find a lesson' : 'Find a lesson →'}</Button></View>
-          </View> : <View testID="notebook-entries">{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} compact={compact} />)}</View>}
+          {!!model.notebook.length && <View testID="notebook-entries">{model.notebook.map(entry => <NotebookCard key={entry.id} entry={entry} model={model} visible={matches.has(entry.id)} compact={compact} />)}</View>}
         </View>
       </View>
       {(focusRecall || model.notebook.length > 0) && <View style={[t.side, { flexBasis: 380 }, focusRecall && { flexBasis: '100%', maxWidth: 700 },
@@ -126,8 +118,8 @@ function NotebookCard({ entry, model, visible, compact }: { entry: NotebookEntry
       <Button quiet compact icon="edit" label="Edit note" disabled={model.blocked} onPress={edit}>{compact ? 'Edit' : 'Edit note'}</Button>
     </View>
     {!isTextAbbreviation && !!voiceError && <Text accessibilityRole="alert" style={[s.muted, { color: colors.danger }]}>{voiceError}</Text>}
-    {!!entry.example && <View style={[t.inset, { padding: compact ? 12 : 16 }]}>
-      <Text style={t.label}>{compact ? 'Note' : 'Example / personal note'}</Text><Text style={s.body}>{entry.example}</Text>
+    {!!entry.example && <View style={t.stack}>
+      <Text style={t.label}>Note</Text><Text style={s.body}>{entry.example}</Text>
       {!!entry.exampleReading && <Text style={s.muted}>{entry.exampleReading}</Text>}
     </View>}
     {saved && <Text accessibilityLiveRegion="polite" style={s.muted}>Changes saved in this browser.</Text>}

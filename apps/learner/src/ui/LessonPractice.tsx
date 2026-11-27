@@ -52,7 +52,7 @@ export function PictureActivity({ lesson, routed, browseOnly, disabled, done, re
       <View style={layout.actions}>
         <Button quiet label={hint ? 'Hide hint' : 'Show a hint'} expanded={hint}
           onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : phone ? 'Hint' : 'Show a hint'}</Button>
-        {(done || browseOnly) && <Button primary={!phone} accent={phone} trailingIcon="arrow-right" href={nextHref}
+        {(done || browseOnly) && <Button primary trailingIcon="arrow-right" href={nextHref}
           disabled={disabled && !browseOnly} onPress={onNext}>Next</Button>}
       </View>
     </View>
@@ -94,7 +94,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const normalize = language === 'ja-JP' ? (value: string) => normalizeJapaneseAnswer(value, 'verbatim') : normalizeAnswer;
   const accepted = done ? exercise.answers.find(value => normalize(value) === normalize(answer)) ?? exercise.answers[0] : '';
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
-  const nextLessonButton = nextLesson && <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
+  const nextLessonButton = nextLesson && <Button primary trailingIcon="arrow-right" label={`Next lesson: ${nextLesson.title}`}
     href={nextLesson.href} disabled={disabled && !browseOnly} onPress={nextLesson.onOpen}>
     {phone ? 'Next lesson' : `Next lesson · ${nextLesson.title}`}
   </Button>;
@@ -111,7 +111,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
       <View style={layout.tray}>
         {done ? <Text {...languageProps} style={[s.heading, layout.clue]}>{accepted}</Text>
           : selected.length ? <View style={layout.pieces}>
-            {selected.map(index => <Button compact accent disabled={disabled} key={index} label={`Remove ${exercise.tokens[index]}`}
+            {selected.map(index => <Button compact disabled={disabled} key={index} label={`Remove ${exercise.tokens[index]}`}
               onPress={() => setSelected(selected.filter(item => item !== index))}>{exercise.tokens[index]} ×</Button>)}
           </View> : <Text style={[s.muted, layout.trayPlaceholder]}>{browseOnly ? 'Sentence practice' : 'Tap the pieces below to build your sentence.'}</Text>}
       </View>
@@ -127,10 +127,9 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
         </View>
         {extraPractice}
         <View style={layout.actions}>
-          <Button quiet={completed || canComplete} primary={!phone && !completed && !canComplete && !browseOnly}
-            accent={phone && !completed && !canComplete && !browseOnly}
+          <Button quiet={completed || canComplete} primary={!completed && !canComplete && !browseOnly}
             disabled={disabled && !browseOnly} onPress={onReview}>{reviewLabel}</Button>
-          {(completed || canComplete || browseOnly) && <Button primary={!phone && !nextLesson} accent={phone && !nextLesson} quiet={!!nextLesson}
+          {(completed || canComplete || browseOnly) && <Button primary={!nextLesson} quiet={!!nextLesson}
             trailingIcon={nextLesson ? undefined : 'arrow-right'} href={nextHref} disabled={disabled && !browseOnly}
             onPress={canComplete && !browseOnly ? onComplete : onNext}>{returnLabel}</Button>}
           {nextLessonButton}
@@ -148,8 +147,8 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
               onPress={() => { setHint(!hint); setHintUsed(true); }}>{hint ? 'Hide hint' : phone ? 'Hint' : 'Show a hint'}</Button>
             {!!selected.length && <Button quiet disabled={disabled} onPress={() => { setSelected([]); setFeedback(''); }}>Clear</Button>}
           </View>
-          {browseOnly ? <Button primary={!phone} accent={phone} trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
-            : <Button primary={!phone} accent={phone} label="Check sentence" disabled={disabled || selected.length !== exercise.tokens.length}
+          {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
+            : <Button primary label="Check sentence" disabled={disabled || selected.length !== exercise.tokens.length}
               onPress={check}>{phone ? 'Check' : 'Check sentence'}</Button>}
         </View>
         {completed && nextLessonButton && <View style={layout.actions}>

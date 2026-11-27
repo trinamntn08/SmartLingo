@@ -197,7 +197,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         href={exitHref} disabled={exitBlocked} onPress={onExit}>{returnLabel ?? 'All lessons'}</Button>
       {!phone && <Text style={[s.muted, layout.meta]}>{lessonMeta}</Text>}
     </View>}
-    <View style={phone ? layout.phoneIntro : [s.card, layout.intro, compact && layout.compactIntro]}>
+    <View style={layout.intro}>
       {sequence && <View style={[s.row, { justifyContent: 'space-between', gap: 8 }]}>
         <Text style={phone ? layout.stepCount : s.eyebrow}>Lesson {sequence.position} of {sequence.total}</Text>
         {previousLesson && <Button compact quiet icon="arrow-left" label={`Previous lesson: ${previousLesson.title}`}
@@ -206,7 +206,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       {courseSession && !compact && <Text style={s.eyebrow}>{lesson.level === 'foundation' ? 'Foundations' : lesson.level}</Text>}
       <Text nativeID={titleId} accessibilityRole="header"
         style={[s.title, compact && s.compactTitle, phone && layout.phoneTitle]}>{lesson.subtitle}</Text>
-      {(!phone || stage === 'dialogue') && <Text style={[s.body, layout.outcome, compact && s.muted, phone && layout.phoneOutcome]}>{lesson.outcome}</Text>}
+      {stage === 'dialogue' && <Text style={[s.body, layout.outcome, compact && s.muted, phone && layout.phoneOutcome]}>{lesson.outcome}</Text>}
       {timeEstimate && !phone && <Text style={[s.muted, layout.meta]}>{timeEstimate}</Text>}
       <LessonProgress stage={stage} compact={compact} phone={phone} meaningMatch={meaningMatch}
         recorded={browseOnly || phone ? undefined : recordedItems} total={lesson.vocabulary.length + 2}
@@ -217,34 +217,32 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         {...(Platform.OS === 'web' ? { 'aria-level': 2 } : {})} style={[s.heading, layout.stageHeading, phone && tokens.typography.compactHeading]}>{heading}</Text>
       {stage === 'dialogue' && <>
         {practical?.prerequisites && <Text style={s.muted}>{practical.prerequisites}</Text>}
-        {practical && <Text style={s.muted}>After sentence building, try the {practical.checkpoint ? 'unit check' : 'real-life task'}.</Text>}
         <LessonConversation lesson={lesson} photo={courseSession?.dialoguePhoto} phone={phone} />
-        <StudyActions phone={phone} primaryAction={skipStudiedPhrases
-          ? <Button primary={!phone} accent={phone} trailingIcon="arrow-right"
+        <View style={phone ? layout.phoneActions : [s.row, layout.actions]}>
+          {skipStudiedPhrases
+          ? <Button primary
             href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
             onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>{listeningQuestion ? 'Start listening' : practiceLabel}</Button>
-          : <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label="Continue to key phrases"
+          : <Button primary label="Continue to key phrases"
             href={stageHref('vocabulary')} disabled={exitBlocked}
             onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>
             {phone ? 'Continue' : 'Continue to key phrases'}
-          </Button>}>
-          {skipStudiedPhrases && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
-        </StudyActions>
+          </Button>}
+        </View>
       </>}
-      {stage === 'vocabulary' && <>
-        <LessonWords lesson={lesson} model={model} compact={compact} phone={phone} guided={!!courseSession} />
-        <StudyActions phone={phone} primaryAction={listeningQuestion
-          ? <Button primary={!phone} accent={phone} trailingIcon="arrow-right" label="Continue to listening"
+      {stage === 'vocabulary' && <LessonWords lesson={lesson} model={model} guided={!!courseSession}>
+        <View style={phone ? layout.phoneActions : [s.row, layout.actions]}>
+          {listeningQuestion
+          ? <Button primary label="Continue to listening"
             disabled={exerciseBlocked && !browseOnly} onPress={() => reviewVocabulary('listening')}>
             {phone ? 'Continue' : 'Continue to listening'}
           </Button>
-          : <Button primary={!phone} accent={phone} disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>}>
-          {!phone && <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>}
+          : <Button primary disabled={exerciseBlocked && !browseOnly}
+            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>}
           {listeningQuestion && <Button quiet label={practiceLabel} disabled={exerciseBlocked && !browseOnly}
             onPress={() => reviewVocabulary('picture')}>{phone ? (meaningMatch ? 'Meaning practice' : 'Picture practice') : practiceLabel}</Button>}
-        </StudyActions>
-      </>}
+        </View>
+      </LessonWords>}
       {stage === 'listening' && (listeningQuestion
         ? <ListeningQuestionPlayer question={listeningQuestion} revision={lesson.revision} compact={compact}
           continuation={{ label: 'Continue to matching', skipLabel: 'Skip listening', href: stageHref('picture'),
@@ -265,17 +263,6 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         reviewLabel={reviewLabel} onReview={() => setStage(reviewStage)} />}
     </View>
   </View>;
-}
-
-function StudyActions({ children, phone, primaryAction }: { children: ReactNode; phone: boolean; primaryAction: ReactNode }) {
-  if (Platform.OS !== 'web') return <View style={[s.row, layout.actions]}>{children}{primaryAction}</View>;
-  return <>
-    {phone && children && <View style={[s.row, layout.actions]}>{children}</View>}
-    <div style={{ position: 'sticky', bottom: 0, zIndex: 1,
-      paddingBlock: 8, backgroundColor: colors.paper, borderTop: '1px solid ' + colors.line }}>
-      {phone ? <View>{primaryAction}</View> : <View style={[s.row, layout.actions]}>{children}{primaryAction}</View>}
-    </div>
-  </>;
 }
 
 function stageLabels(stage: LessonStage, meaningMatch: boolean) {
@@ -341,16 +328,15 @@ const layout = StyleSheet.create({
   compactPage: { gap: 12 },
   breadcrumb: { gap: 8 },
   meta: { flexShrink: 1, minWidth: 0 },
-  intro: { gap: 8 },
-  compactIntro: { padding: 12, gap: 6 },
-  phoneIntro: { minWidth: 0, gap: 8 },
+  intro: { minWidth: 0, gap: 8 },
   phoneTitle: { fontSize: 28, lineHeight: 34, outlineWidth: 0 },
   phoneOutcome: { fontSize: 16, lineHeight: 23 },
   outcome: { color: colors.muted, maxWidth: 690 },
   stage: { minWidth: 0, gap: 14 },
   phoneStage: { gap: 10 },
   stageHeading: { alignSelf: 'flex-start', outlineColor: colors.focusRing, outlineOffset: 2 },
-  actions: { justifyContent: 'flex-end', gap: 8 },
+  actions: { gap: 8 },
+  phoneActions: { gap: 4 },
   progress: { gap: 8, marginTop: 4, paddingTop: 12, borderTopWidth: 1, borderColor: colors.line },
   compactProgress: { gap: 6, marginTop: 2, paddingTop: 8 },
   phoneProgress: { marginTop: 0, paddingTop: 4, borderTopWidth: 0 },

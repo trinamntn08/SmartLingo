@@ -7,7 +7,7 @@ test('kana Back restores the answered character and Forward opens the next promp
   const [first, second] = row.characters;
   await page.goto('/learn/ja/letters');
   await expect(page).toHaveURL(url => url.pathname === `/learn/ja/letters/${row.id}/study`);
-  await page.getByRole('button', { name: 'Recognition practice', exact: true }).click();
+  await page.getByRole('button', { name: 'Practice', exact: true }).click();
   const firstAddress = new URL(page.url()).pathname;
   expect(firstAddress).toContain(`/recognition/${first!.id}`);
   await page.getByRole('button', { name: `Choose ${first!.kana}`, exact: true }).click();

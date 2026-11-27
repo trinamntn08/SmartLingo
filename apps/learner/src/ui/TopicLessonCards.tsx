@@ -41,7 +41,7 @@ export function TopicLessonCards({ language, lessons, visibleLessons, headingId,
       <Text accessibilityRole="header" aria-level={3} style={layout.lessonTitle}>{lesson.subtitle}</Text>
       <Text style={layout.outcome}>{lesson.outcome}</Text>
       <View style={[layout.footer, compact && next && layout.mobileAction]}>
-        <Button compact={!next} primary={next} accent={next} trailingIcon="arrow-right" label={`Open ${lesson.subtitle}`} disabled={disabled}
+        <Button compact={!next} primary={next} trailingIcon="arrow-right" label={`Open ${lesson.subtitle}`} disabled={disabled}
           href={routeHref({ kind: 'lesson', language, lessonId: lesson.id })} onPress={() => onOpen(lesson)}>
           {completed ? 'Revisit lesson' : started ? 'Continue lesson' : 'Start lesson'}
         </Button>

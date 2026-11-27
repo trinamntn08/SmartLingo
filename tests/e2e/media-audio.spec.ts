@@ -50,10 +50,11 @@ test('generated coffee photograph loads locally and falls back to an illustratio
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
   await openTopicVocabulary(page);
   const card = page.getByTestId('vocabulary-fr.cafe');
-  const photo = card.locator('img[src^="/generated-vocabulary-photos/"]');
+  const example = page.getByTestId('example-fr.cafe');
+  const photo = example.locator('img[src^="/generated-vocabulary-photos/"]');
   await expect(photo).toHaveAttribute('src', '/generated-vocabulary-photos/espresso.jpg');
   await expect.poll(() => photo.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  await card.scrollIntoViewIfNeeded();
+  await example.scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('vocabulary-photograph.png') });
   await expect(page.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Photo credits and licences' })).toHaveCount(0);
@@ -65,6 +66,6 @@ test('generated coffee photograph loads locally and falls back to an illustratio
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await page.getByRole('button', { name: 'Topic Restaurant', exact: true }).click();
   await openTopicVocabulary(page);
-  await expect(card.locator('img[alt]:not([alt=""])')).toHaveAttribute('src', /^data:image\/svg/);
+  await expect(example.locator('img[alt]:not([alt=""])')).toHaveAttribute('src', /^data:image\/svg/);
   await expect(card.getByRole('heading', { name: 'un café', exact: true })).toBeVisible();
 });

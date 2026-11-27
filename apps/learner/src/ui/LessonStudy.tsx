@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { Lesson } from '@smartlingo/domain';
 import { BilingualDialogue } from './BilingualDialogue';
@@ -7,10 +7,10 @@ import type { ContextPhoto } from './contextPhotos';
 import { GrammarNote } from './GrammarNote';
 import { Button } from './controls';
 import { styles as s } from './theme';
-import { VocabularyCard } from './VocabularyCard';
+import { VocabularyList } from './VocabularyList';
 import type { LearningModel } from './useLearning';
 
-export function LessonWords({ lesson, model, compact, phone, guided }: { lesson: Lesson; model: LearningModel; compact: boolean; phone: boolean; guided?: boolean }) {
+export function LessonWords({ lesson, model, guided, children }: { lesson: Lesson; model: LearningModel; guided?: boolean; children: ReactNode }) {
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
   const [showRomanization, setShowRomanization] = useState(false);
   const optionalRomanization = language === 'ja-JP' && lesson.level === 'A1';
@@ -18,11 +18,9 @@ export function LessonWords({ lesson, model, compact, phone, guided }: { lesson:
   return <View style={{ gap: 12 }}>
     {optionalRomanization && <View style={s.row}><Button quiet compact expanded={showRomanization}
       onPress={() => setShowRomanization(value => !value)}>{showRomanization ? 'Hide rōmaji' : 'Show rōmaji'}</Button></View>}
-    <View style={layout.wordGrid}>
-      {lesson.vocabulary.map(entry => <View key={entry.id} style={[layout.word, compact && layout.fullWidth]}>
-        <VocabularyCard entry={entry} model={model} language={language} study phoneStudy={phone} romanization={romanization} courseClip={guided} />
-      </View>)}
-    </View>
+    <VocabularyList entries={lesson.vocabulary} model={model} language={language} romanization={romanization} courseClip={guided}>
+      {children}
+    </VocabularyList>
   </View>;
 }
 
@@ -37,8 +35,5 @@ export function LessonConversation({ lesson, photo = getLessonDialoguePhoto(less
 }
 
 const layout = StyleSheet.create({
-  wordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, minWidth: 0 },
-  word: { flexGrow: 1, flexShrink: 1, flexBasis: '42%', minWidth: 0 },
-  fullWidth: { flexBasis: '100%' },
   conversation: { minWidth: 0, gap: 16 },
 });

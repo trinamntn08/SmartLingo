@@ -1,10 +1,14 @@
 # Project status
 
-Reviewed on 2026-11-26, Europe/Paris, against this checkout's source. See [PROJECT_PLAN](../PROJECT_PLAN.md) for target requirements, [local operations](LOCAL_OPERATIONS.md) for setup, and [the session checkpoint](SESSION_CHECKPOINT.md) for recent changes, validation and preview availability.
+Reviewed on 2026-11-27, UTC, against this checkout's source. See [PROJECT_PLAN](../PROJECT_PLAN.md) for target requirements, [local operations](LOCAL_OPERATIONS.md) for setup, and [the session checkpoint](SESSION_CHECKPOINT.md) for recent changes, validation and preview availability.
 
 Before every status/progress answer, complete the [local/remote repository check and safe synchronization](SESSION_WORKFLOW.md#repository-check-and-synchronization-first), then record the observation and work in [WORK_LOG](WORK_LOG.md). This dated summary alone does not prove the checkout is current.
 
-This Android phone branch builds on the verified bilingual upgrade at `71c4a64` and the shared learner at `e1774bb`. The earlier French-only shell (`0d21d67`) and hosted learner (`c88bc41`) are recorded separately. [Repository and branch state](REPOSITORY_STATE.md)
+This learner builds on the Japanese curriculum at `afe9d7e`, including the Android phone redesign at `cd9d078`. The earlier French-only shell (`0d21d67`) and hosted learner (`c88bc41`) are recorded separately. [Repository and branch state](REPOSITORY_STATE.md)
+
+## Material-first lessons
+
+Japanese letters open in study mode. The title, kana, readings and audio come first, with a single Practice button. Longer rows wrap and the script chooser, examples and guide use vertical scrolling. Both languages share a vocabulary list with meanings, audio and save controls, followed by examples in context. Today, Learn, Review, Report and Profile use shorter headings, actions and status messages. [Mobile vowel lesson](screenshots/material-first-vowels.png)
 
 ## Japanese curriculum redesign
 

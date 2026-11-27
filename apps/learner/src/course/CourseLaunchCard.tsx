@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import type { CourseDay, OpenCourse } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
 import { colors, designTokens, styles as s } from '../ui/theme';
@@ -15,10 +15,10 @@ export interface CourseLaunchProps {
 
 const progressMessages: Record<CourseLaunchProps['status'], string | undefined> = {
   start: undefined,
-  resume: 'Resume your saved step.',
-  next: 'Your next lesson is ready.',
-  complete: 'All lessons complete. Revisit any lesson.',
-  unavailable: 'Saved course progress is unavailable. You can still study.',
+  resume: undefined,
+  next: undefined,
+  complete: 'Course complete.',
+  unavailable: 'Saved progress unavailable.',
 };
 
 const featuredActions: Record<CourseLaunchProps['status'], string> = {
@@ -32,63 +32,23 @@ const featuredActions: Record<CourseLaunchProps['status'], string> = {
 export function CourseLaunchCard({ course, day, status, loading, href, onOpen, disabled, featured = false, concise = false, showCourseName = true }: CourseLaunchProps & {
   featured?: boolean; concise?: boolean; showCourseName?: boolean;
 }) {
-  const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
-  const message = loading ? 'Loading course progress…' : progressMessages[status];
-  if (concise) {
-    const action = featuredActions[status];
-    return <View testID="open-course-panel" style={[s.card, launch.concise, featured && launch.conciseFeatured]}>
-      {showCourseName && <Text style={launch.courseTitle}>{course.title.split(':', 1)[0]}</Text>}
-      <Text accessibilityRole="header" aria-level={2} style={[s.heading, featured ? launch.featuredTitleCompact : launch.lessonTitle]}>
-        {loading ? 'Loading lesson…' : day.title}
-      </Text>
-      {status === 'unavailable' && <Text style={launch.note}>{message}</Text>}
-      <Button accent={featured} primary={!featured} href={href} onPress={onOpen} label={action}
-        disabled={loading || disabled} trailingIcon="arrow-right">{action.split(' ', 1)[0]}</Button>
-    </View>;
-  }
-
-  return <View testID="open-course-panel" style={[
-    s.card,
-    featured ? launch.featured : launch.regular,
-    compact && (featured ? launch.featuredCompact : launch.regularCompact),
-  ]}>
-    <View style={[launch.copy, compact && launch.copyCompact]}>
-      <Text accessibilityRole="header" aria-level={2} style={launch.courseTitle}>
-        {course.title}
-      </Text>
-      {!loading && <>
-        <Text accessibilityRole="header" aria-level={3} style={[s.heading,
-          featured ? launch.featuredTitle : launch.lessonTitle, featured && compact && launch.featuredTitleCompact]}>
-          Lesson {day.dayNumber}: {day.title}
-        </Text>
-        <Text style={[s.body, launch.outcome]}>{day.outcome}</Text>
-      </>}
-      <Text style={launch.note}>
-        {course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview
-      </Text>
-      {message && <Text accessibilityLiveRegion="polite" style={launch.note}>{message}</Text>}
-    </View>
-    <View style={[s.row, !featured && launch.regularAction]}>
-      <Button accent={featured} primary={!featured} compact={!featured} href={href} onPress={onOpen}
-        disabled={loading || disabled} trailingIcon="arrow-right">{featured ? featuredActions[status] : 'Open course'}</Button>
-    </View>
+  const message = progressMessages[status];
+  const title = concise ? day.title : `Lesson ${day.dayNumber}: ${day.title}`;
+  return <View testID="open-course-panel" style={[s.card, launch.container, featured && launch.featured]}>
+    {showCourseName && <Text style={launch.courseTitle}>{concise ? course.title.split(':', 1)[0] : course.title}</Text>}
+    <Text accessibilityRole="header" aria-level={2} style={[s.heading, !concise && launch.largeTitle]}>
+      {loading ? 'Loading lesson…' : title}
+    </Text>
+    {!loading && message && <Text accessibilityLiveRegion="polite" style={s.muted}>{message}</Text>}
+    <View style={s.row}><Button primary={featured} quiet={!featured} href={href} onPress={onOpen} disabled={loading || disabled}>
+      {featuredActions[status]}
+    </Button></View>
   </View>;
 }
 
 const launch = StyleSheet.create({
-  concise: { padding: 16, gap: 9, borderTopWidth: 3, borderTopColor: colors.yellow },
-  conciseFeatured: { backgroundColor: colors.goldTint, borderWidth: 1, borderTopWidth: 1, borderTopColor: colors.line, gap: 12 },
-  regular: { padding: 20, borderTopWidth: 3, borderTopColor: colors.yellow, gap: 8 },
-  regularCompact: { padding: 16, gap: 6 },
-  featured: { flexGrow: 1, justifyContent: 'center', padding: 24, backgroundColor: colors.goldTint, borderBottomWidth: 3, gap: 18 },
-  featuredCompact: { padding: 16, gap: 14 },
-  copy: { minWidth: 0, gap: 8 },
-  copyCompact: { gap: 6 },
+  container: { padding: 16, gap: 12, borderWidth: 0, minWidth: 0 },
+  featured: { flexGrow: 1, padding: 20, justifyContent: 'center', backgroundColor: colors.sageTint },
+  largeTitle: { fontSize: 34, lineHeight: 40 },
   courseTitle: { ...designTokens.typography.smallLabel, color: colors.primary, fontWeight: '700' },
-  lessonTitle: { fontSize: 22, lineHeight: 29 },
-  featuredTitle: { fontSize: 34, lineHeight: 40 },
-  featuredTitleCompact: { fontSize: 27, lineHeight: 33 },
-  outcome: { fontSize: 16, lineHeight: 25 },
-  note: { ...designTokens.typography.caption, color: colors.muted },
-  regularAction: { marginTop: 4 },
 });

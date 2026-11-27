@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openCoursePilot, japaneseLessons, japaneseAlphabetLessons } from '@smartlingo/content';
+import { openCoursePilot, japaneseLessons } from '@smartlingo/content';
 import { openTopic } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -34,12 +34,11 @@ for (const language of ['French', 'Japanese'] as const) {
       await expect(page.getByText('Step 2 of 5', { exact: true })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
     } else {
-      const first = japaneseAlphabetLessons[0]!;
-      await expect(page.getByRole('heading', { name: first.title, exact: true })).toBeVisible();
-      await expect(page.getByText(/Hiragana.*Row 1 of \d+.*Study/)).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Vowels', exact: true })).toBeVisible();
+      await expect(page.getByText(/Hiragana.*Row 1 of \d+/)).toBeVisible();
       await expect(page.getByTestId(/^kana-row-/)).toHaveCount(0);
-      await button(page, 'Try recognising this row').click();
-      await expect(page.getByText(/Hiragana.*Row 1 of \d+.*Recognition/)).toBeVisible();
+      await button(page, 'Practice').click();
+      await expect(page.getByTestId('kana-recognition')).toBeVisible();
       await expect(button(page, 'Mark row studied')).toBeDisabled();
     }
     await expectContained(page);

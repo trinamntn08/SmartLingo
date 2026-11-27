@@ -123,7 +123,6 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
   function unavailable() {
     return <View style={s.card}>
       <Text accessibilityRole="header" style={s.heading}>This learning link is unavailable</Text>
-      <Text style={s.body}>The lesson or section may have changed, or it may need to be loaded on this device.</Text>
       <View style={s.row}><Button onPress={() => language ? selectTopic(null) : chooseHome()}>{language ? 'Browse all lessons' : 'Choose a language'}</Button></View>
     </View>;
   }
@@ -205,7 +204,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         contentContainerStyle={{ flexGrow: 1 }}>
         <View role="main" nativeID={learnerContentId} tabIndex={-1}
           style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 17 },
-            compact && { padding: 14, paddingTop: compactReader ? 8 : 12, paddingBottom: 22, gap: 12 }]}>
+            route.kind === 'letters' && { maxWidth: 900 },
+            compact && { padding: 16, paddingTop: compactReader ? 8 : 16, paddingBottom: 24, gap: 12 }]}>
           {!courseVisible && <CourseWriteStatus learning={courseLearning} />}
           {route.kind === 'unavailable' ? unavailable() : !language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />
@@ -214,13 +214,12 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
             {!!model.loadError && <View style={s.error}>
               <Text accessibilityRole="alert" style={s.heading}>Your learning data couldn’t be opened.</Text>
               <Text style={s.body}>{model.loadError}</Text>
-              <Text style={s.body}>You can browse the bundled lessons. Saving and lesson progress need browser storage.</Text>
+              <Text style={s.body}>You can still study. Saving needs browser storage.</Text>
               <Button onPress={() => void model.load()}>Retry opening storage</Button>
             </View>}
             {!!model.saveError && <View style={s.error}>
               <Text accessibilityRole="alert" style={s.heading}>This change hasn’t been confirmed as saved.</Text>
               <Text style={s.body}>{model.saveError}</Text>
-              <Text style={s.muted}>Retry keeps the same event, so your practice won’t be counted twice.</Text>
               <View style={s.row}>
                 <Button primary disabled={model.busy} onPress={model.retry}>Retry save</Button>
                 <Button disabled={model.busy} onPress={model.cancelWrite}>Dismiss and continue</Button>
@@ -228,13 +227,12 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
             </View>}
             {model.busy && !compact && <Text accessibilityLiveRegion="polite" style={s.muted}>Saving in this browser…</Text>}
             {!!selection.message && <Text accessibilityLiveRegion="polite" style={s.muted}>{selection.message}</Text>}
-            {switchingBlocked && !compact && <Text style={s.muted}>Finish saving or resolve the save message before leaving this screen or changing language.</Text>}
             {renderDestination(language)}
           </>}
         </View>
       </ScrollView>
     </View>
-    {language && !choosing && mobileNav && <View style={{ backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line,
+    {language && !choosing && mobileNav && <View nativeID="learner-bottom-bar" style={{ flexShrink: 0, backgroundColor: colors.card, borderTopWidth: 1, borderColor: colors.line,
       paddingHorizontal: 5, paddingVertical: 3 }}>
       <LearnerNavigation language={language} selected={tab} disabled={switchingBlocked} onSelect={navigate} hrefFor={item => routeHref(tabRoute(item, language))} mobile />
     </View>}

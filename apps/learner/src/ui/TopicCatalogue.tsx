@@ -6,7 +6,7 @@ import { Button } from './controls';
 import { Icon } from './Icon';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
-import { VocabularyCard } from './VocabularyCard';
+import { VocabularyList } from './VocabularyList';
 import { TopicCover } from './TopicCover';
 import { TopicLessonCards } from './TopicLessonCards';
 import { useVisitState } from '../app/WebNavigation';
@@ -62,16 +62,13 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
         {!phone && <View style={layout.topicCover}><TopicCover key={selected.name} topic={selected} hero /></View>}
       </View>
     </> : !phone && <View style={{ gap: 4 }}>
-      <Text style={s.eyebrow}>{languageNames[language]} / Library</Text>
       <Text accessibilityRole="header" style={[s.title, phone && s.compactTitle]}>Explore topics</Text>
-      <Text style={s.muted}>{topics.length} everyday topics · {[...new Set(lessons.map(lesson => lesson.level === 'foundation' ? 'Foundations' : lesson.level))].join(' / ')}</Text>
     </View>}
     {(!selected || !compactLibrary) && <CatalogueFilters search={search} lessons={lessons} compact={phone} />}
     {!selected ? <>
-      {!topics.length ? <View style={s.card}><Text style={s.heading}>No topics available.</Text>
-        <Text style={s.body}>Your lesson catalogue is empty. Try loading the published catalogue from Profile.</Text></View>
+      {!topics.length ? <Text style={s.body}>No topics available.</Text>
         : !visibleTopics.length && <EmptyResults onClear={clearFilters} />}
-      {!!visibleTopics.length && (query.trim() || level !== 'All') && <Text accessibilityLiveRegion="polite" style={s.muted}>{visibleTopics.length} {visibleTopics.length === 1 ? 'topic' : 'topics'} to explore</Text>}
+      {!!visibleTopics.length && (query.trim() || level !== 'All') && <Text accessibilityLiveRegion="polite" style={s.muted}>{visibleTopics.length} {visibleTopics.length === 1 ? 'topic' : 'topics'}</Text>}
       {!!visibleTopics.length && <TopicGrid topics={visibleTopics} model={model} language={language} onSelect={onSelectTopic} disabled={disabled} compact={phone} />}
     </> : <>
       <TopicLessonCards language={language} lessons={selected.lessons} visibleLessons={topicLessons}
@@ -79,13 +76,13 @@ export function TopicCatalogue({ language, lessons, topics, model, onOpen, selec
         afterFirst={compactLibrary ? <CatalogueFilters search={search} lessons={lessons} compact={phone} /> : undefined}
         onOpen={onOpen} disabled={disabled} />
       {!topicLessons.length && <EmptyResults onClear={clearFilters} />}
-      <TopicVocabulary topic={selected} filteredLessons={topicLessons} query={query} compact={phone} model={model} language={language} />
+      <TopicVocabulary topic={selected} filteredLessons={topicLessons} query={query} model={model} language={language} />
     </>}
   </View>;
 }
 
-function TopicVocabulary({ topic, filteredLessons, query, compact, model, language }: {
-  topic: LessonTopic; filteredLessons: Lesson[]; query: string; compact: boolean; model: LearningModel; language: TargetLanguage;
+function TopicVocabulary({ topic, filteredLessons, query, model, language }: {
+  topic: LessonTopic; filteredLessons: Lesson[]; query: string; model: LearningModel; language: TargetLanguage;
 }) {
   const contentId = useId();
   const [expanded, setExpanded] = useVisitState('topic-vocabulary-expanded', false);
@@ -97,16 +94,14 @@ function TopicVocabulary({ topic, filteredLessons, query, compact, model, langua
     <View style={[s.row, layout.vocabularyHeader]}>
       <Button compact quiet label="Topic vocabulary" icon="book" expanded={expanded} controls={contentId}
         onPress={() => setExpanded(value => !value)}>Topic vocabulary <Text aria-hidden>{expanded ? '−' : '+'}</Text></Button>
-      <Text style={layout.topicDetail}>{topic.vocabulary.length} words and phrases</Text>
+      <Text accessibilityRole={expanded ? 'header' : undefined} aria-level={expanded ? 2 : undefined} style={layout.topicDetail}>
+        {expanded ? `Vocabulary · ${words.length}` : `${topic.vocabulary.length} words and phrases`}
+      </Text>
     </View>
     <View nativeID={contentId} style={expanded ? layout.wordBank : { display: 'none' }}>
       {expanded && <>
-        <Text accessibilityRole="header" aria-level={2} style={s.heading}>Vocabulary · {words.length}</Text>
-        {!words.length && <Text style={s.muted}>No vocabulary matches these filters.</Text>}
-        <View style={[s.split, { gap: 16 }]}>{words.map(entry =>
-          <View key={`${topic.name}:${entry.id}`} style={{ flexGrow: 1, flexShrink: 1, flexBasis: compact ? '100%' : 350, minWidth: 0 }}>
-            <VocabularyCard entry={entry} model={model} language={language} />
-          </View>)}</View>
+        {!words.length && <Text style={s.muted}>No matching words.</Text>}
+        <VocabularyList entries={words} model={model} language={language} />
       </>}
     </View>
   </View>;
@@ -185,7 +180,7 @@ function TopicTile({ topic, width, events, language, disabled, onSelect, compact
         <Text style={[s.heading, layout.tileName, compact && layout.phoneTileName]}>{topic.name}</Text>
         <View style={[layout.tileArrow, hovered && layout.tileArrowHover]}><Icon name="arrow-right" size={18} color={colors.primary} /></View>
       </View>
-      {!compact && topic.vocabulary.length > 0 && <Text style={layout.sample} numberOfLines={2} {...languageProps}>
+      {!compact && topic.vocabulary.length > 0 && <Text style={layout.sample} {...languageProps}>
         {topic.vocabulary.slice(0, 2).map(entry => entry.target).join(' · ')}
       </Text>}
       <View nativeID={summaryId} style={!compact && layout.tileSummary}>
@@ -197,7 +192,7 @@ function TopicTile({ topic, width, events, language, disabled, onSelect, compact
 }
 
 function EmptyResults({ onClear }: { onClear: () => void }) {
-  return <View style={s.card}><Text style={s.heading}>No matches.</Text><Text style={s.body}>Try a topic, word, reading or English meaning.</Text><Button onPress={onClear}>Clear search and filters</Button></View>;
+  return <View style={s.card}><Text style={s.heading}>No matches.</Text><Text style={s.body}>Try another word or level.</Text><Button onPress={onClear}>Clear search and filters</Button></View>;
 }
 
 const layout = StyleSheet.create({
@@ -221,7 +216,7 @@ const layout = StyleSheet.create({
     flex: 1, paddingVertical: 8, paddingRight: 7, outlineWidth: 0 },
   levels: { gap: tokens.space.xs, paddingVertical: 3 },
   focus: { outlineColor: colors.focusRing, outlineWidth: tokens.focus.outlineWidth, outlineOffset: 2, outlineStyle: 'solid' },
-  tile: { minWidth: 0, flexShrink: 1, gap: 0, padding: 0, borderBottomWidth: 3, boxShadow: 'none' },
+  tile: { minWidth: 0, flexShrink: 1, gap: 0, padding: 0, borderBottomWidth: 1, boxShadow: 'none' },
   tileHover: { borderColor: colors.primary, backgroundColor: colors.sageTint },
   tileArt: { borderTopLeftRadius: tokens.radius.card - 1, borderTopRightRadius: tokens.radius.card - 1, overflow: 'hidden' },
   phoneTile: { flexDirection: 'row', alignItems: 'center', paddingLeft: 9, borderRadius: 13, borderBottomWidth: 1 },

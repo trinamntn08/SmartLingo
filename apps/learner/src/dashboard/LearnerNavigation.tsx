@@ -9,11 +9,6 @@ export const learnerTabs = ['Today', 'Learn', 'Slang', 'Review', 'Report', 'Prof
 export type LearnerTab = typeof learnerTabs[number];
 const japaneseTabs = learnerTabs.filter(tab => tab !== 'Slang');
 const icons: Record<LearnerTab, IconName> = { Today: 'home', Learn: 'book', Slang: 'grid', Review: 'bookmark', Report: 'chart', Profile: 'person' };
-const iconColors: Record<LearnerTab, string> = {
-  Today: colors.goldTint, Learn: colors.sageTint, Slang: colors.goldTint, Review: colors.lilacTint,
-  Report: colors.skyTint, Profile: colors.sand,
-};
-
 export const learnerContentId = 'learner-main';
 const learnerNavigationId = 'learner-navigation';
 
@@ -57,14 +52,14 @@ function NavigationItem({ tab, selected, disabled, onPress, href, mobile }: {
     style={({ pressed }) => ({ flexDirection: mobile ? 'column' : 'row', gap: mobile ? 2 : 8, alignItems: 'center', justifyContent: 'center',
       minHeight: mobile ? 48 : 47, paddingVertical: 3, paddingHorizontal: mobile ? 2 : 11,
       ...(mobile ? { flex: 1, minWidth: 0 } : {}),
-      borderRadius: 10, borderWidth: 1, borderColor: selected && !mobile ? colors.yellow : 'transparent',
-      backgroundColor: selected && !mobile ? colors.goldTint : pressed || hovered ? colors.sand : 'transparent', opacity: disabled ? 0.5 : 1,
+      borderRadius: 10,
+      backgroundColor: selected && !mobile ? colors.sageTint : pressed || hovered ? colors.sand : 'transparent', opacity: disabled ? 0.5 : 1,
       outlineWidth: focused ? 3 : 0, outlineStyle: 'solid', outlineOffset: 2, outlineColor: colors.focusRing })}>
     <View style={{ width: mobile ? 38 : 27, height: mobile ? 25 : 27, borderRadius: 9, alignItems: 'center', justifyContent: 'center',
-      backgroundColor: mobile ? selected ? colors.goldTint : 'transparent' : selected ? 'transparent' : iconColors[tab] }}>
+      backgroundColor: mobile && selected ? colors.sageTint : 'transparent' }}>
       <Icon name={icons[tab]} size={mobile ? 20 : 17} color={selected ? colors.primary : colors.ink} />
     </View>
-    <Text style={{ ...(mobile ? { ...designTokens.typography.caption, fontSize: 11, lineHeight: 15, width: '100%', minWidth: 0 } : designTokens.typography.muted), textAlign: 'center', flexShrink: 1, color: selected ? colors.primary : colors.muted,
+    <Text style={{ ...(mobile ? { ...designTokens.typography.caption, fontSize: 12, lineHeight: 16, width: '100%', minWidth: 0 } : designTokens.typography.muted), textAlign: 'center', flexShrink: 1, color: selected ? colors.primary : colors.muted,
       fontWeight: selected ? '700' : '600' }}>{tab}</Text>
   </Pressable>;
 }

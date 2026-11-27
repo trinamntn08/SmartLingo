@@ -10,6 +10,37 @@ const extension = (day: number) => japaneseLessons.find(lesson => lesson.id === 
 
 test.beforeEach(async ({ context }) => { await context.route('**/127.0.0.1:3001/**', route => route.abort()); });
 
+test('vocabulary rows stay in one column and the full translation wraps', async ({ page }, info) => {
+  const lesson = japaneseLessons.find(item => item.id === 'ja.introductions.name')!;
+  const word = lesson.vocabulary.find(entry => entry.id === 'ja.introductions.yoroshiku')!;
+  await page.goto(`/lesson/ja/${lesson.id}/vocabulary`);
+  const rows = page.getByTestId(/^vocabulary-/);
+  await expect(rows).toHaveCount(lesson.vocabulary.length);
+  const translation = page.getByTestId(`vocabulary-${word.id}`).getByText(word.meaning, { exact: true });
+  const widths = info.project.name === 'small-screen' ? [320, 390, 430] : [1440];
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 844 });
+    await expect(translation).toBeVisible();
+    const positions = await rows.evaluateAll(elements => elements.map(element => {
+      const { top, right, bottom, left } = element.getBoundingClientRect();
+      return { top, right, bottom, left };
+    }));
+    for (const [i, row] of positions.entries()) {
+      expect(row.left).toBeGreaterThanOrEqual(0);
+      expect(row.right).toBeLessThanOrEqual(width);
+      if (i > 0) expect(row.top).toBeGreaterThanOrEqual(positions[i - 1].bottom - 1);
+    }
+    await translation.scrollIntoViewIfNeeded();
+    await expect(translation).toBeInViewport({ ratio: 1 });
+    if (width <= 430) {
+      const wraps = await translation.evaluate(element => element.getBoundingClientRect().height > parseFloat(getComputedStyle(element).lineHeight));
+      expect(wraps).toBe(true);
+    }
+    await rows.last().scrollIntoViewIfNeeded();
+    await expect(rows.last()).toBeInViewport();
+  }
+});
+
 test('every Japanese topic exposes its vocabulary and short lessons', async ({ page }, info) => {
   test.setTimeout(120000);
   await page.goto('/'); await button(page, 'Learn Japanese').click();
@@ -24,7 +55,7 @@ test('every Japanese topic exposes its vocabulary and short lessons', async ({ p
     await page.getByRole('textbox', { name: 'Search lessons', exact: true }).fill(entry.reading!);
     const card = page.getByTestId(`vocabulary-${entry.id}`);
     await expect(card.getByRole('heading', { name: entry.target, exact: true })).toBeVisible();
-    await expect(card.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
+    await expect(page.getByTestId(`example-${entry.id}`).getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
     await page.getByRole('textbox', { name: 'Search lessons', exact: true }).fill('');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }

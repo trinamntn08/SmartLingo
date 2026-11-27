@@ -25,8 +25,8 @@ test('Learn opens greetings with readable arrival and departure support, saved w
     const card = page.getByTestId(`vocabulary-${entry.id}`);
     await expect(card.getByRole('heading', { name: target, exact: true })).toBeVisible();
     await expect(card.getByText(entry.meaning, { exact: true })).toBeVisible();
-    await expect(card.getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
-    if (entry.note) await expect(card.getByText(entry.note, { exact: true })).toBeVisible();
+    await expect(page.getByTestId(`example-${entry.id}`).getByText(entry.exampleMeaning, { exact: true })).toBeVisible();
+    if (entry.note) await expect(page.getByTestId(`example-${entry.id}`).getByText(entry.note, { exact: true })).toBeVisible();
   }
   await expect(page.getByRole('button', { name: /Show meaning|Show example translation|Show word note/ })).toHaveCount(0);
   await page.getByRole('button', { name: 'Save bonsoir', exact: true }).click();

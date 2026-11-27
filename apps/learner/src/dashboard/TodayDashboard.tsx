@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import type { LessonTopic, TargetLanguage } from '@smartlingo/domain';
-import { alphabetProgress, isAlphabetLessonId } from '../alphabet/progress';
+import { alphabetLessonTitle, alphabetProgress, isAlphabetLessonId } from '../alphabet/progress';
 import { routeHref, topicRouteKey } from '../app/routes';
 import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
 import { ContextImage } from '../ui/ContextImage';
@@ -61,70 +61,55 @@ export function TodayDashboard({ language, courseLaunch, courseStudiedAt, alphab
     { label: 'Speaking practice', description: 'Say your part in a dialogue', icon: 'mic', tint: colors.sageTint, open: onSpeak, href: routeHref({ kind: 'speaking', language }) },
   ];
 
-  if (compact) return <View style={today.compactScreen}>
-    <Text accessibilityRole="header" aria-level={1} style={[s.title, today.phoneTitle]}>Today</Text>
-    <View testID="today-next-step">
-      {recommendLetters ? <View style={[s.card, today.kanaPhone]}>
-        <Text style={today.kanaCourse}>Japanese letters</Text>
-        <Text accessibilityRole="header" aria-level={2} style={[s.heading, today.phoneLessonTitle]}>
-          {alphabet.next?.title ?? 'Hiragana and katakana'}
-        </Text>
-        <Button accent label={alphabetAction} onPress={onAlphabet} href="/learn/ja/letters" disabled={disabled} trailingIcon="arrow-right">
-          {!lettersStarted ? 'Start' : alphabet.next ? 'Continue' : 'Review'}
-        </Button>
-      </View> : <CourseLaunchCard {...courseLaunch} featured concise />}
+  return <View style={[today.screen, compact && today.compactScreen]}>
+    <Text accessibilityRole="header" aria-level={1} style={[s.title, compact && today.phoneTitle]}>Today</Text>
+    <View style={[today.hero, stackedHero && today.stacked]}>
+      <View testID="today-next-step" style={!stackedHero && today.recommendationWide}>
+        {recommendLetters
+          ? <KanaRecommendation alphabet={alphabet} action={alphabetAction} onOpen={onAlphabet} disabled={disabled} />
+          : <CourseLaunchCard {...courseLaunch} featured concise={compact} />}
+      </View>
+      <TodayPhoto language={language} stacked={stackedHero} compact={compact} />
     </View>
-    {recommendLetters && <CourseLaunchCard {...courseLaunch} concise />}
-    <TodayPhoto language={language} stacked compact />
-  </View>;
-
-  return <View style={today.screen}>
-    <View style={today.intro}>
-      <Text accessibilityRole="header" aria-level={1} style={[s.heading, compact && today.compactHeading]}>Today</Text>
-      <View testID="today-next-step" style={[today.hero, stackedHero && today.stacked]}>
-        <View style={!stackedHero && today.recommendationWide}>
-          {recommendLetters
-            ? <KanaRecommendation alphabet={alphabet} action={alphabetAction} onOpen={onAlphabet} disabled={disabled} />
-            : <CourseLaunchCard {...courseLaunch} featured />}
+    {recommendLetters && <View testID="open-course-panel" style={[s.row, today.courseLink]}>
+      <Text style={[s.body, { minWidth: 0, flexShrink: 1 }]}>{courseLaunch.course.title.split(':', 1)[0]}</Text>
+      <Button compact quiet disabled={disabled || courseLaunch.loading} onPress={courseLaunch.onOpen} href={courseLaunch.href}>Open course</Button>
+    </View>}
+    {!compact && <>
+      <View style={today.section}>
+        <View style={[s.row, today.sectionHeader]}>
+          <Text accessibilityRole="header" aria-level={2} style={s.heading}>
+            Explore topics
+          </Text>
+          <Button compact icon="grid" onPress={onExplore} href={topicsHref} disabled={disabled}>
+            Browse lessons
+          </Button>
         </View>
-        <TodayPhoto language={language} stacked={stackedHero} compact={compact} />
+        {!!topics.length && <View style={today.tileGrid}>
+          {topics.slice(0, starterTileStyles.length).map((topic, index) => (
+            <ShortcutTile key={topic.name} disabled={disabled} accessibleLabel={`Explore ${topic.name}`} item={{
+              label: topic.name,
+              description: `${topic.lessons.length} short ${topic.lessons.length === 1 ? 'lesson' : 'lessons'}`,
+              ...starterTileStyles[index]!,
+              open: () => onTopic(topic.name),
+              href: routeHref({ kind: 'topics', language, topic: topicRouteKey(topic.name) }),
+            }} />
+          ))}
+        </View>}
       </View>
-    </View>
-    {recommendLetters && <CourseLaunchCard {...courseLaunch} />}
 
-    <View style={today.section}>
-      <View style={[s.row, today.sectionHeader]}>
-        <Text accessibilityRole="header" aria-level={2} style={[s.heading, compact && today.compactHeading]}>
-          Explore topics
-        </Text>
-        <Button compact icon="grid" trailingIcon="arrow-right" onPress={onExplore} href={topicsHref} disabled={disabled}>
-          Browse lessons
-        </Button>
+      <View style={today.section}>
+        <View style={[s.row, today.sectionHeader]}>
+          <Text accessibilityRole="header" aria-level={2} style={s.heading}>Listening and speaking</Text>
+          {japanese && !recommendLetters && <Button quiet compact icon="book" onPress={onAlphabet} href="/learn/ja/letters" disabled={disabled}>
+            {alphabetAction}
+          </Button>}
+        </View>
+        <View style={today.tileGrid}>
+          {shortcuts.map(shortcut => <ShortcutTile key={shortcut.label} item={shortcut} disabled={disabled} />)}
+        </View>
       </View>
-      {!!topics.length && <View style={[today.tileGrid, compact && today.stacked]}>
-        {topics.slice(0, starterTileStyles.length).map((topic, index) => (
-          <ShortcutTile key={topic.name} compact={compact} disabled={disabled} accessibleLabel={`Explore ${topic.name}`} item={{
-            label: topic.name,
-            description: `${topic.lessons.length} short ${topic.lessons.length === 1 ? 'lesson' : 'lessons'}`,
-            ...starterTileStyles[index]!,
-            open: () => onTopic(topic.name),
-            href: routeHref({ kind: 'topics', language, topic: topicRouteKey(topic.name) }),
-          }} />
-        ))}
-      </View>}
-    </View>
-
-    <View style={today.section}>
-      <View style={[s.row, today.sectionHeader]}>
-        <Text accessibilityRole="header" aria-level={2} style={[s.heading, compact && today.compactHeading]}>Listening and speaking</Text>
-        {japanese && !recommendLetters && <Button quiet compact icon="book" onPress={onAlphabet} href="/learn/ja/letters" disabled={disabled}>
-          {alphabetAction}
-        </Button>}
-      </View>
-      <View style={[today.tileGrid, compact && today.stacked]}>
-        {shortcuts.map(shortcut => <ShortcutTile key={shortcut.label} item={shortcut} compact={compact} disabled={disabled} />)}
-      </View>
-    </View>
+    </>}
   </View>;
 }
 
@@ -144,20 +129,16 @@ function KanaRecommendation({ alphabet, action, onOpen, disabled }: {
 }) {
   return <View style={[s.card, today.kanaCard]}>
     <View style={today.kanaCopy}>
-      <Text accessibilityRole="header" aria-level={2} style={today.kanaCourse}>
-        {!alphabet.completed && !alphabet.taskIds.size ? 'Start with Japanese letters' : alphabet.next ? 'Continue Japanese letters' : 'Revisit Japanese letters'}
-      </Text>
-      {alphabet.next && <Text accessibilityRole="header" aria-level={3} style={s.heading}>{alphabet.next.title}</Text>}
-      <Text style={today.kanaDescription}>{alphabet.next ? 'Hear the sounds, read real words and practise typing them.'
-        : 'Revisit hiragana, katakana and sound patterns.'}</Text>
-      <Text style={today.translation}>{alphabet.completed} of {alphabet.total} letter lessons studied</Text>
+      <Text style={today.kanaCourse}>{alphabet.next?.script === 'katakana' ? 'Katakana' : 'Hiragana'}</Text>
+      <Text accessibilityRole="header" aria-level={2} style={s.heading}>{alphabet.next ? alphabetLessonTitle(alphabet.next) : 'Japanese letters'}</Text>
+      {!!alphabet.completed && <Text style={today.translation}>{alphabet.completed} of {alphabet.total} rows studied</Text>}
     </View>
-    <View style={s.row}><Button accent onPress={onOpen} href="/learn/ja/letters" disabled={disabled} trailingIcon="arrow-right">{action}</Button></View>
+    <View style={s.row}><Button primary onPress={onOpen} href="/learn/ja/letters" disabled={disabled}>{action}</Button></View>
   </View>;
 }
 
-function ShortcutTile({ item, compact, disabled, accessibleLabel }: {
-  item: Shortcut; compact: boolean; disabled: boolean; accessibleLabel?: string;
+function ShortcutTile({ item, disabled, accessibleLabel }: {
+  item: Shortcut; disabled: boolean; accessibleLabel?: string;
 }) {
   const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -165,14 +146,14 @@ function ShortcutTile({ item, compact, disabled, accessibleLabel }: {
     aria-disabled={disabled} disabled={disabled} {...routePress(disabled ? undefined : item.href, item.open)}
     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
     onHoverIn={() => setHovered(true)} onHoverOut={() => setHovered(false)}
-    style={({ pressed }) => [today.tile, compact ? today.tileCompact : today.tileWide, (pressed || hovered) && today.tileHovered,
+    style={({ pressed }) => [today.tile, (pressed || hovered) && today.tileHovered,
       focused && today.tileFocused, disabled && today.tileDisabled]}>
     <View style={[today.tileIcon, { backgroundColor: item.tint }]}>
       <Icon name={item.icon} size={20} color={colors.primary} />
     </View>
     <View style={today.tileCopy}>
       <Text style={today.tileTitle}>{item.label}</Text>
-      <Text style={today.translation}>{item.description}</Text>
+      {accessibleLabel && <Text style={today.translation}>{item.description}</Text>}
     </View>
     <Icon name="chevron" size={16} color={colors.muted} />
   </Pressable>;
@@ -182,9 +163,6 @@ const today = StyleSheet.create({
   screen: { gap: 24, minWidth: 0 },
   compactScreen: { gap: 14, minWidth: 0 },
   phoneTitle: { fontSize: 32, lineHeight: 39 },
-  phoneLessonTitle: { fontSize: 27, lineHeight: 33 },
-  kanaPhone: { backgroundColor: colors.goldTint, padding: 16, gap: 12 },
-  intro: { gap: 12 },
   hero: { flexDirection: 'row', gap: 14 },
   stacked: { flexDirection: 'column' },
   recommendationWide: { flex: 1.25, minWidth: 0, justifyContent: 'center' },
@@ -194,18 +172,15 @@ const today = StyleSheet.create({
   photoCompact: { height: 144, borderRadius: 16 },
   photo: { width: '100%', height: '100%' },
   translation: { ...designTokens.typography.caption, color: colors.muted },
-  kanaCard: { flexGrow: 1, justifyContent: 'center', backgroundColor: colors.goldTint, borderBottomWidth: 3, gap: 14, padding: 20 },
+  kanaCard: { flexGrow: 1, justifyContent: 'center', backgroundColor: colors.sageTint, borderWidth: 0, gap: 16, padding: 20 },
+  courseLink: { justifyContent: 'space-between', borderBottomWidth: 1, borderColor: colors.line, paddingBottom: 8 },
   kanaCopy: { minWidth: 0, gap: 5 },
   kanaCourse: { ...designTokens.typography.smallLabel, fontWeight: '700', color: colors.primary },
-  kanaDescription: { ...designTokens.typography.muted, color: colors.ink },
-  compactHeading: { ...designTokens.typography.compactHeading },
   section: { gap: 10 },
   sectionHeader: { justifyContent: 'space-between' },
   tileGrid: { flexDirection: 'row', gap: 10 },
-  tile: { minWidth: 0, minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10,
-    borderRadius: 13, borderWidth: 1, borderBottomWidth: 3, borderColor: colors.line, backgroundColor: colors.card },
-  tileWide: { flex: 1 },
-  tileCompact: { minHeight: 60 },
+  tile: { flex: 1, minWidth: 0, minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10,
+    borderRadius: 10, backgroundColor: colors.card },
   tileHovered: { backgroundColor: colors.sageTint },
   tileFocused: { outlineWidth: designTokens.focus.outlineWidth, outlineColor: colors.focusRing, outlineStyle: 'solid', outlineOffset: 2 },
   tileDisabled: { opacity: designTokens.opacity.disabled },

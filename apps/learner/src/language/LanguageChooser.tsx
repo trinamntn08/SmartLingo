@@ -20,7 +20,7 @@ export function LanguageChooser({ onChoose }: { onChoose: (language: TargetLangu
       <Text accessibilityRole="header" aria-level={1} style={[s.hero, !split && chooser.smallHero]}>French and Japanese for everyday life</Text>
       <Text style={chooser.description}>Study useful words, listen to real-life dialogues and practise what to say.</Text>
     </View>
-    <View style={[chooser.options, split && chooser.sideOptions]}>
+    <View style={split && chooser.sideOptions}>
       <View style={[chooser.grid, compact && chooser.compactGrid]}>
         {targetLanguages.map(language => <View key={language} style={[chooser.card, compact && chooser.compactCard]}>
           <ContextImage photo={getContextPhoto(language)} style={compact ? chooser.compactPhoto : [chooser.photo, split && chooser.desktopPhoto]} />
@@ -35,7 +35,6 @@ export function LanguageChooser({ onChoose }: { onChoose: (language: TargetLangu
           </View>
         </View>)}
       </View>
-      <Text style={chooser.details}>Progress is saved in this browser. You can switch languages any time.</Text>
     </View>
   </View>;
 }
@@ -49,7 +48,6 @@ const chooser = StyleSheet.create({
   marker: { width: 40, height: 4, borderRadius: 2, backgroundColor: colors.yellow },
   smallHero: { fontSize: 40, lineHeight: 44, letterSpacing: -0.8, maxWidth: 600 },
   description: { ...designTokens.typography.body, color: colors.muted, maxWidth: 420 },
-  options: { gap: 16 },
   sideOptions: { flex: 1.8, minWidth: 0 },
   grid: { flexDirection: 'row', gap: 16 },
   compactGrid: { flexDirection: 'column', gap: 12 },

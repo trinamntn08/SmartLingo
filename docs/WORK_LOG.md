@@ -2,6 +2,13 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Remove the language chooser footer message
+
+- Start. At 19:41 CET the clean primary `feat/notebook-learner-ui` checkout matched live origin at `bb554db599f93a34527ebe18a29ae46b8f5dbd82`, ahead/behind 0/0. Inspected the worktrees and verified all 75 fetched and live refs.
+- Cloud comparison. `origin/feat/full-frontend-rework` at `66d03cc85814e1835d37c0e8594d9d63c5dad590` introduced the footer and is in the current lineage. The chooser in `origin/feat/material-first-lessons` at `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8` has no separate follow-up for this copy. The current notebook chooser provides the baseline and the prior Cloud adaptations remain in scope as recorded.
+- Outcome. Removed the browser-progress and language-switching message below the chooser cards and its unused spacing rule.
+- Verification. All 75 fetched and live branch heads matched again before export. Repository and TypeScript checks and four learner browser tests passed. The message was absent and both language buttons were available at 1440 and 320 px. Port 8082 serves build `99d293376cdc48c011e3cd13ce7ce19ce1727b1ac8e67fcdb2d931416cc88831` and all 148 served assets matched the export manifest. Next is owner review.
+
 ## 2026-11-27 Refine the shared lesson reader
 
 - Start. At 19:11–19:13 CET the clean primary `feat/notebook-learner-ui` checkout and live origin matched at `20cfe0ac0049f47bc00a6dbbe863e3cc5508b8aa`, ahead/behind 0/0. Inspected the worktrees and matched all 75 fetched and live branch names and SHAs for the three reader requests.

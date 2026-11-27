@@ -76,11 +76,12 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
-  await expect(page.getByText('Je voudrais means', { exact: false })).toBeVisible();
+  await expect(page.getByTestId('grammar-note')).toHaveCount(0);
   await expect(page.getByText('Hello! What would you like?', { exact: true })).toBeVisible();
   await expect(button(page, /Show translation|Show grammar help/)).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('dialogue.png'), fullPage: true });
   await openKeyPhrases(page);
+  await expect(page.getByTestId('grammar-note').getByText('Je voudrais means', { exact: false })).toBeVisible();
   await button(page, /Try picture practice/).click();
   await button(page, 'l’addition').click();
   await expect(page.getByText('Take another look.', { exact: false })).toBeVisible();

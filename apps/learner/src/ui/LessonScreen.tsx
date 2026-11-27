@@ -5,6 +5,7 @@ import { Button } from './controls';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
 import { LessonConversation, LessonWords } from './LessonStudy';
+import { GrammarNote } from './GrammarNote';
 import { PictureActivity, SentenceActivity } from './LessonPractice';
 import { ListeningQuestionPlayer } from '../listening/ListeningQuestionPlayer';
 import { buildLessonListeningQuestion } from '../listening/lessonQuestions';
@@ -214,6 +215,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       </>}
       {stage === 'vocabulary' && <>
         <LessonWords lesson={lesson} model={model} />
+        <GrammarNote lessonId={lesson.id} note={lesson.grammar} />
         <StudyActions sticky={!compact}>
           <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
           {listeningQuestion && <Button quiet disabled={exerciseBlocked && !browseOnly}

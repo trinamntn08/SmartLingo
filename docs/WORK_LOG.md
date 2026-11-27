@@ -2,6 +2,18 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Put Slang audio and saving beside each expression
+
+- Start. At 18:57 CET the primary `feat/notebook-learner-ui` checkout and live origin matched at `6e8acf12d2b10f027ac4443ab0f2dc077483a30d`, ahead/behind 0/0. All 75 live and fetched branch names and SHAs matched. The separate grammar change was in progress and preserved.
+- Cloud comparison. The Slang catalogue from `1068589290305171539f327c5e7e043e6b992444` is adapted in the current reader branch. The separate tap-to-pronounce ref `304e518d7dc84788a6d14a70ce587f24419b39b5` adds a different pronunciation interaction on the Android release lineage. The requested control move uses the current web playback and notebook contracts.
+- Scope. A UI subagent owns the Slang card markup, the functional icon and its test assertions. The primary agent verifies integration. Acceptance is a speaker and save star beside each expression, a clear saved state, accessible controls and no repeated Informal tag.
+
+## 2026-11-27 Move lesson grammar to Key phrases
+
+- Start. At 18:56 CET the clean primary `feat/notebook-learner-ui` checkout and live origin matched at `6e8acf12d2b10f027ac4443ab0f2dc077483a30d`, ahead/behind 0/0. Inspected the worktrees and matched all 75 branch names and full SHAs. The material-first Cloud ref `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8` still renders the note in the conversation. The other adapted learner, curriculum and delivery refs retain their recorded dispositions.
+- Acceptance. The shared French and Japanese reader puts the existing grammar note after the vocabulary on Key phrases. Dialogue keeps the transcripts and contextual scene. Learners can read the complete note before doing the exercises.
+- Checks. Repository and TypeScript checks, six Chromium cases and six cold-offline cases passed across the run and reruns. The two B1 offline reruns use the current Today sidebar route. Preview build `8f382032cf6f` matched all 148 exported assets. Desktop and 320 px walkthroughs confirmed the French opening note’s placement and exercised the previously adapted Cloud learner entries. The commit containing this entry is the grammar checkpoint.
+
 ## 2026-11-27 Simplify Today and add a study sidebar
 
 - Start. At 18:42 CET the clean primary `feat/notebook-learner-ui` checkout matched live origin at `d48021b28189b1aa04146d3f578381fc19976b75`, ahead/behind 0/0. All 75 fetched and live branch names and full SHAs matched. Inspected 20 worktrees and reviewed the live preview at desktop and phone widths.

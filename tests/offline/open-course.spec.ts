@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, getFrenchTopicPractice, frenchCourseLessonsByDay, openCoursePilot } from '@smartlingo/content';
 import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
 import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline,
-  openProfileSection, openTopic } from '../e2e/learner-journeys';
+  openProfileSection, openTodayStudyOptions, openTopic } from '../e2e/learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
@@ -32,7 +32,7 @@ test('the B1 starter course and its connected response are available after cold 
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/today/fr');
-  await cold.getByRole('button', { name: b1.title, exact: true }).click();
+  await (await openTodayStudyOptions(cold)).getByRole('link', { name: b1.title, exact: true }).click();
   await expect(step(cold, `Lesson 1: ${day.title}`)).toBeVisible();
   await button(cold, 'Next').click();
   await button(cold, 'Next').click();
@@ -72,12 +72,13 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   const study = opening.blocks.find(block => block.kind === 'study')!;
   if (study.kind !== 'study') throw new Error('Missing study explanation');
   const grammar = panel(cold).getByTestId('grammar-note');
-  await expect(grammar.getByRole('heading', { name: study.title, exact: true })).toBeVisible();
-  await expect(grammar.getByTestId('grammar-explanation')).toContainText(study.explanation, { useInnerText: true });
+  await expect(grammar).toHaveCount(0);
   await expect(button(cold, 'Source credits and licence')).toHaveCount(0);
   await expect(button(cold, 'Authorship and review')).toHaveCount(0);
   await button(cold, 'Next').click();
   await expect(step(cold, 'Key phrases')).toBeVisible();
+  await expect(grammar.getByRole('heading', { name: study.title, exact: true })).toBeVisible();
+  await expect(grammar.getByTestId('grammar-explanation')).toContainText(study.explanation, { useInnerText: true });
   await expect(panel(cold).getByTestId('vocabulary-fr.greetings.bonsoir')).toContainText('good evening');
   await button(cold, 'Save bonsoir').click();
   await expect(button(cold, 'Save bonsoir')).toHaveText(/In notebook/);

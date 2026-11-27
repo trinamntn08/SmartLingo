@@ -3,7 +3,6 @@ import type { Lesson } from '@smartlingo/domain';
 import { BilingualDialogue } from './BilingualDialogue';
 import { getLessonDialoguePhoto } from './dialoguePhotos';
 import type { ContextPhoto } from './contextPhotos';
-import { GrammarNote } from './GrammarNote';
 import { VocabularyCard } from './VocabularyCard';
 import { colors, designTokens as tokens } from './theme';
 import type { LearningModel } from './useLearning';
@@ -19,14 +18,10 @@ export function LessonWords({ lesson, model }: { lesson: Lesson; model: Learning
 
 export function LessonConversation({ lesson, photo = getLessonDialoguePhoto(lesson.id) }: { lesson: Lesson; photo?: ContextPhoto }) {
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
-  return <View style={layout.conversation}>
-    <BilingualDialogue turns={lesson.dialogue} language={language} photo={photo} highlightedRole={lesson.role} study />
-    <GrammarNote lessonId={lesson.id} note={lesson.grammar} />
-  </View>;
+  return <BilingualDialogue turns={lesson.dialogue} language={language} photo={photo} highlightedRole={lesson.role} study />;
 }
 
 const layout = StyleSheet.create({
   wordList: { minWidth: 0, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, borderRadius: tokens.radius.lg },
   rule: { borderTopWidth: 1, borderTopColor: colors.line },
-  conversation: { minWidth: 0, gap: tokens.space.xxl },
 });

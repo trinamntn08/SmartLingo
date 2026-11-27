@@ -59,9 +59,10 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await button(page, `Choose lesson ${day.dayNumber}: ${day.title}`).click();
   await expect(panel(page).getByRole('heading', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
   const lesson = buildCourseLesson(japaneseCourse, day);
-  await expect(panel(page).getByTestId('grammar-note').getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
+  await expect(panel(page).getByTestId('grammar-note')).toHaveCount(0);
   await expect(panel(page).getByTestId('dialogue-japanese-transcript').getByText(lesson.dialogue[0].reading!, { exact: true }).first()).toBeVisible();
   await openStep(page, 'Key phrases', 'Key phrases');
+  await expect(panel(page).getByTestId('grammar-note').getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
   const word = day.vocabulary[0];
   const card = panel(page).getByTestId(`vocabulary-${word.id}`);
   await expect(card.getByText(word.reading!, { exact: true })).toBeVisible();

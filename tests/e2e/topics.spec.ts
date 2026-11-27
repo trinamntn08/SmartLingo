@@ -64,6 +64,8 @@ test('foundations and A2 experience lessons expose translated study material and
     await page.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
     await expect(page.getByText(lesson.dialogue[0].meaning, { exact: true })).toBeVisible();
     const grammar = page.getByTestId('grammar-note');
+    await expect(grammar).toHaveCount(0);
+    await openKeyPhrases(page);
     await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
     if (slug === 'essentials') {
       await expect(grammar.getByText('Vous pouvez répéter ?', { exact: true })).toBeVisible();
@@ -72,7 +74,6 @@ test('foundations and A2 experience lessons expose translated study material and
       await expect(grammar.getByText('Use the dictionary form of the verb.', { exact: true })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await grammar.screenshot({ path: info.outputPath('grammar-card.png') });
-      await openKeyPhrases(page);
       await page.getByRole('button', { name: /Try meaning practice/ }).click();
       await expect(page.getByText(lesson.pictureActivity.prompt, { exact: true })).toBeVisible();
     } else {

@@ -68,6 +68,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     if (active && !catalogue.loading && !model.loading) scroll.current?.scrollTo({ y: Number(read('learner.scroll') ?? 0), animated: false });
   }, [visit, active, catalogue.loading, model.loading]);
   const showLibrary = route.kind === 'topics' && !choosing;
+  const wideToday = route.kind === 'today' && !choosing && width >= designTokens.layout.sidebarBreakpoint;
   const lessons = useMemo(() => catalogue.lessons.filter(lesson => lesson.language === language), [catalogue.lessons, language]);
   const topics = useMemo(() => groupLessonTopics(lessons), [lessons]);
   const wideLibrary = showLibrary && width >= designTokens.layout.sidebarBreakpoint;
@@ -173,7 +174,8 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
         onScroll={event => { if (active) write('learner.scroll', event.nativeEvent.contentOffset.y); }} scrollEventThrottle={16}
         contentContainerStyle={{ flexGrow: 1 }}>
         <View role="main" nativeID={learnerContentId} tabIndex={-1}
-          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 20 }, compact && { padding: 16, paddingBottom: 32 }]}>
+          style={[s.main, showLibrary && { maxWidth: designTokens.layout.libraryMaxWidth, paddingTop: 20 },
+            wideToday && { maxWidth: designTokens.layout.shellMaxWidth }, compact && { padding: 16, paddingBottom: 32 }]}>
           {!courseVisible && <CourseWriteStatus learning={courseLearning} />}
           {route.kind === 'unavailable' ? unavailable() : !language || choosing ? <LanguageChooser onChoose={chooseLanguage} /> : model.loading || catalogue.loading ? <View style={s.card}>
             <ActivityIndicator color={colors.ink} />

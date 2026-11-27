@@ -11,6 +11,7 @@ const iconPaths = {
   settings: 'M4 6h16M4 12h16M4 18h16M8 4v4m8 2v4m-6 2v4',
   chevron: 'm9 6 6 6-6 6',
   'chevron-down': 'm6 9 6 6 6-6',
+  'chevron-up': 'm6 15 6-6 6 6',
   folder: 'M3 7V5h7l2 2h9v13H3z',
   layers: 'm12 3 9 5-9 5-9-5 9-5Zm9 9-9 5-9-5m18 4-9 5-9-5',
   grid: 'M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z',

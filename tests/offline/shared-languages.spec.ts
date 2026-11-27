@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons, lessons } from '@smartlingo/content';
-import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openTodayStudyOptions, openTopic } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 
-test('the Cloud photo and the new French and Japanese drafts load from a cold download', async ({ page, context }) => {
+test('Today study links and the Cloud French and Japanese drafts load from a cold download', async ({ page, context }) => {
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.goto('/today/fr');
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
@@ -17,9 +17,10 @@ test('the Cloud photo and the new French and Japanese drafts load from a cold do
 
   const cold = await context.newPage();
   await cold.goto('/today/fr');
-  await expect.poll(() => cold.getByTestId('today-next-step').locator('img').evaluateAll(images => images.some(image =>
-    image instanceof HTMLImageElement && image.complete && image.naturalWidth === 1200 && image.src.includes('lyon-bakery'),
-  ))).toBe(true);
+  await expect(cold.getByTestId('today-next-step').getByRole('img')).toHaveCount(0);
+  const studyOptions = await openTodayStudyOptions(cold);
+  await studyOptions.getByRole('link', { name: 'Browse all lessons', exact: true }).click();
+  await expect(cold.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
   for (const id of ['fr.cycling.rent', 'fr.household-waste.sorting', 'ja.cafe.drinks']) {
     const lesson = [...lessons, ...japaneseLessons].find(item => item.id === id)!;
     await cold.goto(`/lesson/${lesson.language === 'ja-JP' ? 'ja' : 'fr'}/${id}/dialogue`);

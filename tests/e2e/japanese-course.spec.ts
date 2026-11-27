@@ -2,9 +2,10 @@ import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import type { CourseEvent, NotebookEntry } from '@smartlingo/domain';
 import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
-import { buildAcceptedSentence, guidedLessonButton, openCourseOutline } from './learner-journeys';
+import { buildAcceptedSentence, guidedLessonButton, openCourseOutline, openTodayStudyOptions } from './learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
+const todayCourse = async (page: Page) => (await openTodayStudyOptions(page)).getByRole('link', { name: japaneseCourse.title, exact: true });
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
 
 async function stored<T>(page: Page, storeName: string) {
@@ -39,7 +40,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await page.goto('/');
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
-  await guidedLessonButton(page).focus();
+  await (await todayCourse(page)).focus();
   await page.keyboard.press('Enter');
   await expect(button(page, 'Next')).toBeEnabled();
   await button(page, 'Authorship and review').click();
@@ -97,7 +98,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await page.reload();
-  await guidedLessonButton(page).click();
+  await (await todayCourse(page)).click();
   await expect(panel(page).getByRole('heading', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
   await expect(page).toHaveURL(new RegExp(`/course/ja/${japaneseCourse.id}/${day.id}/lesson-picture$`));
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Match the meaning');
@@ -147,7 +148,7 @@ test('Japanese completion follows study and both activities, and the next lesson
   await page.goto('/');
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
-  await guidedLessonButton(page).click();
+  await (await todayCourse(page)).click();
   const lesson = buildCourseLesson(japaneseCourse, day);
   const completed = panel(page).getByRole('heading', { name: 'Lesson complete', exact: true });
   await button(page, 'Next').click();
@@ -185,7 +186,7 @@ test('Japanese days remain readable without browser storage', async ({ page }) =
   await page.goto('/');
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
-  await guidedLessonButton(page).click();
+  await (await todayCourse(page)).click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
   await openCourseOutline(panel(page));
   await button(page, 'B1').click();

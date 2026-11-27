@@ -1,4 +1,4 @@
-import { openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
+import { openKeyPhrases, openTopic, openProfileSection, openTodayStudyOptions } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
@@ -71,7 +71,7 @@ test.beforeEach(async ({ page }) => {
 test('Japanese starts with hiragana, saves studied rows and restores them alongside existing vocabulary history', async ({ page, browser, baseURL }, info) => {
   test.setTimeout(90000);
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Start with Japanese letters', exact: true })).toBeVisible();
+  await expect(page.getByTestId('today-next-step').getByRole('heading', { name: first.title, exact: true })).toBeVisible();
   await button(page, 'Start Hiragana').click();
   const alphabet = page.getByTestId('japanese-alphabet');
   await expect(alphabet.getByRole('combobox')).toHaveCount(0);
@@ -97,7 +97,7 @@ test('Japanese starts with hiragana, saves studied rows and restores them alongs
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);
   await button(page, 'Today').click();
-  await button(page, 'Start Hiragana').click();
+  await (await openTodayStudyOptions(page)).getByRole('link', { name: 'Japanese letters', exact: true }).click();
   await tryRow(page, first, true);
   await alphabet.getByRole('button', { name: 'Mark row studied', exact: true }).click();
   await revealRows(page);

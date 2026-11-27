@@ -1,4 +1,4 @@
-import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openLessonFromTopics } from './learner-journeys';
+import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openLessonFromTopics, openTodayStudyOptions } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, frenchCourseLessonsByDay, japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, courseLessonStageId, type CourseDay, type CourseEvent } from '@smartlingo/domain';
@@ -61,16 +61,19 @@ test.beforeEach(async ({ context }) => {
 test('French courses open independently and B1 is also available in the topic library', async ({ page }) => {
   const [, a2, b1] = frenchCourses;
   const visitCourse = (title: string) => page.getByRole('button', { name: title, exact: true }).click();
+  const visitTodayCourse = async (title: string) => {
+    await (await openTodayStudyOptions(page)).getByRole('link', { name: title, exact: true }).click();
+  };
   const today = () => page.getByRole('button', { name: 'Today', exact: true }).click();
   await page.goto('/today/fr');
 
-  await visitCourse(a2.title);
+  await visitTodayCourse(a2.title);
   await expect(dayHeading(page, a2.days[0])).toBeVisible();
   await button(page, 'Next').click();
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
 
   await today();
-  await visitCourse(b1.title);
+  await visitTodayCourse(b1.title);
   await expect(dayHeading(page, b1.days[0])).toBeVisible();
   await openCourseOutline(coursePanel(page));
   await chooseDay(page, b1.days[2]).click();
@@ -83,7 +86,7 @@ test('French courses open independently and B1 is also available in the topic li
 
   await today();
   await expect(guidedLessonButton(page)).toHaveText(/Start lesson/u);
-  await visitCourse(a2.title);
+  await visitTodayCourse(a2.title);
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   if (page.viewportSize()!.width < 600) {
@@ -104,9 +107,10 @@ test('French courses open independently and B1 is also available in the topic li
 
 test('all five opening lessons share a five-step reader with full transcripts and photos', async ({ page }) => {
   await page.goto('/');
-  await expect(step(page, openCoursePilot.title)).toBeVisible();
+  await expect(page.getByTestId('today-next-step').getByRole('heading', { name: `Lesson 1: ${firstDay.title}` })).toBeVisible();
   await guidedLessonButton(page).focus();
   await page.keyboard.press('Enter');
+  await expect(step(page, openCoursePilot.title)).toBeVisible();
   await openCourseOutline(coursePanel(page));
   await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
   if (page.viewportSize()!.width >= 900) {

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseCourse } from '@smartlingo/content';
-import { guidedLessonButton, openCourseOutline, openProfileSection } from '../e2e/learner-journeys';
+import { openCourseOutline, openProfileSection, openTodayStudyOptions } from '../e2e/learner-journeys';
 
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
 
@@ -23,7 +23,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   const cold = await context.newPage();
   await cold.goto(baseURL!);
   const panel = cold.getByTestId('open-course-panel');
-  await guidedLessonButton(panel).click();
+  await (await openTodayStudyOptions(cold)).getByRole('link', { name: japaneseCourse.title, exact: true }).click();
   await openCourseOutline(panel);
   await panel.getByRole('button', { name: 'B1', exact: true }).click();
   const day = japaneseCourse.days.at(-1)!;

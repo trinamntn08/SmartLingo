@@ -5,6 +5,13 @@ export function guidedLessonButton(scope: Locator | Page) {
   return scope.getByRole('button', { name: /^(?:Start lesson|Continue lesson|Revisit lesson|Open course)$/ });
 }
 
+export async function openTodayStudyOptions(page: Page) {
+  await expect(page.getByTestId('today-next-step')).toBeVisible();
+  const disclosure = page.getByRole('button', { name: 'Browse study options', expanded: false, exact: true });
+  if (await disclosure.isVisible()) await disclosure.click();
+  return page.getByRole('navigation', { name: 'Study options', exact: true });
+}
+
 export async function openKeyPhrases(page: Page) {
   await page.getByRole('button', { name: /^(?:Review key phrases|Next)$/ }).first().click();
 }

@@ -148,8 +148,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/');
-  const todayPhoto = cold.getByTestId('today-next-step').getByRole('img');
-  await expect.poll(() => todayPhoto.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect(guidedLessonButton(cold)).toBeVisible();
   await expect.poll(() => cold.evaluate(() => Array.from(document.fonts).some(font => font.family === 'Inter' && font.status === 'loaded'))).toBe(true);
   await openTopic(cold, restaurantLesson.topic);
   await expect(cold.getByText('Isolated cached publication', { exact: true })).toBeVisible();

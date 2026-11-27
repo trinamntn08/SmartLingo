@@ -31,7 +31,7 @@ The application shell lives in `src/app/`, Profile in `src/profile/`, and Today/
 
 ## Information hierarchy
 
-Today leads with one recommendation and an adjoining photograph. Other courses and ruled links offer direct access to lessons, listening and speaking. Review opens saved words. Topics belong in Learn, metrics in Report and settings in Profile. Green indicates selection or feedback where useful. Keep meanings, examples, translations and reading aids visible during study.
+Today leads with one recommendation. Ruled study links sit in a 250 px sidebar at widths of 1,050 px and above. At narrower widths they open from one disclosure below the recommendation. Review opens saved words. Topics belong in Learn, metrics in Report and settings in Profile. Green indicates selection or feedback where useful. Keep meanings, examples, translations and reading aids visible during study.
 
 The library shows topic covers alongside searchable lessons and vocabulary. The lesson canvas opens on the active material and puts readable study text alongside contextual photography where available. Five numbered lesson steps share a ruled strip with a yellow current-step marker. On phones the number sits above the short label. Choosing a step moves web focus to its heading. The separate progress bar reflects saved activity. The listening player puts playback and the transcript toggle together, followed by the question and feedback. Kana puts the character grid, audio and the practice action first. The course outline reflows when expanded. Focus review hides the notebook and retains unsaved form text. The editor uses a ruled lesson rail and an explicit draft, preview and publication sequence.
 

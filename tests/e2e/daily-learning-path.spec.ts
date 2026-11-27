@@ -23,7 +23,7 @@ test('Today and Learn share the guided lesson, resume point and next lesson', as
   await expect(panel(page).getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   const savedStep = page.url();
   await button(page, 'Today').click();
-  await expect(panel(page).getByText('Resume your saved step.')).toBeVisible();
+  await expect(launch(page)).toHaveAccessibleName('Continue lesson');
   await launch(page).click();
   await expect(page).toHaveURL(savedStep);
   await button(page, 'Next').click();

@@ -33,7 +33,8 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
   featured?: boolean;
 }) {
   const compact = useWindowDimensions().width < designTokens.layout.compactBreakpoint;
-  const message = loading ? 'Loading course progress…' : progressMessages[status];
+  const showProgress = !featured || status === 'unavailable' || status === 'complete';
+  const message = loading ? 'Loading course progress…' : showProgress ? progressMessages[status] : undefined;
 
   return <View testID="open-course-panel" style={[
     s.card,
@@ -41,19 +42,19 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
     compact && (featured ? launch.featuredCompact : launch.regularCompact),
   ]}>
     <View style={[launch.copy, compact && launch.copyCompact]}>
-      <Text accessibilityRole="header" aria-level={2} style={launch.courseTitle}>
+      {!featured && <Text accessibilityRole="header" aria-level={2} style={launch.courseTitle}>
         {course.title}
-      </Text>
+      </Text>}
       {!loading && <>
-        <Text accessibilityRole="header" aria-level={3} style={[s.heading,
+        <Text accessibilityRole="header" aria-level={featured ? 2 : 3} style={[s.heading,
           featured ? launch.featuredTitle : launch.lessonTitle, featured && compact && launch.featuredTitleCompact]}>
           Lesson {day.dayNumber}: {day.title}
         </Text>
         <Text style={[s.body, launch.outcome]}>{day.outcome}</Text>
       </>}
-      <Text style={launch.note}>
+      {!featured && <Text style={launch.note}>
         {course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview
-      </Text>
+      </Text>}
       {message && <Text accessibilityLiveRegion="polite" style={launch.note}>{message}</Text>}
     </View>
     <View style={[s.row, !featured && launch.regularAction]}>
@@ -79,7 +80,7 @@ export function OtherFrenchCourses({ courses }: { courses: readonly CourseLaunch
 const launch = StyleSheet.create({
   regular: { padding: 20, gap: 12 },
   regularCompact: { padding: 16 },
-  featured: { flexGrow: 1, justifyContent: 'center', padding: 32, borderRadius: 0, borderWidth: 0, borderLeftWidth: 4, borderLeftColor: colors.yellow, boxShadow: 'none', gap: 20 },
+  featured: { padding: 32, borderLeftWidth: 4, borderLeftColor: colors.yellow, boxShadow: 'none', gap: 20 },
   featuredCompact: { padding: 20, gap: 16 },
   copy: { minWidth: 0, gap: 12 },
   copyCompact: { gap: 8 },

@@ -28,16 +28,16 @@ export function VocabularyCard({ entry, model, language = 'fr-FR', showIllustrat
   </View>;
 
   const definition = <View style={layout.definition}>
-    <View style={[s.row, layout.phrase]}>
-      <Speak language={language} text={entry.target} onError={setVoiceError} headingLevel={3}
-        wordStyle={[s.target, layout.target, compact && layout.compactTarget, study && layout.studyTarget]} />
-      {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
-      {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
-      <View style={layout.termActions}>
-        <NotebookStar model={model} entry={{ id: `notebook.${entry.id}`, sourceEntryId: entry.id, language, reading: entry.reading,
-          exampleReading: entry.exampleReading, target: entry.target, meaning: entry.meaning, example: entry.example }}
-          onChange={saved => setMessage(saved ? `Saved ${entry.target} to your notebook.` : `Removed ${entry.target} from your notebook.`)} />
+    <View style={layout.definitionHeader}>
+      <View style={[s.row, layout.phrase]}>
+        <Speak language={language} text={entry.target} onError={setVoiceError} headingLevel={3}
+          wordStyle={[s.target, layout.target, compact && layout.compactTarget, study && layout.studyTarget]} />
+        {language === 'ja-JP' && <JapaneseWordReading target={entry.target} reading={entry.reading} />}
+        {gender && <Text accessibilityLabel={gender.accessible} style={s.muted}>{gender.short}</Text>}
       </View>
+      <NotebookStar model={model} entry={{ id: `notebook.${entry.id}`, sourceEntryId: entry.id, language, reading: entry.reading,
+        exampleReading: entry.exampleReading, target: entry.target, meaning: entry.meaning, example: entry.example }}
+        onChange={saved => setMessage(saved ? `Saved ${entry.target} to your notebook.` : `Removed ${entry.target} from your notebook.`)} />
     </View>
     {language !== 'ja-JP' && !!entry.reading && <Text style={s.body}>{entry.reading}</Text>}
     <Text style={[s.body, layout.meaning]}>{entry.meaning}</Text>
@@ -56,8 +56,8 @@ const layout = StyleSheet.create({
   compactCard: { padding: 16 },
   studyCard: { minWidth: 0, padding: 24, gap: 12 },
   definition: { minWidth: 0, gap: 4 },
-  phrase: { gap: 8 },
-  termActions: { ...s.row, gap: 4, maxWidth: '100%' },
+  definitionHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
+  phrase: { flex: 1, minWidth: 0, gap: 8 },
   target: { flexShrink: 1, minWidth: 0 },
   compactTarget: { fontSize: 32, lineHeight: 42 },
   studyTarget: { fontSize: 28, lineHeight: 36, fontWeight: '500' },

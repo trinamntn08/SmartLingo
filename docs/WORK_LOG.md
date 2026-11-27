@@ -2,6 +2,12 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Move vocabulary stars to the right edge
+
+- Start. The primary worktree was clean and matched live `release/local-learner-preview` at `77f16572ab5236861d2730d899011062a5196a76`, ahead/behind `0/0`. All 76 live and fetched heads matched. Checked the vocabulary-card history and the previous Cloud handoff. The notebook and pronunciation ports are in this baseline, and the Android layout stays in its own release lineage. No newer relevant web card change was found.
+- Scope. Align the save star at the right edge of the shared lesson and topic vocabulary cards. Check the alignment and save toggle in French and Japanese at desktop and narrow widths. Account usage was unavailable.
+- Outcome. The star sits at the top-right of each vocabulary card. The word and pronunciation control stay together on the left, with space for Japanese readings to wrap. Repository and TypeScript checks and Git whitespace checks passed. Chromium measured the alignment and verified keyboard saving and pointer unsaving in a French guided lesson and a Japanese topic lesson at 1,440 and 320 px. All 76 GitHub heads matched again before building. Port 8082 serves `51f8a2f6c41d61d6d98e6bfab3e65ac7d9634de0a3ee30ee8ca244daeb3677cb`, with the served manifest and bundle verified against the export. The commit containing this entry is the source checkpoint.
+
 ## 2026-11-27 Gather the latest features and rebuild the learner preview
 
 - Start. Checked the clean primary worktree and 20 sibling worktrees in Europe/Paris. The owner-selected GitHub origin matched all 75 fetched branch names and SHAs. The local and live notebook baseline was `b504f5efa72b22027d46fdd541c5a5ca8267ebdc`, ahead/behind `0/0`. Started `release/local-learner-preview` from that baseline. Account usage was unavailable. The primary agent used inventory/review, kana and audio helpers with the inherited model.

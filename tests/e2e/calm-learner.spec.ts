@@ -30,7 +30,7 @@ for (const language of ['French', 'Japanese'] as const) {
       await expect(page.getByText('Step 1 of 5', { exact: true })).toBeVisible();
       await expect(page.getByTestId('dialogue-french-transcript').locator('[lang="fr-FR"]').first()).toBeInViewport();
       await expect(page.getByTestId('dialogue-english-transcript')).toBeVisible();
-      await button(page, 'Continue to key phrases').click();
+      await button(page, 'Next').click();
       await expect(page.getByText('Step 2 of 5', { exact: true })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
     } else {

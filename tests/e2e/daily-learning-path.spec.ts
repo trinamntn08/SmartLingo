@@ -19,15 +19,15 @@ test('Today and Learn share the guided lesson, resume point and next lesson', as
   await expect(button(page, 'Lessons')).toBeVisible();
   await launch(page).click();
   await expect(button(page, 'Learn')).toHaveAttribute('aria-selected', 'true');
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(panel(page).getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   const savedStep = page.url();
   await button(page, 'Today').click();
   await expect(panel(page).getByText('Resume your saved step.')).toBeVisible();
   await launch(page).click();
   await expect(page).toHaveURL(savedStep);
-  await button(page, 'Continue to listening').click();
-  await button(page, 'Skip listening').click();
+  await button(page, 'Next').click();
+  await button(page, 'Next').click();
   const lesson = buildCourseLesson(openCoursePilot, first);
   const answer = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
   await button(page, answer.target).click();
@@ -69,9 +69,9 @@ test('a failed course save can be retried after Back leaves a reloaded course', 
   await page.goto('/languages');
   await button(page, 'Learn French').click();
   await launch(page).click();
-  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   await page.reload();
-  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   await page.evaluate(() => {
     const add = IDBObjectStore.prototype.add;
     let fail = true;
@@ -83,7 +83,7 @@ test('a failed course save can be retried after Back leaves a reloaded course', 
       return add.call(this, value, key);
     };
   });
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(button(page, 'Retry course save')).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL('/today/fr');

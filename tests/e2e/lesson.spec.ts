@@ -23,7 +23,7 @@ test('the food-needs dialogue keeps the complete French and English transcripts 
   await expectDialoguePhoto(stage, 'french-bistro-dialogue.jpg');
   await expect(french.getByRole('button', { name: `Listen to ${lesson.dialogue[0].target}`, exact: true })).toBeVisible();
   await expect(stage.getByText('Naming an allergy', { exact: true })).toBeVisible();
-  await expect(button(page, 'Continue to key phrases')).toBeVisible();
+  await expect(button(page, 'Next')).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 

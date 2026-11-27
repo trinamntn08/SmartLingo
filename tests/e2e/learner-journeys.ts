@@ -6,7 +6,7 @@ export function guidedLessonButton(scope: Locator | Page) {
 }
 
 export async function openKeyPhrases(page: Page) {
-  await page.getByRole('button', { name: /^(?:Continue to|Review) key phrases$/ }).click();
+  await page.getByRole('button', { name: /^(?:Review key phrases|Next)$/ }).first().click();
 }
 
 export async function openTopicVocabulary(page: Page) {

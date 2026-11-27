@@ -2,6 +2,19 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Draft Today redesign prompt
+
+- Start. At 18:24 CET the primary `feat/notebook-learner-ui` checkout and live origin matched at `2228d207bb4017cbd82df83fd4b3946ce6d0e761`, ahead/behind 0/0. All 75 live and tracking heads matched. The in-flight lesson button changes stayed in the working tree.
+- Scope. Compared the annotated Today screenshot with the routed French and Japanese dashboard and the adapted Cloud material-first source `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8`. The existing Cloud layout preserves the same underlying routes. The prompt makes the active recommendation the main content, moves the three marked groups to a left sidebar on desktop and specifies a compact fallback on phones.
+- Outcome. The prompt is provided in chat for the owner’s next Codex session. The Today redesign is a separate implementation task.
+
+## 2026-11-27 Use Next between lesson steps
+
+- Start. At 18:22 CET the clean primary checkout and live `feat/notebook-learner-ui` matched at `2228d207bb4017cbd82df83fd4b3946ce6d0e761`, ahead/behind 0/0. All 75 fetched and live origin heads matched. The preview responded on port 8082.
+- Cloud comparison. The adapted material-first ref `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8` still spells out destinations on desktop. The previous local matching-label change `9452302` is in the current lineage. No newer Cloud change covers this copy edit. The Cloud curriculum and media dispositions are recorded in the preceding redesign.
+- Acceptance. Forward step controls in the shared lesson reader say “Next”. Direct step links, alternate matching shortcuts, recorded study and transitions keep their current behavior.
+- Outcome. Standardized the forward button in both languages, including entering and leaving the listening step. Repository and TypeScript checks, Git whitespace, 58 targeted Chromium cases and six cold-offline cases passed. All 75 live and fetched heads matched before export. The existing preview serves build `3684c57efa14`. All 149 manifest entries matched the served bytes. Walkthroughs at 1440 and 320 px exercised the Next sequence and the previously adapted Cloud entries. The commit containing this entry is the task checkpoint.
+
 ## 2026-11-27 Redesign the learner with unslop
 
 - Start. At 17:51 CET, Europe/Paris, inspected the clean primary checkout and 19 sibling worktrees. Fetched all branches from the owner-selected origin. All 74 live GitHub heads matched the cached names and full SHAs. Local and live `feat/french-daily-opening` matched at `a37da522398ae23a98bd02bc638bce057fd0a4f6`, ahead/behind 0/0. Started `feat/notebook-learner-ui` there in the primary worktree.

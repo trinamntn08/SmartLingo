@@ -50,7 +50,7 @@ test('lesson Back restores its stage and Forward restores the previous hint in t
   await expect(page).toHaveURL(`${location}/dialogue`);
   await expect(storedEvents<LearningEvent>(page, 'events')).resolves.toEqual([]);
 
-  await page.getByRole('button', { name: 'Continue to key phrases', exact: true }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page).toHaveURL(`${location}/vocabulary`);
   await page.getByRole('button', { name: /Try picture practice/ }).click();
   await expect(page).toHaveURL(`${location}/picture`);
@@ -88,7 +88,7 @@ test('French lesson listening assembles phrase cards, checks their order and kee
   const lessonPath = `/lesson/fr/${lesson.id}`;
   const sentence = 'Au revoir et bonne journée !';
   await page.goto(`${lessonPath}/vocabulary`);
-  await page.getByRole('button', { name: 'Continue to listening', exact: true }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page).toHaveURL(`${lessonPath}/listening`);
   const player = page.getByTestId('listening-question-player');
   const button = (name: string) => player.getByRole('button', { name, exact: true });
@@ -126,14 +126,14 @@ test('French lesson listening assembles phrase cards, checks their order and kee
   await expect(feedback).toContainText('Goodbye and have a good day!');
   await expect(feedback).toContainText('You used transcript support');
   await expect(transcript).toContainText(sentence);
-  await button('Continue to matching').click();
+  await button('Next').click();
   await expect(page).toHaveURL(`${lessonPath}/picture`);
   await page.goBack();
   await expect(feedback).toBeVisible();
   await page.reload();
   await expect(page).toHaveURL(`${lessonPath}/listening`);
   await expect(feedback).toHaveCount(0);
-  await button('Skip listening').click();
+  await button('Next').click();
   await expect(page).toHaveURL(`${lessonPath}/picture`);
   const saved = await storedEvents<LearningEvent>(page, 'events');
   expect(saved).toHaveLength(1);
@@ -236,7 +236,7 @@ test('French course history uses the five-step strip beside a lessons-only outli
     await expect(outline).toHaveCount(0);
   }
 
-  await panel.getByRole('button', { name: 'Continue to key phrases', exact: true }).click();
+  await panel.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page).toHaveURL(`${location}/lesson-vocabulary`);
   if (wide) await expect(outline.getByRole('heading', { name: 'Course outline' })).toBeInViewport();
   const initialEvents = await storedEvents<CourseEvent>(page, 'courseEvents');

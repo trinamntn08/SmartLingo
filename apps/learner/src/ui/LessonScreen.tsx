@@ -207,28 +207,28 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
           {skipStudiedPhrases && <Button quiet href={stageHref('vocabulary')} disabled={exitBlocked} onPress={() => setStage('vocabulary')}>Review key phrases</Button>}
           {skipStudiedPhrases
             ? <Button primary trailingIcon="arrow-right" href={stageHref(listeningQuestion ? 'listening' : 'picture')} disabled={exitBlocked}
-              onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>{listeningQuestion ? 'Start listening' : practiceLabel}</Button>
+              onPress={() => setStage(listeningQuestion ? 'listening' : 'picture')}>Next</Button>
             : <Button primary trailingIcon="arrow-right" href={stageHref('vocabulary')} disabled={exitBlocked}
-              onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>Continue to key phrases</Button>}
+              onPress={() => courseSession ? courseSession.studyDialogue({ [focusStageKey]: 'vocabulary' }) : setStage('vocabulary')}>Next</Button>}
         </StudyActions>
       </>}
       {stage === 'vocabulary' && <>
         <LessonWords lesson={lesson} model={model} />
         <StudyActions sticky={!compact}>
           <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
-          <Button primary={!listeningQuestion} quiet={!!listeningQuestion} disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>
-          {listeningQuestion && <Button primary trailingIcon="arrow-right" disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('listening')}>Continue to listening</Button>}
+          {listeningQuestion && <Button quiet disabled={exerciseBlocked && !browseOnly}
+            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>}
+          <Button primary trailingIcon="arrow-right" disabled={exerciseBlocked && !browseOnly}
+            onPress={() => reviewVocabulary(listeningQuestion ? 'listening' : 'picture')}>Next</Button>
         </StudyActions>
       </>}
       {stage === 'listening' && (listeningQuestion
         ? <ListeningQuestionPlayer question={listeningQuestion} revision={lesson.revision} compact={compact}
-          continuation={{ label: 'Continue to matching', skipLabel: 'Skip listening', href: stageHref('picture'),
+          continuation={{ label: 'Next', skipLabel: 'Next', href: stageHref('picture'),
             onPress: () => setStage('picture'), disabled: exitBlocked }} />
         : <View style={s.notice}>
           <Text style={s.body}>Listening practice is unavailable for this lesson.</Text>
-          <Button primary href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>Continue to matching</Button>
+          <Button primary href={stageHref('picture')} disabled={exitBlocked} onPress={() => setStage('picture')}>Next</Button>
         </View>)}
       {stage === 'picture' && <PictureActivity lesson={lesson} routed={usesVisitState} disabled={exerciseBlocked} browseOnly={browseOnly}
         done={progress.pictureDone} record={record} nextHref={stageHref('sentence')} onNext={() => setStage('sentence')} />}

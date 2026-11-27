@@ -66,7 +66,7 @@ test('French courses open independently and B1 is also available in the topic li
 
   await visitCourse(a2.title);
   await expect(dayHeading(page, a2.days[0])).toBeVisible();
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
 
   await today();
@@ -75,7 +75,7 @@ test('French courses open independently and B1 is also available in the topic li
   await openCourseOutline(coursePanel(page));
   await chooseDay(page, b1.days[2]).click();
   await expect(dayHeading(page, b1.days[2])).toBeVisible();
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
   await page.reload();
   await expect(step(page, 'Key phrases')).toBeVisible();
@@ -136,7 +136,7 @@ test('all five opening lessons share a five-step reader with full transcripts an
       await expect(button(page, 'Authorship and review')).toHaveCount(0);
     }
     await expect(button(page, 'Listening check')).toHaveCount(0);
-    await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+    await expect(button(page, 'Next')).toBeEnabled();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
 });
@@ -170,7 +170,7 @@ for (const course of [openCoursePilot, japaneseCourse]) {
     const feedback = check.getByTestId('listening-feedback');
     await expect(feedback).toContainText(question.meaning);
     await expect(feedback).toContainText(/transcript support/);
-    await expect(button(page, 'Continue to matching')).toBeEnabled();
+    await expect(button(page, 'Next')).toBeEnabled();
     await expect(page).toHaveURL(path);
     expect(await storedEvents(page)).toEqual([]);
     expect(await storedEvents(page, 'events')).toEqual([]);
@@ -185,10 +185,10 @@ test('the shared stages save progress, restore matching and unlock the next less
   await expect(step(page, 'Key phrases')).toBeVisible();
   expect((await storedEvents(page)).filter(event => event.kind === 'study')).toEqual([]);
   await stepTab(page, 'dialogue').press('Enter');
-  await button(page, 'Continue to key phrases').click();
-  await button(page, 'Continue to listening').click();
+  await button(page, 'Next').click();
+  await button(page, 'Next').click();
   await expect(step(page, 'Listening practice')).toBeVisible();
-  await button(page, 'Skip listening').click();
+  await button(page, 'Next').click();
   const lesson = buildCourseLesson(openCoursePilot, firstDay);
   const { entryId, choices, prompt } = lesson.pictureActivity;
   const correct = lesson.vocabulary.find(entry => entry.id === entryId)!;
@@ -243,10 +243,10 @@ test('the shared stages save progress, restore matching and unlock the next less
 test('notebook, progress and the resume step survive backup and restore', async ({ page, browser }, info) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await button(page, 'Save bonjour').click();
   await expect(button(page, 'Save bonjour')).toBeDisabled();
-  await button(page, 'Continue to listening').click();
+  await button(page, 'Next').click();
   await expect(step(page, 'Listening practice')).toBeVisible();
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Offline & backups');
@@ -281,7 +281,7 @@ test('notebook, progress and the resume step survive backup and restore', async 
 test('Next retries a failed cursor write without duplicating dialogue study', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   await page.evaluate(() => {
     const original = IDBObjectStore.prototype.add;
     const attempts: string[] = [];
@@ -295,10 +295,10 @@ test('Next retries a failed cursor write without duplicating dialogue study', as
       return original.call(this, value, key);
     };
   });
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(coursePanel(page).getByRole('alert')).toContainText('Simulated cursor failure');
   await expect(step(page, 'Read a conversation')).toBeVisible();
-  await expect(button(page, 'Continue to key phrases')).toBeDisabled();
+  await expect(button(page, 'Next')).toBeDisabled();
   await button(page, 'Retry course save').click();
   await expect(step(page, 'Key phrases')).toBeVisible();
   const ids = await page.evaluate(() => (window as unknown as { courseNavigationAttempts: string[] }).courseNavigationAttempts);
@@ -313,11 +313,11 @@ test('all five steps can be browsed at 320 px when progress storage is unavailab
   await page.goto('/');
   await guidedLessonButton(page).click();
   await expect(button(page, 'Retry course storage')).toBeVisible();
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(step(page, 'Key phrases')).toBeVisible();
-  await button(page, 'Continue to listening').click();
+  await button(page, 'Next').click();
   await expect(step(page, 'Listening practice')).toBeVisible();
-  await button(page, 'Skip listening').click();
+  await button(page, 'Next').click();
   await expect(step(page, 'Match the meaning')).toBeVisible();
   await button(page, 'Next').click();
   await expect(step(page, 'Build a sentence')).toBeVisible();
@@ -328,7 +328,7 @@ test('all five steps can be browsed at 320 px when progress storage is unavailab
 test('the rewritten lesson has fresh progress and preserves historical events and other lesson cursors', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   const firstHistory = firstDay.blocks.map((block, index): CourseEvent => {
     if (block.kind === 'choice') return { ...courseEvent(firstDay, block.id, 'choice', index), kind: 'choice',
       choiceId: block.answerId, result: 'correct', supported: false };
@@ -373,7 +373,7 @@ test('the rewritten lesson has fresh progress and preserves historical events an
 test('a restored inconsistent choice never shows correct feedback', async ({ page }) => {
   await page.goto('/');
   await guidedLessonButton(page).click();
-  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   await seedEvents(page, [{ ...courseEvent(firstDay, courseLessonStageId('picture'), 'choice', 0), kind: 'choice',
     choiceId: 'incorrect', result: 'correct', supported: false }]);
   await page.goto(`/course/fr/${openCoursePilot.id}/${firstDay.id}/lesson-picture`);

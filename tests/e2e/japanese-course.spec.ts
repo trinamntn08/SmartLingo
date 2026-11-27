@@ -41,7 +41,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
   await guidedLessonButton(page).focus();
   await page.keyboard.press('Enter');
-  await expect(button(page, 'Continue to key phrases')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
   await button(page, 'Authorship and review').click();
   await expect(panel(page).getByText(`Author: ${japaneseCourse.provenance!.author}`, { exact: true })).toBeVisible();
   await expect(panel(page).getByText(`Rights: ${japaneseCourse.provenance!.rights}`, { exact: true })).toBeVisible();
@@ -73,9 +73,9 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   expect(captured).toMatchObject({ language: 'ja-JP', target: word.target, reading: word.reading, exampleReading: word.exampleReading });
   await openStep(page, 'Read dialogue', 'Read a conversation');
   await openStep(page, 'Key phrases', 'Key phrases');
-  await button(page, 'Continue to listening').click();
+  await button(page, 'Next').click();
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Listening practice');
-  await button(page, 'Skip listening').click();
+  await button(page, 'Next').click();
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Match the meaning');
   const choice = lesson.pictureActivity;
   const target = lesson.vocabulary.find(word => word.id === choice.entryId)!;
@@ -92,7 +92,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await page.getByRole('button', { name: 'Learn French', exact: true }).click();
   const french = page.getByTestId('open-course-panel');
   await guidedLessonButton(french).click();
-  await french.getByRole('button', { name: 'Continue to key phrases', exact: true }).click();
+  await french.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(french.getByTestId('lesson-stage-heading')).toHaveText('Key phrases');
   await page.getByRole('button', { name: 'Change language', exact: true }).click();
   await page.getByRole('button', { name: 'Learn Japanese', exact: true }).click();
@@ -150,7 +150,7 @@ test('Japanese completion follows study and both activities, and the next lesson
   await guidedLessonButton(page).click();
   const lesson = buildCourseLesson(japaneseCourse, day);
   const completed = panel(page).getByRole('heading', { name: 'Lesson complete', exact: true });
-  await button(page, 'Continue to key phrases').click();
+  await button(page, 'Next').click();
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Key phrases');
   await button(page, 'Try meaning practice').click();
   const match = lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!;

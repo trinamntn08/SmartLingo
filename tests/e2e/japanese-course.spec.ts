@@ -43,10 +43,11 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await (await todayCourse(page)).focus();
   await page.keyboard.press('Enter');
   await expect(button(page, 'Next')).toBeEnabled();
-  await button(page, 'Authorship and review').click();
-  await expect(panel(page).getByText(`Author: ${japaneseCourse.provenance!.author}`, { exact: true })).toBeVisible();
-  await expect(panel(page).getByText(`Rights: ${japaneseCourse.provenance!.rights}`, { exact: true })).toBeVisible();
-  await expect(panel(page).getByRole('button', { name: /Creative Commons/ })).toHaveCount(0);
+  await expect(button(page, 'Authorship and review')).toHaveCount(0);
+  const japaneseTranscript = panel(page).getByTestId('dialogue-japanese-transcript');
+  await expect(japaneseTranscript.getByText('Konnichiwa. Tanaka desu.', { exact: true })).toBeVisible();
+  await expect(japaneseTranscript.getByText('Sumimasen. Mou ichido, yukkuri onegai shimasu.', { exact: true })).toBeVisible();
+  await expect(panel(page).getByTestId('dialogue-english-transcript').getByText('Hello. I am Tanaka.', { exact: true })).toBeVisible();
   await openCourseOutline(panel(page));
   const days = panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose lesson / });
   await expect(days).toHaveCount(11);
@@ -60,7 +61,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(panel(page).getByRole('heading', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
   const lesson = buildCourseLesson(japaneseCourse, day);
   await expect(panel(page).getByTestId('grammar-note')).toHaveCount(0);
-  await expect(panel(page).getByTestId('dialogue-japanese-transcript').getByText(lesson.dialogue[0].reading!, { exact: true }).first()).toBeVisible();
+  await expect(japaneseTranscript.getByText('Hitori de ryokou shita koto ga arimasu ka?', { exact: true })).toBeVisible();
   await openStep(page, 'Key phrases', 'Key phrases');
   await expect(panel(page).getByTestId('grammar-note').getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
   const word = day.vocabulary[0];

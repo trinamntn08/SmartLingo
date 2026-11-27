@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Put Japanese dialogue readings in Latin script
+
+- Start. At 19:52 CET the primary `feat/notebook-learner-ui` checkout and live origin matched at `2d5f97e4bf11facac3a32f1b50544422f06b2bdd`, ahead/behind 0/0. Inspected the worktrees and verified all 75 live and fetched branches. The Grammar step and Notebook star changes were already in progress locally.
+- Cloud comparison. The dialogue in `origin/feat/material-first-lessons` at `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8` still uses kana for the secondary line. The pronunciation branch `origin/feat/japanese-reading-typography` at `28f1f4eb0893eb9d1804935a20226fd7c9bbe10f` already has its vocabulary pronunciation renderer adapted locally. The starter dialogue in `origin/feat/japanese-curriculum-redesign` at `afe9d7e1df57328cfc8c8004b73b4141819b7581` matches the current content. No relevant Cloud update needs integration.
+- Scope. Show spaced Latin-script Japanese pronunciation under the guided course dialogue lines and remove the learner-facing Authorship and review disclosure. Preserve English translations and actual source credits.
+- Outcome. The guided reader displays authored romaji for all 13 lessons and source credit disclosures appear only for courses with source entries. The shared transcript can use the same readings wherever the same Japanese line appears.
+- Verification. Before export, verified all 75 live and fetched heads again. Repository and TypeScript checks, six Japanese-course Chromium tests and the Git whitespace check passed. Port 8082 serves build `356e29f2c52d093eb7182471b96cbfd56f0d08512a9ac1d1cc2d2a44d4fb53ca` from the task baseline with this change and the existing local Grammar and Notebook edits. The served manifest and JavaScript bundle match the export. Verified all 13 lessons at 1440 and 320 px. The regular offline runner found port 8185 in use by another test process, so both viewport checks downloaded the build on port 8082 and reopened a B1 dialogue offline in fresh Chromium tabs. Next is owner review of the existing preview.
+
 ## 2026-11-27 Remove the language chooser footer message
 
 - Start. At 19:41 CET the clean primary `feat/notebook-learner-ui` checkout matched live origin at `bb554db599f93a34527ebe18a29ae46b8f5dbd82`, ahead/behind 0/0. Inspected the worktrees and verified all 75 fetched and live refs.

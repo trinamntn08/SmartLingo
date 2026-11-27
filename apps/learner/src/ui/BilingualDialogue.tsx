@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import type { TargetLanguage } from '@smartlingo/domain';
 import { Speak } from '../audio/Speak';
+import { japaneseDialoguePronunciation } from '../content/japaneseDialoguePronunciation';
 import { colors, styles as s } from './theme';
 
 interface DialogueTurn {
@@ -42,11 +43,15 @@ function Transcript({ turns, language, highlightedRole, study }: {
 function SpokenTurn({ turn, language }: { turn: DialogueTurn; language: TargetLanguage }) {
   const [voiceError, setVoiceError] = useState('');
   const languageProps = Platform.OS === 'web' ? { lang: language } : { accessibilityLanguage: language };
+  const pronunciation = language === 'ja-JP' ? japaneseDialoguePronunciation.get(turn.target) : undefined;
+  const reading = pronunciation ?? turn.reading;
+  const readingLanguage = pronunciation ? 'ja-Latn' : language;
+  const readingLanguageProps = Platform.OS === 'web' ? { lang: readingLanguage } : { accessibilityLanguage: readingLanguage };
   return <>
     <View style={t.frenchTurn}>
       <View style={t.frenchText}>
         <Text {...languageProps} style={[s.body, t.frenchSentence]}>{turn.target}</Text>
-        {!!turn.reading && <Text style={s.muted}>{turn.reading}</Text>}
+        {!!reading && <Text {...readingLanguageProps} style={s.muted}>{reading}</Text>}
       </View>
       <Speak language={language} text={turn.target} onError={setVoiceError} />
     </View>

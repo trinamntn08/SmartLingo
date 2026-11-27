@@ -28,6 +28,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await panel.getByRole('button', { name: 'B1', exact: true }).click();
   const day = japaneseCourse.days.at(-1)!;
   await panel.getByRole('button', { name: `Choose lesson ${day.dayNumber}: ${day.title}`, exact: true }).click();
+  await expect(panel.getByTestId('dialogue-japanese-transcript').getByText('Bii-shitsu nara niji kara tsukaemasu ne.', { exact: true })).toBeVisible();
   await panel.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   const path = `/course/ja/${japaneseCourse.id}/${day.id}/lesson-vocabulary`;
   await expect(cold).toHaveURL(url => url.pathname === path);
@@ -44,8 +45,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await cold.goto(`/course/ja/${japaneseCourse.id}/${day.id}/${oldVocabulary.id}`);
   await expect(cold).toHaveURL(url => url.pathname === path);
   await expect(panel.getByTestId('lesson-stage-heading')).toHaveText('Key phrases');
-  await panel.getByRole('button', { name: 'Authorship and review', exact: true }).click();
-  await expect(panel.getByText(`Rights: ${japaneseCourse.provenance!.rights}`, { exact: true })).toBeVisible();
+  await expect(panel.getByRole('button', { name: 'Authorship and review', exact: true })).toHaveCount(0);
   expect(remoteRequests).toEqual([]);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await cold.screenshot({ path: info.outputPath('japanese-cold-offline.png'), fullPage: true });

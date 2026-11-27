@@ -7,19 +7,16 @@ import { styles as s } from '../ui/theme';
 export function CourseCredits({ course }: { course: OpenCourse }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
-  const hasSources = course.sources.length > 0;
-  if (!hasSources && (course.language === 'fr-FR' || !course.provenance)) return null;
+  if (!course.sources.length) return null;
   async function follow(url: string) {
     setError('');
     try { await Linking.openURL(url); } catch { setError('The external link could not be opened. All course study material is available here.'); }
   }
   return <View style={{ gap: 12, minWidth: 0, paddingTop: 16, borderTopWidth: 1, borderTopColor: '#DCE3DB' }}>
-    <Button expanded={open} onPress={() => setOpen(value => !value)}>{hasSources
-      ? (open ? 'Hide source credits' : 'Source credits and licence')
-      : (open ? 'Hide authorship' : 'Authorship and review')}</Button>
+    <Button expanded={open} onPress={() => setOpen(value => !value)}>{open ? 'Hide source credits' : 'Source credits and licence'}</Button>
     {open && <View testID="course-source-credits" style={s.notice}>
-      <Text accessibilityRole="header" style={s.heading}>{hasSources ? 'Source credits' : 'Authorship and review'}</Text>
-      {hasSources && <Text style={s.muted}>All study material is included here. These optional links open the original source and licence.</Text>}
+      <Text accessibilityRole="header" style={s.heading}>Source credits</Text>
+      <Text style={s.muted}>All study material is included here. These optional links open the original source and licence.</Text>
       {!!course.provenance && <View style={{ gap: 8 }}>
         <Text style={s.body}>Author: {course.provenance.author}</Text>
         <Text style={s.body}>Rights: {course.provenance.rights}</Text>

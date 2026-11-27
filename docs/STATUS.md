@@ -8,7 +8,7 @@ This learner builds on the Japanese curriculum at `afe9d7e`, including the Andro
 
 ## Combined web and Android preview
 
-Android 0.2.5-preview (version code 7) includes the bilingual curriculum, material-first lessons and native device speech. Tap a character, its reading, or a vocabulary word to hear it. The five isolated Japanese vowels use bundled reference recordings in study and recognition. Other Japanese study items can use a voice selected in Profile. The local web app retains its optional API-backed editor and conversation tools.
+Android 0.2.6-preview (version code 8) includes the bilingual curriculum, material-first lessons and native device speech. Tap a character, its reading, or a vocabulary word to hear it. The five vowels use recordings made by a native Japanese speaker in both study and recognition. Japanese starts at the recorded pace and honors previously saved speed preferences. Other Japanese study items can use a voice selected in Profile. The local web app retains its optional API-backed editor and conversation tools.
 
 ## Material-first lessons
 
@@ -18,7 +18,7 @@ Japanese letters open in study mode. The title, kana, readings and audio come fi
 
 Reviewed the bundled Japanese catalog across letters, guided lessons and topic practice. The learner now offers 53 kana lessons, 13 guided lessons with three cumulative units, and 69 topic lessons across 16 banks. All 69 topic lessons have practical application and each bank has a fresh check. Contextual readings, typed Japanese, furigana, listening, open replies, support-aware feedback and task resume are available in the normal reader. Original lesson identities, revisions, saved core progress and routes remain available. [Curriculum map and audit](curriculum/japanese-curriculum-redesign.md) · [Decision](decisions/0048-japanese-communicative-practice.md)
 
-The app bundles 506 synthetic listening and study clips from exact authored Japanese text, with a transcript manifest and VOICEVOX credit. [Audio sources and verification](JAPANESE_AUDIO.md)
+The app bundles 311 human recordings covering 70 distinct kana sounds and 254 vocabulary spellings, plus 353 synthetic clips for other study and listening material. Each human recording has a source and license in Profile → About SmartLingo → Japanese recording credits. [Audio sources and verification](JAPANESE_AUDIO.md)
 
 ## Implemented
 

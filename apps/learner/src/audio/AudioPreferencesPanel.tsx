@@ -72,7 +72,7 @@ function DeviceAudioPreferencesPanel({ language }: { language: TargetLanguage })
 
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>{name} audio</Text>
-    <Text style={s.body}>Choose a synthetic voice offered by your {isAndroidApp() ? 'device' : 'browser'} and listen before deciding. Voice quality varies by device.</Text>
+    <Text style={s.body}>{android && language === 'ja-JP' ? 'Japanese lessons include native-speaker recordings. You can also select a device voice.' : `Choose a synthetic voice offered by your ${android ? 'device' : 'browser'} and listen before deciding. Voice quality varies by device.`}</Text>
     {!supported ? <Text style={s.body}>Device speech is unavailable here. All lesson text and translations remain available.</Text> : <>
       {discovering && voices.length === 0 && <Text accessibilityLiveRegion="polite" style={s.muted}>Checking for {name} voices…</Text>}
       {!discovering && voices.length === 0 && <Text style={s.body}>No {name} voice is available yet. {android

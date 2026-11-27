@@ -145,7 +145,7 @@ export function ListeningQuestionPlayer({ question, revision, position, total, a
   const languageProps = Platform.OS === 'web' ? { lang: question.language } : { accessibilityLanguage: question.language };
 
   return <View testID="listening-question-player" style={[s.card, layout.exercise]}>
-    {question.language === 'ja-JP' && hasJapaneseCourseClip(question.sentence) && <Text style={s.muted}>{japaneseCourseVoiceCredit}</Text>}
+    {question.language === 'ja-JP' && hasJapaneseCourseClip(question.sentence) && <Text style={s.muted}>{japaneseCourseVoiceCredit(question.sentence)}</Text>}
     <View style={[layout.player, compact && layout.playerCompact, embedded && layout.embeddedPlayer,
       embedded && compact && layout.embeddedPlayerCompact]}>
       {!embedded && <View style={layout.progress}>

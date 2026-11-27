@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import { japaneseAlphabetLessons, japaneseCourse, japaneseDailyGuides, japaneseLessons } from '@smartlingo/content';
 import type { JapanesePracticeTask } from '@smartlingo/domain';
 import { buildCourseListeningQuestion, buildLessonListeningQuestion } from '../src/listening/lessonQuestions';
+import { hasHumanRecording, humanRecordings } from '../src/audio/japanese/course-clips';
 import manifest from '../public/japanese-audio/manifest.json';
 
 const assets = new URL('../public/japanese-audio/', import.meta.url);
@@ -25,7 +26,17 @@ test('Japanese study audio covers exact lesson, guided, kana and checkpoint scri
     ...japaneseAlphabetLessons.flatMap(lesson => [...lesson.characters.map(character => character.audioText),
       ...lesson.examples!.map(example => example.text), ...audioTexts(lesson.practice!)]),
   ]);
-  assert.deepEqual(new Set(Object.keys(clips)), expected);
+  for (const text of expected) assert(text in clips, `Missing course audio for ${text}`);
+  const vocabulary = new Set(japaneseLessons.flatMap(lesson => lesson.vocabulary.map(entry => entry.target)));
+  for (const text of Object.keys(clips)) {
+    assert(expected.has(text) || (vocabulary.has(text) && hasHumanRecording(text)), `Unexpected clip for ${text}`);
+  }
+  for (const vowel of 'アイウエオ') assert(hasHumanRecording(vowel), `Missing speaker recording for ${vowel}`);
+  for (const [text, credit] of Object.entries(humanRecordings)) {
+    assert(text in clips && credit.author && credit.license, `Missing recording or credit for ${text}`);
+    assert.match(credit.source, /^https:\/\//u);
+    assert.match(credit.licenseUrl, /^https:\/\//u);
+  }
   const names = new Set<string>();
   for (const [text, clip] of Object.entries(clips)) {
     assert.match(text, /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u);
@@ -37,6 +48,6 @@ test('Japanese study audio covers exact lesson, guided, kana and checkpoint scri
     assert.equal(createHash('sha256').update(bytes).digest('hex'), clip.sha256, clip.file);
     names.add(clip.file);
   }
-  assert.equal(names.size, expected.size);
-  assert.deepEqual(new Set(readdirSync(assets)), new Set(['manifest.json', ...names]));
+
+  assert.deepEqual(new Set(readdirSync(assets)), new Set(['manifest.json', 'human-recordings.json', ...names]));
 });

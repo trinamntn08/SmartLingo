@@ -1,8 +1,18 @@
 import clips from '../../../public/japanese-audio/manifest.json';
+import recordings from '../../../public/japanese-audio/human-recordings.json';
 import { preferencesForLanguage } from '../preferences';
 
 const files: Readonly<Record<string, { file: string; sha256: string; speed: number }>> = clips;
-export const japaneseCourseVoiceCredit = 'Synthetic audio · VOICEVOX:四国めたん';
+export type RecordingCredit = { author: string; source: string; license: string; licenseUrl: string; changes?: string };
+export const humanRecordings: Readonly<Record<string, RecordingCredit>> = recordings;
+
+export function hasHumanRecording(text: string) {
+  return Object.hasOwn(humanRecordings, text);
+}
+
+export function japaneseCourseVoiceCredit(text: string) {
+  return hasHumanRecording(text) ? `Recording · ${humanRecordings[text].author}` : 'Synthetic audio · VOICEVOX:四国めたん';
+}
 
 export function hasJapaneseCourseClip(text: string) {
   return Object.hasOwn(files, text);

@@ -1,12 +1,12 @@
 # Free Japanese audio
 
-Research/implementation evidence dated 2026-11-21; this guide was checked against source on 2026-11-22. Linked external terms and quality claims were not freshly revalidated during this documentation sync. Japanese speaker buttons can now work without a Japanese browser voice. The default automatic source uses an available Japanese device voice first, then saved clips or a free local VOICEVOX voice. Profile → Japanese audio also lets you choose the free voice explicitly and preview it.
+SmartLingo includes human recordings for basic kana and selected vocabulary, plus synthetic course recordings for other prompts. Bundled clips work without a Japanese browser voice or a running API. Profile lists recording credits and Japanese audio preferences.
 
 ## Readings and where to listen
 
-Choose **Learn Japanese** on the homepage, then use Today, Learn, Review, Report or Profile. **Learn > Japanese letters** shows basic kana with romaji readings and optional sound; **Learn > Vocabulary & lessons** shows Japanese words and examples with written kana readings. These written aids are bundled and remain available without the API. They are not a universal romaji/IPA pronunciation guide or pronunciation scoring.
+Choose **Learn Japanese**, open a lesson and select the speaker beside a character or word. The learner displays the authored reading, and playback uses the Japanese target text. For **Vowels**, each speaker plays one complete native-speaker pronunciation. Recognition practice uses the same recording.
 
-Speaker buttons speak their supplied Japanese text through the selected audio source; word cards do not synthesize from the separate reading field. **Profile > Japanese audio** controls the source and Slow/Gentle/Normal speed. In Automatic mode, an available device voice is selected first; a device playback failure does not automatically retry through VOICEVOX. Select Free local voice explicitly to use saved local clips or the engine instead.
+Profile's Japanese audio settings control playback speed and available device or local voices for text without a bundled recording.
 
 ## Choice and evidence
 
@@ -69,20 +69,18 @@ python -X utf8 -m unittest discover -s scripts/japanese_voice -p test_server.py
 
 Live checks require explicit local setup/start above. Automated tests do not establish Japanese pronunciation quality or native/Safari support; the checkpoint records the actual engine and browser runs.
 
-## Bundled Japanese course clips
+## Bundled Japanese recordings
 
-Course listening questions, kana audio and new Japanese practice use exact Japanese transcript keys from the source. The guided dialogue and key phrases also have bundled playback. The files are original course text rendered in **VOICEVOX:四国めたん** style 2. Foundation and A1 prompts use a gentler base pace. The Japanese playback-speed preference applies to both bundled clips and device or local speech. Other text and personal words can use the selected device or local source.
+Kana study uses recordings by Hakatanoshio117117, who identifies Japanese as their native language. Each recording's original Commons page identifies the author, the spoken kana and the public-domain dedication. Hiragana and katakana share audio when the authored pronunciation matches. [Speaker profile](https://ja.wikipedia.org/wiki/利用者:Hakatanoshio117117) · [Vowel recording and dedication](https://commons.wikimedia.org/wiki/File:Ja-A.oga#Licensing)
 
-The app export includes the clip files and SHA-256 manifest, with no voice model or engine. The [pinned model terms](https://github.com/VOICEVOX/voicevox_vvm/blob/0.17.1/TERMS.txt) and [voice and onward-use conditions](https://zunko.jp/con_ongen_kiyaku.html) apply to the generated clips. Keep the credit and these applicable conditions with supplied copies. These are synthetic examples. Listening checks record comprehension or reading support. Speaking tasks use model playback and manual self-review.
+The original speaker gives three separate pronunciations. SmartLingo uses one complete take with about 100 ms of silence at each edge, retaining the onset and trailing breath at the speaker's pace. The basic kana came from Commons MP3 transcodes archived by KanaZen. The additional single-kana files came from MeguLit's Commons copies, which had previously been trimmed and levelled. SmartLingo encoded the selected take as mono MP3 without gain adjustment, pitch shifting or time stretching. Each kana credit records the pinned input file, its checksum and the start and end times of the excerpt in milliseconds. [KanaZen acquisition notes](https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/CREDITS.md) · [MeguLit acquisition notes](https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/CREDITS.md)
 
-[Clip collection](../scripts/japanese_voice/collect-course-clips.ts) uses the same lesson questions and practice sources as the learner. [Rendering](../scripts/japanese_voice/render-course-clips.py) requires locally installed CORE, the official style 2 model, Open JTalk dictionary and ffmpeg. Run the collector with `node --import tsx scripts/japanese_voice/collect-course-clips.ts`. Pass the redirected JSON and a fresh output directory to the renderer, with the installed runtime library, dictionary and model paths. Reconcile the complete output with the authored sources before replacing a clip set. The application checks verify source coverage and file hashes. Device availability, pitch accent naturalness and qualified listening review remain separate from source/hash verification.
+The credited vocabulary recordings from Tofugu and WaniKani are original MP3s spoken by native Japanese speakers. They retain their original tempo and their Creative Commons Attribution-ShareAlike 4.0 International license. [Tofugu and WaniKani recording collection](https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/tree/9725e0e7d628ab616e8b14e126d3daa33eba8d36) · [License](https://creativecommons.org/licenses/by-sa/4.0/)
 
-### Isolated study vowels
+The recording catalog lists the speaker or credited producer, source file, license, license link and edits for each human recording. Keep the credits, license links and modification notices with redistributed copies. The media manifest records the delivered file and SHA-256 for each transcript. [Recording credits](../apps/learner/public/japanese-audio/human-recordings.json) · [Media manifest](../apps/learner/public/japanese-audio/manifest.json)
 
-The five single-vowel clips use the same VOICEVOX:四国めたん model and style 2. Isolated synthesis produced a breathy or very quiet onset for some vowels. The renderer now generates the target mora inside a Japanese carrier, checks its vowel phoneme and voicing, and cuts the steady vowel from the model's mora timings. A 40 ms margin at each boundary excludes the neighbouring sounds. The retained vowel lasts about 226 ms at the stored pace, with a short fade at each edge. The renderer matches the vowel level before encoding and rejects a source that would require more than 10 dB of gain.
+## Synthetic course audio
 
-Run the decoded-media check after regenerating the clips. It uses Python and ffmpeg to measure periodic speech in 20 ms windows, compare levels across the five vowels, and check peak headroom.
+Other authored course clips use **VOICEVOX:四国めたん** style 2. They include guided dialogue and listening prompts that use exact authored text. Preserve the voice credit and applicable conditions with redistributed clips. The playback-speed preference applies to both human and synthetic clips. [Model terms](https://github.com/VOICEVOX/voicevox_vvm/blob/0.17.1/TERMS.txt) · [Voice terms](https://zunko.jp/con_ongen_kiyaku.html)
 
-```sh
-python scripts/japanese_voice/isolated_vowels.py apps/learner/public/japanese-audio
-```
+To refresh synthetic clips, collect course transcripts with `node --import tsx scripts/japanese_voice/collect-course-clips.ts`. Pass the resulting JSON and a fresh output directory to the renderer along with CORE, the style 2 model, Open JTalk dictionary and ffmpeg. The renderer verifies and copies the bundled human recordings with their credit catalog before generating uncovered transcripts. [Collector](../scripts/japanese_voice/collect-course-clips.ts) · [Renderer](../scripts/japanese_voice/render-course-clips.py)

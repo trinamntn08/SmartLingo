@@ -9,7 +9,7 @@ import { BrowserClipPlayer } from './generated/player';
 import { JapaneseSpeechPlayer } from './japanese/player';
 import { japaneseSource } from './japanese/preferences';
 import { japaneseAudioStore, japaneseSpeechClient } from './japanese/runtime';
-import { JapaneseCourseClipPlayer } from './japanese/course-clips';
+import { hasHumanRecording, JapaneseCourseClipPlayer } from './japanese/course-clips';
 import { isAndroidApp } from '../platform/runtime';
 import { AndroidSpeechPlayer, hasSelectedAndroidVoice } from './android';
 
@@ -125,7 +125,12 @@ const courseClips = new JapaneseCourseClipPlayer();
 let playbackSequence = 0;
 export const audio: AudioPlayer = {
   available: language => preferredAudio.available(language),
-  speak(text, language) {
+  async speak(text, language) {
+    if (language === 'ja-JP' && hasHumanRecording(text)
+      && (isAndroidApp() ? !hasSelectedAndroidVoice(language) : japaneseSource.get() === 'auto')) {
+      await speakCourseAudio(text, language);
+      return;
+    }
     playbackSequence++;
     courseClips.stop();
     return preferredAudio.speak(text, language);
@@ -148,7 +153,7 @@ export async function speakCourseAudio(text: string, language: TargetLanguage): 
     try { return await clip; }
     catch (error) {
       if (sequence !== playbackSequence) return false;
-      if (!vowel || !deviceAudio.available(language)) throw error;
+      if (!hasHumanRecording(text) || !deviceAudio.available(language)) throw error;
       await deviceAudio.speak(text, language);
       return sequence === playbackSequence;
     }

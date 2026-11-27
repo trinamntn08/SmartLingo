@@ -72,11 +72,11 @@ export function JapaneseAudioPreferencesPanel() {
   const selectStyle = { width: '100%', minWidth: 0, minHeight: 48, padding: 12, borderRadius: 12, border: '1px solid #8B8D7E', background: colors.card, color: colors.ink, fontSize: 16 };
   return <View style={s.card}>
     <Text accessibilityRole="header" style={s.heading}>Japanese audio</Text>
-    <Text style={s.body}>Choose synthetic device speech or a free local Japanese voice. Automatic uses a Japanese device voice when available, then saved audio or VOICEVOX.</Text>
+    <Text style={s.body}>Automatic uses native-speaker recordings where available. Other words can use a Japanese device voice or free local speech.</Text>
     <View style={{ gap: 8 }}>
       <label htmlFor={sourceId} style={{ color: colors.ink, fontSize: 17, fontWeight: 600 }}>Japanese audio source</label>
       <select id={sourceId} value={source} onChange={event => saveSource(event.target.value as JapaneseSource)} style={selectStyle}>
-        <option value="auto">Automatic — device, then free local voice</option>
+        <option value="auto">Automatic — recordings and voices</option>
         <option value="device">Device voice only</option>
         <option value="voicevox">Free local voice — Shikoku Metan</option>
       </select>

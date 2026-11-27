@@ -1,0 +1,2296 @@
+{
+  "ア": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Ja-A.oga",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/a.mp3",
+    "copySha256": "1eda422b93d92182c1c75cbe25bde3c5219bf0994266ec20af40d9a118d712bb",
+    "startMs": 1030,
+    "endMs": 1330
+  },
+  "イ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_I.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/i.mp3",
+    "copySha256": "aa4fffc21af54d0823969c5618986ca550221e0c2197e482392883fa23a1ea6b",
+    "startMs": 910,
+    "endMs": 1200
+  },
+  "ウ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_U.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/u.mp3",
+    "copySha256": "cb7d3c13ec9665a2bbc75fe1425b711ba3d35aa2ea90f5d09f7200a4c803f8a9",
+    "startMs": 910,
+    "endMs": 1200
+  },
+  "エ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Ja-E.oga",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/e.mp3",
+    "copySha256": "16c05eb69437811919830d2f948b4d7929bddb5c9832225a8425f75ac1982ab1",
+    "startMs": 980,
+    "endMs": 1280
+  },
+  "オ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_O.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/o.mp3",
+    "copySha256": "18da569b93f086b3f41f3a63f391748c8645fa8b06167c4d187ed50a66012ec5",
+    "startMs": 920,
+    "endMs": 1240
+  },
+  "カ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Ja-Ka.oga",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ka.mp3",
+    "copySha256": "b5acc9ce3cebfec3704d5d524bd20f425d862d8f6929e2815fbd2915b7c32cf3",
+    "startMs": 1860,
+    "endMs": 2260
+  },
+  "ガ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ga.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/304c.ogg",
+    "copySha256": "2f3b749da97368c09625bc864086ef97d13de203a2995fc41745dfcf21cabf61",
+    "startMs": 980,
+    "endMs": 1430
+  },
+  "キ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ki.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ki.mp3",
+    "copySha256": "d7437109c680a54af037a3ecc8f942c32a4c0a7ecc5d9c49ab115189a120949c",
+    "startMs": 1790,
+    "endMs": 2250
+  },
+  "ギ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_gi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/304e.ogg",
+    "copySha256": "089ac9f02d040822761b812f9c6a5003a6381c9ad01453d3c55103cac3496487",
+    "startMs": 990,
+    "endMs": 1500
+  },
+  "ク": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ku.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ku.mp3",
+    "copySha256": "50cb286418d33c233b7938312c7b4876aba8126c296d1ec4a8f075afe4dcdd62",
+    "startMs": 1350,
+    "endMs": 1850
+  },
+  "グ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_gu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3050.ogg",
+    "copySha256": "17fd47c5bffa6e0e5753e1091355d068e1b38086e9eda50bc8c7287956467b59",
+    "startMs": 970,
+    "endMs": 1380
+  },
+  "ケ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ke.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ke.mp3",
+    "copySha256": "cb4a835bdc6d64e7571736f6481a80f0d7c964c02d6b5d4de4a1429243b5e93a",
+    "startMs": 1630,
+    "endMs": 2090
+  },
+  "ゲ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ge.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3052.ogg",
+    "copySha256": "65468821f013288164d2fe142f0b75f328781c94ea0b76f1e1d598867a70177c",
+    "startMs": 970,
+    "endMs": 1440
+  },
+  "コ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ko.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ko.mp3",
+    "copySha256": "87e0f7705ba457e5dadd02876d1342be4eed50dfa8dee7d0f556773d2f13e2a1",
+    "startMs": 1760,
+    "endMs": 2290
+  },
+  "ゴ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_go.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3054.ogg",
+    "copySha256": "baa9eb094251d2cb1815639997e4d2e4009db730270d72480b117418ff60cc73",
+    "startMs": 980,
+    "endMs": 1390
+  },
+  "サ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_sa.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/sa.mp3",
+    "copySha256": "79d149b5e212deb9361c9b834b5b63acca01bec9a935ae3ddc3a34b95954ce71",
+    "startMs": 1610,
+    "endMs": 2090
+  },
+  "ザ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_za.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3056.ogg",
+    "copySha256": "2247faa8ce0c309d70f280ec8f701395611dd566864add0fe4d99a3bbd5a49be",
+    "startMs": 1000,
+    "endMs": 1450
+  },
+  "シ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_shi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/shi.mp3",
+    "copySha256": "830e3c1fda885699dda8c8d4eb7c491318f09742e7b52c68c8ca1f8ad5923452",
+    "startMs": 1310,
+    "endMs": 1760
+  },
+  "ジ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_zi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3058.ogg",
+    "copySha256": "83e19ae5b61913293cb01392f9611e9e9c225b92b580cb145c20b772008e9a64",
+    "startMs": 1000,
+    "endMs": 1430
+  },
+  "ス": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_su.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/su.mp3",
+    "copySha256": "2d357d375d168b2f84f97f8ee3376ed7dba19ec3379cbea658868220cb4d6b1f",
+    "startMs": 1560,
+    "endMs": 2000
+  },
+  "ズ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_zu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/305a.ogg",
+    "copySha256": "bfd684bb80a3fd8bedd6737425cb0787885d9a9912ed69a47ddbb87d8aea7458",
+    "startMs": 1020,
+    "endMs": 1450
+  },
+  "セ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_se.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/se.mp3",
+    "copySha256": "0d3860df07770748f8a3f1475f19482c963b22e15b9977f573744cae8d63518a",
+    "startMs": 1500,
+    "endMs": 1990
+  },
+  "ゼ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ze.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/305c.ogg",
+    "copySha256": "bc5ee8f3a6cf87c4f62ad28f37ecb12485a5ed58773154ba57a2df400f7c0927",
+    "startMs": 1070,
+    "endMs": 1490
+  },
+  "ソ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Ja-So.oga",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/so.mp3",
+    "copySha256": "612b37e3ef7869d83c3ec4cee08d89f46a59f0ab4956967bc85cc95380911b75",
+    "startMs": 1360,
+    "endMs": 1830
+  },
+  "ゾ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_zo.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/305e.ogg",
+    "copySha256": "1e9435e7253e9806998b0b1a298a33e4516484c343a2772cacc27749cbb1da5a",
+    "startMs": 980,
+    "endMs": 1420
+  },
+  "タ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ta.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ta.mp3",
+    "copySha256": "52ce06aec0eec7e0493d280422902df82a221adcce87e7b30c063563e236f1ee",
+    "startMs": 1650,
+    "endMs": 2000
+  },
+  "ダ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_da.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3060.ogg",
+    "copySha256": "b6a0f79d1e6af310aeb8c61f661fb0d63006a90ddc4d742edf69a1376a3edd65",
+    "startMs": 1030,
+    "endMs": 1440
+  },
+  "チ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ti.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/chi.mp3",
+    "copySha256": "35d30f9e60a98643a34836a9fa13e162811ebb44e540713d6d15c1492eaa6054",
+    "startMs": 1450,
+    "endMs": 1860
+  },
+  "ヂ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_di.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3062.ogg",
+    "copySha256": "73ed19f8757c642c3fb2e316a8f2d0304d78c26f70470a621283b108e4caff9e",
+    "startMs": 970,
+    "endMs": 1370
+  },
+  "ツ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_tsu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/tsu.mp3",
+    "copySha256": "b6ac5f323290405764331fc23155c8421f619aac3aabb88ad4eddb3a58fc2518",
+    "startMs": 1270,
+    "endMs": 1750
+  },
+  "ヅ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_du.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3065.ogg",
+    "copySha256": "6fb276a2d91b9780932b61b4da33c4d101639219c4fc91de75cc1aa3c5c69f7e",
+    "startMs": 1370,
+    "endMs": 1810
+  },
+  "テ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_te.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/te.mp3",
+    "copySha256": "c2b29cf37c5d1b861687dac1533222de0985a3d4d51c95575df96682abfaaf1d",
+    "startMs": 1470,
+    "endMs": 1870
+  },
+  "デ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_de.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3067.ogg",
+    "copySha256": "06737773d229d560783c0f646fae2374535eceed1241b0ba291408ccffa92c92",
+    "startMs": 1010,
+    "endMs": 1430
+  },
+  "ト": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_to.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/to.mp3",
+    "copySha256": "7855596ce1b348f568e6f79becd05ecc61e1114fd93b0b3b5cfd88174eed727e",
+    "startMs": 1360,
+    "endMs": 1810
+  },
+  "ド": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_do.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3069.ogg",
+    "copySha256": "c9fbb8318ff127d419a9495c3b0c4ec9c46340af1685beb655d6a136acd42b58",
+    "startMs": 1020,
+    "endMs": 1470
+  },
+  "ナ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_na.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/na.mp3",
+    "copySha256": "9b4e9043456bde7acb27ffbb6e011a39f7e73705472a18bbb0f3a708869d1ec0",
+    "startMs": 1340,
+    "endMs": 1820
+  },
+  "ニ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ni.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ni.mp3",
+    "copySha256": "ca926e479cab0fd00838cc4dbd943aec7f93f92fefa17bc1b7f6ad8237388b7d",
+    "startMs": 1370,
+    "endMs": 1820
+  },
+  "ヌ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_nu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/nu.mp3",
+    "copySha256": "de55758ae220ce88108c88432ce6b36871ea6c843cf08b3a9ba07585688d7bd8",
+    "startMs": 1370,
+    "endMs": 1820
+  },
+  "ネ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ne.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ne.mp3",
+    "copySha256": "7c8e809bf6b942e141942ff3ccbe7b8130bc0dc9915cb4b22ec404bc455adea4",
+    "startMs": 1370,
+    "endMs": 1820
+  },
+  "ノ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_no.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/no.mp3",
+    "copySha256": "76c4913ea99ad1a0e932beb96880864fec4497ddf62f61ec412f9720bd21a9a1",
+    "startMs": 1430,
+    "endMs": 1930
+  },
+  "ハ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ha.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ha.mp3",
+    "copySha256": "dfba356ec9f550fdb0852adc89c1b8859ff3e0f279fad09589fb90a456a708ca",
+    "startMs": 1450,
+    "endMs": 1920
+  },
+  "バ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ba.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3070.ogg",
+    "copySha256": "52186fe4605a5686100e0f483d27620483da135cff9a56a266a94daaf3f0d1a0",
+    "startMs": 980,
+    "endMs": 1410
+  },
+  "パ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_pa.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3071.ogg",
+    "copySha256": "3fb35d4e134ea877fa2e1709fd7d71061cff41b464ba4fa18b5d5470074eac9a",
+    "startMs": 1060,
+    "endMs": 1450
+  },
+  "ヒ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_hi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/hi.mp3",
+    "copySha256": "1a3e856155b6547238a6a5854594e4845ab1413a37074e003410d1708778ede2",
+    "startMs": 1150,
+    "endMs": 1650
+  },
+  "ビ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_bi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3073.ogg",
+    "copySha256": "d70f654e40a1cf75bf41c44fa6dc149199229719acfb2180272da5470e24e536",
+    "startMs": 980,
+    "endMs": 1400
+  },
+  "ピ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_pi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3074.ogg",
+    "copySha256": "09c3f8cdab930c968687efef874ff87236fb8817ca2632d2660a855628ec6986",
+    "startMs": 1020,
+    "endMs": 1360
+  },
+  "フ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_hu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/fu.mp3",
+    "copySha256": "eeb3dd4e0d5fb32fdd364a77b44d45d6838aaca3bdd0a22e341682efc348f2bf",
+    "startMs": 1500,
+    "endMs": 1950
+  },
+  "ブ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_bu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3076.ogg",
+    "copySha256": "c7676b7d73a2892768515cb0ef34495ef5ba1d91daf9673bebcdc36536aa10d6",
+    "startMs": 1010,
+    "endMs": 1390
+  },
+  "プ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_pu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3077.ogg",
+    "copySha256": "6b494fb883a60e015fbba0c35f58c3f1349d2188af86d47c52fe6f45cbb202aa",
+    "startMs": 1060,
+    "endMs": 1440
+  },
+  "ヘ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_he.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/he.mp3",
+    "copySha256": "5ab02766f08f76d9d6cdb198e8cc4c61944e32dc00a9f9de385e2e913d6ae0d1",
+    "startMs": 1290,
+    "endMs": 1750
+  },
+  "ベ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_be.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/3079.ogg",
+    "copySha256": "c333c88e913218deef37d62ab5a5f759e12e160a882f080c19173d0ae5e68af3",
+    "startMs": 1000,
+    "endMs": 1460
+  },
+  "ペ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_pe.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/307a.ogg",
+    "copySha256": "568075d8f0874013c70f77cfbbd99151ea850e728238e2d455e5ad8a4b49fbe4",
+    "startMs": 1070,
+    "endMs": 1470
+  },
+  "ホ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ho.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ho.mp3",
+    "copySha256": "7caadca8a0053bf9803f6601f6dd653961fc2101bc3bf02c38941addbef12a09",
+    "startMs": 1270,
+    "endMs": 1730
+  },
+  "ボ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_bo.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/307c.ogg",
+    "copySha256": "b3eea34e3ff413b727759e233f18bca4eda68bf4997b26e7a329960736c9efb2",
+    "startMs": 980,
+    "endMs": 1360
+  },
+  "ポ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_po.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "The source copy had silence trimmed and loudness evened. One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/ilynthn/MeguLit/blob/7a973da5dc1d9c99d2fa7450400dd2f4f7ecdc05/web/kana/audio/male/307d.ogg",
+    "copySha256": "3393e739ebb8d8a1170aca394ef09c4d7415a645b50f5ee4b7d67fd30940c4c8",
+    "startMs": 1040,
+    "endMs": 1440
+  },
+  "マ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ma.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ma.mp3",
+    "copySha256": "99b85b217650523e37c7c9b0770566befe5264f74d5940567eaeec7fcd48b5b8",
+    "startMs": 1220,
+    "endMs": 1660
+  },
+  "ミ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_mi.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/mi.mp3",
+    "copySha256": "b3dc85dc9812299625eb872b2813337865524fc7196c982b54b9ea0d3d5ba03c",
+    "startMs": 1210,
+    "endMs": 1610
+  },
+  "ム": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_mu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/mu.mp3",
+    "copySha256": "7e50eeb952a56786559fbe3e4da15c5619113d50493e90e669565019d152d9eb",
+    "startMs": 1290,
+    "endMs": 1720
+  },
+  "メ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_me.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/me.mp3",
+    "copySha256": "0b955d925df969e185ab1f28812486024cc9a0243f6248313079b1fea7906534",
+    "startMs": 1350,
+    "endMs": 1750
+  },
+  "モ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_mo.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/mo.mp3",
+    "copySha256": "5e77ef54ae961f84a56688f054e1bcbcbecdd73f04897d983a84d26f18363d6b",
+    "startMs": 1200,
+    "endMs": 1610
+  },
+  "ヤ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ya.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ya.mp3",
+    "copySha256": "5ef6a139b0d729bb10f8dc80d9c44eb391bbfc3eaee505f7fc9e60a2d623e171",
+    "startMs": 1380,
+    "endMs": 1770
+  },
+  "ユ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_yu.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/yu.mp3",
+    "copySha256": "99d464afa385bc3fdc1a890fda19050952202d90176f69868ea02a87edee7551",
+    "startMs": 1560,
+    "endMs": 1920
+  },
+  "ヨ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_yo.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/yo.mp3",
+    "copySha256": "2bda68ae92c811bacac760ef0797e37359d8126b0ea84d4194a210d8b349dbc6",
+    "startMs": 1240,
+    "endMs": 1630
+  },
+  "ラ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ra.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ra.mp3",
+    "copySha256": "4676f70cffb2d6f959627cd06aa500740c8618df449443be88000d1fc7829c50",
+    "startMs": 1370,
+    "endMs": 1760
+  },
+  "リ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ri.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ri.mp3",
+    "copySha256": "776071a33d89c796f547ae66f554e5de5d3a8553aae8751eee9f76bb7b6fe6e5",
+    "startMs": 1250,
+    "endMs": 1660
+  },
+  "ル": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ru.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ru.mp3",
+    "copySha256": "7210b6b9150ea4e1cf46b24bec3010e5b506334d93f735c88a8b0f4a3595e0bb",
+    "startMs": 1420,
+    "endMs": 1810
+  },
+  "レ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_re.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/re.mp3",
+    "copySha256": "b1891ce9839cfebcb41c0ee1c02ff9d40c2ee3b373eff7a117486615490c6e80",
+    "startMs": 1160,
+    "endMs": 1590
+  },
+  "ロ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_ro.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/ro.mp3",
+    "copySha256": "c62729b83f33d1fa2e310cac3b8bd6a69a3f438b35bba3e5b88ff34f62bd9eac",
+    "startMs": 1350,
+    "endMs": 1710
+  },
+  "ワ": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_wa.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/wa.mp3",
+    "copySha256": "bc9ce96d108e2cd6ad51ae59f4e3f51f86d48edea2188cca34babf884cafaab3",
+    "startMs": 1590,
+    "endMs": 1960
+  },
+  "ン": {
+    "author": "Hakatanoshio117117",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_N.ogg",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+    "changes": "One complete pronunciation selected from three repetitions. Encoded as mono MP3 at the recorded pace.",
+    "copySource": "https://github.com/nekohao/zen-kana/blob/5ac4f6e64e134c7925e3536964b64dbdbce12170/KanaZen/assets/audio/n.mp3",
+    "copySha256": "116be110337bc348839042ff9ac035a39e2a6ca3b78a9a7436657beb3af32dda",
+    "startMs": 1390,
+    "endMs": 1740
+  },
+  "あさ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%9D%E3%80%90%E3%81%82%E3%81%95%E3%80%91.mp3"
+  },
+  "いえ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AE%B6%E3%80%90%E3%81%84%E3%81%88%E3%80%91.mp3"
+  },
+  "いけ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%B1%A0%E3%80%90%E3%81%84%E3%81%91%E3%80%91.mp3"
+  },
+  "うみ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%B5%B7%E3%80%90%E3%81%86%E3%81%BF%E3%80%91.mp3"
+  },
+  "おちゃ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E3%81%8A%E8%8C%B6%E3%80%90%E3%81%8A%E3%81%A1%E3%82%83%E3%80%91.mp3"
+  },
+  "おばあさん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E3%81%8A%E5%A9%86%E3%81%95%E3%82%93%E3%80%90%E3%81%8A%E3%81%B0%E3%81%82%E3%81%95%E3%82%93%E3%80%91.mp3"
+  },
+  "お知らせ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%E3%80%90%E3%81%8A%E3%81%97%E3%82%89%E3%81%9B%E3%80%91.mp3"
+  },
+  "お茶": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E3%81%8A%E8%8C%B6%E3%80%90%E3%81%8A%E3%81%A1%E3%82%83%E3%80%91.mp3"
+  },
+  "お願いします": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E3%81%8A%E9%A1%98%E3%81%84%E3%81%97%E3%81%BE%E3%81%99%E3%80%90%E3%81%8A%E3%81%AD%E3%81%8C%E3%81%84%E3%81%97%E3%81%BE%E3%81%99%E3%80%91.mp3"
+  },
+  "かお": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%A1%94%E3%80%90%E3%81%8B%E3%81%8A%E3%80%91.mp3"
+  },
+  "かぎ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%8D%B5%E3%80%90%E3%81%8B%E3%81%8E%E3%80%91.mp3"
+  },
+  "きって": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%87%E6%89%8B%E3%80%90%E3%81%8D%E3%81%A3%E3%81%A6%E3%80%91.mp3"
+  },
+  "きっぷ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%87%E7%AC%A6%E3%80%90%E3%81%8D%E3%81%A3%E3%81%B7%E3%80%91.mp3"
+  },
+  "ぎゅうにゅう": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%89%9B%E4%B9%B3%E3%80%90%E3%81%8E%E3%82%85%E3%81%86%E3%81%AB%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "ぎんこう": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%8A%80%E8%A1%8C%E3%80%90%E3%81%8E%E3%82%93%E3%81%93%E3%81%86%E3%80%91.mp3"
+  },
+  "ください": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B8%8B%E3%81%95%E3%81%84%E3%80%90%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%91.mp3"
+  },
+  "くち": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%A3%E3%80%90%E3%81%8F%E3%81%A1%E3%80%91.mp3"
+  },
+  "くるま": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%BB%8A%E3%80%90%E3%81%8F%E3%82%8B%E3%81%BE%E3%80%91.mp3"
+  },
+  "こうえん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%85%AC%E5%9C%92%E3%80%90%E3%81%93%E3%81%86%E3%81%88%E3%82%93%E3%80%91.mp3"
+  },
+  "こんにちは": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BB%8A%E6%97%A5%E3%81%AF%E3%80%90%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF%E3%80%91.mp3"
+  },
+  "こんばんは": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BB%8A%E6%99%A9%E3%81%AF%E3%80%90%E3%81%93%E3%82%93%E3%81%B0%E3%82%93%E3%81%AF%E3%80%91.mp3"
+  },
+  "ごご": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8D%88%E5%BE%8C%E3%80%90%E3%81%94%E3%81%94%E3%80%91.mp3"
+  },
+  "さんぽ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%95%A3%E6%AD%A9%E3%80%90%E3%81%95%E3%82%93%E3%81%BD%E3%80%91.mp3"
+  },
+  "した": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B8%8B%E3%80%90%E3%81%97%E3%81%9F%E3%80%91.mp3"
+  },
+  "しばらく": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9A%AB%E3%81%8F%E3%80%90%E3%81%97%E3%81%B0%E3%82%89%E3%81%8F%E3%80%91.mp3"
+  },
+  "じかん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%99%82%E9%96%93%E3%80%90%E3%81%98%E3%81%8B%E3%82%93%E3%80%91.mp3"
+  },
+  "じゃま": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%82%AA%E9%AD%94%E3%80%90%E3%81%98%E3%82%83%E3%81%BE%E3%80%91.mp3"
+  },
+  "じゅんび": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%BA%96%E5%82%99%E3%80%90%E3%81%98%E3%82%85%E3%82%93%E3%81%B3%E3%80%91.mp3"
+  },
+  "すし": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AF%BF%E5%8F%B8%E3%80%90%E3%81%99%E3%81%97%E3%80%91.mp3"
+  },
+  "つづく": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%B6%9A%E3%81%8F%E3%80%90%E3%81%A4%E3%81%A5%E3%81%8F%E3%80%91.mp3"
+  },
+  "でんわ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9B%BB%E8%A9%B1%E3%80%90%E3%81%A7%E3%82%93%E3%82%8F%E3%80%91.mp3"
+  },
+  "とり": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%B3%A5%E3%80%90%E3%81%A8%E3%82%8A%E3%80%91.mp3"
+  },
+  "なに": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BD%95%E3%80%90%E3%81%AA%E3%81%AB%E3%80%91.mp3"
+  },
+  "にゅういん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%85%A5%E9%99%A2%E3%80%90%E3%81%AB%E3%82%85%E3%81%86%E3%81%84%E3%82%93%E3%80%91.mp3"
+  },
+  "ねこ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%8C%AB%E3%80%90%E3%81%AD%E3%81%93%E3%80%91.mp3"
+  },
+  "はっぴょう": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%99%BA%E8%A1%A8%E3%80%90%E3%81%AF%E3%81%A3%E3%81%B4%E3%82%87%E3%81%86%E3%80%91.mp3"
+  },
+  "はな": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%8A%B1%E3%80%90%E3%81%AF%E3%81%AA%E3%80%91.mp3"
+  },
+  "ばんごはん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%99%A9%E3%81%94%E9%A3%AF%E3%80%90%E3%81%B0%E3%82%93%E3%81%94%E3%81%AF%E3%82%93%E3%80%91.mp3"
+  },
+  "ひゃく": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%99%BE%E3%80%90%E3%81%B2%E3%82%83%E3%81%8F%E3%80%91.mp3"
+  },
+  "ひらがな": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B9%B3%E4%BB%AE%E5%90%8D%E3%80%90%E3%81%B2%E3%82%89%E3%81%8C%E3%81%AA%E3%80%91.mp3"
+  },
+  "びょういん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%97%85%E9%99%A2%E3%80%90%E3%81%B3%E3%82%87%E3%81%86%E3%81%84%E3%82%93%E3%80%91.mp3"
+  },
+  "ふね": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%88%B9%E3%80%90%E3%81%B5%E3%81%AD%E3%80%91.mp3"
+  },
+  "ほん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%AC%E3%80%90%E3%81%BB%E3%82%93%E3%80%91.mp3"
+  },
+  "みず": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%B0%B4%E3%80%90%E3%81%BF%E3%81%9A%E3%80%91.mp3"
+  },
+  "みみ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%80%B3%E3%80%90%E3%81%BF%E3%81%BF%E3%80%91.mp3"
+  },
+  "やま": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B1%B1%E3%80%90%E3%82%84%E3%81%BE%E3%80%91.mp3"
+  },
+  "ゆめ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%A4%A2%E3%80%90%E3%82%86%E3%82%81%E3%80%91.mp3"
+  },
+  "ようやく": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%BC%B8%E3%81%8F%E3%80%90%E3%82%88%E3%81%86%E3%82%84%E3%81%8F%E3%80%91.mp3"
+  },
+  "りょかん": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%97%85%E9%A4%A8%E3%80%90%E3%82%8A%E3%82%87%E3%81%8B%E3%82%93%E3%80%91.mp3"
+  },
+  "わたし": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A7%81%E3%80%90%E3%82%8F%E3%81%9F%E3%81%97%E3%80%91.mp3"
+  },
+  "カタカナ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%89%87%E4%BB%AE%E5%90%8D%E3%80%90%E3%81%8B%E3%81%9F%E3%81%8B%E3%81%AA%E3%80%91.mp3"
+  },
+  "バス停": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E3%83%90%E3%82%B9%E5%81%9C%E3%80%90%E3%81%B0%E3%81%99%E3%81%A6%E3%81%84%E3%80%91.mp3"
+  },
+  "一つ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B8%80%E3%81%A4%E3%80%90%E3%81%B2%E3%81%A8%E3%81%A4%E3%80%91.mp3"
+  },
+  "一個": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B8%80%E5%80%8B%E3%80%90%E3%81%84%E3%81%A3%E3%81%93%E3%80%91.mp3"
+  },
+  "三つ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B8%89%E3%81%A4%E3%80%90%E3%81%BF%E3%81%A3%E3%81%A4%E3%80%91.mp3"
+  },
+  "中止": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B8%AD%E6%AD%A2%E3%80%90%E3%81%A1%E3%82%85%E3%81%86%E3%81%97%E3%80%91.mp3"
+  },
+  "乗り場": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%B9%97%E3%82%8A%E5%A0%B4%E3%80%90%E3%81%AE%E3%82%8A%E3%81%B0%E3%80%91.mp3"
+  },
+  "予定": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%88%E5%AE%9A%E3%80%90%E3%82%88%E3%81%A6%E3%81%84%E3%80%91.mp3"
+  },
+  "予約": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%88%E7%B4%84%E3%80%90%E3%82%88%E3%82%84%E3%81%8F%E3%80%91.mp3"
+  },
+  "二つ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%8C%E3%81%A4%E3%80%90%E3%81%B5%E3%81%9F%E3%81%A4%E3%80%91.mp3"
+  },
+  "二重": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%8C%E9%87%8D%E3%80%90%E3%81%AB%E3%81%98%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "交差点": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%A4%E5%B7%AE%E7%82%B9%E3%80%90%E3%81%93%E3%81%86%E3%81%95%E3%81%A6%E3%82%93%E3%80%91.mp3"
+  },
+  "交番": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%A4%E7%95%AA%E3%80%90%E3%81%93%E3%81%86%E3%81%B0%E3%82%93%E3%80%91.mp3"
+  },
+  "人数": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BA%BA%E6%95%B0%E3%80%90%E3%81%AB%E3%82%93%E3%81%9A%E3%81%86%E3%80%91.mp3"
+  },
+  "今": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BB%8A%E3%80%90%E3%81%84%E3%81%BE%E3%80%91.mp3"
+  },
+  "仕事": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BB%95%E4%BA%8B%E3%80%90%E3%81%97%E3%81%94%E3%81%A8%E3%80%91.mp3"
+  },
+  "休憩": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BC%91%E6%86%A9%E3%80%90%E3%81%8D%E3%82%85%E3%81%86%E3%81%91%E3%81%84%E3%80%91.mp3"
+  },
+  "会社": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BC%9A%E7%A4%BE%E3%80%90%E3%81%8B%E3%81%84%E3%81%97%E3%82%83%E3%80%91.mp3"
+  },
+  "会社員": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BC%9A%E7%A4%BE%E5%93%A1%E3%80%90%E3%81%8B%E3%81%84%E3%81%97%E3%82%83%E3%81%84%E3%82%93%E3%80%91.mp3"
+  },
+  "伝える": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BC%9D%E3%81%88%E3%82%8B%E3%80%90%E3%81%A4%E3%81%9F%E3%81%88%E3%82%8B%E3%80%91.mp3"
+  },
+  "住所": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BD%8F%E6%89%80%E3%80%90%E3%81%98%E3%82%85%E3%81%86%E3%81%97%E3%82%87%E3%80%91.mp3"
+  },
+  "何時": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BD%95%E6%99%82%E3%80%90%E3%81%AA%E3%82%93%E3%81%98%E3%80%91.mp3"
+  },
+  "例えば": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BE%8B%E3%81%88%E3%81%B0%E3%80%90%E3%81%9F%E3%81%A8%E3%81%88%E3%81%B0%E3%80%91.mp3"
+  },
+  "便利": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BE%BF%E5%88%A9%E3%80%90%E3%81%B9%E3%82%93%E3%82%8A%E3%80%91.mp3"
+  },
+  "信号": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BF%A1%E5%8F%B7%E3%80%90%E3%81%97%E3%82%93%E3%81%94%E3%81%86%E3%80%91.mp3"
+  },
+  "修理": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E4%BF%AE%E7%90%86%E3%80%90%E3%81%97%E3%82%85%E3%81%86%E3%82%8A%E3%80%91.mp3"
+  },
+  "個人": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%80%8B%E4%BA%BA%E3%80%90%E3%81%93%E3%81%98%E3%82%93%E3%80%91.mp3"
+  },
+  "値段": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%80%A4%E6%AE%B5%E3%80%90%E3%81%AD%E3%81%A0%E3%82%93%E3%80%91.mp3"
+  },
+  "傘": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%82%98%E3%80%90%E3%81%8B%E3%81%95%E3%80%91.mp3"
+  },
+  "優先": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%84%AA%E5%85%88%E3%80%90%E3%82%86%E3%81%86%E3%81%9B%E3%82%93%E3%80%91.mp3"
+  },
+  "先生": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%85%88%E7%94%9F%E3%80%90%E3%81%9B%E3%82%93%E3%81%9B%E3%81%84%E3%80%91.mp3"
+  },
+  "先週": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%85%88%E9%80%B1%E3%80%90%E3%81%9B%E3%82%93%E3%81%97%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "全部": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%85%A8%E9%83%A8%E3%80%90%E3%81%9C%E3%82%93%E3%81%B6%E3%80%91.mp3"
+  },
+  "公園": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%85%AC%E5%9C%92%E3%80%90%E3%81%93%E3%81%86%E3%81%88%E3%82%93%E3%80%91.mp3"
+  },
+  "写真": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%86%99%E7%9C%9F%E3%80%90%E3%81%97%E3%82%83%E3%81%97%E3%82%93%E3%80%91.mp3"
+  },
+  "出口": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%87%BA%E5%8F%A3%E3%80%90%E3%81%A7%E3%81%90%E3%81%A1%E3%80%91.mp3"
+  },
+  "出発": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%87%BA%E7%99%BA%E3%80%90%E3%81%97%E3%82%85%E3%81%A3%E3%81%B1%E3%81%A4%E3%80%91.mp3"
+  },
+  "分": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%86%E3%80%90%E3%81%B5%E3%82%93%E3%80%91.mp3"
+  },
+  "切符": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%87%E7%AC%A6%E3%80%90%E3%81%8D%E3%81%A3%E3%81%B7%E3%80%91.mp3"
+  },
+  "初めて": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%9D%E3%82%81%E3%81%A6%E3%80%90%E3%81%AF%E3%81%98%E3%82%81%E3%81%A6%E3%80%91.mp3"
+  },
+  "別々": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%A5%E3%80%85%E3%80%90%E3%81%B9%E3%81%A4%E3%81%B9%E3%81%A4%E3%80%91.mp3"
+  },
+  "到着": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%88%B0%E7%9D%80%E3%80%90%E3%81%A8%E3%81%86%E3%81%A1%E3%82%83%E3%81%8F%E3%80%91.mp3"
+  },
+  "前": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%89%8D%E3%80%90%E3%81%BE%E3%81%88%E3%80%91.mp3"
+  },
+  "助ける": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8A%A9%E3%81%91%E3%82%8B%E3%80%90%E3%81%9F%E3%81%99%E3%81%91%E3%82%8B%E3%80%91.mp3"
+  },
+  "効率": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8A%B9%E7%8E%87%E3%80%90%E3%81%93%E3%81%86%E3%82%8A%E3%81%A4%E3%80%91.mp3"
+  },
+  "動物園": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8B%95%E7%89%A9%E5%9C%92%E3%80%90%E3%81%A9%E3%81%86%E3%81%B6%E3%81%A4%E3%81%88%E3%82%93%E3%80%91.mp3"
+  },
+  "午前": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8D%88%E5%89%8D%E3%80%90%E3%81%94%E3%81%9C%E3%82%93%E3%80%91.mp3"
+  },
+  "午後": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8D%88%E5%BE%8C%E3%80%90%E3%81%94%E3%81%94%E3%80%91.mp3"
+  },
+  "半": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8D%8A%E3%80%90%E3%81%AF%E3%82%93%E3%80%91.mp3"
+  },
+  "卵": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8D%B5%E3%80%90%E3%81%9F%E3%81%BE%E3%81%94%E3%80%91.mp3"
+  },
+  "参加": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%82%E5%8A%A0%E3%80%90%E3%81%95%E3%82%93%E3%81%8B%E3%80%91.mp3"
+  },
+  "友達": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%8B%E9%81%94%E3%80%90%E3%81%A8%E3%82%82%E3%81%A0%E3%81%A1%E3%80%91.mp3"
+  },
+  "反対": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%8D%E5%AF%BE%E3%80%90%E3%81%AF%E3%82%93%E3%81%9F%E3%81%84%E3%80%91.mp3"
+  },
+  "受付": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%97%E4%BB%98%E3%80%90%E3%81%86%E3%81%91%E3%81%A4%E3%81%91%E3%80%91.mp3"
+  },
+  "可能": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%AF%E8%83%BD%E3%80%90%E3%81%8B%E3%81%AE%E3%81%86%E3%80%91.mp3"
+  },
+  "右": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%8F%B3%E3%80%90%E3%81%BF%E3%81%8E%E3%80%91.mp3"
+  },
+  "名前": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%90%8D%E5%89%8D%E3%80%90%E3%81%AA%E3%81%BE%E3%81%88%E3%80%91.mp3"
+  },
+  "含む": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%90%AB%E3%82%80%E3%80%90%E3%81%B5%E3%81%8F%E3%82%80%E3%80%91.mp3"
+  },
+  "商品": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%95%86%E5%93%81%E3%80%90%E3%81%97%E3%82%87%E3%81%86%E3%81%B2%E3%82%93%E3%80%91.mp3"
+  },
+  "四つ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%9B%9B%E3%81%A4%E3%80%90%E3%82%88%E3%81%A3%E3%81%A4%E3%80%91.mp3"
+  },
+  "困る": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%9B%B0%E3%82%8B%E3%80%90%E3%81%93%E3%81%BE%E3%82%8B%E3%80%91.mp3"
+  },
+  "図書館": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%9B%B3%E6%9B%B8%E9%A4%A8%E3%80%90%E3%81%A8%E3%81%97%E3%82%87%E3%81%8B%E3%82%93%E3%80%91.mp3"
+  },
+  "国": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%9B%BD%E3%80%90%E3%81%8F%E3%81%AB%E3%80%91.mp3"
+  },
+  "地下鉄": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%9C%B0%E4%B8%8B%E9%89%84%E3%80%90%E3%81%A1%E3%81%8B%E3%81%A6%E3%81%A4%E3%80%91.mp3"
+  },
+  "地図": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%9C%B0%E5%9B%B3%E3%80%90%E3%81%A1%E3%81%9A%E3%80%91.mp3"
+  },
+  "場合": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%A0%B4%E5%90%88%E3%80%90%E3%81%B0%E3%81%82%E3%81%84%E3%80%91.mp3"
+  },
+  "増やす": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%A2%97%E3%82%84%E3%81%99%E3%80%90%E3%81%B5%E3%82%84%E3%81%99%E3%80%91.mp3"
+  },
+  "変更": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%A4%89%E6%9B%B4%E3%80%90%E3%81%B8%E3%82%93%E3%81%93%E3%81%86%E3%80%91.mp3"
+  },
+  "大丈夫": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%A4%A7%E4%B8%88%E5%A4%AB%E3%80%90%E3%81%A0%E3%81%84%E3%81%98%E3%82%87%E3%81%86%E3%81%B6%E3%80%91.mp3"
+  },
+  "学ぶ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AD%A6%E3%81%B6%E3%80%90%E3%81%BE%E3%81%AA%E3%81%B6%E3%80%91.mp3"
+  },
+  "学校": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AD%A6%E6%A0%A1%E3%80%90%E3%81%8C%E3%81%A3%E3%81%93%E3%81%86%E3%80%91.mp3"
+  },
+  "学生": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AD%A6%E7%94%9F%E3%80%90%E3%81%8C%E3%81%8F%E3%81%9B%E3%81%84%E3%80%91.mp3"
+  },
+  "安い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AE%89%E3%81%84%E3%80%90%E3%82%84%E3%81%99%E3%81%84%E3%80%91.mp3"
+  },
+  "安心": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AE%89%E5%BF%83%E3%80%90%E3%81%82%E3%82%93%E3%81%97%E3%82%93%E3%80%91.mp3"
+  },
+  "家": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AE%B6%E3%80%90%E3%81%84%E3%81%88%E3%80%91.mp3"
+  },
+  "家族": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AE%B6%E6%97%8F%E3%80%90%E3%81%8B%E3%81%9E%E3%81%8F%E3%80%91.mp3"
+  },
+  "宿": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AE%BF%E3%80%90%E3%82%84%E3%81%A9%E3%80%91.mp3"
+  },
+  "寒い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%AF%92%E3%81%84%E3%80%90%E3%81%95%E3%82%80%E3%81%84%E3%80%91.mp3"
+  },
+  "少し": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B0%91%E3%81%97%E3%80%90%E3%81%99%E3%81%93%E3%81%97%E3%80%91.mp3"
+  },
+  "届ける": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B1%8A%E3%81%91%E3%82%8B%E3%80%90%E3%81%A8%E3%81%A9%E3%81%91%E3%82%8B%E3%80%91.mp3"
+  },
+  "左": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B7%A6%E3%80%90%E3%81%B2%E3%81%A0%E3%82%8A%E3%80%91.mp3"
+  },
+  "希望": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B8%8C%E6%9C%9B%E3%80%90%E3%81%8D%E3%81%BC%E3%81%86%E3%80%91.mp3"
+  },
+  "席": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B8%AD%E3%80%90%E3%81%9B%E3%81%8D%E3%80%91.mp3"
+  },
+  "平日": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%B9%B3%E6%97%A5%E3%80%90%E3%81%B8%E3%81%84%E3%81%98%E3%81%A4%E3%80%91.mp3"
+  },
+  "店": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%BA%97%E3%80%90%E3%81%BF%E3%81%9B%E3%80%91.mp3"
+  },
+  "延長": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%BB%B6%E9%95%B7%E3%80%90%E3%81%88%E3%82%93%E3%81%A1%E3%82%87%E3%81%86%E3%80%91.mp3"
+  },
+  "後ろ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%BE%8C%E3%82%8D%E3%80%90%E3%81%86%E3%81%97%E3%82%8D%E3%80%91.mp3"
+  },
+  "必要": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%BF%85%E8%A6%81%E3%80%90%E3%81%B2%E3%81%A4%E3%82%88%E3%81%86%E3%80%91.mp3"
+  },
+  "忘れ物": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%BF%98%E3%82%8C%E7%89%A9%E3%80%90%E3%82%8F%E3%81%99%E3%82%8C%E3%82%82%E3%81%AE%E3%80%91.mp3"
+  },
+  "忙しい": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E5%BF%99%E3%81%97%E3%81%84%E3%80%90%E3%81%84%E3%81%9D%E3%81%8C%E3%81%97%E3%81%84%E3%80%91.mp3"
+  },
+  "思い出": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%80%9D%E3%81%84%E5%87%BA%E3%80%90%E3%81%8A%E3%82%82%E3%81%84%E3%81%A7%E3%80%91.mp3"
+  },
+  "意見": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%84%8F%E8%A6%8B%E3%80%90%E3%81%84%E3%81%91%E3%82%93%E3%80%91.mp3"
+  },
+  "担当": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%8B%85%E5%BD%93%E3%80%90%E3%81%9F%E3%82%93%E3%81%A8%E3%81%86%E3%80%91.mp3"
+  },
+  "掃除": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%8E%83%E9%99%A4%E3%80%90%E3%81%9D%E3%81%86%E3%81%98%E3%80%91.mp3"
+  },
+  "探す": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%8E%A2%E3%81%99%E3%80%90%E3%81%95%E3%81%8C%E3%81%99%E3%80%91.mp3"
+  },
+  "掲示": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%8E%B2%E7%A4%BA%E3%80%90%E3%81%91%E3%81%84%E3%81%98%E3%80%91.mp3"
+  },
+  "提案": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%8F%90%E6%A1%88%E3%80%90%E3%81%A6%E3%81%84%E3%81%82%E3%82%93%E3%80%91.mp3"
+  },
+  "撮影": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%92%AE%E5%BD%B1%E3%80%90%E3%81%95%E3%81%A4%E3%81%88%E3%81%84%E3%80%91.mp3"
+  },
+  "支払い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%94%AF%E6%89%95%E3%81%84%E3%80%90%E3%81%97%E3%81%AF%E3%82%89%E3%81%84%E3%80%91.mp3"
+  },
+  "教える": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%95%99%E3%81%88%E3%82%8B%E3%80%90%E3%81%8A%E3%81%97%E3%81%88%E3%82%8B%E3%80%91.mp3"
+  },
+  "散歩": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%95%A3%E6%AD%A9%E3%80%90%E3%81%95%E3%82%93%E3%81%BD%E3%80%91.mp3"
+  },
+  "文字": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%96%87%E5%AD%97%E3%80%90%E3%82%82%E3%81%98%E3%80%91.mp3"
+  },
+  "料理": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%96%99%E7%90%86%E3%80%90%E3%82%8A%E3%82%87%E3%81%86%E3%82%8A%E3%80%91.mp3"
+  },
+  "料金": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%96%99%E9%87%91%E3%80%90%E3%82%8A%E3%82%87%E3%81%86%E3%81%8D%E3%82%93%E3%80%91.mp3"
+  },
+  "断る": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%96%AD%E3%82%8B%E3%80%90%E3%81%93%E3%81%A8%E3%82%8F%E3%82%8B%E3%80%91.mp3"
+  },
+  "旅行": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%97%85%E8%A1%8C%E3%80%90%E3%82%8A%E3%82%87%E3%81%93%E3%81%86%E3%80%91.mp3"
+  },
+  "日本": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%97%A5%E6%9C%AC%E3%80%90%E3%81%AB%E3%81%BB%E3%82%93%E3%80%91.mp3"
+  },
+  "日本語": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%80%90%E3%81%AB%E3%81%BB%E3%82%93%E3%81%94%E3%80%91.mp3"
+  },
+  "日程": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%97%A5%E7%A8%8B%E3%80%90%E3%81%AB%E3%81%A3%E3%81%A6%E3%81%84%E3%80%91.mp3"
+  },
+  "早い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%97%A9%E3%81%84%E3%80%90%E3%81%AF%E3%82%84%E3%81%84%E3%80%91.mp3"
+  },
+  "明日": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%98%8E%E6%97%A5%E3%80%90%E3%81%82%E3%81%97%E3%81%9F%E3%80%91.mp3"
+  },
+  "映画": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%98%A0%E7%94%BB%E3%80%90%E3%81%88%E3%81%84%E3%81%8C%E3%80%91.mp3"
+  },
+  "昨日": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%98%A8%E6%97%A5%E3%80%90%E3%81%8D%E3%81%AE%E3%81%86%E3%80%91.mp3"
+  },
+  "昼ご飯": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%98%BC%E3%81%94%E9%A3%AF%E3%80%90%E3%81%B2%E3%82%8B%E3%81%94%E3%81%AF%E3%82%93%E3%80%91.mp3"
+  },
+  "時々": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%99%82%E3%80%85%E3%80%90%E3%81%A8%E3%81%8D%E3%81%A9%E3%81%8D%E3%80%91.mp3"
+  },
+  "時間": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%99%82%E9%96%93%E3%80%90%E3%81%98%E3%81%8B%E3%82%93%E3%80%91.mp3"
+  },
+  "景色": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%99%AF%E8%89%B2%E3%80%90%E3%81%91%E3%81%97%E3%81%8D%E3%80%91.mp3"
+  },
+  "暑い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9A%91%E3%81%84%E3%80%90%E3%81%82%E3%81%A4%E3%81%84%E3%80%91.mp3"
+  },
+  "最初": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%80%E5%88%9D%E3%80%90%E3%81%95%E3%81%84%E3%81%97%E3%82%87%E3%80%91.mp3"
+  },
+  "月曜日": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%88%E6%9B%9C%E6%97%A5%E3%80%90%E3%81%92%E3%81%A4%E3%82%88%E3%81%86%E3%81%B3%E3%80%91.mp3"
+  },
+  "朝ご飯": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%9D%E3%81%94%E9%A3%AF%E3%80%90%E3%81%82%E3%81%95%E3%81%94%E3%81%AF%E3%82%93%E3%80%91.mp3"
+  },
+  "期限": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%9F%E9%99%90%E3%80%90%E3%81%8D%E3%81%92%E3%82%93%E3%80%91.mp3"
+  },
+  "本": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9C%AC%E3%80%90%E3%81%BB%E3%82%93%E3%80%91.mp3"
+  },
+  "条件": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9D%A1%E4%BB%B6%E3%80%90%E3%81%98%E3%82%87%E3%81%86%E3%81%91%E3%82%93%E3%80%91.mp3"
+  },
+  "来週": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9D%A5%E9%80%B1%E3%80%90%E3%82%89%E3%81%84%E3%81%97%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "柔軟": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%9F%94%E8%BB%9F%E3%80%90%E3%81%98%E3%82%85%E3%81%86%E3%81%AA%E3%82%93%E3%80%91.mp3"
+  },
+  "案内": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%A1%88%E5%86%85%E3%80%90%E3%81%82%E3%82%93%E3%81%AA%E3%81%84%E3%80%91.mp3"
+  },
+  "楽しい": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%A5%BD%E3%81%97%E3%81%84%E3%80%90%E3%81%9F%E3%81%AE%E3%81%97%E3%81%84%E3%80%91.mp3"
+  },
+  "楽しみ": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%A5%BD%E3%81%97%E3%81%BF%E3%80%90%E3%81%9F%E3%81%AE%E3%81%97%E3%81%BF%E3%80%91.mp3"
+  },
+  "次回": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AC%A1%E5%9B%9E%E3%80%90%E3%81%98%E3%81%8B%E3%81%84%E3%80%91.mp3"
+  },
+  "正確": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AD%A3%E7%A2%BA%E3%80%90%E3%81%9B%E3%81%84%E3%81%8B%E3%81%8F%E3%80%91.mp3"
+  },
+  "歯": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AD%AF%E3%80%90%E3%81%AF%E3%80%91.mp3"
+  },
+  "残念": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AE%8B%E5%BF%B5%E3%80%90%E3%81%96%E3%82%93%E3%81%AD%E3%82%93%E3%80%91.mp3"
+  },
+  "毎晩": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AF%8E%E6%99%A9%E3%80%90%E3%81%BE%E3%81%84%E3%81%B0%E3%82%93%E3%80%91.mp3"
+  },
+  "毎朝": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AF%8E%E6%9C%9D%E3%80%90%E3%81%BE%E3%81%84%E3%81%82%E3%81%95%E3%80%91.mp3"
+  },
+  "比べる": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AF%94%E3%81%B9%E3%82%8B%E3%80%90%E3%81%8F%E3%82%89%E3%81%B9%E3%82%8B%E3%80%91.mp3"
+  },
+  "毛布": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%AF%9B%E5%B8%83%E3%80%90%E3%82%82%E3%81%86%E3%81%B5%E3%80%91.mp3"
+  },
+  "水": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%B0%B4%E3%80%90%E3%81%BF%E3%81%9A%E3%80%91.mp3"
+  },
+  "決める": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%B1%BA%E3%82%81%E3%82%8B%E3%80%90%E3%81%8D%E3%82%81%E3%82%8B%E3%80%91.mp3"
+  },
+  "減らす": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%B8%9B%E3%82%89%E3%81%99%E3%80%90%E3%81%B8%E3%82%89%E3%81%99%E3%80%91.mp3"
+  },
+  "漢字": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E6%BC%A2%E5%AD%97%E3%80%90%E3%81%8B%E3%82%93%E3%81%98%E3%80%91.mp3"
+  },
+  "無事": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%84%A1%E4%BA%8B%E3%80%90%E3%81%B6%E3%81%98%E3%80%91.mp3"
+  },
+  "無理": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%84%A1%E7%90%86%E3%80%90%E3%82%80%E3%82%8A%E3%80%91.mp3"
+  },
+  "牛乳": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%89%9B%E4%B9%B3%E3%80%90%E3%81%8E%E3%82%85%E3%81%86%E3%81%AB%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "理由": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%90%86%E7%94%B1%E3%80%90%E3%82%8A%E3%82%86%E3%81%86%E3%80%91.mp3"
+  },
+  "町": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%94%BA%E3%80%90%E3%81%BE%E3%81%A1%E3%80%91.mp3"
+  },
+  "省略": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%9C%81%E7%95%A5%E3%80%90%E3%81%97%E3%82%87%E3%81%86%E3%82%8A%E3%82%83%E3%81%8F%E3%80%91.mp3"
+  },
+  "確かに": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A2%BA%E3%81%8B%E3%81%AB%E3%80%90%E3%81%9F%E3%81%97%E3%81%8B%E3%81%AB%E3%80%91.mp3"
+  },
+  "確かめる": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A2%BA%E3%81%8B%E3%82%81%E3%82%8B%E3%80%90%E3%81%9F%E3%81%97%E3%81%8B%E3%82%81%E3%82%8B%E3%80%91.mp3"
+  },
+  "確認": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A2%BA%E8%AA%8D%E3%80%90%E3%81%8B%E3%81%8F%E3%81%AB%E3%82%93%E3%80%91.mp3"
+  },
+  "祝日": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A5%9D%E6%97%A5%E3%80%90%E3%81%97%E3%82%85%E3%81%8F%E3%81%98%E3%81%A4%E3%80%91.mp3"
+  },
+  "禁止": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A6%81%E6%AD%A2%E3%80%90%E3%81%8D%E3%82%93%E3%81%97%E3%80%91.mp3"
+  },
+  "私": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%A7%81%E3%80%90%E3%82%8F%E3%81%9F%E3%81%97%E3%80%91.mp3"
+  },
+  "納得": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%B4%8D%E5%BE%97%E3%80%90%E3%81%AA%E3%81%A3%E3%81%A8%E3%81%8F%E3%80%91.mp3"
+  },
+  "紙": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%B4%99%E3%80%90%E3%81%8B%E3%81%BF%E3%80%91.mp3"
+  },
+  "結局": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%B5%90%E5%B1%80%E3%80%90%E3%81%91%E3%81%A3%E3%81%8D%E3%82%87%E3%81%8F%E3%80%91.mp3"
+  },
+  "続ける": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%B6%9A%E3%81%91%E3%82%8B%E3%80%90%E3%81%A4%E3%81%A5%E3%81%91%E3%82%8B%E3%80%91.mp3"
+  },
+  "美術館": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E7%BE%8E%E8%A1%93%E9%A4%A8%E3%80%90%E3%81%B3%E3%81%98%E3%82%85%E3%81%A4%E3%81%8B%E3%82%93%E3%80%91.mp3"
+  },
+  "考慮": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%80%83%E6%85%AE%E3%80%90%E3%81%93%E3%81%86%E3%82%8A%E3%82%87%E3%80%91.mp3"
+  },
+  "英語": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%8B%B1%E8%AA%9E%E3%80%90%E3%81%88%E3%81%84%E3%81%94%E3%80%91.mp3"
+  },
+  "荷物": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%8D%B7%E7%89%A9%E3%80%90%E3%81%AB%E3%82%82%E3%81%A4%E3%80%91.mp3"
+  },
+  "落とす": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%90%BD%E3%81%A8%E3%81%99%E3%80%90%E3%81%8A%E3%81%A8%E3%81%99%E3%80%91.mp3"
+  },
+  "袋": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%A2%8B%E3%80%90%E3%81%B5%E3%81%8F%E3%82%8D%E3%80%91.mp3"
+  },
+  "要点": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%A6%81%E7%82%B9%E3%80%90%E3%82%88%E3%81%86%E3%81%A6%E3%82%93%E3%80%91.mp3"
+  },
+  "見直す": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%A6%8B%E7%9B%B4%E3%81%99%E3%80%90%E3%81%BF%E3%81%AA%E3%81%8A%E3%81%99%E3%80%91.mp3"
+  },
+  "記録": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%A8%98%E9%8C%B2%E3%80%90%E3%81%8D%E3%82%8D%E3%81%8F%E3%80%91.mp3"
+  },
+  "許可": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%A8%B1%E5%8F%AF%E3%80%90%E3%81%8D%E3%82%87%E3%81%8B%E3%80%91.mp3"
+  },
+  "試す": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%A9%A6%E3%81%99%E3%80%90%E3%81%9F%E3%82%81%E3%81%99%E3%80%91.mp3"
+  },
+  "誘う": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%AA%98%E3%81%86%E3%80%90%E3%81%95%E3%81%9D%E3%81%86%E3%80%91.mp3"
+  },
+  "読み方": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%AA%AD%E3%81%BF%E6%96%B9%E3%80%90%E3%82%88%E3%81%BF%E3%81%8B%E3%81%9F%E3%80%91.mp3"
+  },
+  "譲る": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%AD%B2%E3%82%8B%E3%80%90%E3%82%86%E3%81%9A%E3%82%8B%E3%80%91.mp3"
+  },
+  "負担": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%B2%A0%E6%8B%85%E3%80%90%E3%81%B5%E3%81%9F%E3%82%93%E3%80%91.mp3"
+  },
+  "財布": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%B2%A1%E5%B8%83%E3%80%90%E3%81%95%E3%81%84%E3%81%B5%E3%80%91.mp3"
+  },
+  "費用": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%B2%BB%E7%94%A8%E3%80%90%E3%81%B2%E3%82%88%E3%81%86%E3%80%91.mp3"
+  },
+  "賛成": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%B3%9B%E6%88%90%E3%80%90%E3%81%95%E3%82%93%E3%81%9B%E3%81%84%E3%80%91.mp3"
+  },
+  "趣味": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%B6%A3%E5%91%B3%E3%80%90%E3%81%97%E3%82%85%E3%81%BF%E3%80%91.mp3"
+  },
+  "辞書": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%BE%9E%E6%9B%B8%E3%80%90%E3%81%98%E3%81%97%E3%82%87%E3%80%91.mp3"
+  },
+  "近い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%BF%91%E3%81%84%E3%80%90%E3%81%A1%E3%81%8B%E3%81%84%E3%80%91.mp3"
+  },
+  "近く": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%BF%91%E3%81%8F%E3%80%90%E3%81%A1%E3%81%8B%E3%81%8F%E3%80%91.mp3"
+  },
+  "近所": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E8%BF%91%E6%89%80%E3%80%90%E3%81%8D%E3%82%93%E3%81%98%E3%82%87%E3%80%91.mp3"
+  },
+  "途中": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%80%94%E4%B8%AD%E3%80%90%E3%81%A8%E3%81%A1%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "通勤": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%80%9A%E5%8B%A4%E3%80%90%E3%81%A4%E3%81%86%E3%81%8D%E3%82%93%E3%80%91.mp3"
+  },
+  "週末": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%80%B1%E6%9C%AB%E3%80%90%E3%81%97%E3%82%85%E3%81%86%E3%81%BE%E3%81%A4%E3%80%91.mp3"
+  },
+  "遅れる": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%81%85%E3%82%8C%E3%82%8B%E3%80%90%E3%81%8A%E3%81%8F%E3%82%8C%E3%82%8B%E3%80%91.mp3"
+  },
+  "道": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%81%93%E3%80%90%E3%81%BF%E3%81%A1%E3%80%91.mp3"
+  },
+  "道に迷う": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%81%93%E3%81%AB%E8%BF%B7%E3%81%86%E3%80%90%E3%81%BF%E3%81%A1%E3%81%AB%E3%81%BE%E3%82%88%E3%81%86%E3%80%91.mp3"
+  },
+  "遠い": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%81%A0%E3%81%84%E3%80%90%E3%81%A8%E3%81%8A%E3%81%84%E3%80%91.mp3"
+  },
+  "都合": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%83%BD%E5%90%88%E3%80%90%E3%81%A4%E3%81%94%E3%81%86%E3%80%91.mp3"
+  },
+  "鍵": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%8D%B5%E3%80%90%E3%81%8B%E3%81%8E%E3%80%91.mp3"
+  },
+  "間に合う": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%96%93%E3%81%AB%E5%90%88%E3%81%86%E3%80%90%E3%81%BE%E3%81%AB%E3%81%82%E3%81%86%E3%80%91.mp3"
+  },
+  "隣": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9A%A3%E3%80%90%E3%81%A8%E3%81%AA%E3%82%8A%E3%80%91.mp3"
+  },
+  "集中": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9B%86%E4%B8%AD%E3%80%90%E3%81%97%E3%82%85%E3%81%86%E3%81%A1%E3%82%85%E3%81%86%E3%80%91.mp3"
+  },
+  "難しい": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9B%A3%E3%81%97%E3%81%84%E3%80%90%E3%82%80%E3%81%9A%E3%81%8B%E3%81%97%E3%81%84%E3%80%91.mp3"
+  },
+  "雰囲気": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9B%B0%E5%9B%B2%E6%B0%97%E3%80%90%E3%81%B5%E3%82%93%E3%81%84%E3%81%8D%E3%80%91.mp3"
+  },
+  "電気": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9B%BB%E6%B0%97%E3%80%90%E3%81%A7%E3%82%93%E3%81%8D%E3%80%91.mp3"
+  },
+  "電車": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9B%BB%E8%BB%8A%E3%80%90%E3%81%A7%E3%82%93%E3%81%97%E3%82%83%E3%80%91.mp3"
+  },
+  "静か": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9D%99%E3%81%8B%E3%80%90%E3%81%97%E3%81%9A%E3%81%8B%E3%80%91.mp3"
+  },
+  "音": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9F%B3%E3%80%90%E3%81%8A%E3%81%A8%E3%80%91.mp3"
+  },
+  "音楽": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%9F%B3%E6%A5%BD%E3%80%90%E3%81%8A%E3%82%93%E3%81%8C%E3%81%8F%E3%80%91.mp3"
+  },
+  "領収書": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%A0%98%E5%8F%8E%E6%9B%B8%E3%80%90%E3%82%8A%E3%82%87%E3%81%86%E3%81%97%E3%82%85%E3%81%86%E3%81%97%E3%82%87%E3%80%91.mp3"
+  },
+  "顔": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%A1%94%E3%80%90%E3%81%8B%E3%81%8A%E3%80%91.mp3"
+  },
+  "駅": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%A7%85%E3%80%90%E3%81%88%E3%81%8D%E3%80%91.mp3"
+  },
+  "駅員": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%A7%85%E5%93%A1%E3%80%90%E3%81%88%E3%81%8D%E3%81%84%E3%82%93%E3%80%91.mp3"
+  },
+  "驚く": {
+    "author": "Tofugu and WaniKani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://github.com/tofugu/japanese-vocabulary-pronunciation-audio/blob/9725e0e7d628ab616e8b14e126d3daa33eba8d36/lib/mp3/%E9%A9%9A%E3%81%8F%E3%80%90%E3%81%8A%E3%81%A9%E3%82%8D%E3%81%8F%E3%80%91.mp3"
+  }
+}

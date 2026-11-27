@@ -65,7 +65,7 @@ function PracticeTask({ task, disabled, saved, onResult }: Omit<Props, 'tasks' |
     {source && <>
       {listening && <View style={s.row}>
         <Speak text={source.text} language="ja-JP" courseClip label="Play Japanese audio" onError={setPlayingError} onPlayed={() => setAttempt(previous => ({ ...previous, played: true }))} />
-        <Text style={s.muted}>{hasJapaneseCourseClip(source.text) ? japaneseCourseVoiceCredit : 'Replay as often as you need.'}</Text>
+        <Text style={s.muted}>{hasJapaneseCourseClip(source.text) ? japaneseCourseVoiceCredit(source.text) : 'Replay as often as you need.'}</Text>
       </View>}
       {listening && !played && !usedSupport && !playingError && <Text style={s.muted}>Play the audio or open the transcript before answering.</Text>}
       {!!playingError && <Text accessibilityRole="alert" style={s.body}>{playingError} Open the transcript to continue with reading support.</Text>}

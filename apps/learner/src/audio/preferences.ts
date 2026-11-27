@@ -8,9 +8,8 @@ export interface AudioPreferenceStore {
 }
 
 const key = 'smartlingo.audio-preferences.v1';
-const defaults: AudioPreferences = { voiceId: '', rate: 0.85 };
 
-function validate(value: unknown): AudioPreferences {
+function validate(value: unknown, defaults: AudioPreferences): AudioPreferences {
   if (!value || typeof value !== 'object') return { ...defaults };
   const candidate = value as Partial<AudioPreferences>;
   return {
@@ -20,7 +19,8 @@ function validate(value: unknown): AudioPreferences {
 }
 
 /** Browser settings are separate from learner history and backup data. */
-export function createAudioPreferenceStore(storage: () => PreferenceStorage | undefined, storageKey = key): AudioPreferenceStore {
+export function createAudioPreferenceStore(storage: () => PreferenceStorage | undefined, storageKey = key, defaultRate: AudioRate = 0.85): AudioPreferenceStore {
+  const defaults: AudioPreferences = { voiceId: '', rate: defaultRate };
   let current: AudioPreferences = { ...defaults };
   let loaded = false;
   return {
@@ -29,13 +29,13 @@ export function createAudioPreferenceStore(storage: () => PreferenceStorage | un
         loaded = true;
         try {
           const raw = storage()?.getItem(storageKey);
-          if (raw) current = validate(JSON.parse(raw));
+          if (raw) current = validate(JSON.parse(raw), defaults);
         } catch { /* Keep usable defaults when browser storage is unavailable. */ }
       }
       return { ...current };
     },
     save(preferences) {
-      current = validate(preferences);
+      current = validate(preferences, defaults);
       loaded = true;
       try {
         const target = storage();
@@ -48,7 +48,7 @@ export function createAudioPreferenceStore(storage: () => PreferenceStorage | un
 }
 
 export const audioPreferences = createAudioPreferenceStore(() => globalThis.localStorage);
-export const japaneseAudioPreferences = createAudioPreferenceStore(() => globalThis.localStorage, 'smartlingo.audio-preferences.ja-JP.v1');
+export const japaneseAudioPreferences = createAudioPreferenceStore(() => globalThis.localStorage, 'smartlingo.audio-preferences.ja-JP.v1', 1);
 export function preferencesForLanguage(language: 'fr-FR' | 'ja-JP') {
   return language === 'ja-JP' ? japaneseAudioPreferences : audioPreferences;
 }

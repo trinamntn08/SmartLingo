@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-27 Human Japanese pronunciation recordings
+
+The owner found the synthesized vowels unnatural after the previous level adjustment. Compared 72 live and fetched origin heads; this release starts at 304e518, which includes the combined Android and web learner and tap-to-speak controls. Locate reusable speaker recordings of the actual learning material, preserve them offline and credit each source.
+
+Integrated the complete pronunciations of 70 distinct kana sounds from Hakatanoshio117117 under their Commons public-domain dedication. The full Japanese speaker recordings include all five vowels. Integrated 241 original MP3s from Tofugu and WaniKani covering 254 exact authored word forms. An individual source and license accompany each recording. Human recordings are bundled for offline playback. The remaining 353 clips use synthetic speech, including あお. We identified Marsian’s public-domain recording of this word; the environment's media-host grant did not complete, so its original audio could not be bundled.
+
+On fresh Japanese settings recordings play at 1×. Learners' saved speeds carry forward. Verified successful browser media output through to the end on taps of あ, い, う, え, お and いえ. Repository checks, TypeScript, 34 tooling tests and 311 application tests passed. All 24 focused desktop and mobile browser cases, two cold-offline journeys and 10 Android bridge contracts passed. The Japanese greeting played the exact human recording with and without an installed Japanese device voice in Automatic. The extracted desktop ZIP has 815 verified offline assets. All five vowels and いえ played from its service worker on a cold launch with networking disabled. Profile exposed the corresponding source and license links at 320 px.
+
 ## 2026-11-27 Tap-to-pronounce preview
 
 Compared all 71 origin branch heads with the live inventory. This patch starts from combined release 7d1e116, with its speech adapter, material-first reader and saved progress. The five bundled vowel clips had uneven levels. The owner heard distorted, quiet or unnatural sound. The revised VOICEVOX renderer extracts the steady voiced portion of each target vowel and fades its edges. Decoding all five final MP3s produced 220–240 ms of audible periodic speech, a 0.4 dB spread in voiced RMS and at least 9.4 dB of peak headroom. New asset URLs allow saved offline downloads to refresh.

@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
+import { RecordingCredits } from '../audio/japanese/RecordingCredits';
 import { AudioPreferencesPanel } from '../audio/AudioPreferencesPanel';
 import { GeneratedSpeechPanel } from '../audio/generated/GeneratedSpeechPanel';
 import { BackupPanel } from '../backup/BackupPanel';
@@ -50,7 +51,10 @@ export function ProfileScreen({ catalogue, onOpenEditor, language, model, onChan
     <Disclosure title="About SmartLingo" compact icon="settings">
       <Text style={s.body}>Your progress and notebook stay on this device.</Text>
       {!model.loadError && <Text style={s.muted}>{model.notebook.length} saved {model.notebook.length === 1 ? 'word' : 'words'} in {languageNames[language]}</Text>}
-      {language === 'ja-JP' && <Text style={s.body}>Japanese study clips use VOICEVOX:四国めたん.</Text>}
+      {language === 'ja-JP' && <>
+        <RecordingCredits />
+        <Text style={s.muted}>Synthetic Japanese clips use VOICEVOX:四国めたん.</Text>
+      </>}
       <Text style={s.muted}>Bundled lessons are drafts. Completion records practice.</Text>
     </Disclosure>
   </View>;

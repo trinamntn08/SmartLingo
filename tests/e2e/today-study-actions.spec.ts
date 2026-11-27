@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import audioClips from '../../apps/learner/public/japanese-audio/manifest.json';
 import { guidedLessonButton } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -74,19 +75,25 @@ for (const locale of ['fr', 'ja'] as const) {
   });
 }
 
-test('a Japanese word shows its written pronunciation and plays a bundled clip when tapped without a device voice', async ({ page, hasTouch }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { getVoices: () => [], cancel() {} } });
+for (const withDeviceVoice of [false, true]) {
+  test(`tapping a Japanese word plays its human recording ${withDeviceVoice ? 'with' : 'without'} a Japanese device voice`, async ({ page, hasTouch }) => {
+    await page.addInitScript(available => {
+      Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class {} });
+      Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: {
+        getVoices: () => available ? [{ lang: 'ja-JP', voiceURI: 'ja-test', name: 'Japanese', localService: true }] : [],
+        cancel() {},
+      } });
+    }, withDeviceVoice);
+    await page.route('**/127.0.0.1:3001/**', route => route.abort());
+    await page.goto('/lesson/ja/ja.lesson.day-1/vocabulary');
+    const greeting = page.getByTestId('vocabulary-ja.greetings.konnichiwa');
+    await expect(greeting.getByTestId('word-pronunciation')).toHaveText('konnichiwa');
+    const word = greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true });
+    await expect(word).toHaveText('こんにちは');
+    const clip = page.waitForResponse(response => response.url().endsWith('/japanese-audio/' + audioClips['こんにちは'].file) && response.request().resourceType() === 'media');
+    const visibleWord = word.getByText('こんにちは', { exact: true });
+    if (hasTouch) await visibleWord.tap();
+    else await visibleWord.click();
+    expect((await clip).ok()).toBe(true);
   });
-  await page.route('**/127.0.0.1:3001/**', route => route.abort());
-  await page.goto('/lesson/ja/ja.lesson.day-1/vocabulary');
-  const greeting = page.getByTestId('vocabulary-ja.greetings.konnichiwa');
-  await expect(greeting.getByTestId('word-pronunciation')).toHaveText('konnichiwa');
-  const word = greeting.getByRole('button', { name: 'Listen to こんにちは', exact: true });
-  await expect(word).toHaveText('こんにちは');
-  const clip = page.waitForResponse(response => response.url().includes('/japanese-audio/') && response.request().resourceType() === 'media');
-  const visibleWord = word.getByText('こんにちは', { exact: true });
-  if (hasTouch) await visibleWord.tap();
-  else await visibleWord.click();
-  expect((await clip).ok()).toBe(true);
-});
+}

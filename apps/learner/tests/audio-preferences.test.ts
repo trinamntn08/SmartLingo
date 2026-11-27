@@ -23,6 +23,16 @@ test('French choice honors an explicit voice, prefers local France French, and f
   assert.equal(selectFrenchVoice([voice('France underscore', 'fr_FR'), canadian])?.name, 'France underscore');
 });
 
+test('Japanese starts at natural speed and preserves a previously saved learning speed', () => {
+  const key = 'smartlingo.audio-preferences.ja-JP.v1';
+  let raw: string | null = null;
+  const storage: PreferenceStorage = { getItem: () => raw, setItem: (_, value) => { raw = value; } };
+  const fresh = createAudioPreferenceStore(() => storage, key, 1);
+  assert.equal(fresh.get().rate, 1);
+  fresh.save({ voiceId: '', rate: 0.85 });
+  assert.equal(createAudioPreferenceStore(() => storage, key, 1).get().rate, 0.85);
+});
+
 test('audio preferences persist separately and reject corrupt or unsupported saved values', () => {
   let raw: string | null = null;
   const storage: PreferenceStorage = { getItem: () => raw, setItem: (key, value) => { assert.equal(key, 'smartlingo.audio-preferences.v1'); raw = value; } };

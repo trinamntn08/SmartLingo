@@ -2,6 +2,12 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-28 Draft a prompt for the Grammar step redesign
+
+- Start. At 10:56 CET the clean primary worktree at `D:/dev/projects/SmartLingo` matched live `release/local-learner-preview` at `bf8278cb89b2e244c8cb96952539ba3f7f91e571`, ahead/behind 0/0. Inspected 21 worktrees and verified all 78 fetched and live GitHub heads.
+- Cloud comparison. The prior scannability change `3d63e1931bfdfc13d6bbe8fd4e2263a8ffd300fa` from material-first `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8` is in the current ancestry. The newer shared-course ref `ada219f15fae69b4d73170b8501688b7e62f6fe4` adds no Grammar note changes. Android 0.2.7 at `8bbfa9c307abf5d7130b51e26daf9a4f2539bbfb` has no learner or content delta from that ref and remains on its separate delivery branch.
+- Outcome. Drafted a paste-ready prompt in chat that uses the supplied screenshot as the starting point. It asks for one prominent pattern, a bilingual example, and short essential guidance, with the existing shared reader and a readable custom-note fallback. Repository and TypeScript checks passed. This task delivers the prompt. The redesign and preview verification belong to the implementation request.
+
 ## 2026-11-28 Gather the latest features and launch the browser preview
 
 - Start. At 10:46 CET the clean primary checkout matched live `release/local-learner-preview` at `dc17d16369424503549547b00571065c7b4ae13b`, ahead/behind 0/0. Inspected 21 worktrees and matched all 78 fetched and live heads. The only advertised PR head is the earlier workflow change at `d7ad551b2706fc7fb6f9a8b8ff4c4f88acce1551`.

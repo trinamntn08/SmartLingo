@@ -87,6 +87,7 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
   const [hintUsed, setHintUsed] = useActivityState(routed, `${key}:hint-used`, false);
   const [feedback, setFeedback] = useActivityState(routed, `${key}:feedback`, '');
   const exercise = lesson.sentenceActivity;
+  const remainingTiles = exercise.tokens.length - selected.length;
   const answer = selected.map(index => exercise.tokens[index]).join(' ');
   const accepted = done ? exercise.answers.find(value => normalizeAnswer(value) === normalizeAnswer(answer)) ?? exercise.answers[0] : '';
   const language = lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR';
@@ -136,7 +137,12 @@ export function SentenceActivity({ lesson, routed, browseOnly, disabled, done, r
             {!!selected.length && <Button quiet disabled={disabled} onPress={() => { setSelected([]); setFeedback(''); }}>Clear</Button>}
           </View>
           {browseOnly ? <Button primary trailingIcon="arrow-right" href={nextHref} onPress={onNext}>{returnLabel}</Button>
-            : <Button primary disabled={disabled || selected.length !== exercise.tokens.length} onPress={check}>Check sentence</Button>}
+            : <View style={layout.checkActions}>
+              {selected.length > 0 && remainingTiles > 0 && <Text style={s.muted} accessibilityLiveRegion="polite">
+                {remainingTiles === 1 ? '1 tile left' : `${remainingTiles} tiles left`}
+              </Text>}
+              <Button primary disabled={disabled || remainingTiles !== 0} onPress={check}>Check sentence</Button>
+            </View>}
         </View>
         {completed && nextLessonButton && <View style={layout.actions}>
           <Text style={s.muted}>Lesson already completed</Text>{nextLessonButton}
@@ -169,4 +175,5 @@ const layout = StyleSheet.create({
   trayPlaceholder: { paddingHorizontal: 4 },
   pieces: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, minWidth: 0 },
   secondary: { flexDirection: 'row', flexWrap: 'wrap', gap: 4 },
+  checkActions: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8 },
 });

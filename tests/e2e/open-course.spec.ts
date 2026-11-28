@@ -233,11 +233,19 @@ test('the shared stages save progress, restore matching and unlock the next less
   await expect(step(page, 'Read a conversation')).toBeVisible();
   await page.goBack();
   await expect(activity.getByText(lesson.sentenceActivity.answers[0], { exact: true })).toBeVisible();
+  const firstLessonUrl = `/course/fr/${openCoursePilot.id}/${firstDay.id}`;
+  const secondLessonUrl = `/course/fr/${openCoursePilot.id}/${secondDay.id}`;
+  await page.goto(`${secondLessonUrl}/lesson-dialogue`);
+  await stepTab(page, 'sentence').click();
+  await expect(page).toHaveURL(`${secondLessonUrl}/lesson-sentence`);
+  await page.goto(secondLessonUrl);
+  await expect(page).toHaveURL(`${secondLessonUrl}/lesson-sentence`);
+  await page.goto(`${firstLessonUrl}/lesson-sentence`);
   await button(page, `Next lesson: Lesson 2: ${secondDay.title}`).click();
+  await expect(page).toHaveURL(`${secondLessonUrl}/lesson-dialogue`);
   await expect(dayHeading(page, secondDay)).toBeVisible();
   await expect(step(page, 'Read a conversation')).toBeVisible();
 
-  const firstLessonUrl = `/course/fr/${openCoursePilot.id}/${firstDay.id}`;
   await page.goto(firstLessonUrl);
   await stepTab(page, 'vocabulary').press('Enter');
   await expect(page).toHaveURL(`${firstLessonUrl}/lesson-vocabulary`);

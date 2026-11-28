@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, japaneseCourse, japaneseLessons, lessons } from '@smartlingo/content';
-import { openKeyPhrases, openLessonFromTopics, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { openKeyPhrases, openLessonFromTopics, openProfileSection, openTopic, studyKeyPhrasesAndOpenMatch } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] }, timezoneId: 'Europe/Paris' });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -39,7 +39,7 @@ test('downloaded report cold-starts, switches saved language histories and retri
     await openKeyPhrases(page);
     await button(page, `Save ${lesson.vocabulary[0].target}`).click();
     await expect(button(page, `Unsave ${lesson.vocabulary[0].target}`)).toHaveAttribute('aria-pressed', 'true');
-    await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
+    await studyKeyPhrasesAndOpenMatch(page);
     await expect(page.getByTestId('lesson-step-picture')).toHaveAttribute('aria-current', 'step');
     await report(page, language);
   }

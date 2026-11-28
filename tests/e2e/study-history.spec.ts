@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, lessons, openCoursePilot, restaurantLesson } from '@smartlingo/content';
 import type { CourseEvent, LearningEvent } from '@smartlingo/domain';
-import { buildAcceptedSentence } from './learner-journeys';
+import { buildAcceptedSentence, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 async function storedEvents<T>(page: Page, store: 'events' | 'courseEvents'): Promise<T[]> {
   return page.evaluate(async name => {
@@ -52,15 +52,18 @@ test('lesson Back restores its stage and Forward restores the previous hint in t
 
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page).toHaveURL(`${location}/vocabulary`);
-  await page.getByRole('button', { name: /Try picture practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await expect(page).toHaveURL(`${location}/picture`);
   await page.getByRole('button', { name: 'Show a hint', exact: true }).click();
 
+  await page.goBack();
+  await expect(page).toHaveURL(`${location}/grammar`);
   await page.goBack();
   await expect(page).toHaveURL(`${location}/vocabulary`);
   await expect(page.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
   await page.goBack();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
+  await page.goForward();
   await page.goForward();
   await page.goForward();
   await expect(page.getByRole('button', { name: 'Hide hint', exact: true })).toBeVisible();
@@ -146,7 +149,7 @@ test('the final answer completes the lesson in place and retries both records to
   const location = '/lesson/fr/' + restaurantLesson.id;
   await page.goto(location + '/vocabulary');
   await expect(page.locator('[data-testid^="lesson-step-"]')).toHaveCount(6);
-  await page.getByRole('button', { name: /Try picture practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const match = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: match.target, exact: true }).click();
   await page.getByRole('button', { name: 'Next', exact: true }).click();

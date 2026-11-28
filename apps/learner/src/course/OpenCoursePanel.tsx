@@ -113,8 +113,8 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const following = course.days[day.dayNumber];
   const nextLesson = following && {
     title: `Lesson ${following.dayNumber}: ${following.title}`,
-    href: routeHref({ ...route, dayId: following.id, sectionId: undefined }),
-    onOpen: () => select(following, resumeStage(following, courseDayProgress(course, following, learning.events))),
+    href: routeHref({ ...route, dayId: following.id, sectionId: courseLessonStageId('dialogue') }),
+    onOpen: () => select(following, 'dialogue'),
   };
   const outline = (sidebar || outlineOpen) && <CourseOutline id={outlineId} sidebar={sidebar} course={course} route={route} day={day}
     events={learning.events} level={level} onLevelChange={setLevel} blocked={disabled}
@@ -159,7 +159,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
           stageHref: targetStage => routeHref({ ...route, dayId: day.id, sectionId: courseLessonStageId(targetStage) }),
           changeStage: (targetStage, snapshot) => select(day, targetStage, snapshot),
           studyDialogue: snapshot => select(day, 'vocabulary', snapshot, 'dialogue'),
-          studyWords: (targetStage, snapshot) => select(day, targetStage, snapshot, 'vocabulary'), record,
+          studyWords: snapshot => select(day, 'grammar', snapshot, 'vocabulary'), record,
         }} />
         <CourseCredits course={course} />
       </View>

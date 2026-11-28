@@ -1,4 +1,4 @@
-import { openRestaurant, openProfileSection } from './learner-journeys';
+import { openRestaurant, openProfileSection, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -26,7 +26,7 @@ test('download and explicit restore recover learning in a fresh browser without 
   await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: 'Try picture practice', exact: true }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await page.getByRole('button', { name: 'Review', exact: true }).click();
   await page.getByRole('button', { name: 'Reveal meaning', exact: true }).click();
   await page.getByRole('button', { name: 'Needed help', exact: true }).click();

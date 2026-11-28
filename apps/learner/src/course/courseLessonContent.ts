@@ -27,7 +27,7 @@ const frenchPractice: Partial<Record<string, FrenchPractice>> = {
   'fr.open-course-pilot.day-2': {
     role: 'Newcomer',
     matching: {
-      prompt: 'You are introducing yourself at a neighbourhood activity. Choose the word for the name a friend would call you.',
+      prompt: 'Choose the word for your first name.',
       entryId: 'fr.people.prenom',
       choices: ['fr.people.nom-de-famille', 'fr.people.prenom', 'fr.people.enchante'],
     },

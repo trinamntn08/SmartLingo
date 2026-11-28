@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons, lessons } from '@smartlingo/content';
-import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openTodayStudyOptions, openTopic } from '../e2e/learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openProfileSection, openTodayStudyOptions, openTopic, studyKeyPhrasesAndOpenMatch } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -64,7 +64,7 @@ test('the same French and Japanese lesson widgets and notebooks cold-start and s
   await expect(card.getByText(japanese.exampleMeaning, { exact: true })).toBeVisible();
   await cold.getByRole('button', { name: `Save ${japanese.target}`, exact: true }).click();
   await expect(cold.getByRole('button', { name: `Unsave ${japanese.target}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await cold.getByRole('button', { name: /Try meaning practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(cold);
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
   await cold.getByRole('button', { name: 'Next', exact: true }).click();
   await buildAcceptedSentence(cold, lesson);

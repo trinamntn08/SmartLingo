@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
-import { expectGrammarNote, guidedLessonButton, buildAcceptedSentence, openGrammar, openProfileSection, openTopic } from './learner-journeys';
+import { expectGrammarNote, guidedLessonButton, buildAcceptedSentence, openGrammar, openProfileSection, openTopic, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
 const greetingTopic = 'Everyday greetings and politeness';
@@ -33,7 +33,7 @@ test('Learn opens greetings with readable arrival and departure support, saved w
   await expect(page.getByRole('button', { name: /Show meaning|Show example translation|Show word note/ })).toHaveCount(0);
   await page.getByRole('button', { name: 'Save bonsoir', exact: true }).click();
   await expect(page.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /Try meaning practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await page.reload();
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();

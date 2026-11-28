@@ -1,4 +1,4 @@
-import { openKeyPhrases, openTopic } from './learner-journeys';
+import { openKeyPhrases, openTopic, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
 
@@ -66,7 +66,7 @@ test('browser Back keeps a failed learning save on screen for dismissal or retry
       return add.apply(this, args);
     };
   });
-  await page.getByRole('button', { name: 'Try picture practice', exact: true }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   const dismiss = page.getByRole('button', { name: 'Dismiss and continue', exact: true });
   await expect(dismiss).toBeVisible();
   const failedPlace = page.url();
@@ -87,6 +87,7 @@ test('hash navigation cancels hidden learner speech and preserves the mounted le
   await page.route('**/127.0.0.1:3001/**', route => route.abort());
   await page.addInitScript(() => {
     localStorage.setItem('smartlingo.target-language.v1', 'ja-JP');
+    localStorage.setItem('smartlingo.japanese-audio-source.v1', JSON.stringify({ version: 1, source: 'device' }));
     const voice = { voiceURI: 'test.ja-JP', name: 'Test Japanese', lang: 'ja-JP', localService: true, default: true };
     Object.defineProperty(window, 'SpeechSynthesisUtterance', {
       configurable: true, value: class { constructor(public text: string) {} },
@@ -113,7 +114,7 @@ test('hash navigation cancels hidden learner speech and preserves the mounted le
   await page.getByRole('button', { name: /Return to learning/ }).click();
   await expect(page.getByRole('heading', { name: lesson.subtitle, exact: true })).toBeVisible();
 
-  await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   // This unsaved activity is distinct from the persisted dialogue resume point.
   const activity = page.getByRole('heading', { name: lesson.pictureActivity.prompt, exact: true });
   await expect(activity).toBeVisible();

@@ -1,4 +1,4 @@
-import { expectGrammarNote, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openGrammar, openKeyPhrases, openRestaurant, openTopic } from './learner-journeys';
+import { expectGrammarNote, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openGrammar, openKeyPhrases, openRestaurant, openTopic, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { getFrenchTopicPractice, getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -88,7 +88,9 @@ test('restaurant details are visible directly and practice/notebook completion s
   await expect(button(page, /Next word/)).toHaveCount(0);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
-  await button(page, 'Read conversation').click();
+  await expect(button(page, 'Read conversation')).toHaveCount(0);
+  await expect(button(page, 'Try picture practice')).toHaveCount(0);
+  await page.getByTestId('lesson-step-dialogue').click();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
@@ -101,7 +103,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await openGrammar(page);
   await expectGrammarNote(page.getByTestId('grammar-note'), getLearnerGrammar(restaurantLesson));
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
-  await button(page, /Try picture practice/).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await button(page, 'l’addition').click();
   await expect(page.getByText('Take another look.', { exact: false })).toBeVisible();
   await button(page, 'Show a hint').click();
@@ -207,8 +209,8 @@ test('320px catalogue navigation works by keyboard and illustrations load', asyn
   // Missing device voices never block the text activity.
   await page.screenshot({ path: info.outputPath('narrow-voice-error.png'), fullPage: true });
   await expect(page.getByRole('heading', { name: 'une baguette', exact: true })).toBeVisible();
-  await expect(button(page, 'Try picture practice')).toBeEnabled();
-  await button(page, 'Try picture practice').click();
+  await expect(button(page, 'Next')).toBeEnabled();
+  await studyKeyPhrasesAndOpenMatch(page);
   await expect(page.getByRole('heading', { name: 'Match a picture', exact: true })).toBeVisible();
 });
 
@@ -238,7 +240,7 @@ test('speaker icon plays and stops through keyboard controls', async ({ page }) 
   await page.keyboard.press('Space');
   await expect(speaker).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.stopped)).toBe('true');
-  await expect(button(page, 'Try picture practice')).toBeEnabled();
+  await expect(button(page, 'Next')).toBeEnabled();
 });
 
 test('storage denial explains the problem and never claims a saved change', async ({ page }) => {
@@ -247,7 +249,7 @@ test('storage denial explains the problem and never claims a saved change', asyn
   await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
   await openRestaurant(page);
   await expect(button(page, 'Save bonjour')).toBeDisabled();
-  await button(page, 'Try picture practice').click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await expect(page.getByRole('heading', { name: 'Match a picture', exact: true })).toBeVisible();
   await button(page, 'Retry opening storage').click();
   await expect(page.getByRole('alert').filter({ hasText: 'Your learning data' })).toContainText('couldn’t be opened');
@@ -267,10 +269,10 @@ test('failed save can retry once without duplicate practice', async ({ page }) =
   });
   await page.goto('/');
   await openRestaurant(page);
-  await button(page, 'Try picture practice').click();
+  await button(page, 'Next').click();
   await expect(page.getByRole('alert')).toContainText('hasn’t been confirmed as saved');
-  await expect(button(page, 'Try picture practice')).toBeDisabled();
+  await expect(button(page, 'Next')).toBeDisabled();
   await button(page, 'Retry save').click();
-  await expect(page.getByRole('heading', { name: 'Match a picture', exact: true })).toBeVisible();
+  await expect(page.getByTestId('lesson-step-grammar')).toHaveAttribute('aria-current', 'step');
   expect(await storedRows(page, 'events')).toHaveLength(1);
 });

@@ -1,4 +1,4 @@
-import { openKanaFromToday, openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
+import { openKanaFromToday, openKeyPhrases, openTopic, openProfileSection, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseAlphabetLessons, japaneseLessons, type JapaneseAlphabetLesson } from '@smartlingo/content';
@@ -122,7 +122,7 @@ test('Hiragana lessons save studied rows and restore them alongside existing voc
   await openKeyPhrases(page);
   await button(page, `Save ${oldLesson.vocabulary[0]!.target}`).click();
   await expect(button(page, `Unsave ${oldLesson.vocabulary[0]!.target}`)).toHaveAttribute('aria-pressed', 'true');
-  await button(page, 'Try meaning practice').click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await expect(page.getByTestId('lesson-step-picture')).toHaveAttribute('aria-current', 'step');
   const oldEvents = await events(page);
   expect(oldEvents).toHaveLength(1);

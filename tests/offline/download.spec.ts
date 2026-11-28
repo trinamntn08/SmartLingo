@@ -1,4 +1,4 @@
-import { expectGrammarNote, guidedLessonButton, buildAcceptedSentence, openGrammar, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
+import { expectGrammarNote, guidedLessonButton, buildAcceptedSentence, openGrammar, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary, studyKeyPhrasesAndOpenMatch } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { getFrenchTopicPractice, getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -57,7 +57,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await cold.screenshot({ path: info.outputPath('greetings-offline-study.png'), fullPage: true });
   await button(cold, 'Save bonsoir').click();
   await expect(cold.getByText('Saved bonsoir to your notebook.', { exact: true })).toBeVisible();
-  await button(cold, /Try meaning practice/).click();
+  await studyKeyPhrasesAndOpenMatch(cold);
   const target = opening.vocabulary.find(entry => entry.id === opening.pictureActivity.entryId)!;
   await button(cold, target.target).click();
   await expect(cold.getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
@@ -119,7 +119,7 @@ test('explicit download cold-loads offline and asset removal preserves every lea
   await openRestaurant(page);
   await button(page, 'Save bonjour').click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: true })).toBeVisible();
-  await button(page, 'Try picture practice').click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await button(page, 'Review').click();
   await button(page, 'Reveal meaning').click();
   await button(page, 'Needed help').click();

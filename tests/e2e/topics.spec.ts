@@ -1,4 +1,4 @@
-import { expectGrammarNote, guidedLessonButton, openGrammar, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
+import { expectGrammarNote, guidedLessonButton, openGrammar, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 import { getLearnerGrammar, lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
@@ -147,7 +147,7 @@ test('new A2 meaning and sentence practice work at 320px and survive reload', as
   await page.screenshot({ path: info.outputPath('narrow-new-lesson.png'), fullPage: true });
   await expect(page.getByRole('heading', { name: lesson.vocabulary[5].target, exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /Next word/ })).toHaveCount(0);
-  await page.getByRole('button', { name: /Try meaning practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const target = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
   await expect(page.getByText(target.meaning, { exact: true })).toBeVisible();
   await page.getByRole('button', { name: target.target, exact: true }).click();

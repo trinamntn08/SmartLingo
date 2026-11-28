@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseLessons } from '@smartlingo/content';
-import { openKeyPhrases, openTopicVocabulary, buildAcceptedSentence, openProfileSection, openTopic } from '../e2e/learner-journeys';
+import { openKeyPhrases, openTopicVocabulary, buildAcceptedSentence, openProfileSection, openTopic, studyKeyPhrasesAndOpenMatch } from '../e2e/learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 test.beforeEach(async ({ request }) => { await request.post('/__test__/mode'); });
@@ -28,7 +28,7 @@ test('new Japanese topic vocabulary, search and short practice survive cold offl
   await cold.getByRole('textbox', { name: 'Search lessons', exact: true }).fill('');
   await cold.getByRole('button', { name: `Open ${lesson.subtitle}`, exact: true }).click();
   await openKeyPhrases(cold);
-  await cold.getByRole('button', { name: /Try meaning practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(cold);
   await cold.getByRole('button', { name: lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!.target, exact: true }).click();
   await cold.getByRole('button', { name: 'Next', exact: true }).click(); await buildAcceptedSentence(cold, lesson);
   await expect(cold.getByText('Lesson complete', { exact: true })).toBeVisible();

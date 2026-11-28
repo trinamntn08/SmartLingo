@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons } from '@smartlingo/content';
 import { groupLessonTopics, type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary, openProfileSection, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
@@ -34,7 +34,7 @@ test('every Japanese topic exposes its vocabulary and short lessons', async ({ p
 async function complete(page: Page, lesson: Lesson) {
   await openTopic(page, lesson.topic); await button(page, `Open ${lesson.subtitle}`).click();
   await openKeyPhrases(page);
-  await page.getByRole('button', { name: /Try meaning practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const answer = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
   await button(page, answer.target).click();
   await page.getByRole('button', { name: 'Next', exact: true }).click();
@@ -48,7 +48,7 @@ test('added foundation/A1/A2/B1 lessons complete, save notes and resume without 
   const original = japaneseLessons.find(lesson => lesson.id === 'ja.lesson.day-1')!;
   await openTopic(page, original.topic); await button(page, `Open ${original.subtitle}`).click();
   await openKeyPhrases(page);
-  await page.getByRole('button', { name: /Try meaning practice/ }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   for (const day of [1, 3, 8, 13]) await complete(page, extension(day));
   const lesson = extension(13); const entry = lesson.vocabulary[0];
   await openTopic(page, lesson.topic);

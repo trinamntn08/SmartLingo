@@ -137,6 +137,12 @@ test('the spelling lesson uses the shared six steps and saves completion offline
   await expect(panel(cold).getByText('That’s it. You matched the meaning.', { exact: true })).toBeVisible();
   await button(cold, 'Next').click();
   await expect(step(cold, 'Build a sentence')).toBeVisible();
+  await button(cold, 'ça s’écrit').click();
+  await button(cold, 'N, O,').click();
+  await button(cold, 'R, A.').click();
+  await expect(panel(cold).getByText('1 tile left', { exact: true })).toBeVisible();
+  await expect(button(cold, 'Check sentence')).toBeDisabled();
+  await button(cold, 'Clear').click();
   await buildAcceptedSentence(cold, lesson);
   await expect(step(cold, 'Lesson complete')).toBeVisible();
   await expect(cold).toHaveURL(/\/lesson-sentence$/);

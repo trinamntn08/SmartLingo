@@ -30,7 +30,7 @@ interface LessonSequence {
   total: number;
   previous?: Lesson;
   next?: Lesson;
-  open: (lesson: Lesson) => void;
+  open: (lesson: Lesson, stage?: LessonStage) => void;
 }
 
 interface LessonLink {
@@ -48,7 +48,7 @@ interface CourseLessonSession {
   stageHref: (step: LessonStage) => string;
   changeStage: (step: LessonStage, snapshot: Record<string, unknown>) => void;
   studyDialogue: (snapshot: Record<string, unknown>) => void;
-  studyWords: (next: 'grammar' | 'picture', snapshot: Record<string, unknown>) => void;
+  studyWords: (snapshot: Record<string, unknown>) => void;
   record: (activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number, after?: () => void) => void;
   nextLesson?: LessonLink;
   dialoguePhoto?: ContextPhoto;
@@ -93,7 +93,6 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const afterGrammar = listeningQuestion ? 'listening' : 'picture';
   const { heading } = stageLabels(stage, meaningMatch);
   const scene = stage === 'dialogue' ? courseSession?.dialoguePhoto ?? getLessonDialoguePhoto(lesson.id) : undefined;
-  const practiceLabel = meaningMatch ? 'Try meaning practice' : 'Try picture practice';
   const canComplete = wordsStudied && progress.pictureDone && !progress.completed;
   const skipStudiedPhrases = wordsStudied && !courseSession;
   const exitBlocked = model.busy || !!model.saveError || !!courseSession?.disabled;
@@ -153,14 +152,14 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
   const exitHref = courseSession?.exitHref ?? studyDayHref ?? topicHref;
   const returnLabel = courseSession ? 'Exit lesson' : studyDayHref ? 'Back to guided lesson' : undefined;
 
-  function lessonLink(target: Lesson | undefined) {
+  function lessonLink(target: Lesson | undefined, stage?: LessonStage) {
     if (!sequence || !target) return undefined;
-    const href = routeHref({ kind: 'lesson', language: target.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: target.id });
-    return { title: target.subtitle, href, onOpen: () => sequence.open(target) };
+    const href = routeHref({ kind: 'lesson', language: target.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: target.id, stage });
+    return { title: target.subtitle, href, onOpen: () => sequence.open(target, stage) };
   }
 
   const previousLesson = lessonLink(sequence?.previous);
-  const nextLesson = progress.completed ? courseSession?.nextLesson ?? lessonLink(sequence?.next) : undefined;
+  const nextLesson = progress.completed ? courseSession?.nextLesson ?? lessonLink(sequence?.next, 'dialogue') : undefined;
 
   function entry(activity: LearningEvent['activity'], itemId: string, result: LearningEvent['result'], hints: number): LearningEvent {
     return { id: crypto.randomUUID(), lessonId: lesson.id, revision: lesson.revision, itemId, activity, result, hints,
@@ -180,10 +179,10 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
     }
   }
 
-  function reviewVocabulary(next: 'grammar' | 'picture') {
-    if (browseOnly || wordsStudied) setStage(next);
-    else if (courseSession) courseSession.studyWords(next, { [focusStageKey]: next });
-    else record('vocabulary', lesson.id, 'viewed', 0, () => setStage(next, true));
+  function continueFromVocabulary() {
+    if (browseOnly || wordsStudied) setStage('grammar');
+    else if (courseSession) courseSession.studyWords({ [focusStageKey]: 'grammar' });
+    else record('vocabulary', lesson.id, 'viewed', 0, () => setStage('grammar', true));
   }
 
   function recordPractice(task: JapanesePracticeTask, result: JapanesePracticeResult, assisted: boolean) {
@@ -238,11 +237,8 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
       {stage === 'vocabulary' && <>
         <LessonWords lesson={lesson} model={model} />
         <StudyActions sticky={!compact}>
-          <Button quiet href={stageHref('dialogue')} disabled={exitBlocked} onPress={() => setStage('dialogue')}>Read conversation</Button>
-          {listeningQuestion && <Button quiet disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('picture')}>{practiceLabel}</Button>}
           <Button primary trailingIcon="arrow-right" disabled={exerciseBlocked && !browseOnly}
-            onPress={() => reviewVocabulary('grammar')}>Next</Button>
+            onPress={continueFromVocabulary}>Next</Button>
         </StudyActions>
       </>}
       {stage === 'grammar' && <>

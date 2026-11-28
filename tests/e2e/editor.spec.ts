@@ -1,4 +1,4 @@
-import { guidedLessonButton, buildAcceptedSentence, expectGrammarNote, openGrammar, openRestaurant, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, expectGrammarNote, openGrammar, openRestaurant, openTopic, openTopicVocabulary, openProfileSection, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -37,7 +37,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await openRestaurant(page);
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
   await expect(page.getByText('Saved bonjour to your notebook.', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: 'Try picture practice', exact: true }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await openProfileSection(page, 'Curriculum tools');
   const originalEvents = await learningRows(page, 'events');
@@ -78,7 +78,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   // Preview practice and word capture never touch the real notebook/history.
   await page.getByRole('button', { name: 'Save bonjour', exact: true }).click();
-  await page.getByRole('button', { name: 'Try picture practice' }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const pictureWord = restaurantLesson.vocabulary.find(entry => entry.id === restaurantLesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: pictureWord.target, exact: true }).click();
   await page.getByTestId('lesson-stage').getByRole('button', { name: 'Next', exact: true }).click();
@@ -131,7 +131,7 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   await expect(page.getByText('In France, un café usually means an espresso.', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Unsave bonjour', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: 'Read conversation', exact: true }).click();
+  await page.getByTestId('lesson-step-dialogue').click();
   await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();

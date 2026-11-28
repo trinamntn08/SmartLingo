@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import type { CourseEvent, NotebookEntry } from '@smartlingo/domain';
 import { buildCourseLesson, buildCourseStudy } from '../../apps/learner/src/course/courseLessonContent';
-import { expectGrammarNote, buildAcceptedSentence, guidedLessonButton, openCourseOutline, openTodayStudyOptions } from './learner-journeys';
+import { expectGrammarNote, buildAcceptedSentence, guidedLessonButton, openCourseOutline, openTodayStudyOptions, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const todayCourse = async (page: Page) => (await openTodayStudyOptions(page)).getByRole('link', { name: japaneseCourse.title, exact: true });
@@ -160,7 +160,7 @@ test('Japanese completion follows study and both activities, and the next lesson
   const completed = panel(page).getByRole('heading', { name: 'Lesson complete', exact: true });
   await button(page, 'Next').click();
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Key phrases');
-  await button(page, 'Try meaning practice').click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const match = lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!;
   await button(page, match.target).click();
   await button(page, 'Next').click();

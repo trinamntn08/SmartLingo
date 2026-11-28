@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { lessons } from '@smartlingo/content';
-import { buildAcceptedSentence, openKeyPhrases, openTopic, openTopicVocabulary } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openTopic, openTopicVocabulary, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 const [first, second, third] = lessons.filter(lesson => lesson.id.startsWith('fr.greetings.'));
 
@@ -44,7 +44,7 @@ test('topic cards preserve order and continue to the next lesson after completio
   await expect(page.getByRole('heading', { name: 'Read a conversation', exact: true })).toBeVisible();
   await openKeyPhrases(page);
   await expect(page.getByTestId('lesson-stage-heading')).toBeFocused();
-  await button('Try meaning practice').click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const match = first.vocabulary.find(entry => entry.id === first.pictureActivity.entryId)!;
   await button(match.target).click();
   await button('Next').click();
@@ -55,6 +55,7 @@ test('topic cards preserve order and continue to the next lesson after completio
   const scroll = () => page.getByTestId('learner-content').evaluate(element => element.scrollTop);
   const before = await scroll();
   await next.press('Enter');
+  await expect(page).toHaveURL(new RegExp(`/${second.id}/dialogue$`));
   await expect(page.getByRole('heading', { name: second.subtitle, exact: true })).toBeFocused();
   await expect(page.getByText('Lesson 2 of 3', { exact: true })).toBeVisible();
   await page.goBack();

@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { japaneseLessons, lessons } from '@smartlingo/content';
 import { type Lesson } from '@smartlingo/domain';
-import { buildAcceptedSentence, openKeyPhrases, openTopic, openProfileSection } from './learner-journeys';
+import { buildAcceptedSentence, openKeyPhrases, openTopic, openProfileSection, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 // Exercise the real first-run homepage; older regressions explicitly select French in config.
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -49,7 +49,7 @@ test('French and Japanese follow the same complete lesson and notebook journey, 
     await card.scrollIntoViewIfNeeded();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath(`${name.toLowerCase()}-shared-words.png`), fullPage: true });
-    await page.getByRole('button', { name: /Try meaning practice|Try picture practice/ }).click();
+    await studyKeyPhrasesAndOpenMatch(page);
     const correct = lesson.vocabulary.find(entry => entry.id === lesson.pictureActivity.entryId)!;
     await button(page, correct.target).click();
     await page.getByRole('button', { name: 'Next', exact: true }).click();

@@ -4,7 +4,7 @@ import type { LearnerTab } from '../dashboard/LearnerNavigation';
 import type { LearnMode } from '../learn/LearningHub';
 import { findKanaTopic } from '../alphabet/kanaTopics';
 import { useNavigation, useVisitState } from './WebNavigation';
-import { topicRouteKey, type AppRoute } from './routes';
+import { topicRouteKey, type AppRoute, type LessonStage } from './routes';
 
 export function tabRoute(tab: LearnerTab, language: TargetLanguage): AppRoute {
   switch (tab) {
@@ -78,7 +78,9 @@ export function useLearnerNavigation({ preferred, active, blocked, onChooseLangu
     selectTopic,
     selectLearnMode: (mode: LearnMode) => { if (language) navigate(learnRoute(mode, language, topicKey ?? (selectedTopic ? topicRouteKey(selectedTopic) : undefined))); },
     openLearnMode: (mode: LearnMode) => { if (language) navigate(learnRoute(mode, language)); },
-    openLesson: (next: Lesson) => navigate({ kind: 'lesson', language: next.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: next.id }),
+    openLesson: (next: Lesson, stage?: LessonStage) => navigate({
+      kind: 'lesson', language: next.language === 'ja-JP' ? 'ja-JP' : 'fr-FR', lessonId: next.id, stage,
+    }),
     exitLesson, chooseLanguage,
     changeLanguage: () => navigate({ kind: 'languages' }),
     chooseHome: () => navigate({ kind: 'languages' }),

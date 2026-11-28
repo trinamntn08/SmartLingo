@@ -27,6 +27,12 @@ export async function openGrammar(page: Page) {
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Grammar', exact: true }).click();
 }
 
+export async function studyKeyPhrasesAndOpenMatch(page: Page) {
+  await page.getByTestId('lesson-stage').getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page.getByTestId('lesson-step-grammar')).toHaveAttribute('aria-current', 'step');
+  await page.getByTestId('lesson-step-picture').click();
+}
+
 export async function expectGrammarNote(card: Locator, note: LearnerGrammarNote) {
   await expect(card.getByRole('heading', { name: note.title, exact: true })).toBeVisible();
   if (!note.example) {

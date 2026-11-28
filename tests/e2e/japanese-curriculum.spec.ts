@@ -3,11 +3,11 @@ import { japaneseCourse, japaneseLessons } from '@smartlingo/content';
 import type { Lesson } from '@smartlingo/domain';
 import { routeHref } from '../../apps/learner/src/app/routes';
 import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
-import { buildAcceptedSentence } from './learner-journeys';
+import { buildAcceptedSentence, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
 
 async function finishCore(page: Page, lesson: Lesson) {
   await page.getByTestId('lesson-stage').getByRole('button', { name: 'Next', exact: true }).click();
-  await page.getByRole('button', { name: 'Try meaning practice', exact: true }).click();
+  await studyKeyPhrasesAndOpenMatch(page);
   const target = lesson.vocabulary.find(word => word.id === lesson.pictureActivity.entryId)!;
   await page.getByRole('button', { name: target.target, exact: true }).click();
   await page.getByRole('button', { name: 'Next', exact: true }).click();

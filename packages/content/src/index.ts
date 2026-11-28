@@ -21,7 +21,8 @@ import type { FrenchTransferTask } from './french-practice/types';
 import { a1CourseAliases, a1CourseTasks, a1CourseTopics } from './topics/french-course-a1';
 import { a2CourseAliases, a2CourseTasks, a2CourseTopics } from './topics/french-course-a2';
 import { b1CourseAliases, b1CourseTasks, b1CourseTopics } from './topics/french-course-b1';
-import { frenchBriefGrammar, type LearnerGrammarNote } from './french-grammar';
+import { frenchBriefGrammar } from './french-grammar';
+import type { LearnerGrammarNote } from './grammar-note';
 import { japaneseBriefGrammar } from './japanese-grammar';
 import { japaneseLessons } from './japanese-lessons';
 import { japaneseCourse } from './japanese-course';
@@ -73,7 +74,8 @@ export function getLearnerGrammar(lesson: Lesson): LearnerGrammarNote {
   return brief[`${lesson.id}@${lesson.revision}`] ?? lesson.grammar;
 }
 
-export { frenchPilotBriefGrammar, type LearnerGrammarNote } from './french-grammar';
+export { frenchPilotBriefGrammar } from './french-grammar';
+export type { GrammarExample, LearnerGrammarNote } from './grammar-note';
 export const frenchTopicPractice: Readonly<Partial<Record<string, FrenchTransferTask>>> = {
   ...foundationPractice,
   ...everydayPractice,

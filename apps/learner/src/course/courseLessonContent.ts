@@ -1,4 +1,4 @@
-import { frenchCourseLessonsByDay, frenchPilotBriefGrammar, getJapaneseDailyGuide, getLearnerGrammar, japaneseLessons } from '@smartlingo/content';
+import { frenchCourseLessonsByDay, frenchPilotBriefGrammar, getJapaneseDailyGuide, getLearnerGrammar, japaneseLessons, type LearnerGrammarNote } from '@smartlingo/content';
 import { courseDayProgressRevision, lessonSchema, type CourseDay, type Lesson, type OpenCourse } from '@smartlingo/domain';
 
 interface FrenchPractice {
@@ -86,8 +86,14 @@ const frenchPractice: Partial<Record<string, FrenchPractice>> = {
   },
 };
 
-/** Present a course day as a lesson without adding it to the public lesson catalogue. */
-export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
+type CourseLessonInput = Omit<Lesson, 'grammar' | 'provenance'> & Pick<OpenCourse, 'provenance'>;
+
+function projectCourseStudy(content: CourseLessonInput, grammarNote: LearnerGrammarNote) {
+  return { lesson: lessonSchema.parse({ ...content, grammar: grammarNote }), grammarNote };
+}
+
+/** Keep study presentation alongside the validated lesson, outside its persisted schema. */
+export function buildCourseStudy(course: OpenCourse, day: CourseDay) {
   const identity = {
     id: day.id,
     revision: courseDayProgressRevision(course, day),
@@ -105,38 +111,41 @@ export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
     const authored = japaneseLessons.find(lesson => lesson.id === `ja.lesson.day-${day.dayNumber}`);
     if (!authored) throw new Error(`Missing shared Japanese lesson material for ${day.id}`);
     const guide = getJapaneseDailyGuide(day.id);
-    return lessonSchema.parse({
-      ...authored, ...identity, grammar: getLearnerGrammar(authored),
+    return projectCourseStudy({
+      ...authored, ...identity,
       japanesePractice: guide ? {
         tasks: [...guide.tasks, ...guide.checkpoint],
         checkpoint: guide.checkpoint.length > 0,
         prerequisites: guide.preparation,
         revisit: guide.review,
       } : authored.japanesePractice,
-    });
+    }, getLearnerGrammar(authored));
   }
 
   const authored = frenchCourseLessonsByDay.get(day.id);
-  if (authored) return lessonSchema.parse({
+  if (authored) return projectCourseStudy({
     ...authored, ...identity, durationMinutes: 12,
-    grammar: getLearnerGrammar(authored),
     sentenceActivity: { ...authored.sentenceActivity, id: `${day.id}.sentence` },
-  });
+  }, getLearnerGrammar(authored));
 
   const study = day.blocks.find(block => block.kind === 'study');
   const dialogue = day.blocks.find(block => block.kind === 'dialogue');
   const practice = frenchPractice[day.id];
   if (!study || !dialogue || !practice) throw new Error(`Missing shared French lesson material for ${day.id}`);
 
-  return lessonSchema.parse({
+  return projectCourseStudy({
     ...identity,
     durationMinutes: 10,
     role: practice.role,
     vocabulary: day.vocabulary,
     dialogue: dialogue.lines,
-    grammar: frenchPilotBriefGrammar[`${day.id}@${identity.revision}`] ?? { title: study.title, explanation: study.explanation },
     pictureActivity: { mode: 'meaning', ...practice.matching },
     sentenceActivity: { id: `${day.id}.sentence`, ...practice.sentence, almostAnswers: [] },
     provenance: course.provenance,
-  });
+  }, frenchPilotBriefGrammar[`${day.id}@${identity.revision}`] ?? { title: study.title, explanation: study.explanation });
+}
+
+/** Present a course day as a lesson without adding it to the public lesson catalogue. */
+export function buildCourseLesson(course: OpenCourse, day: CourseDay): Lesson {
+  return buildCourseStudy(course, day).lesson;
 }

@@ -1,4 +1,4 @@
-import { guidedLessonButton, openGrammar, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
+import { expectGrammarNote, guidedLessonButton, openGrammar, openKeyPhrases, openLessonFromTopics, openTopic, openTopicVocabulary } from './learner-journeys';
 import { test, expect } from '@playwright/test';
 import { getLearnerGrammar, lessons } from '@smartlingo/content';
 import { groupLessonTopics, matchesVocabulary, normalizeAnswer } from '@smartlingo/domain';
@@ -70,11 +70,11 @@ test('foundations and A2 experience lessons expose translated study material and
     await openGrammar(page);
     const brief = getLearnerGrammar(lesson);
     await expect(grammar.getByRole('heading', { name: brief.title, exact: true })).toBeVisible();
-    await expect(grammar).toContainText(brief.explanation);
+    await expectGrammarNote(grammar, brief);
     if (slug === 'essentials') {
       await expect(grammar).toContainText('Vous pouvez');
       await expect(grammar).toContainText('répéter');
-      await expect(grammar.locator('[lang="fr-FR"]')).toHaveText('Vous pouvez répéter ?');
+      await expect(grammar.getByTestId('grammar-target').first()).toHaveText('Vous pouvez répéter ?');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await grammar.screenshot({ path: info.outputPath('grammar-card.png') });
       await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Match meanings', exact: true }).click();

@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import type { CourseEvent, NotebookEntry } from '@smartlingo/domain';
-import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
-import { buildAcceptedSentence, guidedLessonButton, openCourseOutline, openTodayStudyOptions } from './learner-journeys';
+import { buildCourseLesson, buildCourseStudy } from '../../apps/learner/src/course/courseLessonContent';
+import { expectGrammarNote, buildAcceptedSentence, guidedLessonButton, openCourseOutline, openTodayStudyOptions } from './learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const todayCourse = async (page: Page) => (await openTodayStudyOptions(page)).getByRole('link', { name: japaneseCourse.title, exact: true });
@@ -59,7 +59,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(days).toHaveCount(4);
   await button(page, `Choose lesson ${day.dayNumber}: ${day.title}`).click();
   await expect(panel(page).getByRole('heading', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
-  const lesson = buildCourseLesson(japaneseCourse, day);
+  const { lesson, grammarNote } = buildCourseStudy(japaneseCourse, day);
   await expect(panel(page).getByTestId('grammar-note')).toHaveCount(0);
   await expect(japaneseTranscript.getByText('Hitori de ryokou shita koto ga arimasu ka?', { exact: true })).toBeVisible();
   await openStep(page, 'Key phrases', 'Key phrases');
@@ -80,7 +80,7 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(page).toHaveURL(/\/lesson-grammar$/);
   const grammar = panel(page).getByTestId('grammar-note');
   await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
-  await expect(grammar).toContainText(lesson.grammar.explanation);
+  await expectGrammarNote(grammar, grammarNote);
   await button(page, 'Next').click();
   await expect(panel(page).getByTestId('lesson-stage-heading')).toHaveText('Listening practice');
   await button(page, 'Next').click();

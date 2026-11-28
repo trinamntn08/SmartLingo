@@ -1,7 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { completedJapanesePracticeIds, lessonProgress, type JapanesePracticeResult, type JapanesePracticeTask, type LearningEvent, type Lesson } from '@smartlingo/domain';
-import { getLearnerGrammar } from '@smartlingo/content';
+import { getLearnerGrammar, type LearnerGrammarNote } from '@smartlingo/content';
 import { Button } from './controls';
 import { colors, designTokens as tokens, styles as s } from './theme';
 import type { LearningModel } from './useLearning';
@@ -57,12 +57,13 @@ interface CourseLessonSession {
   onPracticeResult?: (task: JapanesePracticeTask, result: JapanesePracticeResult, assisted: boolean) => void;
 }
 
-export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession, timeEstimate, extraDialogue, extraPractice }: {
+export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, routed = false, courseSession, timeEstimate, extraDialogue, extraPractice, grammarNote }: {
   lesson: Lesson; model: LearningModel; onExit: () => void; studyDayHref?: string; sequence?: LessonSequence; routed?: boolean;
   courseSession?: CourseLessonSession;
   timeEstimate?: string;
   extraDialogue?: ReactNode;
   extraPractice?: ReactNode;
+  grammarNote?: LearnerGrammarNote;
 }) {
   const { route, navigate, read } = useNavigation();
   const [focusRoutedStage, setFocusRoutedStage] = useVisitState<LessonStage | null>(focusStageKey, null);
@@ -245,7 +246,7 @@ export function LessonScreen({ lesson, model, onExit, studyDayHref, sequence, ro
         </StudyActions>
       </>}
       {stage === 'grammar' && <>
-        <GrammarNote note={routed ? getLearnerGrammar(lesson) : lesson.grammar}
+        <GrammarNote note={grammarNote ?? (routed ? getLearnerGrammar(lesson) : lesson.grammar)} compact={compact}
           language={lesson.language === 'ja-JP' ? 'ja-JP' : 'fr-FR'} />
         <StudyActions sticky={!compactCourse}>
           <Button primary trailingIcon="arrow-right" href={stageHref(afterGrammar)} disabled={exitBlocked}

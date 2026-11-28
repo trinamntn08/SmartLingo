@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, getFrenchTopicPractice, frenchCourseLessonsByDay, openCoursePilot } from '@smartlingo/content';
-import { buildCourseLesson } from '../../apps/learner/src/course/courseLessonContent';
+import { buildCourseLesson, buildCourseStudy } from '../../apps/learner/src/course/courseLessonContent';
 import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline,
-  openProfileSection, openTodayStudyOptions, openTopic } from '../e2e/learner-journeys';
+  expectGrammarNote, openProfileSection, openTodayStudyOptions, openTopic } from '../e2e/learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
@@ -71,7 +71,7 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   if (dialogue.kind !== 'dialogue') throw new Error('Missing dialogue');
   await expectFrenchTranscripts(panel(cold), dialogue.lines);
   await expectDialoguePhoto(panel(cold), 'french-neighbour-dialogue.jpg');
-  const lesson = buildCourseLesson(openCoursePilot, opening);
+  const { grammarNote } = buildCourseStudy(openCoursePilot, opening);
   const grammar = panel(cold).getByTestId('grammar-note');
   await expect(grammar).toHaveCount(0);
   await expect(button(cold, 'Source credits and licence')).toHaveCount(0);
@@ -84,8 +84,7 @@ test('the original French opening, notebook and saved cursor cold-start offline'
   await expect(button(cold, 'Unsave bonsoir')).toHaveAttribute('aria-pressed', 'true');
   await button(cold, 'Next').click();
   await expect(cold).toHaveURL(/\/lesson-grammar$/);
-  await expect(grammar.getByRole('heading', { name: lesson.grammar.title, exact: true })).toBeVisible();
-  await expect(grammar).toContainText(lesson.grammar.explanation);
+  await expectGrammarNote(grammar, grammarNote);
   await cold.reload();
   await expect(grammar).toBeVisible();
   await button(cold, 'Next').click();

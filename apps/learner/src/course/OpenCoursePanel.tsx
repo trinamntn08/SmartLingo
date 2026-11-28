@@ -14,7 +14,7 @@ import { LessonScreen } from '../ui/LessonScreen';
 import { colors, designTokens, styles as s } from '../ui/theme';
 import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
-import { buildCourseLesson } from './courseLessonContent';
+import { buildCourseStudy } from './courseLessonContent';
 import { CourseOutline } from './CourseOutline';
 import { CourseWriteStatus } from './CourseWriteStatus';
 import { JapaneseDailyGuide } from './JapaneseDailyGuide';
@@ -49,7 +49,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const requestedDay = course.days.find(item => item.id === route.dayId);
   const day = requestedDay ?? recommendedDay;
   const progress = useMemo(() => courseDayProgress(course, day, learning.events), [course, day, learning.events]);
-  const lesson = useMemo(() => buildCourseLesson(course, day), [course, day]);
+  const { lesson, grammarNote } = useMemo(() => buildCourseStudy(course, day), [course, day]);
   const guide = course.language === 'ja-JP' ? getJapaneseDailyGuide(day.id) : undefined;
   const completedPracticeIds = useMemo(() => lesson.japanesePractice
     ? [...coursePracticeProgress(course, day, lesson.japanesePractice.tasks, learning.events).completedIds]
@@ -148,7 +148,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     <View testID="course-journey" style={[layout.journey, compact && layout.compactJourney, sidebar && layout.splitJourney]}>
       {outline}
       <View style={[layout.reader, sidebar && layout.splitReader]}>
-        <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close}
+        <LessonScreen key={`${lesson.id}.${lesson.revision}`} lesson={lesson} model={model} onExit={close} grammarNote={grammarNote}
           extraDialogue={guide && <JapaneseDailyGuide guide={guide} />}
           extraPractice={transfer && <FrenchTransferPractice lessonId={lesson.id} {...transfer} checks={[transfer.check]} />}
           timeEstimate={course.language === 'fr-FR' ? `About ${lesson.durationMinutes} min` : undefined} courseSession={{

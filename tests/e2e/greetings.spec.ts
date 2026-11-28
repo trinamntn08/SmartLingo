@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
-import { guidedLessonButton, buildAcceptedSentence, openGrammar, openProfileSection, openTopic } from './learner-journeys';
+import { expectGrammarNote, guidedLessonButton, buildAcceptedSentence, openGrammar, openProfileSection, openTopic } from './learner-journeys';
 
 const opening = lessons.find(lesson => lesson.id === 'fr.greetings.hello-goodbye')!;
 const greetingTopic = 'Everyday greetings and politeness';
@@ -20,7 +20,7 @@ test('Learn opens greetings with readable arrival and departure support, saved w
   await expect(page.getByText(opening.dialogue[0].meaning, { exact: true }).first()).toBeVisible();
   await expect(page.getByTestId('grammar-note')).toHaveCount(0);
   await openGrammar(page);
-  await expect(page.getByTestId('grammar-note')).toContainText(getLearnerGrammar(opening).explanation);
+  await expectGrammarNote(page.getByTestId('grammar-note'), getLearnerGrammar(opening));
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   for (const target of ['bonjour', 'bonsoir', 'bonne journée', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;

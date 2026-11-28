@@ -1,4 +1,4 @@
-import { guidedLessonButton, buildAcceptedSentence, openGrammar, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
+import { expectGrammarNote, guidedLessonButton, buildAcceptedSentence, openGrammar, openKeyPhrases, openLessonFromTopics, openProfileSection, openRestaurant, openTopic, openTopicVocabulary } from '../e2e/learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { getFrenchTopicPractice, getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -45,7 +45,7 @@ test('a fresh offline download starts greetings and saves study, practice and no
   await openGrammar(cold);
   await expect(cold).toHaveURL(/\/grammar$/);
   await cold.reload();
-  await expect(cold.getByTestId('grammar-note')).toContainText(getLearnerGrammar(opening).explanation);
+  await expectGrammarNote(cold.getByTestId('grammar-note'), getLearnerGrammar(opening));
   await cold.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   for (const target of ['bonsoir', 'bonne soirée']) {
     const entry = opening.vocabulary.find(word => word.target === target)!;

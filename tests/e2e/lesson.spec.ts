@@ -1,4 +1,4 @@
-import { guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openGrammar, openKeyPhrases, openRestaurant, openTopic } from './learner-journeys';
+import { expectGrammarNote, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openGrammar, openKeyPhrases, openRestaurant, openTopic } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { getFrenchTopicPractice, getLearnerGrammar, lessons, restaurantLesson } from '@smartlingo/content';
 
@@ -35,7 +35,7 @@ test('the food-needs dialogue keeps the complete French and English transcripts 
   await button(page, 'Next').click();
   await expect(page).toHaveURL(`/lesson/fr/${lesson.id}/grammar`);
   await expect(grammar.getByRole('heading', { name: brief.title, exact: true })).toBeVisible();
-  await expect(grammar).toContainText(brief.explanation);
+  await expectGrammarNote(grammar, brief);
   await expect(stage.getByTestId(`vocabulary-${lesson.vocabulary[0].id}`)).toHaveCount(0);
   await page.reload();
   await expect(grammar).toBeVisible();
@@ -99,7 +99,7 @@ test('restaurant details are visible directly and practice/notebook completion s
   await openKeyPhrases(page);
   await expect(page.getByTestId('grammar-note')).toHaveCount(0);
   await openGrammar(page);
-  await expect(page.getByTestId('grammar-note')).toContainText(getLearnerGrammar(restaurantLesson).explanation);
+  await expectGrammarNote(page.getByTestId('grammar-note'), getLearnerGrammar(restaurantLesson));
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   await button(page, /Try picture practice/).click();
   await button(page, 'l’addition').click();

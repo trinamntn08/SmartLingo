@@ -1,4 +1,4 @@
-import { guidedLessonButton, buildAcceptedSentence, openKeyPhrases, openRestaurant, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
+import { guidedLessonButton, buildAcceptedSentence, expectGrammarNote, openGrammar, openRestaurant, openTopic, openTopicVocabulary, openProfileSection } from './learner-journeys';
 import { test, expect, type Page } from '@playwright/test';
 import { restaurantLesson } from '@smartlingo/content';
 
@@ -28,6 +28,10 @@ async function learningRows(page: Page, name: string) {
 
 test('isolated editor draft, preview and explicit publication reach cached learner content', async ({ page }, info) => {
   test.skip(info.project.name !== 'desktop', 'One publication writer against the isolated in-memory test API.');
+  const authoredGrammar = {
+    title: 'A polite request',
+    explanation: 'Use je voudrais to place an order.\n\nAdd s’il vous plaît at the end to make the request polite.',
+  };
   await proxyTestContent(page);
   await page.goto('/');
   await openRestaurant(page);
@@ -53,6 +57,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await page.getByRole('textbox', { name: 'Dialogue line 1 — Speaker role', exact: true }).fill('Host');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — French text', exact: true }).fill('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?');
   await page.getByRole('textbox', { name: 'Dialogue line 1 — English translation', exact: true }).fill('Hello! Would you prefer a table inside or outside?');
+  await page.getByRole('textbox', { name: 'Grammar title', exact: true }).fill(authoredGrammar.title);
+  await page.getByRole('textbox', { name: 'Grammar explanation', exact: true }).fill(authoredGrammar.explanation);
   await page.getByRole('textbox', { name: 'un café — Word note', exact: true }).fill('');
   await page.getByRole('button', { name: 'un café — No gender', exact: true }).click();
   await expect(page.getByRole('button', { name: 'un café — No gender', exact: true })).toHaveAttribute('aria-selected', 'true');
@@ -66,6 +72,8 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await expect(page.getByTestId('dialogue-french-transcript').getByText('Host', { exact: true })).toBeVisible();
   await expect(page.getByText('Bonjour ! Vous préférez une table à l’intérieur ou en terrasse ?', { exact: true })).toBeVisible();
   await expect(page.getByText('Hello! Would you prefer a table inside or outside?', { exact: true })).toBeVisible();
+  await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('button', { name: 'Grammar', exact: true }).click();
+  await expectGrammarNote(page.getByTestId('grammar-note'), authoredGrammar);
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('button', { name: 'Key phrases' }).click();
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   // Preview practice and word capture never touch the real notebook/history.
@@ -116,7 +124,9 @@ test('isolated editor draft, preview and explicit publication reach cached learn
   await openTopic(page, 'Café visits');
   await page.getByRole('button', { name: 'Open A coffee with confidence', exact: true }).click();
   await expect(page.getByText('A2 \u00b7 Caf\u00e9 visits \u00b7 Published', { exact: true })).toBeVisible();
-  await openKeyPhrases(page);
+  await openGrammar(page);
+  await expectGrammarNote(page.getByTestId('grammar-note'), authoredGrammar);
+  await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   await expect(page.getByText('A greeting reviewed in this isolated test', { exact: true })).toBeVisible();
   await expect(page.getByTestId('vocabulary-fr.cafe').getByText('m.', { exact: true })).toHaveCount(0);
   await expect(page.getByText('In France, un café usually means an espresso.', { exact: true })).toHaveCount(0);

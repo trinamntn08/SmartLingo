@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import type { LearnerGrammarNote } from '@smartlingo/content';
 import { normalizeAnswer, type Lesson } from '@smartlingo/domain';
 
 export function guidedLessonButton(scope: Locator | Page) {
@@ -24,6 +25,21 @@ export async function openKeyPhrases(page: Page) {
 
 export async function openGrammar(page: Page) {
   await page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Grammar', exact: true }).click();
+}
+
+export async function expectGrammarNote(card: Locator, note: LearnerGrammarNote) {
+  await expect(card.getByRole('heading', { name: note.title, exact: true })).toBeVisible();
+  if (!note.example) {
+    await expect(card.getByTestId('grammar-explanation')).toHaveText(note.explanation);
+    return;
+  }
+  const { detail } = note;
+  const secondExample = detail && typeof detail !== 'string' ? detail : undefined;
+  const examples = secondExample ? [note.example, secondExample] : [note.example];
+  await expect(card.getByTestId('grammar-target')).toHaveText(examples.map(example => example.target));
+  await expect(card.getByTestId('grammar-meaning')).toHaveText(examples.map(example => example.meaning));
+  if (typeof detail === 'string') await expect(card.getByTestId('grammar-detail')).toHaveText(detail);
+  if (secondExample?.label) await expect(card.getByText(secondExample.label, { exact: true })).toBeVisible();
 }
 
 export async function openTopicVocabulary(page: Page) {

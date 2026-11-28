@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-28 Remove the duplicate course links from Learn
+
+- Start. At 11:34 CET the clean primary worktree on `release/local-learner-preview` matched live origin at `1254c3ada3769840561d6eb3479916859805ef74`, ahead/behind 0/0. Inspected all 21 worktrees and matched all 78 fetched and live GitHub heads.
+- Source comparison. Checked the Learn and Today course entry points, including shared-course `ada219f15fae69b4d73170b8501688b7e62f6fe4` and its separate Android delivery descendant `8bbfa9c307abf5d7130b51e26daf9a4f2539bbfb`. The older Cloud layout uses a course picker. The current notebook preview already provides A1, A2 and B1 in Today’s Courses group.
+- Scope. The marked links duplicate the independent A2 and B1 courses in Today. The owner requested removing the duplicates from Learn. Keep the single recommended course card and the topic-level filters. Check course selection and resume through Today at desktop and phone widths.
+- Outcome and checks. Removed the desktop row and compact disclosure. Repository and TypeScript checks, eight Chromium cases at 1,440 and 320 px, and one cold-offline case passed. Verified A2/B1 selection and separate resume through Today, the Learn recommendation and B1 topic access, and Japanese kana entry.
+- Handoff. All 78 GitHub heads matched again before export. Port 8082 serves build `d024979e418ef682fe742238080d1d7ffdeb98bfcd8928ccd3fe49a05cbaacc9` with all 814 asset digests verified. The commit containing this entry records the source. Next is owner review at the shared preview.
+
 ## 2026-11-28 Keep Next as the Key phrases footer action
 
 - Start. At 11:22 CET the clean primary worktree matched live `release/local-learner-preview` at `1efa8f23b921b1b5d2594d8b0f4e5c3313518994`, ahead/behind 0/0. Inspected 21 worktrees and matched all 78 fetched and live branch heads. Compared the shared reader with material-first `eb7202a61d0e9c5ba36d94aa73ca7edc3aa10de8`, which also has both shortcuts. Shared-course `ada219f15fae69b4d73170b8501688b7e62f6fe4` has no change to this reader, and Android `8bbfa9c307abf5d7130b51e26daf9a4f2539bbfb` stays separate.

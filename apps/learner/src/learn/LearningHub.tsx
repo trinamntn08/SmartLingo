@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { type Lesson, type LessonTopic, type TargetLanguage } from '@smartlingo/domain';
 import { Button } from '../ui/controls';
@@ -14,14 +14,13 @@ import { JapaneseAlphabet } from '../alphabet/JapaneseAlphabet';
 import { useNavigation } from '../app/WebNavigation';
 import { routeHref, topicRouteKey } from '../app/routes';
 import { learnRoute } from '../app/useLearnerNavigation';
-import { CourseLaunchCard, OtherFrenchCourses, type CourseLaunchProps } from '../course/CourseLaunchCard';
+import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
 
 export const learnModes = ['Lessons', 'Listening & videos', 'Speaking'] as const;
 export type LearnMode = typeof learnModes[number];
 
-export function LearningHub({ language, lessons, model, mode, kanaLesson, onMode, selectedTopic, onSelectTopic, onOpen, disabled, active, catalogueSearch, topics, topicNavigation, courseLaunch, otherCourses }: {
+export function LearningHub({ language, lessons, model, mode, kanaLesson, onMode, selectedTopic, onSelectTopic, onOpen, disabled, active, catalogueSearch, topics, topicNavigation, courseLaunch }: {
   language: TargetLanguage; lessons: Lesson[]; model: LearningModel; mode: LearnMode; courseLaunch: CourseLaunchProps;
-  otherCourses: readonly CourseLaunchProps[];
   kanaLesson: boolean;
   onMode: (mode: LearnMode) => void; selectedTopic: string | null;
   onSelectTopic: (topic: string | null) => void; onOpen: (lesson: Lesson) => void;
@@ -36,10 +35,7 @@ export function LearningHub({ language, lessons, model, mode, kanaLesson, onMode
   const compact = width < designTokens.layout.compactBreakpoint;
   const materialFirst = kanaLesson || (!!selectedTopic && mode === 'Lessons' && compact);
   const showCourseCard = !kanaLesson && !selectedTopic && mode === 'Lessons';
-  const courseCards = showCourseCard && (compact ? <CompactCourseEntry courseLaunch={courseLaunch} otherCourses={otherCourses} /> : <>
-    <CourseLaunchCard {...courseLaunch} />
-    <OtherFrenchCourses courses={otherCourses} />
-  </>);
+  const courseCard = showCourseCard && (compact ? <CompactCourseEntry {...courseLaunch} /> : <CourseLaunchCard {...courseLaunch} />);
   const courseShortcut = !showCourseCard && <Button compact icon="calendar" href={courseLaunch.href}
     disabled={courseLaunch.disabled || courseLaunch.loading} onPress={courseLaunch.onOpen}>Course</Button>;
   const hrefForMode = (choice: LearnMode) => routeHref(learnRoute(choice, language, selectedTopic ? topicRouteKey(selectedTopic) : undefined));
@@ -53,7 +49,7 @@ export function LearningHub({ language, lessons, model, mode, kanaLesson, onMode
     </View>}
   </View>;
   return <View style={hub.page}>
-    {!materialFirst && courseCards}
+    {courseCard}
     {!materialFirst && sectionNavigation}
     {topicNavigation}
     {kanaLesson ? <JapaneseAlphabet model={model} />
@@ -67,27 +63,16 @@ export function LearningHub({ language, lessons, model, mode, kanaLesson, onMode
         </Disclosure>}
       </>}
     {materialFirst && sectionNavigation}
-    {materialFirst && courseCards}
   </View>;
 }
 
-function CompactCourseEntry({ courseLaunch, otherCourses }: {
-  courseLaunch: CourseLaunchProps; otherCourses: readonly CourseLaunchProps[];
-}) {
-  const [expanded, setExpanded] = useState(false);
-  const otherCoursesId = useId();
-  const { course, day, status, loading, disabled, href, onOpen } = courseLaunch;
+function CompactCourseEntry({ course, day, status, loading, disabled, href, onOpen }: CourseLaunchProps) {
   return <View style={[s.card, hub.courseEntry]} testID="open-course-panel">
     <Text style={hub.courseTitle}>{course.title}</Text>
     <Text style={s.body}>{loading ? 'Loading course progress…' : `Lesson ${day.dayNumber}: ${day.title}`}</Text>
     {status === 'unavailable' && <Text accessibilityLiveRegion="polite" style={s.muted}>Saved course progress is unavailable. You can still study.</Text>}
     <View style={hub.modes}>
       <Button compact primary href={href} disabled={loading || disabled} onPress={onOpen}>Open course</Button>
-      {!!otherCourses.length && <Button compact quiet label="More French courses" trailingIcon="chevron-down"
-        controls={otherCoursesId} expanded={expanded} onPress={() => setExpanded(value => !value)}>More courses</Button>}
-    </View>
-    <View nativeID={otherCoursesId} style={expanded ? undefined : hub.hidden}>
-      {expanded && <OtherFrenchCourses courses={otherCourses} />}
     </View>
   </View>;
 }
@@ -99,7 +84,6 @@ const hub = StyleSheet.create({
   modes: { ...s.row, gap: 4 },
   courseEntry: { padding: 12, gap: 4 },
   courseTitle: { ...designTokens.typography.smallLabel, color: colors.primary },
-  hidden: { display: 'none' },
 });
 
 function ListeningSection({ lessons, language, active }: { lessons: Lesson[]; language: TargetLanguage; active: boolean }) {

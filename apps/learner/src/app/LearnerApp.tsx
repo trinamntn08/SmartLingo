@@ -137,7 +137,7 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     />;
     if (tab === 'Learn') return <LearningHub
       language={targetLanguage} lessons={lessons} model={model} mode={learnMode} kanaLesson={route.kind === 'letters'}
-      courseLaunch={courseLaunch} otherCourses={otherCourses}
+      courseLaunch={courseLaunch}
       onMode={selectLearnMode} selectedTopic={selectedTopic} onSelectTopic={selectTopic}
       onOpen={openLesson} disabled={switchingBlocked} active={active} catalogueSearch={catalogueSearch}
       topics={topics} topicNavigation={showLibrary && !wideLibrary && renderTopicNavigation(true)}

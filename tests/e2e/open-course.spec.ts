@@ -58,9 +58,8 @@ test.beforeEach(async ({ context }) => {
   await context.route('**/127.0.0.1:3001/**', route => route.abort());
 });
 
-test('French courses open independently and B1 is also available in the topic library', async ({ page }) => {
+test('Today opens French courses independently and Learn focuses on the recommendation and topics', async ({ page }) => {
   const [, a2, b1] = frenchCourses;
-  const visitCourse = (title: string) => page.getByRole('button', { name: title, exact: true }).click();
   const visitTodayCourse = async (title: string) => {
     await (await openTodayStudyOptions(page)).getByRole('link', { name: title, exact: true }).click();
   };
@@ -89,13 +88,13 @@ test('French courses open independently and B1 is also available in the topic li
   await visitTodayCourse(a2.title);
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
-  if (page.viewportSize()!.width < 600) {
-    const moreCourses = button(page, 'More French courses');
-    await expect(moreCourses).toHaveAttribute('aria-expanded', 'false');
-    await moreCourses.click();
-    await expect(moreCourses).toHaveAttribute('aria-expanded', 'true');
-  }
-  await visitCourse(b1.title);
+  await expect(coursePanel(page).getByRole('button', { name: 'Open course', exact: true })).toBeVisible();
+  await expect(page.getByText('More French courses', { exact: true })).toHaveCount(0);
+  await expect(button(page, 'More French courses')).toHaveCount(0);
+  await expect(button(page, a2.title)).toHaveCount(0);
+  await expect(button(page, b1.title)).toHaveCount(0);
+  await today();
+  await visitTodayCourse(b1.title);
   await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
 
   const topicLesson = frenchCourseLessonsByDay.get(b1.days[2].id)!;

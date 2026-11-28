@@ -64,19 +64,6 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
   </View>;
 }
 
-export function OtherFrenchCourses({ courses }: { courses: readonly CourseLaunchProps[] }) {
-  if (!courses.length) return null;
-  return <View style={launch.moreCourses}>
-    <Text accessibilityRole="header" aria-level={2} style={launch.courseTitle}>More French courses</Text>
-    <View style={s.row}>
-      {courses.map(({ course, href, onOpen, disabled, loading }) =>
-        <Button key={course.id} compact href={href} onPress={onOpen} disabled={loading || disabled} trailingIcon="arrow-right">
-          {course.title}
-        </Button>)}
-    </View>
-  </View>;
-}
-
 const launch = StyleSheet.create({
   regular: { padding: 20, gap: 12 },
   regularCompact: { padding: 16 },
@@ -91,5 +78,4 @@ const launch = StyleSheet.create({
   outcome: { fontSize: 16, lineHeight: 24 },
   note: { ...designTokens.typography.caption, color: colors.muted },
   regularAction: { alignSelf: 'flex-start' },
-  moreCourses: { gap: 8 },
 });

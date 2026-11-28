@@ -6,6 +6,8 @@ test('web routes retain the explicit destination through a copy or refresh', () 
   const routes: AppRoute[] = [
     { kind: 'today', language: 'fr-FR', section: 'courses' },
     { kind: 'today', language: 'ja-JP' },
+    { kind: 'courses', language: 'ja-JP' },
+    { kind: 'courses', language: 'fr-FR' },
     { kind: 'lesson', language: 'fr-FR', lessonId: 'fr.essentials.repair', stage: 'dialogue' },
     { kind: 'lesson', language: 'ja-JP', lessonId: 'ja.greetings.hello', stage: 'listening' },
     { kind: 'lesson', language: 'ja-JP', lessonId: 'ja.greetings.hello', stage: 'grammar' },

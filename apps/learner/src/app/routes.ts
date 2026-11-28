@@ -10,6 +10,7 @@ export type AppRoute =
   | { kind: 'report' | 'profile'; language: TargetLanguage }
   | { kind: 'slang'; language: 'fr-FR' }
   | { kind: 'topics'; language: TargetLanguage; topic?: string }
+  | { kind: 'courses'; language: TargetLanguage }
   | { kind: 'lesson'; language: TargetLanguage; lessonId: string; stage?: LessonStage; studyDay?: StudyDayLink }
   | { kind: 'course'; language: TargetLanguage; courseId: string; dayId?: string; sectionId?: string }
   | { kind: 'listening'; language: TargetLanguage; topic?: string; lessonId?: string; questionId?: string; library?: boolean; chooser?: boolean }
@@ -79,6 +80,7 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
     return { kind: 'course', language, courseId: section, dayId: item, sectionId: extra };
   }
   if (area !== 'learn') return unavailable;
+  if (parts.length === 2 && new URLSearchParams(search).get('view') === 'courses') return { kind: 'courses', language };
   if (section === undefined || (section === 'topics' && parts.length <= 4 && (item === undefined || topicName(item)))) {
     return { kind: 'topics', language, topic: item };
   }
@@ -111,6 +113,7 @@ export function routeHref(route: AppRoute): string {
     case 'today': return path('today', lang) + (route.section === 'courses' ? '?section=courses' : '');
     case 'report': case 'profile': case 'slang': return path(route.kind, lang);
     case 'review': return path('review', lang, route.view);
+    case 'courses': return `${path('learn', lang)}?view=courses`;
     case 'topics': return route.topic ? path('learn', lang, 'topics', route.topic) : path('learn', lang);
     case 'lesson': {
       const destination = path('lesson', lang, route.lessonId, route.stage);

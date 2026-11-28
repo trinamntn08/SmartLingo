@@ -1,8 +1,9 @@
 import { useEffect, useId } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { languageNames, type TargetLanguage } from '@smartlingo/domain';
+import { KanaStudyLinks } from '../alphabet/KanaStudyLinks';
 import { routeHref } from '../app/routes';
-import { useVisitState } from '../app/WebNavigation';
+import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { CourseLaunchCard, type CourseLaunchProps } from '../course/CourseLaunchCard';
 import { SidebarRow, sidebarStyles } from '../ui/SidebarRow';
 import { colors, designTokens as tokens, styles as s } from '../ui/theme';
@@ -22,6 +23,7 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, showCours
   const { width } = useWindowDimensions();
   const compact = width < tokens.layout.compactBreakpoint;
   const wide = width >= tokens.layout.sidebarBreakpoint;
+  const { navigate } = useNavigation();
   const [expanded, setExpanded] = useVisitState('today.study-options', showCourses);
   const [coursesFocused, setCoursesFocused] = useVisitState('today.courses-focused', false);
   const optionsId = useId();
@@ -29,6 +31,7 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, showCours
   const panelTitle = `Explore ${languageNames[language]}`;
   const showNavigation = wide || expanded;
   const disabled = courseLaunch.disabled;
+  const coursesRoute = { kind: 'courses', language } as const;
 
   useEffect(() => {
     if (Platform.OS !== 'web' || !showCourses || !showNavigation || coursesFocused) return;
@@ -50,6 +53,7 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, showCours
       <View testID="today-next-step" style={today.nextStep}>
         <CourseLaunchCard {...courseLaunch} featured />
       </View>
+      {language === 'ja-JP' && <KanaStudyLinks disabled={disabled} />}
     </View>
     <View style={[sidebarStyles.panel, wide ? today.sidebar : today.options]}>
       {!wide && <View accessibilityRole="header" aria-level={2}>
@@ -64,11 +68,12 @@ export function TodayDashboard({ language, courseLaunch, otherCourses, showCours
             <Text accessibilityRole="header" aria-level={3}
               style={[sidebarStyles.sectionLabel, today.heading]}>Find lessons</Text>
             <SidebarRow title="Browse lessons by topic" icon="grid" prominent
-              description={language === 'ja-JP' ? 'Includes Hiragana and Katakana' : undefined}
               href={routeHref({ kind: 'topics', language })} onPress={onExplore} disabled={disabled} />
             <View style={[sidebarStyles.group, today.courseGroup]}>
               <Text nativeID={coursesId} accessibilityRole="header" aria-level={4}
                 style={[sidebarStyles.meta, today.heading, today.courseHeading]}>Guided courses</Text>
+              <SidebarRow title="Browse guided courses" icon="layers"
+                href={routeHref(coursesRoute)} onPress={() => navigate(coursesRoute)} disabled={disabled} />
               {[courseLaunch, ...otherCourses].map(option => {
                 const title = option.course.title.replace(/^French ([A-C][12]):\s*/u, '$1 · ');
                 return <SidebarRow key={option.course.id} title={title}

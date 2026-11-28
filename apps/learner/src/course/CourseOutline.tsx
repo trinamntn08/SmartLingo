@@ -2,6 +2,7 @@ import { useLayoutEffect, useMemo, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { courseOutlineUnits } from '@smartlingo/content';
 import { courseDayProgress, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
+import { KanaStudyLinks } from '../alphabet/KanaStudyLinks';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { routeHref, type AppRoute } from '../app/routes';
 import { Button } from '../ui/controls';
@@ -48,7 +49,7 @@ export function CourseOutline({ id, sidebar, course, route, day, events, progres
   const availableLevels = levels.filter(value => value === 'All' || course.days.some(item => item.level === value));
   const proficiencyLevels = availableLevels.filter(value => value !== 'All' && value !== 'foundation');
   const showLevelFilters = !japanese && (units?.length ? proficiencyLevels.length > 1 : availableLevels.length > 2);
-  const coursesRoute = { kind: 'today', language: course.language, section: 'courses' } as const;
+  const coursesRoute = { kind: 'courses', language: course.language } as const;
   const topicsRoute = { kind: 'topics', language: course.language } as const;
 
   function chooseLevel(value: CourseLevel) {
@@ -136,6 +137,7 @@ export function CourseOutline({ id, sidebar, course, route, day, events, progres
           : progress === 'loading' ? 'Loading saved progress…' : 'Saved progress unavailable'}
       </Text>
     </View>
+    {japanese && <KanaStudyLinks disabled={blocked} />}
     {sidebar ? <div ref={scroll} style={{ overflowY: 'auto', scrollbarWidth: 'thin', scrollbarColor: `${colors.inputBorder} transparent`,
       minHeight: 0, flex: '0 1 auto', padding: 4, margin: -4 }}>{chooser}</div> : chooser}
     <View style={t.more}>

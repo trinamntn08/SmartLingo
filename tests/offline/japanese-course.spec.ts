@@ -27,9 +27,15 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await openCourseOutline(panel);
   const outline = panel.getByRole('navigation', { name: 'Course outline' });
   await expect(outline.getByRole('heading', { name: 'Lesson levels', exact: true })).toHaveCount(0);
-  await outline.getByRole('button', { name: /^Unit 3:/u }).click();
+  await outline.getByRole('link', { name: 'Browse guided courses', exact: true }).click();
+  await expect(cold).toHaveURL(/\/learn\/ja\?view=courses$/u);
+  const catalogue = cold.getByTestId('guided-course-catalogue');
+  await expect(catalogue.getByRole('link', { name: /^Lesson \d+:/u })).toHaveCount(13);
+  await catalogue.getByRole('link', { name: 'Hiragana', exact: true }).click();
+  await expect(cold).toHaveURL(/\/learn\/ja\/topics\/Hiragana$/u);
+  await cold.goBack();
   const day = japaneseCourse.days.at(-1)!;
-  await panel.getByTestId(`course-day-${day.id}`).getByRole('link').click();
+  await catalogue.getByRole('link', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true }).click();
   await expect(panel.getByTestId('dialogue-japanese-transcript').getByText('Bii-shitsu nara niji kara tsukaemasu ne.', { exact: true })).toBeVisible();
   await panel.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   const path = `/course/ja/${japaneseCourse.id}/${day.id}/lesson-vocabulary`;

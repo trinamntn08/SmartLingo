@@ -20,9 +20,8 @@ export async function openTodayCourse(page: Page, title: string) {
 }
 
 export async function openKanaTopicFromToday(page: Page, script: 'Hiragana' | 'Katakana') {
-  const options = await openTodayStudyOptions(page);
-  await options.getByRole('link', { name: 'Browse lessons by topic', exact: true }).click();
-  await page.getByRole('button', { name: `Topic ${script}`, exact: true }).click();
+  const writing = page.getByRole('navigation', { name: 'Japanese writing', exact: true });
+  await writing.getByRole('link', { name: script, exact: true }).click();
 }
 
 export async function openKanaFromToday(page: Page, script: 'Hiragana' | 'Katakana', lessonTitle: string) {

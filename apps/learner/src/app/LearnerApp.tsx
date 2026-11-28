@@ -1,13 +1,15 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ActivityIndicator, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import { courseLessonStageForBlock, groupLessonTopics, languageNames, notebookLanguage, type TargetLanguage } from '@smartlingo/domain';
+import { courseDayProgress, courseLessonStageForBlock, courseLessonStageId, groupLessonTopics, languageNames, notebookLanguage,
+  type CourseDay, type OpenCourse, type TargetLanguage } from '@smartlingo/domain';
 import { getFrenchTopicPractice, languageCurricula } from '@smartlingo/content';
 import { FrenchTransferPractice, frenchTopicPracticeMinutes } from '../ui/FrenchTransferPractice';
 import { isAlphabetLessonId } from '../alphabet/progress';
 import { findKanaTopic, kanaTopics } from '../alphabet/kanaTopics';
 import { useCatalogue } from '../content/useCatalogue';
 import type { CourseLaunchProps } from '../course/CourseLaunchCard';
-import { courseRecommendation } from '../course/courseRecommendation';
+import { courseRecommendation, courseResumeStage } from '../course/courseRecommendation';
+import { GuidedCourseCatalogue } from '../course/GuidedCourseCatalogue';
 import { OpenCoursePanel } from '../course/OpenCoursePanel';
 import { CourseWriteStatus } from '../course/CourseWriteStatus';
 import { useCourseLearning } from '../course/useCourseLearning';
@@ -98,6 +100,19 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     || (route.kind === 'topics' && !!selectedTopic && !kanaTopicSelected && !topics.some(topic => topic.name === selectedTopic));
   const courseVisible = route.kind === 'course' && !missingDestination && !model.loading && !catalogue.loading;
 
+  function openGuidedLesson(course: OpenCourse, day: CourseDay) {
+    if (switchingBlocked || courseLearning.loading) return;
+    const stage = courseResumeStage(day, courseDayProgress(course, day, courseLearning.events));
+    const destination = { kind: 'course', language: course.language, courseId: course.id, dayId: day.id,
+      sectionId: courseLessonStageId(stage) } as const;
+    if (courseUnavailable) {
+      navigation.navigate(destination);
+      return;
+    }
+    courseLearning.save([{ ...courseLearning.eventFields(course, day, stage), kind: 'navigation' }],
+      () => navigation.navigate(destination, { afterSave: true }));
+  }
+
   function unavailable() {
     return <View style={s.card}>
       <Text accessibilityRole="header" style={s.heading}>This learning link is unavailable</Text>
@@ -126,6 +141,9 @@ export function LearnerApp({ active, onOpenEditor }: LearnerAppProps) {
     }
     if (route.kind === 'course' && activeCourse) return <OpenCoursePanel key={activeCourse.course.id} route={route} course={activeCourse.course}
       recommendedDay={activeCourse.day} learning={courseLearning} model={model} />;
+    if (route.kind === 'courses') return <GuidedCourseCatalogue language={targetLanguage} courses={courses}
+      events={courseLearning.events} loading={courseLearning.loading} progressAvailable={!courseUnavailable}
+      disabled={switchingBlocked} onOpenDay={openGuidedLesson} />;
     if (route.kind === 'slang') return <SlangCatalogue model={model} />;
     if (tab === 'Today') return <TodayDashboard language={targetLanguage} courseLaunch={courseLaunch} otherCourses={otherCourses}
       showCourses={route.kind === 'today' && route.section === 'courses'} onExplore={() => openLearnMode('Lessons')}

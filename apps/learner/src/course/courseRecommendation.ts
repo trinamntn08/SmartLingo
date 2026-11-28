@@ -1,5 +1,9 @@
-import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, nextCourseDay, resumeCourseDay,
+import { courseDayProgress, courseDayProgressRevision, courseLessonEventStage, courseLessonStageForBlock, nextCourseDay, resumeCourseDay,
   type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
+
+export function courseResumeStage(day: CourseDay, progress: ReturnType<typeof courseDayProgress>) {
+  return courseLessonStageForBlock(day, progress.lastBlockId) ?? (progress.completed ? 'sentence' : 'dialogue');
+}
 
 export function courseRecommendation(course: OpenCourse, events: readonly CourseEvent[], unavailable: boolean): {
   day: CourseDay; status: 'start' | 'resume' | 'next' | 'complete' | 'unavailable';

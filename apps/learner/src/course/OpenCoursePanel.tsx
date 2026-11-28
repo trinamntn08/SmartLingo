@@ -1,7 +1,7 @@
-import { useEffect, useId, useMemo, useRef } from 'react';
+import { useEffect, useId, useMemo } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { frenchCourseLessonsByDay, getFrenchTopicPractice, getJapaneseDailyGuide } from '@smartlingo/content';
-import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId, coursePracticeProgress,
+import { courseDayProgress, courseLessonStageForBlock, courseLessonStageId, coursePracticeProgress,
   type CourseDay, type CourseEvent, type JapanesePracticeResult, type JapanesePracticeTask, type LearningEvent, type OpenCourse } from '@smartlingo/domain';
 import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { routeHref, type AppRoute, type LessonStage } from '../app/routes';
@@ -16,6 +16,7 @@ import type { LearningModel } from '../ui/useLearning';
 import { CourseCredits } from './CourseCredits';
 import { buildCourseStudy } from './courseLessonContent';
 import { CourseOutline } from './CourseOutline';
+import { courseResumeStage } from './courseRecommendation';
 import { CourseWriteStatus } from './CourseWriteStatus';
 import { JapaneseDailyGuide } from './JapaneseDailyGuide';
 import type { CourseLearningModel } from './useCourseLearning';
@@ -37,14 +38,11 @@ interface LessonSelection {
   fromOutline?: boolean;
 }
 
-function resumeStage(day: CourseDay, progress: ReturnType<typeof courseDayProgress>): LessonStage {
-  return courseLessonStageForBlock(day, progress.lastBlockId) ?? (progress.completed ? 'sentence' : 'dialogue');
-}
-
 export function OpenCoursePanel({ course, route, recommendedDay, learning, model }: CourseProps) {
   const { width, height } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
-  const sidebar = Platform.OS === 'web' && width >= 900 && height >= 640
+  const sidebarMinimumHeight = course.language === 'ja-JP' ? 720 : 640;
+  const sidebar = Platform.OS === 'web' && width >= 900 && height >= sidebarMinimumHeight
     ? (width >= designTokens.layout.fullNavBreakpoint ? 'wide' : 'medium') : undefined;
   const { backTo, navigate } = useNavigation();
   const learn = tabRoute('Learn', course.language);
@@ -52,7 +50,6 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const outlineButtonId = `${outlineId}-button`;
   const [outlineOpen, setOutlineOpen] = useVisitState('course.outline.open', false);
   const [level, setLevel] = useVisitState<CourseDay['level'] | 'All'>(outlineLevelKey, 'All');
-  const clock = useRef(0);
 
   const requestedDay = course.days.find(item => item.id === route.dayId);
   const day = requestedDay ?? recommendedDay;
@@ -68,7 +65,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const invalidDay = !!route.dayId && !requestedDay;
   const requestedStage = !invalidDay ? courseLessonStageForBlock(day, route.sectionId) : undefined;
   const invalidStage = !invalidDay && !!route.sectionId && !requestedStage;
-  const stage = requestedStage ?? resumeStage(day, progress);
+  const stage = requestedStage ?? courseResumeStage(day, progress);
   const sectionId = courseLessonStageId(stage);
   const browseOnly = !!learning.loadError;
   const disabled = learning.loading || learning.busy || !!learning.saveError || model.busy || !!model.saveError;
@@ -82,14 +79,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
 
   function close() {
     backTo(learn, previous => 'language' in previous && previous.language === course.language
-      && ['today', 'topics', 'letters', 'listening', 'speaking'].includes(previous.kind), true);
-  }
-
-  function eventFields(target: CourseDay, targetStage: LessonStage) {
-    const latest = learning.events.reduce((value, saved) => Math.max(value, Date.parse(saved.occurredAt)), 0);
-    clock.current = Math.max(Date.now(), clock.current + 1, latest + 1);
-    return { id: crypto.randomUUID(), courseId: course.id, courseRevision: courseDayProgressRevision(course, target), dayId: target.id,
-      blockId: courseLessonStageId(targetStage), occurredAt: new Date(clock.current).toISOString() };
+      && ['today', 'courses', 'topics', 'letters', 'listening', 'speaking'].includes(previous.kind), true);
   }
 
   function select(target: CourseDay, targetStage: LessonStage, { snapshot, studiedStage, fromOutline }: LessonSelection = {}) {
@@ -109,20 +99,20 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     }
     if (browseOnly) { open(false); return; }
     const events: CourseEvent[] = [];
-    if (studiedStage) events.push({ ...eventFields(target, studiedStage), kind: 'study' });
-    events.push({ ...eventFields(target, targetStage), kind: 'navigation' });
+    if (studiedStage) events.push({ ...learning.eventFields(course, target, studiedStage), kind: 'study' });
+    events.push({ ...learning.eventFields(course, target, targetStage), kind: 'navigation' });
     learning.save(events, () => open(true));
   }
 
   function record(activity: LearningEvent['activity'], _itemId: string, result: LearningEvent['result'], hints: number, after?: () => void) {
     if (disabled || browseOnly || (activity !== 'picture' && activity !== 'sentence')) return;
     const outcome = result === 'correct' ? 'correct' : 'incorrect';
-    learning.save([{ ...eventFields(day, activity), kind: 'choice', choiceId: outcome, result: outcome, supported: hints > 0 }], after);
+    learning.save([{ ...learning.eventFields(course, day, activity), kind: 'choice', choiceId: outcome, result: outcome, supported: hints > 0 }], after);
   }
 
   function recordPractice(task: JapanesePracticeTask, result: JapanesePracticeResult, supported: boolean) {
     if (disabled || browseOnly || !lesson.japanesePractice?.tasks.some(authoredTask => authoredTask.id === task.id)) return;
-    learning.save([{ ...eventFields(day, 'sentence'), kind: 'practice', taskId: task.id, result, supported }]);
+    learning.save([{ ...learning.eventFields(course, day, 'sentence'), kind: 'practice', taskId: task.id, result, supported }]);
   }
 
   const following = course.days[day.dayNumber];
@@ -134,7 +124,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   const outline = (sidebar || outlineOpen) && <CourseOutline id={outlineId} sidebar={sidebar} course={course} route={route} day={day}
     events={learning.events} level={level} onLevelChange={setLevel} blocked={disabled}
     progress={learning.loading ? 'loading' : browseOnly ? 'unavailable' : 'available'}
-    onDay={target => select(target, resumeStage(target, courseDayProgress(course, target, learning.events)), { fromOutline: true })} />;
+    onDay={target => select(target, courseResumeStage(target, courseDayProgress(course, target, learning.events)), { fromOutline: true })} />;
 
   return <View testID="open-course-panel" style={[layout.panel, compact && layout.compactPanel]}>
     <View style={[s.row, layout.header]}>

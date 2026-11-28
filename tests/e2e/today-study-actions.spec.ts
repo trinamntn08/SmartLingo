@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { frenchCourses, japaneseCourse } from '@smartlingo/content';
+import { frenchCourses, japaneseAlphabetLessons, japaneseCourse } from '@smartlingo/content';
 import { openCourseOutline, openTodayStudyOptions } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -7,6 +7,8 @@ const button = (page: Page, name: string) => page.getByRole('button', { name, ex
 const nextStep = (page: Page) => page.getByTestId('today-next-step');
 const studyNav = (page: Page) => page.getByRole('navigation', { name: /^Explore (French|Japanese)$/u });
 const frenchTitles = ['A1 · First steps in France', 'A2 · Everyday independence', 'B1 · Explain, solve and participate'];
+const guidedCatalogue = (page: Page) => page.getByTestId('guided-course-catalogue');
+const writing = (page: Page) => page.getByRole('navigation', { name: 'Japanese writing', exact: true });
 
 for (const locale of ['fr', 'ja'] as const) {
   test(`${locale} Today prioritises study and keeps saved words in Review`, async ({ page }, info) => {
@@ -32,6 +34,12 @@ for (const locale of ['fr', 'ja'] as const) {
     await expect(recommendation).toHaveAccessibleName('Start lesson');
     await recommendation.focus();
     await page.keyboard.press('Tab');
+    if (!french) {
+      await expect(writing(page).getByRole('link', { name: 'Hiragana', exact: true })).toBeFocused();
+      await page.keyboard.press('Tab');
+      await expect(writing(page).getByRole('link', { name: 'Katakana', exact: true })).toBeFocused();
+      await page.keyboard.press('Tab');
+    }
 
     if (compact) {
       await expect(options).toHaveCount(0);
@@ -52,7 +60,7 @@ for (const locale of ['fr', 'ja'] as const) {
     await expect(library).toHaveCSS('outline-style', 'solid');
     await expect(options.getByRole('heading', { name: 'Find lessons', exact: true })).toBeVisible();
     await expect(options.getByRole('heading', { name: 'Practise a skill', exact: true })).toBeVisible();
-    await expect(options.getByRole('link')).toHaveCount(titles.length + 3);
+    await expect(options.getByRole('link')).toHaveCount(titles.length + 4);
     for (const title of titles) await expect(options.getByRole('link', { name: title, exact: true })).toBeVisible();
     for (const link of await options.getByRole('link').all()) expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -130,14 +138,61 @@ test('French Today resumes Lesson 3 at the saved step with one action', async ({
 
   await openCourseOutline(course);
   const browseCourses = outline.getByRole('link', { name: 'Browse guided courses', exact: true });
-  await expect(browseCourses).toHaveAttribute('href', '/today/fr?section=courses');
+  await expect(browseCourses).toHaveAttribute('href', '/learn/fr?view=courses');
   await browseCourses.press('Enter');
-  await expect(page).toHaveURL(/\/today\/fr\?section=courses$/u);
-  await expect(studyNav(page).getByRole('heading', { name: 'Guided courses', exact: true })).toBeFocused();
-  for (const name of frenchTitles.slice(1)) await expect(studyNav(page).getByRole('link', { name, exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/learn\/fr\?view=courses$/u);
+  const catalogue = guidedCatalogue(page);
+  await expect(catalogue.getByRole('heading', { name: 'Guided courses', exact: true })).toBeFocused();
+  await expect(catalogue.getByRole('link', { name: /^Lesson \d+:/u })).toHaveCount(17);
+  for (const { title: name } of frenchCourses) await expect(catalogue.getByRole('heading', { name, exact: true })).toBeVisible();
+  await catalogue.getByRole('link', { name: title, exact: true }).click();
+  await expect(page).toHaveURL(savedUrl);
+  await course.getByRole('button', { name: 'Close course', exact: true }).click();
+  await expect(catalogue).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(savedUrl);
   await expect(course.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
+});
+
+test('Japanese learners can choose any guided lesson or go straight to writing lessons', async ({ page }) => {
+  await page.route('**/127.0.0.1:3001/**', route => route.abort());
+  await page.goto('/today/ja');
+  await writing(page).getByRole('link', { name: 'Hiragana', exact: true }).click();
+  await expect(page).toHaveURL(/\/learn\/ja\/topics\/Hiragana$/u);
+  await page.goBack();
+
+  const todayOptions = await openTodayStudyOptions(page);
+  await todayOptions.getByRole('link', { name: 'Browse guided courses', exact: true }).click();
+  await expect(page).toHaveURL(/\/learn\/ja\?view=courses$/u);
+  const catalogue = guidedCatalogue(page);
+  await expect(catalogue.getByRole('heading', { name: 'Guided courses', exact: true })).toBeFocused();
+  await expect(catalogue.getByRole('link', { name: /^Lesson \d+:/u })).toHaveCount(13);
+  await expect(page.getByTestId('open-course-panel')).toHaveCount(0);
+
+  await writing(page).getByRole('link', { name: 'Katakana', exact: true }).click();
+  const kana = japaneseAlphabetLessons.filter(lesson => lesson.script === 'katakana')[1]!;
+  await button(page, `Open ${kana.title}`).click();
+  await expect(page.getByTestId('japanese-alphabet').getByRole('heading', { name: kana.title, exact: true })).toBeVisible();
+  await page.goBack();
+  await page.goBack();
+
+  const day = japaneseCourse.days[9]!;
+  const name = `Lesson ${day.dayNumber}: ${day.title}`;
+  await catalogue.getByRole('link', { name, exact: true }).click();
+  const reader = page.getByTestId('open-course-panel');
+  await expect(reader.getByRole('heading', { name, exact: true })).toBeVisible();
+  const lessonUrl = page.url();
+  await page.goBack();
+  await expect(catalogue).toBeVisible();
+  await button(page, 'Today').click();
+  await expect(nextStep(page).getByRole('heading', { name, exact: true })).toBeVisible();
+  await nextStep(page).getByRole('button', { name: 'Continue lesson' }).click();
+  await expect(page).toHaveURL(lessonUrl);
+  await openCourseOutline(reader);
+  await reader.getByRole('link', { name: 'Hiragana', exact: true }).click();
+  await expect(page).toHaveURL(/\/learn\/ja\/topics\/Hiragana$/u);
+  await page.goBack();
+  await expect(page).toHaveURL(lessonUrl);
 });
 
 test('a direct Japanese lesson shows written pronunciation beside the playable word', async ({ page }) => {

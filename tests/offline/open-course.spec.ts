@@ -162,9 +162,12 @@ test('the spelling lesson uses the shared six steps and saves completion offline
   await expect(cold).toHaveURL(savedUrl);
   await openCourseOutline(panel(cold));
   await outline.getByRole('link', { name: 'Browse guided courses', exact: true }).click();
-  await expect(cold).toHaveURL(/\/today\/fr\?section=courses$/u);
+  await expect(cold).toHaveURL(/\/learn\/fr\?view=courses$/u);
   await cold.reload();
   await expect(cold.getByRole('heading', { name: 'Guided courses', exact: true })).toBeFocused();
+  const catalogue = cold.getByTestId('guided-course-catalogue');
+  await expect(catalogue.getByRole('link', { name: /^Lesson \d+:/u })).toHaveCount(17);
+  await expect(catalogue.getByRole('link', { name: `Lesson 3: ${spelling.title}, completed`, exact: true })).toBeVisible();
   await cold.goBack();
   await expect(cold).toHaveURL(savedUrl);
   await expect(step(cold, 'Lesson complete')).toBeVisible();

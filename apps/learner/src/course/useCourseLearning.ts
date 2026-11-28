@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CourseEvent, LearningRepository } from '@smartlingo/domain';
+import { courseDayProgressRevision, courseLessonStageId,
+  type CourseDay, type CourseEvent, type CourseLessonStage, type LearningRepository, type OpenCourse } from '@smartlingo/domain';
 import { openLearningRepository } from '../persistence';
 
 type PendingSave = { events: CourseEvent[]; after: () => void };
@@ -14,6 +15,7 @@ export function useCourseLearning() {
   const [loadError, setLoadError] = useState('');
   const [saveError, setSaveError] = useState('');
   const generation = useRef(0);
+  const clock = useRef(0);
   const locked = useRef(false);
   const pending = useRef<PendingSave | null>(null);
   const connection = useRef<LearningRepository | null>(null);
@@ -79,8 +81,14 @@ export function useCourseLearning() {
     if (locked.current || pending.current || loading || loadError) return;
     pending.current = { events: batch, after }; void execute();
   }
+  function eventFields(course: OpenCourse, day: CourseDay, stage: CourseLessonStage) {
+    const latest = events.reduce((time, event) => Math.max(time, Date.parse(event.occurredAt)), 0);
+    clock.current = Math.max(Date.now(), clock.current + 1, latest + 1);
+    return { id: crypto.randomUUID(), courseId: course.id, courseRevision: courseDayProgressRevision(course, day),
+      dayId: day.id, blockId: courseLessonStageId(stage), occurredAt: new Date(clock.current).toISOString() };
+  }
   function discard() { if (!locked.current) { pending.current = null; setSaveError(''); } }
-  return { events, loading, busy, loadError, saveError, load, save, retry: () => void execute(), discard,
+  return { events, loading, busy, loadError, saveError, load, save, eventFields, retry: () => void execute(), discard,
     blocked: loading || busy || !!loadError || !!saveError };
 }
 

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { lessons as frenchLessons, japaneseLessons } from '@smartlingo/content';
+import { languageCurricula } from '@smartlingo/content';
 import { mergeLessonCatalogue, type LearningRepository, type Lesson } from '@smartlingo/domain';
 import { openLearningRepository } from '../persistence';
 import { localContentApi } from './api';
+
+const bundledLessons = Object.values(languageCurricula).flatMap(curriculum => curriculum.topicLessons);
 
 export function useCatalogue() {
   const repository = useRef<LearningRepository | null>(null);
@@ -40,5 +42,5 @@ export function useCatalogue() {
     } catch (failure) { setError(failure instanceof Error ? failure.message : 'Published content could not be loaded. Your current catalogue was kept.'); }
     finally { inFlight.current = false; setBusy(false); }
   }
-  return { lessons: mergeLessonCatalogue([...frenchLessons, ...japaneseLessons], published), loading, busy, error, message, refreshPublished };
+  return { lessons: mergeLessonCatalogue(bundledLessons, published), loading, busy, error, message, refreshPublished };
 }

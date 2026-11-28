@@ -12,6 +12,8 @@ Verify all live GitHub heads, run repository and application checks, and exercis
 
 ## Handoff
 
+2026-11-28 follow-up. Adapt the shared course registry, course-outline filters and responsive navigation from `ada219f15fae69b4d73170b8501688b7e62f6fe4` to the notebook layout and searchable kana library. Verify the French and Japanese course launches, the Japanese level filter and kana entry, and the served build at port 8082 before opening the browser.
+
 The export retains the existing notebook layout and lesson identifiers. Japanese letters include 53 lessons. All 69 Japanese topic lessons and 13 guided lessons provide supplemental saved practice, with three guided units. The 664 bundled Japanese MP3 files include native-speaker and credited synthetic audio. The local web preview is available at `http://localhost:8082` as build `8998ba5afc54`.
 
 Repository, TypeScript, 18 tooling, 309 application, 14 focused online Chromium and six cold-offline checks passed. The Android and hosted delivery branches are documented in the work log. Owner and qualified Japanese review remain open. [Source and validation](../WORK_LOG.md#2026-11-27-gather-the-latest-features-and-rebuild-the-learner-preview)

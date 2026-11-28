@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { japaneseDailyUnits } from '@smartlingo/content';
+import { courseOutlineUnits } from '@smartlingo/content';
 import { courseDayProgress, type CourseDay, type CourseEvent, type OpenCourse } from '@smartlingo/domain';
 import { routeHref, type AppRoute } from '../app/routes';
 import { Button } from '../ui/controls';
@@ -35,7 +35,10 @@ export function CourseOutline({ id, sidebar, course, route, day, events,
   const nearbyDays = course.days.slice(Math.max(0, index - neighborCount), index + neighborCount + 1);
   const visibleDays = level !== 'All' ? course.days.filter(candidate => candidate.level === level)
     : showAll ? course.days : nearbyDays;
-  const units = course.units ?? (course.language === 'ja-JP' ? japaneseDailyUnits : undefined);
+  const units = courseOutlineUnits(course);
+  const availableLevels = levels.filter(value => value === 'All' || course.days.some(item => item.level === value));
+  const proficiencyLevels = availableLevels.filter(value => value !== 'All' && value !== 'foundation');
+  const showLevelFilters = !units?.length || proficiencyLevels.length > 1;
   const unitGroups = units?.map((unit, position) => ({
     unit, position, days: visibleDays.filter(candidate => unit.dayIds.includes(candidate.id)),
   })).filter(group => group.days.length);
@@ -72,8 +75,8 @@ export function CourseOutline({ id, sidebar, course, route, day, events,
       {level === 'All' && nearbyDays.length < course.days.length && <View style={{ alignItems: 'flex-start' }}>
         <Button compact quiet onPress={() => setShowAll(value => !value)}>{showAll ? 'Show nearby lessons' : 'Show all lessons'}</Button>
       </View>}
-      {!course.units?.length && <View style={[s.row, t.filters]}>
-        {levels.filter(value => value === 'All' || course.days.some(item => item.level === value)).map(value =>
+      {showLevelFilters && <View style={[s.row, t.filters]}>
+        {availableLevels.map(value =>
           <Button compact key={value} disabled={blocked} selected={level === value} onPress={() => onLevelChange(value)}
             label={value === 'All' ? 'All course levels' : undefined}>
             {value === 'All' ? 'All levels' : value === 'foundation' ? 'Foundations' : value}

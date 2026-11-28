@@ -1,4 +1,4 @@
-import type { Lesson } from '@smartlingo/domain';
+import type { Lesson, OpenCourse, TargetLanguage } from '@smartlingo/domain';
 import { buildTopic } from './build-topic';
 import { frenchSeedLessons } from './topics/preview-lessons';
 import { foodHomeTopics } from './topics/food-home';
@@ -24,6 +24,8 @@ import { b1CourseAliases, b1CourseTasks, b1CourseTopics } from './topics/french-
 import { frenchBriefGrammar, type LearnerGrammarNote } from './french-grammar';
 import { japaneseBriefGrammar } from './japanese-grammar';
 import { japaneseLessons } from './japanese-lessons';
+import { japaneseCourse } from './japanese-course';
+import { japaneseDailyUnits } from './japanese-daily-practice';
 
 export type { FrenchTransferTask } from './french-practice/types';
 export { getWordVisual, wordVisuals, type WordVisual } from './visuals';
@@ -92,6 +94,22 @@ const french = buildFrenchCourses(buildOpenCoursePilot(openingLessons.flatMap(le
 export const frenchCourses = french.courses;
 export const [openCoursePilot] = frenchCourses;
 export const frenchCourseLessonsByDay = french.lessonsByDay;
-export { japaneseCourse } from './japanese-course';
-export { japaneseLessons };
-export { japaneseDailyGuides, japaneseDailyUnits, getJapaneseDailyGuide, type JapaneseDailyGuide } from './japanese-daily-practice';
+
+interface LanguageCurriculum {
+  courses: readonly [OpenCourse, ...OpenCourse[]];
+  topicLessons: readonly Lesson[];
+}
+
+export const languageCurricula: Readonly<Record<TargetLanguage, LanguageCurriculum>> = {
+  'fr-FR': { courses: frenchCourses, topicLessons: lessons },
+  'ja-JP': { courses: [japaneseCourse], topicLessons: japaneseLessons },
+};
+
+const supplementalCourseUnits = new Map([[japaneseCourse.id, japaneseDailyUnits]]);
+
+export function courseOutlineUnits(course: OpenCourse) {
+  return course.units ?? supplementalCourseUnits.get(course.id);
+}
+
+export { japaneseCourse, japaneseLessons, japaneseDailyUnits };
+export { japaneseDailyGuides, getJapaneseDailyGuide, type JapaneseDailyGuide } from './japanese-daily-practice';

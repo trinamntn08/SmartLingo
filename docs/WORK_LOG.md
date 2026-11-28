@@ -2,6 +2,13 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-28 Document Cloud Drive setup
+
+- Matched 80 live GitHub branch heads to fetched refs. The preview checkout matched origin at `072f5e6`. The separate Cloud environment was prepared from `chore/cloud-workflow` at `8e6866f`. Kept the documentation on a separate topic branch from the preview and left the local untracked credentials file out of Git.
+- Documented Windows authorization, exact Cloud variable names, network hosts, read-only listing, and common errors in [Cloud workflow](CLOUD_WORKFLOW.md#connect-the-smartlingo-apk-folder-in-google-drive).
+- The first Cloud check found a missing remote type. Added and published the type. A fresh check then exited 1 because the saved token was invalid JSON. Started a fresh Windows authorization. Next is owner Google consent and entry of the full token JSON, followed by a fresh read-only Cloud check. No Drive write was attempted.
+- Repository tooling and TypeScript checks passed. The commit containing this entry records the documentation.
+
 ## 2026-11-28 Show guided lessons and make Japanese writing easier to reach
 
 - Start. At 12:38 CET, Europe/Paris, the clean primary worktree and live `feat/learner-sidebar-navigation` matched at `706cf853e363f3353972c93290928460ddea58b7` (0/0). Inspected 22 worktrees and verified all 80 fetched and live GitHub heads.

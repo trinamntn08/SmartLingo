@@ -65,6 +65,30 @@ Keep provider secrets unset for normal development. The tests use fake providers
 
 Review the setup report and configuration, then save and select **Publish**. Environment publication saves the development setup; it is separate from GitHub merging, app deployment, and curriculum publication. Repository skills travel with source. Personal skills on the Windows computer do not automatically sync, and repository hook/role files do not prove runtime activation.
 
+## Connect the SmartLingo APK folder in Google Drive
+
+1. Install [rclone for Windows](https://rclone.org/downloads/). Open PowerShell in the extracted folder and run `.\rclone.exe authorize drive`. Approve rclone in the browser on that same PC with the Google account that can access the SmartLingo Drive folder. The local callback URL only works on the machine running rclone.
+2. Copy the entire JSON object printed between the rclone output markers, including both braces and the `refresh_token` field. Paste it straight into the value field in step 3. Keep it out of chat, screenshots, repository files and Git.
+3. Open **Settings → Codex Cloud → Environments → SmartLingo → Edit → Environment variables → Manage**. Set the values below. Rclone reads the JSON directly from the running process, so use the environment-variable panel. Save the dialog, then publish if the editor shows unpublished changes.
+
+   | Key | Value |
+   | --- | --- |
+   | `RCLONE_CONFIG_SMARTLINGO_DRIVE_TYPE` | `drive` |
+   | `RCLONE_CONFIG_SMARTLINGO_DRIVE_TOKEN` | The complete rclone JSON object, with no extra quotes or code fences |
+
+4. If public internet access is restricted, check **Additional allowed domains** for `www.googleapis.com` and `oauth2.googleapis.com`. The first serves Drive requests and the second refreshes credentials.
+5. Start a fresh Cloud chat with **SmartLingo** selected. With rclone available, run this read-only check. It suppresses file names.
+
+   ```bash
+   rclone lsf smartlingo_drive: --drive-root-folder-id 1ixuZ1ZR-NnYeoA15sCN9d4AQCuoLi42_ >/dev/null
+   ```
+
+   Exit code `0` means the listing request succeeded. An empty listing can mean no entries are visible. Verify the folder ID against the Drive link and the account's folder access separately before relying on an empty result. A listing alone cannot confirm upload permission.
+
+If rclone cannot find the remote, check the exact `TYPE` key and remote name, then verify the token variable is present without displaying it. A token decoding error means the saved value needs to be checked for complete JSON. If Google returns HTTP `401`, reauthorize on Windows and replace the token value, then repeat the test in a fresh Cloud chat.
+
+[rclone browser authorization](https://rclone.org/remote_setup/) · [Codex Cloud environment variables](https://learn.chatgpt.com/docs/environments/cloud-environments#configure-environment-variables-and-network-secrets)
+
 ## Phone acceptance task
 
 On the phone open **Codex**, select the published SmartLingo environment, and send:

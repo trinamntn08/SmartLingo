@@ -40,7 +40,7 @@ These original lessons are bundled drafts for owner review. Earlier exports cont
 
 ## Try the Japanese route
 
-Choose **Learn Japanese**. **Browse lessons by topic** opens the shared catalogue, including **Hiragana** and **Katakana** under Foundations and 13 topic banks of 30 entries. **Open course** opens the Japanese course at its saved step. Use **Course outline** to expand a unit or filter by level. All study text, English support and kana readings are bundled. Japanese completion and continuation use Japanese progress.
+Choose **Learn Japanese**. **Browse lessons by topic** opens the shared catalogue, including **Hiragana** and **Katakana** under Foundations and 13 topic banks of 30 entries. **Open course** opens the Japanese course at its saved step. Use **Course outline** to expand a unit and open a lesson. All study text, English support and kana readings are bundled. Japanese completion and continuation use Japanese progress.
 
 Shared vocabulary cards show Japanese readings, examples, translations and usage notes directly. Save phrases and find them under **Review**. Search includes kana readings and preserves dakuten distinctions. Notes retain editable readings and language. Course and topic lesson histories keep their respective completion records. Hiragana and Katakana topics cover basic letters, voiced marks, combinations and timing patterns. Japanese audio can use bundled recordings, a device voice, a saved clip or free local VOICEVOX.
 

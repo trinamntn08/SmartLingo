@@ -53,7 +53,7 @@ export function CourseLaunchCard({ course, day, status, loading, href, onOpen, d
         <Text style={[s.body, launch.outcome]}>{day.outcome}</Text>
       </>}
       {!featured && <Text style={launch.note}>
-        {course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview
+        {course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'}{course.language === 'fr-FR' && ' · Draft preview'}
       </Text>}
       {message && <Text accessibilityLiveRegion="polite" style={launch.note}>{message}</Text>}
     </View>

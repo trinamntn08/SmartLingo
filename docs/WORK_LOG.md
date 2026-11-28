@@ -2,6 +2,14 @@
 
 Track every work request here, including status checks, reviews and documentation tasks. Follow [the session workflow](SESSION_WORKFLOW.md#repository-check-and-synchronization-first) before reporting status or editing. Keep one dated entry per task, update it as work progresses, and preserve previous entries. Full implementation evidence belongs in linked plans, decisions and Git history; [the checkpoint](SESSION_CHECKPOINT.md) owns the latest recovery action.
 
+## 2026-11-28 Remove the Japanese course preview label and level filters
+
+- Start. At 12:17 CET, Europe/Paris, the clean primary checkout and live `feat/learner-sidebar-navigation` matched at `6cc1eaa5a6df06256212cc15fbd9e9dfde411247` (0/0). Inspected 22 worktrees and matched all 80 live and fetched branch heads.
+- Cloud comparison. The synced sidebar source contains the adapted shared-course outline from `feat/shared-course-interface` (`ada219f15fae69b4d73170b8501688b7e62f6fe4`) through `bf8278cb89b2e244c8cb96952539ba3f7f91e571`. Japanese curriculum redesign `afe9d7e1df57328cfc8c8004b73b4141819b7581` contributed the guided units and practice already adapted into this preview. Android 0.2.7 `8bbfa9c307abf5d7130b51e26daf9a4f2539bbfb` remains a separate delivery. No newer Cloud variant of the marked controls appeared in the fetched history.
+- Scope. Remove the marked labels from the Japanese guided course. Use its three expandable units for browsing and remove the same preview label from its Learn course card. Verify B1 lessons and saved steps remain reachable.
+- Outcome. The Japanese outline opens unfiltered and shows all three units. The header and Learn course card omit the draft-preview label. Lesson 13 opens from Unit 3, and saved cursors resume through the normal course entry point.
+- Checks and handoff. Repository and TypeScript checks, eight Chromium cases and two cold-offline cases passed. Rechecked all 80 branch heads before export. Port 8082 serves build `5be6cb21f256ee5cab9e36f0ed9a0485db7b06ca31222fa380aaae042b27e241`, with 814 asset digests and Japanese navigation at 1440 and 320 px verified. The commit containing this note records the source. Next is owner review.
+
 ## 2026-11-28 Redesign Today study navigation and the course outline
 
 - Start. At 11:46 CET, Europe/Paris, all 79 live and fetched heads matched. Inspected 22 worktrees. The clean primary worktree matched its origin release at `0eb5cf20542b68876372839db7eae82a8edacf89` (0/0). Created `feat/learner-sidebar-navigation` at that verified baseline in the primary preview checkout.

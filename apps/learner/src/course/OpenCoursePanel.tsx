@@ -140,7 +140,7 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
     <View style={[s.row, layout.header]}>
       <View style={[layout.context, compact && layout.compactContext]}>
         <Text accessibilityRole="header" style={[s.heading, compact ? designTokens.typography.label : { fontSize: 21 }]}>{course.title}</Text>
-        {!compact && <Text style={s.muted}>{sidebar ? 'Draft preview'
+        {!compact && course.language === 'fr-FR' && <Text style={s.muted}>{sidebar ? 'Draft preview'
           : `${course.days.length} guided ${course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview`}</Text>}
       </View>
       <View style={[s.row, layout.navigation, compact && layout.compactNavigation]}>

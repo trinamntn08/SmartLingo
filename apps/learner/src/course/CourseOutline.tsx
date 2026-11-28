@@ -32,7 +32,7 @@ const levelName = (value: CourseLevel) => value === 'All' ? 'All levels' : value
 const lessonCount = (count: number) => `${count} ${count === 1 ? 'lesson' : 'lessons'}`;
 
 export function CourseOutline({ id, sidebar, course, route, day, events, progress,
-  level, onLevelChange, blocked, onDay }: CourseOutlineProps) {
+  level: selectedLevel, onLevelChange, blocked, onDay }: CourseOutlineProps) {
   const { navigate } = useNavigation();
   const [unitChoices, setUnitChoices] = useVisitState<Record<string, boolean>>('course.outline.units', {});
   const scroll = useRef<HTMLDivElement>(null);
@@ -40,12 +40,14 @@ export function CourseOutline({ id, sidebar, course, route, day, events, progres
   const activeUnitHeadingId = `${id}-active-unit`;
   const units = courseOutlineUnits(course);
   const activeUnit = units?.find(unit => unit.dayIds.includes(day.id));
+  const japanese = course.language === 'ja-JP';
+  const level = japanese ? 'All' : selectedLevel;
   const completedDays = useMemo(() => progress === 'available' ? new Set(course.days
     .filter(item => courseDayProgress(course, item, events).completed).map(item => item.id)) : undefined, [course, events, progress]);
   const visibleDays = level === 'All' ? course.days : course.days.filter(item => item.level === level);
   const availableLevels = levels.filter(value => value === 'All' || course.days.some(item => item.level === value));
   const proficiencyLevels = availableLevels.filter(value => value !== 'All' && value !== 'foundation');
-  const showLevelFilters = units?.length ? proficiencyLevels.length > 1 : availableLevels.length > 2;
+  const showLevelFilters = !japanese && (units?.length ? proficiencyLevels.length > 1 : availableLevels.length > 2);
   const coursesRoute = { kind: 'today', language: course.language, section: 'courses' } as const;
   const topicsRoute = { kind: 'topics', language: course.language } as const;
 
@@ -115,7 +117,7 @@ export function CourseOutline({ id, sidebar, course, route, day, events, progres
         </View>
         <View nativeID={detailsId} style={expanded ? t.unitLessons : t.hidden}>
           {expanded && <>
-            {current && course.language === 'ja-JP' && unit.outcome && <Text style={[sidebarStyles.meta, t.unitNote]}>{unit.outcome}</Text>}
+            {current && japanese && unit.outcome && <Text style={[sidebarStyles.meta, t.unitNote]}>{unit.outcome}</Text>}
             {matching.length ? renderDays(matching) : <Text style={[sidebarStyles.meta, t.unitNote]}>No matching lessons in this unit</Text>}
           </>}
         </View>

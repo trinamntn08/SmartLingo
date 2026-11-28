@@ -1,6 +1,6 @@
 # Session checkpoint
 
-On 2026-11-28, documented the SmartLingo Cloud Drive setup and published the missing remote type. The fresh rclone listing exited 1 because the stored token was invalid JSON. Next is Google consent, saving fresh JSON and rerunning the read-only listing. Repository and TypeScript checks passed. [Work log](WORK_LOG.md#2026-11-28-document-cloud-drive-setup)
+On 2026-11-28, documented the SmartLingo Cloud Drive setup and published the missing remote type. After Google consent and saving valid JSON, added the Drive API and OAuth refresh hosts to the restricted network allowlist and republished. A fresh Cloud listing exited 0 with zero visible entries. Upload access remains untested. Repository and TypeScript checks passed. [Work log](WORK_LOG.md#2026-11-28-document-cloud-drive-setup)
 
 Completed on 2026-11-28, Europe/Paris. Matched all 80 branch heads and clean baseline `706cf853e363f3353972c93290928460ddea58b7` on `feat/learner-sidebar-navigation` (0/0). The guided catalogue lists all lessons by course and unit. Japanese writing shortcuts open the dedicated kana topic lists. Repository and TypeScript checks, 327 automated tests, 58 Chromium cases, six cold-offline cases and a final cold-offline rerun passed. Verified export `9bd295e49902` and all 814 assets at port 8082, including lesson selection and cursor retry. Next is owner review. Usage is unavailable. [Work log](WORK_LOG.md#2026-11-28-show-guided-lessons-and-make-japanese-writing-easier-to-reach)
 

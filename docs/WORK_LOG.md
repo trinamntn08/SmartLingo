@@ -7,6 +7,7 @@ Track every work request here, including status checks, reviews and documentatio
 - Matched 80 live GitHub branch heads to fetched refs. The preview checkout matched origin at `072f5e6`. The separate Cloud environment was prepared from `chore/cloud-workflow` at `8e6866f`. Kept the documentation on a separate topic branch from the preview and left the local untracked credentials file out of Git.
 - Documented Windows authorization, exact Cloud variable names, network hosts, read-only listing, and common errors in [Cloud workflow](CLOUD_WORKFLOW.md#connect-the-smartlingo-apk-folder-in-google-drive).
 - The first Cloud check found a missing remote type. Added and published the type. A fresh check then exited 1 because the saved token was invalid JSON. Started a fresh Windows authorization. Next is owner Google consent and entry of the full token JSON, followed by a fresh read-only Cloud check. No Drive write was attempted.
+- Follow-up. The published remote type and OAuth JSON were valid. Restricted internet access initially denied the listing. Added only `www.googleapis.com` and `oauth2.googleapis.com` and republished. A fresh SmartLingo Cloud chat ran the rclone listing with exit code 0 and zero visible entries. No token was printed and no Drive write was attempted.
 - Repository tooling and TypeScript checks passed. The commit containing this entry records the documentation.
 
 ## 2026-11-28 Show guided lessons and make Japanese writing easier to reach

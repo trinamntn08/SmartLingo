@@ -1,12 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
-import { frenchCourses, japaneseCourse, lessons, japaneseLessons } from '@smartlingo/content';
-import { groupLessonTopics } from '@smartlingo/domain';
+import { frenchCourses, japaneseCourse } from '@smartlingo/content';
 import { openCourseOutline, openTodayStudyOptions } from './learner-journeys';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true });
 const nextStep = (page: Page) => page.getByTestId('today-next-step');
-const studyNav = (page: Page) => page.getByRole('navigation', { name: 'Study options', exact: true });
+const studyNav = (page: Page) => page.getByRole('navigation', { name: /^Explore (French|Japanese)$/u });
+const frenchTitles = ['A1 · First steps in France', 'A2 · Everyday independence', 'B1 · Explain, solve and participate'];
 
 for (const locale of ['fr', 'ja'] as const) {
   test(`${locale} Today prioritises study and keeps saved words in Review`, async ({ page }, info) => {
@@ -19,12 +19,11 @@ for (const locale of ['fr', 'ja'] as const) {
     await button(page, french ? 'Learn French' : 'Learn Japanese').click();
     const recommendation = nextStep(page).getByRole('button');
     const options = studyNav(page);
-    const disclosure = button(page, 'Browse study options');
-    const titles = (french ? frenchCourses : [japaneseCourse]).map(course => course.title);
-    const suggestedTopics = [...(french ? [] : ['Hiragana', 'Katakana']),
-      ...groupLessonTopics(french ? lessons : japaneseLessons).slice(0, 3).map(topic => topic.name)];
+    const panelTitle = french ? 'Explore French' : 'Explore Japanese';
+    const disclosure = button(page, panelTitle);
+    const titles = french ? frenchTitles : [japaneseCourse.title];
     const course = options.getByRole('link', { name: titles[0], exact: true });
-    const library = options.getByRole('link', { name: 'Browse all lessons', exact: true });
+    const library = options.getByRole('link', { name: 'Browse lessons by topic', exact: true });
 
     await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
     await expect(nextStep(page).getByRole('img')).toHaveCount(0);
@@ -49,12 +48,12 @@ for (const locale of ['fr', 'ja'] as const) {
       const activity = (await nextStep(page).boundingBox())!;
       expect(sidebar.x + sidebar.width).toBeLessThan(activity.x);
     }
-    await expect(course).toBeFocused();
-    await expect(course).toHaveCSS('outline-style', 'solid');
-    await expect(course).toHaveAttribute('aria-current', 'true');
-    await expect(options.getByRole('link')).toHaveCount(titles.length + suggestedTopics.length + 3);
+    await expect(library).toBeFocused();
+    await expect(library).toHaveCSS('outline-style', 'solid');
+    await expect(options.getByRole('heading', { name: 'Find lessons', exact: true })).toBeVisible();
+    await expect(options.getByRole('heading', { name: 'Practise a skill', exact: true })).toBeVisible();
+    await expect(options.getByRole('link')).toHaveCount(titles.length + 3);
     for (const title of titles) await expect(options.getByRole('link', { name: title, exact: true })).toBeVisible();
-    for (const title of suggestedTopics) await expect(options.getByRole('link', { name: title, exact: true })).toBeVisible();
     for (const link of await options.getByRole('link').all()) expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
@@ -70,16 +69,20 @@ for (const locale of ['fr', 'ja'] as const) {
     await expect(button(page, 'Learn')).toHaveAttribute('aria-selected', 'true');
     await page.goBack();
 
-    await options.getByRole('link', { name: suggestedTopics[0], exact: true }).click();
-    await expect(page).toHaveURL(new RegExp(`/learn/${locale}/topics/`));
-    await page.goBack();
     await library.click();
     await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+    if (!french) {
+      await expect(button(page, 'Topic Hiragana')).toBeVisible();
+      await expect(button(page, 'Topic Katakana')).toBeVisible();
+      await button(page, 'Topic Hiragana').click();
+      await expect(page).toHaveURL(/\/learn\/ja\/topics\/Hiragana$/u);
+      await page.goBack();
+    }
     await page.goBack();
     await options.getByRole('link', { name: 'Listening & videos', exact: true }).click();
     await expect(page.getByTestId('listening-comprehension')).toBeVisible();
     await page.goBack();
-    await options.getByRole('link', { name: 'Speaking practice', exact: true }).click();
+    await options.getByRole('link', { name: 'Speaking', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Speaking practice', exact: true })).toBeVisible();
     await button(page, 'Review').click();
     await expect(button(page, 'Add personal word')).toBeVisible();
@@ -87,9 +90,9 @@ for (const locale of ['fr', 'ja'] as const) {
     await button(page, 'Change language').click();
     await button(page, french ? 'Learn Japanese' : 'Learn French').click();
     await expect(nextStep(page).getByRole('button')).toHaveAccessibleName('Start lesson');
-    if (compact) await expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+    if (compact) await expect(button(page, french ? 'Explore Japanese' : 'Explore French')).toHaveAttribute('aria-expanded', 'false');
     await openTodayStudyOptions(page);
-    await expect(options.getByRole('link', { name: french ? japaneseCourse.title : frenchCourses[1]!.title, exact: true })).toBeVisible();
+    await expect(options.getByRole('link', { name: french ? japaneseCourse.title : frenchTitles[1], exact: true })).toBeVisible();
     await expect(course).toHaveCount(0);
   });
 }
@@ -102,7 +105,8 @@ test('French Today resumes Lesson 3 at the saved step with one action', async ({
   const title = `Lesson 3: ${day.title}`;
   const course = page.getByTestId('open-course-panel');
   await openCourseOutline(course);
-  await button(page, `Choose lesson 3: ${day.title}`).click();
+  const outline = course.getByRole('navigation', { name: 'Course outline' });
+  await outline.getByTestId(`course-day-${day.id}`).getByRole('link').click();
   await expect(course.getByRole('heading', { name: title, exact: true })).toBeVisible();
   await button(page, 'Next').click();
   await expect(course.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
@@ -114,6 +118,24 @@ test('French Today resumes Lesson 3 at the saved step with one action', async ({
   await expect(nextStep(page).getByText('Resume your saved step.')).toHaveCount(0);
   await expect(nextStep(page).getByText(/guided lessons/)).toHaveCount(0);
   await button(page, 'Continue lesson').click();
+  await expect(page).toHaveURL(savedUrl);
+  await expect(course.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
+  await openCourseOutline(course);
+  await expect(outline.getByTestId(`course-day-${day.id}`).getByRole('link')).toHaveAttribute('aria-current', 'true');
+  await outline.getByRole('link', { name: 'Browse lessons by topic', exact: true }).click();
+  await expect(page.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(savedUrl);
+  await expect(course.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
+
+  await openCourseOutline(course);
+  const browseCourses = outline.getByRole('link', { name: 'Browse guided courses', exact: true });
+  await expect(browseCourses).toHaveAttribute('href', '/today/fr?section=courses');
+  await browseCourses.press('Enter');
+  await expect(page).toHaveURL(/\/today\/fr\?section=courses$/u);
+  await expect(studyNav(page).getByRole('heading', { name: 'Guided courses', exact: true })).toBeFocused();
+  for (const name of frenchTitles.slice(1)) await expect(studyNav(page).getByRole('link', { name, exact: true })).toBeVisible();
+  await page.goBack();
   await expect(page).toHaveURL(savedUrl);
   await expect(course.getByRole('heading', { name: 'Key phrases', exact: true })).toBeVisible();
 });

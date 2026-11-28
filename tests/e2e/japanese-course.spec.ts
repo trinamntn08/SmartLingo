@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { japaneseCourse, openCoursePilot } from '@smartlingo/content';
+import { courseOutlineUnits, japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import type { CourseEvent, NotebookEntry } from '@smartlingo/domain';
 import { buildCourseLesson, buildCourseStudy } from '../../apps/learner/src/course/courseLessonContent';
 import { expectGrammarNote, buildAcceptedSentence, guidedLessonButton, openCourseOutline, openTodayStudyOptions, studyKeyPhrasesAndOpenMatch } from './learner-journeys';
@@ -49,15 +49,15 @@ test('Japanese readings, B1 browsing, notebook capture and exact resume stay sep
   await expect(japaneseTranscript.getByText('Sumimasen. Mou ichido, yukkuri onegai shimasu.', { exact: true })).toBeVisible();
   await expect(panel(page).getByTestId('dialogue-english-transcript').getByText('Hello. I am Tanaka.', { exact: true })).toBeVisible();
   await openCourseOutline(panel(page));
-  const days = panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose lesson / });
-  await expect(days).toHaveCount(11);
-  await button(page, 'Show all lessons').click();
-  await expect(days).toHaveCount(japaneseCourse.days.length);
-  await button(page, 'Show nearby lessons').click();
-  await expect(days).toHaveCount(11);
+  const outline = panel(page).getByRole('navigation', { name: 'Course outline' });
+  const days = outline.getByRole('link', { name: /^Choose lesson / });
+  await expect(outline.getByText('3 units · 13 lessons', { exact: true })).toBeVisible();
+  await expect(days).toHaveCount(courseOutlineUnits(japaneseCourse)![0]!.dayIds.length);
   await button(page, 'B1').click();
+  await expect(outline.getByText('Showing 4 of 13 lessons', { exact: true })).toBeVisible();
+  await expect(outline.getByRole('button', { name: /^Unit \d:/ })).toHaveCount(3);
   await expect(days).toHaveCount(4);
-  await button(page, `Choose lesson ${day.dayNumber}: ${day.title}`).click();
+  await outline.getByTestId(`course-day-${day.id}`).getByRole('link').click();
   await expect(panel(page).getByRole('heading', { name: `Lesson ${day.dayNumber}: ${day.title}`, exact: true })).toBeVisible();
   const { lesson, grammarNote } = buildCourseStudy(japaneseCourse, day);
   await expect(panel(page).getByTestId('grammar-note')).toHaveCount(0);
@@ -198,11 +198,12 @@ test('Japanese days remain readable without browser storage', async ({ page }) =
   await openCourseOutline(panel(page));
   await button(page, 'B1').click();
   const day = japaneseCourse.days.at(-1)!;
-  await button(page, `Choose lesson ${day.dayNumber}: ${day.title}`).click();
+  const outline = panel(page).getByRole('navigation', { name: 'Course outline' });
+  await outline.getByTestId(`course-day-${day.id}`).getByRole('link').click();
   await openCourseOutline(panel(page));
   await button(page, 'All course levels').click();
-  await expect(panel(page).getByTestId('course-day-chooser').getByRole('button', { name: /^Choose lesson / }).first())
-    .toHaveAccessibleName(/^Choose lesson 3:/);
+  await expect(outline.getByTestId(`course-day-${day.id}`).getByRole('link')).toHaveAttribute('aria-current', 'true');
+  await expect(outline.getByText('Saved progress unavailable', { exact: true })).toBeVisible();
   await openStep(page, 'Key phrases', 'Key phrases');
   const word = day.vocabulary[0];
   await expect(panel(page).getByText(word.reading!, { exact: true })).toBeVisible();

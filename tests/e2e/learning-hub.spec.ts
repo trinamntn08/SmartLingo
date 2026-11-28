@@ -5,6 +5,7 @@ import { openListeningFilters, selectListeningLesson } from './learner-journeys'
 
 async function mockSpeech(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('smartlingo.japanese-audio-source.v1', JSON.stringify({ version: 1, source: 'device' }));
     const voices = ['en-GB', 'fr-FR', 'ja-JP'].map(lang => ({ voiceURI: `test.${lang}`, name: `Test ${lang}`, lang, localService: true, default: lang === 'en-GB' }));
     let held = false;
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: class { constructor(public text: string) {} } });

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { japaneseAlphabetLessons } from '@smartlingo/content';
-import { openKanaFromToday, openProfileSection, openTodayStudyOptions } from '../e2e/learner-journeys';
+import { openKanaFromToday, openKanaTopicFromToday, openProfileSection } from '../e2e/learner-journeys';
 
 test.beforeEach(async ({ request, context }) => {
   await request.post('/__test__/mode');
@@ -31,7 +31,7 @@ test('downloaded letters resume saved hiragana and freely browse katakana on a c
   apiRequests.length = 0;
   await context.setOffline(true); await page.close();
   const cold = await context.newPage(); await cold.goto(baseURL!);
-  await (await openTodayStudyOptions(cold)).getByRole('link', { name: 'Hiragana', exact: true }).click();
+  await openKanaTopicFromToday(cold, 'Hiragana');
   const second = japaneseAlphabetLessons[1]!;
   await expect(cold.getByTestId(`topic-lesson-${first.id}`).getByText('Completed', { exact: true })).toBeVisible();
   await expect(cold.getByTestId(`topic-lesson-${second.id}`).getByText('Up next', { exact: true })).toBeVisible();

@@ -32,7 +32,7 @@ Reports refresh after returning from learning, after confirmed writes, on focus 
 
 ## Try the French course
 
-Choose French and start A1 on Today or choose **Open course** on Learn. Use the A2 and B1 course links on either screen to start or resume those levels. **Course outline** lists lessons on the left on wide screens and opens from the header on narrow screens. Choosing a lesson opens its last saved step. Where offered, **Related practice** below sentence building links to a library lesson with **Back to guided lesson** for the return. Bookmarks and saved steps open at their corresponding step in the shared reader.
+Choose French and start A1 on Today or choose **Open course** on Learn. On Today, **Explore French** lists A1, A2 and B1 under **Guided courses**. **Course outline** appears to the left on wide screens and opens from the header on narrow screens. It shows the current unit, counts and recorded progress. Expand a unit and choose a lesson to open its saved step. The links below the outline open the guided course choices on Today or the complete topic library. Where offered, **Related practice** below sentence building links to a library lesson with **Back to guided lesson** for the return.
 
 The A1 course contains nine lessons and preserves the first five progress scopes from revision 5. A2 and B1 start with four lessons each, covering appointment changes and travel disruptions respectively. Course events, completion and notebook saves persist. Learning backup v4 includes course events and Japanese notebook metadata and accepts earlier v1/v2/v3 files using the normal restore and reload flow. New backups require the updated app.
 
@@ -40,7 +40,7 @@ These original lessons are bundled drafts for owner review. Earlier exports cont
 
 ## Try the Japanese route
 
-Choose **Learn Japanese**. Its 13 topic banks, each with 30 distinct entries across five short lessons, appear in the same Learn topic catalogue and lesson reader as French. **Open course** opens the Japanese course at its saved step. Use **Course outline** to pick a lesson, filter by level or show all lessons. All study text, English support and kana readings are bundled. Japanese completion and continuation use Japanese progress.
+Choose **Learn Japanese**. **Browse lessons by topic** opens the shared catalogue, including **Hiragana** and **Katakana** under Foundations and 13 topic banks of 30 entries. **Open course** opens the Japanese course at its saved step. Use **Course outline** to expand a unit or filter by level. All study text, English support and kana readings are bundled. Japanese completion and continuation use Japanese progress.
 
 Shared vocabulary cards show Japanese readings, examples, translations and usage notes directly. Save phrases and find them under **Review**. Search includes kana readings and preserves dakuten distinctions. Notes retain editable readings and language. Course and topic lesson histories keep their respective completion records. Hiragana and Katakana topics cover basic letters, voiced marks, combinations and timing patterns. Japanese audio can use bundled recordings, a device voice, a saved clip or free local VOICEVOX.
 

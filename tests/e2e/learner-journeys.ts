@@ -8,14 +8,25 @@ export function guidedLessonButton(scope: Locator | Page) {
 
 export async function openTodayStudyOptions(page: Page) {
   await expect(page.getByTestId('today-next-step')).toBeVisible();
-  const disclosure = page.getByRole('button', { name: 'Browse study options', expanded: false, exact: true });
+  const name = /^Explore (French|Japanese)$/u;
+  const disclosure = page.getByRole('button', { name, expanded: false });
   if (await disclosure.isVisible()) await disclosure.click();
-  return page.getByRole('navigation', { name: 'Study options', exact: true });
+  return page.getByRole('navigation', { name });
+}
+
+export async function openTodayCourse(page: Page, title: string) {
+  const name = title.replace(/^French ([A-C][12]):\s*/u, '$1 · ');
+  await (await openTodayStudyOptions(page)).getByRole('link', { name, exact: true }).click();
+}
+
+export async function openKanaTopicFromToday(page: Page, script: 'Hiragana' | 'Katakana') {
+  const options = await openTodayStudyOptions(page);
+  await options.getByRole('link', { name: 'Browse lessons by topic', exact: true }).click();
+  await page.getByRole('button', { name: `Topic ${script}`, exact: true }).click();
 }
 
 export async function openKanaFromToday(page: Page, script: 'Hiragana' | 'Katakana', lessonTitle: string) {
-  const options = await openTodayStudyOptions(page);
-  await options.getByRole('link', { name: script, exact: true }).click();
+  await openKanaTopicFromToday(page, script);
   await page.getByRole('button', { name: `Open ${lessonTitle}`, exact: true }).click();
 }
 

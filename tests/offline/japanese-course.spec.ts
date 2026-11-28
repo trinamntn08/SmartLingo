@@ -27,7 +27,7 @@ test('Japanese B1 study, readings, saved vocabulary and exact cursor cold-start 
   await openCourseOutline(panel);
   await panel.getByRole('button', { name: 'B1', exact: true }).click();
   const day = japaneseCourse.days.at(-1)!;
-  await panel.getByRole('button', { name: `Choose lesson ${day.dayNumber}: ${day.title}`, exact: true }).click();
+  await panel.getByTestId(`course-day-${day.id}`).getByRole('link').click();
   await expect(panel.getByTestId('dialogue-japanese-transcript').getByText('Bii-shitsu nara niji kara tsukaemasu ne.', { exact: true })).toBeVisible();
   await panel.getByRole('navigation', { name: 'Lesson steps' }).getByRole('link', { name: 'Key phrases', exact: true }).click();
   const path = `/course/ja/${japaneseCourse.id}/${day.id}/lesson-vocabulary`;

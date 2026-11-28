@@ -207,7 +207,7 @@ test('the final answer completes the lesson in place and retries both records to
   expect((await storedEvents<LearningEvent>(page, 'events')).map(event => event.activity).sort()).toEqual(['completion', 'picture', 'sentence', 'vocabulary']);
 });
 
-test('French course history uses the six-step strip beside a lessons-only outline', async ({ page }) => {
+test('French course history keeps the six-step strip separate from the course outline', async ({ page }) => {
   const day = openCoursePilot.days[0];
   const location = `/course/fr/${openCoursePilot.id}/${day.id}`;
   await page.goto(`/course/fr/${openCoursePilot.id}`);
@@ -229,8 +229,8 @@ test('French course history uses the six-step strip beside a lessons-only outlin
     await expect(outline).toHaveAttribute('id', (await outlineButton.getAttribute('aria-controls'))!);
   }
   await expect(outline.getByRole('button', { name: /^Section / })).toHaveCount(0);
-  await expect(outline.getByRole('button', { name: /^Choose lesson 1:/ })).toHaveAttribute('aria-selected', 'true');
-  await expect(outline.getByRole('button', { name: /^Choose lesson / })).toHaveCount(openCoursePilot.days.length);
+  await expect(outline.getByRole('link', { name: /^Choose lesson 1:/ })).toHaveAttribute('aria-current', 'true');
+  await expect(outline.getByRole('link', { name: /^Choose lesson / })).toHaveCount(openCoursePilot.units![0]!.dayIds.length);
   const steps = panel.getByRole('navigation', { name: 'Lesson steps' });
   const dialogue = steps.getByRole('link', { name: 'Read dialogue', exact: true });
   await expect(steps.getByRole('link')).toHaveCount(6);

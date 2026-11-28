@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, getFrenchTopicPractice, frenchCourseLessonsByDay, openCoursePilot } from '@smartlingo/content';
 import { buildCourseLesson, buildCourseStudy } from '../../apps/learner/src/course/courseLessonContent';
 import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline,
-  expectGrammarNote, openProfileSection, openTodayStudyOptions, openTopic } from '../e2e/learner-journeys';
+  expectGrammarNote, openProfileSection, openTodayCourse, openTopic } from '../e2e/learner-journeys';
 
 const panel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => panel(page).getByRole('button', { name, exact: true });
@@ -32,7 +32,7 @@ test('the B1 starter course and its connected response are available after cold 
   await page.close();
   const cold = await context.newPage();
   await cold.goto('/today/fr');
-  await (await openTodayStudyOptions(cold)).getByRole('link', { name: b1.title, exact: true }).click();
+  await openTodayCourse(cold, b1.title);
   await expect(step(cold, `Lesson 1: ${day.title}`)).toBeVisible();
   await button(cold, 'Next').click();
   await button(cold, 'Next').click();
@@ -116,7 +116,7 @@ test('the spelling lesson uses the shared six steps and saves completion offline
   await openCourseOutline(panel(cold));
   const outline = panel(cold).getByTestId('course-outline');
   await expect(outline.getByRole('button', { name: /^(Dialogue|Quick practice|Try it)$/ })).toHaveCount(0);
-  await outline.getByRole('button', { name: `Choose lesson 3: ${spelling.title}`, exact: true }).click();
+  await outline.getByTestId(`course-day-${spelling.id}`).getByRole('link').click();
   await expect(step(cold, `Lesson 3: ${spelling.title}`)).toBeVisible();
   await expect(step(cold, 'Read a conversation')).toBeVisible();
   const stepLinks = steps(cold).getByRole('link');
@@ -152,6 +152,22 @@ test('the spelling lesson uses the shared six steps and saves completion offline
   await expect(panel(cold).getByText(lesson.sentenceActivity.answers[0], { exact: true })).toBeVisible();
   await expect(button(cold, 'Practise the conversation')).toHaveCount(0);
   await expect(panel(cold).getByTestId('french-transfer-practice')).toHaveCount(0);
+  const savedUrl = cold.url();
+  await openCourseOutline(panel(cold));
+  await expect(outline.getByText('1 of 9 lessons complete', { exact: true })).toBeVisible();
+  await expect(outline.getByTestId(`course-day-${spelling.id}`).getByRole('link')).toHaveAccessibleName(/completed$/u);
+  await outline.getByRole('link', { name: 'Browse lessons by topic', exact: true }).click();
+  await expect(cold.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
+  await cold.goBack();
+  await expect(cold).toHaveURL(savedUrl);
+  await openCourseOutline(panel(cold));
+  await outline.getByRole('link', { name: 'Browse guided courses', exact: true }).click();
+  await expect(cold).toHaveURL(/\/today\/fr\?section=courses$/u);
+  await cold.reload();
+  await expect(cold.getByRole('heading', { name: 'Guided courses', exact: true })).toBeFocused();
+  await cold.goBack();
+  await expect(cold).toHaveURL(savedUrl);
+  await expect(step(cold, 'Lesson complete')).toBeVisible();
   expect(externalRequests.filter(url => !url.startsWith('http://127.0.0.1:3001/'))).toEqual([]);
   expect(await cold.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const overflowing = await panel(cold).evaluate(root => [root, ...root.querySelectorAll('*')].filter(element => {

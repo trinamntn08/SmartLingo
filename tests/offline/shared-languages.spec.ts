@@ -19,7 +19,7 @@ test('Today study links and the Cloud French and Japanese drafts load from a col
   await cold.goto('/today/fr');
   await expect(cold.getByTestId('today-next-step').getByRole('img')).toHaveCount(0);
   const studyOptions = await openTodayStudyOptions(cold);
-  await studyOptions.getByRole('link', { name: 'Browse all lessons', exact: true }).click();
+  await studyOptions.getByRole('link', { name: 'Browse lessons by topic', exact: true }).click();
   await expect(cold.getByRole('textbox', { name: 'Search lessons', exact: true })).toBeVisible();
   for (const id of ['fr.cycling.rent', 'fr.household-waste.sorting', 'ja.cafe.drinks']) {
     const lesson = [...lessons, ...japaneseLessons].find(item => item.id === id)!;

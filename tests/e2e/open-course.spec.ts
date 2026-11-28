@@ -1,4 +1,4 @@
-import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openLessonFromTopics, openTodayStudyOptions } from './learner-journeys';
+import { buildAcceptedSentence, guidedLessonButton, expectDialoguePhoto, expectFrenchTranscripts, openCourseOutline, openProfileSection, openLessonFromTopics, openTodayCourse } from './learner-journeys';
 import { expect, test, type Page } from '@playwright/test';
 import { frenchCourses, frenchCourseLessonsByDay, japaneseCourse, openCoursePilot } from '@smartlingo/content';
 import { courseDayProgressRevision, courseLessonStageId, type CourseDay, type CourseEvent } from '@smartlingo/domain';
@@ -10,7 +10,7 @@ const coursePanel = (page: Page) => page.getByTestId('open-course-panel');
 const button = (page: Page, name: string) => coursePanel(page).getByRole('button', { name, exact: true });
 const step = (page: Page, name: string) => coursePanel(page).getByRole('heading', { name, exact: true });
 const stepTab = (page: Page, stage: string) => coursePanel(page).getByTestId(`lesson-step-${stage}`);
-const chooseDay = (page: Page, day: CourseDay) => coursePanel(page).getByTestId(`course-day-${day.id}`).getByRole('button');
+const chooseDay = (page: Page, day: CourseDay) => coursePanel(page).getByTestId(`course-day-${day.id}`).getByRole('link');
 const dayHeading = (page: Page, day: CourseDay) => step(page, `Lesson ${day.dayNumber}: ${day.title}`);
 
 async function storedEvents(page: Page, store: 'courseEvents' | 'events' = 'courseEvents') {
@@ -60,19 +60,16 @@ test.beforeEach(async ({ context }) => {
 
 test('Today opens French courses independently and Learn focuses on the recommendation and topics', async ({ page }) => {
   const [, a2, b1] = frenchCourses;
-  const visitTodayCourse = async (title: string) => {
-    await (await openTodayStudyOptions(page)).getByRole('link', { name: title, exact: true }).click();
-  };
   const today = () => page.getByRole('button', { name: 'Today', exact: true }).click();
   await page.goto('/today/fr');
 
-  await visitTodayCourse(a2.title);
+  await openTodayCourse(page, a2.title);
   await expect(dayHeading(page, a2.days[0])).toBeVisible();
   await button(page, 'Next').click();
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
 
   await today();
-  await visitTodayCourse(b1.title);
+  await openTodayCourse(page, b1.title);
   await expect(dayHeading(page, b1.days[0])).toBeVisible();
   await openCourseOutline(coursePanel(page));
   await chooseDay(page, b1.days[2]).click();
@@ -85,7 +82,7 @@ test('Today opens French courses independently and Learn focuses on the recommen
 
   await today();
   await expect(guidedLessonButton(page)).toHaveText(/Start lesson/u);
-  await visitTodayCourse(a2.title);
+  await openTodayCourse(page, a2.title);
   await expect(page).toHaveURL(/\/fr\.course-a2\.day-1\/lesson-vocabulary$/u);
   await page.getByRole('button', { name: 'Learn', exact: true }).click();
   await expect(coursePanel(page).getByRole('button', { name: 'Open course', exact: true })).toBeVisible();
@@ -94,7 +91,7 @@ test('Today opens French courses independently and Learn focuses on the recommen
   await expect(button(page, a2.title)).toHaveCount(0);
   await expect(button(page, b1.title)).toHaveCount(0);
   await today();
-  await visitTodayCourse(b1.title);
+  await openTodayCourse(page, b1.title);
   await expect(page).toHaveURL(/\/fr\.course-b1\.day-3\/lesson-vocabulary$/u);
 
   const topicLesson = frenchCourseLessonsByDay.get(b1.days[2].id)!;
@@ -111,12 +108,16 @@ test('all five opening lessons share a six-step reader with full transcripts and
   await page.keyboard.press('Enter');
   await expect(step(page, openCoursePilot.title)).toBeVisible();
   await openCourseOutline(coursePanel(page));
-  await expect(step(page, 'Unit 1: Your first conversations in France')).toBeVisible();
-  if (page.viewportSize()!.width >= 900) {
-    await expect(coursePanel(page).getByText('9 guided lessons · Draft preview', { exact: true })).toBeVisible();
-  }
   const outline = coursePanel(page).getByTestId('course-outline');
-  await expect(outline.getByRole('button', { name: /^Choose lesson/ })).toHaveCount(9);
+  await expect(outline.getByRole('button', { name: 'Unit 1: Your first conversations in France', exact: true })).toHaveAttribute('aria-expanded', 'true');
+  await expect(outline.getByText('2 units · 9 lessons', { exact: true })).toBeVisible();
+  await expect(outline.getByText('0 of 9 lessons complete', { exact: true })).toBeVisible();
+  const unitTwo = outline.getByRole('button', { name: 'Unit 2: Get around your neighbourhood', exact: true });
+  await expect(unitTwo).toHaveAttribute('aria-expanded', 'false');
+  await expect(unitTwo).toHaveAccessibleDescription('2 lessons');
+  await unitTwo.press('Enter');
+  await expect(outline.getByRole('link', { name: /^Choose lesson/ })).toHaveCount(9);
+  await expect(chooseDay(page, openCoursePilot.days[8]!)).toBeVisible();
   await expect(outline.getByText(/sections in lesson|quick practice|try it/i)).toHaveCount(0);
 
   for (const day of openCoursePilot.days.slice(0, 5)) {

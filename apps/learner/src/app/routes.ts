@@ -6,7 +6,8 @@ export interface StudyDayLink { courseId: string; dayId: string; sectionId: stri
 
 export type AppRoute =
   | { kind: 'home' | 'languages' | 'unavailable' }
-  | { kind: 'today' | 'report' | 'profile'; language: TargetLanguage }
+  | { kind: 'today'; language: TargetLanguage; section?: 'courses' }
+  | { kind: 'report' | 'profile'; language: TargetLanguage }
   | { kind: 'slang'; language: 'fr-FR' }
   | { kind: 'topics'; language: TargetLanguage; topic?: string }
   | { kind: 'lesson'; language: TargetLanguage; lessonId: string; stage?: LessonStage; studyDay?: StudyDayLink }
@@ -53,7 +54,11 @@ export function parseRoute(pathname: string, search = '', hash = ''): AppRoute {
   const language = locale === 'fr' ? 'fr-FR' : locale === 'ja' ? 'ja-JP' : null;
   if (!language) return unavailable;
 
-  if (area === 'today' || area === 'report' || area === 'profile') return parts.length === 2 ? { kind: area, language } : unavailable;
+  if (area === 'today' && parts.length === 2) {
+    const showCourses = new URLSearchParams(search).get('section') === 'courses';
+    return { kind: 'today', language, ...(showCourses && { section: 'courses' }) };
+  }
+  if (area === 'report' || area === 'profile') return parts.length === 2 ? { kind: area, language } : unavailable;
   if (area === 'slang') return language === 'fr-FR' && parts.length === 2 ? { kind: 'slang', language } : unavailable;
   if (area === 'review' && parts.length <= 3) {
     if (section === undefined || section === 'notebook' || section === 'practice') return { kind: 'review', language, view: section };
@@ -103,7 +108,8 @@ export function routeHref(route: AppRoute): string {
   if (!('language' in route)) return '/';
   const lang = route.language === 'ja-JP' ? 'ja' : 'fr';
   switch (route.kind) {
-    case 'today': case 'report': case 'profile': case 'slang': return path(route.kind, lang);
+    case 'today': return path('today', lang) + (route.section === 'courses' ? '?section=courses' : '');
+    case 'report': case 'profile': case 'slang': return path(route.kind, lang);
     case 'review': return path('review', lang, route.view);
     case 'topics': return route.topic ? path('learn', lang, 'topics', route.topic) : path('learn', lang);
     case 'lesson': {

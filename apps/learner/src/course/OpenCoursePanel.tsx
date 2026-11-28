@@ -1,9 +1,9 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef } from 'react';
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { frenchCourseLessonsByDay, getFrenchTopicPractice, getJapaneseDailyGuide } from '@smartlingo/content';
 import { courseDayProgress, courseDayProgressRevision, courseLessonStageForBlock, courseLessonStageId, coursePracticeProgress,
   type CourseDay, type CourseEvent, type JapanesePracticeResult, type JapanesePracticeTask, type LearningEvent, type OpenCourse } from '@smartlingo/domain';
-import { useNavigation } from '../app/WebNavigation';
+import { useNavigation, useVisitState } from '../app/WebNavigation';
 import { routeHref, type AppRoute, type LessonStage } from '../app/routes';
 import { tabRoute } from '../app/useLearnerNavigation';
 import { buildCourseListeningQuestion } from '../listening/lessonQuestions';
@@ -21,6 +21,7 @@ import { JapaneseDailyGuide } from './JapaneseDailyGuide';
 import type { CourseLearningModel } from './useCourseLearning';
 
 type CourseRoute = Extract<AppRoute, { kind: 'course' }>;
+const outlineLevelKey = 'course.outline.level';
 
 interface CourseProps {
   course: OpenCourse;
@@ -30,20 +31,27 @@ interface CourseProps {
   model: LearningModel;
 }
 
+interface LessonSelection {
+  snapshot?: Record<string, unknown>;
+  studiedStage?: 'dialogue' | 'vocabulary';
+  fromOutline?: boolean;
+}
+
 function resumeStage(day: CourseDay, progress: ReturnType<typeof courseDayProgress>): LessonStage {
   return courseLessonStageForBlock(day, progress.lastBlockId) ?? (progress.completed ? 'sentence' : 'dialogue');
 }
 
 export function OpenCoursePanel({ course, route, recommendedDay, learning, model }: CourseProps) {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const compact = width < designTokens.layout.compactBreakpoint;
-  const sidebar = Platform.OS === 'web' && width >= 900
-    ? (width >= designTokens.layout.desktopNavBreakpoint ? 'wide' : 'medium') : undefined;
+  const sidebar = Platform.OS === 'web' && width >= 900 && height >= 640
+    ? (width >= designTokens.layout.fullNavBreakpoint ? 'wide' : 'medium') : undefined;
   const { backTo, navigate } = useNavigation();
   const learn = tabRoute('Learn', course.language);
   const outlineId = useId();
-  const [outlineOpen, setOutlineOpen] = useState(false);
-  const [level, setLevel] = useState<CourseDay['level'] | 'All'>('All');
+  const outlineButtonId = `${outlineId}-button`;
+  const [outlineOpen, setOutlineOpen] = useVisitState('course.outline.open', false);
+  const [level, setLevel] = useVisitState<CourseDay['level'] | 'All'>(outlineLevelKey, 'All');
   const clock = useRef(0);
 
   const requestedDay = course.days.find(item => item.id === route.dayId);
@@ -84,13 +92,20 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
       blockId: courseLessonStageId(targetStage), occurredAt: new Date(clock.current).toISOString() };
   }
 
-  function select(target: CourseDay, targetStage: LessonStage, snapshot?: Record<string, unknown>, studiedStage?: 'dialogue' | 'vocabulary') {
+  function select(target: CourseDay, targetStage: LessonStage, { snapshot, studiedStage, fromOutline }: LessonSelection = {}) {
     if (disabled) return;
-    if (target.id === day.id && targetStage === stage) { setOutlineOpen(false); return; }
+    function focusOutlineButton() {
+      if (fromOutline && !sidebar && Platform.OS === 'web') document.getElementById(outlineButtonId)?.focus({ preventScroll: true });
+    }
+    if (target.id === day.id && targetStage === stage) {
+      if (outlineOpen) setOutlineOpen(false);
+      focusOutlineButton();
+      return;
+    }
     const destination = { ...route, dayId: target.id, sectionId: courseLessonStageId(targetStage) };
     function open(afterSave: boolean) {
-      setOutlineOpen(false);
-      navigate(destination, { afterSave, snapshot });
+      focusOutlineButton();
+      navigate(destination, { afterSave, snapshot: level === 'All' ? snapshot : { ...snapshot, [outlineLevelKey]: level } });
     }
     if (browseOnly) { open(false); return; }
     const events: CourseEvent[] = [];
@@ -118,20 +133,22 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
   };
   const outline = (sidebar || outlineOpen) && <CourseOutline id={outlineId} sidebar={sidebar} course={course} route={route} day={day}
     events={learning.events} level={level} onLevelChange={setLevel} blocked={disabled}
-    onDay={target => select(target, resumeStage(target, courseDayProgress(course, target, learning.events)))} />;
+    progress={learning.loading ? 'loading' : browseOnly ? 'unavailable' : 'available'}
+    onDay={target => select(target, resumeStage(target, courseDayProgress(course, target, learning.events)), { fromOutline: true })} />;
 
   return <View testID="open-course-panel" style={[layout.panel, compact && layout.compactPanel]}>
     <View style={[s.row, layout.header]}>
       <View style={[layout.context, compact && layout.compactContext]}>
         <Text accessibilityRole="header" style={[s.heading, compact ? designTokens.typography.label : { fontSize: 21 }]}>{course.title}</Text>
-        {!compact && <Text style={s.muted}>{course.days.length} guided {course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview</Text>}
+        {!compact && <Text style={s.muted}>{sidebar ? 'Draft preview'
+          : `${course.days.length} guided ${course.days.length === 1 ? 'lesson' : 'lessons'} · Draft preview`}</Text>}
       </View>
       <View style={[s.row, layout.navigation, compact && layout.compactNavigation]}>
         <Button compact quiet icon="arrow-left" label="Close course" href={routeHref(learn)} disabled={disabled} onPress={close}>
           {compact ? 'Close' : 'Close course'}
         </Button>
-        {!sidebar && <Button compact expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
-          trailingIcon={outlineOpen ? 'chevron-down' : 'chevron'} onPress={() => setOutlineOpen(value => !value)}>Course outline</Button>}
+        {!sidebar && <Button compact nativeID={outlineButtonId} expanded={outlineOpen} controls={outlineOpen ? outlineId : undefined}
+          trailingIcon={outlineOpen ? 'chevron-up' : 'chevron-down'} onPress={() => setOutlineOpen(value => !value)}>Course outline</Button>}
       </View>
     </View>
     {learning.loading && <Text accessibilityLiveRegion="polite" style={s.muted}>Loading saved course progress…</Text>}
@@ -157,9 +174,9 @@ export function OpenCoursePanel({ course, route, recommendedDay, learning, model
           practiceCompletedIds: completedPracticeIds, onPracticeResult: recordPractice,
           exitHref: routeHref(learn), disabled, browseOnly, nextLesson, listeningQuestion, dialoguePhoto: getDailyDialoguePhoto(day.id),
           stageHref: targetStage => routeHref({ ...route, dayId: day.id, sectionId: courseLessonStageId(targetStage) }),
-          changeStage: (targetStage, snapshot) => select(day, targetStage, snapshot),
-          studyDialogue: snapshot => select(day, 'vocabulary', snapshot, 'dialogue'),
-          studyWords: snapshot => select(day, 'grammar', snapshot, 'vocabulary'), record,
+          changeStage: (targetStage, snapshot) => select(day, targetStage, { snapshot }),
+          studyDialogue: snapshot => select(day, 'vocabulary', { snapshot, studiedStage: 'dialogue' }),
+          studyWords: snapshot => select(day, 'grammar', { snapshot, studiedStage: 'vocabulary' }), record,
         }} />
         <CourseCredits course={course} />
       </View>
